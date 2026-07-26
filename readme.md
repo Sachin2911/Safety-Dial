@@ -14,6 +14,7 @@ Put `WANDB_API_KEY`, `GITHUB_TOKEN`, and `HF_TOKEN` in Vast account Environment 
 
 # Documents Produced
 > **Note:** All documentation can be found in the `docs` subfolder.
+- [x] Ideation Doc
 - [x] Annotated Bibliography
 - [x] Literature Review
 - [x] Research Proposal
