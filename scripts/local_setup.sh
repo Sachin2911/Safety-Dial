@@ -17,6 +17,7 @@ ensure_uv
 configure_git_identity
 configure_github_https
 sync_python_env
+configure_jupyter_kernel
 # HF login after sync so huggingface_hub is available if added later
 configure_huggingface
 sanity_check

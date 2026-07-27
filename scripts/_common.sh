@@ -91,15 +91,25 @@ configure_jupyter_kernel() {
   cd "${REPO_ROOT}"
   local kernel_name="safetydial-venv"
   local display_name="Python (safetydial .venv)"
+  local venv_python="${REPO_ROOT}/.venv/bin/python"
 
-  # Keep kernel registration tied to the repo venv used by uv.
-  if ! uv run python -c "import ipykernel" >/dev/null 2>&1; then
-    echo "[setup] installing ipykernel into repo venv"
-    uv pip install ipykernel
+  if [[ ! -x "${venv_python}" ]]; then
+    echo "[setup] WARN: missing ${venv_python}; skip Jupyter kernel registration"
+    return 0
   fi
 
-  if uv run python -m ipykernel install --user --name "${kernel_name}" --display-name "${display_name}" >/dev/null 2>&1; then
+  # Force the repo venv — a parent shell may have VIRTUAL_ENV=/venv/main activated.
+  unset VIRTUAL_ENV
+  echo "[setup] ensuring ipykernel in repo .venv"
+  uv pip install --python "${venv_python}" ipykernel
+
+  # --user lands in ~/.local/share/jupyter/kernels, which Vast Jupyter searches.
+  if "${venv_python}" -m ipykernel install \
+      --user \
+      --name "${kernel_name}" \
+      --display-name "${display_name}"; then
     echo "[setup] registered Jupyter kernel: ${display_name}"
+    echo "[setup] select it in JupyterLab (refresh the page if it is missing)"
   else
     echo "[setup] WARN: failed to register Jupyter kernel (${kernel_name})"
   fi
