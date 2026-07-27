@@ -1,3 +1,5 @@
+#Libraries and imports
+
 from __future__ import annotations
 
 import sys
@@ -15,15 +17,16 @@ FILENAME = "pusht_expert_train.h5.zst"
 PROCESSED_NAME = "pusht_expert_train.h5"
 
 
-def download() -> Path:
+# Download the data and return the path
+def download():
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     dest = RAW_DIR / FILENAME
 
     if dest.exists():
-        print(f"[download] already present: {dest}")
+        print(f"Already Downloaded")
         return dest
 
-    print(f"[download] fetching {REPO_ID}/{FILENAME} -> {RAW_DIR}")
+    print(f"Fetching download {REPO_ID}/{FILENAME} -> {RAW_DIR}")
     path = Path(
         hf_hub_download(
             repo_id=REPO_ID,
@@ -32,24 +35,25 @@ def download() -> Path:
             local_dir=RAW_DIR,
         )
     )
-    print(f"[download] wrote {path} ({path.stat().st_size / 1e6:.1f} MB)")
+    print(f"Wrote download {path} ({path.stat().st_size / 1e6:.1f} MB)")
     return path
 
 
+# Decompressing the download
 def decompress(src: Path) -> Path:
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     dst = PROCESSED_DIR / PROCESSED_NAME
 
     if dst.exists():
-        print(f"[decompress] already present: {dst}")
+        print(f"Decompressed version already present")
         return dst
 
-    print(f"[decompress] {src} -> {dst}")
+    print(f"Decompressing from -> to: {src} -> {dst}")
     dctx = zstd.ZstdDecompressor()
     with open(src, "rb") as fin, open(dst, "wb") as fout:
         dctx.copy_stream(fin, fout)
 
-    print(f"[decompress] wrote {dst} ({dst.stat().st_size / 1e6:.1f} MB)")
+    print(f"Wrote {dst} ({dst.stat().st_size / 1e6:.1f} MB)")
     return dst
 
 
@@ -58,10 +62,10 @@ def main() -> int:
         zst_path = download()
         h5_path = decompress(zst_path)
     except Exception as exc:  # noqa: BLE001
-        print(f"[error] {exc}", file=sys.stderr)
+        print(f"Error {exc}", file=sys.stderr)
         return 1
 
-    print(f"[done] ready for inspection: {h5_path}")
+    print(f"Done: {h5_path}")
     return 0
 
 
