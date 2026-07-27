@@ -30,16 +30,14 @@ ensure_uv() {
 }
 
 configure_git_identity() {
-  # Prefer repo-local config so we do not rewrite the user's global ~/.gitconfig.
+  # Always set repo-local identity so commits work on fresh instances.
+  # Prefer Vast/env overrides; fall back to project defaults (never touch global).
   cd "${REPO_ROOT}"
-  if [[ -n "${GIT_AUTHOR_NAME:-}" ]]; then
-    git config user.name "${GIT_AUTHOR_NAME}"
-    echo "[setup] git user.name=${GIT_AUTHOR_NAME} (repo-local)"
-  fi
-  if [[ -n "${GIT_AUTHOR_EMAIL:-}" ]]; then
-    git config user.email "${GIT_AUTHOR_EMAIL}"
-    echo "[setup] git user.email=${GIT_AUTHOR_EMAIL} (repo-local)"
-  fi
+  local name="${GIT_AUTHOR_NAME:-Sachin2911}"
+  local email="${GIT_AUTHOR_EMAIL:-sachinmohan29@gmail.com}"
+  git config user.name "${name}"
+  git config user.email "${email}"
+  echo "[setup] git user.name=${name} user.email=${email} (repo-local)"
 }
 
 configure_github_https() {

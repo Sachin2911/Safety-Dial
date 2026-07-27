@@ -4,7 +4,9 @@
 #   bash scripts/vast_setup.sh
 #
 # Expects secrets from Vast Account Environment Variables and/or repo .env:
-#   WANDB_API_KEY, GITHUB_TOKEN, HF_TOKEN, GIT_AUTHOR_NAME, GIT_AUTHOR_EMAIL
+#   WANDB_API_KEY, GITHUB_TOKEN, HF_TOKEN
+# Optional overrides (defaults already set for commits):
+#   GIT_AUTHOR_NAME, GIT_AUTHOR_EMAIL
 
 set -euo pipefail
 
