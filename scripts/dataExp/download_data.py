@@ -1,3 +1,5 @@
+#To run: uv run python scripts/dataExp/download_data.py
+
 #Libraries and imports
 
 from __future__ import annotations
