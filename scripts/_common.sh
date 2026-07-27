@@ -89,6 +89,24 @@ sync_python_env() {
   fi
 }
 
+configure_jupyter_kernel() {
+  cd "${REPO_ROOT}"
+  local kernel_name="safetydial-venv"
+  local display_name="Python (safetydial .venv)"
+
+  # Keep kernel registration tied to the repo venv used by uv.
+  if ! uv run python -c "import ipykernel" >/dev/null 2>&1; then
+    echo "[setup] installing ipykernel into repo venv"
+    uv pip install ipykernel
+  fi
+
+  if uv run python -m ipykernel install --user --name "${kernel_name}" --display-name "${display_name}" >/dev/null 2>&1; then
+    echo "[setup] registered Jupyter kernel: ${display_name}"
+  else
+    echo "[setup] WARN: failed to register Jupyter kernel (${kernel_name})"
+  fi
+}
+
 sanity_check() {
   cd "${REPO_ROOT}"
   echo "[setup] sanity check..."

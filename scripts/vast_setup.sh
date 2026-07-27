@@ -19,6 +19,7 @@ ensure_uv
 configure_git_identity
 configure_github_https
 sync_python_env
+configure_jupyter_kernel
 configure_huggingface
 sanity_check
 echo "[vast_setup] done"
