@@ -18,6 +18,7 @@ echo "[vast_setup] repo: ${REPO_ROOT}"
 export_env_for_ssh_sessions
 load_dotenv
 ensure_uv
+ensure_system_deps
 configure_git_identity
 configure_github_https
 sync_python_env

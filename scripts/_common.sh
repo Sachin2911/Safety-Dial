@@ -29,6 +29,39 @@ ensure_uv() {
   echo "[setup] uv: $(uv --version)"
 }
 
+ensure_system_deps() {
+  # box2d-py (via gymnasium[all] <- stable-worldmodel[env]) builds from sdist and
+  # needs the system `swig` binary on PATH. The PyPI `swig` wheel alone is not enough.
+  # btop is a resource monitor handy on Vast GPU instances.
+  local pkgs=()
+  command -v swig >/dev/null 2>&1 || pkgs+=(swig)
+  command -v btop >/dev/null 2>&1 || pkgs+=(btop)
+
+  if ((${#pkgs[@]} == 0)); then
+    echo "[setup] system deps ok (swig, btop present)"
+    return 0
+  fi
+
+  if ! command -v apt-get >/dev/null 2>&1; then
+    echo "[setup] ERROR: need ${pkgs[*]}, but apt-get is unavailable." >&2
+    echo "[setup]        Install manually (e.g. brew install swig / btop) and re-run." >&2
+    return 1
+  fi
+
+  echo "[setup] installing system packages: ${pkgs[*]}"
+  apt-get update -qq
+  DEBIAN_FRONTEND=noninteractive apt-get install -y -qq "${pkgs[@]}"
+  if ! command -v swig >/dev/null 2>&1; then
+    echo "[setup] ERROR: swig still missing after apt install" >&2
+    return 1
+  fi
+  if ! command -v btop >/dev/null 2>&1; then
+    echo "[setup] ERROR: btop still missing after apt install" >&2
+    return 1
+  fi
+  echo "[setup] system deps installed: swig=$(command -v swig) btop=$(command -v btop)"
+}
+
 configure_git_identity() {
   # Always set repo-local identity so commits work on fresh instances.
   # Prefer Vast/env overrides; fall back to project defaults (never touch global).
