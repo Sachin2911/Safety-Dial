@@ -26,3 +26,4 @@ configure_huggingface
 sanity_check
 echo "[vast_setup] done"
 echo "[vast_setup] tip: uv run python ...   |   git pull && bash scripts/vast_setup.sh"
+echo "[vast_setup] tip: LeWM substrate (clone + HF ckpt): bash scripts/lewm/setup_lewm.sh"

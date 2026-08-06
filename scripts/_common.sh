@@ -122,7 +122,7 @@ sanity_check() {
 import importlib
 import os
 
-mods = ["torch", "gymnasium", "hydra", "wandb", "pymoo", "numpy"]
+mods = ["torch", "gymnasium", "hydra", "wandb", "pymoo", "numpy", "stable_worldmodel"]
 missing = []
 for name in mods:
     try:

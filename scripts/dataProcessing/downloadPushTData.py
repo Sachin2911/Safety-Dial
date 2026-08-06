@@ -1,12 +1,12 @@
-#To run: uv run python scripts/dataExp/download_data.py
+# Downloads the Push-T expert training dataset from huggingface into the folder data/processed/push_expert_train.h5
+#To run: 
+# uv run python scripts/dataProcessing/downloadPushTData.py
 
 #Libraries and imports
 
 from __future__ import annotations
-
 import sys
 from pathlib import Path
-
 from huggingface_hub import hf_hub_download
 import zstandard as zstd
 
