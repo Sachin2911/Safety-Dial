@@ -22,3 +22,4 @@ configure_jupyter_kernel
 configure_huggingface
 sanity_check
 echo "[local_setup] done"
+echo "[local_setup] tip: LeWM substrate (clone + HF ckpt): bash scripts/lewm/setup_lewm.sh"

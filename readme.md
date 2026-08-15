@@ -12,6 +12,16 @@ bash scripts/vast_setup.sh
 
 Put `WANDB_API_KEY`, `GITHUB_TOKEN`, and `HF_TOKEN` in Vast account Environment Variables first. Prefer hosts with `cuda_max_good>=13.0` so torch CUDA works.
 
+## LeWM substrate
+
+`stable-worldmodel` is a project dependency (installed by setup). Clone `le-wm`, download the Push-T HF checkpoint, and convert it once:
+
+```bash
+bash scripts/lewm/setup_lewm.sh
+```
+
+This writes `$STABLEWM_HOME` (default `data/stablewm`) into `.env`, clones into `third_party/le-wm`, and produces `checkpoints/pusht/lewm_object.ckpt` for `swm.policy.AutoCostModel('pusht/lewm')`.
+
 # Documents Produced
 > **Note:** All documentation can be found in the `docs` subfolder.
 - [x] Ideation Doc
