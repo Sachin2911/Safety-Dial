@@ -1,0 +1,38 @@
+# All LeWM Hub tasks (Push-T + Cube). Default for scripts/download_data.py.
+# Weights ~72 MB each; expert data ~13 GB (Push-T) + ~46 GB (Cube).
+# Skip datasets: uv run python scripts/download_data.py weights_only=true
+# Skip source clone: uv run python scripts/download_data.py clone_source=false
+
+clone_source: true
+source_repo: https://github.com/lucas-maes/le-wm.git
+source_dir: third_party/le-wm
+source_ref: ""
+
+weights_only: false
+
+hydra:
+  job:
+    chdir: false
+  output_subdir: null
+  run:
+    dir: .
+
+tasks:
+  - name: pusht
+    model_repo: quentinll/lewm-pusht
+    dataset_repo: quentinll/lewm-pusht
+    hf_dir: hf_pusht
+    ckpt_relpath: checkpoints/pusht/lewm_object.ckpt
+    dataset_file: pusht_expert_train.h5.zst
+    dataset_kind: zstd_h5
+    processed_relpath: pusht_expert_train.h5
+    swm_id: pusht/lewm
+  - name: cube
+    model_repo: quentinll/lewm-cube
+    dataset_repo: quentinll/lewm-cube
+    hf_dir: hf_cube
+    ckpt_relpath: checkpoints/cube/lewm_object.ckpt
+    dataset_file: cube_single_expert.tar.zst
+    dataset_kind: zstd_tar
+    processed_relpath: cube_single_expert
+    swm_id: cube/lewm

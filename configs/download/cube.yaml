@@ -1,0 +1,27 @@
+# OGBench-Cube LeWM weights + expert dataset (~46 GB compressed).
+#   uv run python scripts/download_data.py --config-name cube
+
+clone_source: true
+source_repo: https://github.com/lucas-maes/le-wm.git
+source_dir: third_party/le-wm
+source_ref: ""
+
+weights_only: false
+
+hydra:
+  job:
+    chdir: false
+  output_subdir: null
+  run:
+    dir: .
+
+tasks:
+  - name: cube
+    model_repo: quentinll/lewm-cube
+    dataset_repo: quentinll/lewm-cube
+    hf_dir: hf_cube
+    ckpt_relpath: checkpoints/cube/lewm_object.ckpt
+    dataset_file: cube_single_expert.tar.zst
+    dataset_kind: zstd_tar
+    processed_relpath: cube_single_expert
+    swm_id: cube/lewm

@@ -14,13 +14,17 @@ Put `WANDB_API_KEY`, `GITHUB_TOKEN`, and `HF_TOKEN` in Vast account Environment 
 
 ## LeWM substrate
 
-`stable-worldmodel` is a project dependency (installed by setup). Clone `le-wm`, download the Push-T HF checkpoint, and convert it once:
+`stable-worldmodel` is a project dependency (installed by setup). One command clones upstream `le-wm`, downloads Hub checkpoints, and (unless skipped) expert data:
 
 ```bash
-bash scripts/lewm/setup_lewm.sh
+uv run python scripts/download_data.py                 # all: source + Push-T + Cube
+uv run python scripts/download_data.py --config-name pusht
+uv run python scripts/download_data.py --config-name cube
+uv run python scripts/download_data.py weights_only=true   # skip ~60 GB datasets
+uv run python scripts/download_data.py clone_source=false  # skip third_party/le-wm
 ```
 
-This writes `$STABLEWM_HOME` (default `data/stablewm`) into `.env`, clones into `third_party/le-wm`, and produces `checkpoints/pusht/lewm_object.ckpt` for `swm.policy.AutoCostModel('pusht/lewm')`.
+This writes `$STABLEWM_HOME` (default `data/stablewm`) into `.env`, clones into `third_party/le-wm`, and produces `checkpoints/<task>/lewm_object.ckpt` for `swm.policy.AutoCostModel('pusht/lewm')` / `'cube/lewm'`. Default `all` also fetches the expert datasets (~13 GB Push-T + ~46 GB Cube).
 
 # Documents Produced
 > **Note:** All documentation can be found in the `docs` subfolder.

@@ -156,7 +156,7 @@ def main() -> int:
     if not H5_PATH.exists():
         print(
             f"[error] missing {H5_PATH}\n"
-            "  run: uv run python scripts/dataExp/download_data.py",
+            "  run: uv run python scripts/download_data.py --config-name pusht",
             file=sys.stderr,
         )
         return 1

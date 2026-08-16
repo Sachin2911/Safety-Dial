@@ -1,7 +1,7 @@
-# Shared helpers for scripts/setup.sh and scripts/lewm/setup_lewm.sh.
+# Shared helpers for scripts/setup.sh.
 # shellcheck shell=bash
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 load_dotenv() {
   local env_file="${REPO_ROOT}/.env"

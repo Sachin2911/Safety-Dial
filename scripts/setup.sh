@@ -44,8 +44,8 @@ if [[ -n "${script_path}" && -f "${script_path}" ]]; then
   script_dir="$(cd "$(dirname "${script_path}")" && pwd)"
 fi
 
-# Piped (curl | bash) or pasted On-start: this file is not next to _common.sh.
-if [[ -z "${script_dir}" || ! -f "${script_dir}/_common.sh" ]]; then
+# Piped (curl | bash) or pasted On-start: helpers/_common.sh is not next to this file.
+if [[ -z "${script_dir}" || ! -f "${script_dir}/helpers/_common.sh" ]]; then
   if is_vast; then
     REPO_DIR="${REPO_DIR:-/workspace/Safety-Dial}"
   else
@@ -73,7 +73,7 @@ if [[ -z "${script_dir}" || ! -f "${script_dir}/_common.sh" ]]; then
 fi
 
 # shellcheck disable=SC1091
-source "${script_dir}/_common.sh"
+source "${script_dir}/helpers/_common.sh"
 
 if ((want_pull)); then
   echo "[setup] git pull --ff-only"
@@ -101,4 +101,4 @@ configure_huggingface
 sanity_check
 echo "[setup] done"
 echo "[setup] tip: uv run python ...   |   git pull && bash scripts/setup.sh"
-echo "[setup] tip: LeWM substrate (clone + HF ckpt): bash scripts/lewm/setup_lewm.sh"
+echo "[setup] tip: LeWM source + Hub weights/data: uv run python scripts/download_data.py"

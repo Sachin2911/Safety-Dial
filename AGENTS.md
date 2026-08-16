@@ -72,7 +72,7 @@ Code scaffolding exists but is currently empty (`.gitkeep` placeholders only). P
 | `src/safetydial/baselines/` | Penalty-tuned CEM, CPO / Lagrangian PPO, ROSARL |
 | `src/safetydial/metrics/` | Hypervolume, IGD, task success, violation counting |
 | `src/safetydial/train/` | Training and evaluation entry points |
-| `configs/` | Hydra configs, grouped as `env/`, `world_model/`, `planner/`, `experiment/` |
+| `configs/` | Hydra configs: `download/` (Hub presets), plus planned `env/`, `world_model/`, `planner/`, `experiment/` |
 | `scripts/` | Setup and launch shell scripts |
 | `tests/` | Pytest suite |
 | `third_party/` | Vendored upstream code (for example a LeWM checkout) |
@@ -94,7 +94,8 @@ Code scaffolding exists but is currently empty (`.gitkeep` placeholders only). P
 | Script | Use |
 |--------|-----|
 | `scripts/setup.sh` | Local or Vast setup. Auto-detects Vast. `--pull` updates the clone first. Piped/pasted (On-start) clones or pulls then re-runs from the repo. |
-| `scripts/_common.sh` | Shared helpers (do not run directly) |
+| `scripts/helpers/_common.sh` | Shared helpers (do not run directly) |
+| `scripts/download_data.py` | Clone `third_party/le-wm`, then Hydra Hub download. Default `--config-name all` (Push-T + Cube weights and expert data). `pusht` / `cube` for one task. `weights_only=true` skips datasets; `clone_source=false` skips the git clone. Configs: `configs/download/` |
 
 Idempotent: `git pull && bash scripts/setup.sh` (or `bash scripts/setup.sh --pull`) is the normal refresh. Vast hosts should have `cuda_max_good>=13.0` so the torch CUDA build works.
 
