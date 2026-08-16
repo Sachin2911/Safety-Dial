@@ -10,11 +10,7 @@ cd Safety-Dial
 bash scripts/setup.sh
 ```
 
-Put `WANDB_API_KEY`, `GITHUB_TOKEN`, and `HF_TOKEN` in Vast account Environment Variables first. Prefer hosts with `cuda_max_good>=13.0` so torch CUDA works.
-
-## LeWM substrate
-
-`stable-worldmodel` is a project dependency (installed by setup). One command clones upstream `le-wm`, downloads Hub checkpoints, and (unless skipped) expert data:
+To download the data sources
 
 ```bash
 uv run python scripts/download_data.py                 # all: source + Push-T + Cube
@@ -24,7 +20,6 @@ uv run python scripts/download_data.py weights_only=true   # skip ~60 GB dataset
 uv run python scripts/download_data.py clone_source=false  # skip third_party/le-wm
 ```
 
-This writes `$STABLEWM_HOME` (default `data/stablewm`) into `.env`, clones into `third_party/le-wm`, and produces `checkpoints/<task>/lewm_object.ckpt` for `swm.policy.AutoCostModel('pusht/lewm')` / `'cube/lewm'`. Default `all` also fetches the expert datasets (~13 GB Push-T + ~46 GB Cube).
 
 # Documents Produced
 > **Note:** All documentation can be found in the `docs` subfolder.
