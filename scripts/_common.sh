@@ -1,4 +1,4 @@
-# Shared helpers for local_setup.sh and vast_setup.sh.
+# Shared helpers for scripts/setup.sh and scripts/lewm/setup_lewm.sh.
 # shellcheck shell=bash
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

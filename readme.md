@@ -2,12 +2,12 @@
 
 > **Note:** There is some project info
 
-## Vast setup
+## Setup
 
 ```bash
 git clone https://github.com/Sachin2911/Safety-Dial.git
 cd Safety-Dial
-bash scripts/vast_setup.sh
+bash scripts/setup.sh
 ```
 
 Put `WANDB_API_KEY`, `GITHUB_TOKEN`, and `HF_TOKEN` in Vast account Environment Variables first. Prefer hosts with `cuda_max_good>=13.0` so torch CUDA works.

@@ -93,12 +93,10 @@ Code scaffolding exists but is currently empty (`.gitkeep` placeholders only). P
 
 | Script | Use |
 |--------|-----|
-| `scripts/local_setup.sh` | Laptop / workstation setup |
-| `scripts/vast_setup.sh` | Vast.ai instance setup, run after cloning |
-| `scripts/vast_onstart.sh` | Paste into the Vast template "On-start script"; clones or pulls, then calls `vast_setup.sh` |
-| `scripts/_common.sh` | Shared helpers sourced by both setup scripts (do not run directly) |
+| `scripts/setup.sh` | Local or Vast setup. Auto-detects Vast. `--pull` updates the clone first. Piped/pasted (On-start) clones or pulls then re-runs from the repo. |
+| `scripts/_common.sh` | Shared helpers (do not run directly) |
 
-Both setup paths are idempotent: `git pull && bash scripts/vast_setup.sh` is the normal refresh. Vast hosts should have `cuda_max_good>=13.0` so the torch CUDA build works.
+Idempotent: `git pull && bash scripts/setup.sh` (or `bash scripts/setup.sh --pull`) is the normal refresh. Vast hosts should have `cuda_max_good>=13.0` so the torch CUDA build works.
 
 ## Secrets
 
