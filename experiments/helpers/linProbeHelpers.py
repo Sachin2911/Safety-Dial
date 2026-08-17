@@ -4,6 +4,131 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from IPython.display import HTML
 import torch
+from stable_worldmodel.solver import CEMSolver
+from stable_worldmodel.solver.utils import prepare_init_action
+
+
+class BoundedCEMSolver(CEMSolver):
+    """CEM with every sampled and returned action clipped to model-space bounds."""
+
+    def __init__(self, *args, action_low, action_high, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.action_low = torch.as_tensor(action_low, dtype=self.dtype).flatten()
+        self.action_high = torch.as_tensor(action_high, dtype=self.dtype).flatten()
+        if self.action_low.shape != self.action_high.shape:
+            raise ValueError("action_low and action_high must have the same shape")
+
+    def _bounds(self, device):
+        repeats = self.action_dim // self.action_low.numel()
+        if repeats * self.action_low.numel() != self.action_dim:
+            raise ValueError("Normalized bounds do not match the configured action dimension")
+        low = self.action_low.repeat(repeats).to(device=device, dtype=self.dtype)
+        high = self.action_high.repeat(repeats).to(device=device, dtype=self.dtype)
+        return low.view(1, 1, 1, -1), high.view(1, 1, 1, -1)
+
+    @torch.inference_mode()
+    def solve(self, info_dict, init_action=None):
+        total_envs = len(next(iter(info_dict.values())))
+        init_action = prepare_init_action(
+            self.model,
+            info_dict,
+            init_action,
+            self.horizon,
+            n_envs=total_envs,
+            action_dim=self.action_dim,
+        )
+        mean, var = self.init_action_distrib(total_envs, init_action)
+        mean = mean.to(self.device)
+        var = var.to(self.device)
+        low, high = self._bounds(self.device)
+        mean = mean.clamp(low.squeeze(1), high.squeeze(1))
+        final_costs = []
+        for callback in self.callbacks:
+            callback.reset()
+
+        for start_idx in range(0, total_envs, self.batch_size):
+            end_idx = min(start_idx + self.batch_size, total_envs)
+            current_bs = end_idx - start_idx
+            batch_mean = mean[start_idx:end_idx]
+            batch_var = var[start_idx:end_idx]
+            expanded_infos = {}
+            for key, value in info_dict.items():
+                value_batch = value[start_idx:end_idx]
+                if torch.is_tensor(value):
+                    target_dtype = self.dtype if value_batch.is_floating_point() else None
+                    value_batch = (
+                        value_batch.to(device=self.device, dtype=target_dtype)
+                        .unsqueeze(1)
+                        .expand(current_bs, self.num_samples, *value_batch.shape[1:])
+                    )
+                elif isinstance(value, np.ndarray):
+                    value_batch = np.repeat(
+                        value_batch[:, None, ...], self.num_samples, axis=1
+                    )
+                expanded_infos[key] = value_batch
+
+            for callback in self.callbacks:
+                callback.start_batch()
+
+            for _ in range(self.n_steps):
+                candidates = torch.randn(
+                    current_bs,
+                    self.num_samples,
+                    self.horizon,
+                    self.action_dim,
+                    generator=self.torch_gen,
+                    device=self.device,
+                    dtype=self.dtype,
+                )
+                candidates = candidates * batch_var.unsqueeze(1) + batch_mean.unsqueeze(1)
+                candidates = candidates.clamp(low, high)
+                candidates[:, 0] = batch_mean
+
+                costs = self.model.get_cost(expanded_infos, candidates)
+                topk_vals, topk_inds = torch.topk(
+                    costs, k=self.topk, dim=1, largest=False
+                )
+                batch_indices = (
+                    torch.arange(current_bs, device=self.device)
+                    .unsqueeze(1)
+                    .expand(-1, self.topk)
+                )
+                topk_candidates = candidates[batch_indices, topk_inds]
+                previous_mean, previous_var = batch_mean, batch_var
+                batch_mean = topk_candidates.mean(dim=1).clamp(
+                    low.squeeze(1), high.squeeze(1)
+                )
+                batch_var = topk_candidates.std(dim=1)
+                for callback in self.callbacks:
+                    callback(
+                        step=_,
+                        candidates=candidates,
+                        costs=costs,
+                        topk_vals=topk_vals,
+                        topk_inds=topk_inds,
+                        topk_candidates=topk_candidates,
+                        mean=batch_mean,
+                        var=batch_var,
+                        prev_mean=previous_mean,
+                        prev_var=previous_var,
+                    )
+
+            mean[start_idx:end_idx] = batch_mean
+            var[start_idx:end_idx] = batch_var
+            final_costs.extend(topk_vals.mean(dim=1).cpu().tolist())
+
+        outputs = {
+            "actions": mean.detach().cpu(),
+            "costs": final_costs,
+            "mean": [mean.detach().cpu()],
+            "var": [var.detach().cpu()],
+        }
+        if self.callbacks:
+            outputs["callbacks"] = {}
+            for callback in self.callbacks:
+                callback.end_solve()
+                outputs["callbacks"][callback.output_key] = callback.history
+        return outputs
 
 def wm_transform(preprocessor, key):
     def _apply(img):
@@ -184,10 +309,12 @@ def box_penetration(xy, hazard_box):
 
 
 def interpolate_path(xy, n_substeps: int):
-    """xy: (B, S, T, 2) -> (B, S, T-1, n_substeps, 2)"""
+    """Sample each segment without duplicating its starting waypoint."""
     starts = xy[:, :, :-1, :].unsqueeze(-2)  # (B, S, T-1, 1, 2)
     ends = xy[:, :, 1:, :].unsqueeze(-2)
-    w = torch.linspace(0.0, 1.0, n_substeps, device=xy.device, dtype=xy.dtype)
+    w = torch.linspace(
+        1.0 / n_substeps, 1.0, n_substeps, device=xy.device, dtype=xy.dtype
+    )
     w = w.view(1, 1, 1, n_substeps, 1)       # broadcast over B, S, T-1, and xy
     return starts * (1.0 - w) + ends * w
 
@@ -195,32 +322,26 @@ def interpolate_path(xy, n_substeps: int):
 def hazard_cost_from_emb(
     predicted_emb,
     hist_len,
-    probe_w,
-    probe_b,
+    probe,          # nn.Module: (N, D) -> (N, 2)
     hazard_box,
     *,
     margin=0.0,
     n_substeps=5,
 ):
-    """
-    Path cost, not knot cost.
-
-    Include the last context frame (current z) plus future predictions, probe xy,
-    interpolate between consecutive points, sum penetration on the denser path.
-    """
-    # current state is at index hist_len-1; skipping it ignores the next executed block
     start = max(hist_len - 1, 0)
     embs = predicted_emb[:, :, start:, :]          # (B, S, T, D)
     B, S, T, D = embs.shape
-    xy = (embs.reshape(B * S * T, D) @ probe_w + probe_b).reshape(B, S, T, 2)
+    xy = probe(embs.reshape(B * S * T, D).float()).reshape(B, S, T, 2)
 
     box = expand_box(hazard_box, margin)
     if T == 1:
-        pen = box_penetration(xy, box).sum(dim=-1)
+        pen = box_penetration(xy, box).mean(dim=-1)
         return pen, xy
 
-    path = interpolate_path(xy, n_substeps)        # (B, S, T-1, n_sub, 2)
-    pen = box_penetration(path, box).sum(dim=(2, 3))
+    path = interpolate_path(xy, n_substeps)
+    path_pen = box_penetration(path, box).flatten(start_dim=2)
+    start_pen = box_penetration(xy[:, :, :1], box)
+    pen = torch.cat([start_pen, path_pen], dim=2).mean(dim=2)
     return pen, xy
 
 
@@ -230,7 +351,7 @@ class HazardAugmentedCostModel(torch.nn.Module):
     def __init__(
         self,
         base_model,
-        ridge_probe,
+        probe,          # MLPProbe or any nn.Module (N, D) -> (N, 2)
         hazard_box,
         lam: float,
         margin: float = 0.0,
@@ -238,36 +359,31 @@ class HazardAugmentedCostModel(torch.nn.Module):
     ):
         super().__init__()
         self.base = base_model
+        self.probe = probe
         self.hazard_box = tuple(map(float, hazard_box))
         self.lam = float(lam)
         self.margin = float(margin)
         self.n_substeps = int(n_substeps)
-        self.register_buffer(
-            "probe_w",
-            torch.as_tensor(ridge_probe.coef_.T, dtype=torch.float32),
-        )
-        self.register_buffer(
-            "probe_b",
-            torch.as_tensor(ridge_probe.intercept_, dtype=torch.float32),
-        )
         self.cost_history = []
-        self.last_xy = None  # elite probed path, for plotting
+        self.last_xy = None
 
     def get_cost(self, info_dict, action_candidates):
         goal_cost = self.base.get_cost(info_dict, action_candidates)
 
         hist_len = info_dict["pixels"].shape[2]
-        hazard_cost, xy = hazard_cost_from_emb(
-            info_dict["predicted_emb"],
-            hist_len,
-            self.probe_w,
-            self.probe_b,
-            self.hazard_box,
-            margin=self.margin,
-            n_substeps=self.n_substeps,
-        )
+        with torch.no_grad():
+            hazard_cost, xy = hazard_cost_from_emb(
+                info_dict["predicted_emb"],
+                hist_len,
+                self.probe,
+                self.hazard_box,
+                margin=self.margin,
+                n_substeps=self.n_substeps,
+            )
 
-        elite = (goal_cost + self.lam * hazard_cost).argmin(dim=1)
+        total_cost = goal_cost + self.lam * hazard_cost
+        elite = total_cost.argmin(dim=1)
+        batch_idx = torch.arange(total_cost.shape[0], device=total_cost.device)
         self.last_xy = xy[0, elite[0]].detach().cpu()
 
         self.last_goal_cost = goal_cost.detach().cpu()
@@ -280,8 +396,11 @@ class HazardAugmentedCostModel(torch.nn.Module):
             "hazard_median": hazard_cost.median().item(),
             "hazard_max": hazard_cost.max().item(),
             "hazard_nonzero": (hazard_cost > 0).float().mean().item(),
+            "selected_goal": goal_cost[batch_idx, elite].mean().item(),
+            "selected_hazard": hazard_cost[batch_idx, elite].mean().item(),
+            "selected_total": total_cost[batch_idx, elite].mean().item(),
         })
-        return goal_cost + self.lam * hazard_cost
+        return total_cost
 
 
 def real_violation_stats(states, hazard_box, entity="pusher"):
@@ -326,6 +445,10 @@ def summarize_cem_history(cost_model, n_steps=30, verbose=True):
             "final_goal_median": last["goal_median"],
             "first_hazard_min": first["hazard_min"],
             "final_hazard_min": last["hazard_min"],
+            "first_selected_hazard": first["selected_hazard"],
+            "final_selected_hazard": last["selected_hazard"],
+            "final_selected_goal": last["selected_goal"],
+            "final_selected_total": last["selected_total"],
         }
         summaries.append(summary)
 
@@ -333,13 +456,13 @@ def summarize_cem_history(cost_model, n_steps=30, verbose=True):
             print(f"\nCEM solve {solve_idx + 1}")
             print(
                 f"  first: goal median={first['goal_median']:.3f}, "
-                f"hazard min={first['hazard_min']:.3f}, "
+                f"selected hazard={first['selected_hazard']:.3f}, "
                 f"max={first['hazard_max']:.3f}, "
                 f"nonzero={first['hazard_nonzero']:.3f}"
             )
             print(
                 f"  final: goal median={last['goal_median']:.3f}, "
-                f"hazard min={last['hazard_min']:.3f}, "
+                f"selected hazard={last['selected_hazard']:.3f}, "
                 f"max={last['hazard_max']:.3f}, "
                 f"nonzero={last['hazard_nonzero']:.3f}"
             )
