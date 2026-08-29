@@ -1,0 +1,27 @@
+# Push-T LeWM weights + expert dataset (~13 GB compressed).
+#   uv run python scripts/download_data.py --config-name pusht
+
+clone_source: true
+source_repo: https://github.com/lucas-maes/le-wm.git
+source_dir: third_party/le-wm
+source_ref: ""
+
+weights_only: false
+
+hydra:
+  job:
+    chdir: false
+  output_subdir: null
+  run:
+    dir: .
+
+tasks:
+  - name: pusht
+    model_repo: quentinll/lewm-pusht
+    dataset_repo: quentinll/lewm-pusht
+    hf_dir: hf_pusht
+    ckpt_relpath: checkpoints/pusht/lewm_object.ckpt
+    dataset_file: pusht_expert_train.h5.zst
+    dataset_kind: zstd_h5
+    processed_relpath: pusht_expert_train.h5
+    swm_id: pusht/lewm

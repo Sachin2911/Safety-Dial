@@ -2,25 +2,24 @@
 
 > **Note:** There is some project info
 
-## Vast setup
+## Setup
 
 ```bash
 git clone https://github.com/Sachin2911/Safety-Dial.git
 cd Safety-Dial
-bash scripts/vast_setup.sh
+bash scripts/setup.sh
 ```
 
-Put `WANDB_API_KEY`, `GITHUB_TOKEN`, and `HF_TOKEN` in Vast account Environment Variables first. Prefer hosts with `cuda_max_good>=13.0` so torch CUDA works.
-
-## LeWM substrate
-
-`stable-worldmodel` is a project dependency (installed by setup). Clone `le-wm`, download the Push-T HF checkpoint, and convert it once:
+To download the data sources
 
 ```bash
-bash scripts/lewm/setup_lewm.sh
+uv run python scripts/download_data.py                 # all: source + Push-T + Cube
+uv run python scripts/download_data.py --config-name pusht
+uv run python scripts/download_data.py --config-name cube
+uv run python scripts/download_data.py weights_only=true   # skip ~60 GB datasets
+uv run python scripts/download_data.py clone_source=false  # skip third_party/le-wm
 ```
 
-This writes `$STABLEWM_HOME` (default `data/stablewm`) into `.env`, clones into `third_party/le-wm`, and produces `checkpoints/pusht/lewm_object.ckpt` for `swm.policy.AutoCostModel('pusht/lewm')`.
 
 # Documents Produced
 > **Note:** All documentation can be found in the `docs` subfolder.
