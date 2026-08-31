@@ -206,6 +206,108 @@ def estimate_px_per_step(states):
     return float(np.median(d))
 
 
+def pick_best_box(candidates, target=(0.15, 0.50)):
+    """Pick first usable box from calibrate_box(); else closest to target midpoint."""
+    usable = [c for c in candidates if c["usable"]]
+    if usable:
+        return tuple(usable[0]["box"])
+
+    target_mid = 0.5 * (target[0] + target[1])
+
+    def _score(c):
+        return abs(c["baseline_viol"] - target_mid)
+
+    best = min(candidates, key=_score)
+    return tuple(best["box"])
+
+
+def suggest_lambda_grid(
+    goal_med,
+    hazard_med,
+    ratios=(0.1, 0.3, 1.0, 3.0, 10.0),
+    *,
+    hazard_max=None,
+    hazard_floor=1.0,
+):
+    """Return lambda values where lam * hazard_scale ~= ratio * goal_med."""
+    goal_med = float(goal_med)
+    hazard_scale = float(hazard_med)
+    if hazard_max is not None:
+        hazard_scale = max(hazard_scale, float(hazard_max) * 0.25)
+    hazard_scale = max(hazard_scale, float(hazard_floor))
+    lams = sorted({ratio * goal_med / hazard_scale for ratio in ratios})
+    return [0.0] + lams
+
+
+def measure_cost_scales(
+    base_model,
+    probe,
+    hazard_box,
+    *,
+    swm,
+    process,
+    transform,
+    start_state,
+    goal_state,
+    margin,
+    n_substeps=5,
+    seed=0,
+    num_samples=300,
+    n_steps=30,
+    topk=30,
+    eval_budget=50,
+    solve_index=0,
+):
+    """Run one CEM solve at lam=0; return typical goal/hazard cost scales."""
+    from stable_worldmodel.solver import CEMSolver
+    from helpers.linProbeHelpers import HazardAugmentedCostModel
+
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+
+    cost_model = HazardAugmentedCostModel(
+        base_model, probe, hazard_box,
+        lam=0.0, margin=margin, n_substeps=n_substeps,
+    ).to("cuda").eval()
+
+    solver = CEMSolver(
+        model=cost_model, batch_size=1, num_samples=num_samples,
+        var_scale=1.0, n_steps=n_steps, topk=topk,
+        device="cuda", seed=seed,
+    )
+    policy = swm.policy.WorldModelPolicy(
+        solver=solver,
+        config=swm.PlanConfig(horizon=5, receding_horizon=1, action_block=5),
+        process=process, transform=transform,
+    )
+    world = swm.World(
+        "swm/PushT-v1", num_envs=1, image_shape=(224, 224),
+        max_episode_steps=2 * eval_budget,
+    )
+    world.set_policy(policy)
+    world.reset(seed=seed, options={"state": start_state, "goal_state": goal_state})
+    world._run(max_steps=eval_budget, mode="wait")
+
+    if not cost_model.cost_history:
+        raise RuntimeError("measure_cost_scales: no CEM cost history recorded")
+
+    idx = min(solve_index, len(cost_model.cost_history) - 1)
+    first_solve = cost_model.cost_history[:n_steps]
+    hazard_medians = [h["hazard_median"] for h in first_solve]
+    hazard_maxes = [h["hazard_max"] for h in first_solve]
+    h = cost_model.cost_history[idx]
+    return {
+        "goal_median": float(np.median([x["goal_median"] for x in first_solve])),
+        "goal_min": h["goal_min"],
+        "goal_max": max(x["goal_max"] for x in first_solve),
+        "hazard_median": float(np.median(hazard_medians)),
+        "hazard_min": min(x["hazard_min"] for x in first_solve),
+        "hazard_max": float(max(hazard_maxes)),
+        "hazard_nonzero": float(np.mean([x["hazard_nonzero"] for x in first_solve])),
+        "solve_index": idx,
+    }
+
+
 # ---------------------------------------------------------------------------
 # 3. episode runner and sweep
 # ---------------------------------------------------------------------------
@@ -276,6 +378,7 @@ def run_episode(
                                bool(world.terminateds[0])))
     out["solve_diagnostics"] = summarize_cem_history(cost_model, n_steps=n_steps,
                                                      verbose=False)
+    out["cost_history"] = cost_model.cost_history
     out["states"] = states
     if keep_frames:
         out["frames"] = frames
@@ -301,21 +404,61 @@ def sweep_lambda(lams, seeds=(0, 1, 2, 3, 4), verbose=True, **kw):
     return rows
 
 
-def plot_front(rows, x="frac_violating", y="max_coverage"):
-    """Mean +- std per lambda. Error bars are the point of running seeds."""
+def summarize_sweep(rows):
+    """Mean ± std per lambda for key metrics."""
     lams = sorted({r["lam"] for r in rows})
-    fig, ax = plt.subplots(figsize=(5.5, 4.5))
+    lines = []
+    header = (
+        f"{'lam':>8}  {'viol':>12}  {'coverage':>12}  "
+        f"{'block_err':>12}  {'success':>10}  {'oob':>8}"
+    )
+    lines.append(header)
+    lines.append("-" * len(header))
     for lam in lams:
         g = [r for r in rows if r["lam"] == lam]
-        xs, ys = [r[x] for r in g], [r[y] for r in g]
-        ax.errorbar(np.mean(xs), np.nanmean(ys),
-                    xerr=np.std(xs), yerr=np.nanstd(ys),
-                    fmt="o", capsize=3)
-        ax.annotate(f"λ={lam:g}", (np.mean(xs), np.nanmean(ys)),
-                    textcoords="offset points", xytext=(6, 4), fontsize=9)
-    ax.set_xlabel("fraction of steps in hazard")
-    ax.set_ylabel("max coverage")
-    ax.set_title("Penalty-CEM front (mean ± std over seeds)")
-    ax.grid(alpha=0.3)
+        viol = [r["frac_violating"] for r in g]
+        cov = [r["max_coverage"] for r in g]
+        block = [r["final_block_err_px"] for r in g]
+        succ = [float(r["success"]) for r in g]
+        oob = [float(r["oob_any"]) for r in g]
+        lines.append(
+            f"{lam:8g}  "
+            f"{np.mean(viol):5.2f}±{np.std(viol):4.2f}  "
+            f"{np.nanmean(cov):5.3f}±{np.nanstd(cov):4.3f}  "
+            f"{np.mean(block):5.1f}±{np.std(block):4.1f}  "
+            f"{np.mean(succ):5.2f}±{np.std(succ):4.2f}  "
+            f"{np.mean(oob):5.2f}±{np.std(oob):4.2f}"
+        )
+    text = "\n".join(lines)
+    print(text)
+    return text
+
+
+def plot_front(rows, x="frac_violating", y="max_coverage", also_block_err=True):
+    """Mean +- std per lambda. Error bars are the point of running seeds."""
+    lams = sorted({r["lam"] for r in rows})
+    ncols = 2 if also_block_err else 1
+    fig, axes = plt.subplots(1, ncols, figsize=(5.5 * ncols, 4.5))
+    if ncols == 1:
+        axes = [axes]
+
+    panels = [(x, y, "max coverage")]
+    if also_block_err:
+        panels.append((x, "final_block_err_px", "final block error (px)"))
+
+    for ax, xkey, ykey, ylabel in zip(axes, *[list(p) for p in zip(*panels)]):
+        for lam in lams:
+            g = [r for r in rows if r["lam"] == lam]
+            xs, ys = [r[xkey] for r in g], [r[ykey] for r in g]
+            ax.errorbar(np.mean(xs), np.nanmean(ys),
+                        xerr=np.std(xs), yerr=np.nanstd(ys),
+                        fmt="o", capsize=3)
+            ax.annotate(f"λ={lam:g}", (np.mean(xs), np.nanmean(ys)),
+                        textcoords="offset points", xytext=(6, 4), fontsize=9)
+        ax.set_xlabel("fraction of steps in hazard")
+        ax.set_ylabel(ylabel)
+        ax.set_title("Penalty-CEM front (mean ± std over seeds)")
+        ax.grid(alpha=0.3)
+
     plt.tight_layout()
     plt.show()

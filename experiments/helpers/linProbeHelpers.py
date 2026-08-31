@@ -204,7 +204,13 @@ def hazard_cost_from_emb(
     start = max(hist_len - 1, 0)
     embs = predicted_emb[:, :, start:, :]          # (B, S, T, D)
     B, S, T, D = embs.shape
-    xy = probe(embs.reshape(B * S * T, D).float()).reshape(B, S, T, 2)
+    flat = embs.reshape(B * S * T, D).float()
+    device = flat.device
+    if hasattr(probe, "parameters"):
+        probe_device = next(probe.parameters()).device
+        if probe_device != device:
+            probe = probe.to(device)
+    xy = probe(flat).reshape(B, S, T, 2)
 
     box = expand_box(hazard_box, margin)
     if T == 1:
@@ -257,6 +263,8 @@ class HazardAugmentedCostModel(torch.nn.Module):
 
         self.last_goal_cost = goal_cost.detach().cpu()
         self.last_hazard_cost = hazard_cost.detach().cpu()
+        weighted_hazard = self.lam * hazard_cost
+        self.last_weighted_hazard = weighted_hazard.detach().cpu()
         self.cost_history.append({
             "goal_min": goal_cost.min().item(),
             "goal_median": goal_cost.median().item(),
@@ -264,10 +272,11 @@ class HazardAugmentedCostModel(torch.nn.Module):
             "hazard_min": hazard_cost.min().item(),
             "hazard_median": hazard_cost.median().item(),
             "hazard_max": hazard_cost.max().item(),
+            "weighted_hazard_median": weighted_hazard.median().item(),
             "hazard_nonzero": (hazard_cost > 0).float().mean().item(),
             "xy_std": xy.reshape(-1, 2).std(0).tolist(),
         })
-        return goal_cost + self.lam * hazard_cost
+        return goal_cost + weighted_hazard
 
 
 def real_violation_stats(states, hazard_box, entity="pusher"):
