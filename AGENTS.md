@@ -250,12 +250,10 @@ Supporting and comparison:
 | Script | Use |
 |--------|-----|
 | `scripts/setup.sh` | Local or Vast setup. Auto-detects Vast. `--pull` updates the clone first. Piped or pasted (Vast On-start) it clones or pulls, then re-runs from the repo |
-| `scripts/helpers/_common.sh` | Shared helpers (do not run directly): dotenv loading, uv install, system deps (`swig` for box2d, `btop`), Vast Codex install/login, git identity, HTTPS push token, venv sync, Jupyter kernel, HF login, sanity check |
+| `scripts/helpers/_common.sh` | Shared helpers (do not run directly): dotenv loading, uv install, system deps (`swig` for box2d, `btop`), git identity, HTTPS push token, venv sync, Jupyter kernel, HF login, sanity check |
 | `scripts/download_data.py` | Clone `third_party/le-wm`, then Hydra Hub download. Default `--config-name all` (Push-T plus Cube weights and expert data). `pusht` / `cube` for one task. `weights_only=true` skips datasets; `clone_source=false` skips the git clone |
 
 Idempotent: `git pull && bash scripts/setup.sh` (or `bash scripts/setup.sh --pull`) is the normal refresh. Vast hosts should have `cuda_max_good>=13.0` so the torch CUDA build works. Real runs happen on Vast at `/workspace/Safety-Dial`; the local `.venv` is usually only partially synced.
-
-On Vast, setup installs Codex CLI if missing using the official standalone installer, without interactive prompts. It reuses an existing installation. With `OPENAI_API_KEY` injected, it saves API-key authentication through stdin, replacing any cached login. Without the key, it preserves existing authentication or prints `codex login --device-auth` for manual ChatGPT login. API-key usage is billed separately from ChatGPT subscription usage. Local setup does not install or change Codex authentication.
 
 ## Secrets
 
@@ -264,14 +262,11 @@ Secrets live in a gitignored `.env` at the repo root, loaded by `_common.sh` and
 - `WANDB_API_KEY` (logging)
 - `GITHUB_TOKEN` (optional; enables push over HTTPS)
 - `HF_TOKEN` (optional; Hugging Face downloads)
-- `OPENAI_API_KEY` (optional; automatic Codex API-key login during Vast setup, with separate API billing)
 - `GIT_AUTHOR_NAME`, `GIT_AUTHOR_EMAIL` (repo-local git identity, not global)
 - `STABLEWM_HOME` (written automatically by `download_data.py`)
 - `LEWM_REPO_URL`, `LEWM_GIT_REF` (optional overrides for the LeWM clone)
 
 Rules: never commit `.env`, never print token values into logs or terminal output, and do not put them in configs or code. There is no tracked `.env.example`; document new keys here instead.
-
-Codex stores authentication in its private credential cache (normally `~/.codex/auth.json` on headless Linux). Setup excludes `OPENAI_API_KEY` from its copies into `/etc/environment`; subsequent SSH sessions use the cached login. Never commit or print the Codex authentication cache.
 
 ## Glossary
 

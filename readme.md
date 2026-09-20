@@ -10,32 +10,6 @@ cd Safety-Dial
 bash scripts/setup.sh
 ```
 
-### Codex on Vast.ai
-
-Vast setup installs Codex CLI automatically if it is missing. For unattended
-authentication, add `OPENAI_API_KEY` in Vast's environment-variable settings before
-launching the instance, then run the normal setup script (or use it as the On-start
-command). Keep the actual key in Vast's settings or the gitignored `.env`, never in
-the setup command or a tracked file.
-
-Setup passes the key to Codex through stdin and saves its login without printing
-the key. A supplied key replaces any existing Codex login. **API-key usage is billed
-separately from your ChatGPT subscription.** To use your ChatGPT subscription,
-leave the key unset and run `codex login --device-auth` once after connecting.
-Setup preserves an existing login when no key is supplied.
-
-After setup, connect with your usual `vast-cursor` command, then run on the instance:
-
-```bash
-cd /workspace/Safety-Dial
-codex
-```
-
-Use `codex resume` to reopen a previous conversation. Local setup leaves Codex
-installation and authentication alone. See the official
-[Codex CLI](https://learn.chatgpt.com/docs/codex/cli) and
-[authentication](https://learn.chatgpt.com/docs/auth) documentation.
-
 To download the data sources
 
 ```bash
