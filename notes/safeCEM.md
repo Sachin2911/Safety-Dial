@@ -48,6 +48,13 @@ volume (`workspace_is_volume = false`), so anything left there is destroyed on r
 - `docs/safeDial/results/arena_fix.json` and `arena_fix_states.npz`, the paired dial-60 run
 - `docs/safeDial/latex/figures/`, every figure
 - `docs/safeDial/SafeDialReport.pdf`, the full report
+- `animations/`, four animations of these same episodes, rebuilt by
+  `experiments/scripts/make_animations.py` (see `animations/README.md`). Frames are the
+  real Push-T renderer replaying the committed states, so nothing in them is a redraw of
+  the summary numbers: `dial_sweep` (the headline, d = 0/20/40 against lambda = 0),
+  `penalty_vs_safe_cem` (same seed, the exchange a weight makes and a threshold refuses),
+  `dial60_arena_escape` (the paired probe-based/action-space run), and `dial_response`
+  (the keep-out region inflating against the measured curves).
 
 Hazard box `(30, 130, 149, 249)` calibrated on the baseline route, baseline violation 0.14.
 Violations are always measured against the **true** box from simulator states.
