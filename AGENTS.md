@@ -6,7 +6,7 @@ This Honours project asks whether the **failure set** a safe-RL agent needs can 
 
 **Project name:** SafetyDial. The dial is now the **reachability threshold `d`**, not a Pareto front.
 
-> **Direction change (August 2026).** The project pivoted from *evolutionary multi-objective planning* (NSGA-II Pareto fronts over imagined plans) to *label-free latent reachability*. Most LaTeX documents in `docs/` still carry the old title and framing. The authority on the current plan is `SafetyDial_Proposal.pdf` at the repo root. See [Doc authority](#doc-authority) and [Legacy framing](#legacy-framing-what-changed).
+> **Direction change (August 2026).** The project pivoted from *evolutionary multi-objective planning* (NSGA-II Pareto fronts over imagined plans) to *label-free latent reachability*. Most LaTeX documents in `docs/` still carry the old title and framing. The authority on the current plan is `docs/revisedProp/`. See [Doc authority](#doc-authority) and [Legacy framing](#legacy-framing-what-changed).
 
 ## Project snapshot
 
@@ -15,7 +15,7 @@ This Honours project asks whether the **failure set** a safe-RL agent needs can 
 - **Former working titles:** Evolutionary Multi-Objective Planning in JEPA (EMOP in JEPA); SafetyDial: Selection Pressure for Safe Latent Planning in JEPA. Both are legacy
 - **Student:** Sachin Mohan (2699183), BSc Honours CS, University of the Witwatersrand
 - **Supervisor:** Geraud Nangue Tasse
-- **Revised proposal:** `SafetyDial_Proposal.pdf` (root), dated 16 August 2026. PDF only, no LaTeX source is in the repo
+- **Current proposal:** `docs/revisedProp/` (20 September 2026). LaTeX source plus built `RevisedProposal.pdf`
 - **Guiding move:** stop asking a human to say what "unsafe" looks like; read it off the dynamics as irreversibility, then make conservatism a runtime knob
 
 ### The gap being attacked
@@ -68,16 +68,32 @@ About 100 states annotated recoverable / irrecoverable, **for evaluation only**,
 | 4 Dial calibration, trade-off curves, ablations | late October |
 | Write-up | November |
 
-`newInfo.md` holds a shorter-horizon todo list written just before the proposal (prior-art week, then a Push-T go/no-go on forward-rollout dispersion, an ICLR-vs-thesis decision point, abstract by 11 Sep for an 18 Sep deadline, OpenReview admin). Where it disagrees with the proposal, the proposal wins: the proposal moves the primary environment to OGBench-Cube and demotes forward dispersion from the method to a comparison baseline.
+### Target venue: ICLR 2027 workshop
+
+Decided 20 September 2026. **The ICLR 2027 main track is not the target.** Its abstract deadline (18 September 2026, abstract registration mandatory) passed without a submission, deliberately: the idea was judged not ready, and a rushed abstract was not worth the slot. Do not treat that as a missed deadline to recover from.
+
+| Date | What |
+|------|------|
+| 29 November 2026 | ICLR 2027 accepted workshop list announced. No specific CFP exists before this |
+| ~1 February 2027 | Suggested workshop paper deadline. Each workshop sets its own on OpenReview, clustering late January to early February |
+| 26 February 2027 | Mandatory accepted-paper notification |
+| 29 to 30 April 2027 | Workshops, San Francisco (main conference 26 to 28 April) |
+
+Every ICLR workshop must accept short papers of 3 to 5 pages in ICLR format; full workshop tracks are usually 4 to 9 pages. Workshop papers are non-archival and ICLR's dual-submission policy explicitly permits them, so a workshop paper does **not** block a later full submission to ICLR 2028, NeurIPS 2027 or ICML 2027.
+
+**Scoping consequence, which governs what work is in scope.** Results must be frozen by mid-January 2027. Stage 1 plus Stage 2 is the workshop paper. Stages 3 and 4 are the conference paper that follows. The thesis write-up lands November 2026, leaving December and January to cut it down.
+
+Candidate workshops, in fit order, from the ICLR 2026 list as a predictor: World Models: Understanding, Modelling and Scaling (was on its 2nd edition); VerifAI (AI verification); Principled Design for Trustworthy AI; Agents in the Wild; and ICBINB ("I Can't Believe It's Not Better") as the negative-results fallback.
+
+The proposal's Section 9 carries the same schedule. These dates and the proposal are the only record; the earlier root-level planning notes were removed on 20 September 2026.
 
 ## Doc authority
 
 When sources conflict, follow this order:
 
-1. **`SafetyDial_Proposal.pdf`** (root, 16 Aug 2026). The current plan: label-free reachability, irreversibility, Safety Dial as threshold
-2. **`newInfo.md`** (root). Same direction, shorter horizon, written slightly earlier
-3. **`notes/`** and the `experiments/` notebooks. What was actually run and what it showed
-4. **`docs/ideation/`, `docs/researchProp/submitted/RP.pdf`, `docs/AB/`, `docs/litReview/`, `readme.md`.** All still describe the older frameworks (NSGA-II Pareto planning, and older still, EA for LLM alignment). Historical only
+1. **`docs/revisedProp/latex/main.tex`** (20 Sep 2026). **The current plan.** Label-free irreversibility, evaluated on the Safety-Gymnasium locomotion suite, three hypotheses, five gated stages. Supersedes everything below on research content, environment and scope
+2. **`notes/`** and the `experiments/` notebooks. What was actually run and what it showed
+3. **`docs/*/submitted/*.pdf`.** All still describe the older frameworks (NSGA-II Pareto planning, and older still, EA for LLM alignment). Historical only. (`readme.md` was rewritten to the reachability framing on 20 September 2026 and is current)
 
 Do not let the NSGA-II / Pareto-front story, or the older CoEvoRL / LLM-alignment story, override the current plan. If asked to write new project prose, write the reachability story.
 
@@ -93,7 +109,29 @@ Do not let the NSGA-II / Pareto-front story, or the older CoEvoRL / LLM-alignmen
 | Primary envs: Reacher, Push-T | OGBench-Cube primary (needs genuinely irreversible failures). Push-T is where the pilot work happened |
 | Baselines: penalty-tuned CEM, CPO, Lagrangian PPO, ROSARL | Supervised latent safety filter (UNISafe style) trained on labels for one failure mode |
 
-`pymoo` is still a declared dependency from the NSGA-II era. Nothing currently uses it.
+`pymoo` was removed from the dependencies on 20 September 2026; nothing used it. If NSGA-II vocabulary appears in old docs, it is legacy.
+
+### Ideas held in reserve
+
+`thesis_trajectory.md` (31 Aug 2026) proposed a **quasimetric** route: measure irreversibility as
+the asymmetry of a learned temporal distance, `r = d(z'->z) - d(z->z')`, fit by an Interval
+Quasimetric Embedding on `(z_t, z_{t+k}, k)` triplets. That file was deleted on 20 September 2026
+and the route was **not** adopted: the current proposal uses rollout return-reachability plus a
+precedence classifier. Three ideas from it are worth keeping and are recorded here so they are not
+lost with the file:
+
+- **A false-safe bound.** Bound the filter's false-safe rate in terms of estimator approximation
+  error and predictor Lipschitz constant, and check it is non-vacuous empirically. The current
+  proposal has conformal calibration but no bound.
+- **The substrate comparison as a first-class result.** End-to-end versus pretrained encoders,
+  originally LeWM versus V-JEPA 2. This survives in the proposal as H1, but framed as frozen
+  general-purpose features versus an end-to-end JEPA.
+- **The directional confound control.** Expert demonstration data is directionally biased, so any
+  asymmetry measure must be refit on reversed trajectories and on a random-policy subset. This
+  matters for the precedence estimator too, and the proposal's Stage 2 should inherit it.
+
+The quasimetric route is cheaper at inference (one forward pass, no rollout) and remains the
+obvious fallback if rollout-based estimation proves too expensive or too noisy.
 
 ## Where things stand
 
@@ -134,18 +172,13 @@ There is **no `src/` package**. The `src/safetydial/...` tree described in earli
 | `configs/download/` | Hydra configs for `download_data.py`: `all` (default), `pusht`, `cube` |
 | `docs/` | Deliverables and papers, see [Docs map](#docs-map) |
 | `data/`, `third_party/` | Local artifacts, contents gitignored, `.gitkeep` tracked |
-| `SafetyDial_Proposal.pdf` | The current proposal |
-| `newInfo.md` | Direction statement plus near-term todo |
+| `docs/revisedProp/` | **The current proposal.** LaTeX source, bib, and built PDF |
 
-New Python that outgrows a notebook goes in `experiments/helpers/` unless we deliberately re-introduce a package. If a package comes back, `pyproject.toml` already points `pythonpath = ["src"]` and `testpaths = ["tests"]` at directories that do not currently exist.
+New Python that outgrows a notebook goes in `experiments/helpers/` unless we deliberately re-introduce a package. `pyproject.toml` no longer points at a `src/` package or a `tests/` directory; if either comes back, re-add `[tool.pytest.ini_options]` and update ruff's `src`.
 
 ### Known warts
 
-- `experiments/.ipynb_checkpoints/` is **tracked in git** (three stale notebook copies). It should be gitignored and removed from the index.
 - Notebooks are committed with outputs, so they run 2 to 5 MB each.
-- `readme.md` still pitches "Safe AI via Evolutionary Algorithms" and titles the project EMOP.
-- `docs/researchProp/latex/main.tex` is an empty section-heading shell; `docs/AB/latex/main.tex` and `docs/litReview/latex/main.tex` are titled "Evolutionary Multi-Objective Planning in JEPA".
-- The revised proposal exists only as a PDF. There is no LaTeX source for it in the repo.
 - `docs/papers/myPapers/unisafe.pdf` and `UncertaintyAwareLatentSafety.pdf` are the **same paper** (Seo et al., UNISafe) committed under two names; `unisafe.pdf` (5.4 MB) was also never Ghostscript-compressed, unlike the 1.4 MB copy. `CEM-EVO.pdf` is actually CEM-RL.
 
 ## Data and checkpoint layout
@@ -164,6 +197,10 @@ third_party/le-wm/                         # upstream clone, gitignored
 ```
 
 Sizes: weights are about 72 MB each; Push-T expert data about 13 GB compressed, Cube about 46 GB. `weights_only=true` skips the datasets.
+
+**Disk is the live blocker for Stage 0.** Push-T decompresses at about 3.5x (13 GB to 46 GB). At that ratio Cube needs well over 100 GB, against roughly 63 GB free on the current Vast box. OGBench-Cube is the proposal's primary environment, so this has to be solved before Stage 0 can run there. The obvious first reclaim is `data/raw/pusht_expert_train.h5.zst` (13 GB), which `download_data.py` keeps after decompressing and which is re-downloadable from the Hub. Note the default `--config-name all` pulls Cube too; use `--config-name pusht` or `weights_only=true` to avoid filling the disk.
+
+`decompress_dataset` writes to a `.part` path and renames only on success, so an interrupted or out-of-disk decompress no longer leaves a truncated file that `processed_ready()` would treat as complete and skip.
 
 Model ids are `pusht/lewm` and `cube/lewm`, loaded as `swm.policy.AutoCostModel("pusht/lewm")`.
 
@@ -188,18 +225,23 @@ Collected from the notebooks and helpers. These cost real debugging time; do not
 
 | Path | Role |
 |------|------|
-| `SafetyDial_Proposal.pdf` (root) | **Current** revised proposal. Highest authority |
-| `newInfo.md` (root) | Current direction plus near-term todo |
-| `docs/ideation/` | Ideation doc (`ID.pdf`). Legacy: selection-pressure / Pareto framing |
-| `docs/researchProp/` | Original proposal. Frozen `submitted/RP.pdf`; living `latex/main.tex` is an empty shell. Superseded by the root PDF |
-| `docs/AB/` | Annotated bibliography. Frozen `submitted/AB.pdf`; `whiteBoard.md` holds the 7-paper list |
+| `docs/revisedProp/` | **Current proposal** (20 Sep 2026). `latex/main.tex` plus `references.bib`; `./compile.sh` builds `RevisedProposal.pdf`. Also published as an artifact for the supervisor |
+| `docs/ideation/` | Frozen `submitted/ID.pdf` plus `whiteBoard.md`. Legacy framing. LaTeX source removed 20 Sep 2026 |
+| `docs/researchProp/` | Original proposal, frozen `submitted/RP.pdf`. Superseded by `docs/revisedProp/`. LaTeX source removed 20 Sep 2026 |
+| `docs/AB/` | Annotated bibliography, frozen `submitted/AB.pdf`; `whiteBoard.md` holds the 7-paper list. LaTeX source removed 20 Sep 2026 |
 | `docs/litReview/` | Literature review. Frozen `submitted/LR.pdf`. Oldest framing (EA / LLM alignment) |
-| `docs/papers/geraudsPapers/` | Supervisor-suggested papers, each with a `.md` text dump beside the PDF |
-| `docs/papers/myPapers/` | Student-chosen papers (PDF). Only `LeWorldModel.md` has a dump, in `docs/papers/myPapersMd/` |
+| `docs/papers/myPapers/` | Student-chosen papers (PDF). 15 files |
 | `docs/projectPresentation/`, `docs/projectReport/` | Placeholders for later deliverables |
-| `readme.md` | Setup quickstart plus a stale pitch |
+| `readme.md` | Front door: the reachability pitch, setup quickstart, deliverable checklist |
 
-Each `docs/<deliverable>/` follows the same shape: `latex/main.tex` plus `references.bib`, `compile.sh` to build (`./compile.sh` builds, `./compile.sh clean` removes artifacts), intermediates in `latex/build/` (gitignored), final PDF at the folder root, `submitted/` holding the frozen handed-in version.
+Only `docs/revisedProp/` still carries LaTeX sources. The shape is `latex/main.tex` plus `references.bib`, `compile.sh` to build (`./compile.sh` builds, `./compile.sh clean` removes artifacts), intermediates in `latex/build/` (gitignored), final PDF at the folder root. The older deliverables were reduced to `submitted/` (the frozen handed-in PDF) plus `guides/` and `whiteBoard.md` on 20 September 2026; their sources all carried the superseded title.
+
+Building needs a LaTeX toolchain, which is not in the base image. On a fresh box:
+
+```bash
+apt-get install -y --no-install-recommends texlive-latex-recommended texlive-latex-extra \
+  texlive-fonts-recommended lmodern latexmk biber texlive-bibtex-extra
+```
 
 ## Reading list
 
@@ -211,7 +253,7 @@ Core to the current direction:
 | UNISafe: Uncertainty-aware Latent Safety Filters (Seo, Nakamura, Bajcsy 2025, arXiv 2505.00779) | `myPapers/unisafe.pdf` **and** `myPapers/UncertaintyAwareLatentSafety.pdf` (same paper, committed twice) | The supervised baseline for Stage 3 |
 | AnySafe (arXiv 2509.19555, ICRA 2026) | not yet in repo | Runtime-adjustable constraints via conformal similarity. Closest prior work on the "dial" idea |
 | No Turning Back (Grinsztajn et al. 2021) | not yet in repo | Precedence-classifier reversibility estimation. Basis of the second estimator |
-| LeWorldModel (LeWM, Maes et al. 2026) | `myPapers/LeWorldModel.pdf` (+ `myPapersMd/LeWorldModel.md`) | The frozen JEPA world model. Also the source of "physical quantities are linearly probeable" |
+| LeWorldModel (LeWM, Maes et al. 2026) | **Notion** (removed from repo, commit e631dc0) | The frozen JEPA world model. Also the source of "physical quantities are linearly probeable" |
 | LeJEPA / SIGReg (Balestriero and LeCun 2025, arXiv 2511.08544) | `myPapers/LeJEPA.pdf` | Why the latent is isotropic, which is what makes latent distance well posed |
 | Hamilton-Jacobi reachability (Bansal et al. 2017) | not yet in repo | The reachability machinery being ported |
 | OGBench (Park et al. 2025) | not yet in repo | Source of the Cube environment, the Stage 0 primary candidate |
@@ -228,18 +270,18 @@ Supporting and comparison:
 | SKY-JEPA, FF-JEPA | `myPapers/SKYJepa.pdf`, `FF-Jepa.pdf` | Further JEPA variants |
 | Constrained MBRL with Robust Cross-Entropy Method | `myPapers/MPC-RCE.pdf` | Safety-aware CEM planning |
 | CEM-RL (Pourchot and Sigaud) | `myPapers/CEM-EVO.pdf` (filename is misleading, the paper is CEM-RL) | Evolutionary plus gradient policy search. Legacy from the EA framing |
-| ROSARL | `geraudsPapers/ROSARL.pdf` (+ `.md`) | Supervisor work. Derives a sufficient penalty from intrinsic quantities, still one scalar fixed before deployment |
-| Safety-Gymnasium | `geraudsPapers/safetyGym/SafetyGym.pdf` (+ `.md`) | Standard benchmark. **Explicitly rejected** as the evaluation environment: its hazards are recoverable |
+| ROSARL | **Notion** (removed from repo, commit 8280a44) | Supervisor work. Derives a sufficient penalty from intrinsic quantities, still one scalar fixed before deployment |
+| Safety-Gymnasium | **Notion** (removed from repo, commit 8280a44) | Standard benchmark. **Explicitly rejected** as the evaluation environment: its hazards are recoverable |
 | OmniSafe | `myPapers/omniSafe.pdf` | Safe-RL implementations |
 | DQN | `myPapers/DQN.pdf` | Background |
-| MAP-Elites, DQD-RL | `geraudsPapers/IlluminatingSearchSpacesByMappingElites.pdf`, `ApprxGradsForDiffQDinRL.pdf` (+ `.md`) | Legacy QD track from the evolutionary framing |
+| MAP-Elites, DQD-RL | **Notion** (removed from repo, commit 8280a44) | Legacy QD track from the evolutionary framing |
 
 ## Environment and tooling
 
 - **Package manager:** `uv`. Python pinned to **3.11** via `.python-version`.
 - **Sync:** `uv sync --frozen --extra dev` (what `setup.sh` runs). Commit `uv.lock` when dependencies change.
 - **Run anything:** `uv run python ...`, `uv run pytest`, `uv run ruff check .`
-- **Direct deps:** `stable-worldmodel[env,train]` (the LeWM stack: `swm.World`, `swm.policy.AutoCostModel`, `CEMSolver`, `HDF5Dataset`), `torch`, `gymnasium`, `numpy`, `hydra-core` plus `omegaconf`, `huggingface_hub`, `h5py`, `zstandard`, `hdf5plugin`, `wandb`, `tqdm`, `pymoo` (legacy). Dev extras: `pytest`, `ruff`, `ipykernel`.
+- **Direct deps:** `stable-worldmodel[env,train]` (the LeWM stack: `swm.World`, `swm.policy.AutoCostModel`, `CEMSolver`, `HDF5Dataset`), `torch`, `gymnasium`, `numpy`, `hydra-core` plus `omegaconf`, `huggingface_hub`, `h5py`, `zstandard`, `hdf5plugin`, `wandb`, `tqdm`. Dev extras: `pytest`, `ruff`, `ipykernel`.
 - **Transitive but used directly in notebooks:** `scikit-learn`, `matplotlib`, `scipy`, `stable_pretraining`, `gym-pusht`, `ogbench`. They arrive via `stable-worldmodel`; if a notebook starts leaning on one, promote it to an explicit dependency.
 - **Lint:** ruff, `line-length = 100`.
 - **Not installed as a package** (`[tool.uv] package = false`).
@@ -303,16 +345,18 @@ Rules: never commit `.env`, never print token values into logs or terminal outpu
 - The dial is the **reachability threshold `d`**, calibrated conformally, not a Pareto front.
 - **Stage 1 gates everything.** If JEPA latent distance turns out to track appearance rather than dynamics, that negative result is itself the deliverable, and the probe-space formulation is the fallback.
 - The world model stays **frozen and released**. Training LeWM is infrastructure, not contribution.
-- **Safety-Gymnasium is rejected** for evaluation (recoverable hazards). OGBench-Cube is the primary candidate.
+- **Safety-Gymnasium locomotion is now the primary environment** (`SafetyWalker2dVelocity-v1` and siblings). The earlier blanket rejection applied to the *navigation* suite, whose hazards are extrinsic painted regions; the locomotion suite carries an intrinsic irreversible failure (falling) that is absent from the `cost` channel. That split is the whole experiment. **Gate 0 must be passed first:** disjointness has only been probed under random and crude directed policies, and it already fails on Hopper under full-forward drive.
 - Scope claims to **irreversible failures**, and state that limitation explicitly rather than defending it. Irreversibility is not the same thing as danger.
 - Do not skip the two Stage 2 controls (joint limits, horizon sweep) or the Stage 3 dataset-composition check. Without them the results are confounded or void.
 - Every probe use must be labelled as supervision of a **generic physical quantity**, never of the safety concept.
 - This is an active area with a high preprint rate. Check arXiv and OpenReview before claiming novelty.
+- The target venue is an **ICLR 2027 workshop**, not the main track. Scope to what can be frozen by mid-January 2027: Stage 1 plus Stage 2. See [Target venue](#target-venue-iclr-2027-workshop).
 
 ### Engineering
 
 - Run everything through **`uv run`**; do not `pip install` into the venv or create a second environment.
 - New code goes in `experiments/helpers/` (or a notebook). There is no `src/` package; do not resurrect one casually.
+- Ruff is clean. Notebook-idiom rules are silenced per-file in `pyproject.toml`; if a new error appears in a `.py` file, fix it rather than widening the ignore list.
 - Configs go in `configs/<group>/` as Hydra groups.
 - Never commit secrets, checkpoints, datasets, run outputs, or `wandb/`.
 - Compress any new PDF under `docs/papers/` before committing (see below).
