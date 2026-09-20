@@ -29,6 +29,61 @@ ensure_uv() {
   echo "[setup] uv: $(uv --version)"
 }
 
+ensure_codex() {
+  if command -v codex >/dev/null 2>&1; then
+    echo "[setup] codex: $(codex --version)"
+    return 0
+  fi
+
+  # Vast normally runs as root. Use the standard SSH login PATH when possible.
+  local install_dir="${HOME}/.local/bin"
+  if [[ -d /usr/local/bin && -w /usr/local/bin ]]; then
+    install_dir="/usr/local/bin"
+  fi
+  local installer
+  installer="$(mktemp)"
+  echo "[setup] installing Codex CLI..."
+  # Download completely before executing; never launch the interactive CLI at boot.
+  if ! curl -fsSL --connect-timeout 10 --max-time 60 \
+      https://chatgpt.com/codex/install.sh -o "${installer}"; then
+    rm -f "${installer}"
+    echo "[setup] ERROR: could not download the Codex installer" >&2
+    return 1
+  fi
+  if ! CODEX_INSTALL_DIR="${install_dir}" CODEX_NON_INTERACTIVE=1 sh "${installer}"; then
+    rm -f "${installer}"
+    echo "[setup] ERROR: Codex installation failed" >&2
+    return 1
+  fi
+  rm -f "${installer}"
+  export PATH="${install_dir}:${PATH}"
+  if ! command -v codex >/dev/null 2>&1; then
+    echo "[setup] ERROR: codex not found after install" >&2
+    return 1
+  fi
+  echo "[setup] codex: $(codex --version)"
+}
+
+configure_codex_auth() (
+  # A subshell keeps tracing disabled and restrictive permissions scoped to login.
+  set +x
+  umask 077
+  if [[ -n "${OPENAI_API_KEY:-}" ]]; then
+    # stdin avoids putting the key in command arguments or setup logs.
+    # An explicitly supplied key takes precedence over a cached ChatGPT login.
+    if printenv OPENAI_API_KEY | codex login --with-api-key >/dev/null 2>&1; then
+      echo "[setup] Codex API-key login saved (usage is billed separately from ChatGPT)"
+    else
+      echo "[setup] ERROR: Codex API-key login failed; check OPENAI_API_KEY and Codex configuration" >&2
+      return 1
+    fi
+  elif codex login status >/dev/null 2>&1; then
+    echo "[setup] Codex already signed in; keeping existing login"
+  else
+    echo "[setup] Codex installed; sign in once with: codex login --device-auth"
+  fi
+)
+
 ensure_system_deps() {
   # box2d-py (via gymnasium[all] <- stable-worldmodel[env]) builds from sdist and
   # needs the system `swig` binary on PATH. The PyPI `swig` wheel alone is not enough.
@@ -131,7 +186,7 @@ configure_jupyter_kernel() {
     return 0
   fi
 
-  # Force the repo venv — a parent shell may have VIRTUAL_ENV=/venv/main activated.
+  # Force the repo venv; a parent shell may have VIRTUAL_ENV=/venv/main activated.
   unset VIRTUAL_ENV
   echo "[setup] ensuring ipykernel in repo .venv"
   uv pip install --python "${venv_python}" ipykernel
@@ -181,7 +236,8 @@ PY
 export_env_for_ssh_sessions() {
   # Vast SSH/Jupyter often hide custom env vars unless written here.
   if [[ "${EUID:-$(id -u)}" -eq 0 ]] && [[ -w /etc/environment ]]; then
-    env >> /etc/environment
+    # Codex uses its private auth cache in later SSH sessions instead.
+    env -u OPENAI_API_KEY >> /etc/environment
     echo "[setup] appended current env to /etc/environment (SSH sessions)"
   else
     echo "[setup] skip /etc/environment (not root or not writable)"

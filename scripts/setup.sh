@@ -9,9 +9,12 @@
 #   curl -fsSL https://raw.githubusercontent.com/Sachin2911/Safety-Dial/main/scripts/setup.sh | bash
 #
 # Env (Vast account vars and/or repo .env):
-#   WANDB_API_KEY, GITHUB_TOKEN, HF_TOKEN
+#   WANDB_API_KEY, GITHUB_TOKEN, HF_TOKEN, OPENAI_API_KEY (optional Codex API login)
 # Optional: REPO_URL, REPO_DIR, GIT_AUTHOR_NAME, GIT_AUTHOR_EMAIL
+# Vast setup also installs Codex CLI. Without an API key, use its device login.
 
+# Dotenv files and authentication must never be echoed by bash -x.
+set +x
 set -euo pipefail
 
 REPO_URL="${REPO_URL:-https://github.com/Sachin2911/Safety-Dial.git}"
@@ -57,7 +60,8 @@ if [[ -z "${script_dir}" || ! -f "${script_dir}/helpers/_common.sh" ]]; then
   fi
 
   if [[ "${EUID:-$(id -u)}" -eq 0 ]] && [[ -w /etc/environment ]]; then
-    env >> /etc/environment
+    # Codex caches its login privately; do not copy its key to this shared file.
+    env -u OPENAI_API_KEY >> /etc/environment
     echo "[setup] appended current env to /etc/environment (SSH sessions)"
   fi
 
@@ -92,6 +96,8 @@ load_dotenv
 ensure_uv
 if is_vast; then
   ensure_system_deps
+  ensure_codex
+  configure_codex_auth
 fi
 configure_git_identity
 configure_github_https
@@ -102,3 +108,6 @@ sanity_check
 echo "[setup] done"
 echo "[setup] tip: uv run python ...   |   git pull && bash scripts/setup.sh"
 echo "[setup] tip: LeWM source + Hub weights/data: uv run python scripts/download_data.py"
+if is_vast; then
+  echo "[setup] tip: cd ${REPO_ROOT} && codex"
+fi
