@@ -167,7 +167,14 @@ There is **no `src/` package**. The `src/safetydial/...` tree described in earli
 | `experiments/*.ipynb` | Where the work happens. `PushTDataExploration.ipynb` (dataset survey), `LinearProbeAndAvoidance.ipynb` (first probe plus hazard run), `LinearProbeAndAvoidance_4.ipynb` (**current**: probes, imagination check, calibrated hazard box, lambda sweep, demo) |
 | `experiments/helpers/linProbeHelpers.py` | Push-T state construction, rendering and animation, trajectory plots, box penetration and path interpolation, `HazardAugmentedCostModel`, violation stats, CEM history summaries |
 | `experiments/helpers/hazardSweep.py` | The corrected sweep layer: episode metrics, hazard-box calibration from the baseline path, margin from imagination error, detour feasibility, `run_episode`, `sweep_lambda`, `plot_front`. Its module docstring lists what it fixed and why |
-| `notes/` | Short markdown findings. `pushTDataExp.md` is the Push-T HDF5 layout reference |
+| `experiments/helpers/locoEnv.py` | **Vendored Safety-Gymnasium velocity task.** Threshold table, env registration under `safetydial/*`, `env_manifest()` fingerprint |
+| `experiments/helpers/locoCollect.py` | State-only HDF5 writer and rollout loop. Stores `(qpos, qvel, action, ...)`, never pixels |
+| `experiments/helpers/locoData.py` | Lazy-render dataset: subclasses `swm.data.Dataset`, renders pixels on demand from stored state. Worker-safe EGL, render fingerprint |
+| `experiments/helpers/locoPolicies.py` | Uniform `act(obs)` adapters: random, scripted-forward, mixed, trained-actor |
+| `experiments/helpers/locoMetrics.py` | Gate 0 statistics, disjointness lift, matched pairs, AUROC, trivial baselines |
+| `experiments/helpers/oracle.py` | **Recoverability oracle.** The project's headline contribution. Evaluation only |
+| `experiments/helpers/equivCheck.py` | Vendored-env equivalence gates G1..G9. Deliberately numpy-only and torch-free |
+| `notes/` | Short markdown findings. `pushTDataExp.md` is the Push-T HDF5 layout reference, `safetyGymLocomotion.md` the measured Safety-Gymnasium facts, `terminationIsNotIrreversibility.md` the headline Phase 0 result |
 | `scripts/` | `setup.sh` (local or Vast), `download_data.py` (LeWM clone plus Hub weights and data), `helpers/_common.sh` |
 | `configs/download/` | Hydra configs for `download_data.py`: `all` (default), `pusht`, `cube` |
 | `docs/` | Deliverables and papers, see [Docs map](#docs-map) |
@@ -345,7 +352,12 @@ Rules: never commit `.env`, never print token values into logs or terminal outpu
 - The dial is the **reachability threshold `d`**, calibrated conformally, not a Pareto front.
 - **Stage 1 gates everything.** If JEPA latent distance turns out to track appearance rather than dynamics, that negative result is itself the deliverable, and the probe-space formulation is the fallback.
 - The world model stays **frozen and released**. Training LeWM is infrastructure, not contribution.
-- **Safety-Gymnasium locomotion is now the primary environment** (`SafetyWalker2dVelocity-v1` and siblings). The earlier blanket rejection applied to the *navigation* suite, whose hazards are extrinsic painted regions; the locomotion suite carries an intrinsic irreversible failure (falling) that is absent from the `cost` channel. That split is the whole experiment. **Gate 0 must be passed first:** disjointness has only been probed under random and crude directed policies, and it already fails on Hopper under full-forward drive.
+- **Safety-Gymnasium locomotion is now the primary environment** (`SafetyWalker2dVelocity-v1` and siblings), **vendored** into `experiments/helpers/locoEnv.py` rather than installed. See `notes/safetyGymLocomotion.md` for the measured facts and `notes/envEquivalence.md` for the equivalence report. The earlier blanket rejection applied to the *navigation* suite, whose hazards are extrinsic painted regions; the locomotion suite carries an intrinsic irreversible failure (falling) that is absent from the `cost` channel. That split is the whole experiment.
+- **Gate 0 gates the data regime, not the environment.** Published OmniSafe numbers back out to a converged PPO-Lagrangian that runs episodes to truncation and almost never falls, while unconstrained PPO violates on ~90% of steps. Both fail a naive "falls while cost stays rare" test, from opposite directions. That is a property of converged experts, not of the benchmark, and nobody deploys a runtime safety filter on a policy that never fails. The central statistic is **disjointness lift**, not "does cost ever fire".
+- **`terminated` is not ground truth for irreversibility, and the gap is large.** Measured: at the step the benchmark declares failure, Walker2d is typically still *standing* at z ~ 1.09, merely leaning past 55 degrees, and does not reach the ground for another ~60 steps. CEM on the true simulator recovers from **96%** of states at the flag. `terminated` is a threshold on torso height and pitch, both of which decode from a raw 32x32 grayscale frame at R^2 = 0.99, so scoring against it is also nearly circular. Use the recoverability oracle in `experiments/helpers/oracle.py`. Full write-up in `notes/terminationIsNotIrreversibility.md`; this is the workshop paper's headline.
+- **Oracle labels are evaluation only.** Nothing in the method path may import `oracle.py` or read its label files, and no method hyperparameter may be selected on oracle AUROC.
+- **Collect with termination DISABLED.** `rollout_episode` records state *before* each action, so `terminated[t]` means "action t made it unhealthy" while `qpos[t]` is the last HEALTHY state; under the benchmark's own termination the episode then ends, so **every row in such a dataset is healthy and it contains no failures at all**. Build the env with `terminate_when_unhealthy=False` and pass `stop_after_unhealthy`. Use the `healthy` column, never `terminated`, to identify failure states. `steps_to_failure` is signed: positive before the first unhealthy step, zero at it, negative after.
+- **Report matched-pair AUROC, not population AUROC.** Pose alone scores ~0.98 on the raw population. A matched pair holds pose almost fixed and varies only recoverability, so it is the honest measurement. Report it as a margin over the strongest trivial baseline.
 - Scope claims to **irreversible failures**, and state that limitation explicitly rather than defending it. Irreversibility is not the same thing as danger.
 - Do not skip the two Stage 2 controls (joint limits, horizon sweep) or the Stage 3 dataset-composition check. Without them the results are confounded or void.
 - Every probe use must be labelled as supervision of a **generic physical quantity**, never of the safety concept.
@@ -354,13 +366,38 @@ Rules: never commit `.env`, never print token values into logs or terminal outpu
 
 ### Engineering
 
-- Run everything through **`uv run`**; do not `pip install` into the venv or create a second environment.
+- Run everything through **`uv run`**; do not `pip install` into the venv or create a second
+  project environment. **One narrow exception:** out-of-band *tooling* that cannot share the
+  project's Python pin, currently `safety-gymnasium` and `omnisafe`. Both are capped below 3.11
+  by hard `==` pins on gymnasium 0.28 and mujoco 2.3, so adding them makes `uv lock` fail
+  outright. They run as ephemeral invocations that never touch `.venv` or `uv.lock`:
+
+  ```bash
+  uv run --isolated --no-project --python 3.10 \
+    --with "safety-gymnasium==1.0.0" --with "numpy<2" \
+    python experiments/scripts/emit_reference_traj.py
+  ```
+
+  They may produce only small artefacts (reference trajectories, policy weights), never datasets
+  and never a reported number. Everything that appears in the thesis or the paper is produced
+  inside `.venv`.
 - New code goes in `experiments/helpers/` (or a notebook). There is no `src/` package; do not resurrect one casually.
 - Ruff is clean. Notebook-idiom rules are silenced per-file in `pyproject.toml`; if a new error appears in a `.py` file, fix it rather than widening the ignore list.
 - Configs go in `configs/<group>/` as Hydra groups.
 - Never commit secrets, checkpoints, datasets, run outputs, or `wandb/`.
 - Compress any new PDF under `docs/papers/` before committing (see below).
 - Follow the writing rules below (no em dashes).
+
+## Locomotion gotchas
+
+Collected from Phase 0. These cost real debugging time.
+
+- `MUJOCO_GL=egl` must be set **before** `import mujoco`. `locoEnv.py` does it at module import, so import it first.
+- Render size must be passed at `make()` time. MuJoCo sizes its offscreen framebuffer once when the GL context is created; setting `width`/`height` afterwards silently does nothing.
+- **An EGL context inherited across `fork()` does not raise.** It renders black or stale frames, which surfaces days later as "the world model will not learn". `locoData` defends with a lazy context, an owner-pid assertion, a render fingerprint checked in every worker, and `spawn` as the default.
+- **`set_state` does not fully reset the solver.** It leaves `data.qacc_warmstart` and `data.ctrl` holding values from whatever ran before, so the same rollout replayed after different predecessors differs in the last two digits. `RecoverySimulator._reset_to` zeroes them. Labels are only bit-reproducible because of this.
+- HalfCheetah and Swimmer never terminate upstream and have their own `step()` bodies; they are deliberately not registered.
+- Oracle throughput on the 5090: ~8,200 sim steps/s per process. T1+T2 is ~8 s per hard state, full CEM ~39 s. Multiprocess physics saturates around 24 workers; 48 is slower.
 
 ## No em dashes
 
