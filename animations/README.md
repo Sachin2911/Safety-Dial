@@ -1,8 +1,9 @@
 # Animations
 
-Rebuild with
+Two independent sets live here. Rebuild with
 
-    uv run python experiments/scripts/make_animations.py
+    uv run python experiments/scripts/make_animations.py             # Push-T Safe CEM
+    uv run python experiments/scripts/make_locomotion_animations.py  # Phase 0 locomotion
 
 Every frame is the real Push-T renderer replaying a **committed simulator state** from
 `docs/safeDial/results/`, not a reconstruction, with the hazard drawn on top:
@@ -32,3 +33,23 @@ action-space variant, which is the honest number. Full discussion in
 Three seeds and a reduced grid. The violation axis saturating at zero across the whole
 usable dial means **H4 is not demonstrated** by this run; see the notes for the gate
 geometry proposed to get a real trade-off.
+
+
+## Phase 0 locomotion (`walker2d_*`, `hopper_*`)
+
+Every frame is the real MuJoCo renderer replaying a simulator state the oracle actually scored,
+with the state readout and a torso-height gauge showing the benchmark's healthy band. Rebuild
+with `make_locomotion_animations.py`.
+
+| File | What it shows |
+|------|---------------|
+| `walker2d_fall_and_getup` | The Phase 0 result in one clip. The robot walks, the benchmark declares failure **while it is still standing** at `z = 0.78`, it goes all the way to the ground at `z = 0.03`, and then a CEM plan stands it back up under the same action bounds any policy has. Nothing about this fall is irreversible, which is why Walker2d cannot support the proposal's experiment. |
+| `hopper_getup` | A Hopper state 150 steps past the flag, torso at `z = 0.084`, recovered to `z = 1.087`. |
+| `hopper_irrecoverable` | The contrast: a Hopper state the search could not recover. Read it with the caveat below. |
+
+**Caveat on `hopper_irrecoverable`.** Hopper's irrecoverable set is a property of the recovery
+predicate rather than of the dynamics. Relaxing the pitch tolerance from 0.10 to 0.15 rad, still
+inside the benchmark's own 0.2 rad healthy band, empties it; so does shortening the dwell
+requirement, and so does doubling the horizon. The clip shows the best attempt found, and that
+attempt does reach an upright, healthy pose without ever holding it for 25 consecutive steps.
+See [`docs/phase0/Phase0Report.pdf`](../docs/phase0/Phase0Report.pdf) section 4.4.

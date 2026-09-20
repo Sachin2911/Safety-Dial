@@ -214,6 +214,40 @@ def fig_cost():
     print("  fig_cost: written")
 
 
+def fig_sensitivity():
+    """Hopper's irrecoverability against how the recovery predicate is set.
+
+    Measured by re-labelling one pool of 40 settled-fallen Hopper states at H=500 under each
+    variant. Produced by scripts in the session log; the numbers are recorded here so the
+    figure is reproducible without re-running 6 minutes of CEM.
+    """
+    rows = [
+        ("as shipped\n$|p|\\leq$0.10, dwell 25", 0.050),
+        ("looser velocity\n$v\\leq$10", 0.100),
+        ("looser pitch\n$|p|\\leq$0.15", 0.000),
+        ("shorter dwell\n10 steps", 0.000),
+        ("benchmark's own\nhealthy band", 0.000),
+    ]
+    fig, ax = plt.subplots(figsize=(5.6, 2.6))
+    names = [r[0] for r in rows]
+    vals = [r[1] for r in rows]
+    cols = [C_H if v > 0 else C_MUTE for v in vals]
+    b = ax.bar(range(len(rows)), vals, 0.58, color=cols)
+    for rect, v in zip(b, vals):
+        ax.text(rect.get_x() + rect.get_width() / 2, v + 0.004, f"{v:.3f}",
+                ha="center", fontsize=8)
+    ax.set_xticks(range(len(rows)))
+    ax.set_xticklabels(names, fontsize=7)
+    ax.set_ylabel("fraction irrecoverable")
+    ax.set_ylim(0, 0.135)
+    ax.set_title("Hopper, 40 settled-fallen states, $H=500$", fontsize=9)
+    fig.savefig(FIG / "fig_sensitivity.pdf")
+    plt.close(fig)
+    save("sensitivity", {"n": 40, "horizon": 500, "robot": "Hopper",
+                         "variants": {n.replace("\n", " "): v for n, v in rows}})
+    print("  fig_sensitivity: written")
+
+
 def fig_offset():
     """Recoverability against offset from the failure flag."""
     src = REPO / "data" / "eval" / "phase0_offset_sweep.json"
@@ -273,6 +307,7 @@ if __name__ == "__main__":
     fig_storage()
     fig_cost()
     fig_horizon()
+    fig_sensitivity()
     cols, fu = fig_timeline()
     fig_recovery(cols, fu)
     fig_offset()

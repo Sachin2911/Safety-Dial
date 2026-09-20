@@ -32,11 +32,14 @@ proposal can support its central claim. The answer is robot-dependent, and the p
 wrong robot. Walker2d, the environment the revised proposal builds its argument around, has no
 irreversible failures at all: given a four second horizon and a competent planner it recovers from
 lying on the ground in every case tested, and recoverability does not fall below 0.88 at any point
-either side of the benchmark's failure flag. Hopper does have a genuine irreversibility boundary,
-but it sits roughly 40 steps \emph{after} the flag fires, and about half of well-fallen Hopper
-states are irrecoverable. So the premise survives, on a different robot, with the failure set
-displaced from where the benchmark says it is. This report records what was built, what was
-measured, the corrections that measurement forced, and what follows.
+either side of the benchmark's failure flag. Hopper appears at first to have a genuine
+irreversibility boundary sitting roughly 40 steps \emph{after} the flag fires, but a sensitivity
+check dissolves it: relaxing the recovery predicate's pitch tolerance from 5.7 to 8.6 degrees,
+still strictly inside the benchmark's own healthy band, takes its irrecoverable fraction to zero.
+What that predicate was measuring is whether a hopping robot can hold near-static balance, not
+whether it can recover. Neither robot, then, carries the irreversible failure the proposal needs.
+This report records what was built, what was measured, the corrections that measurement forced,
+and what follows.
 \end{abstract}
 
 \section{Verdict}
@@ -63,15 +66,21 @@ Hopper   & 0.333 & 0.167 \\
 full CEM search on the true simulator. Walker2d is at zero for both horizons.}
 \end{table}
 
-Hopper is the exception, and it is the useful one. Sweeping either side of the failure flag with
-40 states per point (Figure~\ref{fig:offset}), Walker2d never drops below $0.88$ recoverable
-anywhere, while Hopper falls from $1.000$ at the flag to $0.450$ at $+40$ steps. Hopper therefore
-has a real irreversibility boundary; it simply is not where \texttt{terminated} says it is.
+Hopper looks at first like the exception. Sweeping either side of the failure flag with 40 states
+per point (Figure~\ref{fig:offset}), Walker2d never drops below $0.88$ recoverable anywhere, while
+Hopper falls from $1.000$ at the flag to $0.450$ at $+40$ steps, which reads as a real
+irreversibility boundary displaced from where \texttt{terminated} puts it.
 
-\paragraph{What follows.} Walker2d cannot support the proposal's experiment and should be dropped.
-Hopper can, with the failure set taken from the oracle rather than from the termination flag. This
-is the outcome Phase 0 exists to detect, and detecting it cost one day rather than surfacing in
-Stage 2 in November.
+It does not survive scrutiny. Section~\ref{sec:sensitivity} re-labels the same states under
+weaker recovery predicates: relaxing the pitch tolerance from $0.10$ to $0.15$\,rad, still well
+inside the benchmark's own $0.2$\,rad healthy band, takes the irrecoverable fraction to zero, as
+does shortening the dwell requirement. Hopper's apparent irreversibility is a statement about
+static balance, not about recovery.
+
+\paragraph{What follows.} Neither robot carries the irreversible failure the proposal's
+experiment needs, so the locomotion suite should be replaced rather than re-parameterised. This is
+the outcome Phase 0 exists to detect, and detecting it cost one day rather than surfacing in Stage
+2 in November.
 
 \section{What was built}
 
@@ -195,6 +204,32 @@ intervals and the sampled configurations differ.}
 \label{fig:offset}
 \end{figure}
 
+\subsection{Hopper's boundary is a property of the predicate, not the dynamics}
+\label{sec:sensitivity}
+
+The obvious question about Figure~\ref{fig:offset} is whether Hopper's drop is real or an
+artefact of how ``recovered'' was defined. Hopper's predicate asks for $|\text{pitch}| \leq 0.10$
+rad and root velocity $\leq 5.0$ held for 25 consecutive steps, and a hopper is an inherently
+dynamic system, so it may be being asked to stand still rather than to recover.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.78\textwidth]{fig_sensitivity.pdf}
+\caption{The same 40 settled-fallen Hopper states, re-labelled under weaker recovery predicates
+at $H=500$. Relaxing pitch from $0.10$ to $0.15$\,rad, or shortening the dwell from 25 steps to
+10, takes the irrecoverable fraction to zero. Every variant shown is still strictly inside the
+benchmark's own healthy band of $|\text{pitch}| < 0.2$.}
+\end{figure}
+
+The horizon behaves the same way: at $H=250$ roughly $45\%$ of states at $+150$ are
+irrecoverable, and at $H=500$ that falls to $5\%$. Both knobs point the same way, and the
+conclusion is the one already drawn for Walker2d: what is being measured is how long recovery
+takes and how tidily it must finish, not whether recovery is possible.
+
+This is the same class of error as the joint-velocity cap corrected in Section~5, caught in one
+place and left standing in another. It is recorded here rather than quietly fixed because it
+changes the report's recommendation.
+
 \subsection{Mode A and Mode B are not disjoint}
 
 \begin{figure}[H]
@@ -310,11 +345,16 @@ options:
     the literal published benchmark, which undercuts the reason for choosing it.
 \end{enumerate}
 
-On the evidence here, option 1 applied to \textbf{Hopper} is the shortest path: the environment,
-the baselines and the whole pipeline survive, and the only change is that the failure set comes
-from the oracle rather than from \texttt{terminated}. That change is not a workaround, it is the
-proposal's own thesis, and Figure~\ref{fig:offset} is the evidence that the two sets genuinely
-differ. Walker2d should be dropped rather than defended.
+An earlier draft of this report recommended option 1 applied to Hopper, on the strength of
+Figure~\ref{fig:offset} alone. Section~\ref{sec:sensitivity} withdraws that recommendation: once
+the predicate is relaxed anywhere, Hopper's irrecoverable set empties, so keeping the locomotion
+suite would mean defending a threshold rather than measuring a property.
+
+That leaves options 2 and 3 as the live ones, and they compose: the oracle and the negative result
+are worth reporting whichever environment comes next, and an environment with a genuinely
+one-way transition, such as a cube pushed off a table, is what the rest of the programme needs.
+Option 1 remains available but only with a controller class fixed in advance and justified on its
+own terms, not chosen after seeing which threshold produces failures.
 
 \section*{Reproducing}
 

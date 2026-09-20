@@ -85,11 +85,13 @@ It rolls, pushes off, and stands. This is real physics, not a simulator exploit:
 Walker2d is a 2D planar model with gear-100 actuators and no self-collision, so it can right
 itself.
 
-**Conclusion: Walker2d has no irreversible failures; Hopper does, but not where the benchmark
-says.** Walker2d recovers from everything given time, so any "irreversibility" result on it would
-be an artefact of the horizon chosen. Hopper retains roughly half its well-fallen states as
-irrecoverable, and its recoverability drops from 1.000 at the flag to 0.450 at +40 steps, which is
-a real boundary displaced about 40 steps past the termination flag.
+**Conclusion: neither robot has a genuine irreversible failure.** Walker2d recovers from
+everything given time. Hopper's recoverability does drop from 1.000 at the flag to 0.450 at +40
+steps at H=250, which looked like a real boundary, but relaxing the recovery predicate's pitch
+tolerance from 0.10 to 0.15 rad (still inside the benchmark's own 0.2 rad healthy band) takes its
+irrecoverable fraction to zero, and so does shortening the dwell from 25 steps to 10. Doubling the
+horizon takes 45% irrecoverable down to 5%. Any "irreversibility" result on these environments is
+an artefact of the horizon and the tidiness demanded of the finish.
 
 This kills the environment for the proposal's premise as written. It does not kill the oracle,
 which is what produced the finding, and it does not kill the project: see the options recorded in

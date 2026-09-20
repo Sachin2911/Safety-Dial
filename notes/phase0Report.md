@@ -5,17 +5,32 @@ Sachin Mohan (2699183), 20 September 2026. Covers the first implementation phase
 
 ## Verdict
 
-**Not on Walker2d, which is the robot the proposal names. Yes on Hopper, with the failure set
-displaced from where the benchmark puts it.**
+**No. Not on Walker2d, which is the robot the proposal names, and not on Hopper either once its
+apparent boundary is checked.**
 
 The revised proposal rests on a contrast: the velocity cost is *extrinsic and recoverable*, while
 falling is *intrinsic and irreversible*. The second half is false for Walker2d. Given a 4 second
 horizon and a competent planner it recovers from lying on the ground in every case tested, and
 recoverability never drops below 0.88 at any offset either side of the failure flag.
 
-Hopper is different and is the useful case. Its recoverability falls from 1.000 at the flag to
-0.450 at +40 steps, so it has a genuine irreversibility boundary. That boundary simply is not
-where `terminated` says it is: it sits roughly 40 steps later.
+Hopper looks different at first: recoverability falls from 1.000 at the flag to 0.450 at +40
+steps. But re-labelling the same states under weaker recovery predicates dissolves it. Relaxing
+the pitch tolerance from 0.10 to 0.15 rad, still well inside the benchmark's own 0.2 rad healthy
+band, takes the irrecoverable fraction to zero, as does shortening the dwell requirement from 25
+steps to 10:
+
+| recovery predicate (Hopper, 40 states, H=500) | irrecoverable |
+|---|---|
+| as shipped: z>=0.95, \|pitch\|<=0.10, v<=5, dwell 25 | 0.050 |
+| looser velocity, v<=10 | 0.100 |
+| **looser pitch, \|pitch\|<=0.15** | **0.000** |
+| **shorter dwell, 10 steps** | **0.000** |
+| **the benchmark's own healthy band** | **0.000** |
+
+The horizon behaves the same way: 45% irrecoverable at +150 with H=250, 5% with H=500. Hopper's
+predicate was measuring whether a hopping robot can hold near-static balance, not whether it can
+recover. This is the same class of error as the joint-velocity cap corrected for Walker2d, caught
+in one place and left standing in another.
 
 This is the outcome Phase 0 was built to detect. It cost one day rather than surfacing in Stage 2
 in November.
@@ -117,8 +132,11 @@ And sweeping either side of the flag, 40 states per point, full CEM:
 | Walker2d recoverable | 0.975 | 1.000 | 0.975 | 0.975 | 1.000 | 1.000 | 1.000 | 1.000 | 0.925 |
 | Hopper recoverable | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.950 | **0.450** | 0.750 | 0.550 |
 
-Walker2d never moves. Hopper falls sharply at +40. The Hopper curve is not monotone beyond that;
-at n=40 those points sit within each other's confidence intervals.
+Walker2d never moves. Hopper falls sharply at +40, and the curve is not monotone beyond that; at
+n=40 those points sit within each other's confidence intervals. **Hopper's drop does not survive
+a sensitivity check on the recovery predicate: see the table in the Verdict above.** Relaxing the
+pitch tolerance or the dwell requirement, or doubling the horizon, each takes its irrecoverable
+fraction to zero.
 
 A replayed Walker2d recovery, from z = 0.252, pitch = -2.90 (upside down on the ground), every
 action inside [-1, 1]: t=0 z=0.252, t=40 z=0.420, t=100 z=0.540, **t=140 z=1.471, pitch -0.09**.
@@ -211,6 +229,11 @@ the oracle's one-sidedness is an assumption rather than a guarantee.
 The oracle and the pipeline are sound and environment-agnostic. The environment is not.
 
 Four options, in no particular order:
+
+*(An earlier draft recommended option 1 on Hopper. The sensitivity result above withdraws that:
+once the predicate is relaxed anywhere Hopper's irrecoverable set empties, so keeping the suite
+would mean defending a threshold rather than measuring a property. Options 2 and 3 are the live
+ones and they compose.)*
 
 1. **Controller-relative viability.** Keep Safety-Gymnasium, and define irrecoverable as "outside
    the viability kernel of a realistic controller class" rather than "no omniscient planner can
