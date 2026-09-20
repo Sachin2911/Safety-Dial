@@ -1,44 +1,38 @@
 # SafetyDial
 
-**Label-Free Reachability in Joint-Embedding Predictive Architectures for Safe Reinforcement
-Learning.** Subtitle: The Safety Dial, irreversibility as a deployment-time control.
+**When Are JEPA Predictions Reliable Enough for Safe Planning?**
 
 Sachin Mohan (2699183), BSc Honours CS, University of the Witwatersrand.
 Supervised by Geraud Nangue Tasse.
 
 ## The idea
 
-Latent safety filters removed the hand-tuned penalty weight from safe RL, which was real
-progress. They did not remove supervision: the failure set that seeds the reachability
-computation is a classifier trained on human-annotated failure observations, so the filter is
-blind to any failure mode nobody thought to label.
+SafetyDial studies whether a predictive latent world model makes reliable safety decisions
+when a planner chooses the actions. A model may predict ordinary trajectories accurately
+while CEM selects plans whose predicted constraint satisfaction is overly optimistic.
 
-This project asks whether that failure set can be derived from the dynamics instead. The
-criterion is **irreversibility**: a transition is unsafe when no available action sequence
-returns the system to where it was. That is a property of the transition structure, needs no
-annotation, and is only computable with a world model, since it depends on rollouts of actions
-that were never taken.
+**Research question.** Does planner optimisation amplify optimistic safety errors in
+JEPA-style world models, and can a simple correction reduce those errors while preserving
+useful task performance?
 
-The work builds return-reachability estimators in the latent space of a JEPA world model
-(LeWM / SIGReg), a substrate where reachability analysis has not been attempted, and then
-exposes the resulting conservatism as the **Safety Dial**: a threshold an operator sets at
-deployment rather than an engineer fixing during training.
+The adopted plan accepts Safety-Gymnasium's supplied cost constraints and uses programmatic
+labels. It audits actual versus imagined futures, compares ordinary and planner-selected
+actions, and tests one small correction such as a horizon-dependent error margin. The
+**Safety Dial** controls deployment conservatism on those predictions. Closed-loop Safe-CEM
+is an extension after the offline evidence is established.
 
-**Research question.** Can the failure set required by a latent safety filter be derived from
-irreversibility in the dynamics, without failure labels, and does such a filter, computed in a
-JEPA latent, detect failure modes that a supervised latent safety filter trained on different
-labelled failures cannot?
+Full adopted plan, hypotheses, metrics, baselines, gates and first pilot:
+[`docs/researchDirection.md`](docs/researchDirection.md). Repo conventions and current
+status: [`AGENTS.md`](AGENTS.md).
 
-Full plan, method, evidence and timeline: [`docs/revisedProp/RevisedProposal.pdf`](docs/revisedProp/RevisedProposal.pdf)
-(LaTeX source in [`docs/revisedProp/latex/`](docs/revisedProp/latex/), rebuild with
-`./docs/revisedProp/compile.sh`). Repo conventions and current status:
-[`AGENTS.md`](AGENTS.md).
+The existing [Phase 0 findings](notes/phase0Report.md) explain why termination should not
+be treated as irreversibility. The [Safe-CEM pilot](notes/safeCEM.md) motivates auditing
+imagined safety decisions and records corrections to the original penalty comparison.
 
-> **Note on older documents.** The project pivoted in August 2026 from evolutionary
-> multi-objective planning (NSGA-II Pareto fronts) to label-free irreversibility, and
-> revised again in September 2026 onto the Safety-Gymnasium locomotion suite. The
-> deliverables under `docs/*/submitted/` were written under the older framing and are kept
-> as the record of graded work; their LaTeX sources were removed on 20 September 2026.
+> **Direction adopted 20 September 2026.** The earlier label-free irreversibility proposal
+> in `docs/revisedProp/` is superseded by the Markdown plan above. The older NSGA-II and
+> LLM-alignment documents are historical. This project now studies supervised constraint
+> prediction; it does not require an irreversible-failure environment or a new safety theorem.
 
 ## Setup
 
@@ -72,6 +66,7 @@ All under [`docs/`](docs/).
 - [x] Ideation document
 - [x] Annotated bibliography
 - [x] Literature review
-- [x] Research proposal (superseded by `docs/revisedProp/`)
+- [x] Research proposals (historical, including `docs/revisedProp/`)
+- [x] Adopted research direction, [`docs/researchDirection.md`](docs/researchDirection.md)
 - [ ] Project presentation
 - [ ] Project report
