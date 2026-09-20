@@ -1,0 +1,111 @@
+{
+  "config": {
+    "dial": 60.0,
+    "hazard_box": [
+      30.104567677974686,
+      130.10456767797467,
+      148.66144357681293,
+      248.66144357681293
+    ],
+    "start_pusher": [
+      40.0,
+      40.0
+    ],
+    "goal_pusher": [
+      250.0,
+      310.0
+    ],
+    "start_block": [
+      300.0,
+      310.0
+    ],
+    "goal_block": [
+      360.0,
+      310.0
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "probe_stats": {
+      "r2": 0.9991065795969422,
+      "rmse": 3.0341551303863525,
+      "radial_median": 2.630727529525757,
+      "radial_p95": 7.533760070800781,
+      "n_train": 80000,
+      "n_test": 20000
+    },
+    "provenance_note": "Paired run of both arena-constraint variants at dial 60. Reproduce with: uv run python experiments/scripts/validate_arena_fix.py --seeds 3 --both"
+  },
+  "variants": {
+    "probe_based": {
+      "episodes": [
+        {
+          "seed": 0,
+          "frac_violating": 0.0,
+          "final_block_err_px": 60.0,
+          "oob_frac": 0.96,
+          "block_moved_px": 0.0,
+          "final_frac_feasible": 0.8050000131130218
+        },
+        {
+          "seed": 1,
+          "frac_violating": 0.0,
+          "final_block_err_px": 60.0,
+          "oob_frac": 0.96,
+          "block_moved_px": 0.0,
+          "final_frac_feasible": 0.8053333401679993
+        },
+        {
+          "seed": 2,
+          "frac_violating": 0.0,
+          "final_block_err_px": 60.0,
+          "oob_frac": 0.94,
+          "block_moved_px": 0.0,
+          "final_frac_feasible": 0.8083333492279052
+        }
+      ],
+      "mean": {
+        "frac_violating": 0.0,
+        "final_block_err_px": 60.0,
+        "oob_frac": 0.9533333333333333,
+        "block_moved_px": 0.0
+      }
+    },
+    "action_space": {
+      "episodes": [
+        {
+          "seed": 0,
+          "frac_violating": 0.0,
+          "final_block_err_px": 9.434372428125855,
+          "oob_frac": 0.0,
+          "block_moved_px": 66.8309719892281,
+          "final_frac_feasible": 0.6133333345254263
+        },
+        {
+          "seed": 1,
+          "frac_violating": 0.0,
+          "final_block_err_px": 15.821726150662421,
+          "oob_frac": 0.0,
+          "block_moved_px": 67.81132883875388,
+          "final_frac_feasible": 0.6920000046491623
+        },
+        {
+          "seed": 2,
+          "frac_violating": 0.0,
+          "final_block_err_px": 24.756965955552683,
+          "oob_frac": 0.0,
+          "block_moved_px": 84.03393476625645,
+          "final_frac_feasible": 0.6436666697263718
+        }
+      ],
+      "mean": {
+        "frac_violating": 0.0,
+        "final_block_err_px": 16.671021511446984,
+        "oob_frac": 0.0,
+        "block_moved_px": 72.89207853141282
+      }
+    }
+  }
+}
