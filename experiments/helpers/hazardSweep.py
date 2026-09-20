@@ -338,7 +338,7 @@ def run_episode(
 ):
     from stable_worldmodel.solver import CEMSolver
     from helpers.linProbeHelpers import (
-        HazardAugmentedCostModel, make_on_step, summarize_cem_history,
+        HazardAugmentedCostModel, summarize_cem_history,
     )
 
     # CEMSolver(seed=...) does not control every RNG -- cell 38 and cell 39

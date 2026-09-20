@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tarfile
@@ -178,23 +179,45 @@ def decompress_dataset(src: Path, task: DictConfig) -> Path:
         return dest
 
     print(f"[download] decompressing {src} -> {dest}")
+
+    # Decompress to a .part path and rename only on success. A partial write
+    # left at `dest` (out of disk, interrupt) would otherwise satisfy
+    # processed_ready() and be silently skipped on the next run.
+    staging = dest.with_name(dest.name + ".part")
+    if staging.exists():
+        print(f"[download] clearing stale partial: {staging}")
+        if staging.is_dir():
+            shutil.rmtree(staging)
+        else:
+            staging.unlink()
+
+    try:
+        if kind == "zstd_h5":
+            dctx = zstd.ZstdDecompressor()
+            with open(src, "rb") as fin, open(staging, "wb") as fout:
+                dctx.copy_stream(fin, fout)
+        elif kind == "zstd_tar":
+            staging.mkdir(parents=True, exist_ok=True)
+            dctx = zstd.ZstdDecompressor()
+            with open(src, "rb") as fin, dctx.stream_reader(fin) as reader:
+                with tarfile.open(fileobj=reader, mode="r|") as tar:
+                    tar.extractall(path=staging)
+        else:
+            raise ValueError(f"unknown dataset_kind: {kind}")
+    except BaseException:
+        # Includes KeyboardInterrupt and out-of-disk OSError.
+        if staging.is_dir():
+            shutil.rmtree(staging, ignore_errors=True)
+        elif staging.exists():
+            staging.unlink()
+        raise
+
+    staging.rename(dest)
     if kind == "zstd_h5":
-        dctx = zstd.ZstdDecompressor()
-        with open(src, "rb") as fin, open(dest, "wb") as fout:
-            dctx.copy_stream(fin, fout)
         print(f"[download] wrote {dest} ({dest.stat().st_size / 1e6:.1f} MB)")
-        return dest
-
-    if kind == "zstd_tar":
-        dest.mkdir(parents=True, exist_ok=True)
-        dctx = zstd.ZstdDecompressor()
-        with open(src, "rb") as fin, dctx.stream_reader(fin) as reader:
-            with tarfile.open(fileobj=reader, mode="r|") as tar:
-                tar.extractall(path=dest)
+    else:
         print(f"[download] extracted archive into {dest}")
-        return dest
-
-    raise ValueError(f"unknown dataset_kind: {kind}")
+    return dest
 
 
 def run_task(home: Path, task: DictConfig, weights_only: bool) -> None:

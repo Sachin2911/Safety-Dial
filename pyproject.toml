@@ -1,7 +1,7 @@
 [project]
 name = "safetydial"
 version = "0.1.0"
-description = "SafetyDial: selection pressure for safe latent planning in JEPA"
+description = "SafetyDial: label-free latent reachability for safe RL in JEPA world models"
 readme = "readme.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -11,7 +11,6 @@ dependencies = [
     "torch>=2.2",
     "gymnasium>=0.29",
     "wandb>=0.16",
-    "pymoo>=0.6",
     "tqdm>=4.66",
     "huggingface_hub>=0.24",
     "h5py>=3.11",
@@ -32,8 +31,13 @@ package = false
 
 [tool.ruff]
 line-length = 100
-src = ["src", "scripts"]
+src = ["experiments", "scripts"]
 
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-pythonpath = ["src"]
+[tool.ruff.lint.per-file-ignores]
+# Notebook-facing helpers are consumed via `from helpers.X import *`.
+"experiments/helpers/*.py" = ["F403", "F405"]
+# Imports follow sys.path setup, and star-imported names resolve at runtime.
+"experiments/scripts/*.py" = ["E402", "F403", "F405"]
+# Research notebooks: exploratory idioms (star imports, imports after code,
+# cell-level redefinition) are deliberate. Real errors still surface.
+"experiments/*.ipynb" = ["E402", "E702", "E741", "F401", "F403", "F405", "F541", "F811"]

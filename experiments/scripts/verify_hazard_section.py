@@ -25,7 +25,6 @@ from helpers.hazardSweep import (
     estimate_px_per_step,
     measure_cost_scales,
     suggest_lambda_grid,
-    run_episode,
     sweep_lambda,
 )
 
@@ -175,7 +174,7 @@ def main():
         scales["hazard_median"],
         hazard_max=scales["hazard_max"],
     )
-    print(f"LAMS={[round(l, 4) for l in LAMS]}")
+    print(f"LAMS={[round(lam, 4) for lam in LAMS]}")
 
     # Quick sweep: 2 lambdas x 1 seed
     test_lams = [LAMS[0], LAMS[len(LAMS) // 2]]
