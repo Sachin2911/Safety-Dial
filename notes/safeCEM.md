@@ -102,11 +102,12 @@ that survives the data is about *reliability*.
 out-of-bounds is 0.000 at every lambda, even in the arm with no arena constraint at all.
 The earlier "every non-zero lambda abandoned the task and fled the arena" result is
 therefore **confounded by cause 1**, the start sitting inside the inflated hazard.
-`AGENTS.md` currently calls that sweep "a clean, first-hand demonstration of the
-penalty-fragility argument" and `docs/revisedProp/latex/main.tex` presents it as
-preliminary evidence. It is not clean. A referee who reproduces it from a feasible start
-will find lambda = 1 works. Re-frame that section around the dial's interpretability and
-its zero-violation guarantee instead.
+Earlier guidance and the
+[historical proposal](https://github.com/Sachin2911/Safety-Dial/blob/a7799a22f76b7af3284a2e94b0ca67f6c65d4f95/docs/revisedProp/latex/main.tex)
+presented that sweep as clean evidence of penalty fragility. The corrected geometry
+invalidates that interpretation. The usable Safe-CEM runs recorded zero true-box
+violations; that is an empirical result, not a zero-violation guarantee. The
+[current plan](../docs/researchDirection.md) retains these corrected experiments as evidence.
 
 **H4 is not demonstrated by this run.** The safety axis saturates at 0.000 for every
 usable dial, and block error is non-monotone within seed noise (9.0, 11.9, 6.7 px at

@@ -1,7 +1,8 @@
 # Phase 0 report: does Safety-Gymnasium locomotion support the SafetyDial premise?
 
 Sachin Mohan (2699183), 20 September 2026. Covers the first implementation phase against
-`docs/revisedProp/RevisedProposal.pdf`.
+[the historical irreversibility proposal](https://github.com/Sachin2911/Safety-Dial/blob/a7799a22f76b7af3284a2e94b0ca67f6c65d4f95/docs/revisedProp/RevisedProposal.pdf).
+The [current research direction](../docs/researchDirection.md) supersedes its requirements.
 
 ## Verdict
 

@@ -1,7 +1,7 @@
 """Clone LeWM source, then download Hub checkpoints and expert datasets.
 
 Usage (from repo root):
-  uv run python scripts/download_data.py
+  uv run python scripts/download_data.py  # Push-T by default
   uv run python scripts/download_data.py --config-name pusht
   uv run python scripts/download_data.py --config-name cube
   uv run python scripts/download_data.py weights_only=true
@@ -234,7 +234,7 @@ def run_task(home: Path, task: DictConfig, weights_only: bool) -> None:
 @hydra.main(
     version_base=None,
     config_path="../configs/download",
-    config_name="all",
+    config_name="pusht",
 )
 def main(cfg: DictConfig) -> None:
     os.chdir(REPO_ROOT)

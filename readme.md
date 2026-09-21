@@ -1,40 +1,34 @@
 # SafetyDial
 
-**When Are JEPA Predictions Reliable Enough for Safe Planning?**
+**Which Experience Makes LeWM Safer to Use?**
 
 Sachin Mohan (2699183), BSc Honours CS, University of the Witwatersrand.
 Supervised by Geraud Nangue Tasse.
 
-## The idea
+## Current research
 
-SafetyDial studies whether a predictive latent world model makes reliable safety decisions
-when a planner chooses the actions. A model may predict ordinary trajectories accurately
-while CEM selects plans whose predicted constraint satisfaction is overly optimistic.
+At the same interaction budget, which additional experience improves a pretrained
+LeWM's predictions of unsafe outcomes, and does that improvement transfer to new
+hazards, starting states and goals?
 
-**Research question.** Does planner optimisation amplify optimistic safety errors in
-JEPA-style world models, and can a simple correction reduce those errors while preserving
-useful task performance?
+Start with the released Push-T checkpoint. Diagnose information available in actual
+observations versus errors in imagined futures. If the predictor is the bottleneck,
+freeze the visual encoder and physical readout, then compare ordinary, boundary-focused
+and eventually learned error-risk acquisition using the same predictor-side adaptation.
+The safety rule is supplied explicitly; this is not label-free safety discovery.
 
-The adopted plan accepts Safety-Gymnasium's supplied cost constraints and uses programmatic
-labels. It audits actual versus imagined futures, compares ordinary and planner-selected
-actions, and tests one small correction such as a horizon-dependent error margin. The
-**Safety Dial** controls deployment conservatism on those predictions. Closed-loop Safe-CEM
-is an extension after the offline evidence is established.
+**Adopted 21 September 2026.** The new study has not run. The existing Push-T and Phase 0
+experiments are preserved as evidence and reusable infrastructure.
 
-Full adopted plan, hypotheses, metrics, baselines, gates and first pilot:
-[`docs/researchDirection.md`](docs/researchDirection.md). Repo conventions and current
-status: [`AGENTS.md`](AGENTS.md).
+- [Adopted research direction](docs/researchDirection.md): question, gates and full protocol.
+- [First-pilot checklist](docs/research/pilot.md): next work and completion criteria.
+- [Checkpoint reference](docs/research/checkpoints.md): available models and asset dependencies.
+- [Related work](docs/research/relatedWork.md): closest overlaps and limits on novelty claims.
+- [Experiment index](experiments/README.md): existing runnable work and planned additions.
+- [Experimental notes](notes/README.md) and [animations](animations/README.md).
+- [Agent and engineering guidance](AGENTS.md).
 
-The existing [Phase 0 findings](notes/phase0Report.md) explain why termination should not
-be treated as irreversibility. The [Safe-CEM pilot](notes/safeCEM.md) motivates auditing
-imagined safety decisions and records corrections to the original penalty comparison.
-
-> **Direction adopted 20 September 2026.** The earlier label-free irreversibility proposal
-> in `docs/revisedProp/` is superseded by the Markdown plan above. The older NSGA-II and
-> LLM-alignment documents are historical. This project now studies supervised constraint
-> prediction; it does not require an irreversible-failure environment or a new safety theorem.
-
-## Setup
+## Setup and asset recovery
 
 ```bash
 git clone https://github.com/Sachin2911/Safety-Dial.git
@@ -42,31 +36,38 @@ cd Safety-Dial
 bash scripts/setup.sh
 ```
 
-Then download the LeWM source, checkpoints and expert data:
+Recover the earlier checkpoint, fitted normalisers and a small replay subset if available.
+The local audit found the expected assets absent. Weights alone do not supply the fitted
+normalisers used by the existing planner.
+
+If downloads are needed, Push-T is now the default:
 
 ```bash
-uv run python scripts/download_data.py                 # all: source + Push-T + Cube
-uv run python scripts/download_data.py --config-name pusht
+# Source and Push-T checkpoint only; still needs normalisers/data for the full pilot.
+uv run python scripts/download_data.py weights_only=true
+
+# Push-T weights and expert data.
+uv run python scripts/download_data.py
+
+# Optional other supported datasets, not required for the first pilot.
 uv run python scripts/download_data.py --config-name cube
-uv run python scripts/download_data.py weights_only=true   # skip ~60 GB datasets
-uv run python scripts/download_data.py clone_source=false  # skip third_party/le-wm
+uv run python scripts/download_data.py --config-name all
 ```
 
-> **Disk warning.** The default (`all`) pulls both datasets. Push-T is ~13 GB compressed and
-> decompresses to ~46 GB; Cube is ~46 GB compressed and decompresses far larger. Check free
-> space before running the default, or use `--config-name pusht` / `weights_only=true`.
+Push-T expert data is about 13 GB compressed; Cube is about 46 GB compressed and is
+optional. Check storage before downloading and decompressing. Preview configuration
+without downloading with `uv run python scripts/download_data.py --cfg job`.
 
-Work happens in the notebooks under [`experiments/`](experiments/); run JupyterLab with
-`experiments/` as the working directory so `import helpers.linProbeHelpers` resolves.
+Run JupyterLab with `experiments/` as the working directory and use the
+**Python (safetydial .venv)** kernel. New reusable code belongs in
+`experiments/helpers/`, with small entry points in `experiments/scripts/`.
 
-## Documents produced
+## Preserved work
 
-All under [`docs/`](docs/).
-
-- [x] Ideation document
-- [x] Annotated bibliography
-- [x] Literature review
-- [x] Research proposals (historical, including `docs/revisedProp/`)
-- [x] Adopted research direction, [`docs/researchDirection.md`](docs/researchDirection.md)
-- [ ] Project presentation
-- [ ] Project report
+- [Push-T penalty-CEM and Safe-CEM findings](notes/safeCEM.md),
+  [report and recorded results](docs/safeDial/), and
+  [notebooks](experiments/README.md).
+- [Phase 0 recovery findings](notes/phase0Report.md),
+  [report and data](docs/phase0/), and locomotion helpers/scripts.
+- Submitted academic deliverables and reference papers remain under `docs/`.
+  They record earlier work and do not define the current research requirements.

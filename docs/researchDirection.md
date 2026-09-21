@@ -1,359 +1,127 @@
-# SafetyDial: when are JEPA predictions reliable enough for safe planning?
+# SafetyDial: which experience makes LeWM safer to use?
 
-**Status: adopted research direction, 20 September 2026.** Sachin Mohan agreed to this
-direction after the Phase 0 locomotion experiments, the Push-T Safe-CEM pilot, and the
-subsequent literature review. This document is the authority for the project's research
-question, scope and next experiments. It supersedes the research plan in
-[`revisedProp/latex/main.tex`](revisedProp/latex/main.tex) and its built PDF. Earlier
-proposals and experiment reports remain records of what was proposed or measured. This
-decision does not imply supervisor approval or that the proposed experiments have run.
+**Status: adopted research direction, 21 September 2026.** Sachin Mohan approved
+this direction after the Push-T pilot, Phase 0 triage and targeted-experience review.
+This is the authority for the research question, scope and experiment sequence.
+It supersedes the 20 September planner-selection audit and earlier proposals.
+Adoption does not imply supervisor approval, completed experiments or new trained weights.
 
 Student: Sachin Mohan (2699183), BSc Honours Computer Science, University of the
-Witwatersrand. Supervisor: Geraud Nangue Tasse. Project name: **SafetyDial**. Working
-title: **When Are JEPA Predictions Reliable Enough for Safe Planning?**
+Witwatersrand. Supervisor: Geraud Nangue Tasse. Project name: **SafetyDial**.
+Working title: **Which Experience Makes LeWM Safer to Use?**
 
-**1. The central question is whether planning selects optimistic safety errors.**
-Does planner optimisation amplify optimistic constraint-prediction errors in JEPA-style
-world models, and can a simple correction reduce those errors while preserving useful
-task performance?
+Start execution with the [pilot checklist](research/pilot.md). The
+[checkpoint reference](research/checkpoints.md) records the asset audit, and
+[related work](research/relatedWork.md) bounds the prospective contribution.
+Completed [Push-T](../notes/safeCEM.md) and [Phase 0](../notes/phase0Report.md)
+experiments remain evidence and reusable infrastructure.
 
-The project accepts Safety-Gymnasium's supplied safety costs. It studies whether a
-predictive latent model can support reliable decisions about those costs, particularly
-when CEM selects actions using the model's own predictions. The contribution sought is
-a controlled diagnosis of safety decision errors, followed by one measured repair.
-The method sequence is **offline audit, simple repair, then optional closed-loop
-intervention**. A useful empirical audit is the minimum thesis contribution; a new
-controller or formal safety theorem is not a prerequisite.
+**The adopted study keeps LeWM's visual representation fixed and tests which additional experience improves its safety-relevant predictions.** Start with the released Push-T checkpoint, first establish what physical information can already be read from it, then change only the experience used to adapt its dynamics predictor. This connects your interest in what JEPA encodes to a controllable experiment: distinguish information already available in observations from information the predictor fails to carry into imagined futures. It also reuses your strongest assets without first training locomotion. The main question is:
 
-**2. The pivot removes an unresolved safety-definition problem.** The previous plan
-required genuinely irreversible failures, a defensible recovery evaluator, an estimator
-of irreversibility in learned latents, and a deployment filter. Phase 0 showed that the
-tested Walker2d falls could be recovered, while Hopper's apparent boundary depended
-strongly on recovery predicates and search horizon. Those findings invalidate using
-termination as an irreversibility label; they do not invalidate Safety-Gymnasium as a
-benchmark for its stated constraints. See the
-[`Phase 0 report`](../notes/phase0Report.md).
+> **At the same interaction budget, which additional experience improves a released LeWM's predictions of unsafe outcomes, and does that improvement transfer to new safety rules?**
 
-The new plan makes three decisions explicit:
+The main study should proceed only if the initial diagnosis finds a meaningful, repairable prediction error. A result that simple boundary sampling beats a sophisticated selector could be valuable. A result that only a new readout is needed would change the claim. We should let those outcomes determine the project rather than assume a new acquisition algorithm is necessary.
 
-- A benchmark cost violation is the safety event, even if recovery is easy. Falling and
-  task abandonment remain additional outcomes to report, not definitions of irreversibility.
-- Cost and physical-state labels may be collected automatically from simulation. This
-  is **supervised constraint prediction**, not label-free safety discovery. A velocity
-  probe supervises a generic physical quantity; applying a chosen velocity threshold
-  supplies the safety specification. A cost head uses direct safety supervision.
-- The Safety Dial controls an empirical conservatism margin on predicted constraints.
-  It is no longer a reachability threshold, an irreversibility score, or a Pareto front.
+**“Encoding safety” needs a precise meaning.**
 
-OGBench-Cube failure engineering, Sokoban reachability, precedence estimation, failure-mode
-label holdout, HJ reachability, and a new conformal guarantee are outside the core scope.
-They may be revisited as separate future work. They are not dependencies of this thesis.
+In Push-T, the model can encode physical information such as the T's position, orientation and motion. You supply the safety rule, for example “no part of the T may enter this region”. The experiment asks whether the model preserves enough information to answer that question. It does not test whether the model independently discovers what is dangerous.
 
-**3. The existing results motivate the new question without proving it.** In the Push-T
-pilot, the probe-based arena constraint judged many candidates feasible while the pusher
-left the observation domain. Computing the arena check from commanded actions repaired
-the observed failure. This motivates testing the reliability of imagined constraint
-decisions; it does not yet show the same effect in locomotion.
+There are three distinct claims. A readout trained on actual encoded observations measures information accessible to that readout. Applying the same readout to imagined futures measures how well the predictor carries that information forward. Updating the encoder would change the representation itself. **Improving a predictor while its encoder stays frozen cannot demonstrate that the encoder learned new safety features.** Likewise, a weak probe does not prove that information is absent: the readout, observation history or training coverage could be inadequate. FARM, posted 10 September 2026, already extracts failure information from frozen predictive states using supervised readouts, so “a JEPA latent contains failure information” alone is not a fresh contribution. ([FARM](https://arxiv.org/html/2609.11445v1))
 
-The pilot recorded zero true-box violations in nine episodes across usable dials, not a
-general safety guarantee. The original penalty-fragility result was confounded by an
-infeasible starting configuration. With corrected geometry, penalty-CEM performed
-substantially better. Use the corrected account in [`safeCEM.md`](../notes/safeCEM.md),
-including the distinction between the original probe-based sweep and the action-space
-arena repair. Neither all penalty methods failing nor monotone realised safety is an
-established motivation.
+The released checkpoint supports a study of **additional adaptation experience**. It cannot establish what caused its original representation to form without controlled pretraining comparisons. That broader question would be a separate, substantially larger study.
 
-**4. Three hypotheses organise one project.** They are prospective empirical questions,
-not conclusions to engineer into the evaluation.
+**What we can reuse, and what still needs building.**
 
-- **H1, imagined constraint fidelity:** accurate readout from encoded real observations
-  and low average latent prediction error do not necessarily imply accurate future
-  constraint decisions. Measure the additional error introduced by imagination at
-  increasing horizons and near the constraint boundary. If the gap is negligible,
-  report that rather than manufacturing a harder task.
-- **H2, selection amplification:** CEM-selected plans exhibit more optimistic safety
-  error than ordinary candidate plans, conditional on comparable initial states,
-  horizons, predicted margins and candidate budgets. Sweep search effort to determine
-  whether this amplification grows, stays flat or reverses.
-- **H3, useful correction:** a simple correction reduces false-safe decisions at
-  comparable acceptance and task progress. Demonstrating fewer violations solely by
-  rejecting everything, standing still, or ending episodes early does not support H3.
+The official release lists Push-T, Cube, TwoRooms and Reacher checkpoints. No compatible locomotion checkpoint is listed there. Start with Push-T; the others are possible later replications using their own models and action conventions, not zero-shot transfers of Push-T weights. ([Official LeWM repository](https://github.com/lucas-maes/le-wm))
 
-H1 and H2 form the minimum audit. H3 is the first extension. Closed-loop improvement
-is a stronger extension of H3, rather than an additional mandatory thesis project.
+- **Released Push-T LeWM:** a pretrained encoder and action-conditioned predictor, with 192-dimensional latents.
+- **Existing project code:** penalty-CEM, Safe-CEM, pusher constraints, preprocessing and task metrics.
+- **Existing probe implementation:** a pusher-position MLP, not a validated block-position/orientation readout.
+- **Work still required:** block geometry and readout, verified branch replay, transition collection, acquisition scoring and a fine-tuning runner.
 
-**5. Start with one existing locomotion environment and a competent nominal policy.**
-Walker2d is the initial development candidate because the vendored environment,
-collection and rendering infrastructure already exist. Confirm a usable trained actor
-and data coverage before fixing the robot. Hopper is an alternative within the existing
-stack if it has better usable data. A second robot is replication after the first study
-works, with predictor retraining where needed; it is not zero-shot cross-robot transfer.
+These distinctions come from the [checkpoint audit](research/checkpoints.md), [published configuration](https://huggingface.co/quentinll/lewm-pusht/blob/main/config.json) and [existing probe code](../experiments/helpers/probes.py).
 
-Use the pinned implementation's cost channel. In the currently documented Walker2d-v1
-implementation, the cost compares signed forward velocity with 2.3415 m/s. Do not
-silently substitute absolute speed because of a documentation summary. Pin robot,
-version, simulator, controller timestep, action bounds, rendering, camera, observation
-history and termination settings. The official
-[velocity-task documentation](https://safety-gymnasium.readthedocs.io/en/latest/environments/safe_velocity.html)
-and [Walker2d source](https://github.com/PKU-Alignment/safety-gymnasium/blob/main/safety_gymnasium/tasks/safe_velocity/safety_walker2d_velocity_v0.py)
-describe the task; the exact tested code determines the experiment.
+The current local checkout lacks the weights, expert data and upstream source under the expected `data/` and `third_party/` paths. The public weights are about 72 MB, but the expert archive is 13.1 GB compressed. Existing scripts fit action/state normalisation from expert data; the inspected model repository does not include fitted scalers. Prefer recovering the historical checkpoint, source revision, scalers and a small replay subset from the previous experiment machine before downloading a large dataset. Installed packages alone do not establish that the old run is reproducible. ([Weight metadata](https://huggingface.co/quentinll/lewm-pusht/blob/main/weights.pt), [Dataset files](https://huggingface.co/datasets/quentinll/lewm-pusht/tree/main), [Model files](https://huggingface.co/quentinll/lewm-pusht/tree/main))
 
-Obtain or train one competent nominal policy, then collect its behaviour and controlled
-action perturbations. The presence of an actor adapter is not evidence that a compatible
-trained actor is available. Record policy provenance and its observations. A policy using
-privileged state may be shared across filter variants, but the overall system must then
-not be described as vision-only. Do not ask CEM to learn walking from scratch.
+**The literature makes the contribution narrower, but still testable.**
 
-**6. Gate the observation and model before scaling experiments.** The released
-Push-T/Cube checkpoints are not validated locomotion predictors. The
-[official LeWM release](https://github.com/lucas-maes/le-wm) reviewed for this decision did
-not supply a verified drop-in Safety-Gymnasium locomotion model. Predictor training is a
-real dependency, and its cost must be measured rather than inferred from another task.
+WMPO already adapts a pretrained world model using base-policy rollouts because expert demonstrations underrepresent failures. AdaJEPA already compares predictor-only and joint adaptation, and varies data amount and diversity with fixed optimisation steps. Therefore, neither collecting failures nor comparing frozen and unfrozen components is sufficient novelty. ([WMPO, November 2025](https://arxiv.org/html/2511.09515v1), [AdaJEPA, June 2026](https://arxiv.org/html/2606.32026v1))
 
-The first substrate is a frozen visual encoder with cached features, a small
-history-conditioned action predictor and a velocity readout. This is a frozen-feature
-predictive-embedding model. It must be named accurately; success on it alone does not
-establish a result about end-to-end LeWM or SIGReg. A matched LeWM-style model can be a
-later comparison if resources permit.
+ReDRAW studies small latent-dynamics repairs and the experience that supports transfer; FOSP already varies safe/unsafe data balance and dataset size. Our prospective distinction is a controlled intervention on **which counterfactual action branches are acquired**, isolating its effect on false-safe decisions and transfer while the repair mechanism stays fixed. This search has not established that the exact comparison is absent everywhere. The result must explain which experience fixes which error, rather than merely show that more data helps. ([ReDRAW, April 2025](https://arxiv.org/html/2504.02252v1), [FOSP, ICLR 2025](https://arxiv.org/html/2407.04942v2))
 
-First test whether velocity is observable from the chosen image/action history. A camera
-that tracks the robot may conceal translation. If history is insufficient, explicitly
-declare a proprioceptive input or change the observation setup. Supplying the quantity
-being predicted directly is a different information regime and must be identified.
-Keep observations consistent across comparisons. Ground-truth future states must never
-enter the model-based planning path; a simulator-informed reference is a separately
-labelled baseline.
+**Experiment 0: make the physical question and replay trustworthy.**
 
-Train models and readouts on the training split, choose their settings on development
-data, and freeze them for the audit. A margin sweep then changes deployment behaviour
-without retraining that model. A predictor trained with an auxiliary loss is a distinct
-model variant, not another point on the same frozen-model dial.
+Use the whole T-shaped footprint avoiding a virtual forbidden region as the main constraint. Predict block centre and `(sin θ, cos θ)`, then transform the simulator's actual shape polygons. A centre outside the region does not establish that the T is clear. Keep the pusher's action-space arena guard as a common engineering baseline. A virtual constraint changes the rule, not the physics; introducing a solid obstacle would be a different experiment.
 
-**7. Collect transition-aligned data and prevent leakage.** Reuse state-only storage and
-lazy rendering. Record observations or reproducible render states, actions, episode and
-step identifiers, velocity, cost, reward, health, termination, truncation and policy
-provenance. Record complete simulator restoration state and verify replay; saved state
-requirements are environment-specific.
+Build layouts independently of each evaluated method, with both initial and target footprints clear. Use development cases with a demonstrated feasible route to define the layout generator, then freeze it. Do not remove test cases because a method fails, or create only tiny hazards positioned between prediction timestamps.
 
-The current collector stores state before each action. The returned reward and cost
-describe that action's transition. Preserve both endpoints and make the indexing
-explicit: an input at time t and action a_t predicts the returned transition cost and
-next observation, not a label attached to the preceding frame by accident. Confirm this
-with hand-checked short traces before fitting a model.
+Replay is an unresolved dependency. The saved seven-number observation omits block linear/angular velocity, and the inspected `_set_state` path advances physics. It is sufficient for pose visualisation, not a verified arbitrary-root snapshot. Start from a fresh seeded reset and replay the recorded action prefix before branching. Verify repeated suffix outcomes, including contact. Charge those prefixes to interaction cost. Replace this with snapshot restoration only after equivalence is tested. ([Replay and geometry audit](research/checkpoints.md))
 
-Split by complete trajectories before sampling roots or clips. All candidate branches
-from one root belong to the same split. Keep training, model-development,
-margin-calibration and final-test roles distinct. If data are limited, partition the
-validation trajectories between model selection and calibration, and leave the test
-set untouched. Report the number of independent episodes and roots as well as branches.
+Preserve the released action convention: a block contains **five sequential two-dimensional commands**, not necessarily one repeated command. In the inspected 10 Hz setup, a block spans 0.5 seconds and five predicted blocks span 2.5 seconds. Record every environment transition inside each block. Compare dense truth with coarse true endpoints and interpolation, and inspect a few physics-substep contact traces. Environment-step logging is not continuous collision certification. ([Timing and action audit](research/checkpoints.md))
 
-Include both safe and violating transitions and a range of speeds and action perturbations.
-Keep a near-boundary diagnostic bank separate from a representative-policy evaluation
-bank, and report their different sampling distributions. A balanced diagnostic sample
-does not estimate deployment prevalence.
+The output is a small replay report, geometry overlays and roughly ten checked contact traces. Stop here if replay or event definitions remain unreliable.
 
-Termination-disabled collection is no longer a universal requirement. Use it only for an
-explicitly labelled diagnostic continuation. For ordinary benchmark evaluation retain
-the declared benchmark termination and time limit. Do not silently count missing
-post-termination steps as safe. Report early falls and censoring, and compare horizons
-consistently; diagnostic physics beyond termination must not be reported as standard
-benchmark return.
+**Experiment 1: locate the untouched checkpoint's bottleneck.**
 
-**8. Separate encoding, prediction and action selection with paired simulator branches.**
-For each held-out root, construct a supported population of action sequences, initially
-around the nominal policy. Save the executed action sequence, initial conditions, random
-seed, predicted trajectory, predicted margin and selection decision. Run each audited
-sequence from the same restored simulator root.
+Create separate trajectory-level banks for probe training, development and final evaluation. Fit linear and small MLP block-pose readouts on real encoded observations, choose capacity on development data, then freeze the chosen readout. The historical pusher probe used random frame splitting, so its results do not replace this validation.
 
-Compare three paths on the same actions:
+An illustrative screening budget is 20,000 probe-training frames and 24 evaluation roots with eight action tapes each, each tape covering five model steps. These are provisional sizes, not claims about sufficient statistical power. Include ordinary bounded perturbations around useful pushing and a separately labelled contact/rotation stress bank.
 
-- The actual transition velocity and cost from simulation, used as evaluation truth.
-- The velocity readout on encoded actual observation histories, isolating observation
-  and readout error.
-- The same readout on imagined future latents, exposing the additional predictor error.
+On identical executed actions compare dense simulator geometry, coarse true poses plus interpolation, the readout on actual future images, and that same readout on imagined latents. Measure centre, periodic-angle and polygon-clearance errors, then resulting hazard decisions. Stratify by contact, rotation, horizon and distance to the boundary. Include a stationary-block reference and a small coordinate-dynamics predictor, clearly labelling privileged simulator state or velocity inputs.
 
-The low-dimensional state-dynamics baseline is a further reference, not a substitute for
-the paired encoded-versus-imagined comparison. Reproduce restoration of contacts, solver
-state and randomisation before interpreting small decision differences.
+Good actual-image readout with poor imagination supports predictor repair. Poor readout first calls for better observation/probe checks. If temporal sampling explains the misses, resolve that before blaming representation learning. If a simple physical reference solves the problem, that is evidence against making the latent method central.
 
-Report errors by horizon in physical time and by action-block settings. Do not copy
-Push-T's frameskip into a newly trained locomotion model without justification. Inspect
-both continuous velocity residuals and the resulting threshold decisions; low aggregate
-RMSE can hide a harmful one-sided error tail.
+**Experiment 2: establish that extra experience can repair the error.**
 
-**9. Distinguish candidate adaptation from final selection.** Audit three action groups:
-samples from the initial fixed proposal, samples from CEM's adapted final proposal, and
-the plan actually selected for execution. Where possible, pair the selected plan with a
-uniform sample from that same final candidate pool. This separates distribution changes
-during search from the final ranking decision. Compare roots and horizons, report the
-actual model-evaluation budget including CEM iterations, and stratify initial velocity
-and predicted clearance.
+Collect a modest, diverse bank of additional contact outcomes and action perturbations. Before developing a sophisticated selector, test whether these transitions improve the diagnosed failure at all. An error-enriched subset can test repairability, but every simulated candidate inspected to find those errors counts as a query.
 
-Increase candidate counts or iterations while holding the root bank, predictor and
-constraint fixed. A naive selected-versus-random aggregate is insufficient: selected
-plans can be closer to the boundary or make more progress. Report the raw operational
-difference and the conditional comparison. Keep matching rules fixed before test
-evaluation and report where the groups lack common support.
+The preferred main repair is **predictor-side adaptation**. Freeze the visual encoder and observation projector, including BatchNorm running statistics by keeping those modules in evaluation mode. Freeze preprocessing, scalers and the diagnostic physical readout. Cache detached target embeddings from new real observations. Adapt the action encoder, predictor and prediction projector using the latent-prediction objective, mixed with the same original-style replay subset for every arm. Strictly updating only the predictor is another possible setting, but choose one before the main comparison and name it accurately.
 
-Audit the actual returned sequence, including any averaging, clipping or action-block
-conversion by the solver. Feasibility of an elite candidate does not establish feasibility
-of an averaged returned action. Track all-infeasible searches explicitly.
+An illustrative replay mixture is half original-style and half acquired transitions. Fix one-step versus rollout training, optimiser settings and update count on development data. With frozen target features, their SIGReg term supplies no representation-learning gradient. The upstream end-to-end training script does not already implement this controlled adaptation experiment. ([Training implementation](https://raw.githubusercontent.com/lucas-maes/le-wm/main/train.py), [Module audit](research/checkpoints.md))
 
-**10. Define the main metric and its denominator.** For a declared horizon H, let
-U = 1 when any actual transition violates the benchmark constraint. Let A = 1 when
-the complete predicted plan satisfies the chosen feasibility test. The primary
-false-safe acceptance rate is
+Include no update, a calibrated fixed margin and one cheap readout-only residual correction. These diagnose what needs changing; they are not the start of an architecture-by-selector factorial. If only readout correction helps, report better interpretation rather than repaired dynamics. If ordinary extra data does nothing after one reasonable optimisation check, pause acquisition development.
 
-`FSA = count(A = 1 and U = 1) / count(A = 1)`.
+**Experiment 3: compare three ways of spending the same experience budget.**
 
-Always report accepted count, total evaluated count and acceptance rate alongside FSA.
-If nothing is accepted, FSA is undefined, not zero. Report actual violation rate among
-selected plans whether or not the search found a feasible candidate; a deployed fallback
-must not disappear from the denominator. Distinguish FSA from the false-negative rate
-among all truly unsafe plans.
+Every arm starts from the same paid seed data and uses the same chosen repair. The core comparison is:
 
-Supporting offline metrics include signed velocity error, upper residual quantiles,
-constraint confusion counts, unsafe-event recall, and AUROC or precision-recall curves
-where meaningful. The headline is the operating decision, not AUROC alone. Use paired
-comparisons and uncertainty estimates clustered by episode or root; thousands of related
-branches are not thousands of independent trials. Repeat model training when making
-claims across training randomness, and distinguish model seeds from rollout seeds.
+1. **Random supported experience:** sample ordinary nominal-plan perturbations from a common proposal generator.
+2. **Predicted boundary coverage:** select branches near predicted polygon contact, balanced across roots and motion regimes.
+3. **Learned optimistic-error risk:** train a small scorer on previously queried branches to predict false-safe events or optimistic clearance errors from available context and imagined trajectories.
 
-Closed-loop metrics include benchmark return and cost, distance travelled, violation
-fraction and severity, falls or unhealthy events, episode length, intervention frequency,
-infeasible searches and planning latency. Report total cost with exposure so early falls
-do not appear safer merely because the episode was shorter.
+The third arm cannot inspect an unqueried actual future. Its training data, scoring cost and update schedule are part of the method. Ensemble disagreement can be a later reference if affordable; it should not double the initial project. A selector ranked by true future errors is an oracle upper reference, not a deployable acquisition rule.
 
-**11. Test one modest correction after the audit identifies the error.** The first
-candidate is a horizon-dependent additive velocity margin m_h, fitted on held-out
-prediction residuals from the intended action-selection procedure. For an upper signed
-velocity limit v_max, the plan satisfies the corrected constraint when
+A provisional pilot grid is 128 common seed branches, then 64, 128, 256 and 512 additional branches, using matched prefix lengths and equal branch horizons. **The main prospective comparison uses equal charged simulator-step budgets, including prefix replay**, since equal branch counts can otherwise have unequal costs. Compare learning curves at common charged-step budgets and report branch counts alongside them. Count root-generation rollouts, reset-prefix execution, unsuccessful queries and discarded examples. Report model-query and training compute separately. A precomputed pool is useful for debugging training-set selection, but generating every outcome first does not demonstrate reduced simulator interaction. Prospective acquisition chooses branches before their outcomes are known.
 
-`predicted_velocity_h + d * m_h <= v_max` for every predicted transition h.
+At each data checkpoint, start adaptation from the same released predictor weights, with equal optimiser steps, replay ratio and paired training seed. This separates data choice from accumulated optimisation. Use the latest available adapted model to score the next acquisition batch, with rules frozen after development. Begin with one paired pilot run; confirm a useful effect with several acquisition seeds, then additional training seeds if making a training-robustness claim.
 
-Here d is a nonnegative, dimensionless deployment conservatism multiplier, and m_h has
-velocity units. This is an initial operational definition of the Safety Dial. Record the
-quantile rule, treatment of negative margins, horizon grouping and calibration sample
-counts. Compare d = 0, a fixed additive margin and the horizon-dependent correction
-under the same model and candidate budget. Select the tested dial grid on development
-data; report the entire predeclared test sweep rather than choosing its best point.
+**Experiment 4: test what the repair actually learned.**
 
-Measure error separately at each horizon; do not assume it increases monotonically. If
-a nondecreasing envelope is imposed for conservatism, state it as a design choice. A
-corrected planner changes which actions are selected, so calibration on the uncorrected
-planner may not cover its new distribution. Use a declared calibration procedure and
-measure the corrected selection distribution on untouched test roots. Per-step residual
-quantiles do not automatically cover an entire plan or a closed-loop episode.
+Use an untouched transfer grid crossing familiar versus held-out hazard layouts with familiar versus held-out starts/goals. Keep dynamics unchanged initially. Evaluate both representative branches and the separately declared stress bank. All descendants of a source trajectory belong to one split, and final-test outcomes never enter adaptive selection or calibration. New trajectory splits do not establish that all states were unseen during the released model's pretraining; that provenance is not fully known.
 
-If the diagnosis instead implicates poor propagation of velocity, the alternative repair
-is an auxiliary future-velocity loss during predictor training. Hold training data,
-encoder, readout supervision and evaluation budget constant across variants. With a
-frozen encoder this changes the predictor, not the visual representation. Do not add both
-repairs by default or present a known auxiliary loss as an invention.
+Relabelling one physical trajectory under several virtual hazards creates extra constraint labels, not extra simulator experience or independent episodes. Apply the same relabelling policy to every arm. Test ordinary motion and goal prediction too, so a predictor that simply forecasts less movement cannot pass as an improved model.
 
-**12. Baselines must be capable of disproving the need for imagination.** Include
-current-speed persistence, a declared reactive or one-step guard, a small state-dynamics
-predictor, the same latent predictor without correction, and a fixed-margin variant.
-The reactive controller must be concrete: clipping actuator torque is not the same as
-clipping velocity. Validate its action rule and task progress. If it uses privileged
-velocity or state, label that information advantage and include an observation-matched
-variant where feasible.
+Report unsafe accepted plans divided by all accepted plans, with counts and acceptance rate; the fraction is undefined when nothing is accepted. Compare methods where acceptance and useful progress overlap, and group uncertainty by root or source trajectory. Preserve arena exits as bad outcomes. Report a composite of hazard violation or observation-domain exit, and identify censored hazard-only futures rather than calling unseen steps safe.
 
-For optional control experiments, compare the nominal policy, reactive guard,
-uncorrected Safe-CEM, corrected Safe-CEM and a corrected penalty-CEM arm using the same
-constraint, observations, horizon and model-evaluation budget. Compare at matched
-acceptance and useful progress where the methods have overlap, and present full curves.
-Penalty-CEM can change lambda at inference; do not attribute a new training run to each
-lambda. Published state-based PPO/CPO results can contextualise the task but are not
-automatically fair direct comparisons with a pixel-based filter.
+Continue if a data strategy produces a repeatable transferable improvement or reveals a clear failure of an apparently sensible strategy. Stop claiming targeted acquisition if gains vanish when all queries are charged, disappear on new roots, or merely reflect greater rejection. Random data matching the learned selector is a valid outcome, not a reason to keep adding complexity.
 
-**13. Closed-loop intervention is conditional on useful offline predictions.** Warm-start
-short-horizon candidates around a competent nominal policy and use feasibility-first
-ranking with task progress or a declared deviation objective. Fix how the nominal action
-sequence is obtained: a state-policy action tape produced by true-simulator branching is
-a privileged diagnostic, not a deployable visual rollout mechanism. An implementable
-filter may use a validated policy over its available predicted features or a declared
-open-loop proposal around the current nominal action and previous plan. Report which
-mechanism is used.
+**Experiment 5: show the control consequence only after the offline result.**
 
-Specify and evaluate the all-infeasible fallback before running episodes. Least predicted
-violation, a backup controller, and the nominal action are different policies; none is
-safe by definition. Freeze model weights during the dial sweep, use paired initial
-conditions, and report actual violations and progress. A tighter predicted feasible set
-does not guarantee monotonically improving realised safety with approximate search and
-model error. Safe-CEM is not automatically an invariant HJ safety filter.
+Freeze all weights and compare repaired versus original Safe-CEM, fixed margins and one matched penalty-CEM reference, with nominal planning for context. Pair starts, goals and hazards, use equal candidate budgets and declare all-infeasible fallbacks. Audit the sequence actually returned and executed, including CEM averaging. Report block coverage, pose error, hazard exposure, arena failures and latency. A second released task is optional replication after its data and action interface are verified.
 
-**14. Prior work determines the scope of the claim.** SafeDreamer already studies safe
-world-model planning, robust CEM already combines planning and constraints, and AnySafe
-already offers adjustable latent constraints with DINO-WM. UNISafe addresses optimistic
-safety estimates with uncertainty. A cost head, frozen encoder, constraint-priority
-ranking, or runtime threshold alone is therefore insufficient novelty.
+Encoder adaptation should remain a separate extension if the encoding gate reveals a plausible limitation. Each adapted encoder would need fresh equal-capacity probes trained on the same reference split, because an old probe can fail simply when feature coordinates move. Do not quietly fold that different representation study into the fixed-encoder acquisition comparison.
 
-PSG-JEPA studies physical grounding, and the particularly close Intervention Gap work
-separates current-state decodability from imagined action effects. The prospective
-contribution here is a safety-decision audit of planner selection, with a reproducible
-measure of false-safe amplification and a correction evaluated at useful performance.
-This is a candidate contribution; check the closest papers again before writing a
-novelty claim. A rigorous negative result can establish when the predictive model offers
-no advantage over simpler controls.
+**The minimum next pilot is much smaller than the full trajectory.** Restore and fingerprint the previous assets, complete Experiments 0 and 1, then compare random versus boundary-selected data with one predictor-side repair at one modest budget. Produce a decomposition plot, a paired before/after table and representative successes and failures. Develop the learned acquisition scorer only if this exposes a repairable signal. A rough allocation is validity and diagnosis first, repairability next, then acquisition curves and transfer; GPU memory, collection speed and training time remain unmeasured. The first gate determines whether to proceed to the main acquisition comparison. The learned selector, closed-loop study and second task remain conditional extensions.
 
-Primary sources reviewed for the direction:
 
-- [Robust CEM](https://arxiv.org/abs/2010.07968): existing constraint-aware planning.
-- [SafeDreamer](https://arxiv.org/abs/2307.07176): safe planning with learned world models.
-- [UNISafe](https://arxiv.org/abs/2505.00779): uncertainty-aware latent safety filtering.
-- [AnySafe](https://arxiv.org/abs/2509.19555): adjustable latent constraints and conservatism.
-- [PSG-JEPA](https://arxiv.org/abs/2608.06799): physical grounding of predictive latents.
-- [The Intervention Gap in Latent World Models](https://arxiv.org/abs/2608.29998):
-  decodability versus imagined action effects.
+**Scope and planning horizon.** The minimum study is a reproducible diagnosis,
+repairability test and equal-budget comparison of ordinary versus boundary-focused
+experience. A learned error-risk selector follows only if that comparison exposes a
+useful signal. Transfer is required for a claim beyond memorising acquired cases.
+New locomotion training, irreversibility estimation, a new safety-filter architecture,
+encoder adaptation and full-model pretraining are not core dependencies. SafetyDial
+remains the project name; a conservatism dial is an evaluation tool, not the novelty claim.
 
-**15. The first pilot should end with a decision, not a larger infrastructure project.**
-These are proposed work allocations, not promises about hardware runtime.
-
-- **Days 1-2:** fix one robot, verify a competent actor and restoration, collect a small
-  dataset spanning the cost boundary, confirm label alignment and speed observability,
-  and create trajectory-disjoint splits.
-- **Days 3-4:** cache features, fit a small predictor and readout, establish persistence
-  and state-model references, and evaluate actual versus imagined constraint decisions.
-- **Days 5-6:** audit initial, adapted and selected candidates on paired roots. Test one
-  correction only if the observed error supports it. Closed-loop runs are optional at
-  this point, not necessary to call the pilot complete.
-- **Day 7:** record the measured bottleneck and a go/no-go decision. Continue if future
-  prediction adds useful information or a robust error is diagnosed that merits a
-  bounded repair. Stop expanding if observations conceal the constraint, model support
-  is inadequate, or a simple guard matches predictive control. Do not invent an
-  artificial constraint merely to force a world-model advantage.
-
-The minimum thesis is a reproducible audit with strong controls and honest positive or
-negative conclusions. A successful repair is the next deliverable; closed-loop benefit
-and a second robot are stronger extensions. Aim to complete the core evidence in
-October, write the thesis in November, and use December and early January for bounded
-replication and a possible workshop paper. The existing target remains an ICLR 2027
-workshop, subject to a suitable actual call; no particular workshop or acceptance is
-assumed. Freeze results by mid-January if that target is pursued.
-
-**16. Reuse the engineering work and keep the new implementation small.** Existing
-modules provide the following starting points, not a claim that the pivot is implemented:
-
-- [`locoEnv.py`](../experiments/helpers/locoEnv.py): environment registration and manifests.
-- [`locoCollect.py`](../experiments/helpers/locoCollect.py) and
-  [`locoData.py`](../experiments/helpers/locoData.py): state storage and lazy rendering.
-- [`locoPolicies.py`](../experiments/helpers/locoPolicies.py): actor interfaces.
-- [`equivCheck.py`](../experiments/helpers/equivCheck.py): environment verification support.
-- [`probes.py`](../experiments/helpers/probes.py): existing probe patterns; the current
-  pusher-specific probe is not a locomotion velocity probe.
-- [`safeCEM.py`](../experiments/helpers/safeCEM.py): constraint-priority planning patterns;
-  Push-T geometry, action semantics and margin units must be adapted explicitly.
-
-New experiment logic belongs in `experiments/helpers/` and small entry points in
-`experiments/scripts/`, with configs in `configs/<group>/`. Continue using `uv run` and
-the existing project environment. Record simulator/model/data versions, policy and model
-seeds, split identifiers, training time, candidate budgets and observation access. Do not
-commit datasets, weights, credentials or raw run directories. The next implementation
-task is the competent-policy, data and observability gate, not a new safety algorithm.
-
-**17. Open choices have explicit decision points.** The exact actor, encoder, history
-length, predictor architecture, useful physical horizon, calibration quantile and dial
-grid remain to be chosen on development evidence. No new experiment in this document
-has been run. The adopted commitment is the question and staged scope, not a promised
-effect size, monotone curve, calibrated safety guarantee or publication outcome.
+The thesis target remains November 2026, with a possible ICLR 2027 workshop afterward.
+Measure pilot runtime before committing to a larger schedule. Check the eventual
+workshop's actual call; no paper deadline or acceptance is assumed.
