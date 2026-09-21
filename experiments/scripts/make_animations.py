@@ -13,6 +13,7 @@ the animations rebuild from a fresh clone. Output lands in `animations/`.
 
     uv run python experiments/scripts/make_animations.py
     uv run python experiments/scripts/make_animations.py --only dial_sweep --no-mp4
+    uv run python experiments/scripts/make_animations.py --only penalty_sweep --fps 6
 
 Provenance, and it matters for every d = 60 panel: the sweep in `results.json` ran with the
 probe-based arena constraint, which cannot detect a genuine arena exit. That is why the
@@ -37,7 +38,7 @@ sys.path.insert(0, str(REPO_ROOT / "experiments"))
 # pygame needs a video driver even to draw onto an offscreen surface, and the env reads
 # STABLEWM_HOME at import time.
 os.environ.setdefault("SDL_VIDEODRIVER", "dummy")
-os.environ.setdefault("STABLEWM_HOME", str(REPO_ROOT / "data" / "stablewm"))
+os.environ["STABLEWM_HOME"] = str(REPO_ROOT / "data" / "stablewm")
 for _v in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS"):
     os.environ.setdefault(_v, "4")
 
@@ -275,7 +276,7 @@ def save(frames, name, fps, want_mp4):
 
 def anim_dial_sweep(ctx, fps, want_mp4):
     """Turning the dial up grows the keep-out region and bends the route around it."""
-    sweep, states, box = ctx["sweep"], ctx["states"], ctx["box"]
+    states, box = ctx["states"], ctx["box"]
     panels = [
         ("penalty_0", None, r"no hazard term ($\lambda = 0$)", "drives straight through"),
         ("safe_0", 0.0, r"Safe CEM, dial $d = 0$", "avoid the box itself"),
@@ -344,6 +345,56 @@ def anim_penalty_vs_safe(ctx, fps, want_mp4):
         fig.legends.clear()
     plt.close(fig)
     save(frames, "penalty_vs_safe_cem", fps, want_mp4)
+
+
+def anim_penalty_sweep(ctx, fps, want_mp4):
+    """Replay all four penalty weights on seed 1, matching the existing comparison clip."""
+    sweep, states, box = ctx["sweep"], ctx["states"], ctx["box"]
+    seed = 1
+    episodes = {
+        (ep["lam"], ep["seed"]): (states[f"penalty_{i}"], ep)
+        for i, ep in enumerate(sweep["arms"]["penalty"]["episodes"])
+    }
+    panels = [episodes[(lam, seed)] for lam in (0.0, 0.1, 1.0, 10.0)]
+    n = max(len(s) for s, _ in panels)
+
+    fig, axes = plt.subplots(2, 2, figsize=(10.0, 10.3), dpi=120)
+    axes = axes.ravel()
+    fig.subplots_adjust(left=0.02, right=0.98, top=0.89, bottom=0.15,
+                        wspace=0.02, hspace=0.36)
+    fig.suptitle(
+        "Penalty-CEM on Push-T: changing the penalty weight\n"
+        f"Weights 0, 0.1, 1 and 10, all on seed {seed}",
+        fontsize=13, y=0.985,
+    )
+    fig.legend(
+        handles=legend_handles()[:3], loc="lower center", ncol=3, fontsize=8,
+        frameon=False, bbox_to_anchor=(0.5, 0.055),
+    )
+    fig.text(
+        0.5, 0.038,
+        "Same start, goal, model and CEM budget. Probe-based arena constraint; no dial inflation.",
+        ha="center", fontsize=8, color="0.35",
+    )
+    fig.text(
+        0.5, 0.018,
+        "One recorded seed, not the three-seed average. Completed episodes hold their final pose.",
+        ha="center", fontsize=8, color="0.35",
+    )
+
+    frames = []
+    timeline = [n] if PREVIEW["on"] else range(n + max(1, round(1.5 * fps)))
+    for t in timeline:
+        for ax, (s, ep) in zip(axes, panels):
+            title = rf"Penalty-CEM, $\lambda = {ep['lam']:g}$"
+            subtitle = (
+                f"Final block error: {ep['final_block_err_px']:.1f} px   |   "
+                f"outside arena: {ep['oob_steps']}/{len(s)} steps"
+            )
+            episode_panel(ax, ctx["renderer"], s, t, box, None, title, subtitle=subtitle)
+        frames.append(fig_to_rgb(fig))
+    plt.close(fig)
+    save(frames, "penalty_lambda_sweep", fps, want_mp4)
 
 
 def anim_dial60_escape(ctx, fps, want_mp4):
@@ -539,6 +590,7 @@ def anim_dial_response(ctx, fps, want_mp4):
 
 ANIMATIONS = {
     "dial_sweep": anim_dial_sweep,
+    "penalty_sweep": anim_penalty_sweep,
     "penalty_vs_safe": anim_penalty_vs_safe,
     "dial60_escape": anim_dial60_escape,
     "dial_response": anim_dial_response,

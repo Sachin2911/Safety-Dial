@@ -8,8 +8,8 @@ Two independent sets live here. Rebuild with
 Every frame is the real Push-T renderer replaying a **committed simulator state** from
 `docs/safeDial/results/`, not a reconstruction, with the hazard drawn on top:
 
-- **solid red box** — the true hazard. Violations are always measured against this box.
-- **dotted box** — that hazard inflated by the dial `d`. This is the keep-out region the
+- **solid red box**: the true hazard. Violations are always measured against this box.
+- **dotted box**: that hazard inflated by the dial `d`. This is the keep-out region the
   planner tests candidate plans against, and it is the only thing the dial changes.
 
 Each is written twice: `.gif` for inline viewing, `.mp4` (about a tenth the size) for slides.
@@ -17,9 +17,16 @@ Each is written twice: `.gif` for inline viewing, `.mp4` (about a tenth the size
 | File | What it shows |
 |------|---------------|
 | `dial_sweep` | The headline Safe CEM result. Seed 0 at `lambda = 0` (no hazard term) and at dials `d = 0, 20, 40`. The unconstrained planner cuts through the hazard on 7 of 50 steps; Safe CEM enters it on none, at any dial, and the route bends further out as `d` grows. |
+| `penalty_lambda_sweep` | Four panels compare penalty CEM at `lambda = 0, 0.1, 1, 10`, all on seed 1 to match the existing comparison clip. Live counters show hazard steps and their denominators; captions show final block error and out-of-bounds counts. This is the corrected-geometry sweep with the original probe-based arena constraint and no dial inflation. Completed episodes hold their final pose. These are individual episodes, not three-seed averages. |
 | `penalty_vs_safe_cem` | A weight is not a threshold. Seed 1 under penalty CEM at `lambda = 0` and `lambda = 1`, against Safe CEM at `d = 40`. `lambda = 1` cuts the violation from 0.32 to 0.06 but not to zero: a weighted sum will still buy goal progress with a little violation, and constraint-priority ranking will not make that exchange. |
-| `dial60_arena_escape` | Why a probe cannot enforce a constraint outside its own validity domain. Both panels are `d = 60`, same seed. Left, the arena constraint is read off the probe: the planner escapes the 512 px arena entirely, where no encoder output carries the pusher's position, and scores zero violations *vacuously* — the block never moves. Right, the same constraint computed in action space closes the exploit. |
+| `dial60_arena_escape` | Why a probe cannot enforce a constraint outside its own validity domain. Both panels are `d = 60`, same seed. Left, the arena constraint is read off the probe: the planner escapes the 512 px arena entirely, where no encoder output carries the pusher's position, and scores zero violations *vacuously*: the block never moves. Right, the same constraint computed in action space closes the exploit. |
 | `dial_response` | What the operator is turning and what it costs. `d` sweeps 0 to 60 px, the keep-out region inflates, and the measured curves fill in beside it: violations at exactly 0.000 across the dial, task cost non-monotone within 3-seed noise, feasible set genuinely tightening. |
+
+Rebuild only the penalty-weight comparison at its presentation playback rate:
+
+```bash
+uv run python experiments/scripts/make_animations.py --only penalty_sweep --fps 6
+```
 
 ## Provenance, which matters for every `d = 60` panel
 
