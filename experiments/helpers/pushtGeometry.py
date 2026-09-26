@@ -191,10 +191,57 @@ def t_clearance(pose, hazard: Hazard, local=T_LOCAL) -> float:
     return min(polygon_clearance(p, hazard) for p in t_polygons(pose, local))
 
 
+def _seg_dist_batch(p: np.ndarray, a: np.ndarray, b: np.ndarray) -> np.ndarray:
+    """Distances from points p (..., 2) to segments a->b (..., 2), broadcasting."""
+    ab = b - a
+    ap = p - a
+    t = np.clip((ap * ab).sum(-1) / np.maximum((ab * ab).sum(-1), 1e-12), 0.0, 1.0)
+    proj = a + t[..., None] * ab
+    return np.linalg.norm(p - proj, axis=-1)
+
+
+def _inside_batch(p: np.ndarray, polys: np.ndarray) -> np.ndarray:
+    """p (N, 2) against convex polys (N, V, 2) -> (N,) bool."""
+    e = np.roll(polys, -1, axis=1) - polys
+    d = p[:, None, :] - polys
+    cross = e[..., 0] * d[..., 1] - e[..., 1] * d[..., 0]
+    return np.all(cross >= 0, axis=1) | np.all(cross <= 0, axis=1)
+
+
+def polygon_clearance_batch(polys: np.ndarray, hazard: Hazard) -> np.ndarray:
+    """Vectorised `polygon_clearance` for polys (N, V, 2). Same values as the scalar one."""
+    polys = np.asarray(polys, dtype=float)
+    N, V, _ = polys.shape
+    nxt = np.roll(polys, -1, axis=1)
+    if isinstance(hazard, Disc):
+        c = np.array([hazard.cx, hazard.cy])
+        d = _seg_dist_batch(np.broadcast_to(c, (N, V, 2)), polys, nxt).min(1)
+        inside = _inside_batch(np.broadcast_to(c, (N, 2)), polys)
+        return np.where(inside, -d, d) - hazard.r
+    bv = hazard.vertices  # (4, 2)
+    bn = np.roll(bv, -1, axis=0)
+    e = nxt - polys
+    normals = np.stack([-e[..., 1], e[..., 0]], -1)
+    normals = normals / np.maximum(np.linalg.norm(normals, axis=-1, keepdims=True), 1e-12)
+    box_axes = np.broadcast_to(np.array([[1.0, 0.0], [0.0, 1.0]]), (N, 2, 2))
+    axes = np.concatenate([normals, box_axes], axis=1)  # (N, V+2, 2)
+    pa = np.einsum("nvd,nad->nva", polys, axes)  # (N, V, A)
+    pb = np.einsum("bd,nad->nba", bv, axes)  # (N, 4, A)
+    overlap = np.minimum(pa.max(1) - pb.min(1), pb.max(1) - pa.min(1)).min(1)  # (N,)
+    d1 = _seg_dist_batch(polys[:, :, None, :], np.broadcast_to(bv, (N, V, 4, 2)), np.broadcast_to(bn, (N, V, 4, 2))).min((1, 2))
+    d2 = _seg_dist_batch(np.broadcast_to(bv, (N, 4, 2))[:, :, None, :], polys[:, None, :, :], nxt[:, None, :, :]).min((1, 2))
+    dist = np.minimum(d1, d2)
+    return np.where(overlap > 0, -overlap, dist)
+
+
 def clearance_trace(poses: np.ndarray, hazard: Hazard, local=T_LOCAL) -> np.ndarray:
-    """(N, 3) poses -> (N,) signed clearance."""
-    poses = np.asarray(poses, dtype=float)
-    return np.array([t_clearance(p, hazard, local) for p in poses])
+    """(N, 3) poses -> (N,) signed clearance of the whole T (vectorised)."""
+    poses = np.asarray(poses, dtype=float).reshape(-1, 3)
+    if len(poses) == 0:
+        return np.zeros(0)
+    world = t_polygons_batch(poses, local)  # (N, S, 4, 2)
+    per_shape = np.stack([polygon_clearance_batch(world[:, k], hazard) for k in range(world.shape[1])], 1)
+    return per_shape.min(1)
 
 
 def unsafe(poses: np.ndarray, hazard: Hazard, local=T_LOCAL) -> bool:

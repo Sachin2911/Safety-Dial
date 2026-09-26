@@ -39,11 +39,14 @@ CELL = (ARENA_HI - ARENA_LO) / GRID
 # Cells are (row, col) with image-style y down. Familiar = checkerboard "even" cells,
 # held-out = "odd" cells, so both families cover the arena but never share a cell.
 FAMILIES = {
-    "familiar": {"cells": [(r, c) for r in range(GRID) for c in range(GRID) if (r + c) % 2 == 0], "size": (22.0, 34.0)},
-    "heldout": {"cells": [(r, c) for r in range(GRID) for c in range(GRID) if (r + c) % 2 == 1], "size": (38.0, 52.0)},
+    "familiar": {"cells": [(r, c) for r in range(GRID) for c in range(GRID) if (r + c) % 2 == 0], "size": (15.0, 25.0)},
+    "heldout": {"cells": [(r, c) for r in range(GRID) for c in range(GRID) if (r + c) % 2 == 1], "size": (28.0, 40.0)},
 }
-MAX_MARGIN = 40.0  # widest dial tested (px)
+# The widest dial tested. Block displacement along nominal routes has median 34 px (E0
+# bank), so start/goal clearance requirements above ~25 px reject most roots.
+MAX_MARGIN = 20.0
 SLACK = 5.0
+ROUTE_CROSS_TOL = 8.0  # accept routes whose minimum clearance is at most this (near-crossing)
 
 
 @dataclass
@@ -91,13 +94,13 @@ def generate_layout(
     slack: float = SLACK,
     tries: int = 400,
     kinds=("box", "disc"),
-    route_fraction_range=(0.25, 0.85),
+    route_fraction_range=(0.4, 1.0),
 ) -> Layout | None:
     """Place a hazard of `family` across `route_poses` (N, 3), clear of start and goal.
 
-    Accept when: the nominal route's minimum clearance is negative (the route crosses
-    the hazard), the hazard centre lies in a family cell, and both the start and goal
-    footprints keep clearance >= max_margin + slack.
+    Accept when: the nominal route's minimum clearance is at most ROUTE_CROSS_TOL (the
+    route crosses or grazes the hazard), the hazard centre lies in a family cell, and both
+    the start and goal footprints keep clearance >= max_margin + slack.
     """
     fam = FAMILIES[family]
     cells = set(map(tuple, fam["cells"]))
@@ -121,11 +124,11 @@ def generate_layout(
         if sc < need or gc < need:
             continue
         rc = float(clearance_trace(route_poses, hz).min())
-        if rc >= 0:
+        if rc > ROUTE_CROSS_TOL:
             continue
         lay = Layout(hz.to_dict(), family, root_id, f, rc, sc, gc)
-        # prefer hazards the route crosses decisively but that leave room for a detour
-        score = -abs(rc + 15.0)
+        # prefer hazards the route crosses moderately: unsafe nominal, room for a detour
+        score = -abs(rc + 8.0)
         if best is None or score > best[0]:
             best = (score, lay)
     return None if best is None else best[1]
