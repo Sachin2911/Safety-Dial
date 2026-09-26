@@ -1,0 +1,297 @@
+# Fresh stress-only recovery after v3 completed the immutable test bank.
+# Reuse exact development/test bytes; retain failed stress costs and all fixed roots.
+# Freeze every stress tape before simulation, with unchanged primitives and arena guard.
+# Preserve every downstream gate, seed, budget and retention requirement.
+version: 1
+workflow_id: pusht-continuation-20260926-4
+working_directory: .
+state_dir: runs/workflows/pusht-continuation-20260926-4
+poll_interval_seconds: 15
+wait_timeout_seconds: 172800
+stages:
+- id: recover_fixed_root_stress_bank
+  wait_for:
+  - data/study/pusht/continuation-v3/e1/test/manifest.json
+  - data/study/pusht/continuation-v3/e1/stress/progress.json
+  - data/study/pusht/continuation-v3/e1/sampling-plan.json
+  - docs/mainPlan/results/continuation-v3/development-witness/witnesses.json
+  - docs/mainPlan/results/continuation-v3/development-witness/hf_upload.json
+  requires_gates:
+  - path: docs/mainPlan/results/continuation-v3/development-witness/witnesses.json
+    key: gate.passes
+  argv:
+  - uv
+  - run
+  - python
+  - experiments/scripts/pusht_stress_recovery.py
+  - --source-banks-dir
+  - data/study/pusht/continuation-v3/e1
+  - --source-feasibility-report
+  - docs/mainPlan/results/continuation-v3/development-witness/witnesses.json
+  - --output-dir
+  - data/study/pusht/continuation-v4/e1
+  - --results-dir
+  - docs/mainPlan/results/continuation-v4/banks-final
+  - --feasibility-output
+  - docs/mainPlan/results/continuation-v4/development-witness
+  - --run-id
+  - pusht-banks-stress-recovery-continuation-20260926-4
+  timeout_seconds: 21600
+  fresh_outputs:
+  - data/study/pusht/continuation-v4/e1
+  - docs/mainPlan/results/continuation-v4/banks-final
+  - docs/mainPlan/results/continuation-v4/development-witness
+  outputs:
+  - data/study/pusht/continuation-v4/e1
+  - docs/mainPlan/results/continuation-v4/banks-final
+  - docs/mainPlan/results/continuation-v4/development-witness
+- id: development_decomposition_gate
+  argv:
+  - uv
+  - run
+  - python
+  - experiments/scripts/pusht_e1_decompose.py
+  - --run-id
+  - pusht-decomposition-continuation-20260926-4
+  - --banks-dir
+  - data/study/pusht/continuation-v4/e1
+  - --probes-run
+  - runs/pusht-probes-continuation-20260926-2
+  - --results-dir
+  - docs/mainPlan/results/continuation-v4/decomposition
+  timeout_seconds: 86400
+  fresh_outputs:
+  - docs/mainPlan/results/continuation-v4/decomposition
+  - runs/pusht-decomposition-continuation-20260926-4-coord
+  outputs:
+  - docs/mainPlan/results/continuation-v4/decomposition
+  - runs/pusht-decomposition-continuation-20260926-4-coord
+  gate:
+    path: docs/mainPlan/results/continuation-v4/decomposition/decomposition.json
+    key: gate.passes
+    stop_exit_codes:
+    - 0
+    - 2
+  wait_for:
+  - docs/mainPlan/results/continuation-v4/banks-final/banks.json
+  - data/study/pusht/continuation-v4/e1/test/manifest.json
+  - data/study/pusht/continuation-v4/e1/stress/manifest.json
+  requires_gates:
+  - path: docs/mainPlan/results/continuation-v4/development-witness/witnesses.json
+    key: gate.passes
+- id: repairability_and_retention_gate
+  requires_gates:
+  - path: docs/mainPlan/results/continuation-v4/decomposition/decomposition.json
+    key: gate.passes
+  - path: docs/mainPlan/results/continuation-v4/development-witness/witnesses.json
+    key: gate.passes
+  argv:
+  - uv
+  - run
+  - python
+  - experiments/scripts/pusht_e2_repair.py
+  - --run-id
+  - pusht-adapt-e2-continuation-20260926-4
+  - --banks-dir
+  - data/study/pusht/continuation-v4/e1
+  - --probes-run
+  - runs/pusht-probes-continuation-20260926-2
+  - --feasibility-report
+  - docs/mainPlan/results/continuation-v4/development-witness/witnesses.json
+  - --decomposition-report
+  - docs/mainPlan/results/continuation-v4/decomposition/decomposition.json
+  - --study-dir
+  - data/study/pusht/continuation-v4/e2
+  - --results-dir
+  - docs/mainPlan/results/continuation-v4/repair
+  - --retention-episodes
+  - '20'
+  - --retention-blocks
+  - '50'
+  timeout_seconds: 172800
+  fresh_outputs:
+  - data/study/pusht/continuation-v4/e2
+  - docs/mainPlan/results/continuation-v4/repair
+  - runs/pusht-adapt-e2-continuation-20260926-4
+  outputs:
+  - data/study/pusht/continuation-v4/e2
+  - docs/mainPlan/results/continuation-v4/repair
+  - runs/pusht-adapt-e2-continuation-20260926-4
+  gate:
+    path: docs/mainPlan/results/continuation-v4/repair/repair.json
+    key: gate.passes
+    stop_exit_codes:
+    - 0
+    - 2
+- id: paired_acquisition
+  argv:
+  - uv
+  - run
+  - python
+  - experiments/scripts/pusht_e3_acquisition.py
+  - --run-id
+  - pusht-acq-continuation-20260926-4
+  - --e2-report
+  - docs/mainPlan/results/continuation-v4/repair/repair.json
+  - --feasibility-report
+  - docs/mainPlan/results/continuation-v4/development-witness/witnesses.json
+  - --banks-dir
+  - data/study/pusht/continuation-v4/e1
+  - --assets-run
+  - runs/pusht-assets-20260926-1
+  - --probes-run
+  - runs/pusht-probes-continuation-20260926-2
+  - --output-dir
+  - docs/mainPlan/results/continuation-v4/acquisition
+  - --data-dir
+  - data/study/pusht/continuation-v4/e3
+  - --checkpoint-dir
+  - runs/pusht-acq-continuation-20260926-4
+  - --seeds
+  - '0'
+  - '1'
+  - '2'
+  - --arms
+  - random
+  - boundary
+  - --budgets
+  - '64'
+  - '128'
+  - '256'
+  - '512'
+  - --acq-roots
+  - '96'
+  - --pool-per-root
+  - '40'
+  timeout_seconds: 172800
+  fresh_outputs:
+  - docs/mainPlan/results/continuation-v4/acquisition
+  - data/study/pusht/continuation-v4/e3
+  - runs/pusht-acq-continuation-20260926-4
+  outputs:
+  - docs/mainPlan/results/continuation-v4/acquisition
+  - data/study/pusht/continuation-v4/e3
+  - runs/pusht-acq-continuation-20260926-4
+  wait_for:
+  - docs/mainPlan/results/continuation-v4/repair/repair.json
+  - docs/mainPlan/results/continuation-v4/repair/repair_rows.npz
+  - docs/mainPlan/results/continuation-v4/repair/goal_retention_cases.json
+  - docs/mainPlan/results/continuation-v4/development-witness/witnesses.json
+  - runs/pusht-adapt-e2-continuation-20260926-4/hf_upload.json
+  watch_gates:
+  - path: docs/mainPlan/results/continuation-v4/decomposition/decomposition.json
+    key: gate.passes
+  - path: docs/mainPlan/results/continuation-v4/development-witness/witnesses.json
+    key: gate.passes
+  - path: docs/mainPlan/results/continuation-v4/repair/repair.json
+    key: gate.passes
+  requires_gates:
+  - path: docs/mainPlan/results/continuation-v4/repair/repair.json
+    key: gate.passes
+  - path: docs/mainPlan/results/continuation-v4/development-witness/witnesses.json
+    key: gate.passes
+- id: final_checkpoint_goal_retention
+  argv:
+  - uv
+  - run
+  - python
+  - experiments/scripts/pusht_transfer_retention.py
+  - --acquisition-report
+  - docs/mainPlan/results/continuation-v4/acquisition/acquisition.json
+  - --cases
+  - docs/mainPlan/results/continuation-v4/repair/goal_retention_cases.json
+  - --checkpoint-root
+  - runs/pusht-acq-continuation-20260926-4
+  - --output-dir
+  - docs/mainPlan/results/continuation-v4/transfer-retention
+  - --run-id
+  - pusht-transfer-retention-continuation-20260926-4
+  timeout_seconds: 86400
+  fresh_outputs:
+  - docs/mainPlan/results/continuation-v4/transfer-retention
+  outputs:
+  - docs/mainPlan/results/continuation-v4/transfer-retention
+- id: geometric_transfer_report
+  argv:
+  - uv
+  - run
+  - python
+  - experiments/scripts/pusht_e4_report.py
+  - --acquisition-report
+  - docs/mainPlan/results/continuation-v4/acquisition/acquisition.json
+  - --retention-report
+  - docs/mainPlan/results/continuation-v4/transfer-retention/transfer_retention.json
+  - --output-dir
+  - docs/mainPlan/results/continuation-v4/transfer-e4
+  timeout_seconds: 3600
+  fresh_outputs:
+  - docs/mainPlan/results/continuation-v4/transfer-e4
+  outputs:
+  - docs/mainPlan/results/continuation-v4/transfer-e4
+- id: closedloop_selection_gate
+  argv:
+  - uv
+  - run
+  - python
+  - experiments/scripts/pusht_e5_selection.py
+  - resolve
+  - --acquisition-report
+  - docs/mainPlan/results/continuation-v4/acquisition/acquisition.json
+  - --e2-report
+  - docs/mainPlan/results/continuation-v4/repair/repair.json
+  - --feasibility-report
+  - docs/mainPlan/results/continuation-v4/development-witness/witnesses.json
+  - --retention-report
+  - docs/mainPlan/results/continuation-v4/transfer-retention/transfer_retention.json
+  - --cases
+  - docs/mainPlan/results/continuation-v4/repair/goal_retention_cases.json
+  - --banks-dir
+  - data/study/pusht/continuation-v4/e1
+  - --checkpoint-root
+  - runs/pusht-acq-continuation-20260926-4
+  - --e5-run-id
+  - pusht-closedloop-continuation-20260926-4
+  - --e5-output-dir
+  - docs/mainPlan/results/continuation-v4/closedloop
+  - --out
+  - docs/mainPlan/results/continuation-v4/e5-selection.json
+  - --acquisition-seed
+  - '0'
+  - --blocks
+  - '10'
+  - --samples
+  - '300'
+  - --iterations
+  - '30'
+  - --case-seed
+  - '20261005'
+  - --lam
+  - '0.05'
+  timeout_seconds: 1800
+  fresh_outputs:
+  - docs/mainPlan/results/continuation-v4/e5-selection.json
+  outputs:
+  - docs/mainPlan/results/continuation-v4/e5-selection.json
+  gate:
+    path: docs/mainPlan/results/continuation-v4/e5-selection.json
+    key: gate.passes
+    stop_exit_codes:
+    - 0
+    - 2
+- id: conditional_paired_closedloop
+  argv:
+  - uv
+  - run
+  - python
+  - experiments/scripts/pusht_e5_selection.py
+  - run
+  - --selection
+  - docs/mainPlan/results/continuation-v4/e5-selection.json
+  timeout_seconds: 21600
+  fresh_outputs:
+  - docs/mainPlan/results/continuation-v4/closedloop
+  outputs:
+  - docs/mainPlan/results/continuation-v4/closedloop
+  requires_gates:
+  - path: docs/mainPlan/results/continuation-v4/e5-selection.json
+    key: gate.passes

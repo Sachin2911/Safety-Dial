@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "status": "pure_preflight_supported",
+  "written_utc": "2026-09-26T22:59:30Z",
+  "inputs": {
+    "test_roots": {
+      "path": "data/study/pusht/continuation-v3/e1/test/roots.json",
+      "sha256": "799cf938fb5212dc07ccb47752189ba4cd1d77bf83261045b8cda9f9bbed497c",
+      "bytes": 380940
+    },
+    "test_layouts": {
+      "path": "data/study/pusht/continuation-v3/e1/test/layouts.json",
+      "sha256": "b95bda4385bf04004bed9262b0e84cfecc415dbb6d356fc76d9ba8670f074542",
+      "bytes": 78823
+    },
+    "test_branches": {
+      "path": "data/study/pusht/continuation-v3/e1/test/branches.h5",
+      "sha256": "f44eb3eaa50c1e15134727f5ef625922b28ce4e6a26381a45800ea63a3b834ac",
+      "bytes": 48727683
+    },
+    "original_stress_journal": {
+      "path": "data/study/pusht/continuation-v3/e1/stress/attempts.jsonl",
+      "sha256": "b6277f2821985083eeb7bd8d57b67877ea7ac3a8ea14eb4038a01087bd027052",
+      "bytes": 90846
+    },
+    "original_stress_progress": {
+      "path": "data/study/pusht/continuation-v3/e1/stress/progress.json",
+      "sha256": "5e69f2edb4ef16784d0947dd48ee68f9aed46c18ae8d9fef9bfc28f15ebc8ed4",
+      "bytes": 1116
+    },
+    "original_sampling_plan": {
+      "path": "data/study/pusht/continuation-v3/e1/sampling-plan.json",
+      "sha256": "fc8292fcd67f2985157e4a72433e23189dc897f183ebca1f06f098233fa6db23",
+      "bytes": 5775741
+    },
+    "recovery_helper": {
+      "path": "experiments/helpers/pushtStressRecovery.py",
+      "sha256": "55824eec18f8229cedcccaf10cc4ba87731e68bd04c817b1e2a06dbbaa962cac",
+      "bytes": 8718
+    },
+    "original_frozen_sampler": {
+      "path": "data/study/pusht/continuation-v3/e1/source_snapshot/experiments/helpers/pushtBankSampling.py",
+      "sha256": "6388d11c35aebbdf81f4cae52024dba1953d761e451d8c969e3e54a47740f29d",
+      "bytes": 14193
+    },
+    "original_frozen_primitives": {
+      "path": "data/study/pusht/continuation-v3/e1/source_snapshot/experiments/helpers/branchBank.py",
+      "sha256": "b946ab098c3ab0c31b14b21b782f7a88bb31dae47cc2ad16932a77f1b2767acb",
+      "bytes": 24071
+    },
+    "original_frozen_geometry": {
+      "path": "data/study/pusht/continuation-v3/e1/source_snapshot/experiments/helpers/pushtGeometry.py",
+      "sha256": "ff72e9b9b3a37e86bd62a29d5b16d73e0791bb43ef716a2dda3e06600dce0863",
+      "bytes": 12530
+    }
+  },
+  "protocol": {
+    "version": "fixed-test-roots-stress-recovery-v1",
+    "seed": 20280927,
+    "original_maximum_trials_per_slot": 20,
+    "recovery_maximum_trials_per_slot": 4096,
+    "allowance_scope": "One fixed 4096-attempt limit applied uniformly to every slot of every saved test root before new stress execution; no root-specific limits.",
+    "root_order": "Completed original test bank order, retaining all 128 fixed roots.",
+    "root_state_source": "test/branches.h5 states[first branch whose root_index equals the saved root index, 0]",
+    "hazard_source": "Original familiar layout for each saved root, with centre computed from its disc or box parameters.",
+    "tapes_per_root": 16,
+    "slots": [
+      "stress",
+      "stress",
+      "stress",
+      "stress",
+      "stress",
+      "stress",
+      "stress",
+      "stress",
+      "toward_hazard",
+      "toward_hazard",
+      "toward_hazard",
+      "toward_hazard",
+      "toward_hazard",
+      "toward_hazard",
+      "toward_hazard",
+      "toward_hazard"
+    ],
+    "unchanged": "Original action primitives and random-draw order, parameter distributions, float32 conversion before arena checks and deduplication, arena bounds and tape uniqueness.",
+    "execution_requirement": "The new recovery runner must freeze and verify all 128 complete pools before any stress simulator query; incomplete preflight must stop."
+  },
+  "measured_preflight": {
+    "roots_checked": 128,
+    "complete_roots": 128,
+    "tapes_generated": 2048,
+    "total_proposal_trials": 2668,
+    "maximum_trials_in_any_slot": 61,
+    "pool_sha256": "114fb8f3aa35065eee49fbfd8e27f0e86c9bf7c37a47c246a5499ad33e1b55c1",
+    "pool_digest_schema": "Repeated UTF-8 root_id, NUL, kind, NUL, C-order float32 tape bytes in saved root order and slot order",
+    "failed_roots": [],
+    "initial_saved_state_equality": {
+      "roots_compared": 128,
+      "compared_to": "Original root.meta.state_at_root",
+      "maximum_absolute_difference": 0.0,
+      "all_equal": true
+    },
+    "historical_reproduction": {
+      "complete_original_roots": 17,
+      "complete_trial_audits_exactly_equal": true,
+      "root_ids": [
+        "test-familiar-c00015",
+        "test-familiar-c00032",
+        "test-familiar-c00041",
+        "test-familiar-c00122",
+        "test-familiar-c00174",
+        "test-familiar-c00177",
+        "test-familiar-c00210",
+        "test-familiar-c00226",
+        "test-familiar-c00237",
+        "test-familiar-c00238",
+        "test-familiar-c00248",
+        "test-familiar-c00264",
+        "test-familiar-c00267",
+        "test-familiar-c00293",
+        "test-familiar-c00296",
+        "test-familiar-c00297",
+        "test-familiar-c00301"
+      ],
+      "comparison": "Entire ordered trial records, including accepted/rejected outcome, slot, trial, kind, parameters and tape SHA256.",
+      "failed_root": "test-familiar-c00318",
+      "failed_root_original_trial_count": 35,
+      "failed_root_original_trial_prefix_exactly_equal": true
+    },
+    "previous_failure": {
+      "completed_stress_roots": 17,
+      "completed_stress_tapes": 272,
+      "charged_steps_to_preserve": 13040,
+      "failed_root_filled_slots": 8,
+      "accepted_contact_stress_tapes": 8,
+      "contact_stress_arena_rejections": 7,
+      "first_toward_hazard_slot_arena_rejections": 20,
+      "duplicate_rejections": 0
+    },
+    "diagnosis": "The original finite rejection allowance failed on arena rejections, not finite primitive-support exhaustion; the unchanged generator completes every fixed root under the uniform larger allowance."
+  },
+  "validation": {
+    "focused_pure_tests_passed": 17,
+    "test_path": "experiments/tests/test_pusht_stress_recovery.py",
+    "ruff": "passed for the new helper and its focused tests",
+    "independent_helper_review": "No blocking issue reported; caller must bind exact saved initial states and retain preflight failure audits."
+  },
+  "evidence_scope": {
+    "pure_action_geometry_only": true,
+    "simulator_steps": 0,
+    "model_queries": 0,
+    "gpu_queries": 0,
+    "new_render_calls": 0,
+    "future_branch_performance_inspected": false,
+    "hdf5_data_inspection": "Only root_index and the first saved initial state per root were interpreted; full-file hashing reads opaque bytes for identity only.",
+    "new_experiment_executed": false,
+    "interpretation": "This validates action-pool construction and provenance only. It does not establish stress-bank execution, safety, repairability, acquisition benefit or any final-performance gate.",
+    "preservation": "Original test bank, failed stress bank, frozen sources and their charged interaction costs remain intact; new recovery results require a separate output identity."
+  }
+}

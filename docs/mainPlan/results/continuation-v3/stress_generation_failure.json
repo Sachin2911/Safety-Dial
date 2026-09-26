@@ -1,0 +1,103 @@
+{
+  "status": "preserved_operational_failure",
+  "observed_utc": "2026-09-26T22:53:49Z",
+  "workflow": "runs/workflows/pusht-continuation-20260926-3/state.json",
+  "workflow_sha256": "8e5669ab1a327a199760708090c3c25b73a96cd9bde7cb47534c706cb6535dc7",
+  "stage": "frozen_final_test_and_stress_banks",
+  "failure": {
+    "type": "RuntimeError",
+    "message": "Frozen stress root test-familiar-c00318 lacks 16 valid unique proposals within the declared limit"
+  },
+  "failed_candidate": {
+    "root_id": "test-familiar-c00318",
+    "episode": 8454,
+    "reused_test_root": true
+  },
+  "completed_test": {
+    "status": "complete",
+    "roots_stored": 128,
+    "n_branches": 2048,
+    "attempts_completed": 3804,
+    "accepted_by_family": {
+      "familiar": 64,
+      "heldout": 64
+    },
+    "ledger": {
+      "steps": {
+        "root_generation": 187774,
+        "discarded_source_geometry": 0,
+        "layout_route": 53341,
+        "root_discarded_no_layout": 0,
+        "proposals_arena_rejected": 0,
+        "proposals_duplicate_rejected": 0,
+        "proposals_attempted": 0,
+        "branch": 101298,
+        "discarded_invalid_root": 0,
+        "discarded_censored_layout_route": 0,
+        "discarded_proposal_shortfall": 0
+      },
+      "branches": {
+        "discarded_source_geometry": 2645,
+        "root_discarded_no_layout": 769,
+        "proposals_arena_rejected": 1819,
+        "proposals_attempted": 3916,
+        "branch": 2048,
+        "discarded_invalid_root": 65,
+        "discarded_censored_layout_route": 186,
+        "discarded_proposal_shortfall": 11
+      },
+      "total_steps": 342413
+    }
+  },
+  "preserved_stress": {
+    "status": "incomplete",
+    "roots_stored": 17,
+    "n_branches": 272,
+    "attempts_completed": 17,
+    "accepted_by_family": {
+      "familiar": 17
+    },
+    "ledger": {
+      "steps": {
+        "proposals_arena_rejected": 0,
+        "proposals_duplicate_rejected": 0,
+        "proposals_attempted": 0,
+        "branch": 13040
+      },
+      "branches": {
+        "proposals_arena_rejected": 110,
+        "proposals_attempted": 390,
+        "branch": 272
+      },
+      "total_steps": 13040
+    }
+  },
+  "source_plan_sha256": "fc8292fcd67f2985157e4a72433e23189dc897f183ebca1f06f098233fa6db23",
+  "test_audit": "docs/mainPlan/results/continuation-v3/test_bank_completion_audit.json",
+  "test_audit_sha256": "63eb827e08d6270570865a8ca701f16801e1f68dae1f3780aa20c87c5c350745",
+  "preserved_files_sha256": {
+    "test/roots.json": "799cf938fb5212dc07ccb47752189ba4cd1d77bf83261045b8cda9f9bbed497c",
+    "test/branches.h5": "f44eb3eaa50c1e15134727f5ef625922b28ce4e6a26381a45800ea63a3b834ac",
+    "test/layouts.json": "b95bda4385bf04004bed9262b0e84cfecc415dbb6d356fc76d9ba8670f074542",
+    "test/manifest.json": "eb1ce527a95809ba8acbd22942340572bcf1207a61ae0eed0981b0fdbb4729dc",
+    "test/progress.json": "8bee44874270dd2d65a3187d917bbcca2f34b2e249be2271a430096c58114b0e",
+    "test/attempts.jsonl": "082d0dbd7b69a0cb08b3b9f0f0315e2f2413a4caf9b2eea42600f9483e64e7c6",
+    "stress/roots.json": "01138decf7f0fdf7c650f99ed6da5588f8d9c9adc66a9801a8cb37a8ad188231",
+    "stress/branches.h5": "e1d5d8dcd87f3e83ef98cfefb87dd35b2a2edfa08c8bf5e34819fe8e0be33936",
+    "stress/layouts.json": "42e53ff395829998eef3696d06654e240a2afbe012cb02a23a8d4495cebb5a55",
+    "stress/progress.json": "5e69f2edb4ef16784d0947dd48ee68f9aed46c18ae8d9fef9bfc28f15ebc8ed4",
+    "stress/attempts.jsonl": "b6277f2821985083eeb7bd8d57b67877ea7ac3a8ea14eb4038a01087bd027052"
+  },
+  "unused_oracle_queue": {
+    "service": "safetydial_pusht_oracle_continuation",
+    "stopped": true,
+    "attempts_started": 0,
+    "state_sha256": "51be2c10cd75586cb35e66fd7fff8db89b481133ef694592bd0dd1d90c7a33e7"
+  },
+  "recovery": {
+    "config": "configs/pusht/continuation-v4.yaml",
+    "scope": "Fresh stress-only construction; preserve all original banks and exact development/test bytes. All fixed-root stress tapes are frozen before simulation. No final-test performance is inspected.",
+    "protocol_change": "Same stress primitives, parameter distributions, float32 controls, arena guard, roots and 8+8 slots; a single fixed 4096-trial slot limit replaces 20 for all roots.",
+    "failed_stress_cost_retained_steps": 13040
+  }
+}
