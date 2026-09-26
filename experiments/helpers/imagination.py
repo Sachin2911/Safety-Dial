@@ -171,6 +171,7 @@ class PlanResult:
     cost: float
     solve_time: float
     frac_feasible: float = 1.0
+    diag: dict = None
 
 
 class NominalPlanner:
@@ -194,6 +195,10 @@ class NominalPlanner:
             "action": torch.zeros((1, 1, ACTION_BLOCK * 2), device=self.device),
         }
 
+    def _cost_model(self, hist, pusher_xy):
+        """Hook for subclasses (e.g. the whole-T Safe CEM in safeCemT.py)."""
+        return HistoryCostModel(self.model, hist, action_scaler=self.process["action"], pusher_xy=pusher_xy, arena_guard=self.arena_guard)
+
     def plan(self, frames, hist_blocks, goal_frame, *, seed: int, pusher_xy=None,
              init_future=None) -> PlanResult:
         """One CEM solve. `pusher_xy` anchors the arena guard; `init_future` is a raw
@@ -211,10 +216,7 @@ class NominalPlanner:
         seed = int(seed) % (2**32 - 1)
         torch.manual_seed(seed)
         np.random.seed(seed)
-        cost_model = HistoryCostModel(
-            self.model, hist, action_scaler=self.process["action"], pusher_xy=pusher_xy,
-            arena_guard=self.arena_guard,
-        ).to(self.device).eval()
+        cost_model = self._cost_model(hist, pusher_xy).to(self.device).eval()
         solver = CEMSolver(model=cost_model, batch_size=1, num_samples=self.num_samples,
                            var_scale=self.var_scale, n_steps=self.n_steps, topk=self.topk,
                            device=self.device, seed=seed)
@@ -235,7 +237,8 @@ class NominalPlanner:
         flat[:n_hist] = hist.cpu()
         blocks = model_to_blocks(self.process, flat[n_hist:])
         res = PlanResult(blocks, flat, float(out["costs"][0]), time.time() - t0)
-        res.frac_feasible = cost_model.last_frac_feasible
+        res.frac_feasible = getattr(cost_model, "last_frac_feasible", 1.0)
+        res.diag = getattr(cost_model, "last_diag", {})
         return res
 
 

@@ -59,9 +59,10 @@ def targets_at(ep, idx):
     return np.stack([ep["qpos"][idx, 1], ep["qpos"][idx, 2], np.where(idx > 0, xv[np.maximum(idx - 1, 0)], 0.0)], 1).astype(np.float32)
 
 
-def main() -> int:
+def main() -> int:  # noqa: PLR0915
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", required=True)
+    ap.add_argument("--data-dir", default=str(DATA))
     ap.add_argument("--probe-frames", type=int, default=30000)
     ap.add_argument("--n-roots", type=int, default=200)
     ap.add_argument("--seed", type=int, default=0)
@@ -71,6 +72,7 @@ def main() -> int:
     t0 = time.time()
     RESULTS.mkdir(parents=True, exist_ok=True)
     device = "cuda"
+    data_dir = Path(args.data_dir)
     run_id = make_run_id("walker2d", "probes", n=args.n)
     model, scaler = load_walker_model(Path(args.model), device)
     im = WalkerImaginer(model, scaler, device)
@@ -80,7 +82,7 @@ def main() -> int:
     # ---- probes on real frames (probe set, split by episode) ---------------------------
     Z, Y, E = [], [], []
     got = 0
-    for ei, ep in episodes(DATA / "probe.h5"):
+    for ei, ep in episodes(data_dir / "probe.h5"):
         idx = np.arange(0, len(ep["qpos"]), 2)
         frames = ctx.render_many(ep["qpos"][idx], ep["qvel"][idx])
         Z.append(im.encode(frames).cpu().numpy())
@@ -111,7 +113,7 @@ def main() -> int:
     err_by_block = {"height": [], "pitch": [], "speed": []}
     real_err = {"height": [], "pitch": [], "speed": []}
     n_done = 0
-    for ei, ep in episodes(DATA / "roots.h5"):
+    for ei, ep in episodes(data_dir / "roots.h5"):
         n = len(ep["qpos"])
         if n < (HISTORY - 1) * FRAMESKIP + HORIZON_BLOCKS * FRAMESKIP + 1:
             continue
