@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "status": "visually_reviewed",
+  "reviewed_utc": "2026-09-26T23:27:48Z",
+  "source_report_sha256": "8b235cab8e0f73ff230cc69bc88af6c33c9cda38e573b43e4a6e1353301b16c8",
+  "script_sha256": "521ee8f627e82bc418052f5647d08bbf4fc30814d183319bc2c82053c91da270",
+  "manifest_sha256": "6cfa717bf570179a203c7489bb1713669239d3c32e32e3ae085e5d1ce30116f3",
+  "figures": [
+    {
+      "file": "dial_curves_by_source.png",
+      "sha256": "61f3fbd939ce25fb431f3250976d5335bb5fb65323350beb7ff9e7835db7371f",
+      "width_px": 2340,
+      "height_px": 990
+    },
+    {
+      "file": "pose_error_by_horizon.png",
+      "sha256": "076992f04ff15627812406714dcf834611d6fabdbb3094a28ce25b2567e9c570",
+      "width_px": 2340,
+      "height_px": 1200
+    }
+  ],
+  "review_method": "Original generated PNG bytes were forwarded directly as image content after view_image was found unavailable due the namespace sandbox. No images were edited for inspection.",
+  "checks": {
+    "dial": "All three bank panels contain supported plotted information. Test/stress annotations explicitly state FSA is undefined at all saved dial points. Dashed lower bounds, defined solid curves and saved m=0 capped censor ranges are distinguished in visible labels. Both rate axes show nonnegative probability ticks; no unlabeled empty panel remains.",
+    "pose": "Banks occupy separate columns; error quantities occupy separate rows with explicit pixel/degree units. Each source has a consistent distinct colour, marker and line style across banks. Shared legend and axis labels are readable; no obvious text clipping or missing panels.",
+    "scientific_interpretation": "No full-grid upper bounds were invented. Undefined point FSA remains null, zero acceptance is not converted to safe zero, and finite bootstrap endpoints from an undefined full-data FSA were not used. Saved m=0 ranges are identified as censoring bounds, not confidence intervals.",
+    "preservation": "All 11 original decomposition files were hash-checked unchanged during rendering. The original five PNG hashes were rechecked afterward; original JSON hash and scientific gate remain exact."
+  },
+  "numeric_policy_validation": {
+    "focused_tests_passed": 12,
+    "test_file": "experiments/tests/test_pusht_e1_figures.py",
+    "ruff": "passed",
+    "independent_review": "verification_audit found no blocking interpretation issue in dial_value()/prepare_dial()"
+  },
+  "resolved_original_findings": [
+    "F01",
+    "F02"
+  ],
+  "remaining_original_notes": "Minor original cumulative-attribution headroom and regime sign-convention notes are outside these two presentation corrections; originals remain preserved.",
+  "new_model_calls": 0,
+  "new_simulator_steps": 0,
+  "uploads": 0
+}

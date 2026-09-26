@@ -60,3 +60,16 @@ false-safe errors to imagined dynamics (75%), passing the predeclared developmen
 gate. One accepted development future remains unresolved; its false-safe rate is
 undefined, with reported bounds rather than an assumed safe label. Repairability
 and goal retention are running; successful repair is not yet established.
+
+The [independent diagnosis audit](development_diagnosis_audit.json) reproduces the gate
+from the saved development rows and verifies input identities, 6,880 charged root-prefix
+steps and all 41,920 horizon rows. The [corrected figures](decomposition-figures/README.md)
+show explicitly labeled lower bounds where false-safe acceptance is undefined and use
+consistent pose-series styles. These are presentation corrections from the immutable
+report; all original outputs and the gate decision remain unchanged. The numeric
+plotting policy passed 12 focused tests and Ruff.
+
+The [data-only results archive](decomposition_archive.json) is prepared locally, including
+both numerical NPZ files and the original and corrected figures. Its private upload
+requires explicit approval after automatic review rejected the transfer; no upload
+occurred. This optional archive is separate from the running scientific workflows.

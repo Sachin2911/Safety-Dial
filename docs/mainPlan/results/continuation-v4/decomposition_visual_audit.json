@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "status": "presentation_followup_required",
+  "reviewed_utc": "2026-09-26T23:21:01Z",
+  "scope": "One-time visual inspection of five completed PNG artifacts only: labels, axes, units, legends, visible panel completeness and presentation-level consistency. No numerical results were inferred or checked against underlying data.",
+  "inspection_method": {
+    "requested_tool": "view_image",
+    "tool_result": "Blocked by bwrap namespace permission error",
+    "fallback": "Original PNG bytes were read through an escalated read-only file command and forwarded as image content for direct visual inspection. Original files were not resized or modified; the display automatically resized the largest image."
+  },
+  "figures": [
+    {
+      "path": "docs/mainPlan/results/continuation-v4/decomposition/dial_curves_by_source.png",
+      "sha256": "335efd283648ea6fb154c8a672701793bf44cfda9fde71b8e69966eca6759f1c",
+      "bytes": 75153,
+      "width_px": 1950,
+      "height_px": 520,
+      "status": "presentation_defect",
+      "readability": "Titles, axes and the development legend are readable, with no visible text clipping.",
+      "axes_units_legends": "Both axes are labelled as rates; the development y axis spans 0 to 1. The empty test/stress x axes show negative rate ticks from automatic empty-axis scaling.",
+      "panels": "Development curves are present. Test and stress panels contain no curves, markers, legend or explanation for missing data.",
+      "visible_claim_consistency": "The titles identify three bank-specific dial comparisons, but only the development comparison is visibly supplied.",
+      "finding_ids": [
+        "F01"
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/decomposition/attribution_m0.png",
+      "sha256": "acee1f7eb370b3ac2da0736eab4d38b2730474deb3dd5a2be0f4f90561b0e4c6",
+      "bytes": 34970,
+      "width_px": 780,
+      "height_px": 520,
+      "status": "readable",
+      "readability": "Title, bank labels, long count-axis label and three-component legend are readable. No obvious text or bar clipping.",
+      "axes_units_legends": "Bank categories and false-safe decision counts at m=0 are explicit; legend maps temporal sampling, readout and imagination to distinct colors.",
+      "panels": "One complete stacked-bar panel with dev, test and stress categories.",
+      "visible_claim_consistency": "The first-failing-link title and stacked attribution categories are consistent at the visual presentation level.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/decomposition/pose_error_by_horizon.png",
+      "sha256": "e240483390cc93a6959f0a521a09087b00132e5453ea92ccbc042281b564be0d",
+      "bytes": 150943,
+      "width_px": 1300,
+      "height_px": 520,
+      "status": "presentation_defect",
+      "readability": "Both panels, their titles, integer horizon ticks and legend text are readable. Some series overlap visibly.",
+      "axes_units_legends": "Center-error units are pixels and angle-error units are degrees in panel titles; both state mean error. The x axis identifies block 0 as the current frame. Twelve legend entries use a repeated color cycle with identical markers/line style.",
+      "panels": "Both center and angle error panels contain plotted series.",
+      "visible_claim_consistency": "Titles identify quantities and units, but repeated styles prevent an unambiguous mapping of every visible curve to its legend entry.",
+      "finding_ids": [
+        "F02"
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/decomposition/attribution_by_cumulative_horizon.png",
+      "sha256": "b84d0c03558f7bfaae43b6c0cceb1171672090bc0917423f73e11df5418a1c51",
+      "bytes": 84978,
+      "width_px": 1950,
+      "height_px": 520,
+      "status": "readable_with_minor_presentation_note",
+      "readability": "All three titles, axis labels and the shared six-category legend are readable. The tallest final-horizon bars meet the top axis boundary, leaving no visible headroom; actual value clipping cannot be established visually.",
+      "axes_units_legends": "Prefix horizon is stated in action blocks, and the y axes name observed false-safe imagined decisions at m=0. Category colors are distinct.",
+      "panels": "All three dev/test/stress panels are populated; legends may include categories with no visually apparent nonzero segment.",
+      "visible_claim_consistency": "Panel titles and count-axis labels are consistent with cumulative-horizon attribution. No numeric correctness claim is made by this audit.",
+      "finding_ids": [
+        "N01"
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/decomposition/regime_error_by_horizon.png",
+      "sha256": "0d24d7c585ab96c39aaa05cc0508029e0c8d34cbdf3e592e8f2546c2e40fdcb1",
+      "bytes": 404145,
+      "width_px": 1935,
+      "height_px": 1581,
+      "status": "readable_with_minor_presentation_note",
+      "readability": "The nine-panel grid has readable titles, ticks and horizon labels at inspection scale. No obvious missing panel, cropped label or clipped series.",
+      "axes_units_legends": "Center and signed-clearance errors use pixels; periodic-angle errors use degrees. The shared legend identifies pusher contact, free motion, rotation >=10 degrees and near-boundary regimes. Signed-clearance panels show a zero reference line.",
+      "panels": "All nine panels contain plotted series, arranged by bank and error quantity.",
+      "visible_claim_consistency": "The figure declares unsupported targets omitted. A standalone reader is not told the subtraction order for signed clearance error, so positive/negative values cannot be interpreted as optimistic/pessimistic from the image alone.",
+      "finding_ids": [
+        "N02"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "F01",
+      "severity": "material_presentation",
+      "figure": "dial_curves_by_source.png",
+      "issue": "Unexplained empty test and stress dial panels, with negative acceptance-rate ticks from empty-axis defaults.",
+      "suggested_followup": "Check the plotting/data-selection path. If curves are available, provide them in a new corrected artifact; if intentionally unavailable, explicitly label the panels and reason. Preserve the completed original artifact."
+    },
+    {
+      "id": "F02",
+      "severity": "material_presentation",
+      "figure": "pose_error_by_horizon.png",
+      "issue": "Identical blue styles label dev/real_readout and stress/coord_mlp; identical orange styles label dev/imagined and stress/endpoint. Marker and line styles do not disambiguate these repeated colors.",
+      "suggested_followup": "Use distinct or systematic bank/source line-and-marker styles in any later corrected figure, or separate banks into panels; preserve the original artifact."
+    },
+    {
+      "id": "N01",
+      "severity": "minor_presentation",
+      "figure": "attribution_by_cumulative_horizon.png",
+      "issue": "Tallest final-horizon stacks meet the upper axes boundary with no headroom; visually this makes completeness harder to assess. Actual clipping is not established.",
+      "suggested_followup": "Allow a little upper-axis headroom in a later presentation revision."
+    },
+    {
+      "id": "N02",
+      "severity": "minor_presentation",
+      "figure": "regime_error_by_horizon.png",
+      "issue": "The signed-clearance error subtraction order is not visible in the standalone figure.",
+      "suggested_followup": "State the actual sign convention in a later caption or axis label before interpreting positive/negative errors."
+    }
+  ],
+  "preservation": {
+    "completed_output_directory_modified": false,
+    "figures_regenerated": false,
+    "model_calls": 0,
+    "simulator_steps": 0,
+    "uploads": 0,
+    "source_edits": false,
+    "staged_or_committed": false
+  }
+}
