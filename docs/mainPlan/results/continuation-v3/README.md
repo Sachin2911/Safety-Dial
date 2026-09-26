@@ -1,6 +1,6 @@
 # Push-T continuation after bounded bank-source exhaustion
 
-Status: running under supervisor from commit `8601568`. All 258 repository tests and Ruff passed before launch. Scientific outcomes remain pending.
+Status: final-bank generation is running under supervisor. The 24-root, 192-branch development bank is complete and three independent replayed feasible routes passed the development gate. Bank generation remains frozen at commit `8601568`; the downstream reporting and oracle work at `d56abc2` passes all 345 repository tests and Ruff. Main-study outcomes remain pending.
 
 The [v2 failure record](../continuation-v2/bank_generation_failure.json) preserves the
 partial banks: 24 development roots with 166 tapes and 26 test roots with 416 tapes.
@@ -54,9 +54,15 @@ construction attempt is journaled; finite exhaustion remains a failure with pres
 partial provenance. This change is prospective and does not inspect final-test outcomes.
 
 A [separate oracle workflow](../../../../configs/pusht/continuation-oracle-v3.yaml) is
-prepared to follow the completed random/boundary acquisition and E4 report. It uses the
+queued under supervisor to follow the completed random/boundary acquisition and E4 report. It uses the
 identical source-root cache, candidate tapes, common-seed keys, root schedule, three
 acquisition seeds and four additional budgets. Its entire queried pool is charged and
 persisted incrementally. Any censored tape makes the full-future optimistic-error
 reference undefined; all paid outcomes remain stored and the workflow records that
 scientific stop. Oracle cost does not support an interaction-efficiency comparison.
+
+The [development completion audit](development_completion_audit.json) verifies exact
+root/tape counts, the saved journal and 117,182 combined development-generation and
+feasibility steps, pinned private upload bytes, and the required development-to-witness-
+to-final chronology. The [parent manifest](manifest.json) records the completed-stage
+provenance while the overall study remains running.

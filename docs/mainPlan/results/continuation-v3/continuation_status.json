@@ -2,20 +2,21 @@
   "status": "running",
   "implementation_commit": "8601568",
   "verification": {
-    "pytest_passed": 258,
+    "pytest_passed": 345,
     "ruff": "passed",
     "workflow_dry_run": "passed",
-    "stage_argv_parse_checks": 10
+    "stage_argv_parse_checks": 10,
+    "frozen_bank_source_mismatches": 0
   },
   "service": "safetydial_pusht_v3_continuation",
   "workflow_id": "pusht-continuation-20260926-3",
   "config": "configs/pusht/continuation-v3.yaml",
   "config_sha256": "d40847e3eb9dcf0e4416eff7f7ad0d45af5c4df270530799880f31ef76335231",
   "state_dir": "/workspace/Safety-Dial/runs/workflows/pusht-continuation-20260926-3",
-  "current_stage": "development_bank_and_frozen_plan",
+  "current_stage": "frozen_final_test_and_stress_banks",
   "current_launcher_pid": 603035,
   "started_unix": 1790445039.7801301,
-  "observed_unix": 1790445544.2274356,
+  "observed_unix": 1790447325.9535325,
   "planned_banks": {
     "development": {
       "roots": 24,
@@ -37,5 +38,51 @@
   "frozen_plan_verification": "docs/mainPlan/results/continuation-v3/frozen_plan_verification.json",
   "sampling_plan_sha256": "fc8292fcd67f2985157e4a72433e23189dc897f183ebca1f06f098233fa6db23",
   "first_root_audit": "docs/mainPlan/results/continuation-v3/first_root_audit.json",
-  "first_root_audit_status": "passed"
+  "first_root_audit_status": "passed",
+  "downstream_implementation_commit": "d56abc2",
+  "completed_stages": [
+    "development_bank_and_frozen_plan",
+    "development_feasible_routes"
+  ],
+  "development_bank": {
+    "status": "complete",
+    "roots": 24,
+    "branches": 192,
+    "tapes_per_root": 8,
+    "report": "docs/mainPlan/results/continuation-v3/banks-development/banks.json",
+    "ledger_total_steps": 35309,
+    "upstream": {
+      "repo_id": "Sachioster/safetydial-pusht-banks",
+      "repo_type": "dataset",
+      "path": "banks/pusht-banks-development-continuation-20260926-3-dev",
+      "revision": "c7edb472eddd6cb7c638dc0551bda269d2c314fe",
+      "run_id": "pusht-banks-development-continuation-20260926-3-dev"
+    }
+  },
+  "development_feasibility": {
+    "passes": true,
+    "n_independent_witnesses": 3,
+    "report": "docs/mainPlan/results/continuation-v3/development-witness/witnesses.json",
+    "scope": "Development generator feasibility, not per-test-case solvability",
+    "ledger_total_steps": 81873,
+    "upstream": {
+      "repo_id": "Sachioster/safetydial-pusht-banks",
+      "repo_type": "dataset",
+      "path": "development-witness/pusht-witness-continuation-20260926-3",
+      "revision": "631431ce7e85b4b8ed32fa535d20c1cb11d1a7f2",
+      "run_id": "pusht-witness-continuation-20260926-3"
+    }
+  },
+  "oracle_workflow": {
+    "service": "safetydial_pusht_oracle_continuation",
+    "pid": 625787,
+    "workflow_id": "pusht-oracle-continuation-20260926-3",
+    "status": "waiting",
+    "attempts_started": 0,
+    "config": "configs/pusht/continuation-oracle-v3.yaml",
+    "config_sha256": "5df67a19f3ebc8c6b01998fa08b2f12de1139a962081d490968707f737652c96",
+    "waits_for": "Completed normal acquisition and E4; watches development/repair gates"
+  },
+  "development_completion_audit": "docs/mainPlan/results/continuation-v3/development_completion_audit.json",
+  "development_completion_audit_status": "passed"
 }
