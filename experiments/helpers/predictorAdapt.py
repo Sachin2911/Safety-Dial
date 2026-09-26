@@ -159,9 +159,21 @@ def freeze_for_adaptation(model, modules: str) -> list[torch.nn.Parameter]:
 
 
 def keep_frozen_eval(model, modules: str) -> None:
+    """Frozen modules stay in eval(); every BatchNorm layer stays in eval() as well.
+
+    The prediction projector contains BatchNorm1d(2048). In train mode its running
+    statistics drift toward our small mixed batches and the released model's loss on
+    held-out expert clips rises from 0.0087 to 0.0103 even with replay data ONLY (measured
+    26 September 2026, 300 steps, lr 5e-5); with the running statistics frozen the same
+    run lowers it to 0.0060. The affine BatchNorm weights remain trainable. This extends
+    the protocol's "freeze running statistics" rule to the trainable modules' normalisers.
+    """
     train_names = PREDICTOR_SIDE if modules == "predictor_side" else PREDICTOR_ONLY
     for name, mod in model.named_children():
         if name not in train_names:
+            mod.eval()
+    for mod in model.modules():
+        if isinstance(mod, torch.nn.modules.batchnorm._BatchNorm):
             mod.eval()
 
 
@@ -232,7 +244,7 @@ def adapt(base_state_dict: dict, model_template, acquired: ClipSet | None, repla
         opt.step()
         sched.step()
         if (step + 1) % 100 == 0 or step == 0:
-            rec = {"step": step + 1, "loss": float(loss), "loss_tf": float(loss_tf), "loss_rollout": float(loss_ro), "t": time.time() - t0}
+            rec = {"step": step + 1, "loss": float(loss.detach()), "loss_tf": float(loss_tf.detach()), "loss_rollout": float(loss_ro.detach()), "t": time.time() - t0}
             if eval_fn is not None and eval_every and (step + 1) % eval_every == 0:
                 model.eval()
                 rec["eval"] = eval_fn(model)
