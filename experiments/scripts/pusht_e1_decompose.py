@@ -38,130 +38,20 @@ apply_torch()
 
 from helpers.branchBank import Bank  # noqa: E402
 from helpers.coordDynamics import expert_block_transitions, fit_coord_dynamics  # noqa: E402
-from helpers.dialMetrics import auc_dial, clearance_error_stats, cluster_bootstrap, fsa, margin_for_acceptance  # noqa: E402
+from helpers.dialMetrics import auc_dial, clearance_error_stats, fsa, margin_for_acceptance  # noqa: E402
 from helpers.imagination import Imaginer  # noqa: E402
 from helpers.poseProbes import load_probe  # noqa: E402
-from helpers.pushtAssets import ACTION_BLOCK, H5_PATH, load_model, load_scalers  # noqa: E402
-from helpers.pushtGeometry import clearance_trace  # noqa: E402
+from helpers.pushtAssets import H5_PATH, load_model, load_scalers  # noqa: E402
 from helpers.pushtLayouts import load_layouts  # noqa: E402
-from helpers.pushtReplay import endpoint_interpolation  # noqa: E402
 from helpers.runManifest import build_manifest, write_manifest  # noqa: E402
 
 ASSETS_RUN = REPO_ROOT / "runs" / "pusht-assets-20260926-1"
 PROBES_RUN = REPO_ROOT / "runs" / "pusht-probes-20260926-1"
 STUDY = REPO_ROOT / "data" / "study" / "pusht"
 RESULTS = REPO_ROOT / "docs" / "mainPlan" / "results" / "e1"
-SOURCES = ["dense", "endpoint", "real_readout", "imagined", "stationary", "coord_mlp"]
+from helpers.decomposition import SOURCES, analyse_bank, ang_err_deg, by_regime, decision_table  # noqa: E402
+
 MARGINS = np.linspace(-20, 60, 41)
-
-
-def interp_from_endpoints(end_states: np.ndarray) -> np.ndarray:
-    """(K+1, 7) endpoint states -> (K*ACTION_BLOCK+1, 7) interpolated states."""
-    K = len(end_states) - 1
-    full = np.zeros((K * ACTION_BLOCK + 1, 7))
-    full[::ACTION_BLOCK] = end_states
-    return endpoint_interpolation(full)
-
-
-def ang_err_deg(a, b):
-    return np.degrees(np.abs(np.arctan2(np.sin(a - b), np.cos(a - b))))
-
-
-def analyse_bank(name, bank: Bank, layouts, imaginer, probe, coord, *, device) -> dict:
-    """Per-branch clearance minima per source and layout, plus pose errors by horizon."""
-    lay_by_root = {}
-    for lay in layouts:
-        lay_by_root.setdefault(lay.root_id, {})[lay.family] = lay.shape
-    N = len(bank)
-    rows = []
-    pose_err = {s: {"centre": [], "angle": []} for s in ("endpoint", "real_readout", "imagined", "coord_mlp")}
-    t0 = time.time()
-    cache_root = {}
-    for j in range(N):
-        b = bank.branch(j, frames=True)
-        root = bank.root_of(j)
-        ri = int(b["root_index"])
-        st = b["states"]
-        tape = b["tape"].astype(np.float64)
-        ends = st[::ACTION_BLOCK]  # (6, 7)
-        # --- readouts ---
-        z_real = imaginer.encode(b["frames"])  # (6, D)
-        pose_real = probe.predict_pose(z_real)  # (6, 3)
-        if ri not in cache_root:
-            # history latents: the root's last HISTORY_FRAMES endpoint frames are the branch's frame 0 preceded by prefix frames;
-            # the bank stores only branch frames, so re-encode the root context once per root
-            from helpers.pushtReplay import make_env, reset_root
-
-            env = cache_root.get("_env") or make_env()
-            cache_root["_env"] = env
-            ctx = reset_root(env, root)
-            cache_root[ri] = (imaginer.encode(ctx.frames), ctx.history_actions.copy())
-        z_hist, hist_blocks = cache_root[ri]
-        z_imag = imaginer.rollout(z_hist, hist_blocks, tape[None])[0]  # (5, D)
-        pose_imag = np.concatenate([pose_real[:1], probe.predict_pose(z_imag)], 0)  # (6, 3)
-        coord_states = coord.rollout(st[0], tape[None])[0]  # (6, 7)
-        stat_states = np.repeat(st[:1], len(ends), 0)
-        # --- traces (26 rows) ---
-        traces = {
-            "dense": st[:, 2:5],
-            "endpoint": interp_from_endpoints(ends)[:, 2:5],
-            "real_readout": interp_from_endpoints(np.column_stack([ends[:, :2], pose_real, ends[:, 5:]]))[:, 2:5],
-            "imagined": interp_from_endpoints(np.column_stack([ends[:, :2], pose_imag, ends[:, 5:]]))[:, 2:5],
-            "stationary": interp_from_endpoints(stat_states)[:, 2:5],
-            "coord_mlp": interp_from_endpoints(coord_states)[:, 2:5],
-        }
-        for s, pose6 in (("endpoint", ends[:, 2:5]), ("real_readout", pose_real), ("imagined", pose_imag), ("coord_mlp", coord_states[:, 2:5])):
-            pose_err[s]["centre"].append(np.linalg.norm(pose6[:, :2] - ends[:, 2:4], axis=1))
-            pose_err[s]["angle"].append(ang_err_deg(pose6[:, 2], ends[:, 4]))
-        contact = bool((b["n_contacts"] > 0).any())
-        rot = float(np.degrees(abs(np.arctan2(np.sin(st[-1, 4] - st[0, 4]), np.cos(st[-1, 4] - st[0, 4])))))
-        disp = float(np.linalg.norm(st[-1, 2:4] - st[0, 2:4]))
-        disp_imag = float(np.linalg.norm(pose_imag[-1, :2] - pose_imag[0, :2]))
-        rot_imag = float(np.degrees(abs(np.arctan2(np.sin(pose_imag[-1, 2] - pose_imag[0, 2]), np.cos(pose_imag[-1, 2] - pose_imag[0, 2])))))
-        for fam, hz in lay_by_root.get(root.root_id, {}).items():
-            cmins = {s: float(clearance_trace(tr, hz).min()) for s, tr in traces.items()}
-            when = int(np.argmin(clearance_trace(traces["dense"], hz)))
-            rows.append({"bank": name, "branch": j, "root": ri, "layout": fam, "kind": b["kind"], "contact": contact, "rotation_deg": rot,
-                         "displacement_px": disp, "imag_displacement_px": disp_imag, "imag_rotation_deg": rot_imag, "dense_argmin_step": when,
-                         **{f"cmin_{s}": v for s, v in cmins.items()}})
-        if (j + 1) % 200 == 0:
-            print(f"[e1:{name}] {j + 1}/{N} branches {time.time() - t0:.0f}s")
-    errs = {s: {"centre_by_block": np.stack(v["centre"]).mean(0).tolist(), "centre_p95_by_block": np.percentile(np.stack(v["centre"]), 95, axis=0).tolist(),
-                "angle_by_block": np.stack(v["angle"]).mean(0).tolist(), "angle_p95_by_block": np.percentile(np.stack(v["angle"]), 95, axis=0).tolist()}
-            for s, v in pose_err.items()}
-    return {"rows": rows, "pose_err": errs}
-
-
-def decision_table(rows, m: float) -> dict:
-    u = np.array([r["cmin_dense"] < 0 for r in rows])
-    root = np.array([r["root"] for r in rows])
-    out = {"m": float(m), "n": int(len(rows)), "n_unsafe": int(u.sum())}
-    for s in SOURCES:
-        c = np.array([r[f"cmin_{s}"] for r in rows])
-        out[s] = fsa(c, u, m)
-    # attribution of source-4 false safes at this margin
-    acc = {s: np.array([r[f"cmin_{s}"] >= m for r in rows]) for s in SOURCES}
-    fs4 = acc["imagined"] & u
-    attr = {"n_false_safe_imagined": int(fs4.sum()), "temporal": int((fs4 & acc["endpoint"]).sum()),
-            "readout": int((fs4 & ~acc["endpoint"] & acc["real_readout"]).sum()),
-            "imagination": int((fs4 & ~acc["endpoint"] & ~acc["real_readout"]).sum())}
-    out["attribution"] = attr
-    if len(rows):
-        out["fsa_imagined_ci"] = cluster_bootstrap(lambda c, u: fsa(c, u, m)["fsa"], root, n_boot=500, c=np.array([r["cmin_imagined"] for r in rows]), u=u)
-    return out
-
-
-def by_regime(rows, m: float) -> dict:
-    out = {}
-    groups = {"contact": lambda r: r["contact"], "free": lambda r: not r["contact"],
-              "rotation>=10deg": lambda r: r["rotation_deg"] >= 10, "rotation<10deg": lambda r: r["rotation_deg"] < 10,
-              "near_boundary(|c|<20)": lambda r: abs(r["cmin_dense"]) < 20, "far(|c|>=20)": lambda r: abs(r["cmin_dense"]) >= 20}
-    for g, f in groups.items():
-        sub = [r for r in rows if f(r)]
-        if sub:
-            t = decision_table(sub, m)
-            out[g] = {"n": len(sub), "n_unsafe": t["n_unsafe"], **{s: {"fsa": t[s]["fsa"], "ar": t[s]["acceptance_rate"], "n_acc": t[s]["n_accepted"]} for s in SOURCES}, "attribution": t["attribution"]}
-    return out
 
 
 def main() -> int:
@@ -205,7 +95,7 @@ def main() -> int:
     for name in args.banks:
         bank = Bank(STUDY / name)
         layouts, _ = load_layouts(STUDY / name / "layouts.json")
-        res = analyse_bank(name, bank, layouts, imaginer, probe, coord, device=device)
+        res = analyse_bank(name, bank, layouts, imaginer, probe, coord)
         all_rows += res["rows"]
         pose_errs[name] = res["pose_err"]
         print(f"[e1] {name}: {len(res['rows'])} (branch, layout) rows; unsafe {sum(r['cmin_dense'] < 0 for r in res['rows'])}")
