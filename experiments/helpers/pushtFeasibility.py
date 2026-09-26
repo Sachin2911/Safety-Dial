@@ -101,10 +101,19 @@ def feasibility_gate(records: list[dict], development_episodes: list[int]) -> di
             "scope": "Development generator feasibility, not per-test-case solvability"}
 
 
-def require_feasibility_report(path: Path, dev_bank: Path) -> dict:
+def require_feasibility_report(path: Path, dev_bank: Path, *, sampling_plan: Path | None = None) -> dict:
     """Validate current bank/generator identities and recompute the reported witness gate."""
     path, dev_bank = Path(path), Path(dev_bank)
     report = json.loads(path.read_text())
+    frozen_plan = report.get("frozen_sampling_plan")
+    if sampling_plan is not None or frozen_plan is not None:
+        from helpers.pushtDevelopmentPlan import validate_development_plan
+
+        if not isinstance(frozen_plan, dict) or not frozen_plan.get("path"):
+            raise ValueError("Development witness does not bind a frozen future sampling plan")
+        actual = validate_development_plan(dev_bank, sampling_plan or Path(frozen_plan["path"]))
+        if actual != frozen_plan:
+            raise ValueError("Development witness identifies a different frozen future sampling plan")
     if report.get("protocol") != PROTOCOL or report.get("generator_identity") != generator_identity():
         raise ValueError("Feasible-route witness uses a different frozen generator")
     if report.get("development_bank_identity") != bank_identity(dev_bank):
@@ -125,4 +134,5 @@ def require_feasibility_report(path: Path, dev_bank: Path) -> dict:
     if report.get("gate", {}).get("passes") is not True or not gate["passes"]:
         raise ValueError("Development feasible-route witness gate did not pass")
     return {**gate, "report": str(path.resolve()), "sha256": file_sha256(path),
-            "generator_identity": report["generator_identity"]}
+            "generator_identity": report["generator_identity"],
+            **({"frozen_sampling_plan": frozen_plan} if frozen_plan is not None else {})}

@@ -463,6 +463,8 @@ class Bank:
     def __init__(self, bank_dir: Path):
         self.dir = Path(bank_dir)
         blob = json.loads((self.dir / "roots.json").read_text())
+        if "status" in blob and blob["status"] != "complete":
+            raise ValueError(f"Refusing explicitly incomplete bank: {self.dir} ({blob['status']})")
         self.roots = [Root.from_dict(r) for r in blob["roots"]]
         self.ledger = blob["ledger"]
         self.manifest = blob.get("manifest", {})

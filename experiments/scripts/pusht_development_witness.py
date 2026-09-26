@@ -26,6 +26,7 @@ from helpers.acquisitionSafety import MeteredEnv
 from helpers.branchBank import Bank
 from helpers.hfStore import HFStore
 from helpers.pushtAssets import H5_PATH
+from helpers.pushtDevelopmentPlan import validate_development_plan
 from helpers.pushtFeasibility import (
     MIN_GOAL_COVERAGE, MIN_WITNESSES, PROTOCOL, assess_witness, feasibility_gate,
     generator_identity, require_feasibility_report,
@@ -36,6 +37,25 @@ from helpers.pushtReplay import StepLedger, make_env, reset_root, run_actions
 from helpers.pushtRetention import block_coverage
 from helpers.runManifest import build_manifest, file_sha256, make_run_id, validate_run_id, write_manifest
 from helpers.splitIntegrity import bank_identity, validate_bank_splits
+
+
+def validate_witness_inputs(banks_dir, *, development_only=False, sampling_plan=None):
+    """Check source reservations before any simulator work or output creation."""
+    banks_dir = Path(banks_dir)
+    if development_only:
+        if sampling_plan is None:
+            raise ValueError("Development-only witnesses require a frozen future sampling plan")
+        if any((banks_dir / name).exists() for name in ("test", "stress")):
+            raise ValueError("Prospective development witness creation requires absent final banks")
+        binding = validate_development_plan(banks_dir / "dev", sampling_plan)
+        plan = json.loads(Path(sampling_plan).read_text())
+        counts = {role: {family: len(eps) for family, eps in families.items()}
+                  for role, families in plan["source_roles"].items()}
+        return {"passes": True, "scope": "Completed dev bank against all reserved final sources",
+                "source_role_counts": counts, "final_banks_evaluated": False}, binding
+    if sampling_plan is not None:
+        raise ValueError("A sampling plan argument requires development-only witness mode")
+    return validate_bank_splits({name: banks_dir / name for name in ("dev", "test", "stress")}), None
 
 
 def candidate_tapes(bank, index, expert, rng, max_steps, perturbations):
@@ -64,6 +84,10 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--banks-dir", type=Path, required=True)
     ap.add_argument("--output-dir", type=Path, required=True)
+    ap.add_argument("--development-only", action="store_true",
+                    help="Validate completed development bank before generating frozen final banks")
+    ap.add_argument("--sampling-plan", type=Path,
+                    help="Required with --development-only; binds full future source/candidate plan")
     ap.add_argument("--expert-data", type=Path, default=H5_PATH)
     ap.add_argument("--max-steps", type=int, default=250)
     ap.add_argument("--perturbations", type=int, default=24)
@@ -73,11 +97,15 @@ def main():
     args = ap.parse_args()
     if args.max_steps < 25 or args.perturbations < 0:
         ap.error("Use at least 25 steps and a nonnegative bounded perturbation count")
+    if args.development_only != (args.sampling_plan is not None):
+        ap.error("--development-only and --sampling-plan must be supplied together")
     if args.output_dir.exists():
         raise FileExistsError(f"Preserving existing witnesses: {args.output_dir}")
     started = time.time()
-    audit = validate_bank_splits({name: args.banks_dir / name for name in ("dev", "test", "stress")})
+    audit, frozen_plan = validate_witness_inputs(args.banks_dir,
+        development_only=args.development_only, sampling_plan=args.sampling_plan)
     dev_dir = args.banks_dir / "dev"
+    initial_bank_identity = bank_identity(dev_dir)
     bank = Bank(dev_dir)
     dev_roles = bank.manifest["data"]["source_roles"]["dev"]
     development = sorted({int(e) for episodes in dev_roles.values() for e in episodes})
@@ -145,9 +173,15 @@ def main():
                 break
     env.close()
     bank.h5.close()
+    if bank_identity(dev_dir) != initial_bank_identity:
+        raise ValueError("Development bank changed during witness generation")
+    if frozen_plan is not None and validate_development_plan(dev_dir, args.sampling_plan) != frozen_plan:
+        raise ValueError("Frozen future sampling plan changed during witness generation")
     report = {"run_id": run_id, "protocol": PROTOCOL, "generator_identity": generator_identity(),
-        "development_bank_identity": bank_identity(dev_dir), "development_episodes": development,
+        "development_bank_identity": initial_bank_identity, "development_episodes": development,
         "split_audit": audit, "witnesses": witnesses, "attempts": attempts, "ledger": ledger.to_dict(),
+        "generation_phase": "before_final_banks" if args.development_only else "after_full_banks",
+        **({"frozen_sampling_plan": frozen_plan} if frozen_plan is not None else {}),
         "gate": feasibility_gate(witnesses, development),
         "freeze_policy": "Validate the already frozen generator without changing or filtering final-test cases; failure requires diagnosis and fresh banks if generator tuning changes it"}
     output = args.output_dir / "witnesses.json"
@@ -159,7 +193,8 @@ def main():
     (args.output_dir / "README.md").write_text(f"# {run_id}\n\nDevelopment-only exact simulator route witnesses for the frozen nominal-swept-route hazard generator. Dense whole-T clearance must stay positive, observed goal coverage must reach 0.90, and reset-and-prefix replay must agree bitwise. Every attempt is charged. Final test cases are never filtered. This finite search does not certify impossibility when it fails.\n")
     write_manifest(args.output_dir, build_manifest(run_id=run_id, kind="development-witness",
         seeds={"search": args.seed}, data={"expert_sha256": file_sha256(args.expert_data),
-            "development_bank": report["development_bank_identity"], "generator": report["generator_identity"]},
+            "development_bank": report["development_bank_identity"], "generator": report["generator_identity"],
+            **({"frozen_sampling_plan": frozen_plan} if frozen_plan is not None else {})},
         costs=ledger.to_dict(), metrics=report["gate"], started_at=started))
     if not args.no_upload:
         HFStore().upload_run("pusht-banks", "development-witness", args.output_dir, run_id=run_id)

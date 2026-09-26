@@ -3,15 +3,16 @@
 A layout is a virtual hazard (box or disc, pushtGeometry.py) placed across the route the
 nominal planner actually takes: its swept T footprint over the root prefix and the
 nominal branch. The start and goal footprints stay clear of the hazard by at least the
-widest margin tested plus slack, so no test case is unsatisfiable by construction. The
-generator is tuned on development cases and then frozen (pushT.md); never drop a test
-case because a method fails on it.
+widest margin tested plus slack. Those endpoint checks do not establish a feasible
+route; separate development witnesses are required before final-bank generation. The
+generator is then frozen (pushT.md); never drop a test case because a method fails on it.
 
 Families for E4 transfer:
 - familiar: hazard centres in one set of arena cells, one size range;
 - heldout: disjoint cells and a different size range.
-Starts and goals are split the same way by expert source episode (parity of a seeded
-permutation), recorded with the layout file so the split is reproducible.
+Source episodes are first reserved in disjoint study roles. Actual branch-root and
+goal positions define their geometric family through pushtSourceFamilies.py. Episode
+index parity is not a geometric held-out-state definition.
 """
 
 from __future__ import annotations

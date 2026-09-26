@@ -1,7 +1,7 @@
 {
   "status": "execution_failed",
   "stage": "disjoint_geometric_banks",
-  "reason": "Exhausted disjoint source trajectories for test/familiar before reaching the requested64roots",
+  "reason": "Exhausted disjoint source trajectories for test/familiar before reaching the requested 64 roots",
   "requested_test_roots_per_family": 64,
   "last_logged_test_familiar_roots": 24,
   "stage_started_unix": 1790439670.2601144,
@@ -63,5 +63,15 @@
     },
     "hash_encoding": "SHA256 of compact JSON, preserving episode order; excluded IDs sorted",
     "recovery_rule": "Keep these exact development and final-test source roles. Generation rejection alone does not move a source into development or disqualify it from its original final-test role; no final-test performance was used."
-  }
+  },
+  "partial_development_h5_counts": {
+    "accepted_roots_in_h5": 24,
+    "recorded_branch_tapes": 166,
+    "requested_tapes_per_root": 8,
+    "observed_tapes_per_root": [
+      5,
+      7
+    ]
+  },
+  "additional_construction_issue": "Original random-proposal sigma allocation rounded down; additional arena rejections left 5 or 7 tapes per development root instead of the requested 8. Fresh recovery enforces exact distinct proposal counts before executing branches."
 }
