@@ -52,9 +52,9 @@ controlled checkpoint-resume benchmark if sustained idle time or directly measur
 loader waits justify it. GPU activity alone does not measure compute efficiency.
 
 A bounded [lossless image-cache feasibility check](walker_cache_feasibility_20260926.json)
-then tested 39 codec configurations on fixed training-only samples. Sample pixels
-matched across fresh renderers and reversed render order; all codec round trips were
-exact. The best per-frame scheme projected 54.12 GiB, while the smallest tested
+then tested 39 codec configurations on fixed training-only samples. The 256-frame
+per-image sample matched across fresh renderers and reversed render order; all codec
+round trips in both the per-image and temporal samples were exact. The best per-frame scheme projected 54.12 GiB, while the smallest tested
 16-frame scheme projected 50.41 GiB before indexing and padding. With about 54 GiB
 free, this leaves too little margin for sampling uncertainty and later artifacts.
 Warm-memory decoding also does not establish end-to-end training speedup. No full
