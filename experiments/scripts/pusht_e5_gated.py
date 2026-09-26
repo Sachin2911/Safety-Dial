@@ -42,7 +42,7 @@ from helpers.pushtLayouts import load_layouts
 from helpers.pushtReplay import StepLedger
 from helpers.pushtContactReplay import make_env
 from helpers.pushtSourceFamilies import validate_geometric_bank
-from helpers.runManifest import build_manifest, write_manifest
+from helpers.runManifest import build_manifest, validate_run_id, write_manifest
 from helpers.splitIntegrity import validate_bank_splits
 from helpers.studyGates import require_closedloop_gate, require_goal_retention
 
@@ -65,6 +65,7 @@ def main():
     ap.add_argument("--retention-report", type=Path, required=True)
     ap.add_argument("--banks-dir", type=Path, required=True)
     ap.add_argument("--output-dir", type=Path, required=True)
+    ap.add_argument("--run-id", type=validate_run_id, help="Immutable local/remote identity; defaults to output directory basename")
     ap.add_argument("--acquisition-seed", default="0")
     ap.add_argument("--episodes-per-layout", type=int, default=10)
     ap.add_argument("--blocks", type=int, default=10)
@@ -74,6 +75,7 @@ def main():
     ap.add_argument("--lam", type=float, default=.05)
     ap.add_argument("--preflight-only", action="store_true")
     args = ap.parse_args()
+    args.run_id = validate_run_id(args.run_id or args.output_dir.name)
     penalty_protocol = penalty_reference_protocol(args.lam)
     from helpers.pushtFeasibility import require_feasibility_report
 
@@ -107,7 +109,7 @@ def main():
                         seed=args.case_seed, margin=max(dial, fixed))
     require_new_paths([args.output_dir])
     if args.preflight_only:
-        print(json.dumps({"gate": gate, "n_cases": len(cases), "weights_sha256": digest,
+        print(json.dumps({"run_id": args.run_id, "gate": gate, "n_cases": len(cases), "weights_sha256": digest,
                           "gpu_loaded": False, "simulator_steps": 0}, indent=1))
         return 0
     args.output_dir.mkdir(parents=True)
@@ -125,7 +127,7 @@ def main():
                 "probes": hf.reference_run("pusht", "probes", Path(report["probes_run"])),
                 "banks": {name: hf.reference_run("pusht-banks", "banks", args.banks_dir / name) for name in ("dev", "test", "stress")}}
     (args.output_dir / "config.yaml").write_text(json.dumps({key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()}, indent=1) + "\n")
-    out = {"acquisition_report": str(args.acquisition_report), "gate": gate, "weights_sha256": digest,
+    out = {"run_id": args.run_id, "acquisition_report": str(args.acquisition_report), "gate": gate, "weights_sha256": digest,
            "goal_retention": retention, "development_feasibility": feasibility, "upstream": upstream,
            "split_audit": split_audit, "cases": cases, "arms": {}, "dial": dial, "fixed_margin": fixed,
            "planner": {"samples": args.samples, "iterations": args.iterations, "penalty_lambda": args.lam,
@@ -162,11 +164,11 @@ def main():
         env.close()
         out["ledger"] = ledger.to_dict()
         (args.output_dir / "closedloop.json").write_text(json.dumps(out, indent=1) + "\n")
-        write_manifest(args.output_dir, build_manifest(run_id=args.output_dir.name, kind="closedloop",
+        write_manifest(args.output_dir, build_manifest(run_id=args.run_id, kind="closedloop",
                        seeds={"case_seed": args.case_seed}, data={"checkpoint_sha256": digest, "upstream": upstream,
                         "acquisition_report_sha256": hashlib.sha256(args.acquisition_report.read_bytes()).hexdigest(),
                         "retention_report_sha256": hashlib.sha256(args.retention_report.read_bytes()).hexdigest()}, costs=ledger.to_dict()))
-    revision = hf.upload_run("pusht", "closedloop", args.output_dir, run_id=args.output_dir.name)
+    revision = hf.upload_run("pusht", "closedloop", args.output_dir, run_id=args.run_id)
     print(json.dumps({"status": out["status"], "hf_repo": hf.repo_id("pusht"), "hf_revision": revision}))
     return 0
 

@@ -74,3 +74,27 @@ control that difference. The S5 comparison now fits separate A variants on exact
 selected acquired transitions, excluding the common seed, and checks exact experience
 identity and row counts. The original S4 seed-plus-budget study is preserved. Matching
 regressions are covered by the Walker comparison tests.
+
+## Qualified continuation after E2
+
+`configs/pusht/continuation-after-e2.yaml` preserves the running bank and repair
+workflows. It watches their scientific gates while waiting, then schedules the fixed
+random/boundary comparison with acquisition seeds 0, 1 and 2 and cumulative additional
+budgets of 64, 128, 256 and 512 branches. The 128 common seed branches and every charged
+simulator step remain explicit. Incomplete gate JSON is pending; a completed negative
+gate stops the dependent workflow.
+
+E4 reads hash-bound baseline and per-checkpoint E3 rows, retains representative and
+stress banks separately, and reports the geometric hazard/start-goal 2 by 2 grid.
+Intervals cluster source episodes, preserving all sibling roots and tapes. The report
+shows acceptance, false-safe counts, unresolved accepted futures and usable bootstrap
+replicates. A finite interval from usable resamples cannot support a directional claim
+when the full-data estimate is undefined. Final-budget goal retention is measured for
+every arm and acquisition seed on the exact frozen E2 cases.
+
+Only repeatable E3 improvements can unlock E5. Its checkpoint rule fixes the boundary
+arm and acquisition seed 0 before retention is observed, then uses the largest budget
+qualified by the repeatability gate. Failed retention does not trigger a search across
+other seeds. Selection verifies the exact bank, case, checkpoint, upload receipt and
+feasibility evidence, and execution revalidates those identities. E4 is reported even
+if the E3 repeatability gate is negative. No passing outcome is assumed by this queue.

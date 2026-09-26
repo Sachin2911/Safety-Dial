@@ -117,7 +117,10 @@ def load_workflow(config_path: Path, repo_root: Path):
                 raise WorkflowError(f"{sid}.{key} must be a list of paths")
         if not stage.get("outputs") or not stage.get("fresh_outputs"):
             raise WorkflowError(f"{sid}: declare both outputs and fresh_outputs")
-        for gate in stage.get("requires_gates", []) + ([stage["gate"]] if "gate" in stage else []):
+        for key in ("requires_gates", "watch_gates"):
+            if not isinstance(stage.get(key, []), list):
+                raise WorkflowError(f"{sid}.{key} must be a list of gate specifications")
+        for gate in stage.get("requires_gates", []) + stage.get("watch_gates", []) + ([stage["gate"]] if "gate" in stage else []):
             if (not isinstance(gate, dict) or not isinstance(gate.get("path"), str)
                     or not isinstance(gate.get("key"), str) or not gate["key"]):
                 raise WorkflowError(f"{sid}: gates require a JSON path and dotted boolean key")
@@ -215,10 +218,31 @@ def run_workflow(config_path: Path, repo_root: Path, *, resume=False, dry_run=Fa
                 state["status"] = "waiting"
                 deadline = time.monotonic() + stage.get("wait_timeout_seconds", config.get("wait_timeout_seconds", 86400))
                 while True:
+                    watched, pending_gate_json = [], []
+                    for spec in stage.get("watch_gates", []):
+                        if not (cwd / spec["path"]).is_file():
+                            continue
+                        try:
+                            watched.append(read_gate(spec, cwd))
+                        except WorkflowError as exc:
+                            # Upstream finite scripts may publish JSON with write_text.
+                            # A syntax-incomplete write is pending, never a passing gate.
+                            # Completed wrong schemas/non-booleans still fail immediately.
+                            if not isinstance(exc.__cause__, json.JSONDecodeError):
+                                raise
+                            pending_gate_json.append(spec["path"])
+                    current["watched_gates"] = watched
+                    current["pending_gate_json"] = pending_gate_json
+                    if any(not gate["passes"] for gate in watched):
+                        current["output_hashes"] = _record_outputs([gate["path"] for gate in watched], cwd)
+                        current["status"] = state["status"] = "gate_stopped"
+                        save()
+                        print(f"[workflow] upstream scientific gate stopped waiting stage {sid}", flush=True)
+                        return state
                     missing = [path for path in stage.get("wait_for", []) if not (cwd / path).is_file()]
                     current["waiting_for"] = missing
                     save()
-                    if not missing:
+                    if not missing and not pending_gate_json:
                         break
                     if time.monotonic() >= deadline:
                         raise WorkflowError(f"Timed out waiting for input files for stage {sid}")

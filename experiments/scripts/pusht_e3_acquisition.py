@@ -48,9 +48,9 @@ from helpers.pushtGeometry import clearance_trace  # noqa: E402
 from helpers.pushtLayouts import generate_layout, load_layouts, save_layouts  # noqa: E402
 from helpers.pushtReplay import StepLedger  # noqa: E402
 from helpers.pushtContactReplay import execute_tape, make_env, reset_root  # noqa: E402
-from helpers.runManifest import build_manifest, make_run_id, write_manifest
+from helpers.runManifest import build_manifest, file_sha256, make_run_id, validate_run_id, write_manifest
 from helpers.acquisitionSafety import COLLECTION_VERSION, MeteredEnv, copy_ledger, enforce_gate, require_new_paths, validate_acquisition_cache
-from helpers.splitIntegrity import inspect_bank_splits
+from helpers.splitIntegrity import bank_identity, inspect_bank_splits
 from helpers.studyGates import acquisition_repeatability_gate
 from helpers.pushtSourceFamilies import SOURCE_FAMILY_PROTOCOL, geometric_source_family, validate_geometric_bank
 from scripts.pusht_e2_repair import retention_metrics  # noqa: E402
@@ -259,6 +259,12 @@ def main() -> int:
     ap.add_argument("--pool-per-root", type=int, default=40)
     ap.add_argument("--band", type=float, default=10.0)
     ap.add_argument("--recipe", default=None, help="JSON AdaptConfig; default: recorded E2 recipe")
+    ap.add_argument("--run-id", type=validate_run_id)
+    ap.add_argument("--data-dir", type=Path, help="Fresh acquisition data directory")
+    ap.add_argument("--checkpoint-dir", type=Path, help="Fresh checkpoint parent directory")
+    ap.add_argument("--budgets", nargs="+", type=int, default=[64, 128, 256, 512],
+                    help="Predeclared full-study additional branch totals")
+    ap.add_argument("--feasibility-report", type=Path, help="Exact passing development witness recorded by E2")
     ap.add_argument("--e2-report", type=Path, default=REPO_ROOT / "docs/mainPlan/results/e2/repair.json")
     ap.add_argument("--banks-dir", type=Path)
     ap.add_argument("--assets-run", type=Path)
@@ -285,7 +291,22 @@ def main() -> int:
         raise ValueError("Positive root count/band and at least 4 proposals per root are required")
     if args.acq_roots_dir and args.acq_roots_dir.exists():
         validate_acquisition_cache(args.acq_roots_dir, n_roots=args.acq_roots, seed=20261003)
+    if args.budgets != [64, 128, 256, 512]:
+        raise ValueError("The qualified protocol fixes additional budgets at 64, 128, 256 and 512 branches")
     rounds = [64] if args.diagnostic else ROUNDS
+    feasibility = None
+    if not args.diagnostic:
+        from helpers.pushtFeasibility import require_feasibility_report
+
+        recorded = e2.get("development_feasibility", {})
+        if args.feasibility_report is None:
+            if not recorded.get("report"):
+                raise ValueError("Qualified acquisition requires E2's recorded development feasibility witness")
+            args.feasibility_report = Path(recorded["report"])
+        if (Path(recorded.get("report", "")).resolve() != args.feasibility_report.resolve()
+                or recorded.get("sha256") != file_sha256(args.feasibility_report)):
+            raise ValueError("Acquisition feasibility witness differs from the passing E2 report")
+        feasibility = require_feasibility_report(args.feasibility_report, args.banks_dir / "dev")
     cfg = AdaptConfig(**(json.loads(args.recipe) if args.recipe else e2["chosen_recipe"]))
     if cfg.steps <= 0 or cfg.batch_size <= 0 or not 0 <= cfg.replay_frac <= 1:
         raise ValueError("Invalid adaptation recipe")
@@ -297,10 +318,10 @@ def main() -> int:
     transfer_valid = split_audit["passes"] and all(layout.family == "familiar" for layout in dev_layouts)
     if not transfer_valid and not args.diagnostic:
         raise ValueError("Held-out layouts appear in development or source roles overlap; rebuild banks")
-    run_id = make_run_id("pusht", "acq-diagnostic" if args.diagnostic else "acq", n=args.n)
+    run_id = args.run_id or make_run_id("pusht", "acq-diagnostic" if args.diagnostic else "acq", n=args.n)
     result_dir = args.output_dir or RESULTS / run_id
-    data_dir = STUDY / run_id
-    checkpoint_dir = REPO_ROOT / "runs" / run_id
+    data_dir = args.data_dir or STUDY / run_id
+    checkpoint_dir = args.checkpoint_dir or REPO_ROOT / "runs" / run_id
     require_new_paths([result_dir, data_dir, checkpoint_dir])
     if args.preflight_only:
         print(json.dumps({"gate": gate, "split_errors": split_audit["errors"], "rounds": rounds,
@@ -314,8 +335,11 @@ def main() -> int:
     report = {"run_id": run_id, "gate": gate, "split_audit": split_audit,
               "transfer_interpretation": "descriptive_episode_subsets_only", "recipe": cfg.to_dict(),
               "arms": {}, "rounds": rounds, "seed_branches": SEED_BRANCHES,
+              "evaluation_bank_identity": {name: bank_identity(path) for name, path in bank_paths.items()},
               "charged_step_definition": "root generation plus cached history collection plus common seed plus acquired branches; evaluation recorded separately",
-              "e2_report": str(args.e2_report),
+              "e2_report": str(args.e2_report.resolve()), "e2_report_sha256": file_sha256(args.e2_report),
+              "development_feasibility": feasibility, "checkpoint_dir": str(checkpoint_dir.resolve()),
+              "data_dir": str(data_dir.resolve()), "budgets_added": [sum(rounds[:i + 1]) for i in range(len(rounds))],
               "assets_run": str(args.assets_run), "probes_run": str(args.probes_run),
               "clips_dir": str(args.clips_dir), "banks_dir": str(args.banks_dir),
               "probe_name": e2.get("probe_name", "block_pose_mlp"),
@@ -355,7 +379,11 @@ def main() -> int:
         env = make_env()
         dev_rows0 = evaluate_model_on_bank("dev", banks["dev"][0], banks["dev"][1], imaginer, probe, cache=caches["dev"])
         target_ar = float(np.mean([r["cmin_imagined"] >= 0 for r in dev_rows0]))
-        base_eval, _ = evaluate_all(model, process, probe, banks, caches, device, target_ar)
+        base_eval, base_rows = evaluate_all(model, process, probe, banks, caches, device, target_ar)
+        baseline_rows_path = result_dir / "no-update-rows.npz"
+        np.savez_compressed(baseline_rows_path, rows=json.dumps(base_rows))
+        report["no_update_rows"] = {"file": baseline_rows_path.name,
+            "sha256": hashlib.sha256(baseline_rows_path.read_bytes()).hexdigest()}
         report.update(target_acceptance_rate_dev=target_ar, no_update=base_eval,
                       root_collection_ledger=acq_bank.ledger, evaluation_ledger=evaluation_ledger.to_dict())
         report["no_update_retention"] = retention_metrics(model, Imaginer, process, probe, retention, device)
@@ -459,7 +487,10 @@ def main() -> int:
                     torch.save(predictor_side_state(m_cur, cfg.modules), budget_dir / "weights.pt")
                     point["weights_sha256"] = hashlib.sha256((budget_dir / "weights.pt").read_bytes()).hexdigest()
                     (budget_dir / "config.json").write_text(json.dumps(paired_cfg.to_dict(), indent=1) + "\n")
-                    np.savez_compressed(result_dir / f"{arm}-s{seed}-b{total_added}-rows.npz", rows=json.dumps(rows))
+                    rows_path = result_dir / f"{arm}-s{seed}-b{total_added}-rows.npz"
+                    np.savez_compressed(rows_path, rows=json.dumps(rows))
+                    point["evaluation_rows"] = {"file": rows_path.name,
+                        "sha256": hashlib.sha256(rows_path.read_bytes()).hexdigest()}
                     write_manifest(budget_dir, build_manifest(run_id=budget_id, kind="adapted", seeds={"acq_seed": seed, "train_seed": paired_cfg.seed},
                         data={"arm": arm, "budget_added": total_added, "diagnostic": args.diagnostic, "assets_run": str(args.assets_run),
                               "probes_run": str(args.probes_run), "evaluation_banks": str(args.banks_dir)}, costs=ledger.to_dict(), metrics=ev["test"]["at_matched"]))

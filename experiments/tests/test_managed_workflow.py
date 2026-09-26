@@ -163,3 +163,62 @@ def test_dry_run_has_no_subprocess_or_filesystem_side_effects(tmp_path):
     assert result["subprocesses_started"] == 0
     assert not (tmp_path / "one.txt").exists()
     assert not (tmp_path / "workflow-state").exists()
+
+
+def test_available_negative_upstream_gate_stops_while_later_files_are_missing(tmp_path):
+    (tmp_path / "e1.json").write_text('{"gate":{"passes":false}}')
+    stage = make_stage("e3", "must_not_exist.txt", wait_for=["e2_never_runs.json"],
+                       watch_gates=[{"path": "e1.json", "key": "gate.passes"},
+                                    {"path": "e2_never_runs.json", "key": "gate.passes"}])
+    path = config_file(tmp_path, [stage])
+    result = run_workflow(path, tmp_path)
+    assert result["status"] == "gate_stopped"
+    assert not result["stages"]["e3"]["attempts"]
+    assert not (tmp_path / "must_not_exist.txt").exists()
+    assert run_workflow(path, tmp_path, resume=True)["status"] == "gate_stopped"
+    (tmp_path / "e1.json").write_text('{"gate":{"passes":true}}')
+    with pytest.raises(WorkflowError, match="output hash changed"):
+        run_workflow(path, tmp_path, resume=True)
+
+
+def test_watched_positive_gate_does_not_bypass_missing_prerequisite(tmp_path):
+    (tmp_path / "e1.json").write_text('{"passes":true}')
+    stage = make_stage("e3", "must_not_exist.txt", wait_for=["e2_missing.json"],
+                       watch_gates=[{"path": "e1.json", "key": "passes"}])
+    path = config_file(tmp_path, [stage], wait_timeout_seconds=.03)
+    with pytest.raises(WorkflowError, match="Timed out waiting"):
+        run_workflow(path, tmp_path)
+    assert not (tmp_path / "must_not_exist.txt").exists()
+
+
+def test_partial_watched_json_blocks_even_when_all_wait_files_exist(tmp_path):
+    gate_path = tmp_path / "upstream.json"
+    gate_path.write_text('{"gate":')
+    (tmp_path / "ready.txt").write_text("already ready")
+    stage = make_stage("dependent", "must_not_exist.txt", wait_for=["ready.txt"],
+                       watch_gates=[{"path": "upstream.json", "key": "gate.passes"}])
+    path = config_file(tmp_path, [stage])
+
+    def complete_write():
+        time.sleep(.05)
+        gate_path.write_text('{"gate":{"passes":false}}')
+
+    writer = threading.Thread(target=complete_write)
+    writer.start()
+    try:
+        result = run_workflow(path, tmp_path)
+    finally:
+        writer.join()
+    assert result["status"] == "gate_stopped"
+    assert not result["stages"]["dependent"]["attempts"]
+    assert not (tmp_path / "must_not_exist.txt").exists()
+
+
+def test_complete_but_nonboolean_watched_json_is_not_treated_as_incomplete(tmp_path):
+    (tmp_path / "upstream.json").write_text('{"gate":{"passes":"false"}}')
+    stage = make_stage("dependent", "must_not_exist.txt", wait_for=[],
+                       watch_gates=[{"path": "upstream.json", "key": "gate.passes"}])
+    path = config_file(tmp_path, [stage])
+    with pytest.raises(WorkflowError, match="JSON boolean"):
+        run_workflow(path, tmp_path)
+    assert not (tmp_path / "must_not_exist.txt").exists()
