@@ -1,0 +1,92 @@
+{
+  "observed_unix": 1790457477.489361,
+  "status": "bounded_feasibility_check_complete_no_cache_migration",
+  "purpose": "Assess whether avoiding repeated exact EGL rendering is a practical throughput improvement while Walker and PushT share the GPU.",
+  "scope": "Training-only stored-state rendering and CPU lossless-codec checks. No new env.step calls, model queries, final-evaluation outcomes, training-setting changes, checkpoint resume or cache builder launch.",
+  "source_dataset_sha256": "4602eeb952c918a3a9de787605d496c5a751fd692396f539e3e82fcf9c96f267",
+  "training_splits_sha256": "e7a8083f82d7b7701587b3dcaf1c73043384c18603d617470d293de58221b4b6",
+  "render_fingerprint": "8298e1d623e8ecda907516ba14a1dcb6",
+  "coverage": {
+    "required_training_frames": 2885560,
+    "required_selected_validation_frames": 2021,
+    "required_total_frames": 2887581,
+    "raw_required_bytes": 434661792768,
+    "raw_required_gib": 404.81033992767334
+  },
+  "samples": {
+    "per_frame": {
+      "seed": 60269,
+      "episodes": 64,
+      "frames": 256,
+      "frames_sha256": "711c4bf71ada643dbb3725451b0830520ba33060d045feb7014b88622f31f612",
+      "fresh_context_reverse_order_byte_equality": true
+    },
+    "temporal": {
+      "seed": 60271,
+      "episodes": 28,
+      "frames": 448,
+      "frames_sha256": "3a33379a06492e5293edf5e347b7778d237aa657257b7af8b35889559741d64e",
+      "total_fresh_render_calls_including_fingerprint": 512,
+      "wall_clock_seconds": 35.52428433764726
+    }
+  },
+  "codec_variants_checked": 39,
+  "all_sample_lossless_roundtrips_passed": true,
+  "best_per_frame_codec": {
+    "name": "zstd3_delta_(1,)_green_decorrelation_True",
+    "mean_bytes_per_frame": 20124.734375,
+    "projected_required_gib": 54.120831760854344,
+    "compression_frames_per_s": 2068.6904996031335,
+    "decode_and_byte_check_frames_per_s": 1614.7974077886558,
+    "exact_roundtrip": true
+  },
+  "best_temporal_codec": {
+    "name": "zstd_level6_chunk16_raw",
+    "chunk_frames": 16,
+    "transform": "none",
+    "sample_chunks": 28,
+    "compressed_sample_bytes": 8397159,
+    "mean_compressed_bytes_per_stored_frame": 18743.65848214286,
+    "projected_training_cache_gib": 50.371467293921995,
+    "projected_training_and_selected_validation_gib": 50.40674666271038,
+    "compression_seconds": 0.40785880479961634,
+    "compression_frames_per_second": 1098.419342007598,
+    "full_chunk_decode_and_exact_bytecheck_seconds": 0.04990391992032528,
+    "exact_chunk_and_requested_frame_roundtrip": true,
+    "random_requested_frame_queries": 512,
+    "random_query_seconds": 0.733860241714865,
+    "effective_requested_frames_per_second": 697.680526749306,
+    "decoded_frames_per_requested_frame": 16,
+    "mean_reconstructed_prefix_frames": 0,
+    "random_query_policy": "Warm in-memory compressed chunks, one useful frame per full chunk decode, includes prefix reconstruction and exact frame byte check; no reuse"
+  },
+  "disk_free_gib_at_decision": 54.34485626220703,
+  "projected_free_gib_after_best_payload_only": 3.9381095994966486,
+  "required_pixel_supply_at_3_updates_per_second": 1536,
+  "decision": "Keep the current trainer and fixed scientific settings. Do not build or migrate to a full on-disk pixel cache on this instance: the best sampled payload alone leaves approximately four GiB for all later artifacts, before indexing, padding, checkpoints and sampling uncertainty. End-to-end speedup has not been demonstrated.",
+  "limitations": [
+    "Sampled compression ratios are extrapolations, not a measured full-cache size. The per-frame and temporal samples use different fixed training-only sampling policies.",
+    "Temporal size projections exclude shard/index/checksum/partial-tail overhead.",
+    "Decode measurements are single-process warm-memory sample rates, not a multiworker DataLoader or disk benchmark. Six workers could outperform one; single-process results alone do not prove inability to feed training.",
+    "Rendering timings were collected under concurrent GPU workloads; they do not establish isolated rendering throughput or a reliable full-cache build time.",
+    "Full-cache generation, random storage reads, collation, pinning, transfer, cache recovery and a training restart were not attempted.",
+    "This bounded check does not exclude other possible optimizations, partial caches or larger storage."
+  ],
+  "local_report_sha256": {
+    "runs/continuation-audit/walker-cache-feasibility-20260926-1/report.json": "4a7d7093039405c8964ff5cd4ab73211a3c733a7c57c905323d3c4804564cd51",
+    "runs/continuation-audit/walker-cache-feasibility-20260926-1/image_codecs.json": "7586e13c583f9dedb02ed4cc3535cdcacaa744bdcbcd062d1f1856bc5bd2299d",
+    "runs/continuation-audit/walker-cache-temporal-feasibility-20260926-1/report.json": "f7f3fcc2ae5d26bbbff4df83b343d98531ea8c969b706a78e797530023266c54"
+  },
+  "local_benchmark_script_sha256": {
+    "runs/continuation-audit/walker-cache-feasibility-20260926-1/safetydial_walker_cache_feasibility.py": "e22df8a8b259b060b9825e0b30a3009243cf00c1f7da7182944d960f4664f43f",
+    "runs/continuation-audit/walker-cache-feasibility-20260926-1/safetydial_walker_cache_codecs.py": "aca136bed2055ba3898ab34c95e1ac1eba72471c4a7fba41e3b5005f25348bd7",
+    "runs/continuation-audit/walker-cache-temporal-feasibility-20260926-1/benchmark.py": "2faa236318badf29949048f04347521c7c39cb7d473e9eb916029870e9b50a6a"
+  },
+  "render_source_sha256": {
+    "safetydial_walker_cache_feasibility.py": "e22df8a8b259b060b9825e0b30a3009243cf00c1f7da7182944d960f4664f43f",
+    "safetydial_walker_cache_codecs.py": "aca136bed2055ba3898ab34c95e1ac1eba72471c4a7fba41e3b5005f25348bd7",
+    "experiments/helpers/locoData.py": "4f51e6bff77279d4682b337ffa790c13088b03c02f2cd09d9202bc559d914f99",
+    "experiments/helpers/locoEnv.py": "0da5ba842b8d830b748139def9a74fa0488242465bf2e695084a889312ca355f",
+    "experiments/helpers/threads.py": "799c1d68e9a056186bff086d7f07bdb16b5f789af3e09835b32437e5d7c7a584"
+  }
+}
