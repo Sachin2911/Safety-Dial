@@ -47,6 +47,14 @@ At the audited snapshot, the next pass had added one root from a new source, giv
 source skips and charged-step accounting agree. This is an incremental metadata audit;
 the full final banks and their performance evaluation remain incomplete.
 
+The [familiar-family completion audit](familiar_family_completion_audit.json) verifies
+64 unique familiar-test source roots and 1,024 completed metadata branches, with
+16 distinct prequery float32 tape hashes per root. Frozen candidate identities,
+source reservations and 176,353 charged steps agree at family completion. Held-out
+collection then started and had reached four roots at the audit snapshot. This is
+construction metadata evidence; the full test/stress banks and outcome evaluation
+remain incomplete.
+
 The later analysis stages now emit cumulative-horizon attribution and pose/clearance
 errors by regime, an E2 paired table with deterministic observed examples, and charged
 history-replay ledgers. E3 records exact model/input and candidate-pool identities,
