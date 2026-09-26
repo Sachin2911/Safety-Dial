@@ -16,7 +16,7 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from helpers.branchBank import Proposal, propose
+from helpers.branchBank import Proposal, exits_arena, propose
 from helpers.decomposition import RootLatentCache, interp_from_endpoints
 from helpers.pushtAssets import ACTION_BLOCK
 from helpers.pushtGeometry import clearance_trace
@@ -50,6 +50,11 @@ class CandidatePool:
             props, _ = propose(rng, root, ctx, n_random=per_root - n_stress - n_toward - 1, sigmas=(0.05, 0.1, 0.2), n_stress=n_stress,
                                hazard_centre=hz.centre, n_toward_hazard=n_toward)
             for p_i, p in enumerate(props):
+                # These are the exact controls BankWriter persists and replay executes.
+                # Recheck the existing guard after rounding, before any real query.
+                p.tape = np.asarray(p.tape, dtype=np.float32)
+                if exits_arena(p.tape, ctx.state[:2]):
+                    continue
                 cands.append(Candidate(ri, p, (ri, p_i)))
         return CandidatePool(cands)
 

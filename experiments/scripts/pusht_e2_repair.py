@@ -18,6 +18,7 @@ Outputs the explicit new --results-dir/repair.json and figures; adapted weights 
 from __future__ import annotations
 
 import argparse
+from dataclasses import replace
 import hashlib
 import json
 import sys
@@ -36,7 +37,7 @@ import torch  # noqa: E402
 
 apply_torch()
 
-from helpers.branchBank import Bank, BankWriter, build_root, execute_proposals, expert_pairs, propose  # noqa: E402
+from helpers.branchBank import Bank, BankWriter, build_root, execute_proposals, expert_pairs, propose, exits_arena  # noqa: E402
 from helpers.decomposition import RootLatentCache, decision_table, evaluate_model_on_bank, ordinary_motion, row_outcomes  # noqa: E402
 from helpers.dialMetrics import auc_dial, clearance_error_stats, cluster_bootstrap, fsa, margin_for_acceptance  # noqa: E402
 from helpers.hfStore import HFStore  # noqa: E402
@@ -57,6 +58,7 @@ from helpers.pushtAssets import ACTION_BLOCK, H5_PATH, load_model, load_scalers 
 from helpers.pushtSourceFamilies import SOURCE_FAMILY_PROTOCOL, geometric_source_family  # noqa: E402
 from helpers.pushtLayouts import load_layouts  # noqa: E402
 from helpers.pushtReplay import StepLedger
+from helpers.acquisitionSafety import MeteredEnv, copy_ledger
 from helpers.pushtContactReplay import make_env  # noqa: E402
 from helpers.runManifest import validate_run_id, build_manifest, make_run_id, write_manifest, file_sha256  # noqa: E402
 from helpers.splitIntegrity import validate_bank_splits, validate_decomposition_gate  # noqa: E402
@@ -66,6 +68,42 @@ PROBES_RUN = REPO_ROOT / "runs" / "pusht-probes-20260926-1"
 STUDY = REPO_ROOT / "data" / "study" / "pusht"
 RESULTS = REPO_ROOT / "docs" / "mainPlan" / "results" / "e2"
 KS = [0, 2, 4, 6]
+
+
+def canonical_proposals(proposals, pusher_xy):
+    """Check and execute exactly the float32 controls persisted by BankWriter."""
+    accepted, rejected = [], 0
+    for proposal in proposals:
+        tape = np.asarray(proposal.tape, dtype=np.float32)
+        if not np.isfinite(tape).all() or exits_arena(tape, pusher_xy):
+            rejected += 1
+        else:
+            accepted.append(replace(proposal, tape=tape))
+    return accepted, rejected
+
+
+def metered_root_cache(imaginer, bank, ledger, category):
+    cache = RootLatentCache(imaginer, bank)
+    cache.env = MeteredEnv(cache.env, ledger, category)
+    return cache
+
+
+def metered_branch_clips(imaginer, bank, indices, ledger):
+    env = MeteredEnv(make_env(), ledger, "adapt_training_history")
+    try:
+        return branch_clips(imaginer, bank, indices, env=env)
+    finally:
+        env.close()
+
+
+def combined_simulator_ledger(collection, context, evaluation, goal_base, goal_adapted):
+    """Disjoint actual work in this E2 run; historical source-bank costs stay upstream."""
+    ledger = StepLedger()
+    for prefix, source in (("collection_", collection), ("context_", context),
+                           ("evaluation_", evaluation), ("goal_no_update_", goal_base),
+                           ("goal_adapted_", goal_adapted)):
+        copy_ledger(source, ledger, prefix)
+    return ledger.to_dict()
 
 
 def build_adapt_bank(n_roots, n_tapes, seed, splits, model, process, device, *, study_dir=STUDY) -> tuple[Path, StepLedger]:
@@ -99,6 +137,11 @@ def build_adapt_bank(n_roots, n_tapes, seed, splits, model, process, device, *, 
         root.meta["source_family_protocol"] = SOURCE_FAMILY_PROTOCOL["version"]
         props, rej = propose(rng, root, ctx, n_random=n_tapes - 4, sigmas=(0.05, 0.1, 0.2), n_stress=3)
         ledger.add("proposals_rejected_by_arena", 0, branches=rej)
+        props, precision_rejections = canonical_proposals(props, ctx.state[:2])
+        ledger.add("proposals_rejected_after_float32", 0, branches=precision_rejections)
+        if not props:
+            ledger.add("discarded_no_float32_proposals", 0, branches=1)
+            continue
         br = execute_proposals(env, root, props, ledger=ledger)
         contact_counts["typed_roots"] += int(root.meta.get("contact_kind") == "pusher_block")
         contact_counts["roots_in_pusher_contact"] += int(root.meta.get("in_contact_last_block") is True)
@@ -229,13 +272,15 @@ def main() -> int:
         replay.save(cache_dir / "replay.npz")
         retention.save(cache_dir / "retention.npz")
     training_indices = adapt_bank.valid_training_indices()
-    acquired = branch_clips(imaginer, adapt_bank, training_indices)
+    context_ledger = StepLedger()
+    acquired = metered_branch_clips(imaginer, adapt_bank, training_indices, context_ledger)
     acquired.save(cache_dir / "adapt_branches.npz")
     print(f"[e2] clips: replay {len(replay)}, retention {len(retention)}, acquired {len(acquired)}")
     write_manifest(cache_dir, build_manifest(run_id=f"{run_id}-clips", kind="cached-targets",
         seeds={"seed": args.seed}, data={"upstream": references,
         "training_branch_indices": training_indices.tolist(),
-        "files_sha256": {p.name: file_sha256(p) for p in cache_dir.glob("*.npz")}}))
+        "files_sha256": {p.name: file_sha256(p) for p in cache_dir.glob("*.npz")}},
+        costs=context_ledger.to_dict()))
     (cache_dir / "config.yaml").write_text(json.dumps(vars(args), default=str, indent=2) + "\n")
     (cache_dir / "README.md").write_text("# Cached frozen targets\n\nExact replay, retention and acquired latent clips used by this E2 run. Scalers and frozen encoder are pinned in the manifest.\n")
     if store is not None:
@@ -243,7 +288,9 @@ def main() -> int:
         references["cached_targets"] = store.reference_run("pusht", "assets", cache_dir)
 
     banks = {n: (Bank(args.banks_dir / n), load_layouts(args.banks_dir / n / "layouts.json")[0]) for n in ("dev", "test", "stress")}
-    caches = {n: RootLatentCache(imaginer, b) for n, (b, _) in banks.items()}
+    evaluation_ledger = StepLedger()
+    caches = {n: metered_root_cache(imaginer, b, evaluation_ledger, n + "_history")
+              for n, (b, _) in banks.items()}
 
     def evaluate(m, name, correction=None):
         im = Imaginer(m, process, device)
@@ -299,7 +346,7 @@ def main() -> int:
         "n_episodes": len(retention_cases), "n_blocks": args.retention_blocks,
         "case_file_sha256": case_sha256}
     # readout-only correction on the same new data (imagined latents of the adapt bank vs true endpoint poses)
-    cache_a = RootLatentCache(imaginer, adapt_bank)
+    cache_a = metered_root_cache(imaginer, adapt_bank, context_ledger, "readout_correction_history")
     Zi, Yt = [], []
     for ri in range(len(adapt_bank.roots)):
         idx = np.intersect1d(adapt_bank.indices_for_root(ri), training_indices)
@@ -350,6 +397,15 @@ def main() -> int:
     ret_ok = clip_ret_ok and goal_ret_ok and retention_complete
     report["gate"] = {"test_fsa_no_update": base_t, "test_fsa_adapted": adap_t, "test_fsa_readout_correction": ro_t, "relative_reduction": rel,
                       "beats_readout_correction": bool(adap_t < ro_t), "retention_within_15pct": bool(clip_ret_ok), "goal_retention_passes": goal_ret_ok, "retention_complete": retention_complete, "passes": bool(rel >= 0.25 and adap_t < ro_t and ret_ok)}
+    report["context_ledger"] = context_ledger.to_dict()
+    report["evaluation_ledger"] = evaluation_ledger.to_dict()
+    report["simulator_costs"] = combined_simulator_ledger(adapt_bank.ledger,
+        context_ledger.to_dict(), evaluation_ledger.to_dict(),
+        goal_retention_base["ledger"], goal_retention_adapted["ledger"])
+    report["simulator_cost_accounting"] = (
+        "All actual E2 collection, context-cache replay and goal-retention steps; "
+        "pre-existing evaluation-bank generation costs remain in upstream manifests. "
+        "Repeated uses of a filled latent cache add no simulator steps.")
     print(f"[e2] GATE: {json.dumps(report['gate'])}")
 
     # ---- save weights, upload, write ---------------------------------------------------
@@ -367,7 +423,7 @@ def main() -> int:
                                     "bank_manifests": {name: json.loads((path / "manifest.json").read_text()) for name, path in bank_paths.items()},
                                     "split_integrity": split_report, "adapt_bank_branches": len(adapt_bank),
                                     "training_branches": len(training_indices), "replay_clips": len(replay)},
-                              costs=adapt_bank.ledger, metrics=report["gate"], started_at=t_start)
+                              costs=report["simulator_costs"], metrics=report["gate"], started_at=t_start)
     write_manifest(run_dir, manifest)
     (run_dir / "README.md").write_text(f"# {run_id}\n\nPredictor-side adapted Push-T LeWM (E2). Only the trained modules ({cfg.modules}) are stored; load over the released weights. See manifest.json.\n")
     if not args.no_upload:
@@ -378,6 +434,10 @@ def main() -> int:
     write_manifest(results, {**manifest, "hf_revision": report.get("hf_revision")})
     (results / "repair.json").write_text(json.dumps(report, indent=1, default=float) + "\n")
     np.savez_compressed(results / "repair_rows.npz", rows=json.dumps(rows_by_arm))
+    from helpers.pushtRepairReport import write_repair_report
+
+    write_repair_report(results / "repair.json", results / "repair_rows.npz",
+                        args.banks_dir, results / "paired-report")
     print(f"[e2] done in {time.time() - t_start:.0f}s")
     return 0
 

@@ -17,6 +17,7 @@ start/goal source family (E4).
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import json
 import sys
@@ -51,6 +52,9 @@ from helpers.pushtContactReplay import execute_tape, make_env, reset_root  # noq
 from helpers.runManifest import build_manifest, file_sha256, make_run_id, validate_run_id, write_manifest
 from helpers.acquisitionSafety import COLLECTION_VERSION, MeteredEnv, copy_ledger, enforce_gate, require_new_paths, validate_acquisition_cache
 from helpers.splitIntegrity import bank_identity, inspect_bank_splits
+from helpers.pushtAcquisitionReporting import (
+    candidate_pool_identity, result_provenance, validate_reference, validate_reference_pool,
+)
 from helpers.studyGates import acquisition_repeatability_gate
 from helpers.pushtSourceFamilies import SOURCE_FAMILY_PROTOCOL, geometric_source_family, validate_geometric_bank
 from scripts.pusht_e2_repair import retention_metrics  # noqa: E402
@@ -75,45 +79,93 @@ def build_acq_roots(n_roots, seed, splits, model, process, device, bank_dir):
     planner = NominalPlanner(model, process, device)
     rng = np.random.default_rng(seed)
     episodes = splits["roles"]["reserve"][3000:8000]
-    n_candidates = min(len(episodes), n_roots * 8)
+    # Freeze the full pre-existing acquisition reservation before any simulation.
+    # A 4-8% geometric acceptance rate cannot reliably fill 96 roots from 768 trials.
+    n_candidates = len(episodes)
     if n_candidates < n_roots:
         raise ValueError("Insufficient disjoint source trajectories for acquisition roots")
     pairs = expert_pairs(H5_PATH, episodes, rng, n_candidates)
+    if len(set(episodes)) != len(episodes):
+        raise ValueError("Acquisition reservation must contain unique source episodes")
     writer = BankWriter(bank_dir, with_frames=False)
+    plan = {"protocol": "full-reserved-sources-single-candidate-v1", "seed": seed,
+            "requested_roots": n_roots, "max_accepted_roots_per_source": 1,
+            "source_episodes": episodes, "source_family_protocol": SOURCE_FAMILY_PROTOCOL,
+            "expert_h5_sha256": file_sha256(H5_PATH),
+            "candidates": [dict(pair, candidate_index=i, root_seed=seed + i,
+                                k=KS[i % len(KS)], root_id=f"acq-r{i:03d}")
+                           for i, pair in enumerate(pairs)]}
+    plan_path = bank_dir / "sampling-plan.json"
+    plan_path.write_text(json.dumps(plan, indent=1,
+                                   default=lambda v: v.tolist() if isinstance(v, np.ndarray) else v) + "\n")
+    plan_sha = file_sha256(plan_path)
     layouts, contexts, built = [], [], 0
     t0 = time.time()
+
+    def snapshot(status, attempts):
+        writer.h5.flush()
+        blob = {"status": status, "roots": writer.roots, "ledger": ledger.to_dict(),
+                "manifest": {"bank": "acq_roots", "seed": seed, "n_roots": n_roots,
+                             "collection_version": COLLECTION_VERSION, "status": status,
+                             "sampling_plan_sha256": plan_sha}}
+        for name, value in (("roots.json", blob), ("progress.json", {
+            "status": status, "attempts_completed": attempts, "accepted_roots": built,
+            "scheduled_candidates": n_candidates, "requested_roots": n_roots,
+            "ledger": ledger.to_dict(), "elapsed_seconds": time.time() - t0,
+            "sampling_plan_sha256": plan_sha,
+        })):
+            path = bank_dir / name
+            temporary = path.with_suffix(path.suffix + ".tmp")
+            temporary.write_text(json.dumps(value, indent=1) + "\n")
+            temporary.replace(path)
+        save_layouts(bank_dir / "layouts.json", layouts, {"bank": "acq_roots", "status": status})
+
+    attempts = 0
+    snapshot("running", attempts)
     try:
         for i, pair in enumerate(pairs):
+            steps_before, roots_before = ledger.total, built
             try:
-                root, ctx, _ = build_root(env, planner, pair, seed=seed + i, k=KS[i % 4], root_id=f"acq-r{i:03d}")
-            except ValueError as exc:
-                if "censored or out-of-domain prefix" not in str(exc):
-                    raise
-                ledger.add("discarded_invalid_root", 0, branches=1)
-                continue
-            if geometric_source_family(ctx.state, root.goal_state) != "familiar":
-                ledger.add("discarded_source_geometry", 0, branches=1)
-                continue
-            root.meta["source_family"] = "familiar"
-            root.meta["source_family_protocol"] = SOURCE_FAMILY_PROTOCOL["version"]
-            reset_root(env, root, record_frames=False)
-            log = execute_tape(env, np.asarray(root.meta["nominal_plan"]).reshape(-1, 2), record_frames=False)
-            if log.censored:
-                ledger.add("discarded_censored_layout_route", 0, branches=1)
-                continue
-            route = np.concatenate([ctx.prefix_log.states[:, 2:5], log.states[1:, 2:5]], 0)
-            lay = generate_layout(rng, route, ctx.state[2:5], root.goal_state[2:5], family="familiar", root_id=root.root_id)
-            if lay is None:
-                ledger.add("discarded_root", 0, branches=1)
-                continue
-            writer.add_root(root)
-            layouts.append(lay)
-            contexts.append(ctx)
-            built += 1
-            if built % 16 == 0:
-                print(f"[e3] acq roots {built}/{n_roots} {time.time() - t0:.0f}s")
-            if built == n_roots:
-                break
+                try:
+                    root, ctx, _ = build_root(env, planner, pair, seed=seed + i, k=KS[i % 4], root_id=f"acq-r{i:03d}")
+                except ValueError as exc:
+                    if "censored or out-of-domain prefix" not in str(exc):
+                        raise
+                    ledger.add("discarded_invalid_root", 0, branches=1)
+                    continue
+                if geometric_source_family(ctx.state, root.goal_state) != "familiar":
+                    ledger.add("discarded_source_geometry", 0, branches=1)
+                    continue
+                root.meta["source_family"] = "familiar"
+                root.meta["source_family_protocol"] = SOURCE_FAMILY_PROTOCOL["version"]
+                reset_root(env, root, record_frames=False)
+                log = execute_tape(env, np.asarray(root.meta["nominal_plan"]).reshape(-1, 2), record_frames=False)
+                if log.censored:
+                    ledger.add("discarded_censored_layout_route", 0, branches=1)
+                    continue
+                route = np.concatenate([ctx.prefix_log.states[:, 2:5], log.states[1:, 2:5]], 0)
+                lay = generate_layout(rng, route, ctx.state[2:5], root.goal_state[2:5], family="familiar", root_id=root.root_id)
+                if lay is None:
+                    ledger.add("discarded_root", 0, branches=1)
+                    continue
+                writer.add_root(root)
+                layouts.append(lay)
+                contexts.append(ctx)
+                built += 1
+                if built % 16 == 0:
+                    print(f"[e3] acq roots {built}/{n_roots} {time.time() - t0:.0f}s")
+                if built == n_roots:
+                    break
+            finally:
+                attempts += 1
+                record = {"candidate_index": i, "episode": pair["episode"],
+                          "root_seed": seed + i, "k": KS[i % len(KS)],
+                          "accepted": built > roots_before,
+                          "actual_steps": ledger.total - steps_before,
+                          "cumulative_steps": ledger.total}
+                with (bank_dir / "attempts.jsonl").open("a") as handle:
+                    handle.write(json.dumps(record) + "\n")
+                snapshot("running", attempts)
         if built != n_roots:
             raise RuntimeError(f"Only {built}/{n_roots} roots obtained; preserving incomplete cache")
         save_layouts(bank_dir / "layouts.json", layouts, {"bank": "acq_roots"})
@@ -121,8 +173,14 @@ def build_acq_roots(n_roots, seed, splits, model, process, device, bank_dir):
                             history_actions=np.stack([c.history_actions for c in contexts]),
                             root_ids=np.asarray([r["root_id"] for r in writer.roots]))
         writer.finish(ledger, {"bank": "acq_roots", "seed": seed, "n_roots": n_roots,
-                               "collection_version": COLLECTION_VERSION})
+                               "collection_version": COLLECTION_VERSION, "status": "complete",
+                               "sampling_plan_sha256": plan_sha})
+        progress = json.loads((bank_dir / "progress.json").read_text())
+        progress["status"] = "complete"
+        (bank_dir / "progress.json").write_text(json.dumps(progress, indent=1) + "\n")
     except BaseException:
+        if writer.h5.id.valid:
+            snapshot("incomplete", attempts)
         if writer.h5.id.valid:
             writer.h5.close()
         (bank_dir / "incomplete_ledger.json").write_text(json.dumps(ledger.to_dict(), indent=1) + "\n")
@@ -143,7 +201,7 @@ def acquisition_context_cache(imaginer, bank):
     return cache
 
 
-def execute_candidates(env, bank, cands, ledger: StepLedger, category: str) -> list[Branch]:
+def execute_candidates(env, bank, cands, ledger: StepLedger, category: str, *, on_branch=None) -> list[Branch]:
     """Meter actual attempted steps; do not infer the cost from successful branch count."""
     metered = MeteredEnv(env, ledger, category)
     out = []
@@ -152,6 +210,12 @@ def execute_candidates(env, bank, cands, ledger: StepLedger, category: str) -> l
         reset_root(metered, root, record_frames=False)
         log = execute_tape(metered, c.proposal.tape.reshape(-1, 2), record_frames=True)
         ledger.add(category, 0, branches=1)
+        branch = Branch(root.root_id, c.proposal.tape, c.proposal.kind,
+                        dict(c.proposal.params, key=list(c.key)), log)
+        # Preserve the observed trace before any later query or budget-padding failure.
+        out.append(branch)
+        if on_branch is not None:
+            on_branch(branch)
         # A terminated tape leaves part of its scheduled horizon unavailable. Spend
         # that allowance on explicitly discarded fresh-reset neutral queries. This
         # preserves equal ACTUAL paid budgets without using an unseen suffix as data.
@@ -163,8 +227,6 @@ def execute_candidates(env, bank, cands, ledger: StepLedger, category: str) -> l
                 padding.step(np.zeros(2))
             ledger.add(category + "_discarded_padding", 0, branches=unused)
         c.executed = True
-        out.append(Branch(root.root_id, c.proposal.tape, c.proposal.kind,
-                          dict(c.proposal.params, key=list(c.key)), log))
     return out
 
 
@@ -270,6 +332,7 @@ def main() -> int:
     ap.add_argument("--assets-run", type=Path)
     ap.add_argument("--probes-run", type=Path)
     ap.add_argument("--clips-dir", type=Path)
+    ap.add_argument("--reference-report", type=Path, help="Completed normal study binding an oracle-only reference")
     ap.add_argument("--acq-roots-dir", type=Path, help="Optional complete charged root cache")
     ap.add_argument("--output-dir", type=Path, help="New result directory; existing paths are refused")
     ap.add_argument("--preflight-only", action="store_true", help="Validate gates, splits and paths without loading a model or spending simulator steps")
@@ -278,6 +341,11 @@ def main() -> int:
     args = ap.parse_args()
     t_start = time.time()
     arms = list(args.arms) + (["learned"] if args.learned else []) + (["oracle"] if args.oracle else [])
+    reference = None
+    if args.reference_report:
+        if arms != ["oracle"] or not args.acq_roots_dir or not args.acq_roots_dir.exists():
+            raise ValueError("A separate oracle reference requires only the oracle arm and an existing root cache")
+        reference = json.loads(args.reference_report.read_text())
     e2 = json.loads(args.e2_report.read_text())
     gate = enforce_gate(e2, diagnostic=args.diagnostic, arms=arms, seeds=args.seeds)
     args.banks_dir = args.banks_dir or Path(e2.get("banks_dir", STUDY))
@@ -335,6 +403,7 @@ def main() -> int:
     report = {"run_id": run_id, "gate": gate, "split_audit": split_audit,
               "transfer_interpretation": "descriptive_episode_subsets_only", "recipe": cfg.to_dict(),
               "arms": {}, "rounds": rounds, "seed_branches": SEED_BRANCHES,
+              "acquisition_seeds": args.seeds, "candidate_pool_identities": {},
               "evaluation_bank_identity": {name: bank_identity(path) for name, path in bank_paths.items()},
               "charged_step_definition": "root generation plus cached history collection plus common seed plus acquired branches; evaluation recorded separately",
               "e2_report": str(args.e2_report.resolve()), "e2_report_sha256": file_sha256(args.e2_report),
@@ -345,11 +414,29 @@ def main() -> int:
               "probe_name": e2.get("probe_name", "block_pose_mlp"),
               "candidate_pool": "nominal plan plus bounded Gaussian perturbations; stress remains a separate evaluation bank",
               "censored_budget_policy": "Unused scheduled horizon steps are paid fresh-reset neutral queries, discarded from training"}
-    active_store, active_ledger = None, None
+    if reference is not None:
+        report["oracle_reference"] = {"report": str(args.reference_report.resolve()),
+            "sha256": file_sha256(args.reference_report), "run_id": reference.get("run_id"),
+            "interpretation": "Retrospective data-usefulness reference; whole-pool cost is not comparable to prospective acquisition"}
+    input_paths = [args.assets_run / "scalers.npz", args.assets_run / "splits.json",
+                   args.probes_run / (report["probe_name"] + ".pt"),
+                   args.clips_dir / "replay.npz", args.clips_dir / "retention.npz"]
+    input_paths += [REPO_ROOT / "experiments" / relative for relative in (
+        "scripts/pusht_e3_acquisition.py", "helpers/acquisition.py", "helpers/imagination.py",
+        "helpers/decomposition.py", "helpers/predictorAdapt.py", "helpers/poseProbes.py",
+        "helpers/pushtAcquisitionReporting.py", "helpers/dialMetrics.py",
+        "scripts/pusht_e2_repair.py")]
+    report["input_sha256"] = {str(path.resolve()): file_sha256(path) for path in input_paths}
+    active_store, active_ledger, active_oracle = None, None, None
     try:
         device = "cuda"
         model = load_model(device)
         base_sd = {k: v.detach().clone() for k, v in model.state_dict().items()}
+        model_digest = hashlib.sha256()
+        for name, value in sorted(base_sd.items()):
+            model_digest.update(json.dumps([name, str(value.dtype), list(value.shape)]).encode())
+            model_digest.update(value.contiguous().reshape(-1).view(torch.uint8).cpu().numpy().tobytes())
+        report["input_sha256"]["loaded_base_model_state_dict"] = model_digest.hexdigest()
         process = load_scalers(args.assets_run / "scalers.npz")
         splits = json.loads((args.assets_run / "splits.json").read_text())
         probe, _ = load_probe(args.probes_run / (report["probe_name"] + ".pt"), device)
@@ -368,6 +455,10 @@ def main() -> int:
             cache.env = MeteredEnv(cache.env, evaluation_ledger, n + "_history")
         acq_dir = args.acq_roots_dir or data_dir / "acq_roots"
         acq_bank, acq_layouts = build_acq_roots(args.acq_roots, 20261003, splits, model, process, device, acq_dir)
+        report["acquisition_root_identity"] = dict(bank_identity(acq_dir), **{
+            "contexts.npz": file_sha256(acq_dir / "contexts.npz")})
+        if reference is not None:
+            validate_reference(reference, report)
         acquisition_splits = inspect_bank_splits(bank_paths | {"acquisition": acq_dir})
         # A diagnostic may reuse overlapping development/test rows, never acquisition rows.
         acq_episodes = {r.meta["episode"] for r in acq_bank.roots}
@@ -392,28 +483,69 @@ def main() -> int:
             report["limitations"].append("Legacy diagnostic episode subsets do not establish geometric transfer")
         comparison_rows = {}
         hf = None if args.no_upload else HFStore()
+        report["upstream_revisions"] = {} if hf is None else {
+            "assets": hf.reference_run("pusht", "assets", args.assets_run),
+            "probes": hf.reference_run("pusht", "probes", args.probes_run),
+            "evaluation_banks": {name: hf.reference_run("pusht-banks", "banks", path)
+                                 for name, path in bank_paths.items()},
+        }
         if hf and not args.acq_roots_dir:
             write_manifest(acq_dir, build_manifest(run_id=f"{run_id}-roots", kind="bank", seeds={"root_seed": 20261003},
                            data={"n_roots": len(acq_bank.roots)}, costs=acq_bank.ledger))
             report["root_bank_hf_revision"] = hf.upload_run("pusht-banks", "banks", acq_dir, run_id=f"{run_id}-roots")
+        if hf:
+            report["upstream_revisions"]["acquisition_roots"] = hf.reference_run("pusht-banks", "banks", acq_dir)
         for seed in args.seeds:
             pool = CandidatePool.build(np.random.default_rng(1000 + seed), acq_bank, args.pool_per_root,
                                        n_stress=0, n_toward=0, layouts_by_root=lay)
             schedule = root_schedule(pool, SEED_BRANCHES + sum(rounds), np.random.default_rng(2000 + seed))
             seed_schedule = schedule[:SEED_BRANCHES]
             seed_cands = select("random", pool, SEED_BRANCHES, np.random.default_rng(3000 + seed), schedule=seed_schedule)
-            common_ledger = StepLedger()
+            pool_identity = candidate_pool_identity(pool, schedule, seed_cands)
+            if reference is not None:
+                validate_reference_pool(reference, seed, pool_identity)
+            report["candidate_pool_identities"][str(seed)] = pool_identity
+            (result_dir / "acquisition.json").write_text(json.dumps(report, indent=1) + "\n")
+            common_ledger, oracle_ledger = StepLedger(), StepLedger()
             active_ledger = common_ledger
-            seed_branches = execute_candidates(env, acq_bank, seed_cands, common_ledger, "seed")
-            oracle_truth, oracle_by_key, oracle_ledger = {}, {}, StepLedger()
+            if "oracle" in arms:
+                def cumulative_oracle_ledger():
+                    combined = StepLedger()
+                    copy_ledger(acq_bank.ledger, combined, "common_")
+                    copy_ledger(common_ledger.to_dict(), combined)
+                    copy_ledger(oracle_ledger.to_dict(), combined)
+                    return combined
+                active_oracle = OraclePoolProgress(data_dir / f"oracle-pool-s{seed}",
+                                                   acq_bank, cumulative_oracle_ledger)
+            seed_branches = execute_candidates(env, acq_bank, seed_cands, common_ledger, "seed",
+                                               on_branch=active_oracle.add if active_oracle else None)
+            oracle_truth, oracle_by_key = {}, {}
             if "oracle" in arms:
                 rest = list(pool.unexecuted())
                 active_ledger = oracle_ledger
-                oracle_branches = execute_candidates(env, acq_bank, rest, oracle_ledger, "oracle_pool")
+                oracle_branches = execute_candidates(env, acq_bank, rest, oracle_ledger, "oracle_pool",
+                                                     on_branch=active_oracle.add)
                 for c in rest:
                     c.executed = False
-                if any(b.log.censored for b in oracle_branches):
-                    raise ValueError("The oracle ceiling requires fully observed candidate outcomes")
+                pool_ledger = StepLedger()
+                copy_ledger(acq_bank.ledger, pool_ledger, "common_")
+                copy_ledger(common_ledger.to_dict(), pool_ledger)
+                copy_ledger(oracle_ledger.to_dict(), pool_ledger)
+                pool_path = data_dir / f"oracle-pool-s{seed}"
+                all_pool_branches = seed_branches + oracle_branches
+                pool_gate = preserve_oracle_pool(pool_path, acq_bank, all_pool_branches, pool_ledger,
+                                                run_id=run_id, seed=seed, hf=hf, writer=active_oracle.writer)
+                active_oracle = None
+                report.setdefault("oracle_pool_results", {})[str(seed)] = pool_gate
+                if not pool_gate["gate"]["passes"]:
+                    report["status"] = "oracle_undefined_censored_pool"
+                    report["evaluation_ledger"] = evaluation_ledger.to_dict()
+                    report["wall_clock_s"] = time.time() - t_start
+                    (result_dir / "oracle_gate.json").write_text(json.dumps(pool_gate, indent=1) + "\n")
+                    (result_dir / "acquisition.json").write_text(json.dumps(report, indent=1, default=float) + "\n")
+                    write_result_manifest(report, result_dir, t_start)
+                    env.close()
+                    return 2
                 oracle_truth = {tuple(b.params["key"]): float(clearance_trace(b.log.states[:, 2:5], lay[b.root_id]["familiar"]).min()) for b in oracle_branches}
                 oracle_by_key = {tuple(b.params["key"]): b for b in oracle_branches}
             for arm in arms:
@@ -531,17 +663,108 @@ def main() -> int:
         (result_dir / "closedloop_gate.json").write_text(json.dumps(report["closedloop_gate"], indent=1) + "\n")
         (result_dir / "acquisition.json").write_text(json.dumps(report, indent=1, default=float) + "\n")
         make_figures(report, result_dir)
+        write_result_manifest(report, result_dir, t_start)
+        if "oracle" in arms:
+            (result_dir / "oracle_gate.json").write_text(json.dumps({"gate": {"passes": True},
+                "interpretation": "Whole-pool optimistic-error reference completed; simulator cost is not comparable"}, indent=1) + "\n")
         env.close()
         print(f"[e3] {report['status']}: {result_dir}")
         return 0
     except BaseException as exc:
         report["status"] = "incomplete"
         report["error_type"] = type(exc).__name__
+        if active_oracle is not None:
+            active_ledger = active_oracle.ledger()
+            if active_oracle.writer.h5.id.valid:
+                report["oracle_pool_failure"] = active_oracle.abort(type(exc).__name__)
         report["active_ledger"] = active_ledger.to_dict() if active_ledger else None
         if active_store is not None and active_store.writer.h5.id.valid:
             active_store.writer.finish(active_ledger or StepLedger(), {"run_id": run_id, "incomplete": True})
         (result_dir / "incomplete.json").write_text(json.dumps(report, indent=1, default=float) + "\n")
         raise
+
+
+def oracle_observation_gate(branches):
+    """Full-future optimistic-error ranking is undefined if any paid tape is censored."""
+    censored = [list(branch.params["key"]) for branch in branches if branch.log.censored]
+    return {"gate": {"passes": bool(branches) and not censored},
+            "n_queried_branches": len(branches), "n_censored": len(censored),
+            "n_invalid_training": sum(not branch.log.valid_for_training for branch in branches),
+            "censored_keys": censored,
+            "interpretation": ("Whole-pool optimistic-error reference; simulator cost is not comparable"
+                if branches and not censored else
+                "Full-future optimistic errors are undefined for censored tapes. All queries are preserved and charged; no ceiling or efficiency claim is made.")}
+
+
+class OraclePoolProgress:
+    """Persist every completed paid trace before another query, including common seeds."""
+
+    def __init__(self, path, bank, ledger):
+        self.path, self.ledger = path, ledger
+        self.writer = BankWriter(path)
+        for root in bank.roots:
+            self.writer.add_root(root)
+        (path / "layouts.json").write_bytes((bank.dir / "layouts.json").read_bytes())
+        self.snapshot("running")
+
+    def snapshot(self, status, error_type=None):
+        self.writer.h5.flush()
+        record = {"status": status, "roots": self.writer.roots,
+                  "n_branches": int(self.writer.h5["tape"].shape[0]),
+                  "ledger": self.ledger().to_dict(),
+                  "manifest": {"bank": "oracle_full_pool", "outcomes_filtered": False}}
+        if error_type:
+            record["error_type"] = error_type
+        temporary = self.path / "roots.json.tmp"
+        temporary.write_text(json.dumps(record, indent=1) + "\n")
+        temporary.replace(self.path / "roots.json")
+        return record
+
+    def add(self, branch):
+        self.writer.add_branches([branch])
+        self.snapshot("running")
+
+    def abort(self, error_type):
+        record = self.snapshot("incomplete", error_type)
+        self.writer.h5.close()
+        return {"bank": str(self.path.resolve()), "stored_branches": record["n_branches"],
+                "ledger": record["ledger"], "error_type": error_type,
+                "interpretation": "All completed traces saved; any unfinished query has no complete outcome and its attempted steps remain charged"}
+
+
+def preserve_oracle_pool(path, bank, branches, ledger, *, run_id, seed, hf, writer=None):
+    """Save all paid outcomes before the oracle gate, including untrainable branches."""
+    if writer is None:
+        writer = BankWriter(path)
+        for root in bank.roots:
+            writer.add_root(root)
+        writer.add_branches(branches)
+    if writer.h5["tape"].shape[0] != len(branches):
+        raise ValueError("Incremental oracle bank does not contain every queried branch")
+    (path / "layouts.json").write_bytes((bank.dir / "layouts.json").read_bytes())
+    writer.finish(ledger, {"bank": "oracle_full_pool", "status": "complete", "seed": seed,
+                           "run_id": run_id, "outcomes_filtered": False})
+    gate = oracle_observation_gate(branches)
+    gate.update(bank=str(path.resolve()), bank_identity=bank_identity(path), ledger=ledger.to_dict())
+    pool_id = f"{run_id}-oracle-pool-s{seed}"
+    write_manifest(path, build_manifest(run_id=pool_id, kind="oracle-pool", seeds={"acquisition": seed},
+        data={"all_paid_outcomes_retained": True, "observation_gate": gate}, costs=ledger.to_dict()))
+    if hf:
+        gate["hf_revision"] = hf.upload_run("pusht-banks", "banks", path, run_id=pool_id)
+        gate["hf_repo"] = hf.repo_id("pusht-banks")
+    return gate
+
+
+def write_result_manifest(report, result_dir, started_at):
+    provenance = result_provenance(report)
+    write_manifest(result_dir, build_manifest(run_id=report["run_id"], kind="acquisition-report",
+        seeds={"acquisition_seeds": report["acquisition_seeds"]},
+        data=provenance, upstream_revisions=report.get("upstream_revisions", {}),
+        costs={"root_collection": report.get("root_collection_ledger"),
+               "evaluation": report.get("evaluation_ledger"),
+               "accounting": "Per-arm ledger includes shared root costs; do not sum shared arm allocations as new physical work"},
+        extra={"acquisition_report_sha256": file_sha256(result_dir / "acquisition.json"),
+               "status": report["status"]}, started_at=started_at))
 
 
 def make_figures(report, result_dir):
@@ -551,13 +774,32 @@ def make_figures(report, result_dir):
     import matplotlib.pyplot as plt
 
     fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+    table_rows = []
     for ax, bank in zip(axes, ("test", "stress")):
         for arm, seeds in report["arms"].items():
             # Plot each seed at its own paid costs; do not average unequal x coordinates.
             for seed, values in seeds.items():
                 xs = [point["charged_steps"] for point in values["curve"]]
                 ys = [point["eval"][bank]["at_matched"]["fsa"] for point in values["curve"]]
-                ax.plot(xs, ys, marker="o", label=f"{arm}, seed {seed}")
+                label = f"{arm}, seed {seed}" + (" (retrospective)" if arm == "oracle" else "")
+                line, = ax.plot(xs, ys, marker="o", label=label)
+                for point in values["curve"]:
+                    metrics = point["eval"][bank]
+                    counts, ci = metrics["at_matched"], metrics["fsa_matched_ci"]
+                    finite = np.isfinite(counts["fsa"]) and np.isfinite(ci["lo"]) and np.isfinite(ci["hi"])
+                    if finite:
+                        ax.vlines(point["charged_steps"], ci["lo"], ci["hi"], color=line.get_color(), alpha=.55)
+                    table_rows.append({"bank": bank, "arm": arm, "acquisition_seed": seed,
+                        "additional_branches": point["budget_added"], "charged_steps": point["charged_steps"],
+                        "queried_branches": point["n_queried_branches"], "retained_branches": point["n_retained_branches"],
+                        "trainable_branches": point["n_trainable_branches"], "fsa": counts["fsa"],
+                        "fsa_ci_lo": ci["lo"] if finite else None, "fsa_ci_hi": ci["hi"] if finite else None,
+                        "bootstrap_usable": ci["n_boot"], "bootstrap_requested": 300,
+                        "acceptance_rate": counts["acceptance_rate"], "accepted": counts["n_accepted"],
+                        "false_safe": counts["n_false_safe"], "total": counts["n"],
+                        "accepted_censored": counts.get("n_accepted_censored", 0),
+                        "training_seconds": point["training_time_cumulative_s"],
+                        "scoring_seconds": point["scoring_time_cumulative_s"]})
         ax.axhline(report["no_update"][bank]["at_matched"]["fsa"], color="k", ls="--", label="no update")
         ax.set_xlabel("charged simulator steps (roots + seed + acquired)")
         ax.set_ylabel("FSA at matched acceptance")
@@ -567,6 +809,20 @@ def make_figures(report, result_dir):
     fig.tight_layout()
     fig.savefig(result_dir / "fsa_vs_charged_steps.png", dpi=130)
     plt.close(fig)
+    if table_rows:
+        with (result_dir / "acquisition_table.csv").open("w", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=list(table_rows[0]))
+            writer.writeheader()
+            writer.writerows(table_rows)
+    (result_dir / "README.md").write_text(
+        "# Acquisition report\n\n"
+        "The CSV gives counts, charged simulator steps, and model-scoring/training time beside every rate. "
+        "Figure bars are 95% root-cluster bootstrap intervals at the development-calibrated margins. "
+        "Seeds retain their own paid x-coordinates. Undefined full-data FSA has no plotted interval; "
+        "usable bootstrap replicates do not resolve it. Baseline evaluation is in acquisition.json.\n\n"
+        "An oracle arm is a retrospective data-usefulness reference charged for its entire queried pool. "
+        "Its interaction cost is not comparable to prospective random/boundary acquisition. "
+        "Shared root-generation costs are allocated to each arm and must not be added together as fresh physical queries.\n")
 
 
 if __name__ == "__main__":

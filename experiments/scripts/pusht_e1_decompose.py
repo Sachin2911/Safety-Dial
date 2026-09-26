@@ -44,6 +44,7 @@ from helpers.imagination import Imaginer  # noqa: E402
 from helpers.poseProbes import load_probe  # noqa: E402
 from helpers.pushtAssets import H5_PATH, load_model, load_scalers  # noqa: E402
 from helpers.pushtLayouts import load_layouts  # noqa: E402
+from helpers.pushtReplay import StepLedger  # noqa: E402
 from helpers.runManifest import validate_run_id, build_manifest, make_run_id, write_manifest, file_sha256  # noqa: E402
 
 ASSETS_RUN = REPO_ROOT / "runs" / "pusht-assets-20260926-1"
@@ -51,7 +52,8 @@ PROBES_RUN = REPO_ROOT / "runs" / "pusht-probes-20260926-1"
 STUDY = REPO_ROOT / "data" / "study" / "pusht"
 RESULTS = REPO_ROOT / "docs" / "mainPlan" / "results" / "e1"
 from helpers.splitIntegrity import validate_bank_splits, bank_identity, decomposition_gate  # noqa: E402
-from helpers.decomposition import SOURCES, analyse_bank, ang_err_deg, by_regime, decision_table, row_outcomes  # noqa: E402
+from helpers.decomposition import (SOURCES, HORIZON_REPORT_PROTOCOL, analyse_bank, ang_err_deg,
+    by_regime, cumulative_horizon_report, decision_table, row_outcomes)  # noqa: E402
 
 MARGINS = np.linspace(-20, 60, 41)
 
@@ -134,12 +136,21 @@ def main() -> int:
 
     # --- decomposition per bank ------------------------------------------------------
     all_rows, pose_errs = [], {}
+    all_horizon_rows, all_diagnostic_pose_rows = [], []
+    evaluation_ledger = StepLedger()
     for name in args.banks:
         bank = Bank(STUDY / name)
         layouts, _ = load_layouts(STUDY / name / "layouts.json")
-        res = analyse_bank(name, bank, layouts, imaginer, probe, coord)
+        try:
+            res = analyse_bank(name, bank, layouts, imaginer, probe, coord, evaluation_ledger=evaluation_ledger)
+        finally:
+            # Preserve actual attempted replay costs even when evaluation fails.
+            (RESULTS / "evaluation_ledger.json").write_text(json.dumps(evaluation_ledger.to_dict(), indent=1) + "\n")
+            bank.h5.close()
         all_rows += res["rows"]
         pose_errs[name] = res["pose_err"]
+        all_horizon_rows.extend(res["horizon_rows"])
+        all_diagnostic_pose_rows.extend(res["diagnostic_pose_rows"])
         print(f"[e1] {name}: {len(res['rows'])} (branch, layout) rows; unsafe {sum(r['cmin_dense'] < 0 for r in res['rows'])}")
 
     # matched acceptance target: dev AR of the unadapted model (imagined source) at m=0
@@ -177,6 +188,9 @@ def main() -> int:
                                             "true_rot_mean_deg": float(r_true.mean()), "imag_rot_mean_deg": float(r_imag.mean()),
                                             "rot_ratio_imag_over_true": float(r_imag.sum() / max(r_true.sum(), 1e-9)),
                                             "frac_under_predicted_disp": float((d_imag < d_true).mean())}
+        entry["cumulative_horizon"] = cumulative_horizon_report(
+            [row for row in all_horizon_rows if row["bank"] == name],
+            [row for row in all_diagnostic_pose_rows if row["bank"] == name], matched_margin=m_matched)
         report["banks"][name] = entry
         t = entry["at_m0"]
         print(f"[e1] {name} @m=0: " + " | ".join(f"{s} FSA {t[s]['fsa']:.3f} AR {t[s]['acceptance_rate']:.2f}" for s in SOURCES) + f" | attribution {t['attribution']}")
@@ -184,13 +198,22 @@ def main() -> int:
         min_false_safe=args.min_false_safe, min_imagination=args.min_imagination,
         min_imagination_share=args.min_imagination_share)
     np.savez_compressed(RESULTS / "decomposition_rows.npz", rows=json.dumps(all_rows))
+    diagnostic_path = RESULTS / "decomposition_horizon_rows.npz"
+    np.savez_compressed(diagnostic_path, rows=json.dumps(all_horizon_rows),
+        pose_rows=json.dumps(all_diagnostic_pose_rows), protocol=json.dumps(HORIZON_REPORT_PROTOCOL))
+    report["supplementary_diagnostics"] = {"file": diagnostic_path.name, "sha256": file_sha256(diagnostic_path),
+        "n_horizon_layout_rows": len(all_horizon_rows), "n_physical_branch_horizon_pose_rows": len(all_diagnostic_pose_rows),
+        "protocol": HORIZON_REPORT_PROTOCOL}
+    report["evaluation_ledger"] = evaluation_ledger.to_dict()
     report["wall_clock_s"] = time.time() - t_start
     report["manifest"] = build_manifest(run_id=run_id, kind="analysis",
-                                        data={"upstream": references, "split_integrity": split_report})
+                                        data={"upstream": references, "split_integrity": split_report},
+                                        costs=evaluation_ledger.to_dict())
     (RESULTS / "decomposition.json").write_text(json.dumps(report, indent=1, default=float) + "\n")
     write_manifest(RESULTS, report["manifest"])
     write_manifest(RESULTS, report["manifest"], name="decomposition_manifest.json")
     make_figures(report)
+    make_diagnostic_figures(report)
     print(f"[e1] done in {time.time() - t_start:.0f}s")
     return 0
 
@@ -249,6 +272,66 @@ def make_figures(report: dict) -> None:
     ax.legend()
     fig.tight_layout()
     fig.savefig(RESULTS / "attribution_m0.png", dpi=130)
+
+
+def make_diagnostic_figures(report: dict) -> None:
+    """Supplementary prefix attribution and regime errors; unavailable values remain gaps."""
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    banks = [name for name, entry in report["banks"].items() if entry.get("cumulative_horizon", {}).get("by_horizon")]
+    if not banks:
+        return
+    labels = {"temporal": "temporal sampling", "readout": "readout", "imagination": "imagination",
+              "domain_exit": "domain exit", "censored": "censored prefix", "unavailable_chain": "unavailable source chain"}
+    fig, axes = plt.subplots(1, len(banks), figsize=(5 * len(banks), 4), squeeze=False)
+    for ax, name in zip(axes[0], banks):
+        entries = report["banks"][name]["cumulative_horizon"]["by_horizon"]
+        horizons = sorted(map(int, entries))
+        bottom = np.zeros(len(horizons))
+        for key, label in labels.items():
+            counts = np.array([entries[str(k)]["decisions"]["at_m0"].get("attribution", {}).get(key, 0) for k in horizons])
+            ax.bar(horizons, counts, bottom=bottom, label=label)
+            bottom += counts
+        ax.set_title(f"{name}: cumulative attribution at m=0")
+        ax.set_xlabel("prefix horizon (action blocks)")
+        ax.set_ylabel("observed false-safe imagined decisions")
+        ax.set_xticks(horizons)
+    axes[0][-1].legend(fontsize=7)
+    fig.tight_layout()
+    fig.savefig(RESULTS / "attribution_by_cumulative_horizon.png", dpi=130)
+    plt.close(fig)
+
+    regimes = {"contact": "pusher contact", "free": "free motion", "rotation>=10deg": "rotation >= 10 degrees",
+               "near_boundary(|c|<20)": "near boundary"}
+    fig, axes = plt.subplots(len(banks), 3, figsize=(15, 4 * len(banks)), squeeze=False)
+    for row_index, name in enumerate(banks):
+        entries = report["banks"][name]["cumulative_horizon"]["by_horizon"]
+        horizons = sorted(map(int, entries))
+        for regime, label in regimes.items():
+            values = [entries[str(k)]["by_regime"].get(regime, {}) for k in horizons]
+            for column, metric in enumerate(("centre_px", "angle_deg", "clearance")):
+                series = []
+                for value in values:
+                    statistic = (value.get("clearance_error", {}).get("imagined", {}) if metric == "clearance" else
+                                 value.get("pose_error", {}).get("imagined", {}).get(metric, {}))
+                    mean = statistic.get("mean")
+                    series.append(np.nan if mean is None else mean)
+                axes[row_index, column].plot(horizons, series, marker="o", label=label)
+        for column, title in enumerate(("centre error (px)", "periodic angle error (degrees)", "signed clearance error (px)")):
+            ax = axes[row_index, column]
+            ax.set_title(f"{name}: imagined {title}")
+            ax.set_xlabel("prefix horizon (action blocks)")
+            ax.set_xticks(horizons)
+            ax.grid(alpha=.3)
+        axes[row_index, 2].axhline(0, color="black", linewidth=.7)
+    axes[0, -1].legend(fontsize=7)
+    fig.suptitle("Regime errors by horizon; unsupported targets omitted", y=1.01)
+    fig.tight_layout()
+    fig.savefig(RESULTS / "regime_error_by_horizon.png", dpi=130, bbox_inches="tight")
+    plt.close(fig)
 
 
 if __name__ == "__main__":

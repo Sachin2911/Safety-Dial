@@ -241,3 +241,33 @@ def test_acquisition_evaluation_keeps_unresolved_acceptance_undefined(monkeypatc
     assert metric["fsa_lower"] == 0 and metric["fsa_upper"] == 1
     assert metric["n_accepted_censored"] == 1
     assert out["dev"]["clearance_error"]["n"] == 0
+
+
+def test_candidate_controls_are_storage_exact_and_guarded_after_rounding(monkeypatch):
+    import helpers.acquisition as acquisition
+
+    value = np.float64(0.10000000001)
+    source = np.full((5, 5, 2), value)
+    root = SimpleNamespace(root_id="root", meta={"state_at_root": np.ones(7) * 200})
+    monkeypatch.setattr(acquisition, "propose", lambda *args, **kwargs:
+                        ([Proposal(source.copy(), "random")], 0))
+    guarded = []
+
+    def guard(tape, xy):
+        guarded.append(tape.copy())
+        assert tape.dtype == np.float32
+        return False
+
+    monkeypatch.setattr(acquisition, "exits_arena", guard)
+    bank = SimpleNamespace(roots=[root])
+    layouts = {"root": {"familiar": SimpleNamespace(centre=(250, 250))}}
+    pool = CandidatePool.build(np.random.default_rng(1), bank, 4, n_stress=0,
+                               n_toward=0, layouts_by_root=layouts)
+    assert len(pool.candidates) == len(guarded) == 1
+    tape = pool.candidates[0].proposal.tape
+    np.testing.assert_array_equal(tape.astype(np.float64), tape.astype(np.float32).astype(np.float64))
+    assert not np.array_equal(source, tape.astype(np.float64))
+    monkeypatch.setattr(acquisition, "exits_arena", lambda *args: True)
+    rejected = CandidatePool.build(np.random.default_rng(1), bank, 4, n_stress=0,
+                                   n_toward=0, layouts_by_root=layouts)
+    assert rejected.candidates == []

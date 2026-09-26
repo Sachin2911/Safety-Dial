@@ -39,3 +39,24 @@ The [first completed-root audit](first_root_audit.json) passed: eight unique gua
 matching saved progress and journal costs, and body-specific contact metadata. The
 [frozen plan verification](frozen_plan_verification.json) confirms that the source
 reservations, exclusions and requested bank sizes match the declared protocol.
+
+The later analysis stages now emit cumulative-horizon attribution and pose/clearance
+errors by regime, an E2 paired table with deterministic observed examples, and charged
+history-replay ledgers. E3 records exact model/input and candidate-pool identities,
+root-cluster intervals, counts and compute, plus a standalone result manifest.
+Acquisition controls are rounded to their stored float32 representation before the
+unchanged arena guard and execution.
+
+The prospective acquisition root builder freezes all 5,000 source episodes already
+reserved for acquisition, with one candidate and at most one accepted root per source.
+It retains the same geometry, nominal-depth schedule and requested 96 roots. Every
+construction attempt is journaled; finite exhaustion remains a failure with preserved
+partial provenance. This change is prospective and does not inspect final-test outcomes.
+
+A [separate oracle workflow](../../../../configs/pusht/continuation-oracle-v3.yaml) is
+prepared to follow the completed random/boundary acquisition and E4 report. It uses the
+identical source-root cache, candidate tapes, common-seed keys, root schedule, three
+acquisition seeds and four additional budgets. Its entire queried pool is charged and
+persisted incrementally. Any censored tape makes the full-future optimistic-error
+reference undefined; all paid outcomes remain stored and the workflow records that
+scientific stop. Oracle cost does not support an interaction-efficiency comparison.

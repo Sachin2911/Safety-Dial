@@ -131,15 +131,108 @@ def execute_selected(bank_dir, roots, chosen, env, metadata):
     return WalkerBank(bank_dir)
 
 
-def paired_difference(base_rows, rows, rule, base_margin, margin):
-    if [(r["root_id"], r["branch"]) for r in base_rows] != [(r["root_id"], r["branch"]) for r in rows]:
-        raise ValueError("Evaluation tapes are not paired")
-    b = np.array([r[f"cmin_imagined_{rule}"] for r in base_rows])
-    c = np.array([r[f"cmin_imagined_{rule}"] for r in rows])
-    u = rule_unsafe(rule, np.array([r[f"cmin_dense_{rule}"] for r in rows]))
-    root = np.array([r["root"] for r in rows])
-    return cluster_bootstrap(lambda b, c, u: fsa(c, u, margin)["fsa"] - fsa(b, u, base_margin)["fsa"],
-                             root, n_boot=1000, b=b, c=c, u=u)
+def paired_difference(base_rows, rows, rule, base_margin, margin, *, n_boot=1000):
+    """Updated minus reference FSA on identical tapes, clustered by source episode.
+
+    Margins are supplied from development calibration; no final-test threshold is
+    fitted here. Undefined full-sample estimates never acquire a directional CI
+    merely because some bootstrap draws omit the unresolved observations.
+    """
+    if rule not in {"health", "speed"}:
+        raise ValueError("Report health and speed rules separately")
+    def identities(items):
+        return [(r.get("bank"), r["root_id"], r["branch"]) for r in items]
+    ids = identities(base_rows)
+    if not ids or ids != identities(rows) or len(set(ids)) != len(ids):
+        raise ValueError("Evaluation tapes are not uniquely paired in exact root/branch order")
+    roots = np.asarray([r["root"] for r in rows])
+    if not np.array_equal(roots, np.asarray([r["root"] for r in base_rows])):
+        raise ValueError("Paired tapes have different source episode clusters")
+    root_sources = {}
+    for row in rows:
+        if root_sources.setdefault(row["root_id"], row["root"]) != row["root"]:
+            raise ValueError("One evaluation root belongs to multiple source episodes")
+    truth = np.asarray([r[f"cmin_dense_{rule}"] for r in rows], dtype=float)
+    base_truth = np.asarray([r[f"cmin_dense_{rule}"] for r in base_rows], dtype=float)
+    if not np.isfinite(truth).all() or not np.array_equal(base_truth, truth):
+        raise ValueError("Paired tapes must have identical finite dense truth")
+    def censoring(items):
+        flags = [r.get("censored", False) for r in items]
+        if any(not isinstance(flag, (bool, np.bool_)) for flag in flags):
+            raise ValueError("Censoring flags must be booleans")
+        return np.asarray(flags, dtype=bool)
+    censored = censoring(rows)
+    if not np.array_equal(censoring(base_rows), censored):
+        raise ValueError("Paired tapes have different censoring masks")
+    b = np.asarray([r[f"cmin_imagined_{rule}"] for r in base_rows], dtype=float)
+    c = np.asarray([r[f"cmin_imagined_{rule}"] for r in rows], dtype=float)
+    unsafe = rule_unsafe(rule, truth)
+    reference = fsa(b, unsafe, base_margin, censored=censored)
+    updated = fsa(c, unsafe, margin, censored=censored)
+    point = updated["fsa"] - reference["fsa"]
+    interval = cluster_bootstrap(
+        lambda b, c, u, censored: fsa(c, u, margin, censored=censored)["fsa"]
+        - fsa(b, u, base_margin, censored=censored)["fsa"],
+        roots, n_boot=n_boot, b=b, c=c, u=unsafe, censored=censored)
+    defined = bool(np.isfinite(point))
+    interval["point"] = float(point)
+    if not defined:
+        # Finite conditional replicates cannot resolve an undefined estimand.
+        interval["lo"] = interval["hi"] = float("nan")
+    directional = defined and np.isfinite(interval["lo"]) and np.isfinite(interval["hi"])
+    direction = ("decrease" if directional and interval["hi"] < 0 else
+                 "increase" if directional and interval["lo"] > 0 else
+                 "inconclusive" if defined else "undefined")
+    reason = ("zero_acceptance" if not reference["n_accepted"] or not updated["n_accepted"] else
+              "accepted_censored_futures" if not defined else None)
+    return {**interval, "defined": defined, "direction": direction,
+            "interval_excludes_zero": direction in {"decrease", "increase"},
+            "undefined_reason": reason, "n_boot_requested": n_boot,
+            "n_boot_undefined": n_boot - interval["n_boot"], "cluster_unit": "source_episode",
+            "n_source_episodes": int(len(np.unique(roots))), "n_roots": len(root_sources),
+            "reference": reference, "updated": updated}
+
+
+def paired_acquisition_intervals(report, run_dir, *, n_boot=1000):
+    """Summarize saved S4 rows only; no inference, simulator or margin calibration."""
+    run_dir = Path(run_dir)
+    result = {"contrast": "boundary minus random", "cluster_unit": "source_episode",
+              "confidence_level": 0.95, "margin_policy": "fixed from each model's development bank",
+              "negative_difference": "lower boundary-arm false-safe acceptance",
+              "by_budget": {str(b): {"by_seed": {}} for b in report["planned_budgets"]}}
+    for seed in report["acquisition_seeds"]:
+        curves = {arm: report["adaptation"][arm][str(seed)] for arm in ("random", "boundary")}
+        if any([p["budget"] for p in curve] != report["planned_budgets"] for curve in curves.values()):
+            raise ValueError("Paired acquisition reporting requires every declared budget")
+        for random, boundary in zip(curves["random"], curves["boundary"], strict=True):
+            budget = random["budget"]
+            if random["charged_steps"] != boundary["charged_steps"]:
+                raise ValueError("Paired acquisition arms must have equal charged simulator costs")
+            saved, hashes = {}, {}
+            for arm, point in (("random", random), ("boundary", boundary)):
+                path = run_dir / f"{arm}-s{seed}-b{budget}" / "evaluation_rows.json"
+                identity = point["evaluation_rows"]
+                if (identity["file"] != str(path.relative_to(run_dir))
+                        or identity["sha256"] != file_sha256(path)):
+                    raise ValueError("Saved paired evaluation rows differ from their checkpoint identity")
+                saved[arm] = json.loads(path.read_text())
+                hashes[arm] = identity["sha256"]
+            entry = {"charged_steps": random["charged_steps"], "evaluation_rows_sha256": hashes}
+            for bank in ("test", "stress"):
+                entry[bank] = {}
+                for rule in report["active_rules"]:
+                    # The same development-calibrated margin must be recorded for
+                    # every bank; refuse a threshold picked on final outcomes.
+                    margins = {}
+                    for arm, point in (("random", random), ("boundary", boundary)):
+                        margins[arm] = point["eval"]["dev"][rule]["margin"]
+                        if point["eval"][bank][rule]["margin"] != margins[arm]:
+                            raise ValueError("Final-test margin differs from frozen development margin")
+                    entry[bank][rule] = paired_difference(
+                        saved["random"][bank], saved["boundary"][bank], rule,
+                        margins["random"], margins["boundary"], n_boot=n_boot)
+            result["by_budget"][str(budget)]["by_seed"][str(seed)] = entry
+    return result
 
 
 def charged_cost(generation_steps, seed_branches, acquired_branches):
@@ -287,7 +380,7 @@ def main() -> int:
     margins = {r: margin_for_acceptance(np.array([row[f"cmin_imagined_{r}"] for row in base_rows["dev"]]), targets[r]) for r in rules}
     report = {"run_id": run_id, "status": "running", "planned_budgets": args.budgets, "acquisition_seeds": args.seeds, "model": args.model, "probes": args.probes, "gate": str(gate_path),
               "active_rules": rules, "repair_rules": repair_rules, "development_gate": dev_gate, "source_identity": source_id, "acquisition_mode": "prospective",
-              "target_acceptance": targets, "decomposition": {}, "adaptation": {},
+              "target_acceptance": targets, "auc_acceptance_range": [0.2, 0.9], "decomposition": {}, "adaptation": {},
               "cost_policy": "All roots.h5 collection steps, paid seed branches, selected branches; evaluation separately"}
     sources = ["dense", "endpoint", "real_readout", "imagined"]
     for rule in rules:
@@ -311,7 +404,7 @@ def main() -> int:
                 c = np.array([row[f"cmin_imagined_{rule}"] for row in rows])
                 u = rule_unsafe(rule, np.array([row[f"cmin_dense_{rule}"] for row in rows]))
                 metrics[name][rule] = {"margin": local_margins[rule], "at_matched": fsa(c, u, local_margins[rule]),
-                                       "auc_dial": auc_dial(c, u), "paired_fsa_difference": paired_difference(base_rows[name], rows, rule, margins[rule], local_margins[rule]),
+                                       "auc_dial": auc_dial(c, u, ar_lo=0.2, ar_hi=0.9), "auc_acceptance_range": [0.2, 0.9], "paired_fsa_difference": paired_difference(base_rows[name], rows, rule, margins[rule], local_margins[rule]),
                                        "clearance_error": clearance_error_stats(c, np.array([row[f"cmin_dense_{rule}"] for row in rows]))}
         return metrics, rows_by_bank
 
@@ -394,10 +487,13 @@ def main() -> int:
                 revision = store.upload_run("walker2d", "adapted", checkpoint,
                     run_id=f"{run_id}-{arm}-s{seed}-b{budget}") if store else None
                 curve.append({"budget": budget, **costs, "eval": metrics, "hf_revision": revision,
-                              "selected_ids": [c["id"] for c in selected]})
+                              "selected_ids": [c["id"] for c in selected],
+                              "evaluation_rows": {"file": str((checkpoint / "evaluation_rows.json").relative_to(run_dir)),
+                                  "sha256": file_sha256(checkpoint / "evaluation_rows.json")}})
                 report["adaptation"].setdefault(arm, {})[str(seed)] = curve
                 (results_dir / "study.json").write_text(json.dumps(report, indent=1, default=float) + "\n")
                 print(f"[s4] {arm} seed {seed} budget {budget}; charged {costs['charged_steps']} steps", flush=True)
+    report["boundary_vs_random"] = paired_acquisition_intervals(report, run_dir)
     report["status"] = "complete"
     report["wall_clock_s"] = time.time() - t0
     report["evaluation_steps"] = sum(len(b) * HORIZON_STEPS for b in banks.values())
