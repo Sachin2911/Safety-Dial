@@ -1,6 +1,6 @@
 {
   "status": "in_progress",
-  "observed_utc": "2026-09-26T23:14:33Z",
+  "observed_utc": "2026-09-26T23:22:04Z",
   "implementation_commit": "4dc99d7",
   "validation": "docs/mainPlan/results/continuation-v4/recovery_validation.json",
   "workflow": {
@@ -8,11 +8,11 @@
     "service": "safetydial_pusht_v4_continuation",
     "config": "configs/pusht/continuation-v4.yaml",
     "config_sha256": "8c7ca79101d78184ece45e7a68edc0d6de9b44ce1bca0c6a5d1b7a4032956103",
-    "stage": "development_decomposition_gate",
+    "stage": "repairability_and_retention_gate",
     "status": "running",
     "supervisor_pid": 769397,
-    "observed_python_pid": 772350,
-    "observed_python_start_ticks": 272366220
+    "observed_python_pid": 776156,
+    "observed_python_start_ticks": 272393363
   },
   "oracle": {
     "id": "pusht-oracle-continuation-20260926-4",
@@ -51,6 +51,25 @@
       "test": "ae10da693258b019dfed337aa7e860f201919d76",
       "stress": "608d1616a69fcf9c2b9ea8c0fc8399cb74f32584",
       "development_witness": "eb01dd278d2096fc9be4c8b2d26873ec1d55ccd0"
-    }
+    },
+    "audit": "docs/mainPlan/results/continuation-v4/recovery_completion_audit.json"
+  },
+  "development_diagnosis": {
+    "status": "passed_development_gate",
+    "report": "docs/mainPlan/results/continuation-v4/decomposition/decomposition.json",
+    "sha256": "8b235cab8e0f73ff230cc69bc88af6c33c9cda38e573b43e4a6e1353301b16c8",
+    "gate": {
+      "passes": true,
+      "role": "development",
+      "provisional_thresholds": true,
+      "n_attributable_false_safe": 28,
+      "n_imagination": 21,
+      "imagination_share": 0.75,
+      "min_false_safe": 5,
+      "min_imagination": 3,
+      "min_imagination_share": 0.25,
+      "excluded_from_attribution": "domain exits and censored futures"
+    },
+    "interpretation": "Known uncensored attributable development failures only; unresolved accepted futures remain unresolved. Repair and retention outcomes are still pending."
   }
 }

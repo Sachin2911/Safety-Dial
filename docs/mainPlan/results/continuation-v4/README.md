@@ -1,6 +1,6 @@
 # Push-T stress-bank recovery with fixed completed roots
 
-Status: stress-only recovery completed and uploaded after 372 passing tests. The managed workflow is now running the development diagnosis. The completed v3 development
+Status: stress-only recovery completed and uploaded after 372 passing tests. The development diagnosis passed; the managed workflow is now running repairability and goal retention. The completed v3 development
 and representative test banks are retained byte for byte. Main-study outcomes are pending.
 
 The [v3 test audit](../continuation-v3/test_bank_completion_audit.json) verifies 128 roots
@@ -52,3 +52,11 @@ replay. Both completed final banks and the relocated witness are now privately u
 The recovered stress bank contains 128 roots and 2,048 branches, with 101,373 new
 simulator steps. Accounted v3/v4 bank construction and development-witness cost is
 574,008 steps, including the failed stress run. Scientific outcomes remain pending.
+
+The [completed-bank audit](recovery_completion_audit.json) independently verifies every
+frozen control, exact root/layout identity, charged step and all four new private
+uploads. The development diagnosis attributes 21 of 28 known, uncensored attributable
+false-safe errors to imagined dynamics (75%), passing the predeclared development
+gate. One accepted development future remains unresolved; its false-safe rate is
+undefined, with reported bounds rather than an assumed safe label. Repairability
+and goal retention are running; successful repair is not yet established.
