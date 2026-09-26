@@ -7,8 +7,8 @@ repositories under the `Sachioster` namespace (see `infrastructure.md`).
 | Folder | Experiment | Status (26 September 2026) |
 |---|---|---|
 | `e0/` | Assets, replay determinism, geometry, timing | **Passed.** 149 branches from 50 roots (15 mid-contact) replay bitwise identically through contact; substep mirror exact; endpoint interpolation errs by up to 52 px / 14 deg in contact |
-| `e1/` | Probes, banks, four-source decomposition | Probes trained (block pose MLP: centre p50 4.1 px, angle p50 1.6 deg on held-out episodes); dev/test/stress banks built with frozen layouts; decomposition running |
-| `e2/` | Repairability | Queued after E1 (`runs/logs/pusht_chain.sh`) |
+| `e1/` | Probes, banks, four-source decomposition | **Gate passed.** Test bank (3,958 branch-layout rows, 31% unsafe): at m=0 imagined FSA 0.204 [0.16, 0.25], real readout 0.076, endpoint 0.009; of 591 imagined false-safes, 427 are attributed to imagination, 156 to readout, 8 to temporal sampling. Privileged coordinate MLP is worse (0.279). Imagined pose error grows 12 to 32 px over the horizon; rotation in contact is over-predicted 1.5x |
+| `e2/` | Repairability | Running (`runs/logs/pusht_chain.sh`) |
 | `e3/`, `e4/` | Acquisition and transfer | Queued after E2 |
 | `e5/` | Closed loop | Script ready (`pusht_e5_closedloop.py`), run only if E3 holds |
 | `s0/` | Walker rules, observability, policies | Observability passed at frameskip 10 (speed R2 0.99); PPO and PPO-Lagrangian training in OmniSafe |
