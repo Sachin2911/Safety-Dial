@@ -41,3 +41,12 @@ epoch 1, offset 2,522. The validation prediction loss recorded by training is
 `25d59af8bc3ab39db11ff3ff71abda486e594695`. This audit did not rerun GPU recovery,
 rehash the unchanged dataset or download remote checkpoint bytes; the full
 214,780-step training run remains in progress.
+
+A [30-sample throughput audit](throughput_audit_20260926.json) on 26 September
+measured 99.17% mean GPU activity while Walker training, EGL image rendering and
+Push-T bank generation shared the device. Memory use was 15,569 of 32,607 MiB;
+spare memory did not indicate idle compute. CPU use averaged 8.32 cores within the
+15.36-core quota, with no throttling. Both workers advanced during the observation.
+Training settings were left intact. More render workers remain a candidate for a
+controlled checkpoint-resume benchmark if sustained idle time or directly measured
+loader waits justify it. GPU activity alone does not measure compute efficiency.
