@@ -86,8 +86,10 @@ IMAGENET_STD = torch.tensor([0.229, 0.224, 0.225]).view(1, 1, 3, 1, 1)
 def preprocess_batch(batch: dict, mean: np.ndarray, std: np.ndarray, device: str) -> dict:
     """uint8 pixels (B, T, H, W, C) -> normalised float (B, T, C, H, W); actions z-scored."""
     px = batch["pixels"].to(device, non_blocking=True)
+    if px.shape[-1] == 3 and px.shape[2] != 3:  # (B, T, H, W, C) -> channel first
+        px = px.permute(0, 1, 4, 2, 3)
     if px.dtype == torch.uint8:
-        px = px.permute(0, 1, 4, 2, 3).float().div_(255.0)
+        px = px.float().div_(255.0)
     px = (px - IMAGENET_MEAN.to(device)) / IMAGENET_STD.to(device)
     a = batch["action"].to(device).float()  # (B, T, frameskip*6)
     B, T, D = a.shape
@@ -122,3 +124,46 @@ def load_walker_model(run_dir: Path, device="cuda"):
     model.load_state_dict(torch.load(run_dir / "weights.pt", map_location="cpu"))
     z = np.load(run_dir / "scalers.npz")
     return model.to(device).eval(), (z["action_mean"], z["action_std"])
+
+
+# --------------------------------------------------------------------------------------
+# imagination with a trained Walker2d LeWM (mirrors helpers.imagination.Imaginer)
+# --------------------------------------------------------------------------------------
+class WalkerImaginer:
+    def __init__(self, model, scaler: tuple, device: str = "cuda"):
+        self.model, self.device = model.to(device).eval(), device
+        self.mean = torch.as_tensor(scaler[0], dtype=torch.float32, device=device)
+        self.std = torch.as_tensor(scaler[1], dtype=torch.float32, device=device)
+
+    @torch.inference_mode()
+    def encode(self, frames) -> torch.Tensor:
+        from helpers.probes import preprocess_pixels
+
+        out = []
+        frames = np.asarray(frames)
+        for i in range(0, len(frames), 256):
+            x = preprocess_pixels(frames[i : i + 256], self.device)
+            out.append(self.model.encode({"pixels": x.unsqueeze(0)})["emb"][0].float())
+        return torch.cat(out)
+
+    def _flat(self, blocks) -> torch.Tensor:
+        a = torch.as_tensor(np.asarray(blocks, dtype=np.float32), device=self.device)
+        a = (a - self.mean) / self.std
+        return a.reshape(*a.shape[:-2], -1)
+
+    @torch.inference_mode()
+    def rollout(self, real_emb: torch.Tensor, hist_blocks, tapes, chunk: int = 512) -> torch.Tensor:
+        """real_emb (H, D); hist_blocks (H-1, F, 6); tapes (S, K, F, 6) -> (S, K, D)."""
+        H = real_emb.shape[0]
+        hist = self._flat(hist_blocks)
+        fut = self._flat(tapes)
+        S, K = fut.shape[:2]
+        out = torch.empty((S, K, real_emb.shape[1]), device=self.device)
+        for i in range(0, S, chunk):
+            f = fut[i : i + chunk]
+            s = f.shape[0]
+            seq = torch.cat([hist.unsqueeze(0).expand(s, -1, -1), f], 1)
+            info = {"emb": real_emb.unsqueeze(0).unsqueeze(0).expand(1, s, H, -1), "pixels": torch.empty((1, s, H, 0), device=self.device)}
+            pred = self.model.rollout(info, seq.unsqueeze(0))["predicted_emb"]
+            out[i : i + s] = pred[0, :, H:, :]
+        return out
