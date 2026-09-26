@@ -208,6 +208,7 @@ class NominalPlanner:
         hist = blocks_to_model(self.process, hist_blocks).to(self.device)
         assert hist.shape[0] == n_hist
         T = n_hist + self.horizon
+        seed = int(seed) % (2**32 - 1)
         torch.manual_seed(seed)
         np.random.seed(seed)
         cost_model = HistoryCostModel(

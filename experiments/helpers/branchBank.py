@@ -189,6 +189,25 @@ def aimed_tape(pusher_xy, target_xy, speed: float, n_blocks: int = HORIZON_BLOCK
     return tape.reshape(n_blocks, ACTION_BLOCK, 2)
 
 
+def two_phase_tape(pusher_xy, via_xy, target_xy, speed: float, n_blocks: int = HORIZON_BLOCKS, *, overshoot: float = 1.0) -> np.ndarray:
+    """Move to `via_xy` fast, then push through `target_xy` at `speed` (raw units/step).
+
+    Used to push the T toward a hazard: `via` is the side of the T opposite the hazard.
+    """
+    p = np.asarray(pusher_xy, float)
+    via = np.asarray(via_xy, float)
+    steps = n_blocks * ACTION_BLOCK
+    tape = np.zeros((steps, 2))
+    d1 = via - p
+    n1 = int(np.ceil(np.linalg.norm(d1) / (ACTION_CLIP * ACTION_SCALE)))
+    n1 = min(max(n1, 1), steps - 1)
+    for t in range(n1):
+        tape[t] = d1 / n1 / ACTION_SCALE
+    rest = aimed_tape(via, target_xy, speed, n_blocks=n_blocks, overshoot=overshoot).reshape(-1, 2)
+    tape[n1:] = rest[: steps - n1]
+    return np.clip(tape, -ACTION_CLIP, ACTION_CLIP).reshape(n_blocks, ACTION_BLOCK, 2)
+
+
 def t_targets(state) -> dict[str, np.ndarray]:
     """Named aim points on the T footprint: its vertices and edge midpoints."""
     polys = t_polygons(state[2:5])
@@ -210,13 +229,17 @@ class Proposal:
 
 def propose(rng, root: Root, ctx: RootContext, *, n_random: int, sigmas=(0.05, 0.1, 0.2),
             n_stress: int = 0, stress_speeds=(0.1, 0.2, 0.3), extra_targets: dict | None = None,
-            max_tries: int = 20) -> tuple[list[Proposal], int]:
-    """The common candidate pool for one root. Returns (proposals, n_rejected_by_arena)."""
+            hazard_centre=None, n_toward_hazard: int = 0, max_tries: int = 20,
+            include_nominal: bool = True) -> tuple[list[Proposal], int]:
+    """The common candidate pool for one root. Returns (proposals, n_rejected_by_arena).
+
+    `n_toward_hazard` two-phase tapes push the T toward `hazard_centre` (stress bank).
+    """
     nominal = np.asarray(root.meta["nominal_plan"], float)
     state = np.asarray(ctx.state, float)
     out: list[Proposal] = []
     rejected = 0
-    if not exits_arena(nominal, state[:2]):
+    if include_nominal and not exits_arena(nominal, state[:2]):
         out.append(Proposal(nominal.copy(), "nominal", {"sigma": 0.0}))
     per_sigma = max(1, n_random // len(sigmas))
     for sig in sigmas:
@@ -251,6 +274,27 @@ def propose(rng, root: Root, ctx: RootContext, *, n_random: int, sigmas=(0.05, 0
                 rejected += 1
                 continue
             out.append(Proposal(t, "stress", {"target": name, "speed": speed}))
+            got += 1
+    if n_toward_hazard and hazard_centre is not None:
+        hz = np.asarray(hazard_centre, float)
+        centre = state[2:4] + np.array([0.0, 45.0]) @ np.array([[np.cos(state[4]), np.sin(state[4])], [-np.sin(state[4]), np.cos(state[4])]])
+        u = hz - centre
+        u = u / (np.linalg.norm(u) + 1e-9)
+        got = 0
+        tries = 0
+        while got < n_toward_hazard and tries < max_tries * n_toward_hazard:
+            tries += 1
+            side = float(rng.uniform(70.0, 110.0))
+            lateral = rng.normal(0.0, 25.0)
+            perp = np.array([-u[1], u[0]])
+            via = centre - u * side + perp * lateral
+            speed = float(rng.choice(stress_speeds))
+            t = two_phase_tape(state[:2], via, centre + u * 30.0, speed, overshoot=float(rng.uniform(0.5, 2.0)))
+            t = np.clip(t + rng.normal(0.0, 0.02, size=t.shape), -ACTION_CLIP, ACTION_CLIP)
+            if exits_arena(t, state[:2]):
+                rejected += 1
+                continue
+            out.append(Proposal(t, "toward_hazard", {"speed": speed, "side": side}))
             got += 1
     return out, rejected
 
