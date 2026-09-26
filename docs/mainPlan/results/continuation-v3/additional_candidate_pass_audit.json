@@ -1,0 +1,123 @@
+{
+  "audit_status": "passed_for_observed_metadata",
+  "observed_utc": "2026-09-26T19:07:32Z",
+  "bank_status": "running_incomplete",
+  "bank_path": "data/study/pusht/continuation-v3/e1/test",
+  "scope": "Frozen sampling plan, atomic progress/roots/layout metadata, and attempt journal only. This is an additional-candidate-pass audit, not a completed-bank audit.",
+  "observed_counts": {
+    "completed_attempts": 633,
+    "completed_round_0_attempts": 605,
+    "completed_round_1_attempts": 28,
+    "completed_round_1_accepted_roots": 1,
+    "accepted_roots": 29,
+    "unique_accepted_source_episodes": 29,
+    "metadata_branch_count": 464,
+    "prior_accepted_roots_retained": 28,
+    "skipped_previously_accepted_sources": 1,
+    "scheduled_candidates": 4840,
+    "reserved_source_episodes": 605
+  },
+  "frozen_plan": {
+    "sha256": "fc8292fcd67f2985157e4a72433e23189dc897f183ebca1f06f098233fa6db23",
+    "parent_and_bank_copy_hashes_match": true,
+    "all_completed_round_1_candidate_fields_match": true,
+    "checked_fields": [
+      "episode",
+      "t0",
+      "goal_offset",
+      "k",
+      "pair_draw",
+      "candidate_round",
+      "source_position",
+      "candidate_index",
+      "root_seed",
+      "root_id"
+    ],
+    "round_1_same_temporal_pair_as_round_0": true,
+    "round_1_pair_draw": 0,
+    "depth_rotation": [
+      {
+        "from": 0,
+        "to": 2
+      },
+      {
+        "from": 2,
+        "to": 4
+      },
+      {
+        "from": 4,
+        "to": 6
+      },
+      {
+        "from": 6,
+        "to": 0
+      }
+    ]
+  },
+  "first_accepted_additional_pass_root": {
+    "root_id": "test-familiar-c00627",
+    "episode": 16961,
+    "candidate_index": 627,
+    "candidate_round": 1,
+    "pair_draw": 0,
+    "source_position": 22,
+    "previous_depth": 4,
+    "new_depth": 6,
+    "root_seed": 20271554,
+    "charged_steps_for_construction_attempt": 1185,
+    "metadata_branch_count_increment": 16,
+    "all_candidate_identity_fields_match_frozen_plan": true,
+    "stored_root_start_goal_seed_and_metadata_match_frozen_candidate": true
+  },
+  "source_integrity": {
+    "at_most_one_accepted_root_per_source": true,
+    "no_attempt_after_source_already_accepted": true,
+    "skipped_candidate_index": 620,
+    "skipped_previously_accepted_source_count": 1,
+    "all_prior_28_accepted_roots_retained": true,
+    "all_completed_accepted_root_ids_present_and_ordered_in_atomic_roots": true
+  },
+  "accounting": {
+    "atomic_metadata_ledger_steps": 62071,
+    "sum_completed_journal_charged_steps": 62071,
+    "completed_journal_final_cumulative_steps": 62071,
+    "snapshot_inflight_steps": 0,
+    "categories": {
+      "root_generation": 31091,
+      "layout_route": 8986,
+      "branch": 21994
+    },
+    "ledger_categories_sum_matches_total": true,
+    "each_attempt_start_delta_and_completed_cumulative_cost_consistent": true,
+    "roots_and_progress_ledgers_match": true,
+    "progress_and_roots_branch_counts_match_charged_branch_count": true,
+    "each_completed_accepted_root_increments_metadata_branch_count_by_16": true
+  },
+  "atomic_snapshot": {
+    "progress_sha256": "85b1d4889f9de19712fff110e8a6e1343cdfd30a5bbf202c98b2a8ee2813f54b",
+    "progress_bytes_unchanged_across_read": true,
+    "roots_and_layouts_sha256_match_progress_snapshot": true,
+    "last_completed_attempt_utc": "2026-09-26T19:07:28Z",
+    "schedule_cursor": 634,
+    "pending_candidate": {
+      "episode": 18598,
+      "t0": 4,
+      "goal_offset": 27,
+      "k": 4,
+      "pair_draw": 0,
+      "candidate_round": 1,
+      "source_position": 29,
+      "candidate_index": 634,
+      "root_seed": 20271561,
+      "root_id": "test-familiar-c00634"
+    },
+    "pending_candidate_matches_frozen_plan": true
+  },
+  "limitations": [
+    "The bank was still incomplete at observation; the requested eventual root counts were not yet obtained.",
+    "The 16-tape checks use cumulative atomic metadata and charged branch counts. Live H5 contents were not opened or independently checked.",
+    "Final-test outcome performance was not inspected or verified. Construction acceptance/rejection events were used only for schedule, source-retention and accounting checks.",
+    "No simulator/model queries, tests, source/config edits, uploads or commits were performed.",
+    "This file preserves the original observation; no later live snapshot was substituted."
+  ]
+}

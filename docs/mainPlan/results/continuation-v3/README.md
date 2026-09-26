@@ -40,6 +40,13 @@ matching saved progress and journal costs, and body-specific contact metadata. T
 [frozen plan verification](frozen_plan_verification.json) confirms that the source
 reservations, exclusions and requested bank sizes match the declared protocol.
 
+The [additional candidate-pass audit](additional_candidate_pass_audit.json) confirms that
+the final-bank builder continued beyond its first 605 candidates under the frozen plan.
+At the audited snapshot, the next pass had added one root from a new source, giving
+29 distinct roots and 464 tapes while retaining every prior root. Candidate identities,
+source skips and charged-step accounting agree. This is an incremental metadata audit;
+the full final banks and their performance evaluation remain incomplete.
+
 The later analysis stages now emit cumulative-horizon attribution and pose/clearance
 errors by regime, an E2 paired table with deterministic observed examples, and charged
 history-replay ledgers. E3 records exact model/input and candidate-pool identities,
