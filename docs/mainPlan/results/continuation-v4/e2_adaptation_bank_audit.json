@@ -1,0 +1,1087 @@
+{
+  "status": "passed_with_documented_sampling_count_and_accounting_limits",
+  "observed_utc": "2026-09-26T23:45:45.632969+00:00",
+  "scope": "Read-only local construction audit of the finalized E2 adaptation bank; no model/GPU/simulator execution, training outcomes or test-performance inspection.",
+  "bank_path": "/workspace/Safety-Dial/data/study/pusht/continuation-v4/e2/adapt",
+  "written_utc": "2026-09-26T23:39:55Z",
+  "manifest_created_utc": "2026-09-26T23:39:55+00:00",
+  "closure_before_h5_read": {
+    "checked_utc": "2026-09-26T23:45:45.306402+00:00",
+    "no_writable_descriptors": true,
+    "read_only_descriptors": [
+      {
+        "pid": 776156,
+        "fd": 42,
+        "writable": false
+      }
+    ],
+    "runtime_worker_776156_still_active": true
+  },
+  "counts": {
+    "declared_roots": 64,
+    "declared_tapes_argument": 8,
+    "nominal_product": 512,
+    "actual_roots": 64,
+    "actual_branches": 446,
+    "per_root_branch_histogram": {
+      "6": 2,
+      "7": 62
+    },
+    "kind_counts": {
+      "nominal": 64,
+      "random": 190,
+      "stress": 192
+    },
+    "nominal_tapes_rejected_by_arena_guard": 0,
+    "interpretation": "The adopted E2 plan calls for about 512 branches. The shared proposal helper floors 4 requested random tapes across three sigmas to 3 actual random tapes; each root requests up to 3 stress tapes and a nominal tape only when its arena guard passes. Bounded arena rejection can further reduce the surviving count. Exact 8-per-root quota is not claimed."
+  },
+  "source_integrity": {
+    "unique_source_episodes": 64,
+    "all_in_first_3000_frozen_reserve_episodes": true,
+    "expert_pair_start_goal_seed_depth_identities_reproduced": true,
+    "adaptation_sources_disjoint_dev_test_stress": true,
+    "source_ids_sha256": "ed35a2a201c4e2323aa198363f71636e14510382905034d754dd25d1ddbee7e7",
+    "actual_root_goal_geometry_familiar": true,
+    "accepted_roots_contact_counter_kind": "pusher_block"
+  },
+  "training_eligibility": {
+    "paid_branches_retained": 446,
+    "eligible_acquired_clips": 422,
+    "excluded_from_training": 24,
+    "incomplete_observed_horizon": 24,
+    "invalid_observation_at_observed_step": 0,
+    "complete_horizon_but_invalid_observation": 0,
+    "saved_training_indices_match_masks": true,
+    "clips_manifest_sha256": "251be61a65cea6db62ee40b10a208e2d53ba24a97e4c0cd31646ab3247de7c5c",
+    "all_446_branch_costs_retained": true,
+    "rule": "Training requires every horizon step observed and every image observation valid; invalid/incomplete branches remain stored and charged."
+  },
+  "controls": {
+    "all_stored_tapes_finite_float32_and_guarded": true,
+    "all_within_root_stored_tapes_distinct_after_float32": true,
+    "all_stored_tapes_kinds_params_equal_deterministically_reconstructed_prequery_proposals": true,
+    "total_arena_rejections_reproduced": 217,
+    "float32_precision_rejections_reproduced": 0,
+    "typed_contact_counters_available_on_all_branches": true,
+    "reconstruction_method": "Pure expert pair RNG and proposal draws from saved root states/nominal plans; no new environment or model was constructed."
+  },
+  "accounting": {
+    "ledger": {
+      "steps": {
+        "root_generation": 16972,
+        "proposals_rejected_by_arena": 0,
+        "proposals_rejected_after_float32": 0,
+        "branch": 21855,
+        "discarded_nonfamiliar_source": 0,
+        "discarded_invalid_root": 0
+      },
+      "branches": {
+        "proposals_rejected_by_arena": 217,
+        "branch": 446,
+        "discarded_nonfamiliar_source": 275,
+        "discarded_invalid_root": 5
+      },
+      "total_steps": 38827
+    },
+    "manifest_and_roots_ledger_agree": true,
+    "branch_prefix_replay_steps": 10920,
+    "observed_branch_action_steps": 10935,
+    "branch_steps_independently_reconciled": 21855,
+    "attempted_root_candidates": 344,
+    "accepted_roots": 64,
+    "discarded_nonfamiliar_source": 275,
+    "discarded_invalid_root": 5,
+    "root_generation_actual_steps_as_recorded": 16972,
+    "root_generation_meter_mechanism": "build_root Counter increments before each env.step and adds its count in finally, including rejected/partial roots.",
+    "root_generation_individual_attempt_reconciliation": "Unavailable: this E2 BankWriter did not persist a candidate journal or rejected-root traces. The aggregate 16,972 metered steps are recorded consistently but cannot be independently reconstructed per rejected root from this bank.",
+    "all_returned_queried_branches_retained_by_code": true
+  },
+  "upload": {
+    "runtime_receipt_present": true,
+    "receipt": {
+      "repo_id": "Sachioster/safetydial-pusht-banks",
+      "repo_type": "dataset",
+      "path": "banks/pusht-adapt-e2-continuation-20260926-4-adapt-bank",
+      "revision": "24690f74ed95ee2efec48cbb7ba27449934e7c44",
+      "run_id": "pusht-adapt-e2-continuation-20260926-4-adapt-bank"
+    },
+    "verification_scope": "Existing local receipt only; no remote metadata call, download, upload or optional archive retry by this audit."
+  },
+  "local_file_sha256": {
+    "branches.h5": "f7ab6f07129cadb0718e95aa1e8ad4606752c34de2988f8d86bf044b36135634",
+    "roots.json": "b5d8de7881d2e0591bfff0db8fac2acc2ee53eb95e5161937035a5195702ad46",
+    "manifest.json": "bdfb5cb75a7061224199f00f167f505650018acb88f1fcf3cfb10614b4d4d19e",
+    "config.yaml": "716e75d6c49b5e54fcbaacee9c314d5b7d7d0c68986a0457b43232d01542afae",
+    "README.md": "1567cda9523b04e25355bdc224e80acb3999604f3d03027d0b788019049b0870",
+    "hf_upload.json": "3b5bb131211835321060e0eb8989900b4f2a73e71bb77ec31d5ae7c36a1fca49"
+  },
+  "local_files_unchanged_before_after": true,
+  "root_construction_records": [
+    {
+      "root_id": "adapt-r000",
+      "source_episode": 3038,
+      "candidate_index": 0,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r009",
+      "source_episode": 1622,
+      "candidate_index": 9,
+      "depth": 2,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 140,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r013",
+      "source_episode": 2694,
+      "candidate_index": 13,
+      "depth": 2,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 140,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r020",
+      "source_episode": 3760,
+      "candidate_index": 20,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r030",
+      "source_episode": 1969,
+      "candidate_index": 30,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r031",
+      "source_episode": 4167,
+      "candidate_index": 31,
+      "depth": 6,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 280,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r042",
+      "source_episode": 2604,
+      "candidate_index": 42,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r045",
+      "source_episode": 1664,
+      "candidate_index": 45,
+      "depth": 2,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 140,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r065",
+      "source_episode": 2544,
+      "candidate_index": 65,
+      "depth": 2,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 140,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r067",
+      "source_episode": 2107,
+      "candidate_index": 67,
+      "depth": 6,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 280,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r068",
+      "source_episode": 1653,
+      "candidate_index": 68,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r070",
+      "source_episode": 859,
+      "candidate_index": 70,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r088",
+      "source_episode": 4220,
+      "candidate_index": 88,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r090",
+      "source_episode": 3359,
+      "candidate_index": 90,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r095",
+      "source_episode": 3109,
+      "candidate_index": 95,
+      "depth": 6,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 280,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r100",
+      "source_episode": 3351,
+      "candidate_index": 100,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r106",
+      "source_episode": 3391,
+      "candidate_index": 106,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r107",
+      "source_episode": 3558,
+      "candidate_index": 107,
+      "depth": 6,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 280,
+      "observed_action_steps": 121
+    },
+    {
+      "root_id": "adapt-r112",
+      "source_episode": 1740,
+      "candidate_index": 112,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r121",
+      "source_episode": 1673,
+      "candidate_index": 121,
+      "depth": 2,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 140,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r123",
+      "source_episode": 3805,
+      "candidate_index": 123,
+      "depth": 6,
+      "branches": 6,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 2,
+        "stress": 3
+      },
+      "distinct_float32_controls": 6,
+      "prefix_steps": 240,
+      "observed_action_steps": 150
+    },
+    {
+      "root_id": "adapt-r124",
+      "source_episode": 1382,
+      "candidate_index": 124,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r128",
+      "source_episode": 1698,
+      "candidate_index": 128,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r141",
+      "source_episode": 3127,
+      "candidate_index": 141,
+      "depth": 2,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 140,
+      "observed_action_steps": 144
+    },
+    {
+      "root_id": "adapt-r147",
+      "source_episode": 2619,
+      "candidate_index": 147,
+      "depth": 6,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 280,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r157",
+      "source_episode": 1417,
+      "candidate_index": 157,
+      "depth": 2,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 140,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r158",
+      "source_episode": 3051,
+      "candidate_index": 158,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r160",
+      "source_episode": 2111,
+      "candidate_index": 160,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 169
+    },
+    {
+      "root_id": "adapt-r161",
+      "source_episode": 1383,
+      "candidate_index": 161,
+      "depth": 2,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 140,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r162",
+      "source_episode": 450,
+      "candidate_index": 162,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 160
+    },
+    {
+      "root_id": "adapt-r166",
+      "source_episode": 1758,
+      "candidate_index": 166,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r178",
+      "source_episode": 1374,
+      "candidate_index": 178,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r183",
+      "source_episode": 1636,
+      "candidate_index": 183,
+      "depth": 6,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 280,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r190",
+      "source_episode": 3337,
+      "candidate_index": 190,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 172
+    },
+    {
+      "root_id": "adapt-r194",
+      "source_episode": 1507,
+      "candidate_index": 194,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r206",
+      "source_episode": 1366,
+      "candidate_index": 206,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r210",
+      "source_episode": 3479,
+      "candidate_index": 210,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r219",
+      "source_episode": 1101,
+      "candidate_index": 219,
+      "depth": 6,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 280,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r222",
+      "source_episode": 2012,
+      "candidate_index": 222,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r226",
+      "source_episode": 4235,
+      "candidate_index": 226,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 137
+    },
+    {
+      "root_id": "adapt-r231",
+      "source_episode": 3574,
+      "candidate_index": 231,
+      "depth": 6,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 280,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r232",
+      "source_episode": 2052,
+      "candidate_index": 232,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r243",
+      "source_episode": 2117,
+      "candidate_index": 243,
+      "depth": 6,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 280,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r244",
+      "source_episode": 448,
+      "candidate_index": 244,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r246",
+      "source_episode": 2722,
+      "candidate_index": 246,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 173
+    },
+    {
+      "root_id": "adapt-r248",
+      "source_episode": 3075,
+      "candidate_index": 248,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r253",
+      "source_episode": 1341,
+      "candidate_index": 253,
+      "depth": 2,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 140,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r257",
+      "source_episode": 3115,
+      "candidate_index": 257,
+      "depth": 2,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 140,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r258",
+      "source_episode": 495,
+      "candidate_index": 258,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 173
+    },
+    {
+      "root_id": "adapt-r267",
+      "source_episode": 867,
+      "candidate_index": 267,
+      "depth": 6,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 280,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r272",
+      "source_episode": 1725,
+      "candidate_index": 272,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r288",
+      "source_episode": 3481,
+      "candidate_index": 288,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r297",
+      "source_episode": 1514,
+      "candidate_index": 297,
+      "depth": 2,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 140,
+      "observed_action_steps": 134
+    },
+    {
+      "root_id": "adapt-r301",
+      "source_episode": 2543,
+      "candidate_index": 301,
+      "depth": 2,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 140,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r304",
+      "source_episode": 3428,
+      "candidate_index": 304,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r306",
+      "source_episode": 904,
+      "candidate_index": 306,
+      "depth": 4,
+      "branches": 6,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 2,
+        "stress": 3
+      },
+      "distinct_float32_controls": 6,
+      "prefix_steps": 180,
+      "observed_action_steps": 150
+    },
+    {
+      "root_id": "adapt-r311",
+      "source_episode": 3429,
+      "candidate_index": 311,
+      "depth": 6,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 280,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r316",
+      "source_episode": 3078,
+      "candidate_index": 316,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r317",
+      "source_episode": 2091,
+      "candidate_index": 317,
+      "depth": 2,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 140,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r328",
+      "source_episode": 1617,
+      "candidate_index": 328,
+      "depth": 0,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 70,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r329",
+      "source_episode": 852,
+      "candidate_index": 329,
+      "depth": 2,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 140,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r330",
+      "source_episode": 1815,
+      "candidate_index": 330,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 175
+    },
+    {
+      "root_id": "adapt-r334",
+      "source_episode": 1496,
+      "candidate_index": 334,
+      "depth": 4,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 210,
+      "observed_action_steps": 152
+    },
+    {
+      "root_id": "adapt-r343",
+      "source_episode": 3772,
+      "candidate_index": 343,
+      "depth": 6,
+      "branches": 7,
+      "kind_counts": {
+        "nominal": 1,
+        "random": 3,
+        "stress": 3
+      },
+      "distinct_float32_controls": 7,
+      "prefix_steps": 280,
+      "observed_action_steps": 175
+    }
+  ],
+  "limitations": [
+    "Actual 446 branches are reported; the saved adapt_tapes=8 argument does not enforce an exact per-root quota.",
+    "There is no saved E2 construction attempt journal, so discarded-root aggregate costs have weaker independent provenance than the E1 recovery bank.",
+    "Actual simulator execution of canonical float32 controls is established by the recorded code path and saved data; no simulator replay was run.",
+    "Completed adaptation data does not establish E2 repair/retention success; those stages remain outside this audit."
+  ]
+}

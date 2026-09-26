@@ -1,6 +1,6 @@
 {
   "status": "in_progress",
-  "observed_utc": "2026-09-26T23:30:39Z",
+  "observed_utc": "2026-09-26T23:49:06Z",
   "implementation_commit": "4dc99d7",
   "validation": "docs/mainPlan/results/continuation-v4/recovery_validation.json",
   "workflow": {
@@ -87,5 +87,32 @@
       "record": "docs/mainPlan/results/continuation-v4/decomposition_archive.json",
       "no_upload_occurred": true
     }
+  },
+  "repair_inputs": {
+    "status": "collected_cached_and_uploaded",
+    "roots": 64,
+    "branches": 446,
+    "eligible_training_clips": 422,
+    "incomplete_horizon_branches_retained_and_charged": 24,
+    "replay_clips": 2000,
+    "retention_clips": 400,
+    "collection_simulator_steps": 38827,
+    "bank_revision": "24690f74ed95ee2efec48cbb7ba27449934e7c44",
+    "clips_revision": "735799d218d564b13b2d451544ce0848559b845b",
+    "audits": {
+      "e2_adaptation_bank_audit.json": {
+        "path": "docs/mainPlan/results/continuation-v4/e2_adaptation_bank_audit.json",
+        "sha256": "35ac17b93c13062605588f870e4b36a24ae86a71d1828e673061466f5d9868f3"
+      },
+      "e2_input_durability_audit.json": {
+        "path": "docs/mainPlan/results/continuation-v4/e2_input_durability_audit.json",
+        "sha256": "48b9e5552becdac44e0a6fddff4478975c204c530b970bde843f5cc417b7046e"
+      }
+    },
+    "limitations": [
+      "E2 requested approximately 512 branches; the existing three-sigma integer allocation and arena rejection retained 446.",
+      "Rejected-root aggregate cost is metered, but no per-candidate journal was saved for independent reconstruction.",
+      "Completed inputs do not establish repair or goal-retention success."
+    ]
   }
 }

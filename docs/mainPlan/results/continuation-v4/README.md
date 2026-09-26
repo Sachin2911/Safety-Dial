@@ -73,3 +73,13 @@ The [data-only results archive](decomposition_archive.json) is prepared locally,
 both numerical NPZ files and the original and corrected figures. Its private upload
 requires explicit approval after automatic review rejected the transfer; no upload
 occurred. This optional archive is separate from the running scientific workflows.
+
+The [E2 adaptation-bank audit](e2_adaptation_bank_audit.json) verifies 64 source-disjoint
+roots and 446 distinct guarded branches, of which 422 have complete usable training
+horizons. All 446 traces remain stored and charged. The recorded collection cost is
+38,827 simulator steps; the rejected-root aggregate is metered but cannot be independently
+reconstructed per attempt because no candidate journal was saved. The existing proposal
+allocation and arena rejection produce an approximate bank size, not exactly 512 branches.
+The [input durability audit](e2_input_durability_audit.json) verifies all 11 bank and clip
+payload files against pinned private remote metadata. Repair and goal-retention results
+remain pending.
