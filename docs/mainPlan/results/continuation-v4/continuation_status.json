@@ -1,0 +1,56 @@
+{
+  "status": "in_progress",
+  "observed_utc": "2026-09-26T23:14:33Z",
+  "implementation_commit": "4dc99d7",
+  "validation": "docs/mainPlan/results/continuation-v4/recovery_validation.json",
+  "workflow": {
+    "id": "pusht-continuation-20260926-4",
+    "service": "safetydial_pusht_v4_continuation",
+    "config": "configs/pusht/continuation-v4.yaml",
+    "config_sha256": "8c7ca79101d78184ece45e7a68edc0d6de9b44ce1bca0c6a5d1b7a4032956103",
+    "stage": "development_decomposition_gate",
+    "status": "running",
+    "supervisor_pid": 769397,
+    "observed_python_pid": 772350,
+    "observed_python_start_ticks": 272366220
+  },
+  "oracle": {
+    "id": "pusht-oracle-continuation-20260926-4",
+    "service": "safetydial_pusht_oracle_v4_continuation",
+    "config": "configs/pusht/continuation-oracle-v4.yaml",
+    "config_sha256": "9b06fc81944c150c5eabff2cd5765cebcd0f37df565ed23044201ad835df5bfa",
+    "status": "waiting",
+    "attempts": 0,
+    "supervisor_pid": 769695
+  },
+  "banks_dir": "data/study/pusht/continuation-v4/e1",
+  "preserved_v3_failure": "docs/mainPlan/results/continuation-v3/stress_generation_failure.json",
+  "prior_failed_stress_upload": {
+    "repo_id": "Sachioster/safetydial-pusht-banks",
+    "repo_type": "dataset",
+    "path": "prior-failed-stress/pusht-banks-stress-recovery-continuation-20260926-4-prior-failed-stress",
+    "revision": "2acc7f96f59485e16bb098eb6c39368061403213",
+    "run_id": "pusht-banks-stress-recovery-continuation-20260926-4-prior-failed-stress"
+  },
+  "source_root_plan_sha256": "fc8292fcd67f2985157e4a72433e23189dc897f183ebca1f06f098233fa6db23",
+  "controls_pool_sha256": "114fb8f3aa35065eee49fbfd8e27f0e86c9bf7c37a47c246a5499ad33e1b55c1",
+  "gate_policy": "All original development diagnosis/repair, exact retention and conditional closed-loop gates remain active. Main-study outcomes are not yet established.",
+  "completed_bank_recovery": {
+    "stage": "recover_fixed_root_stress_bank",
+    "status": "completed",
+    "test_roots": 128,
+    "test_branches": 2048,
+    "stress_roots": 128,
+    "stress_branches": 2048,
+    "new_stress_simulator_steps": 101373,
+    "accounted_v3_v4_bank_and_witness_steps": 574008,
+    "cost_scope": "Accounted v3/v4 development, test, witness, failed stress and recovered stress construction only; excludes Walker and historical experiments",
+    "hf_revisions": {
+      "prior_failed_stress": "2acc7f96f59485e16bb098eb6c39368061403213",
+      "dev": "c7edb472eddd6cb7c638dc0551bda269d2c314fe",
+      "test": "ae10da693258b019dfed337aa7e860f201919d76",
+      "stress": "608d1616a69fcf9c2b9ea8c0fc8399cb74f32584",
+      "development_witness": "eb01dd278d2096fc9be4c8b2d26873ec1d55ccd0"
+    }
+  }
+}

@@ -90,8 +90,8 @@ See [experiments/README.md](experiments/README.md) and [notes/README.md](notes/R
 The Push-T probe/penalty/Safe-CEM pilot and Phase 0 locomotion triage are completed work.
 The new study is in progress. Block-pose probes, verified branch replay, acquisition and
 predictor-adaptation runners now exist. Read the [validated continuation record](docs/mainPlan/results/continuation-v2/README.md)
-and [current Push-T continuation](docs/mainPlan/results/continuation-v3/README.md) before
-rerunning work. From-scratch Walker2d LeWM training and fresh Push-T banks are still
+and [current Push-T continuation](docs/mainPlan/results/continuation-v4/README.md) before
+rerunning work. From-scratch Walker2d LeWM training and the qualified Push-T continuation are still
 running; earlier diagnostic outcomes do not establish completion of the main plan.
 
 The historical Vast volume (checkpoint copies, fitted scalers, pusher-probe cache) no longer

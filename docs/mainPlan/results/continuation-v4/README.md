@@ -1,6 +1,6 @@
 # Push-T stress-bank recovery with fixed completed roots
 
-Status: recovery implementation validated and ready for managed launch. The completed v3 development
+Status: stress-only recovery completed and uploaded after 372 passing tests. The managed workflow is now running the development diagnosis. The completed v3 development
 and representative test banks are retained byte for byte. Main-study outcomes are pending.
 
 The [v3 test audit](../continuation-v3/test_bank_completion_audit.json) verifies 128 roots
@@ -45,3 +45,10 @@ It made no simulator queries or remote uploads; production execution remains sep
 [Prelaunch validation](recovery_validation.json) passed all 372 repository tests and
 Ruff, both workflow dry runs, the pure proposal tests and independent implementation
 and provenance review. Scientific outcomes remain pending.
+
+The [managed launch record](continuation_status.json) records the active workflow and
+waiting oracle. The original failed stress data was privately archived before new
+replay. Both completed final banks and the relocated witness are now privately uploaded.
+The recovered stress bank contains 128 roots and 2,048 branches, with 101,373 new
+simulator steps. Accounted v3/v4 bank construction and development-witness cost is
+574,008 steps, including the failed stress run. Scientific outcomes remain pending.

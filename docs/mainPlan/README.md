@@ -8,7 +8,7 @@ The Walker2d track and the pretraining-versus-adaptation stretch were added on
 
 **Execution is now in progress.** The [validated continuation record](results/continuation-v2/README.md)
 covers rebuilt assets, replay checks and the running from-scratch Walker2d LeWM training.
-The [current Push-T continuation](results/continuation-v3/README.md) records the fresh
+The [current Push-T continuation](results/continuation-v4/README.md) records the fresh
 bank recovery and its scientific gates. These records distinguish verified evidence,
 failed diagnostic runs and results that are still pending.
 

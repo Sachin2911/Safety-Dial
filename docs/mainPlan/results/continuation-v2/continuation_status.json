@@ -45,36 +45,36 @@
     },
     "latest_uploaded_checkpoint": {
       "repo_id": "Sachioster/safetydial-walker2d",
-      "revision": "cd54af274e36bc86be8ea0e1e4005716450a2368",
+      "revision": "156bed7eac9576892afa53c01bb23b4f8e2b2579",
       "path": "lewm-a/walker2d-lewm-a-continuation-20260926-1",
-      "step": 68000,
-      "validation_pred_loss": 0.007778092287480831,
+      "step": 72000,
+      "validation_pred_loss": 0.0077385522890836,
       "remote_repo_private": true,
       "verified_files": {
         "optimizer.pt": {
-          "sha256": "000ca5fb3a7ccc7a8b99a541697a5bb4576f55f4a4ecd11a48de9e495cf19185",
-          "size_bytes": 217095723
+          "sha256": "6f929ad2c8a05d7afe41b41832aa1ec49bb80de406200141f977b0e483daa785",
+          "size_bytes": 217112107
         },
         "weights.pt": {
-          "sha256": "28808b65a49c5b084572edc4f1d324f97e123f1e4887a6c2e46f10e957e48961",
+          "sha256": "992b9c40c5a3bf2587b21b8a7b1eeb3e065674b77edfae35d913815cfacbcad4",
           "size_bytes": 72267425
         }
       },
       "verification_scope": "Receipt, train state and manifest agree. Pinned private Hugging Face file metadata matches local SHA256 and byte sizes for optimizer.pt and weights.pt. Local file identities remained stable. No tensor deserialization, dataset reads, GPU calls or remote-byte redownload; the last full recovery-structure audit remains step 24000.",
-      "observed_unix": 1790463174.1823304,
-      "observed_utc": "2026-09-26T22:52:54.182330+00:00",
+      "observed_unix": 1790464169.004874,
+      "observed_utc": "2026-09-26T23:09:29.004874+00:00",
       "worker_at_verification": {
         "pid": 539743,
         "state": "S",
-        "cpu_ticks": 2043340,
+        "cpu_ticks": 2149332,
         "start_ticks": "269920944"
       },
-      "worker_cpu_ticks_before": 2043261
+      "worker_cpu_ticks_before": 2149274
     }
   },
   "pusht": {
     "fresh_probe_revision": "f03fb888ff15a4e757600a51c038a0988429c05c",
-    "fresh_banks": "data/study/pusht/continuation-v2/e1",
+    "fresh_banks": "data/study/pusht/continuation-v4/e1",
     "replay_revision": "a9329863aad6cfe3b39ffee6a9fb97ecb1234f61",
     "replay_gate": true,
     "replay_roots": 50,
@@ -110,17 +110,18 @@
         512
       ],
       "conditional_e5_run_id": "pusht-closedloop-continuation-20260926-2",
-      "replacement": "New v3 workflow pending validation; original v2 config remains preserved."
+      "replacement": "The v2 and v3 operational failures are preserved; fresh v4 managed recovery retains all downstream gates and controls."
     },
     "bank_generation": {
       "status": "failed_source_exhaustion",
       "report": "docs/mainPlan/results/continuation-v2/bank_generation_failure.json",
       "partial_test_roots": 26,
       "exact_failed_run_cost_available": false,
-      "recovery": "Fresh v3 development-bank phase is running. The actual frozen plan has been verified against all original source reservations, exclusions and declared bank counts.",
-      "recovery_status": "docs/mainPlan/results/continuation-v3/continuation_status.json",
+      "recovery": "V3 completed 128 test roots and 2,048 branches, then stress proposal construction exhausted its finite draw limit. Fresh v4 stress-only recovery completed and uploaded on all fixed test roots; the managed study is running development diagnosis. Original artifacts and failed costs remain preserved.",
+      "recovery_status": "docs/mainPlan/results/continuation-v4/continuation_status.json",
       "frozen_plan_verification": "docs/mainPlan/results/continuation-v3/frozen_plan_verification.json"
-    }
+    },
+    "preserved_v2_banks": "data/study/pusht/continuation-v2/e1"
   },
   "workflow_configs": [
     "configs/pusht/continuation.yaml",
