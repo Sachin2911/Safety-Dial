@@ -23,7 +23,7 @@ from helpers.pushtGeometry import clearance_trace
 ARMS = ("random", "boundary", "learned", "oracle")
 
 
-@dataclass
+@dataclass(eq=False)
 class Candidate:
     root_index: int
     proposal: Proposal

@@ -222,8 +222,9 @@ def main() -> int:
             oracle_truth = {tuple(b.params["key"]): float(clearance_trace(b.log.states[:, 2:5], lay[b.root_id]["familiar"]).min()) for b in oracle_branches}
             oracle_by_key = {tuple(b.params["key"]): b for b in oracle_branches}
         for arm in arms:
+            seed_ids = {id(c) for c in seed_cands}
             for c in pool.candidates:
-                c.executed = c in seed_cands
+                c.executed = id(c) in seed_ids
             ledger = StepLedger()
             ledger.add("seed", common_ledger.total, branches=len(seed_cands))
             store = DataStore(STUDY / f"acq-{arm}-s{seed}", imaginer)
