@@ -1,0 +1,85 @@
+{
+  "run_dir": "runs/walker2d-lewm-a-continuation-20260926-1",
+  "step": 8000,
+  "planned_optimizer_steps": 214780,
+  "validation_pred_loss": 0.08398623391985893,
+  "private_receipt": {
+    "repo_id": "Sachioster/safetydial-walker2d",
+    "revision": "691d38fbe2fff4042a7a54861d5523e497dd0c49",
+    "path": "lewm-a/walker2d-lewm-a-continuation-20260926-1",
+    "step": 8000
+  },
+  "audit_started_utc": "2026-09-26T17:24:19.632557+00:00",
+  "audit_completed_utc": "2026-09-26T17:24:21.491674+00:00",
+  "checks": {
+    "requested_checkpoint_step_and_revision": true,
+    "recovery_protocol_and_sha_match": true,
+    "step_matches_bundle_manifest_receipt_and_history": true,
+    "export_matches_atomic_bundle": true,
+    "finite_model": true,
+    "finite_optimizer": true,
+    "optimizer_parameter_ids_consistent": true,
+    "all_saved_adam_states_at_step_8000": true,
+    "scheduler_matches_declared_cosine_warmup_at_step": true,
+    "history_tail_and_validation_match": true,
+    "unique_disjoint_training_validation_episodes": true,
+    "split_ids_within_actual_dataset": true,
+    "split_identity_matches_all_checkpoint_records": true,
+    "dataset_path_and_sha_match": true,
+    "render_fingerprint_matches_dataset": true,
+    "exact_training_identity_matches_configuration": true,
+    "saved_scalers_match_atomic_identity_and_are_finite": true,
+    "source_snapshot_hashes_match_manifest_and_config": true,
+    "upload_receipts_match": true,
+    "saved_rng_state_present": true,
+    "checkpoint_bytes_unchanged_during_audit": true,
+    "all_input_file_identities_unchanged_during_audit": true,
+    "final_step_and_receipt_unchanged": true
+  },
+  "file_sha256": {
+    "optimizer.pt": "b9ab9f6590e916cdb4329e84fd04b1df55a684fc50dfc168fa5d8b16afca1919",
+    "weights.pt": "b726fe022881e62f749b02f75a77dfa8805d2dd8d2ad237f53908ef41121984f",
+    "lewm_object.ckpt": "ace14b4d5e39e8bf2374e3ed7c9526d4271d7b5adbab744df553827e4330bb5b",
+    "train_state.json": "95c04576739185234e0056d4586a050850d3e4be05f35a93be7e21dcdfa410da",
+    "config.json": "d1096ead45985aca453f80573073b44eedd62e60d18cc4c4a933d4069be7ed06",
+    "config.yaml": "11773373582b2f3b9fdb33224d4f4f3e4acea895ce732ddec36763b60a72faa7",
+    "scalers.npz": "971a5a4c038b5b9eca40f24755c1d74a8678cb6589b84c36f86782f3456788ae",
+    "splits.json": "e7a8083f82d7b7701587b3dcaf1c73043384c18603d617470d293de58221b4b6",
+    "manifest.json": "062b96ed19927af26fc7e658c2f0c6879a423bb9f67b0a8adc169e7520e6551a",
+    "upload_receipt.json": "c6ea8d6f5219737346f380e4a0cd085a070ee8254f497ae261ced8bc8e59ec62",
+    "hf_upload.json": "6a1f61e470586b1fab8c630c466ddc75fdbecfbdc8b528bd70b4e5a4b9316d5e",
+    "source_snapshot/sha256.json": "63f3221aa8a3aa07d2bcbe2df5c37db46f76dfe010412b3e8e483a626281b3a4"
+  },
+  "dataset": {
+    "path": "data/study/walker2d/continuation-20260926-2/setA.h5",
+    "sha256": "4602eeb952c918a3a9de787605d496c5a751fd692396f539e3e82fcf9c96f267",
+    "source_episodes": 5041,
+    "rows": 2999673,
+    "reported_clips": 2808971,
+    "training_episodes": 4544,
+    "validation_episodes": 93,
+    "render_fingerprint": "8298e1d623e8ecda907516ba14a1dcb6"
+  },
+  "training_state": {
+    "model_tensors": 303,
+    "model_elements": 18043172,
+    "optimizer_tensors": 891,
+    "optimizer_elements": 36070253,
+    "optimizer_parameter_ids": 297,
+    "optimizer_states": 297,
+    "adam_step_min": 8000.0,
+    "adam_step_max": 8000.0,
+    "scheduler_last_epoch": 8000,
+    "scheduler_step_count": 8001,
+    "expected_lr": 4.9829035302952795e-05,
+    "saved_optimizer_lrs": [
+      4.9829035302952795e-05
+    ],
+    "saved_scheduler_lrs": [
+      4.9829035302952795e-05
+    ],
+    "source_snapshot_files_verified": 10,
+    "saved_history_records": 400
+  },
+  "scope": "Read-only CPU inspection of the actual step-8000 atomic recovery bundle and weights.pt export. No model evaluation, optimizer updates, live-run writes or network calls. lewm_object.ckpt is hashed but not deserialized. The local upload receipts match the pinned revision; remote bytes were not re-downloaded. Input inode, size, modification/change times and checkpoint-file hashes remained unchanged across the audit."
+}

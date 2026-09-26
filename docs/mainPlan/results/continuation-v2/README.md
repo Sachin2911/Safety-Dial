@@ -24,3 +24,10 @@ for E2 and the exact prerequisite artifacts. It schedules three paired acquisiti
 all four additional budgets, final-checkpoint retention and the geometric transfer report.
 E5 remains conditional on repeatable gains and retention for the preselected checkpoint.
 See [the continuation audit](../continuation-audit/remaining_requirements.md).
+
+The [8,000-step recovery checkpoint](walker_checkpoint_8000.json) passed 23 read-only
+checks against the actual saved tensors, optimizer, scheduler, dataset, splits and
+local upload receipts. Validation prediction loss is 0.0839862, down from 0.1565982 at
+step 4,000. Its pinned private revision is
+`691d38fbe2fff4042a7a54861d5523e497dd0c49`. These checks establish the consistency of
+this recovery checkpoint; the full training outcome and S3 probes are still pending.
