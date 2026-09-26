@@ -4,7 +4,13 @@
 [21 September research direction](../researchDirection.md) into an executable plan. The
 supervisor, Geraud Nangue Tasse, has seen the 21 September direction and is happy with it.
 The Walker2d track and the pretraining-versus-adaptation stretch were added on
-26 September. **No experiment described in this folder has run yet.**
+26 September. No experiment described in this folder had run when the plan was adopted.
+
+**Execution is now in progress.** The [validated continuation record](results/continuation-v2/README.md)
+covers rebuilt assets, replay checks and the running from-scratch Walker2d LeWM training.
+The [current Push-T continuation](results/continuation-v3/README.md) records the fresh
+bank recovery and its scientific gates. These records distinguish verified evidence,
+failed diagnostic runs and results that are still pending.
 
 Student: Sachin Mohan (2699183), BSc Honours Computer Science, University of the
 Witwatersrand. Thesis due in late November 2026.
