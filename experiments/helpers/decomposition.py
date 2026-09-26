@@ -29,6 +29,21 @@ def interp_from_endpoints(end_states: np.ndarray) -> np.ndarray:
     return endpoint_interpolation(full)
 
 
+def interp_poses_batch(poses: np.ndarray, block: int = ACTION_BLOCK) -> np.ndarray:
+    """(N, K+1, 3) endpoint poses -> (N, K*block+1, 3) linearly interpolated (angle on the circle)."""
+    poses = np.asarray(poses, dtype=float)
+    N, K1, _ = poses.shape
+    K = K1 - 1
+    w = (np.arange(block) / block)[None, None, :, None]  # (1, 1, block, 1)
+    p0 = poses[:, :-1, None, :]
+    p1 = poses[:, 1:, None, :]
+    out = p0 * (1 - w) + p1 * w  # (N, K, block, 3)
+    d = np.arctan2(np.sin(p1[..., 2] - p0[..., 2]), np.cos(p1[..., 2] - p0[..., 2]))
+    out[..., 2] = (p0[..., 2] + w[..., 0] * d) % (2 * np.pi)
+    out = out.reshape(N, K * block, 3)
+    return np.concatenate([out, poses[:, -1:, :]], axis=1)
+
+
 def ang_err_deg(a, b):
     return np.degrees(np.abs(np.arctan2(np.sin(a - b), np.cos(a - b))))
 

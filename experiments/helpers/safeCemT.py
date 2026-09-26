@@ -11,10 +11,9 @@ penalty-CEM reference `goal + lam * violation`. The arena guard is always on.
 
 from __future__ import annotations
 
-import numpy as np
 import torch
 
-from helpers.decomposition import interp_from_endpoints
+from helpers.decomposition import interp_poses_batch
 from helpers.imagination import HistoryCostModel, NominalPlanner
 from helpers.pushtGeometry import Hazard, clearance_trace
 from helpers.safeCEM import arena_exit_depth, commanded_positions
@@ -38,25 +37,29 @@ class TConstraintCostModel(HistoryCostModel):
             emb = info["predicted_emb"][:, :, H - 1 :, :]  # current real frame + K imagined
             B, S, T, D = emb.shape
             pose = self.probe.predict_pose(emb.reshape(-1, D).float()).reshape(B * S, T, 3)
-            cmin = np.empty(B * S)
-            for i in range(B * S):
-                ends = np.zeros((T, 7))
-                ends[:, 2:5] = pose[i]
-                cmin[i] = clearance_trace(interp_from_endpoints(ends)[:, 2:5], self.hazard).min()
+            path = interp_poses_batch(pose)  # (B*S, L, 3)
+            L = path.shape[1]
+            cmin = clearance_trace(path.reshape(-1, 3), self.hazard).reshape(B * S, L).min(1)
             cmin_t = torch.as_tensor(cmin, device=goal_cost.device, dtype=goal_cost.dtype).reshape(B, S)
             pos = commanded_positions(candidates[:, :, n:], self.pusher_xy, self.action_scaler)
             arena = arena_exit_depth(pos).sum(dim=-1)
-            violation = torch.clamp(self.dial - cmin_t, min=0.0) + arena
-        feasible = violation <= 0.0
-        self.last_frac_feasible = float(feasible.float().mean())
+            hazard_violation = torch.clamp(self.dial - cmin_t, min=0.0)
+        arena_ok = arena <= 0.0
         if self.mode == "penalty":
-            total = goal_cost + self.lam * violation
+            # penalty on the hazard; the arena guard stays a hard, common control
+            scored = goal_cost + self.lam * hazard_violation
+            feasible = arena_ok
+            violation = arena
         else:
-            big = (goal_cost[feasible].max() if feasible.any() else goal_cost.max()) + 1.0
-            total = torch.where(feasible, goal_cost, big + violation)
+            feasible = arena_ok & (hazard_violation <= 0.0)
+            scored = goal_cost
+            violation = hazard_violation + arena
+        self.last_frac_feasible = float(feasible.float().mean())
+        big = (scored[feasible].max() if feasible.any() else scored.max()) + 1.0
+        total = torch.where(feasible, scored, big + violation)
         elite = int(total.argmin(dim=1)[0])
         self.last_diag = {"frac_feasible": self.last_frac_feasible, "elite_feasible": bool(feasible[0, elite]), "elite_cmin": float(cmin_t[0, elite]),
-                          "elite_violation": float(violation[0, elite]), "cmin_median": float(cmin_t.median())}
+                          "elite_hazard_violation": float(hazard_violation[0, elite]), "elite_arena": float(arena[0, elite]), "cmin_median": float(cmin_t.median())}
         return total
 
 

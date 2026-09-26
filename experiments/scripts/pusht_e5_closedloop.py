@@ -94,10 +94,24 @@ def main() -> int:
     fixed = args.fixed_margin if args.fixed_margin is not None else float(e2["arms"]["fixed_margin"]["margin"])
     bank = Bank(STUDY / "test")
     layouts, _ = load_layouts(STUDY / "test" / "layouts.json")
-    fam = [lay for lay in layouts if lay.family == "familiar"]
+    fam = [lay for lay in layouts if lay.family == "familiar" and lay.nominal_min_clearance < -5]
     rng = np.random.default_rng(0)
-    picks = [fam[i] for i in rng.choice(len(fam), size=2, replace=False)]
+    rng.shuffle(fam)
     env = make_env()
+    # Layouts the NOMINAL closed-loop controller actually violates (replanning can dodge an
+    # open-loop crossing); the first two found are used for every arm.
+    picks, screened = [], []
+    nominal = NominalPlanner(base, process, device, num_samples=args.samples)
+    for lay in fam:
+        root = next(r for r in bank.roots if r.root_id == lay.root_id)
+        r = run_episode(env, nominal, root, lay.shape, n_blocks=args.blocks, seed=0)
+        screened.append({"root_id": lay.root_id, "nominal_violation_steps": r["violation_steps"]})
+        if r["any_violation"]:
+            picks.append(lay)
+        if len(picks) == 2 or len(screened) >= 24:
+            break
+    if len(picks) < 2:
+        print(f"[e5] only {len(picks)} layouts with nominal violations among {len(screened)} screened; using what exists")
     arms = {
         "nominal": lambda m, hz: NominalPlanner(m, process, device, num_samples=args.samples),
         "safe_original": lambda m, hz: SafePlannerT(base, process, device, probe=probe, hazard=hz, dial=dial, num_samples=args.samples),
@@ -105,7 +119,7 @@ def main() -> int:
         "safe_original_fixed_margin": lambda m, hz: SafePlannerT(base, process, device, probe=probe, hazard=hz, dial=fixed, num_samples=args.samples),
         "penalty_original": lambda m, hz: SafePlannerT(base, process, device, probe=probe, hazard=hz, dial=dial, mode="penalty", lam=args.lam, num_samples=args.samples),
     }
-    report = {"dial": dial, "fixed_margin": fixed, "lam": args.lam, "layouts": [lay.to_dict() for lay in picks], "episodes_per_layout": args.episodes, "arms": {}}
+    report = {"dial": dial, "fixed_margin": fixed, "lam": args.lam, "layouts": [lay.to_dict() for lay in picks], "screened": screened, "episodes_per_layout": args.episodes, "arms": {}}
     for arm, make in arms.items():
         rows = []
         for lay in picks:
