@@ -60,12 +60,34 @@
       "last_prefix_block_pusher_contact_roots": 15,
       "final_prefix_step_pusher_contact_roots": 9,
       "gate": true
+    },
+    "post_e2_workflow": {
+      "service": "safetydial_pusht_e3_continuation",
+      "config": "configs/pusht/continuation-after-e2.yaml",
+      "config_sha256": "2810df21e5da04bdda9244856dc567dee68f5f4541ac991b9787a2fc503460f6",
+      "state_dir": "runs/workflows/pusht-continuation-after-e2-20260926-2",
+      "observed_status": "waiting",
+      "observed_unix": 1790443163.08689,
+      "e3_seeds": [
+        0,
+        1,
+        2
+      ],
+      "e3_additional_budgets": [
+        64,
+        128,
+        256,
+        512
+      ],
+      "conditional_e5_run_id": "pusht-closedloop-continuation-20260926-2"
     }
   },
   "workflow_configs": [
     "configs/pusht/continuation.yaml",
     "configs/pusht/revalidate_e0.yaml",
-    "configs/walker2d/continuation.yaml"
+    "configs/walker2d/continuation.yaml",
+    "configs/pusht/continuation-after-e1.yaml",
+    "configs/pusht/continuation-after-e2.yaml"
   ],
   "original_queues": {
     "pusht_pid": 54445,
@@ -73,9 +95,9 @@
     "reason": "Do not resume unconditional stale-data or ungated downstream commands.",
     "status": "retired_after_children_finished"
   },
-  "implementation_commit": "92f5391",
+  "implementation_commit": "88f8dea",
   "verification": {
-    "pytest_passed": 191,
+    "pytest_passed": 221,
     "ruff": "passed"
   }
 }

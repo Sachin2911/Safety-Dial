@@ -17,3 +17,10 @@ Fresh CPU replay validation passed on 50 stored roots, including 16 roots with c
 The original E3 child finished as a development diagnostic. Its automatic queue and the stale Walker queue were then retired, after confirming neither had a live child, because they would launch stale-data or ungated downstream work. See [the retirement record](original_queue_retirement.json). The corrected workflows use finite subprocesses, private upload barriers, exact output hashes and explicit scientific gate stops.
 
 Current machine-readable status is in [continuation_status.json](continuation_status.json). Live stage states and logs are under ignored `runs/workflows/`; scientific results, manifests and pinned receipts are retained in this results tree and private Hugging Face repositories.
+
+The qualified post-E2 continuation is committed in `88f8dea`, with 221 repository tests
+passing and Ruff clean. Its managed service, `safetydial_pusht_e3_continuation`, is waiting
+for E2 and the exact prerequisite artifacts. It schedules three paired acquisition seeds,
+all four additional budgets, final-checkpoint retention and the geometric transfer report.
+E5 remains conditional on repeatable gains and retention for the preselected checkpoint.
+See [the continuation audit](../continuation-audit/remaining_requirements.md).
