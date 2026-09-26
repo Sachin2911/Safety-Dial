@@ -1,0 +1,67 @@
+{
+  "status": "execution_failed",
+  "stage": "disjoint_geometric_banks",
+  "reason": "Exhausted disjoint source trajectories for test/familiar before reaching the requested64roots",
+  "requested_test_roots_per_family": 64,
+  "last_logged_test_familiar_roots": 24,
+  "stage_started_unix": 1790439670.2601144,
+  "stage_finished_unix": 1790443611.7188191,
+  "returncode": 1,
+  "launcher_pid_missing": 535412,
+  "source_pool_size_per_family": 605,
+  "partial_bank_directory": "data/study/pusht/continuation-v2/e1",
+  "partial_artifacts_preserved": true,
+  "complete_root_metadata_and_ledgers_published": false,
+  "charged_steps": null,
+  "cost_note": "The failed producer published aggregate ledgers only after all banks; exact failed-run simulator costs are unavailable and are not reconstructed from guesses. This generation run provides no E1/E2/E3 scientific result.",
+  "dependent_waiters_stopped": [
+    {
+      "service": "safetydial_pusht_repair_continuation",
+      "workflow": "pusht-continuation-after-e1-20260926-2",
+      "prior_status": "waiting",
+      "started_stage_attempts": 0,
+      "supervisor_result": "safetydial_pusht_repair_continuation: stopped"
+    },
+    {
+      "service": "safetydial_pusht_e3_continuation",
+      "workflow": "pusht-continuation-after-e2-20260926-2",
+      "prior_status": "waiting",
+      "started_stage_attempts": 0,
+      "supervisor_result": "safetydial_pusht_e3_continuation: stopped"
+    }
+  ],
+  "observed_unix": 1790443772.1105723,
+  "recovery_policy": "Use fresh output paths; preserve all requested bank sizes, geometric filters and disjoint source roles. No reduction in study scope and no model-performance-based selection.",
+  "partial_test_h5_counts": {
+    "accepted_roots_in_h5": 26,
+    "recorded_branch_tapes": 416
+  },
+  "frozen_partition": {
+    "seed": 20260928,
+    "excluded_count": 185,
+    "excluded_sorted_ids_sha256": "4f413752d6662177913113f2cc2ebffbca0ed0b7f032263d040fdd33ebef855b",
+    "input_roots_sha256": {
+      "data/study/pusht/dev/roots.json": "a27289162acbecd2ba5055d51a2387b08642a04a3aa5489432b92c0472e4fa68",
+      "data/study/pusht/test/roots.json": "a038cee73fc8a0b23b5768d59179baee2f6cdc11ca3dc6526ed0ee072bd9d16f",
+      "data/study/pusht/stress/roots.json": "01b123e4dee8d8045b0ba68c5bd386612eeac983a4c2099acf60d7dc87ce9661",
+      "data/study/pusht/e0/roots.json": "f8a402188f020c978a1257f568c7ea58061b237b62e769fdc66957371a1525ba"
+    },
+    "asset_splits_sha256": "c3d97c7e5d8c48d62e04d64baca7b4262ee5b43c64099044bcd2f1b0c38b1356",
+    "source_role_hashes": {
+      "dev/familiar": {
+        "count": 605,
+        "ordered_episode_ids_sha256": "660841a2b726de75db66db1250302af1981078314c8085ada4b3aeefd2e1c00d"
+      },
+      "test/familiar": {
+        "count": 605,
+        "ordered_episode_ids_sha256": "c19d3654d9c4f4987c00807e18e2e4fd39998b07ca61c8e7c2edd71d2251c78e"
+      },
+      "test/heldout": {
+        "count": 605,
+        "ordered_episode_ids_sha256": "b225c79665a2704e346e8f3e79bc4506ef7ab9a339300037db575addc7e3d0e6"
+      }
+    },
+    "hash_encoding": "SHA256 of compact JSON, preserving episode order; excluded IDs sorted",
+    "recovery_rule": "Keep these exact development and final-test source roles. Generation rejection alone does not move a source into development or disqualify it from its original final-test role; no final-test performance was used."
+  }
+}

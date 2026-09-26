@@ -10,7 +10,7 @@ The 1,000-step LeWM smoke run passed nonblack rendering, whole-episode split and
 
 LeWM recovery checkpoints are uploaded every 4,000 optimizer steps. Each contains one atomic recovery bundle with model, optimizer, scheduler, random states and a reproducible training-batch cursor, alongside source snapshots and model exports. The interval was increased from 2,000 to fit both full model histories within verified private storage while retaining a 10 GB reserve. The full-run preflight projects 44.94 GB for both checkpoint histories including overhead, with about 30.72 GB remaining beyond the reserve. A recovered run must use a fresh run ID and identical data, split and recipe.
 
-Push-T physical probes have been refitted with source-aware splits and uploaded at private revision `f03fb888ff15a4e757600a51c038a0988429c05c`. Fresh development, representative and stress banks are being generated with geometric start/goal families. Development feasible-route witnesses, the decomposition gate and full paired retention are prerequisites to repairability/acquisition claims.
+Push-T physical probes have been refitted with source-aware splits and uploaded at private revision `f03fb888ff15a4e757600a51c038a0988429c05c`. The first corrected bank build exhausted its finite test/familiar source pool at 26 accepted roots, before the requested 64. Its partial banks are preserved and cannot support a completed study. See [the failure record](bank_generation_failure.json). Fresh continuation-v3 recovery is being prepared with the same source partitions and geometric filters, bounded extra candidates per source, incremental provenance, and development feasibility checked before final-bank generation.
 
 Fresh CPU replay validation passed on 50 stored roots, including 16 roots with collision contact (the old counter includes walls). Repeated observed poses, block velocities, rendered frames and terminal masks agree bitwise. Ten stopped branches retain explicit censored suffixes. Geometry was cross-checked against an independent implementation; all ten contact overlays passed the separate [visual review](e0-visual-review.json). The old contact counter is not evidence of pusher–block contact specifically, so that mechanistic stratum uses the new body-specific observer. A separate [contact coverage check](e0-contact-coverage-combined.json) adds one recorded-action root: 51 roots from 50 source episodes, with 15 roots showing pusher–T contact during the last prefix block and nine at its final step. All three repeats agree bitwise; the original 50-root qualification is preserved. This validates deterministic replay of the recorded float32 tapes, not equivalence to the original unquantized action arrays.
 
@@ -19,11 +19,12 @@ The original E3 child finished as a development diagnostic. Its automatic queue 
 Current machine-readable status is in [continuation_status.json](continuation_status.json). Live stage states and logs are under ignored `runs/workflows/`; scientific results, manifests and pinned receipts are retained in this results tree and private Hugging Face repositories.
 
 The qualified post-E2 continuation is committed in `88f8dea`, with 221 repository tests
-passing and Ruff clean. Its managed service, `safetydial_pusht_e3_continuation`, is waiting
-for E2 and the exact prerequisite artifacts. It schedules three paired acquisition seeds,
-all four additional budgets, final-checkpoint retention and the geometric transfer report.
-E5 remains conditional on repeatable gains and retention for the preselected checkpoint.
-See [the continuation audit](../continuation-audit/remaining_requirements.md).
+passing and Ruff clean at that commit. Its v2 managed service was verified waiting, then
+stopped without starting an experiment when bank generation failed and its prerequisites
+could no longer arrive. The same qualified downstream design will be used in the fresh
+recovery: three paired acquisition seeds, all four additional budgets, final-checkpoint
+retention and the geometric transfer report. E5 remains conditional on repeatable gains
+and retention for the preselected checkpoint. See [the continuation audit](../continuation-audit/remaining_requirements.md).
 
 The [8,000-step recovery checkpoint](walker_checkpoint_8000.json) passed 23 read-only
 checks against the actual saved tensors, optimizer, scheduler, dataset, splits and
