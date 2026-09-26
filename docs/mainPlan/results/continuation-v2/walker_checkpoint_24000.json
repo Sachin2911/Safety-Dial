@@ -1,0 +1,100 @@
+{
+  "status": "passed",
+  "run_dir": "runs/walker2d-lewm-a-continuation-20260926-1",
+  "step": 24000,
+  "planned_optimizer_steps": 214780,
+  "validation_pred_loss": 0.018410890363156796,
+  "private_receipt": {
+    "repo_id": "Sachioster/safetydial-walker2d",
+    "revision": "25d59af8bc3ab39db11ff3ff71abda486e594695",
+    "path": "lewm-a/walker2d-lewm-a-continuation-20260926-1",
+    "step": 24000
+  },
+  "audit_started_utc": "2026-09-26T18:40:57.277305+00:00",
+  "audit_completed_utc": "2026-09-26T18:40:58.558532+00:00",
+  "checks": {
+    "requested_checkpoint_step_and_upload_revision": true,
+    "atomic_protocol_and_recovery_sha": true,
+    "step_matches_bundle_export_metadata_manifest_receipt_history": true,
+    "export_matches_atomic_model_exactly": true,
+    "finite_model": true,
+    "finite_optimizer": true,
+    "optimizer_parameter_ids_and_adam_states_consistent": true,
+    "all_adam_states_at_requested_step": true,
+    "scheduler_and_optimizer_match_cosine_warmup_step": true,
+    "history_tail_and_recorded_validation_agree": true,
+    "history_step_order_and_finite_metrics": true,
+    "training_recipe_and_architecture_identity": true,
+    "split_identity_in_all_local_records": true,
+    "unique_disjoint_training_validation_episodes": true,
+    "dataset_identity_matches_prior_audit_without_rehash": true,
+    "unchanged_recipe_split_scaler_and_snapshot_hashes": true,
+    "saved_scalers_finite_and_match_atomic_identity": true,
+    "frozen_source_snapshot_identity": true,
+    "upload_receipts_agree": true,
+    "cpu_numpy_python_rng_states_loadable": true,
+    "saved_cuda_rng_present_as_cpu_byte_tensor": true,
+    "restartable_cursor_derived_from_completed_steps": true,
+    "all_audited_file_bytes_and_identities_stable": true
+  },
+  "file_sha256": {
+    "optimizer.pt": "d7b017c24498f470c57e3152decccd8145114e6fbac77c58dfcb2178d64abcc0",
+    "weights.pt": "9a028fa4f5ac68eb1270f20a2f39feee7c8000f7354b5211b2f62d2753e48e77",
+    "lewm_object.ckpt": "a59ad01211db2b2edc522424d845a4b09a3149a721b6f12ed942dc8991a8c6c3",
+    "train_state.json": "380d80640b9e8b4c4373a2edffd327692ffb0fc1cdcabbf7e88d2c142e781ed9",
+    "config.json": "d1096ead45985aca453f80573073b44eedd62e60d18cc4c4a933d4069be7ed06",
+    "config.yaml": "11773373582b2f3b9fdb33224d4f4f3e4acea895ce732ddec36763b60a72faa7",
+    "scalers.npz": "971a5a4c038b5b9eca40f24755c1d74a8678cb6589b84c36f86782f3456788ae",
+    "splits.json": "e7a8083f82d7b7701587b3dcaf1c73043384c18603d617470d293de58221b4b6",
+    "manifest.json": "a66c97062b3ed36a668c41bfeea106b71ea3a39981a9f2a5c5aa51cddf0293b7",
+    "upload_receipt.json": "fde1ff684527da987722ee842b4a9c1be26543b726ae5c50ae6b397c113bca91",
+    "hf_upload.json": "a7e35a76f4d82b13274e8138d3bd8f1c0848228ed1fc46567dec3167440392cc",
+    "source_snapshot/sha256.json": "63f3221aa8a3aa07d2bcbe2df5c37db46f76dfe010412b3e8e483a626281b3a4"
+  },
+  "prior_audit": {
+    "path": "docs/mainPlan/results/continuation-v2/walker_checkpoint_8000.json",
+    "sha256": "acc3285d0933a0382d16b0b46f4e20bf4dee960e10e591f75c1118851a293839"
+  },
+  "training_state": {
+    "model_tensors": 303,
+    "model_elements": 18043172,
+    "optimizer_tensors": 891,
+    "optimizer_parameter_ids": 297,
+    "optimizer_states": 297,
+    "adam_step_min": 24000.0,
+    "adam_step_max": 24000.0,
+    "scheduler_last_epoch": 24000,
+    "scheduler_step_count": 24001,
+    "expected_lr": 4.847531563030619e-05,
+    "saved_optimizer_lrs": [
+      4.847531563030619e-05
+    ],
+    "saved_history_records": 1200,
+    "data_order_version": 1,
+    "steps_per_epoch": 21478,
+    "completed_epochs": 1,
+    "next_batch_offset": 2522,
+    "cursor_source": "Completed optimizer step plus frozen restartable-batch sampler; no separately persisted prefetch cursor",
+    "rng_state_bytes": {
+      "torch_cpu": 5056,
+      "cuda_devices": [
+        16
+      ]
+    },
+    "training_episodes": 4544,
+    "validation_episodes": 93
+  },
+  "dataset_identity": {
+    "path": "data/study/walker2d/continuation-20260926-2/setA.h5",
+    "recorded_sha256": "4602eeb952c918a3a9de787605d496c5a751fd692396f539e3e82fcf9c96f267",
+    "bytes_rehashed_this_audit": false
+  },
+  "scope": "Read-only CPU inspection of the local step-24000 atomic recovery bundle, weights export, metadata and successful-upload receipts. Local file inode, size, modification/change times and SHA256 remained stable during the audit.",
+  "limitations": [
+    "No remote bytes were downloaded or checked; the recorded successful-upload receipts agree on the pinned revision.",
+    "The unchanged large dataset was not rehashed or reopened; its declared path/SHA and unchanged split/scaler/config bytes were matched to the detailed step-8000 audit.",
+    "lewm_object.ckpt was hashed but not deserialized; exact tensor equality was checked between optimizer.pt model state and weights.pt.",
+    "CUDA RNG is present and structurally valid but was not restored on a GPU; recovery was not executed.",
+    "No model inference, optimizer updates, simulations, model selection, live-run writes, source/config edits or uploads were performed."
+  ]
+}

@@ -32,3 +32,12 @@ local upload receipts. Validation prediction loss is 0.0839862, down from 0.1565
 step 4,000. Its pinned private revision is
 `691d38fbe2fff4042a7a54861d5523e497dd0c49`. These checks establish the consistency of
 this recovery checkpoint; the full training outcome and S3 probes are still pending.
+
+The [24,000-step recovery audit](walker_checkpoint_24000.json) passed all 23 CPU
+checks. The atomic model matches its weights export exactly; all Adam states and the
+cosine scheduler agree on step 24,000, and the deterministic next-batch cursor is
+epoch 1, offset 2,522. The validation prediction loss recorded by training is
+0.018410890363156796. Matching upload receipts pin private revision
+`25d59af8bc3ab39db11ff3ff71abda486e594695`. This audit did not rerun GPU recovery,
+rehash the unchanged dataset or download remote checkpoint bytes; the full
+214,780-step training run remains in progress.
