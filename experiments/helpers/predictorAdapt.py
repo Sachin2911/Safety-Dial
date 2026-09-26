@@ -126,6 +126,8 @@ def branch_clips(imaginer, bank, indices, *, env=None) -> ClipSet:
     cache = {}
     Z, A = [], []
     for j in indices:
+        if not bank.branch_valid_for_training(int(j)):
+            continue
         b = bank.branch(int(j), frames=True)
         ri = int(b["root_index"])
         if ri not in cache:
@@ -136,6 +138,8 @@ def branch_clips(imaginer, bank, indices, *, env=None) -> ClipSet:
         blocks = np.concatenate([hist_blocks, b["tape"].astype(np.float64)], 0)
         Z.append(np.concatenate([z_prev, z_branch], 0))
         A.append(blocks_to_model(imaginer.process, blocks).numpy())
+    if not Z:
+        raise ValueError("No complete, observation-valid branches are available for adaptation")
     return ClipSet(np.stack(Z).astype(np.float32), np.stack(A).astype(np.float32), {"source": "branches", "n": len(Z)})
 
 

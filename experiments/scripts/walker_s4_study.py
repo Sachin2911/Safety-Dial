@@ -38,7 +38,8 @@ from helpers.predictorAdapt import AdaptConfig, ClipSet, adapt, predictor_side_s
 from helpers.runManifest import build_manifest, make_run_id, write_manifest  # noqa: E402
 from helpers.walkerBank import HORIZON_STEPS, WalkerBank, build_walker_bank, endpoint_targets, interp_steps, sample_roots  # noqa: E402
 from helpers.walkerLewm import FRAMESKIP, HISTORY, WalkerImaginer, load_walker_model  # noqa: E402
-from helpers.walkerRules import HORIZON_BLOCKS, health_clearance, speed_clearance  # noqa: E402
+from helpers.walkerReporting import cumulative_clearance, root_regimes  # noqa: E402
+from helpers.walkerRules import HORIZON_BLOCKS, health_clearance, rule_unsafe, speed_clearance  # noqa: E402
 
 DATA = REPO_ROOT / "data" / "study" / "walker2d"
 RESULTS = REPO_ROOT / "docs" / "mainPlan" / "results" / "s4"
@@ -60,7 +61,7 @@ class RootCache:
         return self.cache[root.root_id]
 
 
-def analyse(bank: WalkerBank, im: WalkerImaginer, probe, ctx: RenderContext, *, sources_all: bool = True) -> list[dict]:
+def analyse(bank: WalkerBank, im: WalkerImaginer, probe, ctx: RenderContext, *, sources_all: bool = True, rules=RULES) -> list[dict]:
     """Per branch: min clearance per rule per source. Sources: dense, endpoint, real_readout, imagined."""
     cache = RootCache(im, ctx)
     rows = []
@@ -79,17 +80,28 @@ def analyse(bank: WalkerBank, im: WalkerImaginer, probe, ctx: RenderContext, *, 
             qp, xv = bank.h5["qpos"][j], bank.h5["x_velocity"][j]
             truth = endpoint_targets(qp, xv)  # (K, 3)
             root_true = np.array([qp[0, 1], qp[0, 2], root.meta.get("x_velocity", 0.0)])
-            row = {"bank": bank.dir.name, "branch": j, "root": ri, "kind": bank.h5["kind"][j].decode() if isinstance(bank.h5["kind"][j], bytes) else str(bank.h5["kind"][j])}
-            for rule in RULES:
+            row = {"bank": bank.dir.name, "branch": j, "root": root.episode, "root_id": root.root_id, "kind": bank.h5["kind"][j].decode() if isinstance(bank.h5["kind"][j], bytes) else str(bank.h5["kind"][j])}
+            row.update(root_regimes(root))
+            real = np.vstack([y0, probe.predict(im.encode(bank.h5["frames"][j][1:]))]) if sources_all else None
+            for rule in rules:
                 dense = rule_clearance(rule, qp[1:, 1], qp[1:, 2], xv)
                 row[f"cmin_dense_{rule}"] = float(dense.min())
+                row[f"cmin_by_block_dense_{rule}"] = cumulative_clearance(dense)
                 ends = np.vstack([root_true, truth])
-                row[f"cmin_endpoint_{rule}"] = float(rule_clearance(rule, interp_steps(ends[:, 0]), interp_steps(ends[:, 1]), interp_steps(ends[:, 2])).min())
+                endpoint = rule_clearance(rule, interp_steps(ends[:, 0]), interp_steps(ends[:, 1]), interp_steps(ends[:, 2]))
+                row[f"cmin_endpoint_{rule}"] = float(endpoint.min())
+                row[f"cmin_by_block_endpoint_{rule}"] = cumulative_clearance(endpoint)
                 imag = np.vstack([y0, pred[a]])
-                row[f"cmin_imagined_{rule}"] = float(rule_clearance(rule, interp_steps(imag[:, 0]), interp_steps(imag[:, 1]), interp_steps(imag[:, 2])).min())
+                imagined = rule_clearance(rule, interp_steps(imag[:, 0]), interp_steps(imag[:, 1]), interp_steps(imag[:, 2]))
+                row[f"cmin_imagined_{rule}"] = float(imagined.min())
+                row[f"cmin_by_block_imagined_{rule}"] = cumulative_clearance(imagined)
                 if sources_all:
-                    real = np.vstack([y0, probe.predict(im.encode(bank.h5["frames"][j][1:]))])
-                    row[f"cmin_real_readout_{rule}"] = float(rule_clearance(rule, interp_steps(real[:, 0]), interp_steps(real[:, 1]), interp_steps(real[:, 2])).min())
+                    readout = rule_clearance(rule, interp_steps(real[:, 0]), interp_steps(real[:, 1]), interp_steps(real[:, 2]))
+                    row[f"cmin_real_readout_{rule}"] = float(readout.min())
+                    row[f"cmin_by_block_real_readout_{rule}"] = cumulative_clearance(readout)
+            row["state_abs_error_by_block"] = np.abs(pred[a] - truth).tolist()
+            row["true_displacement"] = float(qp[-1, 0] - qp[0, 0])
+            row["predicted_displacement"] = float(pred[a, :, 2].sum() * FRAMESKIP * 0.008)
             row["fell"] = bool((qp[1:, 1] < 0.8).any())
             row["speed_max"] = float(xv.max())
             rows.append(row)
@@ -97,7 +109,7 @@ def analyse(bank: WalkerBank, im: WalkerImaginer, probe, ctx: RenderContext, *, 
 
 
 def table(rows, rule, m, sources):
-    u = np.array([r[f"cmin_dense_{rule}"] < 0 for r in rows])
+    u = rule_unsafe(rule, np.array([r[f"cmin_dense_{rule}"] for r in rows]))
     root = np.array([r["root"] for r in rows])
     out = {"n": int(len(rows)), "n_unsafe": int(u.sum())}
     for s in sources:
@@ -130,7 +142,7 @@ def clips_from_bank(bank: WalkerBank, im: WalkerImaginer, ctx: RenderContext, in
     return ClipSet(np.stack(Z).astype(np.float32), np.stack(A), {"source": "walker_branches", "n": len(Z)})
 
 
-def replay_clips(h5_path: Path, im: WalkerImaginer, ctx: RenderContext, rng, n_clips: int, scaler) -> ClipSet:
+def replay_clips(h5_path: Path, im: WalkerImaginer, ctx: RenderContext, rng, n_clips: int, scaler, episodes=None) -> ClipSet:
     """Ordinary set-A windows: HISTORY + HORIZON_BLOCKS endpoint frames and the blocks between."""
     from helpers.walkerBank import iter_episodes
 
@@ -138,7 +150,10 @@ def replay_clips(h5_path: Path, im: WalkerImaginer, ctx: RenderContext, rng, n_c
     T = HISTORY + HORIZON_BLOCKS
     span = (T - 1) * FRAMESKIP + 1
     Z, A = [], []
+    allowed = None if episodes is None else set(episodes)
     for ei, ep in iter_episodes(h5_path):
+        if allowed is not None and ei not in allowed:
+            continue
         n = len(ep["qpos"])
         if n < span:
             continue
@@ -155,7 +170,8 @@ def replay_clips(h5_path: Path, im: WalkerImaginer, ctx: RenderContext, rng, n_c
     return ClipSet(np.stack(Z).astype(np.float32), np.stack(A), {"source": "setA_replay", "n": len(Z)})
 
 
-def main() -> int:
+def legacy_retrospective_main() -> int:
+    raise RuntimeError("Historical retrospective entry point disabled; use main() for prospective S4")
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", required=True)
     ap.add_argument("--probes", required=True)
@@ -228,7 +244,7 @@ def main() -> int:
             out[n] = {}
             for rule in RULES:
                 c = np.array([r[f"cmin_imagined_{rule}"] for r in rows])
-                u = np.array([r[f"cmin_dense_{rule}"] < 0 for r in rows])
+                u = rule_unsafe(rule, np.array([r[f"cmin_dense_{rule}"] for r in rows]))
                 mm = margin_for_acceptance(np.array([r[f"cmin_imagined_{rule}"] for r in rows]), target_ar[rule]) if n == "dev" else out["dev"][rule]["margin"]
                 out[n][rule] = {"margin": float(mm), "at_matched": fsa(c, u, mm), "auc_dial": auc_dial(c, u), "clearance_error": clearance_error_stats(c, np.array([r[f"cmin_dense_{rule}"] for r in rows]))}
         return out
@@ -270,6 +286,12 @@ def main() -> int:
     (RESULTS / "study.json").write_text(json.dumps(report, indent=1, default=float) + "\n")
     print(f"[s4] done in {time.time() - t0:.0f}s")
     return 0
+
+
+def main() -> int:
+    from walker_s4_prospective import main as prospective_main
+
+    return prospective_main()
 
 
 if __name__ == "__main__":

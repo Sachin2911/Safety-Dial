@@ -13,7 +13,7 @@ already produces it: temporal (2 vs 1), readout (3 vs 2) or imagination (4 vs 3)
 
 Outputs docs/mainPlan/results/e1/: decomposition.json, per-branch table (npz), figures.
 
-    uv run python experiments/scripts/pusht_e1_decompose.py
+    uv run python experiments/scripts/pusht_e1_decompose.py --banks-dir data/study/pusht/e1-clean-1 --results-dir runs/e1-clean-1-results
 """
 
 from __future__ import annotations
@@ -39,30 +39,59 @@ apply_torch()
 from helpers.branchBank import Bank  # noqa: E402
 from helpers.coordDynamics import expert_block_transitions, fit_coord_dynamics  # noqa: E402
 from helpers.dialMetrics import auc_dial, clearance_error_stats, fsa, margin_for_acceptance  # noqa: E402
+from helpers.hfStore import HFStore  # noqa: E402
 from helpers.imagination import Imaginer  # noqa: E402
 from helpers.poseProbes import load_probe  # noqa: E402
 from helpers.pushtAssets import H5_PATH, load_model, load_scalers  # noqa: E402
 from helpers.pushtLayouts import load_layouts  # noqa: E402
-from helpers.runManifest import build_manifest, write_manifest  # noqa: E402
+from helpers.runManifest import validate_run_id, build_manifest, make_run_id, write_manifest, file_sha256  # noqa: E402
 
 ASSETS_RUN = REPO_ROOT / "runs" / "pusht-assets-20260926-1"
 PROBES_RUN = REPO_ROOT / "runs" / "pusht-probes-20260926-1"
 STUDY = REPO_ROOT / "data" / "study" / "pusht"
 RESULTS = REPO_ROOT / "docs" / "mainPlan" / "results" / "e1"
-from helpers.decomposition import SOURCES, analyse_bank, ang_err_deg, by_regime, decision_table  # noqa: E402
+from helpers.splitIntegrity import validate_bank_splits, bank_identity, decomposition_gate  # noqa: E402
+from helpers.decomposition import SOURCES, analyse_bank, ang_err_deg, by_regime, decision_table, row_outcomes  # noqa: E402
 
 MARGINS = np.linspace(-20, 60, 41)
 
 
 def main() -> int:
+    global RESULTS, STUDY, ASSETS_RUN, PROBES_RUN
     ap = argparse.ArgumentParser()
     ap.add_argument("--banks", nargs="+", default=["dev", "test", "stress"])
     ap.add_argument("--probe", default="block_pose_mlp")
     ap.add_argument("--coord-epochs", type=int, default=30)
+    ap.add_argument("--banks-dir", type=Path, default=STUDY)
+    ap.add_argument("--results-dir", type=Path, required=True, help="Fresh decomposition output directory")
+    ap.add_argument("--assets-run", type=Path, default=ASSETS_RUN)
+    ap.add_argument("--probes-run", type=Path, default=PROBES_RUN)
+    ap.add_argument("--no-upload", action="store_true")
+    ap.add_argument("--n", type=int, default=1)
+    ap.add_argument("--run-id", type=validate_run_id, help="Explicit stable run ID for queued workflows")
+    ap.add_argument("--min-false-safe", type=int, default=5)
+    ap.add_argument("--min-imagination", type=int, default=3)
+    ap.add_argument("--min-imagination-share", type=float, default=0.25)
     args = ap.parse_args()
+    RESULTS, STUDY = args.results_dir.resolve(), args.banks_dir.resolve()
+    ASSETS_RUN, PROBES_RUN = args.assets_run, args.probes_run
+    if "dev" not in args.banks:
+        ap.error("The development bank is required for margin and readout choices")
+    split_report = validate_bank_splits({name: STUDY / name for name in args.banks})
+    run_id = args.run_id or make_run_id("pusht", "decomposition", n=args.n)
+    coord_dir = REPO_ROOT / "runs" / f"{run_id}-coord"
+    for path in (RESULTS, coord_dir):
+        if path.exists():
+            ap.error(f"Use a fresh output path/run ID; preserving {path}")
+    store = None if args.no_upload else HFStore()
+    references = {} if store is None else {
+        "assets": store.reference_run("pusht", "assets", ASSETS_RUN),
+        "probes": store.reference_run("pusht", "probes", PROBES_RUN),
+        "banks": {name: store.reference_run("pusht-banks", "banks", STUDY / name) for name in args.banks},
+    }
     t_start = time.time()
     device = "cuda"
-    RESULTS.mkdir(parents=True, exist_ok=True)
+    RESULTS.mkdir(parents=True)
     model = load_model(device)
     process = load_scalers(ASSETS_RUN / "scalers.npz")
     splits = json.loads((ASSETS_RUN / "splits.json").read_text())
@@ -74,12 +103,25 @@ def main() -> int:
     Xv, Av, Yv = expert_block_transitions(H5_PATH, splits["roles"]["retention"][:100])
     print(f"[e1] coord reference: {len(X):,} train / {len(Xv):,} val transitions")
     coord, coord_stats = fit_coord_dynamics(X, A, Y, Xv, Av, Yv, device=device, epochs=args.coord_epochs)
-    torch.save(coord.state_dict(), RESULTS.parent.parent.parent.parent / "runs" / "pusht-coord-mlp.pt")
+    coord_dir.mkdir(parents=True)
+    torch.save(coord.state_dict(), coord_dir / "weights.pt")
+    (coord_dir / "config.yaml").write_text(json.dumps({"epochs": args.coord_epochs, "privileged_state": True}) + "\n")
+    write_manifest(coord_dir, build_manifest(run_id=coord_dir.name, kind="coordinate-reference",
+        data={"upstream": references, "training_episodes": splits["roles"]["replay"][:600],
+              "validation_episodes": splits["roles"]["retention"][:100]}, metrics=coord_stats,
+        started_at=t_start))
+    (coord_dir / "README.md").write_text("# Coordinate dynamics reference\n\nPrivileged simulator-coordinate baseline for Push-T; not a visual latent model.\n")
+    if store is not None:
+        store.upload_run("pusht", "references", coord_dir, run_id=coord_dir.name)
+        references["coordinate_reference"] = store.reference_run("pusht", "references", coord_dir)
 
     # --- probe capacity check on development-bank frames (chosen on dev, then frozen) ----
     dev = Bank(STUDY / "dev")
-    fr = np.stack([dev.branch(j, frames=True)["frames"][-1] for j in range(0, len(dev), 3)])
-    st = np.stack([dev.branch(j)["states"][-1] for j in range(0, len(dev), 3)])
+    valid_dev = dev.valid_training_indices()[::3]
+    if not len(valid_dev):
+        raise ValueError("Development bank has no complete observation-valid probe-check frames")
+    fr = np.stack([dev.branch(j, frames=True)["frames"][-1] for j in valid_dev])
+    st = np.stack([dev.branch(j)["states"][-1] for j in valid_dev])
     z = imaginer.encode(fr)
     cap = {}
     for kind in ("linear", "mlp"):
@@ -104,26 +146,33 @@ def main() -> int:
     dev_rows = [r for r in all_rows if r["bank"] == "dev"]
     target_ar = float(np.mean([r["cmin_imagined"] >= 0 for r in dev_rows])) if dev_rows else 0.5
     m_matched = margin_for_acceptance(np.array([r["cmin_imagined"] for r in dev_rows]), target_ar) if dev_rows else 0.0
-    report = {"probe": args.probe, "probe_val_stats": probe_stats["val"], "probe_capacity_dev_frames": cap, "coord_reference": coord_stats,
+    report = {"run_id": run_id, "split_integrity": split_report, "bank_identities": {name: bank_identity(STUDY / name) for name in args.banks}, "probe_sha256": file_sha256(PROBES_RUN / f"{args.probe}.pt"), "probe": args.probe, "probe_val_stats": probe_stats["val"], "probe_capacity_dev_frames": cap, "coord_reference": coord_stats,
               "target_acceptance_rate_dev": target_ar, "margin_matched_dev": float(m_matched), "pose_error_by_block": pose_errs, "banks": {}}
     for name in args.banks:
         rows = [r for r in all_rows if r["bank"] == name]
+        observed_rows = [row for row in rows if not row.get("censored", False)]
         entry = {"n_rows": len(rows), "n_branches": len({r["branch"] for r in rows}), "n_roots": len({r["root"] for r in rows}),
-                 "frac_unsafe": float(np.mean([r["cmin_dense"] < 0 for r in rows])) if rows else None,
+                 "frac_observed_composite_unsafe": float(row_outcomes(rows)[0].mean()) if rows else None,
+                 "n_censored": int(row_outcomes(rows)[1].sum()),
                  "at_m0": decision_table(rows, 0.0), "at_matched": decision_table(rows, m_matched),
                  "by_regime_m0": by_regime(rows, 0.0),
-                 "dial_curves": {s: [{"m": float(m), **{k: v for k, v in fsa(np.array([r[f"cmin_{s}"] for r in rows]), np.array([r["cmin_dense"] < 0 for r in rows]), m).items() if k in ("fsa", "acceptance_rate", "n_accepted", "n_false_safe")}} for m in MARGINS] for s in SOURCES},
-                 "auc_dial": {s: auc_dial(np.array([r[f"cmin_{s}"] for r in rows]), np.array([r["cmin_dense"] < 0 for r in rows])) for s in SOURCES},
-                 "clearance_error": {s: clearance_error_stats(np.array([r[f"cmin_{s}"] for r in rows]), np.array([r["cmin_dense"] for r in rows])) for s in SOURCES if s != "dense"},
-                 "by_layout": {fam: {"n": sum(r["layout"] == fam for r in rows), "fsa_imagined_m0": decision_table([r for r in rows if r["layout"] == fam], 0.0)["imagined"]["fsa"]} for fam in ("familiar", "heldout")},
+                 "dial_curves": {s: [{"m": float(m), **{k: v for k, v in fsa(np.array([r[f"cmin_{s}"] for r in rows]), row_outcomes(rows)[0], m, censored=row_outcomes(rows)[1]).items() if k in ("fsa", "acceptance_rate", "n_accepted", "n_false_safe")}} for m in MARGINS] for s in SOURCES},
+                 "auc_dial": {s: auc_dial(np.array([r[f"cmin_{s}"] for r in rows]), row_outcomes(rows)[0], censored=row_outcomes(rows)[1]) for s in SOURCES},
+                 "clearance_error": {s: (clearance_error_stats(np.array([r[f"cmin_{s}"] for r in observed_rows]), np.array([r["cmin_dense"] for r in observed_rows])) if observed_rows else {"n": 0}) for s in SOURCES if s != "dense"},
+                 "by_layout": {fam: {"n": sum(r["layout"] == fam for r in rows), "fsa_imagined_m0": decision_table([r for r in rows if r["layout"] == fam], 0.0)["imagined"]["fsa"]} for fam in sorted({r["layout"] for r in rows})},
                  "mechanistic_contact": {}}
-        c_rows = [r for r in rows if r["contact"] and r["layout"] == "familiar"]
+        entry["contact_measurement"] = {
+            "typed_branch_rows": sum(r.get("contact_mechanism_identifiable", False) for r in rows),
+            "untyped_branch_rows": sum(not r.get("contact_mechanism_identifiable", False) for r in rows),
+            "legacy_interpretation": "Untyped n_contacts counts any collision, including walls; it cannot identify pusher-T contact or free motion"}
+        c_rows = [r for r in rows if r["contact"] and r["layout"] == "familiar" and not r.get("censored", False) and r.get("observation_valid", True)]
+        entry["mechanistic_contact"] = {"available": bool(c_rows)}
         if c_rows:
             d_true = np.array([r["displacement_px"] for r in c_rows])
             d_imag = np.array([r["imag_displacement_px"] for r in c_rows])
             r_true = np.array([r["rotation_deg"] for r in c_rows])
             r_imag = np.array([r["imag_rotation_deg"] for r in c_rows])
-            entry["mechanistic_contact"] = {"n": len(c_rows), "true_disp_mean_px": float(d_true.mean()), "imag_disp_mean_px": float(d_imag.mean()),
+            entry["mechanistic_contact"] = {"available": True, "n": len(c_rows), "true_disp_mean_px": float(d_true.mean()), "imag_disp_mean_px": float(d_imag.mean()),
                                             "disp_ratio_imag_over_true": float(d_imag.sum() / max(d_true.sum(), 1e-9)),
                                             "true_rot_mean_deg": float(r_true.mean()), "imag_rot_mean_deg": float(r_imag.mean()),
                                             "rot_ratio_imag_over_true": float(r_imag.sum() / max(r_true.sum(), 1e-9)),
@@ -131,11 +180,15 @@ def main() -> int:
         report["banks"][name] = entry
         t = entry["at_m0"]
         print(f"[e1] {name} @m=0: " + " | ".join(f"{s} FSA {t[s]['fsa']:.3f} AR {t[s]['acceptance_rate']:.2f}" for s in SOURCES) + f" | attribution {t['attribution']}")
+    report["gate"] = decomposition_gate(report["banks"]["dev"]["at_m0"],
+        min_false_safe=args.min_false_safe, min_imagination=args.min_imagination,
+        min_imagination_share=args.min_imagination_share)
     np.savez_compressed(RESULTS / "decomposition_rows.npz", rows=json.dumps(all_rows))
     report["wall_clock_s"] = time.time() - t_start
-    report["manifest"] = build_manifest(run_id="pusht-e1-decomposition", kind="analysis",
-                                        data={"assets_run": ASSETS_RUN.name, "probes_run": PROBES_RUN.name, "banks": json.loads((RESULTS / "banks.json").read_text()).get("hf_revisions", {})})
+    report["manifest"] = build_manifest(run_id=run_id, kind="analysis",
+                                        data={"upstream": references, "split_integrity": split_report})
     (RESULTS / "decomposition.json").write_text(json.dumps(report, indent=1, default=float) + "\n")
+    write_manifest(RESULTS, report["manifest"])
     write_manifest(RESULTS, report["manifest"], name="decomposition_manifest.json")
     make_figures(report)
     print(f"[e1] done in {time.time() - t_start:.0f}s")

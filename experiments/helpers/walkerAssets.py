@@ -70,7 +70,9 @@ def evaluate_policy(env, policy, n_episodes: int = 5, seed: int = 0, max_steps: 
     rets, speeds, costs, falls, lengths = [], [], [], [], []
     for ep in range(n_episodes):
         obs, info = env.reset(seed=seed + ep)
-        policy.reset(seed=seed + ep) if hasattr(policy, "reset") else None
+        if hasattr(policy, "rng"):
+            policy.rng = np.random.default_rng(seed + ep)
+        policy.reset()
         ret, cost, vs = 0.0, 0.0, []
         for t in range(max_steps):
             obs, r, term, trunc, info = env.step(policy.act(obs))

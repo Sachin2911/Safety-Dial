@@ -1,0 +1,164 @@
+# S1 is already independently supervised. Its final private-upload receipt is the barrier.
+version: 1
+workflow_id: walker2d-continuation-20260926-2
+working_directory: .
+state_dir: runs/workflows/walker2d-continuation-20260926-2
+poll_interval_seconds: 15
+wait_timeout_seconds: 172800
+stages:
+  - id: lewm_a_smoke
+    wait_for:
+      - data/study/walker2d/continuation-20260926-2/setA.h5
+      - data/study/walker2d/continuation-20260926-2/probe.h5
+      - data/study/walker2d/continuation-20260926-2/roots.h5
+      - data/study/walker2d/continuation-20260926-2/splits.json
+      - data/study/walker2d/continuation-20260926-2/upload_receipt.json
+    argv:
+      - uv
+      - run
+      - python
+      - experiments/scripts/walker_s2_train_lewm.py
+      - --data
+      - data/study/walker2d/continuation-20260926-2/setA.h5
+      - --run-id
+      - walker2d-lewm-a-continuation-smoke-20260926-1
+      - --smoke
+      - --max-steps
+      - '1000'
+      - --batch
+      - '128'
+      - --clip-stride
+      - '1'
+    timeout_seconds: 86400
+    fresh_outputs:
+      - runs/walker2d-lewm-a-continuation-smoke-20260926-1
+      - docs/mainPlan/results/s2/walker2d-lewm-a-continuation-smoke-20260926-1.json
+    # The next stage adds smoke_gate.json. Hash only immutable training files here.
+    outputs:
+      - runs/walker2d-lewm-a-continuation-smoke-20260926-1/weights.pt
+      - runs/walker2d-lewm-a-continuation-smoke-20260926-1/config.json
+      - runs/walker2d-lewm-a-continuation-smoke-20260926-1/config.yaml
+      - runs/walker2d-lewm-a-continuation-smoke-20260926-1/scalers.npz
+      - runs/walker2d-lewm-a-continuation-smoke-20260926-1/splits.json
+      - runs/walker2d-lewm-a-continuation-smoke-20260926-1/train_state.json
+      - runs/walker2d-lewm-a-continuation-smoke-20260926-1/manifest.json
+      - runs/walker2d-lewm-a-continuation-smoke-20260926-1/upload_receipt.json
+      - docs/mainPlan/results/s2/walker2d-lewm-a-continuation-smoke-20260926-1.json
+
+  - id: smoke_gate
+    argv:
+      - uv
+      - run
+      - python
+      - experiments/scripts/mainplan_check_smoke.py
+      - --run-dir
+      - runs/walker2d-lewm-a-continuation-smoke-20260926-1
+      - --out
+      - runs/walker2d-lewm-a-continuation-smoke-20260926-1/smoke_gate.json
+    timeout_seconds: 300
+    fresh_outputs:
+      - runs/walker2d-lewm-a-continuation-smoke-20260926-1/smoke_gate.json
+    outputs:
+      - runs/walker2d-lewm-a-continuation-smoke-20260926-1/smoke_gate.json
+    gate:
+      path: runs/walker2d-lewm-a-continuation-smoke-20260926-1/smoke_gate.json
+      key: gate.passes
+      stop_exit_codes: [0, 2]
+
+  - id: lewm_a_full
+    requires_gates:
+      - path: runs/walker2d-lewm-a-continuation-smoke-20260926-1/smoke_gate.json
+        key: gate.passes
+    argv:
+      - uv
+      - run
+      - python
+      - experiments/scripts/walker_s2_train_lewm.py
+      - --data
+      - data/study/walker2d/continuation-20260926-2/setA.h5
+      - --run-id
+      - walker2d-lewm-a-continuation-20260926-1
+      - --epochs
+      - '10'
+      - --batch
+      - '128'
+      - --clip-stride
+      - '1'
+    # Frameskip 10 and three-frame history are fixed by the validated Walker model.
+    timeout_seconds: 604800
+    fresh_outputs:
+      - runs/walker2d-lewm-a-continuation-20260926-1
+      - docs/mainPlan/results/s2/walker2d-lewm-a-continuation-20260926-1.json
+    outputs:
+      - runs/walker2d-lewm-a-continuation-20260926-1
+      - docs/mainPlan/results/s2/walker2d-lewm-a-continuation-20260926-1.json
+
+  - id: physical_probe_gate
+    argv:
+      - uv
+      - run
+      - python
+      - experiments/scripts/walker_s3_gate.py
+      - --model
+      - runs/walker2d-lewm-a-continuation-20260926-1
+      - --data-dir
+      - data/study/walker2d/continuation-20260926-2
+      - --n-roots
+      - '64'
+      - --run-id
+      - walker2d-probes-continuation-20260926-1
+    timeout_seconds: 86400
+    fresh_outputs:
+      - runs/walker2d-probes-continuation-20260926-1
+      - docs/mainPlan/results/s3/walker2d-probes-continuation-20260926-1
+    outputs:
+      - runs/walker2d-probes-continuation-20260926-1
+      - docs/mainPlan/results/s3/walker2d-probes-continuation-20260926-1
+    gate:
+      path: runs/walker2d-probes-continuation-20260926-1/gate.json
+      key: gate.go
+      stop_exit_codes: [0, 2]
+
+  - id: prospective_acquisition
+    requires_gates:
+      - path: runs/walker2d-probes-continuation-20260926-1/gate.json
+        key: gate.go
+    argv:
+      - uv
+      - run
+      - python
+      - experiments/scripts/walker_s4_study.py
+      - --model
+      - runs/walker2d-lewm-a-continuation-20260926-1
+      - --probes
+      - runs/walker2d-probes-continuation-20260926-1
+      - --data-dir
+      - data/study/walker2d/continuation-20260926-2
+      - --dev-roots
+      - '24'
+      - --test-roots
+      - '64'
+      - --acq-roots
+      - '96'
+      - --budgets
+      - '128'
+      - '512'
+      - --seeds
+      - '0'
+      - '1'
+      - '2'
+      - --run-id
+      - walker2d-s4-continuation-20260926-1
+    timeout_seconds: 172800
+    fresh_outputs:
+      - runs/walker2d-s4-continuation-20260926-1
+      - docs/mainPlan/results/s4/walker2d-s4-continuation-20260926-1
+      - data/study/walker2d/continuation-20260926-2/s4/walker2d-s4-continuation-20260926-1
+    outputs:
+      - runs/walker2d-s4-continuation-20260926-1
+      - docs/mainPlan/results/s4/walker2d-s4-continuation-20260926-1
+      - data/study/walker2d/continuation-20260926-2/s4/walker2d-s4-continuation-20260926-1
+    gate:
+      path: runs/walker2d-s4-continuation-20260926-1/decomposition_gate.json
+      key: go
+      stop_exit_codes: [0, 2]

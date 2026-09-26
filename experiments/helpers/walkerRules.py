@@ -42,6 +42,12 @@ def health_clearance(height, pitch) -> np.ndarray:
     return np.minimum.reduce([(z - HEALTHY_Z[0]) / HEIGHT_SCALE, (HEALTHY_Z[1] - z) / HEIGHT_SCALE, (a - HEALTHY_ANGLE[0]) / PITCH_SCALE, (HEALTHY_ANGLE[1] - a) / PITCH_SCALE])
 
 
+def rule_unsafe(rule: str, clearance) -> np.ndarray:
+    """Health uses open healthy bands; speed at the threshold is allowed."""
+    c = np.asarray(clearance)
+    return c <= 0 if rule == "health" else c < 0
+
+
 def clearances_from_log(log: "BranchLog") -> dict:
     return {"speed": speed_clearance(log.x_velocity), "health": health_clearance(log.qpos[1:, 1], log.qpos[1:, 2])}
 
@@ -67,7 +73,7 @@ class BranchLog:
 
     def unsafe(self) -> dict:
         c = clearances_from_log(self)
-        return {k: bool((v < 0).any()) for k, v in c.items()}
+        return {k: bool(rule_unsafe(k, v).any()) for k, v in c.items()}
 
     def min_clearance(self) -> dict:
         c = clearances_from_log(self)
@@ -87,7 +93,7 @@ def restore(env, qpos, qvel) -> None:
     mujoco.mj_forward(u.model, u.data)
 
 
-def execute_branch(env, qpos, qvel, actions: np.ndarray, *, render_every: int | None = None) -> BranchLog:
+def execute_branch(env, qpos, qvel, actions: np.ndarray, *, render_every: int | None = None, on_step=None) -> BranchLog:
     """Run `actions` (T, 6) from the exact state; termination is never applied here."""
     u = env.unwrapped
     restore(env, qpos, qvel)
@@ -102,7 +108,11 @@ def execute_branch(env, qpos, qvel, actions: np.ndarray, *, render_every: int | 
         frames.append(env.render())
     for t, a in enumerate(actions):
         x0 = u.data.qpos[0]
+        if on_step is not None:
+            on_step()  # Charge attempted calls as well when simulation fails part-way.
         u.do_simulation(np.clip(a, -1.0, 1.0), u.frame_skip)
+        if not (np.isfinite(u.data.qpos).all() and np.isfinite(u.data.qvel).all()):
+            raise FloatingPointError("Nonfinite Walker branch truth; do not label the unseen future safe")
         qp[t + 1], qv[t + 1] = u.data.qpos.copy(), u.data.qvel.copy()
         xv[t] = (u.data.qpos[0] - x0) / u.dt
         if render_every and (t + 1) % render_every == 0:
@@ -160,7 +170,7 @@ def roots_from_episode(ep: dict, steps, *, episode: int, prefix: str = "w", fram
         idx = np.arange(lo, t + 1, frameskip)
         out.append(WalkerRoot(f"{prefix}-e{episode}-t{t}", episode, t, np.asarray(ep["qpos"][t]), np.asarray(ep["qvel"][t]), np.asarray(ep["qpos"][idx]), np.asarray(ep["qvel"][idx]),
                               np.asarray(ep["action"][lo:t], float).reshape(history - 1, frameskip, -1), tape,
-                              {"x_velocity": float(ep["x_velocity"][t - 1]) if t > 0 else 0.0, "height": float(ep["qpos"][t][1]), "pitch": float(ep["qpos"][t][2])}))
+                              {"policy_tape_padding_steps": max(0, horizon * frameskip - (n - t)), "x_velocity": float(ep["x_velocity"][t - 1]) if t > 0 else 0.0, "height": float(ep["qpos"][t][1]), "pitch": float(ep["qpos"][t][2])}))
     return out
 
 
@@ -168,10 +178,11 @@ def propose_tapes(rng, root: WalkerRoot, *, n_random: int, sigmas=(0.1, 0.2, 0.4
     """Common proposal generator: the policy's own tape, Gaussian perturbations, torque bursts."""
     base = np.clip(root.policy_tape, -1, 1)
     out = [(base.copy(), "policy", {})]
-    per = max(1, n_random // len(sigmas))
-    for s in sigmas:
-        for _ in range(per):
-            out.append((np.clip(base + rng.normal(0, s, base.shape), -1, 1), "random", {"sigma": float(s)}))
+    if n_random < 0 or n_bursts < 0 or (n_random and not sigmas):
+        raise ValueError("proposal counts must be nonnegative and noise scales nonempty")
+    for i in range(n_random):
+        s = sigmas[i % len(sigmas)]
+        out.append((np.clip(base + rng.normal(0, s, base.shape), -1, 1), "random", {"sigma": float(s)}))
     for _ in range(n_bursts):
         t0 = int(rng.integers(0, len(base) - FRAMESKIP))
         dur = int(rng.integers(FRAMESKIP // 2, 2 * FRAMESKIP))

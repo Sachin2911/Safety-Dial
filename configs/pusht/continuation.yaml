@@ -1,0 +1,135 @@
+# Managed finite continuation. Run with experiments/scripts/mainplan_workflow.py.
+# Each result path is fresh. E1/E2 negative gates finish as gate_stopped.
+version: 1
+workflow_id: pusht-continuation-20260926-2
+working_directory: .
+state_dir: runs/workflows/pusht-continuation-20260926-2
+poll_interval_seconds: 15
+wait_timeout_seconds: 86400
+stages:
+  - id: physical_probes
+    wait_for:
+      - runs/pusht-assets-20260926-1/scalers.npz
+      - runs/pusht-assets-20260926-1/splits.json
+      - runs/pusht-assets-20260926-1/hf_revision.txt
+    argv:
+      - uv
+      - run
+      - python
+      - experiments/scripts/pusht_e1_probes.py
+      - --run-id
+      - pusht-probes-continuation-20260926-2
+      - --n-frames
+      - '20000'
+      - --bank-roots
+      - '64'
+      - --bank-tapes
+      - '8'
+      - --bank-dir
+      - data/study/pusht/continuation-v2/probe-bank
+      - --output-dir
+      - runs/pusht-probes-continuation-20260926-2
+      - --results-dir
+      - docs/mainPlan/results/continuation-v2/probes
+    timeout_seconds: 86400
+    fresh_outputs:
+      - runs/pusht-probes-continuation-20260926-2
+      - data/study/pusht/continuation-v2/probe-bank
+      - docs/mainPlan/results/continuation-v2/probes
+    outputs:
+      - runs/pusht-probes-continuation-20260926-2
+      - data/study/pusht/continuation-v2/probe-bank
+      - docs/mainPlan/results/continuation-v2/probes
+
+  - id: disjoint_geometric_banks
+    argv:
+      - uv
+      - run
+      - python
+      - experiments/scripts/pusht_e1_banks.py
+      - --n
+      - '2'
+      - --dev-roots
+      - '24'
+      - --test-roots
+      - '64'
+      - --output-dir
+      - data/study/pusht/continuation-v2/e1
+      - --results-dir
+      - docs/mainPlan/results/continuation-v2/banks
+      - --exclude-bank
+      - data/study/pusht/e0
+    timeout_seconds: 172800
+    fresh_outputs:
+      - data/study/pusht/continuation-v2/e1
+      - docs/mainPlan/results/continuation-v2/banks
+    outputs:
+      - data/study/pusht/continuation-v2/e1
+      - docs/mainPlan/results/continuation-v2/banks
+
+  - id: development_decomposition_gate
+    argv:
+      - uv
+      - run
+      - python
+      - experiments/scripts/pusht_e1_decompose.py
+      - --run-id
+      - pusht-decomposition-continuation-20260926-2
+      - --banks-dir
+      - data/study/pusht/continuation-v2/e1
+      - --probes-run
+      - runs/pusht-probes-continuation-20260926-2
+      - --results-dir
+      - docs/mainPlan/results/continuation-v2/decomposition
+    timeout_seconds: 86400
+    fresh_outputs:
+      - docs/mainPlan/results/continuation-v2/decomposition
+      - runs/pusht-decomposition-continuation-20260926-2-coord
+    outputs:
+      - docs/mainPlan/results/continuation-v2/decomposition
+      - runs/pusht-decomposition-continuation-20260926-2-coord
+    gate:
+      path: docs/mainPlan/results/continuation-v2/decomposition/decomposition.json
+      key: gate.passes
+      stop_exit_codes: [0, 2]
+
+  - id: repairability_and_retention_gate
+    requires_gates:
+      - path: docs/mainPlan/results/continuation-v2/decomposition/decomposition.json
+        key: gate.passes
+    argv:
+      - uv
+      - run
+      - python
+      - experiments/scripts/pusht_e2_repair.py
+      - --run-id
+      - pusht-adapt-e2-continuation-20260926-2
+      - --banks-dir
+      - data/study/pusht/continuation-v2/e1
+      - --probes-run
+      - runs/pusht-probes-continuation-20260926-2
+      - --decomposition-report
+      - docs/mainPlan/results/continuation-v2/decomposition/decomposition.json
+      - --study-dir
+      - data/study/pusht/continuation-v2/e2
+      - --results-dir
+      - docs/mainPlan/results/continuation-v2/repair
+      - --retention-episodes
+      - '20'
+      - --retention-blocks
+      - '50'
+    timeout_seconds: 172800
+    fresh_outputs:
+      - data/study/pusht/continuation-v2/e2
+      - docs/mainPlan/results/continuation-v2/repair
+      - runs/pusht-adapt-e2-continuation-20260926-2
+    outputs:
+      - data/study/pusht/continuation-v2/e2
+      - docs/mainPlan/results/continuation-v2/repair
+      - runs/pusht-adapt-e2-continuation-20260926-2
+    gate:
+      path: docs/mainPlan/results/continuation-v2/repair/repair.json
+      key: gate.passes
+      stop_exit_codes: [0, 2]
+# Qualified E3 uses this final repair.json explicitly, with three acquisition seeds.
+# E5 additionally needs a selected-checkpoint goal-retention report and E3 repeatability.

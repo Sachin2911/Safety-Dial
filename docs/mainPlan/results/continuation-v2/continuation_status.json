@@ -1,0 +1,71 @@
+{
+  "status": "in_progress",
+  "historical_evidence": "Original E1/E2/E3 outputs remain development diagnostics because 14 source trajectories crossed development and test roles.",
+  "walker": {
+    "model": "LeWM from scratch; 224px, history3, frameskip10, 60d packed torque input",
+    "data_dir": "data/study/walker2d/continuation-20260926-2",
+    "dataset_revision": "ddd4d51648d2a382725efd20d04cedebedbf8fd2",
+    "training_steps": 2999673,
+    "probe_steps": 300347,
+    "root_steps": 300038,
+    "smoke": {
+      "run_dir": "runs/walker2d-lewm-a-continuation-smoke-20260926-1",
+      "source_report": "/workspace/Safety-Dial/docs/mainPlan/results/s2/walker2d-lewm-a-continuation-smoke-20260926-1.json",
+      "gate": {
+        "passes": true,
+        "reasons": []
+      },
+      "loss_trends": {
+        "pred_loss": {
+          "first_window_mean": 0.4149515688419342,
+          "last_window_mean": 0.22369391471147537,
+          "window_measurements": 10
+        },
+        "sigreg_loss": {
+          "first_window_mean": 16.865625,
+          "last_window_mean": 3.8046875,
+          "window_measurements": 10
+        }
+      },
+      "observed_iterations_per_second": 2.214053778891312,
+      "estimated_ten_epoch_seconds_at_observed_rate": 97007.58041548166,
+      "estimate_note": "Measured smoke throughput; full-run data loading and contention may differ"
+    },
+    "full_run": "runs/walker2d-lewm-a-continuation-20260926-1",
+    "full_optimizer_steps": 214780,
+    "checkpoint_interval_steps": 4000,
+    "checkpoint_recovery": "Atomic optimizer.pt includes weights, optimizer, scheduler, RNG and deterministic batch position; resume to a fresh run directory with identical data and recipe.",
+    "wandb": "https://wandb.ai/2699183-university-of-witwatersrand/safetydial-walker2d/runs/vwkna5ta"
+  },
+  "pusht": {
+    "fresh_probe_revision": "f03fb888ff15a4e757600a51c038a0988429c05c",
+    "fresh_banks": "data/study/pusht/continuation-v2/e1",
+    "replay_revision": "a9329863aad6cfe3b39ffee6a9fb97ecb1234f61",
+    "replay_gate": true,
+    "replay_roots": 50,
+    "replay_mid_contact_roots": 16,
+    "replay_masked_censored_branches": 10,
+    "development_feasibility_required": true,
+    "replay_contact_kind": "any_collision; includes wall contacts",
+    "visual_review": "docs/mainPlan/results/continuation-v2/e0-visual-review.json",
+    "typed_contact_coverage": {
+      "report": "docs/mainPlan/results/continuation-v2/e0-contact-coverage-combined.json",
+      "roots": 51,
+      "source_episodes": 50,
+      "last_prefix_block_pusher_contact_roots": 15,
+      "final_prefix_step_pusher_contact_roots": 9,
+      "gate": true
+    }
+  },
+  "workflow_configs": [
+    "configs/pusht/continuation.yaml",
+    "configs/pusht/revalidate_e0.yaml",
+    "configs/walker2d/continuation.yaml"
+  ],
+  "original_queues": {
+    "pusht_pid": 54445,
+    "walker_pid": 43215,
+    "reason": "Do not resume unconditional stale-data or ungated downstream commands.",
+    "status": "retired_after_children_finished"
+  }
+}

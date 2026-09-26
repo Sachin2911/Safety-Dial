@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -38,9 +39,12 @@ from helpers.hfStore import HFStore  # noqa: E402
 from helpers.locoData import RenderContext  # noqa: E402
 from helpers.locoEnv import make_loco_env  # noqa: E402
 from helpers.poseProbes import ProbeSpec, fit_probe, save_probe, split_by_trajectory  # noqa: E402
-from helpers.runManifest import build_manifest, make_run_id, write_manifest  # noqa: E402
+from helpers.runManifest import build_manifest, file_sha256, make_run_id, write_manifest  # noqa: E402
 from helpers.walkerLewm import FRAMESKIP, HISTORY, WalkerImaginer, load_walker_model  # noqa: E402
-from helpers.walkerRules import HORIZON_BLOCKS, execute_branch, health_clearance, roots_from_episode, speed_clearance  # noqa: E402
+from helpers.walkerRules import HORIZON_BLOCKS, execute_branch, health_clearance, roots_from_episode, rule_unsafe, speed_clearance  # noqa: E402
+
+from helpers.walkerBank import dataset_identity  # noqa: E402
+from helpers.walkerValidation import decision_diagnostics, gate_decision, load_source_split, upload_reference, verify_render_fingerprint  # noqa: E402
 
 DATA = REPO_ROOT / "data" / "study" / "walker2d"
 RESULTS = REPO_ROOT / "docs" / "mainPlan" / "results" / "s3"
@@ -66,17 +70,25 @@ def main() -> int:  # noqa: PLR0915
     ap.add_argument("--probe-frames", type=int, default=30000)
     ap.add_argument("--n-roots", type=int, default=200)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--min-unsafe", type=int, default=10)
+    ap.add_argument("--results-dir", default=None)
     ap.add_argument("--no-upload", action="store_true")
+    ap.add_argument("--run-id", default=None, help="explicit immutable run directory name")
     ap.add_argument("--n", type=int, default=1)
     args = ap.parse_args()
+    if args.run_id and not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", args.run_id):
+        ap.error("run-id must be a single alphanumeric directory name")
     t0 = time.time()
-    RESULTS.mkdir(parents=True, exist_ok=True)
     device = "cuda"
     data_dir = Path(args.data_dir)
-    run_id = make_run_id("walker2d", "probes", n=args.n)
+    source_split = load_source_split(data_dir)
+    if args.min_unsafe < 1 or args.n_roots < 1 or args.probe_frames < 1:
+        ap.error("sample sizes and minimum unsafe evidence must be positive")
+    run_id = args.run_id or make_run_id("walker2d", "probes", n=args.n)
     model, scaler = load_walker_model(Path(args.model), device)
     im = WalkerImaginer(model, scaler, device)
     ctx = RenderContext()
+    verify_render_fingerprint(ctx, data_dir / "roots.h5")
     rng = np.random.default_rng(args.seed)
 
     # ---- probes on real frames (probe set, split by episode) ---------------------------
@@ -95,8 +107,14 @@ def main() -> int:  # noqa: PLR0915
     tr, va = split_by_trajectory(E, rng, 0.2)
     print(f"[s3] probe frames {len(Z):,} from {len(np.unique(E))} episodes")
     run_dir = REPO_ROOT / "runs" / run_id
-    run_dir.mkdir(parents=True, exist_ok=True)
-    probes, report = {}, {"model": args.model, "probes": {}}
+    run_dir.mkdir(parents=True, exist_ok=False)
+    results_dir = Path(args.results_dir) if args.results_dir else RESULTS / run_id
+    results_dir.mkdir(parents=True, exist_ok=False)
+    from omegaconf import OmegaConf
+
+    OmegaConf.save(OmegaConf.create(vars(args)), run_dir / "config.yaml")
+    source_identity = dataset_identity(data_dir / "roots.h5")
+    probes, report = {}, {"run_id": run_id, "model": args.model, "model_sha256": file_sha256(Path(args.model) / "weights.pt"), "source_identity": source_identity, "role": "development", "splits_sha256": file_sha256(data_dir / "splits.json"), "probes": {}}
     for kind in ("linear", "mlp"):
         p, st = fit_probe(Z[tr], Y[tr], Z[va], Y[va], ProbeSpec(target="walker", kind=kind, seed=args.seed), device=device, verbose=False)
         save_probe(p, st, run_dir / f"walker_{kind}.pt")
@@ -105,6 +123,8 @@ def main() -> int:  # noqa: PLR0915
         report["probes"][kind] = {k: v[k] for k in ("r2", "rmse", "height_r2", "pitch_r2", "speed_r2", "height_rmse", "pitch_rmse", "speed_rmse")}
         print(f"[s3] {kind:6s} val R2 height {v['height_r2']:.3f} pitch {v['pitch_r2']:.3f} speed {v['speed_r2']:.3f} | rmse {v['height_rmse']:.3f} m {v['pitch_rmse']:.3f} rad {v['speed_rmse']:.3f} m/s")
     probe = probes["mlp"]
+    report["probe_files_sha256"] = {f"walker_{k}.pt": file_sha256(run_dir / f"walker_{k}.pt") for k in probes}
+    report["model_files_sha256"] = {name: file_sha256(Path(args.model) / name) for name in ("weights.pt", "config.json", "scalers.npz")}
 
     # ---- imagined error by horizon and decisions on roots ---------------------------------
     env = make_loco_env("Walker2d", "v1", render=True, terminate_when_unhealthy=False, six_tuple=True)
@@ -114,6 +134,8 @@ def main() -> int:  # noqa: PLR0915
     real_err = {"height": [], "pitch": [], "speed": []}
     n_done = 0
     for ei, ep in episodes(data_dir / "roots.h5"):
+        if ei not in source_split["roots"]["development"]:
+            continue
         n = len(ep["qpos"])
         if n < (HISTORY - 1) * FRAMESKIP + HORIZON_BLOCKS * FRAMESKIP + 1:
             continue
@@ -143,30 +165,34 @@ def main() -> int:  # noqa: PLR0915
     report["real_readout_abs_error_by_block"] = {k: np.stack(v).mean(0).tolist() for k, v in real_err.items()}
     dec = {}
     for rule in ("speed", "health"):
-        u = np.array([r[f"true_{rule}"] < 0 for r in rows])
+        u = rule_unsafe(rule, np.array([r[f"true_{rule}"] for r in rows]))
         dec[rule] = {"n": int(len(rows)), "n_unsafe": int(u.sum()), "real_readout": fsa(np.array([r[f"real_{rule}"] for r in rows]), u, 0.0), "imagined": fsa(np.array([r[f"imag_{rule}"] for r in rows]), u, 0.0),
                      "real_agreement": float(np.mean((np.array([r[f"real_{rule}"] for r in rows]) < 0) == u))}
     report["decisions_m0"] = dec
-    mlp = report["probes"]["mlp"]
-    e = report["imagined_abs_error_by_block"]
-    grows = all(e[k][-1] > e[k][0] for k in e)
-    useful = e["height"][-1] < 0.3 and e["pitch"][-1] < 0.6
-    report["gate"] = {"height_pass": mlp["height_r2"] >= 0.9, "pitch_pass": mlp["pitch_r2"] >= 0.9, "speed_pass": mlp["speed_r2"] >= 0.8,
-                      "imagined_error_grows": bool(grows), "imagined_error_useful": bool(useful),
-                      "real_readout_tracks_truth": {r: dec[r]["real_agreement"] >= 0.85 for r in dec}}
+    diagnostics = {r: decision_diagnostics(np.array([row[f"real_{r}"] for row in rows]),
+                                           rule_unsafe(r, np.array([row[f"true_{r}"] for row in rows])))
+                   for r in ("speed", "health")}
+    report["decision_diagnostics"] = diagnostics
+    report["gate"] = gate_decision(report["probes"]["mlp"], report["imagined_abs_error_by_block"],
+                                   diagnostics, min_unsafe=args.min_unsafe)
     g = report["gate"]
-    g["health_rule_ok"] = bool(g["height_pass"] and g["pitch_pass"] and g["imagined_error_useful"])
-    g["speed_rule_ok"] = bool(g["speed_pass"])
-    g["go"] = bool(g["health_rule_ok"])
     print(f"[s3] GATE: {json.dumps(g)}")
     report["wall_clock_s"] = time.time() - t0
-    (RESULTS / "gate.json").write_text(json.dumps(report, indent=1, default=float) + "\n")
-    write_manifest(run_dir, build_manifest(run_id=run_id, kind="probes", seeds={"seed": args.seed}, data={"model": args.model, "n_probe_frames": int(len(Z))}, metrics=report["probes"], started_at=t0))
-    (run_dir / "README.md").write_text(f"# {run_id}\n\nWalker2d readout probes (height, pitch, speed) on frozen latents of {args.model}. Not safety supervision.\n")
+    for dest in (results_dir, run_dir):
+        (dest / "gate.json").write_text(json.dumps(report, indent=1, default=float) + "\n")
+        (dest / "gate_rows.json").write_text(json.dumps(rows, default=float) + "\n")
+    manifest = build_manifest(run_id=run_id, kind="probes", seeds={"seed": args.seed}, data={"model": args.model, "model_sha256": report["model_sha256"], "roots": source_identity, "probe": dataset_identity(data_dir / "probe.h5"), "probe_train_episodes": np.unique(E[tr]).tolist(), "probe_val_episodes": np.unique(E[va]).tolist(), "gate_source_episodes": sorted({int(r["root"].split("-e")[1].split("-t")[0]) for r in rows}), "n_probe_frames": int(len(Z))}, metrics=report["probes"], upstream_revisions={"model": upload_reference(args.model), "data": upload_reference(data_dir)}, costs={"gate_branch_steps": len(rows) * HORIZON_BLOCKS * FRAMESKIP}, started_at=t0)
+    for dest in (run_dir, results_dir):
+        write_manifest(dest, manifest)
+    (run_dir / "README.md").write_text(f"# {run_id}\n\nWalker2d readout probes (height, pitch, speed) on frozen latents of {args.model}. Uses privileged simulator height, pitch and speed labels.\n")
     if not args.no_upload:
-        HFStore().upload_run("walker2d", "probes", run_dir, run_id=run_id)
+        revision = HFStore().upload_run("walker2d", "probes", run_dir, run_id=run_id)
+        manifest["probe_hf_revision"] = revision
+        write_manifest(results_dir, manifest)
+    env.close()
+    ctx.close()
     print(f"[s3] done in {time.time() - t0:.0f}s")
-    return 0
+    return 0 if g["go"] else 2
 
 
 if __name__ == "__main__":

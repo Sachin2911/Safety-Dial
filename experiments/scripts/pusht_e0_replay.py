@@ -72,6 +72,7 @@ def angle_err_deg(a, b):
 
 
 def main() -> int:
+    global RESULTS
     ap = argparse.ArgumentParser()
     ap.add_argument("--n-roots", type=int, default=50)
     ap.add_argument("--min-contact", type=int, default=15)
@@ -79,12 +80,19 @@ def main() -> int:
     ap.add_argument("--seed", type=int, default=20260926)
     ap.add_argument("--no-upload", action="store_true")
     ap.add_argument("--n", type=int, default=1)
+    ap.add_argument("--bank-dir", type=Path, required=True, help="Fresh replay bank directory")
+    ap.add_argument("--results-dir", type=Path, required=True, help="Fresh replay report directory")
     args = ap.parse_args()
     t_start = time.time()
 
     run_id = make_run_id("pusht", "e0bank", n=args.n)
-    bank_dir = REPO_ROOT / "data" / "study" / "pusht" / "e0"
-    RESULTS.mkdir(parents=True, exist_ok=True)
+    bank_dir, RESULTS = args.bank_dir.resolve(), args.results_dir.resolve()
+    for path in (bank_dir, RESULTS):
+        if path.exists():
+            ap.error(f"Use a fresh output path; preserving {path}")
+    if bank_dir == RESULTS:
+        ap.error("Bank and results directories must differ")
+    RESULTS.mkdir(parents=True)
     print(f"[e0] run_id={run_id} bank={bank_dir}")
 
     device = "cuda"
@@ -96,10 +104,6 @@ def main() -> int:
     planner = NominalPlanner(model, process, device)
     rng = np.random.default_rng(args.seed)
     ledger = StepLedger()
-    if bank_dir.exists():
-        import shutil
-
-        shutil.rmtree(bank_dir)
     writer = BankWriter(bank_dir)
 
     # ---- roots ------------------------------------------------------------------------
@@ -113,7 +117,14 @@ def main() -> int:
         if i >= len(pairs):
             pairs += expert_pairs(H5_PATH, splits["roles"]["roots"], rng, args.n_roots)
         k = ks[i % len(ks)] if len(roots) < args.n_roots else int(rng.choice([2, 4, 6]))
-        root, ctx, _ = build_root(env, planner, pairs[i], seed=args.seed + i, k=k, root_id=f"e0-r{i:03d}", ledger=ledger)
+        try:
+            root, ctx, _ = build_root(env, planner, pairs[i], seed=args.seed + i, k=k, root_id=f"e0-r{i:03d}", ledger=ledger)
+        except ValueError as exc:
+            if "censored or out-of-domain prefix" not in str(exc):
+                raise
+            ledger.add("discarded_invalid_root", 0, branches=1)
+            i += 1
+            continue
         roots.append(root)
         contexts.append(ctx)
         n_contact += int(root.meta["in_contact_last_block"])
@@ -142,7 +153,7 @@ def main() -> int:
             r = replay_check(env, root, b.tape.reshape(-1, 2), args.repeats)
             r.update({"root_id": root.root_id, "kind": b.kind, "k": root.meta["k"], "in_contact_root": root.meta["in_contact_last_block"]})
             rep_rows.append(r)
-    replay_steps = sum(len(r.prefix) + HORIZON_BLOCKS * ACTION_BLOCK for r in roots) * 3 * args.repeats
+    replay_steps = sum(len(root.prefix) + branch.log.executed_steps for root, branches in zip(roots, branches_per_root) for branch in branches) * args.repeats
     ledger.add("replay_test", replay_steps, branches=len(rep_rows) * args.repeats)
     replay_summary = {
         "n_branches": len(rep_rows),
@@ -258,6 +269,7 @@ def main() -> int:
         "replay": replay_summary, "substep_mirror": sub_rows, "timing": timing,
         "ledger": ledger.to_dict(), "wall_clock_s": time.time() - t_start, "n_overlays": n_ov,
     }
+    write_manifest(RESULTS, {**manifest, "hf_revision": hf_rev})
     (RESULTS / "replay_report.json").write_text(json.dumps(report, indent=2) + "\n")
     print(f"[e0] wrote {RESULTS / 'replay_report.json'}; total {time.time() - t_start:.0f}s")
     return 0

@@ -128,4 +128,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    from walker_s5_matched import main as matched_main
+
+    raise SystemExit(matched_main())

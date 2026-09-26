@@ -40,11 +40,11 @@ from helpers.pushtReplay import (
     Root,
     RootContext,
     StepLedger,
-    execute_tape,
     idle_prefix,
-    reset_root,
-    run_actions,
+    observation_domain_mask,
 )
+
+from helpers.pushtContactReplay import CONTACT_COUNTER, CONTACT_FIELDS, ContactDenseLog, execute_tape, reset_root, run_actions
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 STUDY_DIR = REPO_ROOT / "data" / "study" / "pusht"
@@ -101,9 +101,13 @@ def run_nominal(env, planner, ctx: RootContext, k: int, *, seed: int, record_fra
     blocks, costs, times, feas, warm = [], [], [], [], None
     states = [state.copy()]
     bvel, bang, ncon, fr = [np.zeros(2)], [0.0], [0], [frames[-1]]
+    typed = {key: [0] for key in CONTACT_FIELDS}
+    typed_available = all(getattr(ctx.prefix_log, key, None) is not None for key in CONTACT_FIELDS)
     for b in range(k):
         pr = planner.plan(frames, hist, ctx.goal_frame, seed=seed * 1000 + b, pusher_xy=state[:2], init_future=warm)
         log = run_actions(env, pr.blocks[0].reshape(-1, 2), record_frames=True)
+        if not log.valid_for_training:
+            raise ValueError("Nominal root has a censored or out-of-domain prefix")
         frames = (frames + [log.frames[-1]])[-HISTORY_FRAMES:]
         hist = np.concatenate([hist[1:], pr.blocks[:1]], 0)
         warm = next_warm_start(pr.blocks)
@@ -116,14 +120,43 @@ def run_nominal(env, planner, ctx: RootContext, k: int, *, seed: int, record_fra
         bvel.extend(log.block_vel[1:])
         bang.extend(log.block_ang_vel[1:])
         ncon.extend(log.n_contacts[1:])
+        for key in CONTACT_FIELDS:
+            values = getattr(log, key, None)
+            typed_available &= values is not None
+            typed[key].extend(values[1:] if values is not None else np.zeros(len(log.states) - 1, int))
         fr.append(log.frames[-1])
     final_plan = planner.plan(frames, hist, ctx.goal_frame, seed=seed * 1000 + 999, pusher_xy=state[:2], init_future=warm).blocks
     dense = DenseLog(np.asarray(states), np.asarray(bvel), np.asarray(bang), np.asarray(ncon),
                      np.asarray(blocks).reshape(-1, 2) if blocks else np.zeros((0, 2)), fr if record_frames else None)
+    if typed_available:
+        dense = ContactDenseLog(**vars(dense), **{key: np.asarray(values) for key, values in typed.items()})
     return NominalRun(np.asarray(blocks).reshape(-1, ACTION_BLOCK, 2), dense, costs, times, feas, final_plan)
 
 
 def build_root(env, planner, pair: dict, *, seed: int, k: int, root_id: str, ledger: StepLedger | None = None) -> tuple[Root, RootContext, NominalRun]:
+    """Generate a root and charge every actual prefix step, including rejected attempts."""
+    if ledger is None:
+        return _build_root(env, planner, pair, seed=seed, k=k, root_id=root_id)
+
+    class Counter:
+        def __init__(self, wrapped):
+            self.wrapped, self.steps = wrapped, 0
+
+        def __getattr__(self, name):
+            return getattr(self.wrapped, name)
+
+        def step(self, action):
+            self.steps += 1
+            return self.wrapped.step(action)
+
+    counted = Counter(env)
+    try:
+        return _build_root(counted, planner, pair, seed=seed, k=k, root_id=root_id)
+    finally:
+        ledger.add("root_generation", counted.steps)
+
+
+def _build_root(env, planner, pair: dict, *, seed: int, k: int, root_id: str) -> tuple[Root, RootContext, NominalRun]:
     """Seeded reset + idle prefix + k nominal blocks -> a stored Root with its nominal plan."""
     base = Root(seed=seed, start_state=pair["start"], goal_state=pair["goal"], prefix=idle_prefix())
     ctx0 = reset_root(env, base)
@@ -132,17 +165,21 @@ def build_root(env, planner, pair: dict, *, seed: int, k: int, root_id: str, led
     meta = {
         "episode": int(pair["episode"]), "t0": int(pair["t0"]), "goal_offset": int(pair["goal_offset"]),
         "k": int(k), "nominal_plan": nom.plan_at_end.tolist(),
-        "contact_steps_prefix": int((nom.log.n_contacts > 0).sum()),
-        "in_contact_last_block": bool((nom.log.n_contacts[-ACTION_BLOCK:] > 0).any()) if k else False,
         "state_at_root": nom.log.states[-1].tolist(),
         "nominal_costs": [float(c) for c in nom.costs],
         "block_err_px": float(np.linalg.norm(nom.log.states[-1, 2:4] - pair["goal"][2:4])),
     }
     root = Root(seed=seed, start_state=pair["start"], goal_state=pair["goal"], prefix=prefix, root_id=root_id, meta=meta)
-    if ledger is not None:
-        ledger.add("root_prefix", len(prefix))
     # the env is now AT the root state; return a context consistent with reset_root
     ctx = reset_root(env, root)
+    prefix_contact = getattr(ctx.prefix_log, "pusher_block_contacts", None)
+    root.meta.update({
+        "contact_kind": "pusher_block" if prefix_contact is not None else "any_collision",
+        "contact_counter": CONTACT_COUNTER if prefix_contact is not None else "upstream_any_collision",
+        "contact_steps_prefix": int((prefix_contact > 0).sum()) if prefix_contact is not None else None,
+        "in_contact_last_block": bool((prefix_contact[-ACTION_BLOCK:] > 0).any()) if prefix_contact is not None else None,
+        "any_collision_steps_prefix": int((ctx.prefix_log.n_contacts > 0).sum()),
+    })
     return root, ctx, nom
 
 
@@ -319,7 +356,7 @@ def execute_proposals(env, root: Root, proposals: list[Proposal], *, ledger: Ste
         reset_root(env, root, record_frames=False)
         log = execute_tape(env, p.tape.reshape(-1, 2), record_frames=record_frames)
         if ledger is not None:
-            ledger.add(category, len(root.prefix) + p.tape.size // 2, branches=1)
+            ledger.add(category, len(root.prefix) + log.executed_steps, branches=1)
         out.append(Branch(root.root_id, p.tape, p.kind, p.params, log))
     return out
 
@@ -340,9 +377,16 @@ class BankWriter:
             "block_vel": ((0, T + 1, 2), np.float64),
             "block_ang_vel": ((0, T + 1), np.float64),
             "n_contacts": ((0, T + 1), np.int32),
+            "pusher_block_contacts": ((0, T + 1), np.int64),
+            "block_wall_contacts": ((0, T + 1), np.int64),
+            "typed_contacts_available": ((0,), np.bool_),
             "root_index": ((0,), np.int64),
             "kind": ((0,), h5py.string_dtype()),
             "params": ((0,), h5py.string_dtype()),
+            "terminated": ((0, T + 1), np.bool_),
+            "truncated": ((0, T + 1), np.bool_),
+            "observed": ((0, T + 1), np.bool_),
+            "observation_valid": ((0, T + 1), np.bool_),
         }
         if with_frames:
             spec["frames"] = ((0, n_blocks + 1, 224, 224, 3), np.uint8)
@@ -351,7 +395,15 @@ class BankWriter:
                 maxshape = (None, *shape[1:])
                 chunks = (1, *shape[1:]) if k == "frames" else (64, *shape[1:])
                 kw = {"compression": "gzip", "compression_opts": 1} if k == "frames" else {}
-                self.h5.create_dataset(k, shape=shape, maxshape=maxshape, dtype=dt, chunks=chunks, **kw)
+                existing = self.h5["tape"].shape[0] if "tape" in self.h5 else 0
+                shape = (existing, *shape[1:])
+                ds = self.h5.create_dataset(k, shape=shape, maxshape=maxshape, dtype=dt, chunks=chunks, **kw)
+                if existing and k == "observed":
+                    ds[:] = True
+                if existing and k == "observation_valid":
+                    ds[:] = np.stack([observation_domain_mask(st) for st in self.h5["states"]])
+        self.h5.attrs["n_contacts_kind"] = "any_collision"
+        self.h5.attrs["typed_contact_counter"] = CONTACT_COUNTER
         self.roots: list[dict] = []
         self.root_index: dict[str, int] = {}
         if (self.dir / "roots.json").is_file():
@@ -378,9 +430,22 @@ class BankWriter:
             self.h5["block_vel"][j] = b.log.block_vel
             self.h5["block_ang_vel"][j] = b.log.block_ang_vel
             self.h5["n_contacts"][j] = b.log.n_contacts
+            available = all(getattr(b.log, key, None) is not None
+                            for key in ("pusher_block_contacts", "block_wall_contacts"))
+            self.h5["typed_contacts_available"][j] = available
+            for key in ("pusher_block_contacts", "block_wall_contacts"):
+                self.h5[key][j] = getattr(b.log, key) if available else 0
             self.h5["root_index"][j] = self.root_index[b.root_id]
             self.h5["kind"][j] = b.kind
             self.h5["params"][j] = json.dumps(b.params)
+            for key in ("terminated", "truncated", "observed", "observation_valid"):
+                value = getattr(b.log, key)
+                if value is None:
+                    if key == "observation_valid":
+                        value = observation_domain_mask(b.log.states)
+                    else:
+                        value = np.full(len(b.log.states), key == "observed", dtype=bool)
+                self.h5[key][j] = value
             if self.with_frames:
                 self.h5["frames"][j] = np.stack(b.log.frames)
         self.h5.flush()
@@ -410,9 +475,26 @@ class Bank:
         d = {k: self.h5[k][j] for k in ("tape", "states", "block_vel", "block_ang_vel", "n_contacts", "root_index")}
         d["kind"] = self.h5["kind"][j].decode() if isinstance(self.h5["kind"][j], bytes) else str(self.h5["kind"][j])
         d["params"] = json.loads(self.h5["params"][j])
+        for key in ("terminated", "truncated", "observed", "observation_valid"):
+            if key in self.h5:
+                d[key] = self.h5[key][j]
+        available = "typed_contacts_available" in self.h5 and bool(self.h5["typed_contacts_available"][j])
+        d["contact_kind"] = "pusher_block" if available else "any_collision"
+        d["contact_counter"] = self.h5.attrs.get("typed_contact_counter") if available else "upstream_any_collision"
+        for key in ("pusher_block_contacts", "block_wall_contacts"):
+            d[key] = self.h5[key][j] if available else None
         if frames and "frames" in self.h5:
             d["frames"] = self.h5["frames"][j]
         return d
+
+    def valid_training_indices(self) -> np.ndarray:
+        return np.array([j for j in range(len(self)) if self.branch_valid_for_training(j)], dtype=int)
+
+    def branch_valid_for_training(self, j: int) -> bool:
+        branch = self.branch(j)
+        observed = branch.get("observed", np.ones(len(branch["states"]), bool))
+        valid = branch.get("observation_valid", observation_domain_mask(branch["states"]))
+        return bool(np.all(observed) and np.all(valid))
 
     def root_of(self, j: int) -> Root:
         return self.roots[int(self.h5["root_index"][j])]

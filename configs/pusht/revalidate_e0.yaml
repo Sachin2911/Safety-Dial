@@ -1,0 +1,41 @@
+version: 1
+workflow_id: pusht-e0-revalidation-20260926-2
+working_directory: .
+state_dir: runs/workflows/pusht-e0-revalidation-20260926-2
+poll_interval_seconds: 15
+wait_timeout_seconds: 3600
+stages:
+  - id: replay_and_geometry
+    argv:
+      - uv
+      - run
+      - python
+      - experiments/scripts/pusht_e0_revalidate.py
+      - --source-bank
+      - data/study/pusht/e0
+      - --bank-dir
+      - data/study/pusht/continuation-v2/e0-revalidation
+      - --results-dir
+      - docs/mainPlan/results/continuation-v2/e0-revalidation
+      - --run-id
+      - pusht-e0-revalidation-20260926-2
+      - --n-roots
+      - '50'
+      - --repeats
+      - '3'
+      - --min-contact
+      - '15'
+    timeout_seconds: 3600
+    wait_for:
+      - data/study/pusht/e0/roots.json
+      - data/study/pusht/e0/branches.h5
+    fresh_outputs:
+      - data/study/pusht/continuation-v2/e0-revalidation
+      - docs/mainPlan/results/continuation-v2/e0-revalidation
+    outputs:
+      - data/study/pusht/continuation-v2/e0-revalidation
+      - docs/mainPlan/results/continuation-v2/e0-revalidation
+    gate:
+      path: docs/mainPlan/results/continuation-v2/e0-revalidation/replay_report.json
+      key: gate.passes
+      stop_exit_codes: [0, 2]

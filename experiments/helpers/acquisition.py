@@ -12,6 +12,7 @@ balanced across roots. Selection rules and band widths are frozen after developm
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from types import SimpleNamespace
 
 import numpy as np
 
@@ -38,12 +39,13 @@ class CandidatePool:
 
     @staticmethod
     def build(rng, bank, per_root: int, *, n_stress: int, n_toward: int, layouts_by_root: dict) -> "CandidatePool":
-        from helpers.pushtReplay import make_env, reset_root
-
-        env = make_env()
+        if per_root <= n_stress + n_toward:
+            raise ValueError("Pool size must leave room for nominal and ordinary proposals")
         cands = []
         for ri, root in enumerate(bank.roots):
-            ctx = reset_root(env, root)
+            # Proposal construction only needs the already observed state at the root.
+            # Replaying here would add unreported simulator interaction.
+            ctx = SimpleNamespace(state=np.asarray(root.meta["state_at_root"], dtype=float))
             hz = layouts_by_root[root.root_id]["familiar"]
             props, _ = propose(rng, root, ctx, n_random=per_root - n_stress - n_toward - 1, sigmas=(0.05, 0.1, 0.2), n_stress=n_stress,
                                hazard_centre=hz.centre, n_toward_hazard=n_toward)
@@ -118,14 +120,60 @@ def _balanced_pick(groups: dict[int, list], n: int, rng, key=None) -> list:
     return out
 
 
-def select(arm: str, pool: CandidatePool, n: int, rng, *, margin: float = 0.0, band: float = 10.0, risk_model=None, true_errors: dict | None = None) -> list[Candidate]:
+def root_schedule(pool: CandidatePool, n: int, rng) -> list[int]:
+    """Choose an outcome-independent root schedule shared by every acquisition arm.
+
+    Each scheduled root incurs exactly the same prefix and horizon cost in every arm.
+    The entire seed-plus-round schedule is fixed before any branch outcome is queried.
+    """
+    groups = pool.by_root()
+    remaining = {ri: len(cs) for ri, cs in groups.items()}
+    order = list(groups)
+    rng.shuffle(order)
+    schedule = []
+    while len(schedule) < n:
+        available = [ri for ri in order if remaining[ri]]
+        if not available:
+            raise ValueError(f"Pool has only {len(schedule)} candidates, cannot schedule {n}")
+        for ri in available:
+            schedule.append(ri)
+            remaining[ri] -= 1
+            if len(schedule) == n:
+                break
+    return schedule
+
+
+def _scheduled_pick(groups, schedule, rng, key=None):
+    """Pick candidates within fixed roots, never allowing selector RNG to change cost."""
+    remaining = {ri: list(cs) for ri, cs in groups.items()}
+    for cs in remaining.values():
+        if key is None:
+            rng.shuffle(cs)
+        else:
+            cs.sort(key=key)
+    selected = []
+    for ri in schedule:
+        if not remaining.get(ri):
+            raise ValueError(f"Root {ri} cannot meet the predeclared acquisition schedule")
+        selected.append(remaining[ri].pop(0))
+    return selected
+
+
+def select(arm: str, pool: CandidatePool, n: int, rng, *, margin: float = 0.0, band: float = 10.0, risk_model=None, true_errors: dict | None = None, schedule: list[int] | None = None) -> list[Candidate]:
     groups = {r: [c for c in cs if not c.executed] for r, cs in pool.by_root().items()}
     groups = {r: cs for r, cs in groups.items() if cs}
+    if schedule is not None and len(schedule) != n:
+        raise ValueError("Schedule length must match the requested branch count")
+
+    def pick(key=None):
+        return (_scheduled_pick(groups, schedule, rng, key) if schedule is not None
+                else _balanced_pick(groups, n, rng, key))
+
     if arm == "random":
-        return _balanced_pick(groups, n, rng)
+        return pick()
     if arm == "boundary":
         # distance of predicted clearance to the operating margin; in-band first, then nearest
-        return _balanced_pick(groups, n, rng, key=lambda c: (abs(c.features["c_hat"] - margin) > band, abs(c.features["c_hat"] - margin) + rng.uniform(0, 1e-3)))
+        return pick(key=lambda c: (abs(c.features["c_hat"] - margin) > band, abs(c.features["c_hat"] - margin) + rng.uniform(0, 1e-3)))
     if arm == "learned":
         assert risk_model is not None
         for r, cs in groups.items():
@@ -133,10 +181,10 @@ def select(arm: str, pool: CandidatePool, n: int, rng, *, margin: float = 0.0, b
             risk = risk_model.predict(X)
             for c, s in zip(cs, risk):
                 c.features["risk_hat"] = float(s)
-        return _balanced_pick(groups, n, rng, key=lambda c: -c.features["risk_hat"])
+        return pick(key=lambda c: -c.features["risk_hat"])
     if arm == "oracle":
         assert true_errors is not None, "oracle needs true optimistic errors for the whole pool"
-        return _balanced_pick(groups, n, rng, key=lambda c: -true_errors.get(c.key, -np.inf))
+        return pick(key=lambda c: -true_errors.get(c.key, -np.inf))
     raise ValueError(arm)
 
 

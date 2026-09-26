@@ -88,6 +88,23 @@ class DenseLog:
     actions: np.ndarray  # (T, 2)
     frames: list | None = None  # block-endpoint frames (index 0 = before any action)
 
+    terminated: np.ndarray | None = None  # (T+1,) terminal flag at each state
+    truncated: np.ndarray | None = None  # (T+1,) truncation flag at each state
+    observed: np.ndarray | None = None  # (T+1,) false on padding after a terminal step
+    observation_valid: np.ndarray | None = None  # false after leaving the image domain
+
+    @property
+    def executed_steps(self) -> int:
+        return len(self.actions) if self.observed is None else int(self.observed.sum()) - 1
+
+    @property
+    def censored(self) -> bool:
+        return self.executed_steps < len(self.actions)
+
+    @property
+    def valid_for_training(self) -> bool:
+        return not self.censored and (self.observation_valid is None or self.observation_valid.all())
+
     @property
     def poses(self) -> np.ndarray:
         return self.states[:, 2:5]
@@ -139,25 +156,58 @@ def _read(env) -> tuple[np.ndarray, np.ndarray, float]:
     return state, np.array(tuple(u.block.velocity), dtype=np.float64), float(u.block.angular_velocity)
 
 
-def run_actions(env, actions: np.ndarray, *, record_frames: bool = False, frame_every: int = ACTION_BLOCK) -> DenseLog:
-    """Execute raw env actions from the CURRENT env state, logging every env step."""
+def observation_domain_mask(states: np.ndarray) -> np.ndarray:
+    """Valid pusher observations through the first exit from the 0..512 image arena."""
+    xy = np.asarray(states)[:, :2]
+    inside = np.isfinite(xy).all(axis=1) & (xy >= 0).all(axis=1) & (xy <= 512).all(axis=1)
+    return np.logical_and.accumulate(inside)
+
+
+def run_actions(env, actions: np.ndarray, *, record_frames: bool = False,
+                frame_every: int = ACTION_BLOCK, continue_after_done: bool = False) -> DenseLog:
+    """Log every actual step; mark padding and out-of-domain observations explicitly.
+
+    The fixed-size return preserves the bank layout. After termination/truncation,
+    repeated padding states/frames are unobserved and must never train a model or be
+    scored as a safe future. Continuing past done is an explicit diagnostic option.
+    Dense privileged geometry remains observable after an image-domain exit.
+    """
     actions = np.asarray(actions, dtype=np.float64).reshape(-1, ACTION_DIM)
     T = len(actions)
     states = np.empty((T + 1, STATE_DIM))
     bvel = np.empty((T + 1, 2))
     bang = np.empty(T + 1)
     ncon = np.zeros(T + 1, dtype=np.int64)
+    terminated, truncated = np.zeros(T + 1, bool), np.zeros(T + 1, bool)
+    observed = np.zeros(T + 1, bool)
+    observed[0] = True
     frames = [] if record_frames else None
     states[0], bvel[0], bang[0] = _read(env)
     if record_frames:
         frames.append(env.render())
-    for t, a in enumerate(actions):
-        _, _, _, _, info = env.step(a)
+    executed = 0
+    for t, action in enumerate(actions):
+        _, _, term, trunc, info = env.step(action)
         states[t + 1], bvel[t + 1], bang[t + 1] = _read(env)
         ncon[t + 1] = int(info.get("n_contacts", 0))
-        if record_frames and (t + 1) % frame_every == 0:
+        terminated[t + 1], truncated[t + 1] = bool(term), bool(trunc)
+        observed[t + 1] = True
+        executed = t + 1
+        if record_frames and executed % frame_every == 0:
             frames.append(env.render())
-    return DenseLog(states, bvel, bang, ncon, actions, frames)
+        if (term or trunc) and not continue_after_done:
+            break
+    if executed < T:
+        states[executed + 1:] = states[executed]
+        bvel[executed + 1:] = bvel[executed]
+        bang[executed + 1:] = bang[executed]
+        if record_frames:
+            last_frame = env.render()
+            while len(frames) < T // frame_every + 1:
+                frames.append(last_frame.copy())
+    valid = observation_domain_mask(states) & observed
+    return DenseLog(states, bvel, bang, ncon, actions, frames, terminated, truncated,
+                    observed, valid)
 
 
 def reset_root(env, root: Root, *, record_frames: bool = True) -> RootContext:
@@ -171,6 +221,8 @@ def reset_root(env, root: Root, *, record_frames: bool = True) -> RootContext:
     if len(prefix) // ACTION_BLOCK < HISTORY_FRAMES - 1:
         raise ValueError(f"root needs >= {HISTORY_FRAMES - 1} prefix blocks (idle blocks count)")
     log = run_actions(env, prefix, record_frames=record_frames)
+    if not log.valid_for_training:
+        raise ValueError(f"Root {root.root_id!r} has a censored or out-of-domain prefix")
     frames = log.frames[-HISTORY_FRAMES:] if record_frames else []
     blocks = prefix.reshape(-1, ACTION_BLOCK, ACTION_DIM)
     hist_actions = blocks[-(HISTORY_FRAMES - 1):] if HISTORY_FRAMES > 1 else blocks[:0]
@@ -208,7 +260,7 @@ def replay_check(env, root: Root, tape: np.ndarray, repeats: int = 3, *, frames:
     ref = logs[0]
     out = {"repeats": repeats, "n_steps": int(len(tape)), "bitwise": True, "max_abs_state": 0.0,
            "max_abs_block_vel": 0.0, "max_abs_ang_vel": 0.0, "frames_equal": True,
-           "contact_steps": int((ref.n_contacts > 0).sum())}
+           "contact_steps": int((ref.n_contacts > 0).sum()), "executed_steps": ref.executed_steps, "censored": ref.censored, "observation_valid": ref.valid_for_training}
     for lg in logs[1:]:
         out["max_abs_state"] = max(out["max_abs_state"], float(np.abs(lg.states - ref.states).max()))
         out["max_abs_block_vel"] = max(out["max_abs_block_vel"], float(np.abs(lg.block_vel - ref.block_vel).max()))
@@ -216,6 +268,9 @@ def replay_check(env, root: Root, tape: np.ndarray, repeats: int = 3, *, frames:
         if not (np.array_equal(lg.states, ref.states) and np.array_equal(lg.block_vel, ref.block_vel)
                 and np.array_equal(lg.block_ang_vel, ref.block_ang_vel)):
             out["bitwise"] = False
+        for attribute in ("observed", "observation_valid", "terminated", "truncated"):
+            if not np.array_equal(getattr(lg, attribute), getattr(ref, attribute)):
+                out["bitwise"] = False
         if frames and not all(np.array_equal(a, b) for a, b in zip(lg.frames, ref.frames)):
             out["frames_equal"] = False
     return out
@@ -243,7 +298,8 @@ def step_substeps(env, action) -> np.ndarray:
 
 def check_substep_equivalence(env, root: Root, tape: np.ndarray) -> dict:
     """Run the tape once with env.step and once with step_substeps; compare endpoints."""
-    ctx, log = execute_branch(env, root, tape, record_frames=False)
+    reset_root(env, root, record_frames=False)
+    log = run_actions(env, tape, record_frames=False, continue_after_done=True)
     reset_root(env, root, record_frames=False)
     sub = np.stack([step_substeps(env, a) for a in np.asarray(tape).reshape(-1, ACTION_DIM)])
     diff = float(np.abs(sub[:, -1] - log.states[1:]).max())

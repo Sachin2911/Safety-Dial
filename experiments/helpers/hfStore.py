@@ -14,7 +14,9 @@ Never print token values. Never load "latest": `download_run` requires a revisio
 
 from __future__ import annotations
 
+import json
 import os
+import re
 from pathlib import Path
 
 from huggingface_hub import HfApi, snapshot_download
@@ -65,6 +67,8 @@ class HFStore:
     def ensure_repo(self, key: str) -> str:
         rid, rtype = self.repo_id(key), self.repo_type(key)
         self.api.create_repo(rid, repo_type=rtype, private=True, exist_ok=True)
+        if self.api.repo_info(rid, repo_type=rtype).private is not True:
+            raise RuntimeError(f"Refusing checkpoint upload: {rid} is not a private repository")
         return rid
 
     # ---- uploads -----------------------------------------------------------------
@@ -90,13 +94,27 @@ class HFStore:
             folder_path=str(run_dir),
             path_in_repo=f"{kind}/{run_id}",
             commit_message=message or f"{kind}/{run_id}",
+            ignore_patterns=["hf_upload.json", "hf_upload.json.tmp"],
         )
         sha = getattr(info, "oid", None) or self.api.repo_info(rid, repo_type=rtype).sha
+        record = {"repo_id": rid, "repo_type": rtype, "path": f"{kind}/{run_id}",
+                  "revision": sha, "run_id": run_id}
+        record_path = run_dir / "hf_upload.json"
+        temporary = record_path.with_suffix(".json.tmp")
+        temporary.write_text(json.dumps(record, indent=2) + "\n")
+        temporary.replace(record_path)
         if tag:
             try:
                 self.api.create_tag(rid, tag=run_id, repo_type=rtype, revision=sha)
-            except HfHubHTTPError as exc:  # tag exists: keep the first, warn
-                print(f"[hfStore] tag {run_id} not created ({exc.__class__.__name__}); sha={sha}")
+            except HfHubHTTPError:
+                # A tag is an immutable run identity. A different existing target is
+                # not a successful tagged upload, even though the commit is durable.
+                target = self.api.repo_info(rid, repo_type=rtype, revision=run_id).sha
+                if target != sha:
+                    raise RuntimeError(
+                        f"Run tag {run_id} already refers to {target}; uploaded commit is {sha}. "
+                        "Use a new run ID. Upload provenance is saved in hf_upload.json."
+                    ) from None
         print(f"[hfStore] uploaded {run_dir} -> {rid}:{kind}/{run_id} @ {sha}")
         return sha
 
@@ -121,14 +139,19 @@ class HFStore:
         local_root: str | Path | None = None,
     ) -> Path:
         """Fetch `<path_in_repo>/**` at a pinned `revision` into `local_root/<path_in_repo>`."""
-        if not revision:
-            raise ValueError("revision is required: pin a tag or commit, never 'latest'")
+        if not revision or revision in {"main", "master", "latest", "HEAD"}:
+            raise ValueError("revision must pin a run tag or full commit, never a moving branch")
         rid, rtype = self.repo_id(key), self.repo_type(key)
+        if not re.fullmatch(r"[0-9a-fA-F]{40}|[0-9a-fA-F]{64}", revision):
+            tags = self.api.list_repo_refs(rid, repo_type=rtype).tags
+            if revision not in {t.name for t in tags}:
+                raise ValueError(f"Revision {revision!r} is not a run tag or full commit")
+        resolved = self.api.repo_info(rid, repo_type=rtype, revision=revision).sha
         local_root = Path(local_root or REPO_ROOT / "data" / "hf" / REPOS[key][0])
         snapshot_download(
             repo_id=rid,
             repo_type=rtype,
-            revision=revision,
+            revision=resolved,
             allow_patterns=[f"{path_in_repo}/**", f"{path_in_repo}/*"],
             local_dir=str(local_root),
             token=self.token,
@@ -136,7 +159,47 @@ class HFStore:
         out = local_root / path_in_repo
         if not out.exists():
             raise FileNotFoundError(f"{rid}:{path_in_repo}@{revision} downloaded nothing")
+        (out / "hf_download.json").write_text(json.dumps({
+            "repo_id": rid, "repo_type": rtype, "path": path_in_repo,
+            "requested_revision": revision, "revision": resolved,
+        }, indent=2) + "\n")
         return out
+
+    def reference_run(self, key: str, kind: str, run_dir: str | Path) -> dict:
+        """Pin an existing local bundle by its saved upload receipt or immutable run tag.
+
+        Local file hashes make a consuming manifest explicit about the bytes it used.
+        Older bundles without receipts resolve their original run-ID tag once.
+        """
+        from helpers.runManifest import file_sha256
+
+        run_dir = Path(run_dir)
+        reference = None
+        for name in ("hf_upload.json", "hf_download.json"):
+            path = run_dir / name
+            if path.is_file():
+                reference = json.loads(path.read_text())
+                break
+        legacy = run_dir / "hf_revision.txt"
+        if reference is None and legacy.is_file():
+            repo, path, revision = legacy.read_text().split()[:3]
+            reference = {"repo_id": repo, "path": path, "revision": revision}
+        if reference is None:
+            reference = {"repo_id": self.repo_id(key), "path": f"{kind}/{run_dir.name}",
+                         "revision": self.resolve_revision(key, run_dir.name)}
+        if reference["repo_id"] != self.repo_id(key):
+            raise ValueError(f"Bundle repository does not match {self.repo_id(key)}")
+        sha = reference["revision"]
+        if not re.fullmatch(r"[0-9a-fA-F]{40}|[0-9a-fA-F]{64}", sha):
+            raise ValueError("Bundle reference must contain a full immutable commit")
+        reference = {"repo_id": reference["repo_id"], "repo_type": self.repo_type(key),
+                     "path": reference["path"], "revision": sha,
+                     "local_path": str(run_dir), "files_sha256": {}}
+        for path in sorted(run_dir.iterdir()):
+            if path.is_file() and path.suffix in {".pt", ".ckpt", ".npz", ".yaml"}:
+                reference["files_sha256"][path.name] = file_sha256(path)
+        reference["manifest_sha256"] = file_sha256(run_dir / "manifest.json")
+        return reference
 
     def resolve_revision(self, key: str, ref: str) -> str:
         """Commit sha for a tag/branch/sha, from the Hub."""

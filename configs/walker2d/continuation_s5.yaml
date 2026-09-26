@@ -1,0 +1,155 @@
+# Separately managed stretch after the current S4 has completed all gates/budgets/seeds.
+# Do not edit the already-running continuation.yaml to append these stages.
+version: 1
+workflow_id: walker2d-s5-continuation-20260926-1
+working_directory: .
+state_dir: runs/workflows/walker2d-s5-continuation-20260926-1
+poll_interval_seconds: 15
+wait_timeout_seconds: 604800
+stages:
+  - id: complete_s4_prerequisite
+    wait_for:
+      - runs/walker2d-lewm-a-continuation-20260926-1/upload_receipt.json
+      - docs/mainPlan/results/s2/walker2d-lewm-a-continuation-20260926-1.json
+      - runs/walker2d-probes-continuation-20260926-1/gate.json
+      - runs/walker2d-s4-continuation-20260926-1/decomposition_gate.json
+      - runs/walker2d-s4-continuation-20260926-1/study.json
+      - runs/walker2d-s4-continuation-20260926-1/manifest.json
+      - data/study/walker2d/continuation-20260926-2/s4/walker2d-s4-continuation-20260926-1/hf_upload.json
+    requires_gates:
+      - path: runs/walker2d-probes-continuation-20260926-1/gate.json
+        key: gate.go
+      - path: runs/walker2d-s4-continuation-20260926-1/decomposition_gate.json
+        key: go
+    argv:
+      - uv
+      - run
+      - python
+      - experiments/scripts/walker_s5_ready.py
+      - --model-a
+      - runs/walker2d-lewm-a-continuation-20260926-1
+      - --data-dir
+      - data/study/walker2d/continuation-20260926-2
+      - --s4-run
+      - runs/walker2d-s4-continuation-20260926-1
+      - --s4-bank
+      - data/study/walker2d/continuation-20260926-2/s4/walker2d-s4-continuation-20260926-1
+      - --expected-steps
+      - '214780'
+      - --expected-budget
+      - '512'
+      - --expected-seeds
+      - '0'
+      - '1'
+      - '2'
+      - --seed
+      - '0'
+      - --out
+      - runs/walker2d-s5-ready-continuation-20260926-1/gate.json
+    timeout_seconds: 1800
+    fresh_outputs:
+      - runs/walker2d-s5-ready-continuation-20260926-1
+    outputs:
+      - runs/walker2d-s5-ready-continuation-20260926-1/gate.json
+    gate:
+      path: runs/walker2d-s5-ready-continuation-20260926-1/gate.json
+      key: gate.go
+      stop_exit_codes: [0, 2]
+
+  - id: exact_set_b
+    requires_gates:
+      - path: runs/walker2d-s5-ready-continuation-20260926-1/gate.json
+        key: gate.go
+    argv:
+      - uv
+      - run
+      - python
+      - experiments/scripts/walker_s5_matched.py
+      - --data-dir
+      - data/study/walker2d/continuation-20260926-2
+      - --acquisition-bank
+      - data/study/walker2d/continuation-20260926-2/s4/walker2d-s4-continuation-20260926-1
+      - --model-a
+      - runs/walker2d-lewm-a-continuation-20260926-1
+      - --out
+      - data/study/walker2d/matched-b-continuation-20260926-1
+      - --seed
+      - '0'
+    timeout_seconds: 10800
+    fresh_outputs:
+      - data/study/walker2d/matched-b-continuation-20260926-1
+    outputs:
+      - data/study/walker2d/matched-b-continuation-20260926-1
+      - data/study/walker2d/matched-b-continuation-20260926-1/upload_receipt.json
+
+  - id: lewm_b_full
+    wait_for:
+      - data/study/walker2d/matched-b-continuation-20260926-1/upload_receipt.json
+    requires_gates:
+      - path: runs/walker2d-s5-ready-continuation-20260926-1/gate.json
+        key: gate.go
+    argv:
+      - uv
+      - run
+      - python
+      - experiments/scripts/walker_s2_train_lewm.py
+      - --data
+      - data/study/walker2d/matched-b-continuation-20260926-1/setB.h5
+      - --episode-splits
+      - data/study/walker2d/matched-b-continuation-20260926-1/splits.json
+      - --match-run
+      - runs/walker2d-lewm-a-continuation-20260926-1
+      - --max-steps
+      - '214780'
+      - --name
+      - lewm-b
+      - --run-id
+      - walker2d-lewm-b-continuation-20260926-1
+    # --match-run fixes the validated 214780 updates, initial seed, architecture and scalers.
+    timeout_seconds: 604800
+    fresh_outputs:
+      - runs/walker2d-lewm-b-continuation-20260926-1
+      - docs/mainPlan/results/s2/walker2d-lewm-b-continuation-20260926-1.json
+    outputs:
+      - runs/walker2d-lewm-b-continuation-20260926-1
+      - runs/walker2d-lewm-b-continuation-20260926-1/upload_receipt.json
+      - docs/mainPlan/results/s2/walker2d-lewm-b-continuation-20260926-1.json
+
+  - id: exact_N_comparison
+    wait_for:
+      - runs/walker2d-lewm-b-continuation-20260926-1/upload_receipt.json
+      - docs/mainPlan/results/s2/walker2d-lewm-b-continuation-20260926-1.json
+    requires_gates:
+      - path: runs/walker2d-s5-ready-continuation-20260926-1/gate.json
+        key: gate.go
+    argv:
+      - uv
+      - run
+      - python
+      - experiments/scripts/walker_s5_compare.py
+      - --model-a
+      - runs/walker2d-lewm-a-continuation-20260926-1
+      - --model-b
+      - runs/walker2d-lewm-b-continuation-20260926-1
+      - --data-dir
+      - data/study/walker2d/continuation-20260926-2
+      - --data-b
+      - data/study/walker2d/matched-b-continuation-20260926-1
+      - --s4-run
+      - runs/walker2d-s4-continuation-20260926-1
+      - --s4-bank
+      - data/study/walker2d/continuation-20260926-2/s4/walker2d-s4-continuation-20260926-1
+      - --seed
+      - '0'
+      - --run-id
+      - walker2d-s5-compare-continuation-20260926-1
+    # Includes two fresh 1500-step exact-N predictor updates, then matched fresh probes.
+    # Uses unchanged S4 replay and test banks; executes zero additional simulator actions.
+    timeout_seconds: 172800
+    fresh_outputs:
+      - runs/walker2d-s5-compare-continuation-20260926-1
+      - docs/mainPlan/results/s5/walker2d-s5-compare-continuation-20260926-1
+    outputs:
+      - runs/walker2d-s5-compare-continuation-20260926-1
+      - runs/walker2d-s5-compare-continuation-20260926-1/hf_upload.json
+      - docs/mainPlan/results/s5/walker2d-s5-compare-continuation-20260926-1

@@ -15,11 +15,13 @@ import hashlib
 import json
 import os
 import platform
+import re
 import subprocess
 import time
 from datetime import datetime, timezone
 from importlib import metadata
 from pathlib import Path
+from urllib.parse import urlsplit, urlunsplit
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 LEWM_DIR = REPO_ROOT / "third_party" / "le-wm"
@@ -49,6 +51,14 @@ def _git(args: list[str], cwd: Path) -> str | None:
         return None
 
 
+def sanitise_remote(remote: str | None) -> str | None:
+    """Keep repository provenance without HTTP credentials or query tokens."""
+    if remote is None or "://" not in remote:
+        return remote
+    parts = urlsplit(remote)
+    return urlunsplit((parts.scheme, parts.netloc.rsplit("@", 1)[-1], parts.path, "", ""))
+
+
 def git_info(repo: Path = REPO_ROOT) -> dict:
     commit = _git(["rev-parse", "HEAD"], repo)
     status = _git(["status", "--porcelain"], repo)
@@ -57,7 +67,7 @@ def git_info(repo: Path = REPO_ROOT) -> dict:
         "commit": commit,
         "dirty": bool(status) if status is not None else None,
         "branch": _git(["rev-parse", "--abbrev-ref", "HEAD"], repo),
-        "remote": _git(["config", "--get", "remote.origin.url"], repo),
+        "remote": sanitise_remote(_git(["config", "--get", "remote.origin.url"], repo)),
     }
 
 
@@ -161,7 +171,9 @@ def write_manifest(run_dir: str | Path, manifest: dict, name: str = "manifest.js
     run_dir = Path(run_dir)
     run_dir.mkdir(parents=True, exist_ok=True)
     path = run_dir / name
-    path.write_text(json.dumps(manifest, indent=2, sort_keys=True, default=str) + "\n")
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(manifest, indent=2, sort_keys=True, default=str) + "\n")
+    temporary.replace(path)
     return path
 
 
@@ -174,3 +186,10 @@ def make_run_id(env: str, kind: str, detail: str = "", n: int = 1) -> str:
     day = datetime.now(timezone.utc).strftime("%Y%m%d")
     parts = [env, kind] + ([detail] if detail else []) + [day, str(n)]
     return "-".join(parts)
+
+
+def validate_run_id(value: str) -> str:
+    """An explicit run ID is one safe path component and a stable Hub tag."""
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", value):
+        raise ValueError("Run ID must be one alphanumeric path component with '.', '_' or '-'")
+    return value

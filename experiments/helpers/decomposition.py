@@ -16,9 +16,66 @@ import numpy as np
 from helpers.dialMetrics import cluster_bootstrap, fsa
 from helpers.pushtAssets import ACTION_BLOCK
 from helpers.pushtGeometry import clearance_trace
-from helpers.pushtReplay import endpoint_interpolation
+from helpers.pushtReplay import endpoint_interpolation, observation_domain_mask
 
 SOURCES = ["dense", "endpoint", "real_readout", "imagined", "stationary", "coord_mlp"]
+
+
+def contact_metadata(branch: dict) -> dict:
+    """Only body-specific observed counters establish pusher-T contact or free motion."""
+    aggregate = np.asarray(branch["n_contacts"])
+    observed = np.asarray(branch.get("observed", np.ones(len(aggregate), bool)))
+    specific = branch.get("pusher_block_contacts")
+    typed = specific is not None and branch.get("contact_kind") == "pusher_block"
+    wall = branch.get("block_wall_contacts")
+    return {"contact": bool(np.any(np.asarray(specific)[observed] > 0)) if typed else None,
+            "contact_kind": "pusher_block" if typed else "any_collision",
+            "contact_mechanism_identifiable": typed,
+            "any_collision": bool(np.any(aggregate[observed] > 0)),
+            "block_wall_contact": bool(np.any(np.asarray(wall)[observed] > 0)) if wall is not None else None,
+            "contact_counter": branch.get("contact_counter", "upstream_any_collision")}
+
+
+def outcome_metadata(states, clearances, *, observed=None, observation_valid=None,
+                     terminated=None, truncated=None) -> dict:
+    """Separate observed hazard failure, image-domain exits and unknown future steps."""
+    states, clearances = np.asarray(states), np.asarray(clearances, dtype=float)
+    observed = np.ones(len(states), bool) if observed is None else np.asarray(observed, bool)
+    if observed.shape != (len(states),) or not observed[0]:
+        raise ValueError("Outcome observation mask must include the root state")
+    domain = observation_domain_mask(states)
+    exit_seen = bool((~domain & observed).any())
+    valid = domain & observed if observation_valid is None else np.asarray(observation_valid, bool)
+    hazard = bool((clearances[observed] <= 0).any())
+    censored = bool((~observed).any())
+    return {
+        "hazard_unsafe_observed": hazard, "hazard_boundary_convention": "clearance <= 0 includes contact",
+        "hazard_only_unsafe": True if hazard else (None if censored else False),
+        "hazard_censored": bool(censored and not hazard),
+        "observation_domain_exit": exit_seen, "arena_exit": exit_seen,
+        "censored": censored, "unsafe_composite": bool(hazard or exit_seen),
+        "observed_steps": int(observed.sum()) - 1,
+        "horizon_steps": len(states) - 1,
+        "observation_valid": bool(valid.all()),
+        "terminated": bool(np.any(terminated)) if terminated is not None else None,
+        "truncated": bool(np.any(truncated)) if truncated is not None else None,
+        "termination_flags_recorded": terminated is not None and truncated is not None,
+        "cmin_dense": float(clearances[observed].min()),
+    }
+
+
+def _outcome_from_bank(bank, j, states, clearances):
+    return outcome_metadata(states, clearances, **{
+        key: bank.h5[key][int(j)] for key in
+        ("observed", "observation_valid", "terminated", "truncated") if key in bank.h5
+    })
+
+
+def row_outcomes(rows):
+    """Known composite violations and censoring mask for fsa(..., censored=...)."""
+    unsafe = np.array([r.get("unsafe_composite", r["cmin_dense"] <= 0) for r in rows], bool)
+    censored = np.array([r.get("censored", False) for r in rows], bool)
+    return unsafe, censored
 
 
 def interp_from_endpoints(end_states: np.ndarray) -> np.ndarray:
@@ -105,10 +162,16 @@ def analyse_bank(name, bank, layouts, imaginer, probe, coord=None, *, verbose=Tr
             cs = coord.rollout(st[0], tape[None])[0]
             traces["coord_mlp"] = interp_from_endpoints(cs)[:, 2:5]
             poses6["coord_mlp"] = cs[:, 2:5]
+        observed = np.asarray(b.get("observed", np.ones(len(st), bool)))
+        valid = np.asarray(b.get("observation_valid", observation_domain_mask(st)))
+        endpoint_valid = observed[::ACTION_BLOCK] & valid[::ACTION_BLOCK]
         for s, p6 in poses6.items():
-            pose_err[s]["centre"].append(np.linalg.norm(p6[:, :2] - ends[:, 2:4], axis=1))
-            pose_err[s]["angle"].append(ang_err_deg(p6[:, 2], ends[:, 4]))
-        contact = bool((b["n_contacts"] > 0).any())
+            centre_error = np.linalg.norm(p6[:, :2] - ends[:, 2:4], axis=1)
+            angle_error = ang_err_deg(p6[:, 2], ends[:, 4])
+            centre_error[~endpoint_valid], angle_error[~endpoint_valid] = np.nan, np.nan
+            pose_err[s]["centre"].append(centre_error)
+            pose_err[s]["angle"].append(angle_error)
+        contact = contact_metadata(b)
         rot = float(ang_err_deg(st[-1, 4], st[0, 4]))
         disp = float(np.linalg.norm(st[-1, 2:4] - st[0, 2:4]))
         disp_imag = float(np.linalg.norm(pose_imag[-1, :2] - pose_imag[0, :2]))
@@ -116,13 +179,14 @@ def analyse_bank(name, bank, layouts, imaginer, probe, coord=None, *, verbose=Tr
         for fam, hz in lay.get(root.root_id, {}).items():
             cd = clearance_trace(traces["dense"], hz)
             cmins = {s: float(clearance_trace(tr, hz).min()) for s, tr in traces.items()}
-            rows.append({"bank": name, "branch": j, "root": ri, "layout": fam, "kind": b["kind"], "contact": contact, "rotation_deg": rot,
+            rows.append({"bank": name, "branch": j, "root": ri, "layout": fam, "kind": b["kind"], **contact, "rotation_deg": rot,
                          "displacement_px": disp, "imag_displacement_px": disp_imag, "imag_rotation_deg": rot_imag,
-                         "dense_argmin_step": int(np.argmin(cd)), **{f"cmin_{s}": v for s, v in cmins.items()}})
+                         "dense_argmin_step": int(np.argmin(cd)), **{f"cmin_{s}": v for s, v in cmins.items()},
+                         **_outcome_from_bank(bank, j, st, cd)})
         if verbose and (j + 1) % 200 == 0:
             print(f"[decomp:{name}] {j + 1}/{N} branches {time.time() - t0:.0f}s")
-    errs = {s: {"centre_by_block": np.stack(v["centre"]).mean(0).tolist(), "centre_p95_by_block": np.percentile(np.stack(v["centre"]), 95, axis=0).tolist(),
-                "angle_by_block": np.stack(v["angle"]).mean(0).tolist(), "angle_p95_by_block": np.percentile(np.stack(v["angle"]), 95, axis=0).tolist()}
+    errs = {s: {"centre_by_block": np.nanmean(np.stack(v["centre"]), axis=0).tolist(), "centre_p95_by_block": np.nanpercentile(np.stack(v["centre"]), 95, axis=0).tolist(),
+                "angle_by_block": np.nanmean(np.stack(v["angle"]), axis=0).tolist(), "angle_p95_by_block": np.nanpercentile(np.stack(v["angle"]), 95, axis=0).tolist()}
             for s, v in pose_err.items() if v["centre"]}
     return {"rows": rows, "pose_err": errs}
 
@@ -161,43 +225,52 @@ def evaluate_model_on_bank(name, bank, layouts, imaginer, probe, *, correction=N
             ends = st[::ACTION_BLOCK]
             p6 = np.concatenate([pose0, pose_imag[a]], 0)
             tr_imag = interp_from_endpoints(np.column_stack([ends[:, :2], p6, ends[:, 5:]]))[:, 2:5]
-            contact = bool((bank.h5["n_contacts"][int(j)] > 0).any())
+            contact = contact_metadata(bank.branch(int(j)))
             kind = bank.h5["kind"][int(j)]
             kind = kind.decode() if isinstance(kind, bytes) else str(kind)
             for fam, hz in lay[root.root_id].items():
                 cd = clearance_trace(st[:, 2:5], hz)
-                rows.append({"bank": name, "branch": int(j), "root": int(ri), "layout": fam, "kind": kind, "contact": contact,
+                rows.append({"bank": name, "branch": int(j), "root": int(ri), "layout": fam, "kind": kind, **contact,
                              "cmin_dense": float(cd.min()), "cmin_imagined": float(clearance_trace(tr_imag, hz).min()),
                              "displacement_px": float(np.linalg.norm(st[-1, 2:4] - st[0, 2:4])), "imag_displacement_px": float(np.linalg.norm(p6[-1, :2] - p6[0, :2])),
                              "rotation_deg": float(ang_err_deg(st[-1, 4], st[0, 4])), "imag_rotation_deg": float(ang_err_deg(p6[-1, 2], p6[0, 2])),
-                             "centre_err_h5_px": float(np.linalg.norm(p6[-1, :2] - ends[-1, 2:4])), "angle_err_h5_deg": float(ang_err_deg(p6[-1, 2], ends[-1, 4]))})
+                             "centre_err_h5_px": float(np.linalg.norm(p6[-1, :2] - ends[-1, 2:4])), "angle_err_h5_deg": float(ang_err_deg(p6[-1, 2], ends[-1, 4])),
+                             **_outcome_from_bank(bank, j, st, cd)})
     return rows
 
 
 def decision_table(rows, m: float, sources=None, boot: int = 500) -> dict:
     sources = sources or [s for s in SOURCES if rows and f"cmin_{s}" in rows[0]]
-    u = np.array([r["cmin_dense"] < 0 for r in rows])
+    u, censored = row_outcomes(rows)
     root = np.array([r["root"] for r in rows])
-    out = {"m": float(m), "n": int(len(rows)), "n_unsafe": int(u.sum())}
+    out = {"m": float(m), "n": int(len(rows)), "n_unsafe": int(u.sum()),
+           "n_censored": int(censored.sum()),
+           "n_observation_domain_exits": sum(r.get("observation_domain_exit", False) for r in rows),
+           "outcome": "observed hazard violation OR observation-domain exit; unresolved futures censored"}
     for s in sources:
         c = np.array([r[f"cmin_{s}"] for r in rows])
-        out[s] = fsa(c, u, m)
+        out[s] = fsa(c, u, m, censored=censored)
     acc = {s: np.array([r[f"cmin_{s}"] >= m for r in rows]) for s in sources}
     if "imagined" in acc:
         fs4 = acc["imagined"] & u
-        attr = {"n_false_safe_imagined": int(fs4.sum())}
+        domain_exit = np.array([r.get("observation_domain_exit", False) for r in rows])
+        attr = {"n_false_safe_imagined": int(fs4.sum()),
+                "domain_exit": int((fs4 & domain_exit).sum()),
+                "censored": int((fs4 & ~domain_exit & censored).sum())}
+        fs4 = fs4 & ~domain_exit & ~censored
         if "endpoint" in acc and "real_readout" in acc:
             attr.update({"temporal": int((fs4 & acc["endpoint"]).sum()), "readout": int((fs4 & ~acc["endpoint"] & acc["real_readout"]).sum()),
                          "imagination": int((fs4 & ~acc["endpoint"] & ~acc["real_readout"]).sum())})
         out["attribution"] = attr
         if len(rows) and boot:
-            out["fsa_imagined_ci"] = cluster_bootstrap(lambda c, u: fsa(c, u, m)["fsa"], root, n_boot=boot, c=np.array([r["cmin_imagined"] for r in rows]), u=u)
+            out["fsa_imagined_ci"] = cluster_bootstrap(lambda c, u, censored: fsa(c, u, m, censored=censored)["fsa"], root, n_boot=boot, c=np.array([r["cmin_imagined"] for r in rows]), u=u, censored=censored)
     return out
 
 
 def by_regime(rows, m: float, sources=None) -> dict:
     out = {}
-    groups = {"contact": lambda r: r["contact"], "free": lambda r: not r["contact"],
+    groups = {"contact": lambda r: r["contact"] is True, "free": lambda r: r["contact"] is False,
+              "contact_unknown": lambda r: r["contact"] is None,
               "rotation>=10deg": lambda r: r["rotation_deg"] >= 10, "rotation<10deg": lambda r: r["rotation_deg"] < 10,
               "near_boundary(|c|<20)": lambda r: abs(r["cmin_dense"]) < 20, "far(|c|>=20)": lambda r: abs(r["cmin_dense"]) >= 20}
     for g, f in groups.items():
@@ -210,7 +283,7 @@ def by_regime(rows, m: float, sources=None) -> dict:
 
 def ordinary_motion(rows) -> dict:
     """Predicted against true displacement/rotation on ordinary (random/nominal) tapes."""
-    sub = [r for r in rows if r["kind"] in ("nominal", "random") and r["layout"] == "familiar"]
+    sub = [r for r in rows if r["kind"] in ("nominal", "random") and r["layout"] == "familiar" and not r.get("censored", False) and r.get("observation_valid", True)]
     if not sub:
         return {}
     dt = np.array([r["displacement_px"] for r in sub])

@@ -10,6 +10,7 @@ generation, which is counted once per root as the recorded prefix.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -52,7 +53,10 @@ def sample_roots(h5_path: Path, rng, n_roots: int, *, kind: str = "representativ
         if episode_filter is not None and not episode_filter(ei):
             continue
         n = len(ep["qpos"])
-        hi = n - HORIZON_STEPS
+        # The recorded policy tape may need explicit hold-last padding after termination.
+        # Branch truth continues with termination disabled; near-failure roots must not
+        # be excluded merely because the source episode ends within the horizon.
+        hi = n if kind == "stress" else n - HORIZON_STEPS
         if hi <= MIN_PREFIX:
             continue
         if kind == "representative":
@@ -60,7 +64,7 @@ def sample_roots(h5_path: Path, rng, n_roots: int, *, kind: str = "representativ
         else:
             cands = []
             if bool(ep["terminated"][-1]):
-                cands += list(range(max(MIN_PREFIX, n - 62 - HORIZON_STEPS), hi))
+                cands += list(range(max(MIN_PREFIX, n - 62), hi))
             v = ep["x_velocity"]
             near = np.where(np.abs(v[MIN_PREFIX - 1 : hi - 1] - SPEED_LIMIT) < 0.3)[0] + MIN_PREFIX
             cands += near.tolist()
@@ -77,7 +81,7 @@ class WalkerBankWriter:
     def __init__(self, bank_dir: Path):
         self.dir = Path(bank_dir)
         self.dir.mkdir(parents=True, exist_ok=True)
-        self.h5 = h5py.File(self.dir / "branches.h5", "w")
+        self.h5 = h5py.File(self.dir / "branches.h5", "x")
         T = HORIZON_STEPS
         spec = {"tape": ((0, T, 6), np.float32), "qpos": ((0, T + 1, 9), np.float64), "qvel": ((0, T + 1, 9), np.float64), "x_velocity": ((0, T), np.float64),
                 "root_index": ((0,), np.int64), "kind": ((0,), h5py.string_dtype()), "params": ((0,), h5py.string_dtype()),
@@ -94,7 +98,7 @@ class WalkerBankWriter:
             self.root_index[root.root_id] = len(self.roots) - 1
         return self.root_index[root.root_id]
 
-    def add_branches(self, root: WalkerRoot, items: list[tuple[np.ndarray, str, dict]], env) -> list:
+    def add_branches(self, root: WalkerRoot, items: list[tuple[np.ndarray, str, dict]], env, *, on_step=None) -> list:
         ri = self.add_root(root)
         n0 = self.h5["tape"].shape[0]
         n = len(items)
@@ -102,7 +106,8 @@ class WalkerBankWriter:
             self.h5[k].resize(n0 + n, axis=0)
         logs = []
         for i, (tape, kind, params) in enumerate(items):
-            log = execute_branch(env, root.qpos, root.qvel, tape, render_every=FRAMESKIP)
+            tape = np.asarray(tape, dtype=np.float32)
+            log = execute_branch(env, root.qpos, root.qvel, tape, render_every=FRAMESKIP, on_step=on_step)
             j = n0 + i
             self.h5["tape"][j] = tape.astype(np.float32)
             self.h5["qpos"][j] = log.qpos
@@ -140,7 +145,7 @@ class WalkerBank:
         return {"speed": speed_clearance(xv), "health": health_clearance(qp[1:, 1], qp[1:, 2])}
 
 
-def build_walker_bank(bank_dir: Path, roots: list[WalkerRoot], rng, env, *, n_tapes: int, stress: bool, seed: int, verbose=True) -> WalkerBank:
+def build_walker_bank(bank_dir: Path, roots: list[WalkerRoot], rng, env, *, n_tapes: int, stress: bool, seed: int, verbose=True, provenance: dict | None = None) -> WalkerBank:
     import time
 
     w = WalkerBankWriter(bank_dir)
@@ -153,7 +158,7 @@ def build_walker_bank(bank_dir: Path, roots: list[WalkerRoot], rng, env, *, n_ta
         w.add_branches(root, items[:n_tapes], env)
         if verbose and (i + 1) % 16 == 0:
             print(f"[wbank:{bank_dir.name}] {i + 1}/{len(roots)} roots {time.time() - t0:.0f}s")
-    w.finish({"seed": seed, "n_tapes": n_tapes, "stress": stress, "charged_steps_per_branch": HORIZON_STEPS})
+    w.finish({"seed": seed, "n_tapes": n_tapes, "stress": stress, "charged_steps_per_branch": HORIZON_STEPS, "provenance": provenance})
     return WalkerBank(bank_dir)
 
 
@@ -167,3 +172,27 @@ def interp_steps(vals: np.ndarray, block: int = FRAMESKIP) -> np.ndarray:
     K = len(vals) - 1
     w = np.arange(1, block + 1) / block
     return (vals[:-1, None] * (1 - w) + vals[1:, None] * w).reshape(K * block)
+
+
+def dataset_identity(h5_path: Path) -> dict:
+    """Full content identity: cached banks cannot silently cross data runs."""
+    p = Path(h5_path)
+    digest = hashlib.sha256()
+    with p.open("rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            digest.update(chunk)
+    return {"path": str(p.resolve()), "sha256": digest.hexdigest(), "size": p.stat().st_size}
+
+
+def source_generation_steps(h5_path: Path) -> int:
+    """Charge the whole source pool, including prefixes, unused futures and rejected roots."""
+    with h5py.File(h5_path, "r") as f:
+        return int(np.asarray(f["ep_len"], dtype=np.int64).sum())
+
+
+def load_verified_bank(bank_dir: Path, expected: dict) -> WalkerBank:
+    bank = WalkerBank(bank_dir)
+    if bank.meta.get("provenance") != expected:
+        bank.h5.close()
+        raise ValueError(f"Bank provenance does not match this run: {bank_dir}")
+    return bank

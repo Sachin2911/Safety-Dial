@@ -1,0 +1,31 @@
+# Shared protocol audit, 26 September 2026
+
+The original development and test banks share 14 source expert episodes. Their distinct root IDs do not make those trajectories independent. The stored E1 diagnosis and E2 repair numbers therefore remain development diagnostics. They do not establish final-test generalization. This audit preserves the recorded results and original banks. The exact episode overlaps and artifact hashes are in [the machine-readable audit](shared_protocol_audit.json).
+
+The test/stress banks intentionally share all 128 source episodes: they are representative and stress views of the same final-test role. Neither overlaps the original adaptation or acquisition root sources. The earlier probe branch extension used artificial root-based trajectory IDs, allowing expert frames and their branch descendants into different internal probe splits. Its internal validation must not be described as independent source-trajectory validation.
+
+## Corrections implemented
+
+- `splitIntegrity.py` verifies source episode and root separation. Fresh E1 banks partition episodes before roots, exclude prior evaluated episodes, preserve old output paths, and store development layouts from the familiar family only. The geometric start/goal-family protocol is implemented separately in `pushtSourceFamilies.py`.
+- Probe branch frames now use the original expert episode ID. The probe script saves the actual training/validation episode lists, requires fresh bank/output paths, and stores its exact Hugging Face upload revision.
+- E1 decomposition writes fresh paths, uploads its privileged coordinate baseline, and records an executable development-only diagnosis gate. Provisional defaults require five attributable false-safe decisions, three imagination-attributed errors and an imagination share of at least 0.25. E2 requires this passing report and verifies hashes of the exact roots, branch truth/tapes, layouts and frozen probe before loading a model.
+- Root generation charges all actual simulator steps, including failed attempts and repeated prefixes. Branch logs stop on termination or truncation; fixed-size padding is explicitly unobserved. Dense privileged geometry may continue after an observation-domain exit, while those images are excluded from training. Existing banks without masks retain compatibility and have domain exits reconstructed from stored states.
+- Evaluation exposes observed footprint violations, domain exits and censored horizons separately. New Push-T truth includes exact contact at zero clearance. A known hazard or domain violation is a composite unsafe event. An accepted horizon with an unresolved future has undefined FSA and reported lower/upper bounds; it is never silently safe. Censored padding is excluded from physical-error summaries and all training targets, including the E2 readout correction.
+- E2 saves the complete queried adaptation bank, exact acquired/replay/retention latent clips and pinned upstream references before optimization. Its gate additionally requires paired goal-reaching retention with at least 20 fixed episodes. E0, E1 and E2 entry points require fresh result paths.
+- Shared checkpoint storage verifies that an existing repository is private, records upload commit receipts, resolves download tags to immutable commits, and rejects moving-branch downloads. Manifests redact HTTP URL credentials and use atomic writes. Matched acceptance handles finite samples and ties; dial integration uses achieved acceptance rates.
+
+## Verification
+
+The repository initially contained no collected tests. The complete CPU suite passes 102 tests in 6.93 seconds, including 36 targeted shared regressions. Repository Ruff checks are clean. Tests cover source leakage despite different root IDs, original probe episode labels, exact bank/probe gate identities, early refusal before model loading, terminal padding, domain exits, old-bank compatibility, censored acceptance, checkpoint privacy and retained-history storage budgets. No GPU experiment was started by this audit.
+
+## Storage and runtime
+
+Read-only account inspection found approximately 13.24 GB of private repository storage and no private buckets. The token owner is on the free tier. The published private allowance is 100 GB. Storage includes retained repository versions; a new checkpoint replacing an old pathname does not justify assuming old bytes disappear. [Hugging Face storage limits](https://huggingface.co/docs/hub/storage-limits).
+
+The preserved Walker smoke ran 300 optimizer steps in 149.03 seconds, or 2.013 steps/s including overhead. Its stored weights, serialized model and scalers total 144.61 MB. Adding Adam moments gives a conservative 289.14 MB per resumable checkpoint. At 225,000 optimizer steps and one checkpoint every 2,000 steps, two full models retain 226 versions: 65.35 GB before deduplication, or 75.15 GB with 15% overhead. With current usage and a further 10 GB reserve, the measured profile passes with approximately 1.61 GB remaining. Recheck immediately before each substantial grid. A single 225,000-step model projects to about 31 hours at the old smoke throughput; this is an extrapolation, not a full-run measurement. The new required smoke must replace it.
+
+`storageBudget.py` provides the reusable account inventory, retained-version projection and early budget failure. The numeric snapshot, source measurements and assumptions are preserved in the JSON audit. The account usage endpoint did not provide a usable response, so storage was measured from each private repository's reported `used_storage` and bucket sizes.
+
+## Work still requiring experimental evidence
+
+Fresh source-disjoint instruments and banks must be generated, then E1 diagnosis and E2 repairability must be rerun with their declared gates. An unsuccessful gate is a completed diagnostic outcome, not permission to label later acquisition or control results confirmatory. The earlier checkpoint/results provenance and missing terminal masks cannot be repaired retrospectively by changing code. New E3/E4, Walker go/no-go and any conditional closed-loop or pretraining comparisons still need their own completed, pinned run artifacts. The code and tests do not establish these research results.
