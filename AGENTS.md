@@ -6,8 +6,15 @@
 an existing LeWM's predictions of unsafe outcomes more reliable at the same interaction
 budget, and whether the improvement transfers to new hazards, starts and goals.
 
-Read [docs/researchDirection.md](docs/researchDirection.md) first. It is the research
-authority. Use [the pilot checklist](docs/research/pilot.md) for the next work and
+**Main plan adopted 26 September 2026:** [docs/mainPlan/](docs/mainPlan/README.md) is the
+executable plan and controls execution details. It adds a parallel LeWM trained from
+scratch on Safety-Gymnasium Walker2d (hard go/no-go 18 October 2026) and a
+pretraining-versus-adaptation stretch. The supervisor has seen and approved the
+21 September direction. The historical Vast assets are gone; every model checkpoint now
+goes to private Hugging Face repositories.
+
+Read [docs/researchDirection.md](docs/researchDirection.md) first for the question and
+interpretation rules, then [docs/mainPlan/](docs/mainPlan/README.md) for execution. Use
 [the checkpoint reference](docs/research/checkpoints.md) for verified assets and interfaces.
 The literature boundary is in [related work](docs/research/relatedWork.md).
 
@@ -20,13 +27,17 @@ The literature boundary is in [related work](docs/research/relatedWork.md).
   adapt predictor-side modules using new transitions and a fixed replay mixture.
 - **Core comparison:** ordinary supported experience versus predicted-boundary coverage;
   add learned optimistic-error acquisition only after demonstrating repairability.
-- **Extensions:** transfer, then optional closed-loop Safe-CEM/penalty-CEM and a second task.
-- **Scope:** thesis in November 2026; possible ICLR 2027 workshop. Check the actual call
-  before citing deadlines. No publication outcome or GPU runtime is assumed.
+- **Extensions:** transfer, then optional closed-loop Safe-CEM/penalty-CEM.
+- **Second task:** a LeWM trained from scratch on `SafetyWalker2dVelocity-v1` (speed and
+  health rules), with a pretraining-versus-adaptation stretch. Parallel and gated, never a
+  dependency of the Push-T study.
+- **Scope:** thesis due late November 2026, core results frozen 8 November; possible ICLR
+  2027 workshop. Check the actual call before citing deadlines. No publication outcome or
+  GPU runtime is assumed. Compute is an RTX 5090 on Vast.
 
 ## Research gates and controls
 
-1. Recover the baseline assets, validate reset-and-prefix replay and whole-T geometry.
+1. Rebuild the baseline assets, validate reset-and-prefix replay and whole-T geometry.
 2. Separate dense-event sampling, real-image readout and imagined-dynamics errors.
 3. Show that extra experience repairs the diagnosed error with one fixed mechanism.
 4. Compare acquisition strategies at equal charged simulator-step and training budgets.
@@ -65,9 +76,13 @@ The literature boundary is in [related work](docs/research/relatedWork.md).
   cost head, margin or fine-tuning run is not automatically novel; recheck primary literature.
 
 The previous locomotion-first selection-amplification audit and irreversibility proposals
-are superseded. New locomotion training, recovery labels, failure engineering, NSGA-II,
-HJ filtering, conformal guarantees and encoder pretraining are not core dependencies.
-Do not silently restore those requirements.
+are superseded. **Explicit exception adopted 26 September 2026:** a LeWM trained from
+scratch on Safety-Gymnasium Walker2d is a parallel track
+([docs/mainPlan/walker2d.md](docs/mainPlan/walker2d.md)) with a hard go/no-go on
+18 October 2026. It uses supplied rules, not irreversibility, and it is not a dependency of
+the Push-T study. Recovery labels, failure engineering for irreversibility, NSGA-II, HJ
+filtering and conformal guarantees remain out of scope. Do not silently restore those
+requirements.
 
 ## Preserved experiments and evidence
 
@@ -75,6 +90,11 @@ See [experiments/README.md](experiments/README.md) and [notes/README.md](notes/R
 The Push-T probe/penalty/Safe-CEM pilot and Phase 0 locomotion triage are completed work.
 The newly adopted acquisition study has not run; no block-pose readout, verified Push-T
 branch replay, acquisition runner or predictor-adaptation runner exists yet.
+
+The historical Vast volume (checkpoint copies, fitted scalers, pusher-probe cache) no longer
+exists (confirmed 26 September 2026). Committed results remain valid records; numeric
+reproduction needs rebuilt assets. Existing experiment files are read-only: see
+[protecting earlier work](docs/mainPlan/infrastructure.md#protecting-earlier-work).
 
 The original penalty collapse was confounded by the starting position inside the inflated
 hazard. Corrected penalty-CEM worked substantially better. The usable Safe-CEM dials had
@@ -93,22 +113,27 @@ Historical notes may contain superseded interpretations; the current plan contro
 
 ## Repository map and authority
 
-1. `docs/researchDirection.md`: adopted scope and protocol.
-2. `docs/research/`: current execution checklist, checkpoint audit and related work.
-3. Experiment code, notebooks and recorded results: evidence of what actually ran.
-4. `readme.md` and `AGENTS.md`: concise navigation and engineering guidance.
-5. Submitted academic deliverables: historical records, not current research requirements.
+1. `docs/researchDirection.md`: adopted question, scope and interpretation rules.
+2. `docs/mainPlan/`: the executable main plan (26 September 2026); controls execution.
+3. `docs/research/`: checkpoint audit and related work; `pilot.md` is the superseded
+   21 September checklist.
+4. Experiment code, notebooks and recorded results: evidence of what actually ran.
+5. `readme.md` and `AGENTS.md`: concise navigation and engineering guidance.
+6. Submitted academic deliverables: historical records, not current research requirements.
 
 - `experiments/*.ipynb`: completed exploration and Push-T pilots, retain outputs.
 - `experiments/helpers/`: reusable implementation; there is **no `src/` package**.
 - `experiments/scripts/`: existing runnable studies and future small entry points.
 - `notes/`: experimental findings and data references, not competing project plans.
 - `docs/safeDial/`, `docs/phase0/`: reports, LaTeX, figures and recorded results.
+- `docs/mainPlan/`: the new study's plan; its committed results go under
+  `docs/mainPlan/results/`.
 - `animations/`: preserved videos/GIFs and reproduction instructions.
 - `docs/papers/`: reference library; filenames `CEM-EVO.pdf` and `MPC-RCE.pdf` refer
   to CEM-RL and robust constrained CEM respectively. UNISafe has two historical copies.
 - `docs/*/submitted/`, `docs/*/guides/`: submitted work and assignment guidance.
-- `configs/download/`: `pusht` default, optional `cube` and `all`.
+- `configs/download/`: `pusht` default, optional `cube` and `all`. New-study configs go in
+  new groups, `configs/pusht/` and `configs/walker2d/`.
 - `data/`, `third_party/`: ignored local assets. Presence must be checked on the run machine.
 
 Superseded proposals, brainstorming whiteboards and duplicated research drafts were
@@ -132,9 +157,12 @@ data/probes/                             # historical pusher cache
 third_party/le-wm/
 ```
 
-The 21 September audit found those assets absent locally. Recover historical weights,
-source revision, fitted scalers and a small replay subset if available. Public weights
-alone do not include the fitted normalisers; existing code fits them on expert data.
+The historical assets are gone (confirmed 26 September 2026), so rebuild them on a fresh
+5090 instance as described in
+[docs/mainPlan/infrastructure.md](docs/mainPlan/infrastructure.md). **Every model
+checkpoint goes to a private Hugging Face repository**, pinned by revision, never only on
+the instance and never in git. Public weights alone do not include the fitted normalisers;
+existing code fits them on expert data.
 Push-T weights are about 72 MB and expert data about 13 GB compressed. Cube is optional,
 not a prerequisite. The downloader stages decompression in `.part` and renames on success.
 
@@ -181,7 +209,7 @@ not a prerequisite. The downloader stages decompression in `.part` and renames o
 | `scripts/helpers/_common.sh` | Shared helpers (do not run directly): dotenv loading, uv install, system deps (`swig` for box2d, `btop`), git identity, HTTPS push token, venv sync, Jupyter kernel, HF login, sanity check |
 | `scripts/download_data.py` | Clone `third_party/le-wm`, then Hydra Hub download. Default `--config-name pusht`. `cube` and `all` (Push-T plus Cube) are explicit alternatives. `weights_only=true` skips datasets; `clone_source=false` skips the git clone |
 
-Idempotent: `git pull && bash scripts/setup.sh` (or `bash scripts/setup.sh --pull`) is the normal refresh. Vast hosts should have `cuda_max_good>=13.0` so the torch CUDA build works. Real runs happen on Vast at `/workspace/Safety-Dial`; the local `.venv` is usually only partially synced.
+Idempotent: `git pull && bash scripts/setup.sh` (or `bash scripts/setup.sh --pull`) is the normal refresh. Vast hosts should have `cuda_max_good>=13.0` so the torch CUDA build works. Real runs happen on an RTX 5090 Vast instance at `/workspace/Safety-Dial`; the local `.venv` is usually only partially synced. The instance disk is scratch space: push checkpoints to Hugging Face and commit small results before it is recycled.
 
 ## Secrets
 
@@ -189,7 +217,8 @@ Secrets live in a gitignored `.env` at the repo root, loaded by `_common.sh` and
 
 - `WANDB_API_KEY` (logging)
 - `GITHUB_TOKEN` (optional; enables push over HTTPS)
-- `HF_TOKEN` (optional; Hugging Face downloads)
+- `HF_TOKEN` (Hugging Face; needs write access to upload checkpoints)
+- `HF_NAMESPACE` (optional; user or organisation that owns the checkpoint repositories; defaults to the owner of `HF_TOKEN`)
 - `GIT_AUTHOR_NAME`, `GIT_AUTHOR_EMAIL` (repo-local git identity, not global)
 - `STABLEWM_HOME` (written automatically by `download_data.py`)
 - `LEWM_REPO_URL`, `LEWM_GIT_REF` (optional overrides for the LeWM clone)
@@ -214,6 +243,7 @@ Rules: never commit `.env`, never print token values into logs or terminal outpu
   and never a reported number. Everything that appears in the thesis or the paper is produced
   inside `.venv`.
 - New code goes in `experiments/helpers/` (or a notebook). There is no `src/` package; do not resurrect one casually.
+- Never edit, move or overwrite existing experiment files, notebooks, notes or recorded results. The new study adds new files and writes to new paths; see [protecting earlier work](docs/mainPlan/infrastructure.md#protecting-earlier-work).
 - Ruff is clean. Notebook-idiom rules are silenced per-file in `pyproject.toml`; if a new error appears in a `.py` file, fix it rather than widening the ignore list.
 - Configs go in `configs/<group>/` as Hydra groups.
 - Never commit secrets, checkpoints, datasets, run outputs, or `wandb/`.

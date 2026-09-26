@@ -2,9 +2,15 @@
 
 ## Active research
 
-- [researchDirection.md](researchDirection.md): the single adopted research plan,
-  **Which Experience Makes LeWM Safer to Use?**, adopted 21 September 2026.
-- [research/pilot.md](research/pilot.md): E0-E5 execution checklist and first pilot.
+- [mainPlan/](mainPlan/README.md): the executable main plan adopted 26 September 2026:
+  shared protocol, the Push-T study, a LeWM trained on Safety-Gymnasium Walker2d, the
+  timeline and the infrastructure (fresh 5090 setup, Hugging Face checkpoints). It controls
+  execution; committed results of the new study will live under `mainPlan/results/`.
+- [researchDirection.md](researchDirection.md): the adopted research question and
+  interpretation rules, **Which Experience Makes LeWM Safer to Use?**, adopted
+  21 September 2026.
+- [research/pilot.md](research/pilot.md): the 21 September E0-E5 checklist, superseded for
+  execution by `mainPlan/`.
 - [research/checkpoints.md](research/checkpoints.md): checkpoint and interface audit.
 - [research/relatedWork.md](research/relatedWork.md): closest literature and claim boundaries.
 

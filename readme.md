@@ -20,8 +20,15 @@ The safety rule is supplied explicitly; this is not label-free safety discovery.
 **Adopted 21 September 2026.** The new study has not run. The existing Push-T and Phase 0
 experiments are preserved as evidence and reusable infrastructure.
 
+**Main plan, 26 September 2026:** [docs/mainPlan/](docs/mainPlan/README.md) turns the
+direction into an executable plan: the Push-T study (E0 to E5), a parallel LeWM trained
+from scratch on Safety-Gymnasium Walker2d with a pretraining-versus-adaptation stretch, a
+timeline to the late-November thesis, and Hugging Face storage for every checkpoint.
+
+- [Main plan](docs/mainPlan/README.md): executable plan, timeline, protocol and infrastructure.
 - [Adopted research direction](docs/researchDirection.md): question, gates and full protocol.
-- [First-pilot checklist](docs/research/pilot.md): next work and completion criteria.
+- [First-pilot checklist](docs/research/pilot.md): the 21 September checklist, superseded for
+  execution by the main plan.
 - [Checkpoint reference](docs/research/checkpoints.md): available models and asset dependencies.
 - [Related work](docs/research/relatedWork.md): closest overlaps and limits on novelty claims.
 - [Experiment index](experiments/README.md): existing runnable work and planned additions.
@@ -36,11 +43,13 @@ cd Safety-Dial
 bash scripts/setup.sh
 ```
 
-Recover the earlier checkpoint, fitted normalisers and a small replay subset if available.
-The local audit found the expected assets absent. Weights alone do not supply the fitted
-normalisers used by the existing planner.
+The historical Vast assets (checkpoint copies, fitted normalisers, probe cache) no longer
+exist. Rebuild them on a fresh RTX 5090 instance following
+[docs/mainPlan/infrastructure.md](docs/mainPlan/infrastructure.md). Weights alone do not
+supply the fitted normalisers used by the existing planner. Every model checkpoint is
+stored in private Hugging Face repositories, never only on the instance and never in git.
 
-If downloads are needed, Push-T is now the default:
+Downloads (Push-T is the default):
 
 ```bash
 # Source and Push-T checkpoint only; still needs normalisers/data for the full pilot.
@@ -60,7 +69,8 @@ without downloading with `uv run python scripts/download_data.py --cfg job`.
 
 Run JupyterLab with `experiments/` as the working directory and use the
 **Python (safetydial .venv)** kernel. New reusable code belongs in
-`experiments/helpers/`, with small entry points in `experiments/scripts/`.
+`experiments/helpers/`, with small entry points in `experiments/scripts/`. Existing
+experiment files are read-only: the new study adds new files and writes to new paths.
 
 ## Preserved work
 
