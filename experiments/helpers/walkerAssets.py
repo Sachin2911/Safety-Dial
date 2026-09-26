@@ -20,6 +20,24 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 POLICY_DIR = REPO_ROOT / "data" / "study" / "walker2d" / "policies"
 
 _ACT = {"tanh": torch.nn.Tanh, "relu": torch.nn.ReLU}
+EXPORT_ID_BASE = 100  # policy_id = EXPORT_ID_BASE + rank of the export name; recorded in data attrs
+
+
+class ExportedActorPolicy(TorchActorPolicy):
+    """TorchActorPolicy whose `policy_id` is a stable per-export integer (provenance)."""
+
+    def __init__(self, *args, policy_id: int, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._policy_id = int(policy_id)
+
+    @property
+    def policy_id(self) -> int:
+        return self._policy_id
+
+
+def export_ids(policy_dir: Path = POLICY_DIR) -> dict[str, int]:
+    names = sorted(p.stem for p in Path(policy_dir).glob("*.pt"))
+    return {n: EXPORT_ID_BASE + i for i, n in enumerate(names)}
 
 
 def build_mlp(in_dim: int, hidden_sizes, out_dim: int, activation: str = "tanh") -> torch.nn.Sequential:
@@ -38,8 +56,9 @@ def load_exported_actor(path: Path, action_space, *, seed=None, action_noise: fl
     out_dim = [v for k, v in sd.items() if k.endswith("weight")][-1].shape[0]
     net = build_mlp(in_dim, blob["hidden_sizes"], out_dim, blob["activation"])
     net.load_state_dict(sd)
-    name = f"{blob['algo']}-e{blob['epoch']}"
-    return TorchActorPolicy(action_space, net, seed=seed, obs_mean=blob["obs_mean"], obs_var=blob["obs_var"], action_noise=action_noise, name=name, device=device)
+    name = Path(path).stem
+    pid = export_ids(Path(path).parent).get(name, EXPORT_ID_BASE)
+    return ExportedActorPolicy(action_space, net, seed=seed, obs_mean=blob["obs_mean"], obs_var=blob["obs_var"], action_noise=action_noise, name=name, device=device, policy_id=pid)
 
 
 def list_exports(policy_dir: Path = POLICY_DIR) -> list[Path]:
