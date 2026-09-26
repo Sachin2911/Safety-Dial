@@ -1,6 +1,6 @@
 # Push-T continuation after bounded bank-source exhaustion
 
-Status: validated with 258 repository tests and Ruff passing, not yet launched. Scientific outcomes remain pending.
+Status: running under supervisor from commit `8601568`. All 258 repository tests and Ruff passed before launch. Scientific outcomes remain pending.
 
 The [v2 failure record](../continuation-v2/bank_generation_failure.json) preserves the
 partial banks: 24 development roots with 166 tapes and 26 test roots with 416 tapes.
@@ -34,3 +34,8 @@ evaluation. Negative scientific gates remain valid stops; no favorable outcome i
 The completed physical probes from continuation-v2 are reused. Bank bundles include the
 frozen candidate plan and source hashes. Exact code snapshots remain local, outside
 uploaded bank directories, while the optional source-backup approval is pending.
+
+The [first completed-root audit](first_root_audit.json) passed: eight unique guarded tapes,
+matching saved progress and journal costs, and body-specific contact metadata. The
+[frozen plan verification](frozen_plan_verification.json) confirms that the source
+reservations, exclusions and requested bank sizes match the declared protocol.

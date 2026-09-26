@@ -41,6 +41,14 @@
       "revision": "691d38fbe2fff4042a7a54861d5523e497dd0c49",
       "report": "docs/mainPlan/results/continuation-v2/walker_checkpoint_8000.json",
       "validation_pred_loss": 0.08398623391985893
+    },
+    "latest_uploaded_checkpoint": {
+      "repo_id": "Sachioster/safetydial-walker2d",
+      "revision": "4414593e9b6717e189f369e85a31cfd1b8843f11",
+      "path": "lewm-a/walker2d-lewm-a-continuation-20260926-1",
+      "step": 16000,
+      "verification_scope": "Successful running-job upload receipt; the separate detailed recovery audit remains at step 8000.",
+      "observed_unix": 1790445239.328764
     }
   },
   "pusht": {
@@ -88,7 +96,9 @@
       "report": "docs/mainPlan/results/continuation-v2/bank_generation_failure.json",
       "partial_test_roots": 26,
       "exact_failed_run_cost_available": false,
-      "recovery": "Preparing fresh continuation-v3 outputs with frozen bounded candidates and development feasibility before final-bank generation."
+      "recovery": "Fresh v3 development-bank phase is running. The actual frozen plan has been verified against all original source reservations, exclusions and declared bank counts.",
+      "recovery_status": "docs/mainPlan/results/continuation-v3/continuation_status.json",
+      "frozen_plan_verification": "docs/mainPlan/results/continuation-v3/frozen_plan_verification.json"
     }
   },
   "workflow_configs": [
@@ -104,9 +114,9 @@
     "reason": "Do not resume unconditional stale-data or ungated downstream commands.",
     "status": "retired_after_children_finished"
   },
-  "implementation_commit": "88f8dea",
+  "implementation_commit": "8601568",
   "verification": {
-    "pytest_passed": 221,
+    "pytest_passed": 258,
     "ruff": "passed"
   }
 }
