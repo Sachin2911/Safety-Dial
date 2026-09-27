@@ -120,3 +120,9 @@ uv run python experiments/scripts/walker_s3_figures.py \
   --output-dir docs/mainPlan/results/s3/walker2d-probes-recovery-20260927-1-presentation \
   --workflow-state runs/workflows/walker2d-recovery-20260927-1/state.json
 ```
+
+A later [metadata correction](walker_s4_seed_metadata_validation.json) makes each
+future adapted checkpoint record its actual acquisition seed. Adaptation already
+uses seeds 0, 1 and 2 correctly; only its saved template had retained seed 0.
+The saved and executed configuration expressions now agree, with no change to
+training, selection, random draws or gates.

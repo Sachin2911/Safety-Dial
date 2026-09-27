@@ -504,7 +504,7 @@ def main() -> int:
                 checkpoint = run_dir / f"{arm}-s{seed}-b{budget}"
                 checkpoint.mkdir()
                 torch.save(predictor_side_state(current), checkpoint / "weights.pt")
-                OmegaConf.save(OmegaConf.create({**vars(args), "adaptation": cfg.to_dict()}), checkpoint / "config.yaml")
+                OmegaConf.save(OmegaConf.create({**vars(args), "adaptation": dict(cfg.to_dict(), seed=seed)}), checkpoint / "config.yaml")
                 np.savez(checkpoint / "scalers.npz", action_mean=scaler[0], action_std=scaler[1])
                 (checkpoint / "selection.json").write_text(json.dumps({"selected_ids": [c["id"] for c in selected],
                     "seed_ids": sorted(seed_ids), "candidate_file": str(proposal_path),

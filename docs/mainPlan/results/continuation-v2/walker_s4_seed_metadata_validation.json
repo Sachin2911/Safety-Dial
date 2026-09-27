@@ -1,0 +1,29 @@
+{
+  "status": "validated_before_s4_execution",
+  "observed_utc": "2026-09-27T07:31:54.532856+00:00",
+  "source_sha256": "d69209c362b7987695752c12d68751d196b12a4a70d72d68f43436f307db887a",
+  "problem": "S4 adapt() already receives each actual acquisition seed, but the checkpoint config previously serialized the default seed0 from the shared template for every checkpoint.",
+  "change": "Serialize dict(cfg.to_dict(), seed=seed), exactly matching the existing executed adaptation configuration.",
+  "verification": {
+    "saved_and_executed_configuration_ast_identical": true,
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "independent_review": "/root/pusht_audit: metadata-only correction, no numerical/RNG/selection/stage behavior change",
+    "focused_tests_rerun": false,
+    "reason": "Single serialization correction; exact expression identity and diff review verify the change without extra training or redundant tests."
+  },
+  "scientific_behavior_changed": false,
+  "active_s2_changed": false,
+  "s4_started": false,
+  "deferred_checker": {
+    "path": "/tmp/check_walker_s4_final_evidence.py",
+    "sha256": "da0cede97b038eff4fd38f98d72b547e57f9974b5e93cca3c6570c1b903cc6d6",
+    "synthetic_checks_passed": 27,
+    "executed_on_live_s4": false,
+    "added_checks": [
+      "Managed-state config hash and working-directory identity",
+      "Adapted checkpoint kind, seed and upstream receipt provenance",
+      "Saved per-checkpoint adaptation recipe matches the actual seed and unchanged shared recipe"
+    ]
+  }
+}
