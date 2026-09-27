@@ -5,7 +5,8 @@ Face revisions used. Model checkpoints and banks live in the private Hugging Fac
 repositories under the `Sachioster` namespace (see `infrastructure.md`).
 
 Current status, 27 September: [Walker LeWM training](continuation-v2/README.md) is
-running from scratch toward 214,780 updates. [Fresh Push-T E2](continuation-v4/README.md)
+running toward 214,780 updates after restoring its verified 172,000-step checkpoint
+following an instance restart. [Fresh Push-T E2](continuation-v4/README.md)
 finished and stopped at its repair/retention gate; conditional acquisition, transfer
 and closed-loop stages did not start.
 

@@ -6,7 +6,7 @@ Original E1, E2 and E3 outputs are preserved. Fourteen original source trajector
 
 Fresh Walker collection contains 2,999,673 training steps, 300,347 probe steps and 300,038 root-source steps. Episode roles and seed ranges are disjoint. The dataset is backed up at private revision `ddd4d51648d2a382725efd20d04cedebedbf8fd2`.
 
-The 1,000-step LeWM smoke run passed nonblack rendering, whole-episode split and both loss checks. Mean prediction loss fell from 0.41495 to 0.22369; SIGReg fell from 16.86563 to 3.80469. The measured rate was 2.214 iterations/s, implying about 27 hours for 214,780 optimizer steps under comparable conditions. Full ten-epoch training is running with the declared upstream architecture, batch and loss recipe. Actual completion and S3 probe outcomes remain pending.
+The 1,000-step LeWM smoke run passed nonblack rendering, whole-episode split and both loss checks. Mean prediction loss fell from 0.41495 to 0.22369; SIGReg fell from 16.86563 to 3.80469. The measured rate was 2.214 iterations/s, implying about 27 hours for 214,780 optimizer steps under comparable conditions. Full ten-epoch training resumed from its verified 172,000-step checkpoint after an instance restart on 27 September, using the declared upstream architecture, batch and loss recipe. Actual completion and S3 probe outcomes remain pending.
 
 LeWM recovery checkpoints are uploaded every 4,000 optimizer steps. Each contains one atomic recovery bundle with model, optimizer, scheduler, random states and a reproducible training-batch cursor, alongside source snapshots and model exports. The interval was increased from 2,000 to fit both full model histories within verified private storage while retaining a 10 GB reserve. The full-run preflight projects 44.94 GB for both checkpoint histories including overhead, with about 30.72 GB remaining beyond the reserve. A recovered run must use a fresh run ID and identical data, split and recipe.
 
@@ -73,3 +73,20 @@ Its acquisition and oracle stages did not start. Walker full training continues.
 A [30-sample measurement after Push-T stopped](gpu_after_pusht_gate_20260927.json)
 found 98.03% mean GPU activity (89-100%), with 14,778 of 32,607 MiB used. No third
 heavy workload or change to the frozen training recipe was justified by that window.
+
+The [27 September interruption audit](walker_interruption_20260927.json) found
+strong evidence of a kernel/instance restart at 06:29:43 UTC. The infrastructure
+trigger remains unknown. The original trainer last logged update 174,400; its
+172,000-step atomic checkpoint passed [34 CPU recovery checks](walker_checkpoint_172000_recovery_audit.json).
+Model exports, Adam state, scheduler, random states, splits and the deterministic
+next batch agree. The [recovery preflight](walker_recovery_preflight_20260927.json)
+also verified the original dataset bytes, package versions, passing smoke gate
+and sufficient private storage.
+
+A fresh managed run, `walker2d-lewm-a-recovery-20260927-1`,
+[restored CUDA state and advanced training](walker_recovery_launch_20260927.json).
+It repeats 2,400 logged updates lost after the last atomic checkpoint, then
+continues toward the same 214,780-update total with the unchanged 4,000-update
+validation/upload cadence. The old workflow and run remain untouched. The fresh
+[recovery workflow](../../../../configs/walker2d/recovery-20260927-1.yaml)
+retains the original S3 and S4 recipes and scientific gates under fresh output names.

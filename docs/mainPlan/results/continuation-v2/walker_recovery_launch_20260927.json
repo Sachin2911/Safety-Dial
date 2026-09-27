@@ -1,0 +1,61 @@
+{
+  "status": "running_verified_after_restore",
+  "observed_utc": "2026-09-27T06:54:00.755758+00:00",
+  "workflow_id": "walker2d-recovery-20260927-1",
+  "workflow_config": "configs/walker2d/recovery-20260927-1.yaml",
+  "workflow_config_sha256": "d0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d",
+  "state_dir": "runs/workflows/walker2d-recovery-20260927-1",
+  "service": "safetydial_walker_recovery_20260927_1",
+  "wrapper_pid": 18170,
+  "attempt_pid": 18371,
+  "worker_pid": 18375,
+  "worker_start_ticks": 130742,
+  "run_dir": "runs/walker2d-lewm-a-recovery-20260927-1",
+  "wandb": "https://wandb.ai/2699183-university-of-witwatersrand/safetydial-walker2d/runs/uxzgf780",
+  "resume": {
+    "bundle": "runs/walker2d-lewm-a-continuation-20260926-1/optimizer.pt",
+    "sha256": "50279ce50cac07cc74ef0fa8757415a71e2fedc9f69a09db8699a232174b0d5c",
+    "step": 172000,
+    "private_revision": "bdfbc8afc9d53a8fa9f00fd927be9c56477edcd3",
+    "target_total_steps": 214780,
+    "remaining_at_restore": 42780,
+    "repeated_logged_updates_required": 2400,
+    "next_checkpoint_step": 176000
+  },
+  "observed_optimizer_step": 172300,
+  "cuda_restoration_logged": true,
+  "first_batch_nonblack_guard_passed": true,
+  "finite_loss_and_gradient_guards_passed_for_logged_updates": true,
+  "independent_review": {
+    "status": "reviewed_ready_pending_checkpoint_semantics",
+    "reviewer": "/root/walker_audit",
+    "checked": [
+      "Exact original full training recipe and explicit saved splits",
+      "Unchanged original smoke gate prerequisite",
+      "All S3 and S4 stage fields equal original after fresh run identity substitutions",
+      "All seven fresh outputs and workflow state absent before installation",
+      "First-launch --resume permitted only with absent state; interrupted running stages remain refused",
+      "Workflow dry-run and bash syntax passed",
+      "Eight unchanged snapshot sources; two cadence-guard-only changes independently reviewed",
+      "No production training source or package mutations"
+    ],
+    "files": {
+      "configs/walker2d/recovery-20260927-1.yaml": "d0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d",
+      "runs/continuation-audit/supervisor/safetydial_walker_recovery_20260927_1.sh": "b5349d5f3600961487ef17f814e856b238d4575125e28021cfce070db3bb7692",
+      "runs/continuation-audit/supervisor/safetydial_walker_recovery_20260927_1.conf": "9f63807c22fea269b373ed21c325ccd9cc060ed62da6e7c2a1126acd139de6e3"
+    },
+    "supervisor_installed": true,
+    "supervisor_started": false
+  },
+  "evidence": {
+    "docs/mainPlan/results/continuation-v2/walker_recovery_preflight_20260927.json": "39e4856c6e0ba7d72fd06e9ac1ac36b2b5bda105b9f9dcdc69799066a78f3358",
+    "docs/mainPlan/results/continuation-v2/walker_checkpoint_172000_recovery_audit.json": "1d1ecee6fdc50a253c6a9efe59c127389e25672777bc91c07f6d9d14ddc5927d",
+    "docs/mainPlan/results/continuation-v2/walker_interruption_20260927.json": "c47e614452142c555a36170f09a2572a10152fe2c1a1f459e1714ebc5243bdea"
+  },
+  "limitations": [
+    "Operational continuation is verified by successful state restoration, first-batch guards, finite logged updates and a live worker. No bitwise GPU trajectory equivalence is claimed.",
+    "The original log ends174400, so2400 logged updates must be repeated. Any later unlogged work is unknown.",
+    "The new run has not reached its first post-recovery checkpoint or any downstream scientific gate.",
+    "Automatic restart remains disabled because an interrupted writer requires verified checkpoint recovery to a new output identity."
+  ]
+}

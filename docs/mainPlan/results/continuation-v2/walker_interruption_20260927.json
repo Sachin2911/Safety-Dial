@@ -1,0 +1,243 @@
+{
+  "status": "investigated_read_only",
+  "observed_utc": "2026-09-27T06:41:54.077474+00:00",
+  "conclusion": {
+    "interruption_mechanism": "Visible kernel/instance restart followed by a fresh supervisor startup; original training process tree is absent.",
+    "confidence": "Strong evidence of a kernel/instance restart. The precise infrastructure trigger is unknown.",
+    "underlying_cause": "Unknown; no accessible pre-restart kernel or provider event log establishes OOM, host failure, maintenance, user stop, migration or another trigger.",
+    "why_worker_did_not_autoresume": "The study supervisor service has autostart=false and autorestart=false; the freshly started supervisor reports STOPPED / Not started.",
+    "workflow_status_interpretation": "The on-disk running label is stale process history, not current worker liveness."
+  },
+  "boot_evidence": {
+    "boot_id": "b48516b3-b7d9-4428-99c1-d564b231da62",
+    "kernel_btime_epoch": 1790490583,
+    "kernel_boot_utc": "2026-09-27T06:29:43+00:00",
+    "uptime_seconds": 730.18,
+    "clock_ticks_per_second": 100,
+    "previous_verified_worker_start_ticks": "269920944",
+    "previous_worker_start_exceeds_current_kernel_uptime": true
+  },
+  "known_process_exists": {
+    "528782": false,
+    "539739": false,
+    "539743": false
+  },
+  "process_inventory_names_only": [
+    {
+      "pid": 503,
+      "ppid": 114,
+      "name": "supervisord",
+      "state": "S",
+      "start_ticks": "18578",
+      "this_audit_process": false
+    },
+    {
+      "pid": 647,
+      "ppid": 632,
+      "name": "python3",
+      "state": "S",
+      "start_ticks": "18722",
+      "this_audit_process": false
+    },
+    {
+      "pid": 657,
+      "ppid": 633,
+      "name": "python3",
+      "state": "S",
+      "start_ticks": "18722",
+      "this_audit_process": false
+    },
+    {
+      "pid": 659,
+      "ppid": 634,
+      "name": "python3",
+      "state": "S",
+      "start_ticks": "18722",
+      "this_audit_process": false
+    },
+    {
+      "pid": 697,
+      "ppid": 641,
+      "name": "python3",
+      "state": "S",
+      "start_ticks": "18723",
+      "this_audit_process": false
+    },
+    {
+      "pid": 713,
+      "ppid": 644,
+      "name": "python3",
+      "state": "S",
+      "start_ticks": "18723",
+      "this_audit_process": false
+    },
+    {
+      "pid": 728,
+      "ppid": 648,
+      "name": "python3",
+      "state": "S",
+      "start_ticks": "18723",
+      "this_audit_process": false
+    },
+    {
+      "pid": 13057,
+      "ppid": 13054,
+      "name": "uv",
+      "state": "S",
+      "start_ticks": "73001",
+      "this_audit_process": true
+    },
+    {
+      "pid": 13063,
+      "ppid": 13057,
+      "name": "python3",
+      "state": "R",
+      "start_ticks": "73013",
+      "this_audit_process": true
+    }
+  ],
+  "supervisor": {
+    "walker_status": "safetydial_walker_continuation   STOPPED   Not started",
+    "status_returncode": 3,
+    "settings": {
+      "autostart": "false",
+      "autorestart": "false",
+      "stopasgroup": "true",
+      "killasgroup": "true"
+    },
+    "relevant_log_lines": [
+      "2026-09-26 16:16:13,596 INFO spawned: 'safetydial_walker_continuation' with pid 528782",
+      "2026-09-26 16:16:15,136 INFO success: safetydial_walker_continuation entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)",
+      "2026-09-27 06:32:49,661 INFO Included extra file \"/etc/supervisor/conf.d/safetydial_walker_continuation.conf\" during parsing",
+      "2026-09-27 06:32:49,966 INFO supervisord started with pid 503"
+    ],
+    "last_pre_restart_lines": [
+      "2026-09-26 23:09:32,205 INFO success: safetydial_pusht_v4_continuation entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)",
+      "2026-09-26 23:09:32,358 INFO spawned: 'safetydial_pusht_oracle_v4_continuation' with pid 769695",
+      "2026-09-26 23:09:33,559 INFO success: safetydial_pusht_oracle_v4_continuation entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)",
+      "2026-09-27 01:36:38,370 INFO exited: safetydial_pusht_oracle_v4_continuation (exit status 0; expected)",
+      "2026-09-27 01:36:40,397 INFO exited: safetydial_pusht_v4_continuation (exit status 0; expected)"
+    ]
+  },
+  "training": {
+    "last_logged_step": 174400,
+    "last_log_line": "[s2] step 174400/214780 loss 0.1043 pred 0.0076 sig 0.9648 3.45 it/s",
+    "log_path": "runs/workflows/walker2d-continuation-20260926-2/logs/lewm_a_full.attempt-001.log",
+    "log_sha256": "924462423e2ce972407809e9cebdc654bc0ff3a00e8d63fac35fe18d2e958c0b",
+    "log_mtime_utc": "2026-09-27T06:28:00.787797+00:00",
+    "traceback_present": false,
+    "termination_or_oom_log_lines": [],
+    "workflow_path": "runs/workflows/walker2d-continuation-20260926-2/state.json",
+    "workflow_recorded_status": "running",
+    "workflow_current_stage": "lewm_a_full",
+    "workflow_updated_unix": 1790439893.067381,
+    "latest_recovery_receipt": {
+      "repo_id": "Sachioster/safetydial-walker2d",
+      "revision": "bdfbc8afc9d53a8fa9f00fd927be9c56477edcd3",
+      "path": "lewm-a/walker2d-lewm-a-continuation-20260926-1",
+      "step": 172000
+    },
+    "last_verified_upload_audit": {
+      "path": "docs/mainPlan/results/continuation-v2/walker_checkpoint_172000_upload.json",
+      "sha256": "8dde430a050488014523e85f76edf4111e3aa45c76f422e9c7d38a673331ee22"
+    },
+    "logged_updates_beyond_last_recovery": 2400,
+    "lost_work_limit": "At least the 2,400 logged updates after step 172,000 are not represented by the latest verified recovery bundle. Any further work after the last log is unknown."
+  },
+  "oom_evidence": {
+    "current_cgroup_counters": {
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0",
+      "memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0",
+      "memory.current": "3711938560",
+      "memory.max": "183575248896",
+      "memory.swap.events": "high 0\nmax 0\nfail 0",
+      "pids.events": "max 0",
+      "pids.current": "657",
+      "pids.max": "3840"
+    },
+    "dmesg_returncode": 1,
+    "dmesg_stderr": "dmesg: read kernel buffer failed: Operation not permitted",
+    "filtered_kernel_lines": [],
+    "interpretation": "Current post-restart oom/oom_kill counters are zero. They cannot exclude an OOM before the kernel/instance restart; dmesg is not readable in this container."
+  },
+  "protected_evidence_before_and_after": {
+    "runs/workflows/walker2d-continuation-20260926-2/state.json": {
+      "stat": {
+        "size_bytes": 4552,
+        "mtime_ns": 1790439893065636034,
+        "inode": 6979810743
+      },
+      "sha256": "9d3e872bbe0330d052bde9c3f2a267ce7cc485be573304b7e94047d585dda757"
+    },
+    "runs/workflows/walker2d-continuation-20260926-2/logs/lewm_a_full.attempt-001.log": {
+      "stat": {
+        "size_bytes": 173982,
+        "mtime_ns": 1790490480787797133,
+        "inode": 7545668978
+      },
+      "sha256": "924462423e2ce972407809e9cebdc654bc0ff3a00e8d63fac35fe18d2e958c0b"
+    },
+    "/var/log/portal/safetydial_walker_continuation.log": {
+      "stat": {
+        "size_bytes": 494,
+        "mtime_ns": 1790439893061636023,
+        "inode": 14527137365
+      },
+      "sha256": "ec29621f010ba65c11d16eb7e9f288a26193e7678814d99a90eee8f9b5bb313f"
+    },
+    "docs/mainPlan/results/continuation-v2/walker_checkpoint_172000_upload.json": {
+      "stat": {
+        "size_bytes": 4472,
+        "mtime_ns": 1790489962443230846,
+        "inode": 6460160500
+      },
+      "sha256": "8dde430a050488014523e85f76edf4111e3aa45c76f422e9c7d38a673331ee22"
+    },
+    "runs/walker2d-lewm-a-continuation-20260926-1/upload_receipt.json": {
+      "stat": {
+        "size_bytes": 186,
+        "mtime_ns": 1790489918411181122,
+        "inode": 12358616650
+      },
+      "sha256": "a3b8e4353f026c3d0340560c4df8dbff60165ee7751fe16aa99a576a81b3a716"
+    },
+    "runs/walker2d-lewm-a-continuation-20260926-1/train_state.json": {
+      "stat": {
+        "size_bytes": 8587,
+        "mtime_ns": 1790489899159158145,
+        "inode": 12348854965
+      },
+      "sha256": "2a692ecd424215e6b707158aa89b6653d0eb07eadfe3b1daf80007ed8cfdf241"
+    },
+    "runs/walker2d-lewm-a-continuation-20260926-1/manifest.json": {
+      "stat": {
+        "size_bytes": 67204,
+        "mtime_ns": 1790489899251158258,
+        "inode": 12366947771
+      },
+      "sha256": "a54f526d3f0db751bc5e674f2e2e2e38049c84a031c945f16b00a37c329a6182"
+    },
+    "runs/walker2d-lewm-a-continuation-20260926-1/config.yaml": {
+      "stat": {
+        "size_bytes": 43053,
+        "mtime_ns": 1790439910685679196,
+        "inode": 12348854915
+      },
+      "sha256": "11773373582b2f3b9fdb33224d4f4f3e4acea895ce732ddec36763b60a72faa7"
+    },
+    "runs/walker2d-lewm-a-continuation-20260926-1/config.json": {
+      "stat": {
+        "size_bytes": 1052,
+        "mtime_ns": 1790489899155158140,
+        "inode": 12348854963
+      },
+      "sha256": "d1096ead45985aca453f80573073b44eedd62e60d18cc4c4a933d4069be7ed06"
+    }
+  },
+  "limitations": [
+    "No service/process mutation or restart was performed. Original workflow/run files and prior audits stayed unchanged.",
+    "No environment variables or broad process command arguments were collected.",
+    "No model/tensor/dataset loading, GPU calls, remote-byte access, upload, staging or commit occurred.",
+    "Provider/host pre-restart logs are unavailable here, so the underlying restart cause remains unknown."
+  ]
+}

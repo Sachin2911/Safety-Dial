@@ -31,17 +31,18 @@
       "estimated_ten_epoch_seconds_at_observed_rate": 97007.58041548166,
       "estimate_note": "Measured smoke throughput; full-run data loading and contention may differ"
     },
-    "full_run": "runs/walker2d-lewm-a-continuation-20260926-1",
+    "full_run": "runs/walker2d-lewm-a-recovery-20260927-1",
     "full_optimizer_steps": 214780,
     "checkpoint_interval_steps": 4000,
     "checkpoint_recovery": "Atomic optimizer.pt includes weights, optimizer, scheduler, RNG and deterministic batch position; resume to a fresh run directory with identical data and recipe.",
-    "wandb": "https://wandb.ai/2699183-university-of-witwatersrand/safetydial-walker2d/runs/vwkna5ta",
+    "wandb": "https://wandb.ai/2699183-university-of-witwatersrand/safetydial-walker2d/runs/uxzgf780",
     "latest_verified_checkpoint": {
-      "step": 24000,
-      "revision": "25d59af8bc3ab39db11ff3ff71abda486e594695",
-      "report": "docs/mainPlan/results/continuation-v2/walker_checkpoint_24000.json",
-      "validation_pred_loss": 0.018410890363156796,
-      "verification_scope": "23 read-only CPU checks of the local recovery bundle, export and matching upload receipts; no GPU recovery execution or remote-byte redownload."
+      "step": 172000,
+      "revision": "bdfbc8afc9d53a8fa9f00fd927be9c56477edcd3",
+      "report": "docs/mainPlan/results/continuation-v2/walker_checkpoint_172000_recovery_audit.json",
+      "report_sha256": "1d1ecee6fdc50a253c6a9efe59c127389e25672777bc91c07f6d9d14ddc5927d",
+      "validation_pred_loss": 0.004324658657424152,
+      "verification_scope": "34 CPU semantic checks of the immutable original recovery bundle, model export, Adam state, scheduler, history, RNG, scalers, configuration, splits, snapshots and restartable next batch. Separate launch evidence verifies actual CUDA restore and advancing training."
     },
     "latest_uploaded_checkpoint": {
       "repo_id": "Sachioster/safetydial-walker2d",
@@ -60,7 +61,7 @@
           "size_bytes": 72267425
         }
       },
-      "verification_scope": "Receipt, train state and manifest agree. Pinned private Hugging Face file metadata matches local SHA256 and byte sizes for optimizer.pt and weights.pt. Local file identities remained stable. No tensor deserialization, dataset reads, GPU calls or remote-byte redownload; the last full recovery-structure audit remains step 24000.",
+      "verification_scope": "Receipt, train state and manifest agree. Pinned private Hugging Face metadata matches local SHA256 and sizes for optimizer.pt and weights.pt; files stable. This upload audit did not deserialize tensors or redownload remote bytes. A separate full CPU audit at the same step is linked in latest_verified_checkpoint.",
       "observed_unix": 1790489962.4436243,
       "observed_utc": "2026-09-27T06:19:22.443624+00:00",
       "worker_at_verification": {
@@ -71,6 +72,24 @@
       },
       "worker_cpu_ticks_before": 4740725,
       "report": "docs/mainPlan/results/continuation-v2/walker_checkpoint_172000_upload.json"
+    },
+    "interrupted_full_run": "runs/walker2d-lewm-a-continuation-20260926-1",
+    "interrupted_wandb": "https://wandb.ai/2699183-university-of-witwatersrand/safetydial-walker2d/runs/vwkna5ta",
+    "recovery": {
+      "status": "running_verified_after_restore",
+      "workflow_id": "walker2d-recovery-20260927-1",
+      "service": "safetydial_walker_recovery_20260927_1",
+      "config": "configs/walker2d/recovery-20260927-1.yaml",
+      "config_sha256": "d0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d",
+      "incident_report": "docs/mainPlan/results/continuation-v2/walker_interruption_20260927.json",
+      "preflight_report": "docs/mainPlan/results/continuation-v2/walker_recovery_preflight_20260927.json",
+      "launch_report": "docs/mainPlan/results/continuation-v2/walker_recovery_launch_20260927.json",
+      "resume_step": 172000,
+      "last_original_logged_step": 174400,
+      "repeated_logged_steps": 2400,
+      "planned_additional_optimizer_updates": 42780,
+      "recipe_unchanged": true,
+      "old_artifacts_preserved": true
     }
   },
   "pusht": {
@@ -140,7 +159,8 @@
     "configs/pusht/revalidate_e0.yaml",
     "configs/walker2d/continuation.yaml",
     "configs/pusht/continuation-after-e1.yaml",
-    "configs/pusht/continuation-after-e2.yaml"
+    "configs/pusht/continuation-after-e2.yaml",
+    "configs/walker2d/recovery-20260927-1.yaml"
   ],
   "original_queues": {
     "pusht_pid": 54445,

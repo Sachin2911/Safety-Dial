@@ -1,0 +1,125 @@
+# Resume the verified 172000-step atomic bundle after the instance restart.
+# Keep the original data, smoke gate, recipe, and validation cadence.
+version: 1
+workflow_id: walker2d-recovery-20260927-1
+working_directory: .
+state_dir: runs/workflows/walker2d-recovery-20260927-1
+poll_interval_seconds: 15
+wait_timeout_seconds: 172800
+stages:
+- id: lewm_a_full
+  requires_gates:
+  - path: runs/walker2d-lewm-a-continuation-smoke-20260926-1/smoke_gate.json
+    key: gate.passes
+  argv:
+  - uv
+  - run
+  - python
+  - experiments/scripts/walker_s2_train_lewm.py
+  - --data
+  - data/study/walker2d/continuation-20260926-2/setA.h5
+  - --run-id
+  - walker2d-lewm-a-recovery-20260927-1
+  - --epochs
+  - '10'
+  - --batch
+  - '128'
+  - --clip-stride
+  - '1'
+  - --episode-splits
+  - runs/walker2d-lewm-a-continuation-20260926-1/splits.json
+  - --resume-from
+  - runs/walker2d-lewm-a-continuation-20260926-1/optimizer.pt
+  - --name
+  - lewm-a
+  - --lr
+  - 5e-5
+  - --wd
+  - 1e-3
+  - --warmup
+  - '500'
+  - --workers
+  - '6'
+  - --seed
+  - '3072'
+  - --push-every
+  - '4000'
+  timeout_seconds: 604800
+  fresh_outputs:
+  - runs/walker2d-lewm-a-recovery-20260927-1
+  - docs/mainPlan/results/s2/walker2d-lewm-a-recovery-20260927-1.json
+  outputs:
+  - runs/walker2d-lewm-a-recovery-20260927-1
+  - docs/mainPlan/results/s2/walker2d-lewm-a-recovery-20260927-1.json
+- id: physical_probe_gate
+  argv:
+  - uv
+  - run
+  - python
+  - experiments/scripts/walker_s3_gate.py
+  - --model
+  - runs/walker2d-lewm-a-recovery-20260927-1
+  - --data-dir
+  - data/study/walker2d/continuation-20260926-2
+  - --n-roots
+  - '64'
+  - --run-id
+  - walker2d-probes-recovery-20260927-1
+  timeout_seconds: 86400
+  fresh_outputs:
+  - runs/walker2d-probes-recovery-20260927-1
+  - docs/mainPlan/results/s3/walker2d-probes-recovery-20260927-1
+  outputs:
+  - runs/walker2d-probes-recovery-20260927-1
+  - docs/mainPlan/results/s3/walker2d-probes-recovery-20260927-1
+  gate:
+    path: runs/walker2d-probes-recovery-20260927-1/gate.json
+    key: gate.go
+    stop_exit_codes:
+    - 0
+    - 2
+- id: prospective_acquisition
+  requires_gates:
+  - path: runs/walker2d-probes-recovery-20260927-1/gate.json
+    key: gate.go
+  argv:
+  - uv
+  - run
+  - python
+  - experiments/scripts/walker_s4_study.py
+  - --model
+  - runs/walker2d-lewm-a-recovery-20260927-1
+  - --probes
+  - runs/walker2d-probes-recovery-20260927-1
+  - --data-dir
+  - data/study/walker2d/continuation-20260926-2
+  - --dev-roots
+  - '24'
+  - --test-roots
+  - '64'
+  - --acq-roots
+  - '96'
+  - --budgets
+  - '128'
+  - '512'
+  - --seeds
+  - '0'
+  - '1'
+  - '2'
+  - --run-id
+  - walker2d-s4-recovery-20260927-1
+  timeout_seconds: 172800
+  fresh_outputs:
+  - runs/walker2d-s4-recovery-20260927-1
+  - docs/mainPlan/results/s4/walker2d-s4-recovery-20260927-1
+  - data/study/walker2d/continuation-20260926-2/s4/walker2d-s4-recovery-20260927-1
+  outputs:
+  - runs/walker2d-s4-recovery-20260927-1
+  - docs/mainPlan/results/s4/walker2d-s4-recovery-20260927-1
+  - data/study/walker2d/continuation-20260926-2/s4/walker2d-s4-recovery-20260927-1
+  gate:
+    path: runs/walker2d-s4-recovery-20260927-1/decomposition_gate.json
+    key: go
+    stop_exit_codes:
+    - 0
+    - 2
