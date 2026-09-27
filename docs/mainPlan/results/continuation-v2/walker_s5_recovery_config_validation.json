@@ -1,0 +1,194 @@
+{
+  "kind": "unlaunched-walker-s5-recovery-config-validation-v1",
+  "created_utc": "2026-09-27T07:44:58.227642+00:00",
+  "config": {
+    "path": "configs/walker2d/recovery_s5-20260927-1.yaml",
+    "sha256": "b9d6a23b93ce0c37dbfb9e3dc2e32c5a6750e54d947e0ab848e8913f4d783346"
+  },
+  "source_sha256": {
+    "configs/walker2d/continuation_s5.yaml": "26f4dde367d025950e17cd695c0ab0f2679fc8f0a2f997b64606623b9e8e0562",
+    "configs/walker2d/continuation.yaml": "7f3ec0cdd51d9f188cd4e17b2e1096c1d0fe29f1cdc4936e88041d0e087d235b",
+    "configs/walker2d/recovery-20260927-1.yaml": "d0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d",
+    "experiments/helpers/managedWorkflow.py": "e298cd2450771519e9654ed587e49bed57da7ba3019c515bb42e0af8adb7d7d0",
+    "experiments/helpers/walkerComparison.py": "4225b46c1337bf1d3c301ed163e648632290ccf45c62fa6faebc6c115a9293a2",
+    "experiments/helpers/walkerExperience.py": "17d20a520c4601be55fe1580399cdce92a822bab808ee05fb0630c5c6a79bc19",
+    "experiments/helpers/runManifest.py": "32cbc0992276769d52b6e873f3075ccca6dda5ac9a241fe1eec0eb43acf70d05",
+    "experiments/scripts/walker_s5_ready.py": "74a95d0dbffbcf4ec95bf9512ff32917b23621f3883dea4681223c2c269aaf6f",
+    "experiments/scripts/walker_s5_matched.py": "cf13ead05b20a335541e29d0fa21d44a2cc0b5d709dc8da2de006c107ad03ea1",
+    "experiments/scripts/walker_s2_train_lewm.py": "b591e81f8bdce7ccf92e024d5909a153c03bee529b93bf3f33878114cd53a487",
+    "experiments/scripts/walker_s5_compare.py": "b3079099b0f2b3b4fe4bc6eed2b8a44a7b3912dd52cef54e37c8447041098b96"
+  },
+  "scope": "Only new recovery-specific S5 config and this local validation record. No service installation, production workflow execution, model/simulator calls, network, uploads or commits.",
+  "mapping": {
+    "from_suffix": "-continuation-20260926-1",
+    "to_suffix": "-recovery-20260927-1",
+    "unchanged_source_data": "data/study/walker2d/continuation-20260926-2",
+    "only_additional_argv": [
+      "--n",
+      "92701"
+    ],
+    "semantic_template_equivalence_except_identities": true
+  },
+  "set_b_internal_identity": {
+    "only_args_n_use": "run_id = make_run_id(\"walker2d\", \"data\", \"matched-b\", n=args.n)",
+    "source_line": 134,
+    "pattern": "walker2d-data-matched-b-<UTC execution date>-92701",
+    "report_pattern": "docs/mainPlan/results/s5/walker2d-data-matched-b-<UTC execution date>-92701.json",
+    "date_dependent": true,
+    "sampling_or_recipe_affected": false,
+    "explicit_output": "data/study/walker2d/matched-b-recovery-20260927-1",
+    "barriers_reference_derived_date_name": false,
+    "matching_local_result_names_at_validation": []
+  },
+  "dry_run": {
+    "status": "validated",
+    "workflow_id": "walker2d-s5-recovery-20260927-1",
+    "config_sha256": "b9d6a23b93ce0c37dbfb9e3dc2e32c5a6750e54d947e0ab848e8913f4d783346",
+    "cwd": "/workspace/Safety-Dial",
+    "state_dir": "/workspace/Safety-Dial/runs/workflows/walker2d-s5-recovery-20260927-1",
+    "stages": [
+      "complete_s4_prerequisite",
+      "exact_set_b",
+      "lewm_b_full",
+      "exact_N_comparison"
+    ],
+    "subprocesses_started": 0
+  },
+  "argparse_only_validation": {
+    "complete_s4_prerequisite": {
+      "model_a": "runs/walker2d-lewm-a-recovery-20260927-1",
+      "data_dir": "data/study/walker2d/continuation-20260926-2",
+      "s4_run": "runs/walker2d-s4-recovery-20260927-1",
+      "s4_bank": "data/study/walker2d/continuation-20260926-2/s4/walker2d-s4-recovery-20260927-1",
+      "out": "runs/walker2d-s5-ready-recovery-20260927-1/gate.json",
+      "expected_steps": 214780,
+      "expected_budget": 512,
+      "expected_seeds": [
+        0,
+        1,
+        2
+      ],
+      "seed": 0
+    },
+    "exact_set_b": {
+      "data_dir": "data/study/walker2d/continuation-20260926-2",
+      "acquisition_bank": "data/study/walker2d/continuation-20260926-2/s4/walker2d-s4-recovery-20260927-1",
+      "model_a": "runs/walker2d-lewm-a-recovery-20260927-1",
+      "out": "data/study/walker2d/matched-b-recovery-20260927-1",
+      "seed": 0,
+      "replacement_seed": 20261027,
+      "no_upload": false,
+      "n": 92701
+    },
+    "lewm_b_full": {
+      "data": "data/study/walker2d/matched-b-recovery-20260927-1/setB.h5",
+      "episode_splits": "data/study/walker2d/matched-b-recovery-20260927-1/splits.json",
+      "match_run": "runs/walker2d-lewm-a-recovery-20260927-1",
+      "run_id": "walker2d-lewm-b-recovery-20260927-1",
+      "resume_from": null,
+      "name": "lewm-b",
+      "epochs": 10,
+      "batch": 128,
+      "lr": 5e-05,
+      "wd": 0.001,
+      "warmup": 500,
+      "workers": 6,
+      "clip_stride": 1,
+      "smoke": false,
+      "max_steps": 214780,
+      "push_every": 4000,
+      "seed": 3072,
+      "no_wandb": false,
+      "no_upload": false,
+      "n": 1
+    },
+    "exact_N_comparison": {
+      "model_a": "runs/walker2d-lewm-a-recovery-20260927-1",
+      "model_b": "runs/walker2d-lewm-b-recovery-20260927-1",
+      "data_dir": "data/study/walker2d/continuation-20260926-2",
+      "data_b": "data/study/walker2d/matched-b-recovery-20260927-1",
+      "s4_run": "runs/walker2d-s4-recovery-20260927-1",
+      "s4_bank": "data/study/walker2d/continuation-20260926-2/s4/walker2d-s4-recovery-20260927-1",
+      "b_boundary": null,
+      "seed": 0,
+      "probe_seed": 0,
+      "probe_frames": 30000,
+      "bootstrap": 1000,
+      "results_dir": null,
+      "no_upload": false,
+      "run_id": "walker2d-s5-compare-recovery-20260927-1",
+      "n": 1
+    }
+  },
+  "negative_gate_checks_on_exact_config_in_temporary_directories": [
+    {
+      "failed_gate": "S3",
+      "status": "gate_stopped",
+      "subprocesses_started": 0,
+      "missing_downstream_outputs_ignored": true
+    },
+    {
+      "failed_gate": "S4",
+      "status": "gate_stopped",
+      "subprocesses_started": 0,
+      "missing_downstream_outputs_ignored": true
+    }
+  ],
+  "existing_focused_tests": {
+    "command": "uv run pytest -q experiments/tests/test_managed_workflow.py -k 'available_negative_upstream_gate or watched_positive_gate or partial_watched_json or complete_but_nonboolean_watched_json' -p no:cacheprovider",
+    "passed": 4,
+    "deselected": 15
+  },
+  "fresh_absent_state_and_outputs": [
+    "data/study/walker2d/matched-b-recovery-20260927-1",
+    "data/study/walker2d/matched-b-recovery-20260927-1/upload_receipt.json",
+    "docs/mainPlan/results/s2/walker2d-lewm-b-recovery-20260927-1.json",
+    "docs/mainPlan/results/s5/walker2d-s5-compare-recovery-20260927-1",
+    "runs/walker2d-lewm-b-recovery-20260927-1",
+    "runs/walker2d-lewm-b-recovery-20260927-1/upload_receipt.json",
+    "runs/walker2d-s5-compare-recovery-20260927-1",
+    "runs/walker2d-s5-compare-recovery-20260927-1/hf_upload.json",
+    "runs/walker2d-s5-ready-recovery-20260927-1",
+    "runs/walker2d-s5-ready-recovery-20260927-1/gate.json",
+    "runs/workflows/walker2d-s5-recovery-20260927-1"
+  ],
+  "qualifying_conditions": [
+    "S3 gate.go and S4 decomposition_gate.go must both pass; health-only qualification remains supported.",
+    "A train_state, resolved recipe and final upload receipt must all report 214780 steps.",
+    "S4 must be complete and prospective with passed development decomposition, full declared budgets and exactly acquisition seeds 0,1,2, largest additional budget 512, unique selections and matched random/boundary charges.",
+    "The readiness script binds A weights, source roots/splits, copied report/manifest, saved acquisition/replay/evaluation bytes, exact seed 0 measured experience, and pinned private upload receipts.",
+    "No boundary-superiority condition is added; a completed equal-budget negative comparison remains eligible for the planned pretraining-versus-adaptation question."
+  ],
+  "preserved_comparison": {
+    "acquisition_seed": 0,
+    "additional_branches": 512,
+    "steps_per_branch": 100,
+    "exact_additional_training_transitions_each": 51200,
+    "common_seed_rows_in_exact_N": 0,
+    "B_optimizer_steps": 214780,
+    "B_matches_A_architecture_normalization_initial_seed_recipe": true,
+    "A_exact_N_updates": [
+      "random",
+      "boundary"
+    ],
+    "A_exact_N_replay_and_optimizer": "Frozen S4 recipe and saved replay",
+    "evaluation": "Same immutable S4 dev/test/stress banks and matched-capacity fresh A/B probes",
+    "optional_B_boundary_or_B_plus_added": false
+  },
+  "limits": [
+    "This validates static scheduling and parser compatibility, not scientific qualification of the unfinished upstream run.",
+    "Readiness does not itself independently verify every adapted checkpoint receipt or every seed trajectory payload; the separate deferred completed-S4 audit supplies those broader checks before launch.",
+    "An upstream runtime/upload failure without a false gate remains a bounded wait of 604800 seconds and then an error, never a scientific pass.",
+    "Output absence and date-derived report-name absence are local checks at validation time; the finite workflow enforces fresh outputs again before each stage."
+  ],
+  "original_configs_and_static_sources_unchanged": true,
+  "independent_root_review": {
+    "utc": "2026-09-27T07:50:39.981445+00:00",
+    "template_identity_remap_and_metadata_only": true,
+    "source_hashes_matched": 11,
+    "fresh_paths_absent": 11,
+    "sole_args_n_line": 134,
+    "config_hash_verified": true,
+    "production_launched": false
+  }
+}

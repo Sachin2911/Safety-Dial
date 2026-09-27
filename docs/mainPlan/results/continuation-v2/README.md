@@ -126,3 +126,22 @@ future adapted checkpoint record its actual acquisition seed. Adaptation already
 uses seeds 0, 1 and 2 correctly; only its saved template had retained seed 0.
 The saved and executed configuration expressions now agree, with no change to
 training, selection, random draws or gates.
+
+
+## Conditional S5 recovery workflow
+
+The [fresh S5 configuration](../../../../configs/walker2d/recovery_s5-20260927-1.yaml)
+is prepared but **not launched**. Its [validation record](walker_s5_recovery_config_validation.json)
+checks the original comparison recipe, all four command parsers, a dry run, fresh output
+identities, and immediate stops on either negative upstream gate. The recovery names
+refer to the new A/S3/S4 runs; the source dataset and all sampling and training controls
+are unchanged. The set-B writer uses `--n 92701` only to distinguish its date-derived
+manifest/report identity.
+
+Launch remains conditional on completed, audited S3/S4 evidence: full A training,
+passing development diagnosis, all planned S4 budgets and three paired acquisition
+seeds, equal charged costs, and verified checkpoint/bank provenance. A measured
+boundary advantage is not an extra S5 prerequisite. S5 compares exactly 51,200 acquired
+transitions in each arm, excludes the common S4 seed from the exact-N adaptation
+comparison, and trains B for the same 214,780 updates. This preparation records no
+S5 experiment or scientific result.
