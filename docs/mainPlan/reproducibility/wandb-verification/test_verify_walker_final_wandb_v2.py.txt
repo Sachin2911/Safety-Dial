@@ -1,0 +1,282 @@
+"""Synthetic-only audit contract tests; no real W&B API imports or network."""
+
+import importlib.util
+import json
+from pathlib import Path
+import subprocess
+import sys
+import time
+from types import SimpleNamespace
+
+import pytest
+import yaml
+
+SOURCE = Path("/tmp/verify_walker_final_wandb_v2.py")
+
+
+@pytest.fixture
+def fixture(tmp_path, monkeypatch):
+    spec = importlib.util.spec_from_file_location("wandb_final_verifier", SOURCE)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    monkeypatch.setattr(mod, "ROOT", tmp_path)
+    config_path = tmp_path / "configs/workflow.yaml"
+    config_path.parent.mkdir(parents=True)
+    config_path.write_text("workflow_id: walker2d-recovery-20260927-1\n")
+    monkeypatch.setattr(mod, "WORKFLOW_CONFIG", config_path)
+    monkeypatch.setattr(mod, "WORKFLOW_CONFIG_SHA256", mod.digest(config_path.read_bytes()))
+    output = tmp_path / "runs/continuation-audit/walker_wandb_final_20260927.json"
+    output.parent.mkdir(parents=True)
+    monkeypatch.setattr(mod, "EXPECTED_OUTPUT", output)
+    rd = tmp_path / "runs" / mod.RUN_ID
+    rd.mkdir()
+    rp = tmp_path / "docs/mainPlan/results/s2" / (mod.RUN_ID + ".json")
+    rp.parent.mkdir(parents=True)
+    history = [
+        {
+            "step": step,
+            "loss": 0.1,
+            "pred_loss": 0.02,
+            "sigreg_loss": 0.8,
+            "lr": 0.00005,
+            "it_per_s": 2.2,
+        }
+        for step in range(20, 214781, 20)
+    ]
+    rp.write_text(
+        json.dumps(
+            {
+                "run_id": mod.RUN_ID,
+                "steps": 214780,
+                "checkpoint": {"step": 214780},
+                "history": history,
+            }
+        )
+    )
+    (rd / "train_state.json").write_text(json.dumps({"step": 214780, "val_pred_loss": 0.0123}))
+    config = {
+        "run_id": mod.RUN_ID,
+        "resume_from": "original/optimizer.pt",
+        "epochs": 10,
+        "batch": 128,
+        "workers": 6,
+        "push_every": 4000,
+        "seed": 3072,
+        "no_wandb": False,
+        "lr": 0.00005,
+        "wd": 0.001,
+        "warmup": 500,
+        "clip_stride": 1,
+        "total_steps": 214780,
+        "data": "saved/setA.h5",
+        "smoke": False,
+        "name": "lewm-a",
+        "no_upload": False,
+    }
+    (rd / "config.yaml").write_text(yaml.safe_dump(config))
+    state = {
+        "cwd": str(tmp_path),
+        "workflow_id": "walker2d-recovery-20260927-1",
+        "config_sha256": mod.WORKFLOW_CONFIG_SHA256,
+        "stages": {
+            "lewm_a_full": {
+                "status": "completed",
+                "attempts": [{"returncode": 0, "finished_unix": 1234.5}],
+                "output_hashes": {str(rp): {"kind": "file", "sha256": mod.digest(rp.read_bytes())}},
+            }
+        },
+    }
+    sp = tmp_path / "runs/workflows/walker2d-recovery-20260927-1/state.json"
+    sp.parent.mkdir(parents=True)
+    sp.write_text(json.dumps(state))
+    valsteps = list(range(176000, 212001, 4000)) + [214780]
+    remote_rows = [
+        {
+            **row,
+            "_step": row["step"],
+            **({"val_pred_loss": 0.0123} if row["step"] in valsteps else {}),
+        }
+        for row in history
+        if row["step"] > 172000
+    ]
+    calls = []
+    remote = SimpleNamespace(
+        path=mod.REMOTE.split("/"),
+        name=mod.RUN_ID,
+        state="finished",
+        config=dict(config),
+        summary={"val_pred_loss": 0.0123},
+    )
+
+    def scan_history(**kwargs):
+        calls.append(("scan_history", kwargs))
+        return iter(remote_rows)
+
+    remote.scan_history = scan_history
+
+    def api(**kwargs):
+        calls.append(
+            (
+                "Api",
+                {
+                    "timeout": kwargs["timeout"],
+                    "host": kwargs["overrides"]["base_url"],
+                    "explicit_auth": bool(kwargs["api_key"]),
+                },
+            )
+        )
+        return SimpleNamespace(run=lambda path: remote if path == mod.REMOTE else None)
+
+    monkeypatch.setitem(sys.modules, "wandb", SimpleNamespace(Api=api))
+    monkeypatch.setenv("WANDB_API_KEY", "synthetic-test-only-not-a-real-credential")
+    monkeypatch.setattr(sys, "argv", ["verifier", "--output", str(output)])
+    return SimpleNamespace(
+        mod=mod,
+        output=output,
+        rd=rd,
+        rp=rp,
+        state=state,
+        sp=sp,
+        config_path=config_path,
+        remote=remote,
+        remote_rows=remote_rows,
+        calls=calls,
+    )
+
+
+def test_complete_exact_history_one_window_and_no_remote_write(fixture):
+    f = fixture
+    f.mod.main()
+    result = json.loads(f.output.read_text())
+    assert result["recovered_training_history_records"] == 2139
+    assert result["full_saved_report_history_records"] == 10739
+    assert result["validation_steps"] == list(range(176000, 212001, 4000)) + [214780]
+    assert result["remote_write_calls"] == 0
+    assert f.calls[-1] == (
+        "scan_history",
+        {"page_size": 1_000_000, "min_step": 0, "max_step": 214781, "use_cache": False},
+    )
+    assert f.calls[0][1] == {"timeout": 60, "host": "https://api.wandb.ai", "explicit_auth": True}
+
+
+@pytest.mark.parametrize(
+    "change", ["running", "returncode", "wrong_config", "config_bytes", "report_hash"]
+)
+def test_local_barrier_stops_before_api(fixture, change):
+    f = fixture
+    if change == "running":
+        f.state["stages"]["lewm_a_full"]["status"] = "running"
+    elif change == "returncode":
+        f.state["stages"]["lewm_a_full"]["attempts"][0]["returncode"] = 2
+    elif change == "wrong_config":
+        f.state["config_sha256"] = "0" * 64
+    elif change == "config_bytes":
+        f.config_path.write_text("changed recipe")
+    else:
+        f.rp.write_text(f.rp.read_text() + " ")
+    f.sp.write_text(json.dumps(f.state))
+    with pytest.raises(ValueError):
+        f.mod.main()
+    assert not f.calls and not f.output.exists()
+
+
+@pytest.mark.parametrize("change", ["unfinished", "name", "entity", "recipe"])
+def test_remote_identity_or_gate_fail_closed(fixture, change):
+    f = fixture
+    if change == "unfinished":
+        f.remote.state = "running"
+    elif change == "name":
+        f.remote.name = "another-run"
+    elif change == "entity":
+        f.remote.path[0] = "another-entity"
+    else:
+        f.remote.config["seed"] = 99
+    with pytest.raises(ValueError):
+        f.mod.main()
+    assert len(f.calls) == 1 and not f.output.exists()
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        "missing",
+        "duplicate",
+        "before_resume",
+        "fractional_step",
+        "metric",
+        "nan",
+        "missing_validation",
+    ],
+)
+def test_history_and_censorless_step_identity_are_exact(fixture, change):
+    f = fixture
+    if change == "missing":
+        f.remote_rows.pop(0)
+    elif change == "duplicate":
+        f.remote_rows.insert(1, dict(f.remote_rows[0]))
+    elif change == "before_resume":
+        f.remote_rows[0].update(step=172000, _step=172000)
+    elif change == "fractional_step":
+        f.remote_rows[0]["step"] += 0.5
+    elif change == "metric":
+        f.remote_rows[0]["pred_loss"] += 0.01
+    elif change == "nan":
+        f.remote_rows[0]["lr"] = float("nan")
+    else:
+        next(v for v in f.remote_rows if "val_pred_loss" in v).pop("val_pred_loss")
+    with pytest.raises(ValueError):
+        f.mod.main()
+    assert not f.output.exists()
+
+
+def test_local_evidence_change_during_remote_read_refuses(fixture):
+    f = fixture
+
+    def scan(**kwargs):
+        yield from f.remote_rows
+        (f.rd / "train_state.json").write_text('{"step":0}')
+
+    f.remote.scan_history = scan
+    with pytest.raises(ValueError, match="Local evidence"):
+        f.mod.main()
+    assert not f.output.exists()
+
+
+def test_missing_auth_does_not_construct_api(fixture, monkeypatch):
+    f = fixture
+    monkeypatch.delenv("WANDB_API_KEY")
+    with pytest.raises(ValueError, match="Existing W&B API key"):
+        f.mod.main()
+    assert not f.calls and not f.output.exists()
+
+
+def test_output_cannot_mutate_completed_payload(fixture, monkeypatch):
+    f = fixture
+    bad = f.rd / "new-audit.json"
+    monkeypatch.setattr(sys, "argv", ["verifier", "--output", str(bad)])
+    with pytest.raises(ValueError, match="Unexpected audit output"):
+        f.mod.main()
+    assert not bad.exists() and not f.calls
+
+
+def test_existing_output_is_preserved(fixture):
+    f = fixture
+    f.output.write_text("preserve")
+    with pytest.raises(ValueError, match="fresh"):
+        f.mod.main()
+    assert f.output.read_text() == "preserve" and not f.calls
+
+
+def test_hard_deadline_exits_even_during_blocking_sleep():
+    code = f"""import importlib.util,signal,time
+s=importlib.util.spec_from_file_location("v", {str(SOURCE)!r})
+m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+signal.signal(signal.SIGALRM,m.hard_deadline)
+signal.setitimer(signal.ITIMER_REAL,0.1)
+time.sleep(10)
+"""
+    start = time.monotonic()
+    proc = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=3)
+    assert proc.returncode == 124 and time.monotonic() - start < 3
+    assert json.loads(proc.stdout)["reason"] == "overall_process_deadline"
+    assert "Traceback" not in proc.stderr

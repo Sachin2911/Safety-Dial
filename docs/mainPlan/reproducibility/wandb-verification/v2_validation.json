@@ -1,0 +1,50 @@
+{
+  "kind": "deferred_walker_wandb_v2_validation",
+  "observed_utc": "2026-09-27T09:40:33.440097+00:00",
+  "status": "prepared_synthetic_checks_passed_not_executed_against_WandB",
+  "original_v1_preserved": true,
+  "original_preparation_preserved": true,
+  "source_sha256": "6df22db0a56aa8a4a6919f4f820e7371a9db9a73f9ab341913042fff320451ac",
+  "tests_sha256": "ce132c861d61896e7db032fae7cd5cd14709b44590a9f9c6648448d5c8cf5391",
+  "test_command": "uv run pytest -q /tmp/test_verify_walker_final_wandb_v2.py",
+  "test_result": "22 passed in 1.20s",
+  "ruff_command": "uv run ruff check /tmp/verify_walker_final_wandb_v2.py /tmp/test_verify_walker_final_wandb_v2.py",
+  "ruff_result": "All checks passed",
+  "tests_scope": [
+    "Exact 2139 recovered /10739 full synthetic records and11 validation steps",
+    "Terminal/config/report barrier before API construction",
+    "Remote entity/name/recipe/finished-state mismatches",
+    "Missing,duplicate,pre-resume,fractional-step,nonfinite or changed metrics",
+    "Missing validation and local evidence mutation during scan",
+    "Missing explicit auth and protected/existing output refusal",
+    "Real subprocess SIGALRM deadline exits124 within3s while sleeping"
+  ],
+  "changes_from_v1": [
+    "Independent180s hard process deadline remains armed through shutdown; sanitized os._exit124 on expiry",
+    "Workflow YAML SHA d0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d pinned and compared with managed state config_sha256",
+    "Only exact fresh runs/continuation-audit/walker_wandb_final_20260927.json allowed",
+    "Single1,000,000-step scan window min0/max214781 preserves explicit rejection of earlier records",
+    "Existing key required and passed explicitly with https://api.wandb.ai override; no interactive auth fallback",
+    "Additional data/smoke/name/no_upload config comparison and exact non-fractional step identity"
+  ],
+  "installed_sdk_scan_contract": {
+    "version": "0.28.1",
+    "source": ".venv/lib/python3.11/site-packages/wandb/apis/public/history.py",
+    "source_sha256": "9cc6f44bdb7dc90982edf9520b782f736e01b792cd02e87faa751f0dd612b593",
+    "static_check": "HistoryScan stores page_size directly without an upper-bound validation and clips each requested max step to the scan stop. The chosen window covers only0..214780 with2139 expected records; no huge local sample array is allocated by the helper. No real SDK/API request was made."
+  },
+  "deferred_command": "uv run python /tmp/verify_walker_final_wandb_v2.py --output runs/continuation-audit/walker_wandb_final_20260927.json",
+  "api_calls": 0,
+  "network_calls": 0,
+  "model_calls": 0,
+  "simulator_calls": 0,
+  "original_evidence_mutations": 0,
+  "review_status": "Root review and actual terminal-S2 API verification still pending",
+  "limitations": [
+    "Success will verify recovered logging only, not model quality or HF checkpoint durability.",
+    "Intermediate validation step identities/finiteness are checked; only final validation is matched to the final local train_state value.",
+    "W&B is mutable service evidence, not an immutable revision.",
+    "The SDK may initialize its own local API sidecar/cache; no experiment run is created by the verifier.",
+    "The hard deadline intentionally terminates the verifier process without waiting for SDK cleanup; later retry requires a fresh/absent audit output and actual terminal S2."
+  ]
+}

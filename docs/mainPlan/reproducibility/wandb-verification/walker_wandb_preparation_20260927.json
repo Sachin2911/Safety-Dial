@@ -1,0 +1,194 @@
+{
+  "kind": "walker_s2_wandb_logging_provenance_preparation",
+  "observed_utc": "2026-09-27T09:25:48.160575+00:00",
+  "status": "local_actual_logging_observed_final_remote_confirmation_pending",
+  "final_completeness_claim": false,
+  "run": {
+    "id": "uxzgf780",
+    "project": "safetydial-walker2d",
+    "display_name": "walker2d-lewm-a-recovery-20260927-1",
+    "entity_in_local_record": "",
+    "wandb_run_resumed": false,
+    "configuration": {
+      "run_id": "walker2d-lewm-a-recovery-20260927-1",
+      "resume_from": "runs/walker2d-lewm-a-continuation-20260926-1/optimizer.pt",
+      "epochs": 10,
+      "batch": 128,
+      "workers": 6,
+      "push_every": 4000,
+      "seed": 3072,
+      "no_wandb": false,
+      "steps_per_epoch": 21478
+    },
+    "entity_from_existing_managed_log": "2699183-university-of-witwatersrand",
+    "canonical_url": "https://wandb.ai/2699183-university-of-witwatersrand/safetydial-walker2d/runs/uxzgf780",
+    "api_path": "2699183-university-of-witwatersrand/safetydial-walker2d/uxzgf780",
+    "entity_evidence_limit": "The local protobuf run record has an empty entity; the managed SDK log contains the exact canonical URL."
+  },
+  "frozen_logging_contract": {
+    "source_lines": {
+      "t_start": 89,
+      "conditional_logger": 151,
+      "init": 155,
+      "rate_timer": 169,
+      "resume": 171,
+      "training_log": 205,
+      "validation_log": 218,
+      "report_wall_clock": 234,
+      "finish": 236
+    },
+    "current_and_frozen_bytes_equal": true,
+    "condition": "W&B enabled only when --no-wandb is absent and WANDB_API_KEY is present.",
+    "local_evidence_condition_met": true,
+    "optimizer_step_log_cadence": 20,
+    "metrics": [
+      "loss",
+      "pred_loss",
+      "sigreg_loss",
+      "lr",
+      "it_per_s"
+    ],
+    "validation_cadence": "Each checkpoint interval (4000) and final step.",
+    "run_history_scope": "Fresh W&B run for recovered steps only; restore_training_state restores full local history but does not re-log earlier records."
+  },
+  "observed_local_history": {
+    "binary_prefix_bytes": 2424832,
+    "binary_prefix_sha256": "4377bb8bea33a5016545d6f5c5fd803992d9a3231c48b505dd1f17a9a39c48f7",
+    "last_complete_record_offset": 2424012,
+    "record_counts": {
+      "header": 1,
+      "run": 1,
+      "environment": 2,
+      "files": 1,
+      "telemetry": 2,
+      "output_raw": 858,
+      "stats": 1217,
+      "summary": 3818,
+      "history": 1909
+    },
+    "history_records": 1909,
+    "training_records": 1909,
+    "first_training_step": 172020,
+    "last_training_step": 210180,
+    "unique_contiguous_20_step_sequence": true,
+    "all_logged_training_metrics_finite": true,
+    "validation_steps": [
+      176000,
+      180000,
+      184000,
+      188000,
+      192000,
+      196000,
+      200000,
+      204000,
+      208000
+    ],
+    "history_key_encoding": "This installed SDK stores names in HistoryItem.nested_key.",
+    "reader_scope": "Read-only rb file snapshot parsed through io.BytesIO; SDK open_for_scan(r+b) was not called.",
+    "captured_prefix_unchanged_after_scan": true,
+    "remote_upload_or_sync_completion_proved": false
+  },
+  "managed_log_identity": {
+    "path": "runs/workflows/walker2d-recovery-20260927-1/logs/lewm_a_full.attempt-001.log",
+    "captured_prefix_bytes": 40475,
+    "captured_prefix_sha256": "f4f46d5c1bb3e11d50367103a1b0628161120f78f94336d1170c476c883f4968",
+    "run_url_matches": [
+      "https://wandb.ai/2699183-university-of-witwatersrand/safetydial-walker2d/runs/uxzgf780"
+    ],
+    "captured_prefix_unchanged_after_scan": true
+  },
+  "timing_labels": {
+    "report_wall_clock_s": "Recovery-invocation timed interval: t_start is after argument parsing/optional match-run config, before seeding, fresh run creation, source snapshot, data/scaler setup, model initialization and W&B initialization. Stops when final report dict is constructed, before writing that JSON and before wandb.finish(). Includes restore, renderer warmup, optimization, validation and checkpoint/HF upload work within that invocation; excludes earlier original training, interruption downtime, imports/argument parsing and the final W&B flush.",
+    "it_per_s": "(step - initial_step)/(now - t0). t0 is set immediately before restoring optimizer/history; includes restoration and subsequent warmup, optimization, validation and uploads, but excludes earlier recovery setup. It is a cumulative recovered-segment rate, not full-run throughput; do not sum or average across runs to reconstruct runtime.",
+    "original_attempt_started_unix": 1790439893.0631018,
+    "recovery_attempt_started_unix": 1790491891.0699685,
+    "original_workflow_status": "Historical original state still says running; stale lifecycle record, not evidence of a live original worker. Preserve unchanged.",
+    "final_elapsed_span_formula": "Final successful recovery S2 attempt finished_unix minus 1790439893.0631018.",
+    "final_elapsed_span_label": "Original-start to recovery-finish elapsed span, including original work, interruption/downtime, recovery setup and repeated work; not uninterrupted training time or GPU compute time.",
+    "final_finished_unix": null,
+    "final_elapsed_span_s": null,
+    "final_report_wall_clock_s": null,
+    "minimum_repeated_logged_updates": 2400,
+    "repeated_update_basis": "Parent-observed original log reached 174400; recovery resumes atomic step172000. This lower bound was supplied by parent and not independently reconstructed in this bounded logging check."
+  },
+  "deferred_final_verification": {
+    "helper_path": "/tmp/verify_walker_final_wandb.py",
+    "sha256": "53108c2c5b6bd49726a981feaca7545b979bafacdfc2146b141f4fd349cb22ad",
+    "bytes": 7902,
+    "status": "prepared_not_executed",
+    "validation": "AST parsed and Ruff passed; no live or final API invocation performed.",
+    "command": "uv run python /tmp/verify_walker_final_wandb.py --output runs/continuation-audit/walker_wandb_final_20260927.json",
+    "barrier": "Exact recovery workflow lewm_a_full stage completed with successful terminal attempt and hash-bound final214780 report; enforced before API creation.",
+    "read_api_methods": [
+      "wandb.Api",
+      "Api.run(existing_path)",
+      "Run.scan_history(use_cache=False)",
+      "Run.summary reads"
+    ],
+    "expected_final_training_records": 2139,
+    "expected_training_steps": "172020..214780 every20",
+    "expected_full_local_history_records": 10739,
+    "checks": [
+      "Exact entity/project/run ID, display name and matching recipe.",
+      "Remote run finished, full recovered metric history exactly matched to saved local report within1e-12 tolerance.",
+      "All checkpoint validation steps and final saved validation value match.",
+      "Source/report/config/train_state unchanged and completed S2 stage unchanged across API reads."
+    ],
+    "forbidden_operations": [
+      "wandb.init",
+      "wandb.sync",
+      "wandb.log",
+      "wandb.finish",
+      "CLI sync",
+      "remote updates or deletes"
+    ],
+    "remaining_limits": [
+      "Local history is not proof of complete remote sync.",
+      "W&B is mutable service metadata, not a pinned immutable checkpoint archive.",
+      "The original interrupted W&B run remains separate; this fresh recovery run should not contain pre-resume history.",
+      "Final checkpoint durability and tensor semantics require their separate prepared audits."
+    ]
+  },
+  "input_files": {
+    "current_training_source": {
+      "path": "/workspace/Safety-Dial/experiments/scripts/walker_s2_train_lewm.py",
+      "sha256": "b591e81f8bdce7ccf92e024d5909a153c03bee529b93bf3f33878114cd53a487",
+      "bytes": 14941
+    },
+    "frozen_training_source": {
+      "path": "/workspace/Safety-Dial/runs/walker2d-lewm-a-recovery-20260927-1/source_snapshot/experiments/scripts/walker_s2_train_lewm.py",
+      "sha256": "b591e81f8bdce7ccf92e024d5909a153c03bee529b93bf3f33878114cd53a487",
+      "bytes": 14941
+    },
+    "wandb_metadata": {
+      "path": "/workspace/Safety-Dial/wandb/run-20260927_065148-uxzgf780/files/wandb-metadata.json",
+      "sha256": "6fd8dac2a1b96a516e596baf425dad32621e073f71f1cfb2f26faca6f9d8321f",
+      "bytes": 1816
+    },
+    "deferred_verifier": {
+      "path": "/tmp/verify_walker_final_wandb.py",
+      "sha256": "53108c2c5b6bd49726a981feaca7545b979bafacdfc2146b141f4fd349cb22ad",
+      "bytes": 7902
+    },
+    "original_workflow_state": {
+      "path": "/workspace/Safety-Dial/runs/workflows/walker2d-continuation-20260926-2/state.json",
+      "sha256": "9d3e872bbe0330d052bde9c3f2a267ce7cc485be573304b7e94047d585dda757",
+      "bytes": 4552
+    },
+    "recovery_workflow_state": {
+      "path": "/workspace/Safety-Dial/runs/workflows/walker2d-recovery-20260927-1/state.json",
+      "sha256": "960a26dfe91cda48423aa9c8e9335a07d740ead428490f299a55e2a56b4be7cf",
+      "bytes": 1080
+    }
+  },
+  "wandb_sdk_version": "0.28.1",
+  "source_inputs_unchanged": true,
+  "network_reads": 0,
+  "network_writes": 0,
+  "wandb_runs_created": 0,
+  "cli_sync_calls": 0,
+  "model_calls": 0,
+  "simulator_calls": 0,
+  "training_changes": false,
+  "credential_values_printed": false
+}

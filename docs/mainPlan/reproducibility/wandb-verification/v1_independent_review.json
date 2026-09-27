@@ -1,0 +1,113 @@
+{
+  "kind": "deferred_walker_wandb_verifier_independent_review_v1",
+  "observed_utc": "2026-09-27T09:35:02.939690+00:00",
+  "verdict": "changes_required_before_use",
+  "scope": "Read-only source/preparation/installed-SDK review. No W&B import/API invocation, live history read, model/simulator work, network or upload. Original evidence unchanged.",
+  "inputs": [
+    {
+      "path": "/tmp/verify_walker_final_wandb.py",
+      "bytes": 7902,
+      "sha256": "53108c2c5b6bd49726a981feaca7545b979bafacdfc2146b141f4fd349cb22ad"
+    },
+    {
+      "path": "runs/continuation-audit/walker_wandb_preparation_20260927.json",
+      "bytes": 9123,
+      "sha256": "9672fd57055ea67c8ed5e9ec7b7057f7ee8de912b183d5592853794fc4d88da5"
+    },
+    {
+      "path": "experiments/scripts/walker_s2_train_lewm.py",
+      "bytes": 14941,
+      "sha256": "b591e81f8bdce7ccf92e024d5909a153c03bee529b93bf3f33878114cd53a487"
+    },
+    {
+      "path": ".venv/lib/python3.11/site-packages/wandb/apis/public/api.py",
+      "bytes": 97921,
+      "sha256": "4983f5b8d661f29d6480992d98c2e538b8748030ba3def1691c41df3cf76e09f"
+    },
+    {
+      "path": ".venv/lib/python3.11/site-packages/wandb/apis/public/history.py",
+      "bytes": 4843,
+      "sha256": "9cc6f44bdb7dc90982edf9520b782f736e01b792cd02e87faa751f0dd612b593"
+    },
+    {
+      "path": ".venv/lib/python3.11/site-packages/wandb/apis/public/service_api.py",
+      "bytes": 8002,
+      "sha256": "06756e0fa6e6987316630e8d4a28d46e4d12661d1e9fc48d77aae685b9281106"
+    },
+    {
+      "path": ".venv/lib/python3.11/site-packages/wandb/apis/public/runs.py",
+      "bytes": 62899,
+      "sha256": "2672a3374e24cf5c6c5204060e254cca3634893271f42268cde0ea17c2e29e38"
+    }
+  ],
+  "correctness_checks": [
+    {
+      "name": "S2 terminal barrier",
+      "result": "Stage completed, successful finished attempt, expected cwd/workflow and exact completed report hash are required before importing W&B."
+    },
+    {
+      "name": "History arithmetic",
+      "result": "10739 full local training records at steps20..214780;2139 recovered records at172020..214780. Explicit unexpected/duplicate/pre-resume training rows are rejected."
+    },
+    {
+      "name": "Remote identity",
+      "result": "Exact entity/project/run uxzgf780 and display name are checked; entity from saved managed log is explicit because protobuf field was empty."
+    },
+    {
+      "name": "Metric matching",
+      "result": "All five recovered training metrics compared to exact local history at1e-12 tolerance, all11 expected validation step identities checked, final validation compared to train_state and remote summary. Intermediate validation values are only checked finite, not independently reconciled to separate checkpoint history."
+    },
+    {
+      "name": "Temporal local checks",
+      "result": "Report/config/train_state/verifier bytes and completed stage are rechecked after API reads. Remote service is correctly called mutable rather than pinned."
+    },
+    {
+      "name": "Exceptions",
+      "result": "Application exception output omits exception strings/transport details and does not print credential values. SDK authentication itself may prompt if absent."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "must_fix_boundedness",
+      "path": "/tmp/verify_walker_final_wandb.py",
+      "issue": "No overall deadline. Installed HistoryScan calls ServiceApi.send_api_request without a timeout; Api(timeout=60) does not bound these history waits.",
+      "references": [
+        "wandb/apis/public/history.py:65",
+        "wandb/apis/public/history.py:125",
+        "wandb/apis/public/service_api.py:69"
+      ],
+      "recommendation": "Use an independent hard process deadline and preserve safe failure output."
+    },
+    {
+      "id": "F2",
+      "severity": "cost_and_availability",
+      "issue": "HistoryScan page_size is optimizer-step range width here. min_step0/page_size1000 causes215 service page reads,including172 empty pre-resume windows. These are not necessarily215 remote HTTP requests.",
+      "recommendation": "One sufficiently wide scan window still covering0..214780 preserves explicit no-pre-resume-record checking without redundant windows."
+    },
+    {
+      "id": "F3",
+      "severity": "provenance_guard",
+      "issue": "Managed state config_sha256 is not bound to the pinned recovery YAML. Individual local config/train_state bytes are stable but whole run-directory output hash is delegated to other audits.",
+      "recommendation": "Pin recipe bytes and require state config_sha256; retain separate final payload audit limitation."
+    },
+    {
+      "id": "F4",
+      "severity": "output_guard",
+      "issue": "Freshness alone permits output under a completed hashed run/results directory. The documented invocation is safe but CLI does not enforce it.",
+      "recommendation": "Require the exact fresh audit destination under runs/continuation-audit."
+    },
+    {
+      "id": "F5",
+      "severity": "authentication_guard",
+      "issue": "wandb.Api() without explicit api_key can enter interactive authentication; default host comes from environment/settings. This conflicts with existing-auth-only intent on missing credentials.",
+      "recommendation": "Require an existing nonempty key without printing it; pass explicitly and pin the expected api.wandb.ai host; no login/sync fallback."
+    }
+  ],
+  "limitations": [
+    "This is static review, not proof the remote run finished or that logs fully synchronized.",
+    "API history may initialize a W&B SDK sidecar; no experiment run is created by the listed read methods.",
+    "Source/hash evidence is narrow; a separate final S2 audit must verify checkpoint structure and complete private payload."
+  ],
+  "planned_followup": "Parent authorized a separate v2 helper; original v1 and preparation will be preserved byte-for-byte. No API execution authorized in this review."
+}

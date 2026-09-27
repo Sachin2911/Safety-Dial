@@ -1,0 +1,149 @@
+#!/usr/bin/env python3
+"""Deferred read-only W&B verification after the recovered S2 stage completes.
+
+Never calls wandb.init, login, sync, log, finish, update, delete or a write API.
+Reads only the named existing run and compares recovered history to finalized
+local S2 evidence. No model/tensor/HDF5 loads. Writes one fresh local audit JSON.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import math
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path('/workspace/Safety-Dial')
+RUN_ID = 'walker2d-lewm-a-recovery-20260927-1'
+REMOTE = '2699183-university-of-witwatersrand/safetydial-walker2d/uxzgf780'
+FINAL_STEP, RESUME_STEP = 214780, 172000
+METRICS = ('loss', 'pred_loss', 'sigreg_loss', 'lr', 'it_per_s')
+
+
+def require(ok, reason):
+    if not ok:
+        raise ValueError(reason)
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def stage_barrier(state_path):
+    state = json.loads(state_path.read_bytes())
+    require(state['cwd'] == str(ROOT), 'Unexpected workflow root')
+    require(state['workflow_id'] == 'walker2d-recovery-20260927-1', 'Unexpected workflow')
+    stage = state['stages']['lewm_a_full']
+    require(stage['status'] == 'completed', 'Final S2 stage has not completed')
+    attempts = stage.get('attempts', [])
+    require(bool(attempts) and attempts[-1].get('returncode') == 0
+            and isinstance(attempts[-1].get('finished_unix'), (int, float)),
+            'No successful terminal S2 attempt')
+    return stage
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--output', type=Path, required=True)
+    args = parser.parse_args()
+    require(not args.output.exists(), 'Output must be fresh')
+    state_path = ROOT / 'runs/workflows/walker2d-recovery-20260927-1/state.json'
+    stage = stage_barrier(state_path)  # Must pass before importing or using the API.
+    run_dir = ROOT / 'runs' / RUN_ID
+    paths = {'report': ROOT / 'docs/mainPlan/results/s2' / (RUN_ID + '.json'),
+             'train_state': run_dir / 'train_state.json', 'config': run_dir / 'config.yaml',
+             'generator': Path(__file__)}
+    source_bytes = {key: path.read_bytes() for key, path in paths.items()}
+    report = json.loads(source_bytes['report'])
+    train_state = json.loads(source_bytes['train_state'])
+    require(stage['output_hashes'][str(paths['report'])] ==
+            {'kind': 'file', 'sha256': digest(source_bytes['report'])},
+            'Final S2 report differs from completed workflow output')
+    require(report['run_id'] == RUN_ID and report['steps'] == FINAL_STEP
+            and train_state['step'] == FINAL_STEP and report['checkpoint']['step'] == FINAL_STEP,
+            'Local final step disagreement')
+    history = report['history']
+    require([row['step'] for row in history] == list(range(20, FINAL_STEP + 1, 20)),
+            'Unexpected full saved history')
+    expected = {row['step']: row for row in history if row['step'] > RESUME_STEP}
+    require(len(expected) == 2139, 'Unexpected recovered history size')
+    import yaml
+
+    config = yaml.safe_load(source_bytes['config'])
+    require(config['no_wandb'] is False and config['run_id'] == RUN_ID
+            and config['total_steps'] == FINAL_STEP, 'Unexpected logging configuration')
+    from dotenv import load_dotenv
+
+    load_dotenv(ROOT / '.env', override=False)  # Existing auth only; never printed.
+    import wandb
+
+    api = wandb.Api(timeout=60)
+    remote = api.run(REMOTE)
+    require('/'.join(remote.path) == REMOTE and remote.name == RUN_ID,
+            'Unexpected remote W&B identity')
+    require(remote.state == 'finished', 'Remote W&B run is not finished; retry later without syncing')
+    for key in ('run_id', 'resume_from', 'epochs', 'batch', 'workers', 'push_every',
+                'seed', 'no_wandb', 'lr', 'wd', 'warmup', 'clip_stride'):
+        require(remote.config.get(key) == config[key], 'Remote configuration mismatch: ' + key)
+    seen, validation = {}, {}
+    for row in remote.scan_history(page_size=1000, min_step=0,
+                                   max_step=FINAL_STEP + 1, use_cache=False):
+        if 'loss' in row:
+            step = int(row['step'])
+            require(step == row['_step'] and step in expected and step not in seen,
+                    'Unexpected or duplicate remote training step')
+            for key in METRICS:
+                value = float(row[key])
+                require(math.isfinite(value) and math.isclose(
+                    value, float(expected[step][key]), rel_tol=1e-12, abs_tol=1e-12),
+                    'Remote saved-metric mismatch: ' + key)
+            seen[step] = True
+        if 'val_pred_loss' in row:
+            step = int(row['_step'])
+            value = float(row['val_pred_loss'])
+            require(step not in validation and math.isfinite(value),
+                    'Invalid remote validation history')
+            validation[step] = value
+    require(set(seen) == set(expected), 'Remote recovered training history is incomplete')
+    require(sorted(validation) == list(range(176000, 212001, 4000)) + [FINAL_STEP],
+            'Remote validation checkpoints are incomplete or unexpected')
+    require(math.isclose(validation[FINAL_STEP], float(train_state['val_pred_loss']),
+                         rel_tol=1e-12, abs_tol=1e-12), 'Final validation mismatch')
+    require(math.isclose(float(remote.summary['val_pred_loss']), validation[FINAL_STEP],
+                         rel_tol=1e-12, abs_tol=1e-12), 'Remote final validation summary mismatch')
+    require(stage_barrier(state_path) == stage, 'Completed S2 stage changed during verification')
+    require(all(path.read_bytes() == source_bytes[key] for key, path in paths.items()),
+            'Local evidence or verifier changed during verification')
+    record = {'status': 'passed', 'observed_utc': datetime.now(timezone.utc).isoformat(),
+              'remote_path': REMOTE, 'remote_state': remote.state, 'run_id': RUN_ID,
+              'resume_step': RESUME_STEP, 'final_step': FINAL_STEP,
+              'recovered_training_history_records': len(seen),
+              'full_saved_report_history_records': len(history),
+              'validation_steps': sorted(validation), 'final_validation_matches_saved': True,
+              'all_recovered_training_metrics_match_saved': True,
+              'input_files': {key: {'path': str(paths[key]), 'sha256': digest(data), 'bytes': len(data)}
+                              for key, data in source_bytes.items()},
+              'completed_s2_stage_sha256': digest(json.dumps(stage, sort_keys=True).encode()),
+              'scope': 'Read-only W&B logging verification, not model quality or HF durability.',
+              'limitations': ['W&B is an observed mutable service, not an immutable pinned artifact.',
+                              'The fresh recovery W&B run contains only steps after 172000.',
+                              'Earlier training history belongs to the original interrupted run.',
+                              'Whole checkpoint payload/tensor integrity is covered by separate audits.'],
+              'remote_write_calls': 0}
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    with args.output.open('x') as stream:
+        json.dump(record, stream, indent=2, allow_nan=False)
+        stream.write('\n')
+    print(json.dumps({'status': 'passed', 'output': str(args.output),
+                      'sha256': digest(args.output.read_bytes())}))
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as exc:
+        # API exception strings may include transport details; never print them.
+        print(json.dumps({'status': 'not_verified', 'exception_type': type(exc).__name__,
+                          'reason': 'A local barrier or read-only remote comparison failed; inspect safely.'}))
+        raise SystemExit(1) from None
