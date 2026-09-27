@@ -60,3 +60,9 @@ free, this leaves too little margin for sampling uncertainty and later artifacts
 Warm-memory decoding also does not establish end-to-end training speedup. No full
 cache, trainer change or restart was launched; the bounded measurements and scripts
 are retained locally with hashes.
+
+A [fresh concurrency sample](gpu_training_concurrency_20260926.json) during E2
+adaptation training measured 98.97% mean GPU activity across 30 samples (92-100%),
+with 16,333 of 32,607 MiB used. Walker and Push-T remained active together. This
+short window still does not measure arithmetic efficiency, but it provides no
+evidence of spare compute for a third large workload. Training recipes stayed fixed.

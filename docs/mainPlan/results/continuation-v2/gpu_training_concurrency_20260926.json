@@ -1,0 +1,36 @@
+{
+  "status": "measured",
+  "recorded_utc": "2026-09-27T00:00:07.850470+00:00",
+  "context": "Walker full LeWM training and PushT E2 predictor-adaptation comparison active concurrently",
+  "method": "30 successive nvidia-smi samples with one second between queries; read-only telemetry, no additional model or GPU job",
+  "gpu_busy_percent": {
+    "mean": 98.96666666666667,
+    "min": 92.0,
+    "max": 100.0
+  },
+  "memory_used_mib": {
+    "min": 16333,
+    "max": 16333
+  },
+  "memory_total_mib": 32607,
+  "power_watts_mean": 317.27366666666666,
+  "workers": {
+    "walker": {
+      "python_pid": 539743,
+      "start_ticks": 269920944,
+      "observed_progress": 82200,
+      "latest_uploaded_step": 80000
+    },
+    "pusht": {
+      "python_pid": 776156,
+      "start_ticks": 272393363,
+      "stage": "repairability_and_retention_gate"
+    }
+  },
+  "decision": "Keep the two active workloads and fixed scientific recipes unchanged. This sample does not support treating free VRAM as idle compute or launching a third heavy GPU workload.",
+  "limitations": [
+    "GPU busy time is not a measure of arithmetic efficiency or achieved FLOPs.",
+    "This short window describes the current adaptation-training phase and does not establish utilization at every stage.",
+    "No batch size, model architecture, data split, training schedule or worker configuration was changed."
+  ]
+}
