@@ -1,0 +1,249 @@
+"""Compact S4 presentation from terminal, independently audited saved evidence only."""
+from __future__ import annotations
+
+import argparse
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import shutil
+import sys
+
+REPO = Path('/workspace/Safety-Dial')
+sys.path.insert(0, str(REPO / 'experiments/scripts'))
+from walker_s4_figures import check, file_hash, finite, json_safe, load_evidence, paired_cells, table  # noqa: E402
+
+RUN_ID = 'walker2d-s4-recovery-20260927-1'
+WORKFLOW_ID = 'walker2d-recovery-20260927-1'
+STAGE = 'prospective_acquisition'
+CONFIG_SHA = 'd0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d'
+CHECKER_SHA = 'da0cede97b038eff4fd38f98d72b547e57f9974b5e93cca3c6570c1b903cc6d6'
+SOURCE_SHA = {
+    'experiments/scripts/walker_s4_figures.py': '1baecaefd23a5e90031b5dc418005389c3d31627e286d215b38089d8c968c6cb',
+    'experiments/scripts/walker_s3_figures.py': '99c4ba6e0c73b90809eed4c3527960b3ced800828386ad026baa491815005358',
+    'experiments/helpers/managedWorkflow.py': 'e298cd2450771519e9654ed587e49bed57da7ba3019c515bb42e0af8adb7d7d0',
+    'experiments/scripts/walker_s4_prospective.py': 'd69209c362b7987695752c12d68751d196b12a4a70d72d68f43436f307db887a',
+}
+CONFIG = REPO / 'configs/walker2d/recovery-20260927-1.yaml'
+STATE = REPO / 'runs/workflows' / WORKFLOW_ID / 'state.json'
+RUN = REPO / 'runs' / RUN_ID
+RESULTS = REPO / 'docs/mainPlan/results/s4' / RUN_ID
+BANK = REPO / 'data/study/walker2d/continuation-20260926-2/s4' / RUN_ID
+DEFAULT_OUTPUT = REPO / 'docs/mainPlan/reports/through-s4-20260927/assets/walker-s4'
+
+
+def read_bound(path, hashes):
+    """Interpret exactly the bytes whose identity is recorded."""
+    path = Path(path)
+    check(path.is_file() and not path.is_symlink(), 'Expected regular input file')
+    raw = path.read_bytes()
+    sha = hashlib.sha256(raw).hexdigest()
+    check(file_hash(path) == sha, 'Input changed while being read')
+    hashes[str(path)] = sha
+    return json.loads(raw)
+
+
+def terminal_state(state):
+    check(state['workflow_id'] == WORKFLOW_ID and state['config_sha256'] == CONFIG_SHA,
+          'Recovery workflow identity differs')
+    check(Path(state['cwd']).resolve() == REPO, 'Recovery working directory differs')
+    check(state['status'] in ('completed', 'gate_stopped'), 'Workflow is not terminal')
+    stage = state['stages'][STAGE]
+    check(stage['status'] in ('completed', 'gate_stopped'), 'S4 is not terminal')
+    attempts = stage.get('attempts', [])
+    check(attempts and attempts[-1].get('finished_unix') is not None
+          and attempts[-1].get('returncode') in (0, 2), 'S4 attempt is not finished')
+    return stage
+
+
+def extract(report):
+    """Select exact saved health contrasts without aggregating or estimating."""
+    if report['status'] == 'diagnostic_stop':
+        check(report['final_test_evaluated'] is False, 'Diagnostic stop cannot contain final comparisons')
+        return {'study_status': 'diagnostic_stop', 'run_id': report['run_id'],
+                'recorded_development_gate': report['gate'], 'panels': {}}
+    check(report['status'] == 'complete' and report['active_rules'] == ['health'],
+          'This report layout is reserved for the recorded health-only S4 study')
+    check(report['planned_budgets'] == [128, 512] and report['acquisition_seeds'] == [0, 1, 2],
+          'Unexpected paired grid')
+    paired = report['boundary_vs_random']
+    check(paired['contrast'] == 'boundary minus random' and paired['cluster_unit'] == 'source_episode'
+          and paired['confidence_level'] == .95, 'Unexpected saved contrast semantics')
+    panels = {}
+    for bank in ('test', 'stress'):
+        rows = []
+        for budget in report['planned_budgets']:
+            for seed in report['acquisition_seeds']:
+                entry = paired['by_budget'][str(budget)]['by_seed'][str(seed)]
+                item = entry[bank]['health']
+                paired_cells(item)
+                rows.append({'additional_branches': budget, 'seed': seed,
+                             'charged_steps': entry['charged_steps'],
+                             'evaluation_rows_sha256': entry['evaluation_rows_sha256'],
+                             'saved_paired_estimate': item})
+        panels[bank] = rows
+    return {'study_status': 'complete', 'run_id': report['run_id'], 'rule': 'health',
+            'contrast': paired['contrast'], 'confidence_level': paired['confidence_level'],
+            'cluster_unit': paired['cluster_unit'], 'panels': panels,
+            'presentation_only': {'x_axis_unit': 'percentage points', 'conversion': '100 times saved fractions',
+                                  'bootstrap_recomputed': False, 'cross_seed_pooling': False}}
+
+
+def plot(data, directory):
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from matplotlib.ticker import MaxNLocator
+    plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 10.5, 'axes.titlesize': 12,
+                         'axes.labelsize': 11, 'xtick.labelsize': 10.5, 'ytick.labelsize': 10.5,
+                         'pdf.fonttype': 42, 'ps.fonttype': 42})
+    if data['study_status'] == 'diagnostic_stop':
+        fig, ax = plt.subplots(figsize=(7, 3.3))
+        fig.subplots_adjust(left=.10, right=.97, bottom=.22, top=.75)
+        e = data['recorded_development_gate']['evidence']['health']
+        labels = ['Unsafe', 'Imagined\nfalse-safe', 'Imagination\nattributed']
+        values = [e['n_unsafe'], e['n_false_safe'], e['n_imagination']]
+        ax.bar(labels, values, color='#536D82')
+        ax.bar_label(ax.containers[0], padding=4)
+        ax.set_ylim(0, max(1, *values) * 1.28)
+        ax.set_ylabel('Development branches')
+        fig.suptitle('S4 stopped at the development gate', fontsize=13, y=.94)
+        fig.text(.5, .84, 'No final-test evaluation or acquisition comparison', ha='center', fontsize=11)
+        stem = 'development_stop_compact'
+    else:
+        fig, axes = plt.subplots(2, 1, figsize=(7, 6.6), sharex=True)
+        fig.subplots_adjust(left=.23, right=.97, bottom=.11, top=.89, hspace=.40)
+        endpoints = [0.]
+        for rows in data['panels'].values():
+            for row in rows:
+                item = row['saved_paired_estimate']
+                endpoints.extend(100 * item[k] for k in ('point', 'lo', 'hi') if finite(item[k]))
+        low, high = min(endpoints), max(endpoints)
+        span = max(high - low, 10.)
+        for ax, bank in zip(axes, ('test', 'stress'), strict=True):
+            rows = data['panels'][bank]
+            for y, row in enumerate(rows):
+                item = row['saved_paired_estimate']
+                if finite(item['point']):
+                    if finite(item['lo']) and finite(item['hi']):
+                        ax.hlines(y, 100 * item['lo'], 100 * item['hi'], color='#16678D', linewidth=1.8)
+                        ax.plot([100 * item['lo'], 100 * item['hi']], [y, y], '|', color='#16678D', markersize=7)
+                    ax.scatter(100 * item['point'], y, s=28, color='#16678D', zorder=3)
+                    if not finite(item['lo']):
+                        ax.annotate('interval undefined', (100 * item['point'], y), xytext=(5, 5),
+                                    textcoords='offset points', fontsize=10.5)
+                else:
+                    ax.text(.5, y, 'undefined', transform=ax.get_yaxis_transform(), ha='center',
+                            va='center', color='#555555', fontsize=10.5)
+            ax.axvline(0, color='#444444', linestyle=':', linewidth=1)
+            ax.axhline(2.5, color='#CCCCCC', linewidth=.8)
+            ax.set_yticks(range(6), [f"N={r['additional_branches']:,}, seed {r['seed']}" for r in rows])
+            ax.set_ylim(5.65, -.65)
+            ax.set_xlim(low - .09 * span, high + .09 * span)
+            ax.xaxis.set_major_locator(MaxNLocator(nbins=6))
+            ax.grid(axis='x', alpha=.18)
+            ax.set_title(f'{bank.title()}: health', loc='left', pad=9)
+            ax.spines[['top', 'right']].set_visible(False)
+        axes[-1].set_xlabel('Boundary minus random FSA (percentage points)', labelpad=9)
+        fig.suptitle('S4 paired acquisition comparisons', fontsize=13, y=.974)
+        fig.text(.5, .932, 'Saved 95% source-episode bootstrap intervals; negative favors boundary',
+                 ha='center', fontsize=10.5)
+        stem = 'paired_fsa_compact'
+    fig.canvas.draw()
+    minimum = min(t.get_fontsize() for t in fig.findobj(matplotlib.text.Text) if t.get_visible() and t.get_text())
+    check(minimum >= 10.5, 'A plot text item is too small')
+    fig.savefig(directory / (stem + '.png'), dpi=200)
+    fig.savefig(directory / (stem + '.pdf'))
+    plt.close(fig)
+    return {'stem': stem, 'width_inches': 7, 'minimum_text_fontsize_pt': minimum,
+            'height_inches': 3.3 if data['study_status'] == 'diagnostic_stop' else 6.6}
+
+
+def caption(data):
+    if data['study_status'] == 'diagnostic_stop':
+        return ('# Walker S4: development stop\n\nThe saved development prerequisite did not pass. '
+                'This chart shows development counts only. No final-test result or acquisition comparison is inferred.\n')
+    lines = ['# Walker S4: compact saved paired comparisons', '',
+             'Figure caption: Each dot is the saved boundary-minus-random false-safe acceptance (FSA) difference for one acquisition seed and additional-branch budget N. '
+             'Horizontal segments are the exact saved 95% bootstrap intervals clustered by source episode. Negative differences favor boundary. '
+             'Test and stress are separate panels; seeds are not pooled. Each model uses its own margin calibrated on development and held fixed on test/stress. '
+             'Achieved acceptance rates differ between arms, so these are not comparisons at exactly equal test or stress acceptance. '
+             'The figure copies saved estimates and intervals; it performs no new bootstrap or population-level inference. '
+             'Undefined full-data estimates have no dot or interval, even if some bootstrap replicates were usable. '
+             'N counts additional branches; allocated charged simulator steps also include source generation and common-seed experience. '
+             'Repeated allocations must not be summed as a lifetime cost.', '',
+             'The PNG is 7 inches wide at 200 dpi; the PDF is vector output. All figure text is at least 10.5 pt. '
+             '`plotted_data.json` retains each complete saved paired record, including exact accepted counts, censor support, achieved acceptance and bootstrap support. '
+             'Nonfinite saved values become JSON null without being replaced by zero. `manifest.json` binds original inputs, qualified output identities, and inert generator bytes.', '']
+    def pct(value):
+        return f'{100 * value:.3f}%' if finite(value) else 'undefined'
+    for bank, rows in data['panels'].items():
+        lines += [f'## {bank.title()}', '']
+        cells = []
+        for row in rows:
+            p = row['saved_paired_estimate']
+            cells.append([f"{row['additional_branches']:,}", row['seed'], f"{row['charged_steps']:,}",
+                          pct(p['reference']['acceptance_rate']), pct(p['updated']['acceptance_rate']),
+                          pct(p['reference']['fsa']), pct(p['updated']['fsa']),
+                          'undefined' if not finite(p['point']) else f"{100 * p['point']:.3f}",
+                          'undefined' if not finite(p['lo']) else f"[{100 * p['lo']:.3f}, {100 * p['hi']:.3f}]",
+                          f"{p['n_boot']}/{p['n_boot_requested']}"])
+        lines += [table(['N', 'Seed', 'Charged steps', 'Random AR', 'Boundary AR', 'Random FSA', 'Boundary FSA',
+                         'Difference (pp)', '95% interval (pp)', 'Usable bootstrap'], cells), '']
+    return '\n'.join(lines)
+
+
+def generate(output, local_audit):
+    output, local_audit = Path(output).resolve(), Path(local_audit).resolve()
+    check(not output.exists(), 'Refusing existing output directory')
+    check(all(not output.is_relative_to(p) and not p.is_relative_to(output) for p in (RUN, RESULTS, BANK)),
+          'Output overlaps scientific evidence')
+    hashes = {str(Path(__file__).resolve()): file_hash(Path(__file__))}
+    check(all(file_hash(REPO / p) == sha for p, sha in SOURCE_SHA.items()), 'Prepared source changed')
+    hashes.update({str(REPO / p): sha for p, sha in SOURCE_SHA.items()})
+    check(file_hash(CONFIG) == CONFIG_SHA, 'Frozen recovery config changed')
+    hashes[str(CONFIG)] = CONFIG_SHA
+    state = read_bound(STATE, hashes)
+    stage = terminal_state(state)  # Before any scientific output is opened.
+    audit = read_bound(local_audit, hashes)
+    check(audit['status'] == 'passed' and audit['run_id'] == RUN_ID and audit['workflow_stage'] == STAGE
+          and audit['checker_sha256'] == CHECKER_SHA and audit['workflow_config_sha256'] == CONFIG_SHA,
+          'Missing or mismatched passed independent local audit')
+    check(audit['source_output_hashes'] == stage['output_hashes'], 'Audited output identities differ')
+    report, gate, _, verified_stage, evidence_hashes = load_evidence(RUN, RESULTS, BANK, STATE, STAGE)
+    check(verified_stage == stage and report['status'] == audit['study_status'] and gate == audit['gate'],
+          'Terminal scientific branch differs from the passed local audit')
+    hashes.update(evidence_hashes)
+    data = extract(report)
+    output.mkdir(parents=True, exist_ok=False)
+    (output / 'README.md').write_text(caption(data))
+    (output / 'plotted_data.json').write_text(json.dumps(json_safe(data), indent=2, allow_nan=False) + '\n')
+    shutil.copyfile(Path(__file__), output / 'generator.py.txt')
+    layout = plot(data, output)
+    check(all(file_hash(Path(p)) == h for p, h in hashes.items()), 'Input or source changed during rendering')
+    # Rehash the complete original trees through the existing terminal barrier.
+    from walker_s4_figures import frozen_stage
+    check(frozen_stage(STATE, STAGE, (RUN, RESULTS, BANK)) == stage, 'Terminal outputs changed during rendering')
+    manifest = {'status': 'complete', 'run_id': RUN_ID, 'study_status': report['status'],
+                'created_utc': datetime.now(timezone.utc).isoformat(), 'inputs_sha256': hashes,
+                'passed_local_audit': str(local_audit), 'workflow_stage': STAGE,
+                'terminal_output_hashes': stage['output_hashes'], 'input_artifacts_unchanged': True,
+                'figure_layout': layout, 'bootstrap_recomputed': False, 'cross_seed_pooling': False,
+                'model_calls': 0, 'simulator_steps': 0, 'network_calls': 0,
+                'files': {p.name: {'sha256': file_hash(p), 'bytes': p.stat().st_size}
+                          for p in sorted(output.iterdir()) if p.is_file()}}
+    (output / 'manifest.json').write_text(json.dumps(manifest, indent=2, allow_nan=False) + '\n')
+    return manifest
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--output-dir', type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument('--local-audit', type=Path, default=Path('/tmp/walker_s4_recovery_final_evidence.json'))
+    args = parser.parse_args()
+    result = generate(args.output_dir, args.local_audit)
+    print(json.dumps({'status': result['status'], 'output': str(args.output_dir), 'study_status': result['study_status']}))
+
+
+if __name__ == '__main__':
+    main()

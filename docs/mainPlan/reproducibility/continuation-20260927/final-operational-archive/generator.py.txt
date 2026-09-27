@@ -1,0 +1,93 @@
+"""Preserve terminal operational records only after a confirmed final workflow hash."""
+from pathlib import Path
+from datetime import datetime,timezone
+import argparse,hashlib,json,os,re,signal
+ROOT=Path('/workspace/Safety-Dial')
+PREP=ROOT/'runs/through-s4-operational-archive-preparation-20260927'
+OUT=ROOT/'runs/through-s4-operational-archive-final-20260927'
+STATE='runs/workflows/walker2d-recovery-20260927-1/state.json'
+LOG='runs/workflows/walker2d-recovery-20260927-1/logs/prospective_acquisition.attempt-001.log'
+PREP_MANIFEST_SHA='99bad6271a775b5c0773e72b9648b81864608417f1ca00140bac08dc8f4ba200'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def statid(p):
+ s=p.stat();return [s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns]
+def stable_read(p):
+ assert p.is_file() and not p.is_symlink(),'Expected regular nonsymlink source'
+ a=statid(p);b=p.read_bytes();assert statid(p)==a,'Source changed during read';return b,a
+def deadline(_s,_f):
+ os.write(2,b'Operational preservation deadline exceeded; no completion claim.\n');os._exit(124)
+def main():
+ ap=argparse.ArgumentParser();ap.add_argument('--expected-state-sha256',required=True);ap.add_argument('--expected-log-sha256',required=True);args=ap.parse_args()
+ assert re.fullmatch('[0-9a-f]{64}',args.expected_state_sha256) and re.fullmatch('[0-9a-f]{64}',args.expected_log_sha256),'Expected confirmed terminal hashes'
+ assert not OUT.exists(),'Fresh final archive required'
+ signal.signal(signal.SIGALRM,deadline);signal.alarm(300)
+ mb,mi=stable_read(PREP/'manifest.json');assert sha(mb)==PREP_MANIFEST_SHA,'Preparation bundle changed'
+ prep=json.loads(mb);assert prep['totals']['copied_original_files']==36
+ prep_before={str(p.relative_to(PREP)):sha(stable_read(p)[0]) for p in sorted(PREP.rglob('*')) if p.is_file()}
+ assert len(prep_before)==39
+ source,si=stable_read(PREP/'generator.py.txt');assert sha(source)==prep['additional_files']['generator.py.txt']['sha256']
+ # Reuse the exact reviewed scanner definition, without executing the preparation
+ # program or reading .env/credential stores. Needles stay in memory only.
+ text=source.decode();scanner=text[text.index('# No .env file'):text.index('selected={};excluded=[];workflow_rows=[];pending=[]')]
+ namespace={'os':os,'re':re};exec(compile(scanner,'<preserved-scanner>','exec'),namespace)
+ scan=namespace['scan']
+ state_bytes,state_stat=stable_read(ROOT/STATE);assert sha(state_bytes)==args.expected_state_sha256,'Terminal state hash differs from confirmed barrier'
+ assert not scan(state_bytes),'Terminal state failed credential screening'
+ state=json.loads(state_bytes)
+ assert state['workflow_id']=='walker2d-recovery-20260927-1' and state['cwd']==str(ROOT)
+ assert state['status'] in ('completed','gate_stopped'),'Whole workflow is not terminal'
+ assert state['config_sha256']=='d0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d'
+ assert all(s['status']!='running' for s in state['stages'].values()),'A stage remains running'
+ for sid in ('lewm_a_full','physical_probe_gate'):
+  st=state['stages'][sid];assert st['status']=='completed' and st['attempts'][-1]['returncode']==0 and st['attempts'][-1].get('finished_unix')
+ s4=state['stages']['prospective_acquisition'];assert s4['status'] in ('completed','gate_stopped')
+ assert len(s4['attempts'])==1 and s4['attempts'][0].get('finished_unix')
+ att=s4['attempts'][0];assert att['returncode'] in (0,2) and Path(att['log'])==ROOT/LOG
+ if s4['status']=='completed':assert state['status']=='completed' and att['returncode']==0 and s4['gate']['passes'] is True
+ else:assert state['status']=='gate_stopped' and att['returncode']==2 and s4['gate']['passes'] is False
+ log_bytes,log_stat=stable_read(ROOT/LOG);assert sha(log_bytes)==args.expected_log_sha256,'Closed S4 log hash differs from confirmed barrier'
+ assert not scan(log_bytes),'Closed S4 log failed credential screening'
+ selected=[]
+ for old in prep['copied_files']:
+  b,ident=stable_read(ROOT/old['source_path'])
+  assert sha(b)==old['sha256'] and len(b)==old['bytes'],'Original differs from preparation'
+  assert ident==old['stat_identity'],'Original file identity differs from preparation'
+  assert stable_read(PREP/old['archive_path'])[0]==b,'Preparation copy differs'
+  assert not scan(b),'Prepared source failed current credential screen'
+  row=dict(old);row['preserved_from_preparation']=True;selected.append((b,row))
+ for rel,b,ident,role in [(STATE,state_bytes,state_stat,'terminal_recovery_workflow_state'),(LOG,log_bytes,log_stat,'closed_actual_execution_log')]:
+  selected.append((b,{'source_path':rel,'archive_path':'files/'+rel,'sha256':sha(b),'bytes':len(b),'stat_identity':ident,'role':role,'workflow_id':state['workflow_id'],'actual_executed_python_source':False,'credential_scan':'no_candidates_detected','preserved_from_preparation':False,'execution_binding':'Confirmed terminal managed-workflow state and closed S4 attempt; stage output hashes are recorded, not independently re-audited here.'}))
+ assert len(selected)==38
+ # Complete validation before making the fresh bundle.
+ OUT.mkdir()
+ for b,row in selected:
+  dest=OUT/row['archive_path'];dest.parent.mkdir(parents=True,exist_ok=True)
+  with dest.open('xb') as f:f.write(b)
+  assert stable_read(dest)[0]==b and stable_read(ROOT/row['source_path'])==(b,row['stat_identity'])
+ own,own_stat=stable_read(Path(__file__));assert not scan(own)
+ (OUT/'generator.py.txt').write_bytes(own)
+ readme='''# Through-S4 final operational archive: 27 September 2026
+
+This bundle preserves terminal operational records. It is not a scientific completion certificate or a claim of remote publication. The prior 39-file preparation bundle is unchanged.
+
+The `files/` tree contains the exact 36 original operational files from preparation plus the confirmed terminal Walker recovery workflow state and its closed S4 attempt log: 38 source files. It retains six workflow configurations, archived managed-service recipes, prior Push-T failures and gate stops, and interrupted and completed Walker logs. Each source has a SHA256, byte count, before/after file identity and execution-versus-configuration label in the manifest.
+
+The original interrupted Walker continuation state still says `running`. That stale state is intentionally preserved byte-for-byte; the cited interruption/recovery evidence explains why it is not a live process or successful completion claim. The newly included recovery state is the terminal record. Conditional stages merely present in YAML are not thereby claimed executed. S5 remains excluded.
+
+Logs are actual recorded process output. Workflow configurations are bound to saved config hashes. Archived supervisor wrappers/configs are configuration evidence only; their inclusion does not establish exact installed/executed bytes. Already preserved Python source snapshots are referenced, not duplicated or invented. S3 missing executed-source provenance is not repaired by these logs.
+
+The exact scanner definition from preparation was reused: credential/token/private-key/URL patterns and in-memory matching against available inherited credential values. No values, matched snippets or environment dump were printed or saved; no `.env`, credential store or cache was read/copied. No candidate was present in copied files. This bounded screening cannot prove the absence of every unknown secret. Symbolic variable and environment-setup references do not include their contents.
+
+The source workflow status, final child return code and externally confirmed state/log hashes are checked before copying. Source and preparation bytes are checked again afterward. This archival step does not re-evaluate scientific gates, row arithmetic, model durability or stage output-tree hashes; separate local and remote evidence audits cover those claims.
+
+No scientific arrays/models, live logs, credentials, cache, model/simulator execution, remote call, upload, commit or push is included. No original was modified. Final report/project publication and the separate E2 approval hold remain outside this operation. `generator.py.txt` is inert documentation, not a service launcher.
+'''
+ (OUT/'README.md').write_text(readme)
+ for b,row in selected:assert stable_read(ROOT/row['source_path'])==(b,row['stat_identity'])
+ prep_after={str(p.relative_to(PREP)):sha(stable_read(p)[0]) for p in sorted(PREP.rglob('*')) if p.is_file()}
+ assert prep_after==prep_before,'Preparation bundle changed'
+ assert stable_read(Path(__file__))==(own,own_stat)
+ manifest={'kind':'through_s4_terminal_operational_archive_v1','status':'terminal_operational_records_preserved_not_project_completion','created_utc':datetime.now(timezone.utc).isoformat(),'preparation':{'path':str(PREP.relative_to(ROOT)),'manifest_sha256':PREP_MANIFEST_SHA,'file_count':39,'all_file_hashes_before_after':prep_before,'unchanged':True},'terminal_barrier':{'workflow_id':state['workflow_id'],'workflow_status':state['status'],'state_path':STATE,'state_sha256':sha(state_bytes),'config_sha256':state['config_sha256'],'S4_stage_status':s4['status'],'S4_attempt_returncode':att['returncode'],'S4_attempt_finished_unix':att['finished_unix'],'S4_log_path':LOG,'S4_log_sha256':sha(log_bytes),'recorded_S4_gate':s4['gate'],'recorded_S4_output_hashes':s4.get('output_hashes'),'scope':'Operational archive barrier only; scientific qualification and payload output hashes are not independently recomputed.'},'copied_files':[r for _,r in selected],'totals':{'copied_original_files':38,'copied_original_bytes':sum(len(b) for b,_ in selected)},'credential_screening':{**prep['credential_screening'],'candidate_files_excluded':0,'scanner_source_sha256':sha(scanner.encode()),'same_reviewed_scanner_definition':True},'existing_source_and_audit_references':prep['existing_source_and_audit_references'],'pending_operational_records':[],'preserved_caveats':['Original interrupted state remains stale running; no status repair or original mutation.','Service recipes are archived configuration, not independently verified installed/executed source.','YAML contains conditional unexecuted stages; read attempt records. S5 excluded.','No scientific completion or remote publication claim. Separate final local/remote audits remain authoritative.','Metadata and credential screening are scoped observations; historical source gaps and E2 approval hold remain.'],'checks':{'externally_confirmed_terminal_hashes_match':True,'whole_workflow_terminal':True,'S4_child_closed':True,'exact_36_prior_originals_preserved':True,'two_new_terminal_records_byte_identical':True,'original_file_identities_and_hashes_stable':True,'preparation_39_files_unchanged':True,'no_executed_source_invented':True},'additional_files':{'README.md':{'sha256':sha((OUT/'README.md').read_bytes()),'bytes':(OUT/'README.md').stat().st_size},'generator.py.txt':{'sha256':sha(own),'bytes':len(own),'original_path':str(Path(__file__))}},'network_calls':0,'uploads_commits_pushes':0,'model_simulator_calls':0,'original_mutations':0}
+ (OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+ print(json.dumps({'path':str(OUT.relative_to(ROOT)),'files':41,'bytes':sum(p.stat().st_size for p in OUT.rglob('*') if p.is_file()),'copied_original_bytes':manifest['totals']['copied_original_bytes'],'manifest_sha256':sha((OUT/'manifest.json').read_bytes()),'readme_sha256':sha((OUT/'README.md').read_bytes()),'workflow_status':state['status'],'S4_returncode':att['returncode'],'preparation_unchanged':True},indent=2))
+if __name__=='__main__':main()
