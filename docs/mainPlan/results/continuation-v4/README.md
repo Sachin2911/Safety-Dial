@@ -145,3 +145,11 @@ complete hazard extents and explicit censoring. It explains both the first-recip
 fallback and the 80 px fixed-margin fallback after an undefined development target.
 All saved metrics, examples, original outputs and gates remain unchanged. Sixteen
 focused CPU tests, independent provenance/code review and visual review passed.
+
+
+The [summary charts](repair-summary-charts/README.md) provide PNG and vector PDF
+figures for test censoring bounds and acceptance, ordinary prediction and goal-retention
+completeness, and charged E2 costs. They retain undefined point rates, distinguish
+identification bounds from confidence intervals, and label full-horizon counts separately
+from goal success. [Validation](e2_summary_charts_validation.json) includes seven
+focused tests and independent source/visual review. The original E2 outputs are unchanged.
