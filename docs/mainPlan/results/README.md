@@ -8,12 +8,16 @@ Current status, 27 September: [Walker LeWM training](continuation-v2/README.md) 
 running toward 214,780 updates after restoring its verified 172,000-step checkpoint
 following an instance restart. [Fresh Push-T E2](continuation-v4/README.md)
 finished and stopped at its repair/retention gate; conditional acquisition, transfer
-and closed-loop stages did not start.
+and closed-loop stages did not start. The current user-directed scope ends at S4;
+S5 is excluded. The final PDF and complete publication checks remain pending.
 
 The table below preserves the original launch-day record. Its E1/E2/E3 results are
 now historical development diagnostics because [the later protocol audit](continuation-audit/shared_protocol_audit.md)
 found 14 source trajectories crossing development and test roles. Its running and
-queued statuses are historical, not the current execution state.
+queued statuses are historical, not the current execution state. Previously untracked
+E3/E4 and Walker S3/S4 report files are preserved byte-for-byte in the
+[historical preservation record](continuation-audit/historical_result_preservation_20260927.json).
+Their stored gate flags do not qualify the current continuation.
 
 | Folder | Experiment | Status (26 September 2026) |
 |---|---|---|
@@ -27,5 +31,5 @@ queued statuses are historical, not the current execution state.
 | `s5/` | Pretraining vs adaptation | Set-B builder ready (`walker_s5_setb.py`) |
 
 Entry points live in `experiments/scripts/pusht_e*.py` and `walker_s*.py`; helpers in
-`experiments/helpers/` (new files only; historical files are untouched). Logs of the runs
+`experiments/helpers/`. Logs of the runs
 on the instance are under `runs/logs/` (not committed).
