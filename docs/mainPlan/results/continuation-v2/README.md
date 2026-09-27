@@ -161,3 +161,21 @@ remain undefined. It verifies frozen output identities and writes only to a fres
 sibling directory. [Preparation validation](walker_s4_presentation_validation.json)
 passed 16 focused tests, Ruff, source review and synthetic visual review. No actual
 S4 result has been plotted or inferred from these layout tests.
+
+
+## Post hoc data alignment and original provenance
+
+A [bounded saved-data alignment audit](walker_s1_alignment/README.md) checked fixed
+head/tail windows from the first four training and probe episodes, without inspecting
+final-test roots. All 384 sampled health and cost labels matched their definitions;
+376 successor-based velocity comparisons matched exactly. Final post-action states
+were not retained, leaving eight velocity and four benchmark health-termination
+comparisons unavailable. Seven focused tests and visual review passed. This is post
+hoc evidence, not a claim that the planned review preceded pretraining.
+
+The corrected plan paragraph distinguishes pre-action health from transition cost
+and velocity. Probe data retain a copied termination-on render-context metadata flag,
+although collection disabled health termination; the audit documents both facts
+without changing data. The [S0/S1 evidence index](walker_s0_s1_provenance.json) links
+the existing observability results, source data manifests and private upload receipt.
+Unknown original S0 seeds, split identities and executed source bytes remain unknown.

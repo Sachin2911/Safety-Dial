@@ -105,9 +105,12 @@ State-only HDF5 with lazy rendering, collected by a new script that imports
   Storage is about 0.8 GB, and collection takes minutes to an hour.
 - Split whole episodes into pretraining, probe, development and test, and store the episode
   lists with the data. Test episodes never enter pretraining.
-- Check label alignment on hand-inspected traces: the collector stores the state before
-  each action, so the cost and health at row `t` belong to the transition caused by
-  action `t`.
+- Check label alignment on hand-inspected recorded traces. Row `t` stores pre-action
+  state `s_t`, its `healthy[t]` flag, and action `a_t`. `x_velocity[t]`, `cost[t]`,
+  `reward[t]`, `terminated[t]` and `truncated[t]` describe the transition caused by
+  `a_t`. A state-frame velocity label uses the preceding within-episode transition;
+  episode starts lack that measurement and any placeholder must be stated. Terminal
+  post-action states may be absent from the recorded episode.
 - Upload the data and split lists to a private Hugging Face dataset repository.
 
 ## S2: train LeWM-A on the 5090 (weeks of 5 and 12 October)
