@@ -1,0 +1,241 @@
+"""Read-only metadata coverage for seven fixed historical diagnostic model bundles."""
+from __future__ import annotations
+
+from datetime import datetime, timezone
+import hashlib
+import json
+import os
+from pathlib import Path
+import signal
+
+ROOT = Path('/workspace/Safety-Dial')
+OUTPUT = ROOT / 'runs/continuation-audit/historical_model_remote_coverage_20260927.json'
+DEADLINE = 240
+REPOS = {'pusht': 'Sachioster/safetydial-pusht', 'walker2d': 'Sachioster/safetydial-walker2d'}
+RUNS = (
+    'pusht-acq-20260926-1-boundary-s0',
+    'pusht-acq-20260926-1-random-s0',
+    'pusht-adapt-e2-20260926-1',
+    'walker2d-probes-20260926-1',
+    'walker2d-s4-20260926-1-boundary-s0',
+    'walker2d-s4-20260926-1-random-s0',
+    'pusht-probes-20260926-1',
+)
+IGNORED = {'hf_upload.json', 'hf_upload.json.tmp'}
+
+
+class Deadline(BaseException):
+    pass
+
+
+def alarm(_sig, _frame):
+    raise Deadline()
+
+
+def record(path):
+    assert path.is_file() and not path.is_symlink(), 'Nonregular local payload'
+    before = path.stat()
+    a, b = hashlib.sha256(), hashlib.sha1(f'blob {before.st_size}\0'.encode())
+    with path.open('rb') as f:
+        for block in iter(lambda: f.read(1024 * 1024), b''):
+            a.update(block)
+            b.update(block)
+    fields = ('st_dev', 'st_ino', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+    identity = [getattr(before, k) for k in fields]
+    assert identity == [getattr(path.stat(), k) for k in fields], 'Local file changed'
+    return {'sha256': a.hexdigest(), 'git_blob_sha1': b.hexdigest(),
+            'bytes': before.st_size, 'stat_identity': identity}
+
+
+def local_tree(directory):
+    files = sorted(directory.rglob('*'))
+    assert not directory.is_symlink() and not any(p.is_symlink() for p in files)
+    result = {str(p.relative_to(directory)): record(p) for p in files if p.is_file()}
+    assert files == sorted(directory.rglob('*')), 'Local membership changed'
+    return result
+
+
+def field(obj, key):
+    return obj.get(key) if isinstance(obj, dict) else getattr(obj, key, None)
+
+
+def compare(files, entries, prefix):
+    remote = {}
+    for item in entries:
+        assert item.path.startswith(prefix + '/'), 'Remote prefix escaped'
+        if not hasattr(item, 'blob_id'):
+            assert hasattr(item, 'tree_id'), 'Unknown metadata entry'
+            continue
+        name = item.path[len(prefix) + 1:]
+        assert name not in remote, 'Duplicate metadata entry'
+        remote[name] = item
+    expected = {k: v for k, v in files.items() if Path(k).name not in IGNORED}
+    rows = {}
+    for name in sorted(set(expected) | set(remote)):
+        local, item = expected.get(name), remote.get(name)
+        if local is None:
+            rows[name] = {'status': 'unexpected_remote_file', 'remote_bytes': item.size}
+        elif item is None:
+            rows[name] = {'status': 'missing_remote_file'}
+        else:
+            lfs = getattr(item, 'lfs', None)
+            if lfs:
+                value = field(lfs, 'sha256')
+                size = field(lfs, 'size')
+                match = (value == local['sha256'] and size == local['bytes']
+                         and item.size == local['bytes'])
+                rows[name] = {'status': 'match' if match else 'mismatch',
+                              'method': 'lfs_sha256_and_size', 'remote_sha256': value,
+                              'remote_bytes': item.size, 'lfs_bytes': size}
+            else:
+                match = item.blob_id == local['git_blob_sha1'] and item.size == local['bytes']
+                rows[name] = {'status': 'match' if match else 'mismatch',
+                              'method': 'canonical_git_blob_sha1_and_size',
+                              'remote_git_blob_sha1': item.blob_id, 'remote_bytes': item.size}
+    return {'exact_payload_match': bool(expected) and all(x['status'] == 'match' for x in rows.values()),
+            'local_payload_files': len(expected), 'remote_payload_files': len(remote), 'files': rows}
+
+
+def safe_error(exc):
+    response = getattr(exc, 'response', None)
+    return {'type': type(exc).__name__, 'http_status': getattr(response, 'status_code', None)}
+
+
+def main():
+    assert not OUTPUT.exists() and not OUTPUT.with_suffix('.md').exists(), 'Fresh output required'
+    signal.signal(signal.SIGALRM, alarm)
+    signal.setitimer(signal.ITIMER_REAL, DEADLINE)
+    result = {'kind': 'historical_model_remote_coverage_v1', 'status': 'in_progress',
+              'started_utc': datetime.now(timezone.utc).isoformat(),
+              'scientific_role': 'Unqualified historical diagnostic bundles, not the current qualified continuation.',
+              'max_seconds': DEADLINE, 'api_endpoint': 'https://huggingface.co',
+              'repos_allowed': list(REPOS.values()), 'remote_write_calls': 0,
+              'remote_file_downloads': 0, 'model_deserialization': False,
+              'new_receipts_in_originals': False, 'runs': [], 'repository_observations': {}}
+    trees = {}
+    try:
+        own = record(Path(__file__))
+        result['verifier'] = {'path': str(Path(__file__)), **own}
+        proposal = ROOT / 'runs/continuation-audit/final_archive_coverage_preparation_20260927.json'
+        proposal_record = record(proposal)
+        result['coverage_proposal'] = {'path': str(proposal.relative_to(ROOT)), **proposal_record}
+        for run_id in RUNS:
+            directory = ROOT / 'runs' / run_id
+            files = local_tree(directory)
+            trees[run_id] = files
+            manifest_bytes = (directory / 'manifest.json').read_bytes()
+            assert hashlib.sha256(manifest_bytes).hexdigest() == files['manifest.json']['sha256']
+            manifest = json.loads(manifest_bytes)
+            assert manifest['run_id'] == run_id and manifest['kind'] in {'adapted', 'probes'}
+            task = 'walker2d' if run_id.startswith('walker2d-') else 'pusht'
+            result['runs'].append({'run_id': run_id, 'local_dir': str(directory.relative_to(ROOT)),
+                                   'repo_id': REPOS[task], 'repo_type': 'model',
+                                   'prefix': f"{manifest['kind']}/{run_id}",
+                                   'prefix_derivation': 'Exact local manifest kind and run_id; matching HFStore upload_run convention.',
+                                   'manifest_created_utc': manifest.get('created_utc'),
+                                   'local_files': files, 'tag': run_id, 'queries': [],
+                                   'status': 'unresolved_not_yet_checked'})
+        from dotenv import load_dotenv
+        from huggingface_hub import HfApi, get_token
+        load_dotenv(ROOT / '.env', override=False)
+        token = os.environ.get('HF_TOKEN') or get_token()
+        assert token, 'Existing noninteractive authentication required'
+        api = HfApi(endpoint='https://huggingface.co', token=token)
+        tags_by_repo = {}
+        for repo in REPOS.values():
+            info = api.repo_info(repo_id=repo, repo_type='model', timeout=30)
+            assert info.id == repo and info.private is True, 'Expected existing private task repository'
+            refs = api.list_repo_refs(repo_id=repo, repo_type='model')
+            tags_by_repo[repo] = {x.name: x.target_commit for x in refs.tags}
+            result['repository_observations'][repo] = {
+                'private': True, 'pinned_head_at_start': info.sha,
+                'relevant_tags_at_start': {r: tags_by_repo[repo].get(r) for r in RUNS
+                                           if REPOS['walker2d' if r.startswith('walker2d-') else 'pusht'] == repo},
+            }
+        for run in result['runs']:
+            repo = run['repo_id']
+            tag_sha = tags_by_repo[repo].get(run['tag'])
+            run['tag_found'] = tag_sha is not None
+            candidates = [('run_id_tag', tag_sha)] if tag_sha else []
+            head = result['repository_observations'][repo]['pinned_head_at_start']
+            if head != tag_sha:
+                candidates.append(('pinned_repository_head_fallback', head))
+            for source, revision in candidates:
+                observation = {'source': source, 'revision': revision}
+                run['queries'].append(observation)
+                try:
+                    info = api.repo_info(repo_id=repo, repo_type='model', revision=revision, timeout=30)
+                    assert info.id == repo and info.private is True and info.sha == revision
+                    entries = list(api.list_repo_tree(repo_id=repo, repo_type='model', revision=revision,
+                                                      path_in_repo=run['prefix'], recursive=True, expand=False))
+                    observation.update(compare(run['local_files'], entries, run['prefix']))
+                except Exception as exc:
+                    observation['error'] = safe_error(exc)
+                    observation['exact_payload_match'] = False
+                if observation['exact_payload_match']:
+                    run['status'] = ('verified_exact_tagged_payload' if source == 'run_id_tag'
+                                     else 'verified_exact_pinned_payload_without_matching_run_tag')
+                    run['verified_revision'] = revision
+                    run['verified_file_count'] = observation['local_payload_files']
+                    break
+            else:
+                run['status'] = 'unresolved_needs_archive_or_further_provenance'
+                run['limit'] = 'No exact payload match in the run-ID tag or observed pinned repository head; no claim of absence from all repository history.'
+        for repo in REPOS.values():
+            refs = api.list_repo_refs(repo_id=repo, repo_type='model')
+            after = {x.name: x.target_commit for x in refs.tags}
+            expected = result['repository_observations'][repo]['relevant_tags_at_start']
+            assert {k: after.get(k) for k in expected} == expected, 'Relevant run tags changed during audit'
+            info = api.repo_info(repo_id=repo, repo_type='model',
+                                 revision=result['repository_observations'][repo]['pinned_head_at_start'], timeout=30)
+            assert info.id == repo and info.private is True, 'Repository privacy changed'
+            result['repository_observations'][repo]['relevant_tags_unchanged_after'] = True
+            result['repository_observations'][repo]['private_after'] = True
+        for run_id, before in trees.items():
+            assert local_tree(ROOT / 'runs' / run_id) == before, 'Local payload changed across remote audit'
+        assert record(Path(__file__)) == own and record(proposal) == proposal_record, 'Source input changed'
+        result['local_payloads_and_source_unchanged'] = True
+        resolved = [r for r in result['runs'] if r['status'].startswith('verified_exact')]
+        result['summary'] = {'runs': len(RUNS), 'exact_remote_payloads': len(resolved),
+                             'exact_tagged_payloads': sum(r['status'] == 'verified_exact_tagged_payload' for r in resolved),
+                             'unresolved': len(RUNS) - len(resolved),
+                             'verified_files': sum(r['verified_file_count'] for r in resolved),
+                             'local_files': sum(len(x) for x in trees.values()),
+                             'local_payload_bytes': sum(v['bytes'] for t in trees.values() for v in t.values())}
+        result['status'] = 'complete_all_exact_payloads_verified' if len(resolved) == len(RUNS) else 'complete_with_unresolved_coverage'
+    except (Deadline, Exception) as exc:
+        result['status'] = 'incomplete_deadline_or_verification_failure'
+        result['safe_error'] = safe_error(exc)
+        result['coverage_claim'] = 'Incomplete; any provisional per-run observations require a completed audit before claiming durable coverage.'
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+    result['finished_utc'] = datetime.now(timezone.utc).isoformat()
+    result['limitations'] = [
+        'Authenticated pinned metadata and local hashes only; no remote bytes downloaded, tensor decoding or restore test.',
+        'Tags and privacy were observed metadata and can later be changed by repository administrators.',
+        'Coverage verifies local stored payload only, not scientific correctness, qualified selection, or recoverability of missing original base assets.',
+        'The absence of a local upload receipt did not determine remote coverage. No new receipt was written into any original directory.',
+        'The seven runs remain unqualified historical diagnostics and are distinct from current Push-T E2 or Walker S2/S3/S4 results.',
+        'This audit authorizes no upload and does not resolve or bypass the separate blocked 90-file Push-T E2 result/media archive.',
+    ]
+    with OUTPUT.open('x') as f:
+        json.dump(result, f, indent=2, allow_nan=False)
+        f.write('\n')
+    lines = ['# Historical model remote coverage (27 September 2026)', '',
+             f"Status: **{result['status']}**. These seven bundles remain unqualified historical diagnostics.", '',
+             '| Run | Coverage | Pinned revision | Files |', '| --- | --- | --- | ---: |']
+    for run in result['runs']:
+        lines.append(f"| {run['run_id']} | {run['status']} | {run.get('verified_revision', 'unresolved')} | {run.get('verified_file_count', '-')} |")
+    lines += ['', 'The JSON contains exact local SHA256, canonical Git blob SHA1 and sizes, full per-prefix remote comparisons, repository privacy and run-tag stability observations. No model was loaded and no remote data, tag or receipt was written.', '',
+              'A missing local receipt is not evidence that an upload is absent. Unresolved cases mean the exact run tag and pinned head did not establish full coverage, not that all older repository history was searched. No upload retry is authorized or attempted.', '',
+              'The separate E2 90-file result/media archive approval hold and overlapping GitHub push hold remain unchanged. This read-only model check does not cover those bytes.', '',
+              'Limitations:', ''] + [f'- {x}' for x in result['limitations']]
+    with OUTPUT.with_suffix('.md').open('x') as f:
+        f.write('\n'.join(lines) + '\n')
+    print(json.dumps({'status': result['status'], 'summary': result.get('summary'),
+                      'json_path': str(OUTPUT.relative_to(ROOT)), 'json_sha256': record(OUTPUT)['sha256'],
+                      'markdown_sha256': record(OUTPUT.with_suffix('.md'))['sha256']}))
+
+
+if __name__ == '__main__':
+    main()

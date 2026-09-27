@@ -1,0 +1,132 @@
+"""Read-only verification of three exact historical Walker runtime payloads."""
+from pathlib import Path
+import hashlib,json,os,signal,sys,time
+from datetime import datetime,timezone
+ROOT=Path('/workspace/Safety-Dial')
+OUT=ROOT/'runs/continuation-audit/walker_s0_s1_remote_coverage_20260927.json'
+MD=OUT.with_suffix('.md')
+DEADLINE=600
+REPO='Sachioster/safetydial-walker2d'
+DATAREPO='Sachioster/safetydial-walker2d-data'
+S1=ROOT/'data/study/walker2d/continuation-20260926-2'
+POLICIES=[('walker2d-policies-complete-20260926-1','b42e3f3e7dd80bc4d95cc2ef43c753cee96b9b55',42),('walker2d-policies-continuation-20260926-1','59e05132b151c816ec0b267b0d70e15891ea0a25',41)]
+S1ID='walker2d-data-20260926-3'
+S1REV='ddd4d51648d2a382725efd20d04cedebedbf8fd2'
+S1NAMES={'README.md','config.yaml','manifest.json','splits.json','setA.h5','probe.h5','roots.h5'}
+class CheckError(Exception):pass
+def require(condition,message):
+ if not condition:raise CheckError(message)
+def timeout(_a,_b):
+ os.write(2,b'Walker S0/S1 metadata audit exceeded its 600-second process limit; no success claimed.\n');os._exit(124)
+def now():return datetime.now(timezone.utc).isoformat()
+def identity(p):
+ s=p.stat();return [s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns]
+def record(p):
+ require(p.is_file() and not p.is_symlink(),'Expected regular nonsymlink local input')
+ before=identity(p);h=hashlib.sha256();g=hashlib.sha1();g.update(f'blob {before[2]}\0'.encode())
+ with p.open('rb') as f:
+  while chunk:=f.read(8*1024*1024):h.update(chunk);g.update(chunk)
+ require(identity(p)==before,'Local file changed while hashing')
+ return {'sha256':h.hexdigest(),'git_blob_sha1':g.hexdigest(),'size_bytes':before[2],'stat_identity':before}
+def read(p):return json.loads(p.read_text())
+def relative(p):
+ try:return str(p.relative_to(ROOT))
+ except ValueError:return str(p)
+source_records={};payloads=[]
+def tracked(p):
+ r=record(p);source_records[relative(p)]=r;return r
+def check_receipt(p,expected):
+ tracked(p);require(read(p)==expected,'Local receipt does not match exact authorized destination/revision')
+def main():
+ require(not OUT.exists() and not MD.exists(),'Fresh audit outputs required')
+ start=time.monotonic();signal.signal(signal.SIGALRM,timeout);signal.alarm(DEADLINE)
+ for rel in ['experiments/scripts/walker_s0_export_policies.py','experiments/scripts/walker_s0_train_policies.py','experiments/scripts/walker_s1_collect.py','experiments/helpers/hfStore.py','docs/mainPlan/results/continuation-v2/walker_s0_s1_provenance.json','runs/continuation-audit/final_publication_coverage_20260927.json']:
+  tracked(ROOT/rel)
+ tracked(Path(__file__))
+ provenance=read(ROOT/'docs/mainPlan/results/continuation-v2/walker_s0_s1_provenance.json')
+ require(provenance['remote_verification'].startswith('None'),'Existing index unexpectedly claims remote verification; review before duplicate work')
+ for runid,revision,nactors in POLICIES:
+  folder=ROOT/'runs'/runid
+  expected={'repo_id':REPO,'repo_type':'model','path':f'policies/{runid}','revision':revision,'run_id':runid}
+  check_receipt(folder/'hf_upload.json',expected)
+  manifest=read(folder/'manifest.json')
+  require(manifest['run_id']==runid and manifest['kind']=='policies','Policy manifest run/kind mismatch')
+  actors=manifest['data']['actor_files'];require(len(actors)==nactors,'Policy ladder count mismatch')
+  require(all('/' not in name and name.endswith('.pt') for name in actors),'Unsafe actor payload name')
+  names=set(actors)|{'README.md','config.yaml','manifest.json'}
+  require({x.name for x in folder.iterdir()}==names|{'hf_upload.json'},'Unexpected policy folder membership')
+  files={name:record(folder/name) for name in sorted(names)}
+  require(all(files[n]['sha256']==sha for n,sha in actors.items()),'Policy actor bytes disagree with manifest')
+  payloads.append({**expected,'stage':'S0','local_directory':relative(folder),'local_payload_files':files,'actor_count':nactors,'scope':'All payload files in this exact exported-actor run prefix, excluding its post-upload hf_upload.json. No claim for OmniSafe raw training jobs, evaluation reports or observability CNN artifacts.'})
+ expected={'repo_id':DATAREPO,'repo_type':'dataset','path':f'data/{S1ID}','revision':S1REV,'run_id':S1ID}
+ check_receipt(S1/'hf_upload.json',expected)
+ tracked(S1/'upload_receipt.json');require(read(S1/'upload_receipt.json')=={k:expected[k] for k in ('repo_id','revision','path')},'S1 upload receipts disagree')
+ require({p.name for p in S1.iterdir() if p.is_file()}==S1NAMES|{'hf_upload.json','upload_receipt.json'},'Unexpected S1 top-level files')
+ # Strict allowlist: never recurse, inspect, hash or deserialize live s4 descendants.
+ files={n:record(S1/n) for n in sorted(S1NAMES)}
+ manifest=read(S1/'manifest.json')
+ require(manifest['run_id']==S1ID and manifest['kind']=='data','S1 manifest run/kind mismatch')
+ require(manifest['data']['sha256']=={n:files[n]['sha256'] for n in ('setA.h5','probe.h5','roots.h5')},'S1 data bytes disagree with original manifest')
+ require(manifest['data']['splits']==read(S1/'splits.json'),'S1 split manifest mismatch')
+ require('hf_revision' not in manifest,'S1 manifest differs from expected pre-upload form')
+ require('policy_dir: runs/walker2d-policies-complete-20260926-1' in (S1/'config.yaml').read_text(),'S1 configured policy lineage mismatch')
+ payloads.append({**expected,'stage':'S1','local_directory':relative(S1),'local_payload_files':files,'scope':'Exactly the seven original top-level pre-upload files. Excludes both post-upload receipts, all s4 descendants and external S1 result reports.'})
+ # Existing complete policy ladder must preserve every actor in the earlier ladder.
+ a,b=payloads[:2];shared=[n for n in b['local_payload_files'] if n.endswith('.pt')]
+ require(all(a['local_payload_files'][n]['sha256']==b['local_payload_files'][n]['sha256'] for n in shared),'Earlier policy ladder actor bytes changed in complete ladder')
+ from dotenv import load_dotenv
+ from huggingface_hub import HfApi,get_token
+ load_dotenv(ROOT/'.env',override=False)
+ token=os.environ.get('HF_TOKEN') or get_token();require(bool(token),'Existing Hugging Face credential unavailable')
+ api=HfApi(endpoint='https://huggingface.co',token=token)
+ for item in payloads:
+  repo,kind,rev,tag,prefix=(item[k] for k in ('repo_id','repo_type','revision','run_id','path'))
+  info=api.repo_info(repo_id=repo,repo_type=kind,revision=rev,timeout=30)
+  require(info.id==repo and info.sha==rev and info.private is True,'Pinned repository identity/privacy mismatch')
+  before=[r.target_commit for r in api.list_repo_refs(repo_id=repo,repo_type=kind).tags if r.name==tag]
+  require(before==[rev],'Run tag does not target exact receipt revision')
+  entries=list(api.list_repo_tree(repo_id=repo,repo_type=kind,path_in_repo=prefix,recursive=True,expand=False,revision=rev))
+  remote={}
+  for e in entries:
+   if not hasattr(e,'blob_id'):continue
+   require(e.path.startswith(prefix+'/'),'Remote file escaped exact allowed prefix')
+   name=e.path[len(prefix)+1:];require(name not in remote,'Duplicate remote filename');remote[name]=e
+  require(set(remote)==set(item['local_payload_files']),'Pinned remote payload inventory differs from exact local allowlist')
+  verified={}
+  for name,local in item['local_payload_files'].items():
+   e=remote[name];require(e.size==local['size_bytes'],'Remote payload size mismatch')
+   if e.lfs is not None:
+    require(e.lfs.sha256==local['sha256'] and e.lfs.size==local['size_bytes'],'Remote LFS content identity mismatch')
+    match={'method':'LFS SHA256 and byte size','sha256':e.lfs.sha256,'size_bytes':e.lfs.size}
+   else:
+    require(e.blob_id==local['git_blob_sha1'],'Remote Git blob identity mismatch')
+    match={'method':'canonical Git blob SHA1 and byte size','git_blob_sha1':e.blob_id,'size_bytes':e.size}
+   verified[name]={'sha256':local['sha256'],'git_blob_sha1':local['git_blob_sha1'],'size_bytes':local['size_bytes'],'remote_match':match}
+  after=[r.target_commit for r in api.list_repo_refs(repo_id=repo,repo_type=kind).tags if r.name==tag]
+  require(after==before,'Run tag changed during metadata verification')
+  privacy_after=api.repo_info(repo_id=repo,repo_type=kind,revision=rev,timeout=30)
+  require(privacy_after.id==repo and privacy_after.sha==rev and privacy_after.private is True,'Repository privacy/revision changed during verification')
+  item.update({'remote_repo_private':True,'run_tag_before_after':{'name':tag,'target_commit':rev,'unchanged':True},'exact_remote_prefix_inventory_matches':True,'verified_files':verified,'payload_file_count':len(verified),'payload_bytes':sum(x['size_bytes'] for x in verified.values())})
+  print(f"Verified {item['stage']} {tag}: {len(verified)} payload files at pinned revision {rev}",flush=True)
+ # Full before/after byte comparisons; do not add receipts or other files to original directories.
+ for item in payloads:
+  folder=ROOT/item['local_directory']
+  for n,before in item['local_payload_files'].items():require(record(folder/n)==before,'Payload changed during metadata audit')
+  if item['stage']=='S0':require({x.name for x in folder.iterdir()}==set(item['local_payload_files'])|{'hf_upload.json'},'Policy folder membership changed')
+  else:require({p.name for p in S1.iterdir() if p.is_file()}==S1NAMES|{'hf_upload.json','upload_receipt.json'},'S1 top-level file membership changed')
+  item['local_payload_unchanged_before_after']=True
+ for p,before in source_records.items():require(record(ROOT/p if not Path(p).is_absolute() else Path(p))==before,'Receipt/source/provenance changed during audit')
+ result={'kind':'walker_s0_s1_pinned_remote_payload_coverage_v1','status':'passed','observed_utc':now(),'scope':'Read-only metadata verification of the exact two existing S0 policy runs and original seven-file S1 data run; no whole-project archive or original execution provenance claim.','api_endpoint':'https://huggingface.co','deadline_seconds':DEADLINE,'elapsed_seconds':time.monotonic()-start,'payloads':payloads,'totals':{'uploaded_payload_file_occurrences':sum(x['payload_file_count'] for x in payloads),'uploaded_payload_bytes_across_run_prefixes':sum(x['payload_bytes'] for x in payloads),'note':'Earlier policy actors overlap the complete ladder; these are per-prefix totals, not unique-content totals.','identical_shared_actor_files':len(shared)},'source_and_receipt_records':source_records,'original_upload_boundaries':{'S0':'The exporter writes plain actor files; exact manifests enumerate 42 completed-ladder and 41 earlier-ladder actors. No preserved exact historical packaging invocation was found in the bounded search. Complete remote-prefix inventory and content identities are verified directly; this does not reconstruct the packaging command or training provenance.','S1':'walker_s1_collect.py writes setA/probe/roots H5, splits, config, manifest and README before HFStore.upload_run. HFStore excludes hf_upload receipts and writes one after uploading; the collector then writes upload_receipt.json and external collection.json. It assigns hf_revision only to its in-memory manifest, so the saved/uploaded manifest remains pre-upload.','HFStore':'Current uploader ignores hf_upload.json and hf_upload.json.tmp; records receipt after upload then creates/verifies run tag. Current source comparison is not a retroactive executed-source proof.'},'excluded_from_remote_coverage':['S1 live s4/ descendants: never traversed/read/hashed by this verifier','Post-upload local hf_upload.json in all three runs','S1 post-upload upload_receipt.json','S1 external collection.json and policy_ladder.json','S0 external observability/policy evaluation reports and historical raw OmniSafe jobs','Later audit/alignment/figure/PDF/media/source archives'],'prior_evidence':{'walker_s0_s1_provenance':'docs/mainPlan/results/continuation-v2/walker_s0_s1_provenance.json','prior_scope':'Explicitly no remote verification; no independent complete S0/S1 payload audit was located in the cited prior publication inventory.','duplicate_audit_skipped':False},'limitations':['No remote payload bytes downloaded, tensor/HDF5 deserialization, policy/model inference, simulator work, uploads or remote mutation.','Metadata confirms exact pinned prefix inventory/content identities; this is not a remote restoration or scientific validity test.','S0/S1 manifests record dirty working trees and lack full executed-source provenance. This audit does not recover missing historical source/seed/split/CNN/media facts.','Policy files are byte-verified without decoding their weights or embedded normalizers. Source manifest labels are not independently re-evaluated.','Tag targets and privacy are observed before/after audit; administrators can change them later.','Successful runtime uploads do not establish coverage of excluded reports, live S4 outputs or final source/report/media archives.'],'checks':{'local_payload_SHA_and_Git_blob_identity':True,'all_original_actor_and_H5_manifest_hashes_match':True,'exact_pinned_private_prefix_inventories':True,'immutable_tag_targets_at_observation':True,'local_bytes_and_stats_unchanged':True,'strict_S1_top_level_allowlist':True,'receipts_and_source_bytes_unchanged':True},'network_write_calls':0,'remote_byte_downloads':0,'tensor_or_HDF5_decoding':False,'original_artifact_mutations':0}
+ with OUT.open('x') as f:json.dump(result,f,indent=2);f.write('\n')
+ digest=hashlib.sha256(OUT.read_bytes()).hexdigest()
+ md='# Walker S0/S1 remote payload coverage — 27 September 2026\n\nPassed a read-only comparison of stable local bytes with private pinned Hugging Face metadata. This covers the exact runtime payload prefixes below, **not** the whole project archive or unknown original execution provenance.\n\n| Stage/run | Revision | Files | Bytes | Scope |\n|---|---|---:|---:|---|\n'
+ for x in payloads:md+=f"| {x['stage']}: `{x['run_id']}` | `{x['revision']}` | {x['payload_file_count']} | {x['payload_bytes']:,} | Exact prefix inventory; LFS SHA256/size or Git blob SHA1/size |\n"
+ md+='\nBoth policy runs are in private model repository `Sachioster/safetydial-walker2d`; S1 is in private dataset repository `Sachioster/safetydial-walker2d-data`. Each run-ID tag resolved to its exact receipt revision before and after verification. All local payloads and receipts retained identical bytes and file identities. The 41 earlier actor files are byte-identical to their counterparts in the completed 42-actor ladder; totals count these separate uploaded occurrences.\n\nS1 coverage is exactly `README.md`, `config.yaml`, `manifest.json`, `splits.json`, `setA.h5`, `probe.h5` and `roots.h5`. H5 files were streamed only for hashes. The live `s4/` subtree was neither traversed nor read. The local `hf_upload.json` and `upload_receipt.json` were written after upload and are excluded; external `collection.json` and `policy_ladder.json` are also outside this payload. S0 policy bundles likewise exclude their local upload receipts, raw training jobs, observability artifacts and later evaluation reports.\n\nThe original policy packaging command is not preserved by the bounded source search; direct remote inventory/content verification establishes the payload bytes without inventing that invocation. Current collector/uploader source explains S1 ordering but does not retroactively establish the historical dirty-tree source. This audit cannot repair unknown S0/S1 execution provenance. No remote bytes were downloaded, no tensors/H5 were decoded, and no model, simulator, upload or remote change occurred. Final reports, media, source/config/audits and S4 need their own coverage. Tags/privacy can be changed later by administrators.\n\n'
+ md+=f'JSON: `{relative(OUT)}`. SHA256: `{digest}`.\n'
+ with MD.open('x') as f:f.write(md)
+ print(json.dumps({'status':'passed','artifact':relative(OUT),'sha256':digest,'markdown_sha256':hashlib.sha256(MD.read_bytes()).hexdigest(),'files':result['totals']['uploaded_payload_file_occurrences'],'bytes':result['totals']['uploaded_payload_bytes_across_run_prefixes']},indent=2),flush=True)
+ # Keep the process-level alarm armed through shutdown.
+if __name__=='__main__':
+ try:main()
+ except CheckError as e:print('Audit did not pass: '+str(e),file=sys.stderr);sys.exit(1)
+ except Exception as e:print('Audit did not pass; sanitized error type: '+type(e).__name__,file=sys.stderr);sys.exit(1)

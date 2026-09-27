@@ -712,7 +712,7 @@
         },
         {
           "type": "source",
-          "text": "Evidence: walker_s2_final_local_audit_20260927.json, walker_checkpoint_214780_upload.json, walker_s2_final_wandb_audit_20260927.json, walker_s2_final_timing_20260927.json and walker_recovery_environment_observation_20260927.json under docs/mainPlan/results/continuation-v2/."
+          "text": "Evidence: final S2 and recovery audits, individually identified in the report manifest."
         }
       ]
     },
@@ -800,6 +800,9 @@
           "text": "Health recall is 67/71 and specificity is 107/121, both above the declared threshold. Speed recall is 143/160, but specificity is only 15/32 = 46.875%, so speed is excluded from the qualified S4 comparison. These supports are measured on the development branches; they do not imply independent samples or a population confidence bound."
         },
         {
+          "type": "page_break"
+        },
+        {
           "type": "table",
           "title": "Development zero-margin decisions",
           "headers": [
@@ -852,15 +855,6 @@
           "text": "FSA divides unsafe accepted branches by all accepted branches. The saved S3 records report zero censored and zero accepted-censored branches, so these point values are defined. Health real-readout FSA is 4/111; imagined FSA is 68/187. Speed real-readout FSA is 17/32; imagined FSA is 44/62. The health comparison is a development diagnosis with different acceptance rates, 111/192 versus 187/192. It is not a matched-acceptance adaptation effect, a final-test estimate or a calibrated safety guarantee."
         },
         {
-          "type": "page_break"
-        },
-        {
-          "type": "figure",
-          "path": "assets/walker-s3/horizon_errors_compact.png",
-          "caption": "Saved S3 mean absolute errors by prediction block for real-image readouts and imagined futures. Ten blocks of 0.08 s span 0.8 s. Height is in metres, pitch in radians and speed in metres per second. Each curve summarizes the 192 development branches from 64 roots and 32 source episodes. The speed panel remains a diagnostic even though speed failed decision qualification. These are recorded means with no invented confidence intervals; horizon-error values could not be independently regenerated from per-example predictions because those predictions were not retained.",
-          "source": "Actual S3 gate.json and committed assets/walker-s3/plotted_data.json; saved-evidence compact figure."
-        },
-        {
           "type": "paragraph",
           "text": "Independent auditing reproduced gate arithmetic and paired decision counts from the saved row minima and verified source/model/split identities. Probe R2 and horizon errors remain recorded aggregate measurements: per-example predictions and dense truth/tape logs were not retained for independent recomputation or physical replay. S3 has manifest repository provenance but no per-run executed source snapshot. Current reviewed source hashes cannot retroactively supply that missing execution record."
         },
@@ -871,6 +865,15 @@
         {
           "type": "source",
           "text": "Evidence: completed docs/mainPlan/results/s3/walker2d-probes-recovery-20260927-1/gate.json and gate_rows.json; independent walker_s3_final_local_audit_20260927.json and walker_s3_final_remote_audit_20260927.json under docs/mainPlan/results/continuation-v2/."
+        },
+        {
+          "type": "page_break"
+        },
+        {
+          "type": "figure",
+          "path": "assets/walker-s3/horizon_errors_compact.png",
+          "caption": "Saved S3 mean absolute errors by prediction block for real-image readouts and imagined futures. Ten blocks of 0.08 s span 0.8 s. Height is in metres, pitch in radians and speed in metres per second. Each curve summarizes the 192 development branches from 64 roots and 32 source episodes. The speed panel remains a diagnostic even though speed failed decision qualification. These are recorded means with no invented confidence intervals; horizon-error values could not be independently regenerated from per-example predictions because those predictions were not retained.",
+          "source": "Actual S3 gate.json and committed assets/walker-s3/plotted_data.json; saved-evidence compact figure."
         }
       ]
     },
@@ -955,7 +958,8 @@
     "path_base": "spec_directory",
     "edits": "Added verified terminal S2 and health-only S3 evidence, exact development counts and committed figures. S4/publication pending. No final PDF or frozen report manifest created.",
     "previous_drafts_preserved": true,
-    "s3_remote_audit_sha256": "a988a8af499900a53b7fa66dfc786865735aa5b3f18f9eee52f314732c314da9"
+    "s3_remote_audit_sha256": "a988a8af499900a53b7fa66dfc786865735aa5b3f18f9eee52f314732c314da9",
+    "layout_review": "Draft 24-page render inspected for S2/S3; shortened an orphan source note and kept S3 decision table with interpretation. Final PDF placement remains pending."
   },
   "composition_status": "working_composition_not_final_pdf"
 }

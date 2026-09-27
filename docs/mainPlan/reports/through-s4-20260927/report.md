@@ -220,7 +220,7 @@ A recorded observation at 09:04:49 UTC on 27 September 2026 identified the recov
 | Python / architecture | 3.11.16 / x86_64 | Same saved observation |
 | PyTorch / CUDA build | 2.13.0 / 13.0 | Previously verified recovery preflight, cited by observation |
 
-Source: Evidence: walker_s2_final_local_audit_20260927.json, walker_checkpoint_214780_upload.json, walker_s2_final_wandb_audit_20260927.json, walker_s2_final_timing_20260927.json and walker_recovery_environment_observation_20260927.json under docs/mainPlan/results/continuation-v2/.
+Source: Evidence: final S2 and recovery audits, individually identified in the report manifest.
 
 ## 10. Walker S3: health-only qualification
 
@@ -246,6 +246,8 @@ The declared R2 thresholds are at least 0.90 for height and pitch, and provision
 
 Health recall is 67/71 and specificity is 107/121, both above the declared threshold. Speed recall is 143/160, but specificity is only 15/32 = 46.875%, so speed is excluded from the qualified S4 comparison. These supports are measured on the development branches; they do not imply independent samples or a population confidence bound.
 
+<!-- Intended page break. No final PDF rendered yet. -->
+
 **Development zero-margin decisions**
 
 | Rule / source | Accepted / total | Unsafe accepted | FSA | Acceptance |
@@ -257,6 +259,12 @@ Health recall is 67/71 and specificity is 107/121, both above the declared thres
 
 FSA divides unsafe accepted branches by all accepted branches. The saved S3 records report zero censored and zero accepted-censored branches, so these point values are defined. Health real-readout FSA is 4/111; imagined FSA is 68/187. Speed real-readout FSA is 17/32; imagined FSA is 44/62. The health comparison is a development diagnosis with different acceptance rates, 111/192 versus 187/192. It is not a matched-acceptance adaptation effect, a final-test estimate or a calibrated safety guarantee.
 
+Independent auditing reproduced gate arithmetic and paired decision counts from the saved row minima and verified source/model/split identities. Probe R2 and horizon errors remain recorded aggregate measurements: per-example predictions and dense truth/tape logs were not retained for independent recomputation or physical replay. S3 has manifest repository provenance but no per-run executed source snapshot. Current reviewed source hashes cannot retroactively supply that missing execution record.
+
+The nine uploaded S3 probe-run payload files and run-ID tag were verified in the private model repository at revision cb1560d7b02b4fbe6585b3c0c325a78d56b337e6. The local hf_upload receipt is written after uploading and is excluded from that remote payload. The results manifest later adds probe_hf_revision; it is checked separately and is not claimed as a file in that uploaded commit. No remote restore or tensor decoding is implied.
+
+Source: Evidence: completed docs/mainPlan/results/s3/walker2d-probes-recovery-20260927-1/gate.json and gate_rows.json; independent walker_s3_final_local_audit_20260927.json and walker_s3_final_remote_audit_20260927.json under docs/mainPlan/results/continuation-v2/.
+
 <!-- Intended page break. No final PDF rendered yet. -->
 
 ![Saved-evidence figure](assets/walker-s3/horizon_errors_compact.png)
@@ -264,12 +272,6 @@ FSA divides unsafe accepted branches by all accepted branches. The saved S3 reco
 Saved S3 mean absolute errors by prediction block for real-image readouts and imagined futures. Ten blocks of 0.08 s span 0.8 s. Height is in metres, pitch in radians and speed in metres per second. Each curve summarizes the 192 development branches from 64 roots and 32 source episodes. The speed panel remains a diagnostic even though speed failed decision qualification. These are recorded means with no invented confidence intervals; horizon-error values could not be independently regenerated from per-example predictions because those predictions were not retained.
 
 Source: Actual S3 gate.json and committed assets/walker-s3/plotted_data.json; saved-evidence compact figure.
-
-Independent auditing reproduced gate arithmetic and paired decision counts from the saved row minima and verified source/model/split identities. Probe R2 and horizon errors remain recorded aggregate measurements: per-example predictions and dense truth/tape logs were not retained for independent recomputation or physical replay. S3 has manifest repository provenance but no per-run executed source snapshot. Current reviewed source hashes cannot retroactively supply that missing execution record.
-
-The nine uploaded S3 probe-run payload files and run-ID tag were verified in the private model repository at revision cb1560d7b02b4fbe6585b3c0c325a78d56b337e6. The local hf_upload receipt is written after uploading and is excluded from that remote payload. The results manifest later adds probe_hf_revision; it is checked separately and is not claimed as a file in that uploaded commit. No remote restore or tensor decoding is implied.
-
-Source: Evidence: completed docs/mainPlan/results/s3/walker2d-probes-recovery-20260927-1/gate.json and gate_rows.json; independent walker_s3_final_local_audit_20260927.json and walker_s3_final_remote_audit_20260927.json under docs/mainPlan/results/continuation-v2/.
 
 ## 11. Walker S4: pending terminal evidence
 
