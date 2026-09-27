@@ -1,0 +1,308 @@
+{
+  "kind": "walker_final_s2_timing_recipe_audit_v1",
+  "status": "saved_metadata_and_timing_arithmetic_verified",
+  "observed_utc": "2026-09-27T09:47:21.633006+00:00",
+  "run_id": "walker2d-lewm-a-recovery-20260927-1",
+  "terminal_stage": {
+    "workflow_id": "walker2d-recovery-20260927-1",
+    "stage": "lewm_a_full",
+    "status": "completed",
+    "returncode": 0,
+    "attempt_number": 1,
+    "started_unix": 1790491891.0699685,
+    "started_utc": "2026-09-27T06:51:31.069968+00:00",
+    "finished_unix": 1790502138.3219488,
+    "finished_utc": "2026-09-27T09:42:18.321949+00:00",
+    "canonical_stage_sha256_before": "2346379db5df9d17971b57fb2aedfa334055e044115d6d61247e3bfe9fa450c1",
+    "canonical_stage_sha256_after": "2346379db5df9d17971b57fb2aedfa334055e044115d6d61247e3bfe9fa450c1",
+    "recorded_completed_output_hashes": {
+      "/workspace/Safety-Dial/runs/walker2d-lewm-a-recovery-20260927-1": {
+        "kind": "directory",
+        "sha256": "e5596cf2f4f058a4e0afb1258e769a8bc994438e5a8f75a8e0044143aab0a9f4",
+        "n_files": 24
+      },
+      "/workspace/Safety-Dial/docs/mainPlan/results/s2/walker2d-lewm-a-recovery-20260927-1.json": {
+        "kind": "file",
+        "sha256": "dd5f1e356b4f9a4c8824a9b4b53f185185be9db484defe108192514c2aaa5f7b"
+      }
+    },
+    "output_hash_scope": "Final report bytes rehashed here. Whole run-directory hash is the managed workflow record only; separate final durability/CPU audits verify its full payload."
+  },
+  "timings": {
+    "recovered_report_wall_clock": {
+      "seconds": 10231.99153971672,
+      "hours": 2.8422198721435334,
+      "label": "Recorded recovered-invocation timed interval, not total training lifetime",
+      "formula": "final_report.wall_clock_s"
+    },
+    "recovered_managed_attempt_elapsed": {
+      "seconds": 10247.251980304718,
+      "hours": 2.846458883417977,
+      "label": "Managed resumed S2 attempt start to successful process finish",
+      "formula": "attempt.finished_unix - attempt.started_unix"
+    },
+    "original_start_to_recovery_finish": {
+      "seconds": 62245.258846998215,
+      "hours": 17.290349679721725,
+      "label": "Elapsed calendar span including original training, interruption/downtime, recovery setup and repeated work",
+      "formula": "recovery_attempt.finished_unix - original_attempt.started_unix"
+    },
+    "attempt_minus_report_interval": {
+      "seconds": 15.260440587997437,
+      "hours": 0.0042390112744437325,
+      "label": "Unallocated outer-attempt overhead; not a separately measured W&B flush or imports duration",
+      "formula": "recovered_managed_attempt_elapsed - recovered_report_wall_clock"
+    },
+    "original_attempt_start_unix": 1790439893.0631018,
+    "original_attempt_start_utc": "2026-09-26T16:24:53.063102+00:00",
+    "wall_clock_boundaries": "Recovery-invocation timed interval: t_start is after argument parsing/optional match-run config, before seeding, fresh run creation, source snapshot, data/scaler setup, model initialization and W&B initialization. Stops when final report dict is constructed, before writing that JSON and before wandb.finish(). Includes restore, renderer warmup, optimization, validation and checkpoint/HF upload work within that invocation; excludes earlier original training, interruption downtime, imports/argument parsing and the final W&B flush.",
+    "rate_timer_boundaries": "(step - initial_step)/(now - t0). t0 is set immediately before restoring optimizer/history; includes restoration and subsequent warmup, optimization, validation and uploads, but excludes earlier recovery setup. It is a cumulative recovered-segment rate, not full-run throughput; do not sum or average across runs to reconstruct runtime.",
+    "interpretation": [
+      "Recovered wall_clock_s excludes the entire original training invocation, interruption downtime, Python imports/argument parsing and the final W&B flush. It includes setup, restore, rendering warmup, optimization, validation and checkpoint/HF work before report construction.",
+      "Managed attempt elapsed additionally contains launcher/import/argument overhead plus report write, W&B finish and process exit. The residual cannot attribute those components separately.",
+      "Original-start to recovery-finish is an observed calendar interval, not uninterrupted training time, pure optimization time, GPU compute time or total project runtime."
+    ]
+  },
+  "optimizer_work": {
+    "final_unique_optimizer_index": 214780,
+    "epochs": 10,
+    "steps_per_epoch": 21478,
+    "restored_optimizer_index": 172000,
+    "executed_updates_in_recovered_segment": 42780,
+    "original_last_observed_logged_index": 174400,
+    "minimum_repeated_logged_updates": 2400,
+    "minimum_optimizer_executions_across_the_two_S2_segments": 217180,
+    "scope": "The lower bound counts original logged progress plus completed resumed updates. It excludes all other training, policy, smoke, adaptation or test work. Any unlogged pre-interruption tail is unknown. No bitwise GPU replay equality is claimed.",
+    "repeated_work_evidence": [
+      "docs/mainPlan/results/continuation-v2/walker_interruption_20260927.json",
+      "runs/continuation-audit/walker_wandb_preparation_20260927.json"
+    ]
+  },
+  "logged_rates": {
+    "last_recovered_cumulative_it_per_s": 4.191508410367729,
+    "last_rate_step": 214780,
+    "interpretation": "Cumulative rate since the recovered rate timer, measured while recording the final training update and before its final validation/upload. It includes restore and previous checkpoint overhead, excludes earlier setup and original training, and is not instantaneous optimizer throughput. Rates across runs must not be summed or averaged into total lifetime throughput.",
+    "derived_recovered_updates_per_report_second": 4.18100423890542,
+    "derived_recovered_updates_per_attempt_second": 4.174777792350908,
+    "derived_rate_scope": "Simple resumed-update count divided by its explicitly labeled elapsed interval; not GPU arithmetic efficiency."
+  },
+  "final_recipe": {
+    "optimizer": "AdamW",
+    "epochs": 10,
+    "batch": 128,
+    "learning_rate": 5e-05,
+    "weight_decay": 0.001,
+    "warmup_updates": 500,
+    "schedule": "linear warmup then cosine",
+    "seed": 3072,
+    "render_workers": 6,
+    "worker_context": "spawn, persistent workers",
+    "checkpoint_validation_cadence_updates": 4000,
+    "precision": "CUDA bfloat16 autocast",
+    "gradient_norm_clip": 1.0,
+    "latent_prediction_loss": "teacher-forced next-latent MSE",
+    "SIGReg": {
+      "weight": 0.1,
+      "projections": 1024,
+      "knots": 17
+    },
+    "frameskip": 10,
+    "history_frames": 3,
+    "prediction_blocks_per_training_clip": 1,
+    "images_px": [
+      224,
+      224
+    ],
+    "raw_action_dim": 6,
+    "action_block_dim": 60,
+    "clip_stride": 1,
+    "dataset_path": "data/study/walker2d/continuation-20260926-2/setA.h5",
+    "n_available_dataset_clips_reported": 2808971,
+    "available_clip_count_limit": "This is len(dataset) before the explicit train/validation clip-role selection, not a claim all these clips were used for optimization.",
+    "model_parameters_reported": 18034978,
+    "model_configuration": {
+      "_target_": "stable_worldmodel.wm.lewm.LeWM",
+      "encoder": {
+        "_target_": "stable_pretraining.backbone.utils.vit_hf",
+        "size": "tiny",
+        "patch_size": 14,
+        "image_size": 224,
+        "pretrained": false,
+        "use_mask_token": false
+      },
+      "predictor": {
+        "_target_": "stable_worldmodel.wm.lewm.module.Predictor",
+        "num_frames": 3,
+        "input_dim": 192,
+        "hidden_dim": 192,
+        "output_dim": 192,
+        "depth": 6,
+        "heads": 16,
+        "mlp_dim": 2048,
+        "dim_head": 64,
+        "dropout": 0.1,
+        "emb_dropout": 0.0
+      },
+      "action_encoder": {
+        "_target_": "stable_worldmodel.wm.lewm.module.Embedder",
+        "input_dim": 60,
+        "emb_dim": 192
+      },
+      "projector": {
+        "_target_": "stable_worldmodel.wm.lewm.module.MLP",
+        "input_dim": 192,
+        "output_dim": 192,
+        "hidden_dim": 2048,
+        "norm_fn": {
+          "_target_": "torch.nn.BatchNorm1d",
+          "_partial_": true
+        }
+      },
+      "pred_proj": {
+        "_target_": "stable_worldmodel.wm.lewm.module.MLP",
+        "input_dim": 192,
+        "output_dim": 192,
+        "hidden_dim": 2048,
+        "norm_fn": {
+          "_target_": "torch.nn.BatchNorm1d",
+          "_partial_": true
+        }
+      }
+    },
+    "data_sha256_from_manifest": "4602eeb952c918a3a9de787605d496c5a751fd692396f539e3e82fcf9c96f267",
+    "source_hashes_from_config": {
+      "experiments/scripts/walker_s2_train_lewm.py": "b591e81f8bdce7ccf92e024d5909a153c03bee529b93bf3f33878114cd53a487",
+      "experiments/helpers/walkerTrainingState.py": "f967f5ed69a026a67075585ef1ca606e6a54dc5c9690428c689fb4ff1a500a51",
+      "experiments/helpers/walkerLewm.py": "66f6b2a911decc8a19a9db56b0bb71d04aad55cafe8e98fa9dbe7bf2e5c84b34",
+      "experiments/helpers/walkerProtocol.py": "0c9fb4520eed5145b79744b57367d75b889ec4c7c498a2bf12dfe0d3e70ed170",
+      "experiments/helpers/locoData.py": "4f51e6bff77279d4682b337ffa790c13088b03c02f2cd09d9202bc559d914f99",
+      "experiments/helpers/locoEnv.py": "0da5ba842b8d830b748139def9a74fa0488242465bf2e695084a889312ca355f",
+      "experiments/helpers/threads.py": "799c1d68e9a056186bff086d7f07bdb16b5f789af3e09835b32437e5d7c7a584",
+      "experiments/helpers/hfStore.py": "754c23321ee0c6ad71daa7e80197b406134ebe16f90a5a0d81f7edaf83fc30bd",
+      "experiments/helpers/runManifest.py": "32cbc0992276769d52b6e873f3075ccca6dda5ac9a241fe1eec0eb43acf70d05",
+      "experiments/helpers/storageBudget.py": "77384f8c3f896535b87092cf3f5e0fa8fcfdb528f6a8a142f32df5040d2553d2"
+    },
+    "resume_from": "runs/walker2d-lewm-a-continuation-20260926-1/optimizer.pt",
+    "resume_bundle_sha256_from_manifest": "50279ce50cac07cc74ef0fa8757415a71e2fedc9f69a09db8699a232174b0d5c",
+    "wandb_requested": true,
+    "private_checkpoint_upload_requested": true
+  },
+  "saved_final_metrics": {
+    "training_last_record": {
+      "step": 214780,
+      "loss": 0.10395237803459167,
+      "pred_loss": 0.007760968524962664,
+      "sigreg_loss": 0.9609375,
+      "lr": 0.0,
+      "it_per_s": 4.191508410367729
+    },
+    "validation_prediction_loss": 0.0039440737455151975,
+    "full_history_records": 10739,
+    "recovered_history_records": 2139,
+    "checkpoint_receipt": {
+      "repo_id": "Sachioster/safetydial-walker2d",
+      "revision": "9e05478658484d0f26ea740fead9e0ab7625367e",
+      "path": "lewm-a/walker2d-lewm-a-recovery-20260927-1",
+      "step": 214780
+    },
+    "scope": "Copied final saved metrics and local receipt coherence, not independent model-quality evaluation or remote durability proof."
+  },
+  "source_integrity": {
+    "final_report": {
+      "path": "docs/mainPlan/results/s2/walker2d-lewm-a-recovery-20260927-1.json",
+      "bytes": 2095500,
+      "sha256_before": "dd5f1e356b4f9a4c8824a9b4b53f185185be9db484defe108192514c2aaa5f7b",
+      "sha256_after": "dd5f1e356b4f9a4c8824a9b4b53f185185be9db484defe108192514c2aaa5f7b",
+      "unchanged": true
+    },
+    "train_state": {
+      "path": "runs/walker2d-lewm-a-recovery-20260927-1/train_state.json",
+      "bytes": 8569,
+      "sha256_before": "f02135255e2085237ad63c5e2e1d6d08f09e64f7eed0eaabd9c71f2d11f4e012",
+      "sha256_after": "f02135255e2085237ad63c5e2e1d6d08f09e64f7eed0eaabd9c71f2d11f4e012",
+      "unchanged": true
+    },
+    "resolved_config": {
+      "path": "runs/walker2d-lewm-a-recovery-20260927-1/config.yaml",
+      "bytes": 43102,
+      "sha256_before": "0746d39be814cef2c540eecfa7d228a85e493fece3400abca6cd70d7c4307537",
+      "sha256_after": "0746d39be814cef2c540eecfa7d228a85e493fece3400abca6cd70d7c4307537",
+      "unchanged": true
+    },
+    "manifest": {
+      "path": "runs/walker2d-lewm-a-recovery-20260927-1/manifest.json",
+      "bytes": 67400,
+      "sha256_before": "b2464d17d35f720c90d65d7bb54fc845bfe4a3c43449358d265fc062713a78d4",
+      "sha256_after": "b2464d17d35f720c90d65d7bb54fc845bfe4a3c43449358d265fc062713a78d4",
+      "unchanged": true
+    },
+    "workflow_config": {
+      "path": "configs/walker2d/recovery-20260927-1.yaml",
+      "bytes": 3165,
+      "sha256_before": "d0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d",
+      "sha256_after": "d0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d",
+      "unchanged": true
+    },
+    "original_workflow": {
+      "path": "runs/workflows/walker2d-continuation-20260926-2/state.json",
+      "bytes": 4552,
+      "sha256_before": "9d3e872bbe0330d052bde9c3f2a267ce7cc485be573304b7e94047d585dda757",
+      "sha256_after": "9d3e872bbe0330d052bde9c3f2a267ce7cc485be573304b7e94047d585dda757",
+      "unchanged": true
+    },
+    "logging_preparation": {
+      "path": "runs/continuation-audit/walker_wandb_preparation_20260927.json",
+      "bytes": 9123,
+      "sha256_before": "9672fd57055ea67c8ed5e9ec7b7057f7ee8de912b183d5592853794fc4d88da5",
+      "sha256_after": "9672fd57055ea67c8ed5e9ec7b7057f7ee8de912b183d5592853794fc4d88da5",
+      "unchanged": true
+    },
+    "incident_audit": {
+      "path": "docs/mainPlan/results/continuation-v2/walker_interruption_20260927.json",
+      "bytes": 9386,
+      "sha256_before": "c47e614452142c555a36170f09a2572a10152fe2c1a1f459e1714ebc5243bdea",
+      "sha256_after": "c47e614452142c555a36170f09a2572a10152fe2c1a1f459e1714ebc5243bdea",
+      "unchanged": true
+    },
+    "frozen_training_source": {
+      "path": "runs/walker2d-lewm-a-recovery-20260927-1/source_snapshot/experiments/scripts/walker_s2_train_lewm.py",
+      "bytes": 14941,
+      "sha256_before": "b591e81f8bdce7ccf92e024d5909a153c03bee529b93bf3f33878114cd53a487",
+      "sha256_after": "b591e81f8bdce7ccf92e024d5909a153c03bee529b93bf3f33878114cd53a487",
+      "unchanged": true
+    },
+    "frozen_loss_source": {
+      "path": "runs/walker2d-lewm-a-recovery-20260927-1/source_snapshot/experiments/helpers/walkerLewm.py",
+      "bytes": 7587,
+      "sha256_before": "66f6b2a911decc8a19a9db56b0bb71d04aad55cafe8e98fa9dbe7bf2e5c84b34",
+      "sha256_after": "66f6b2a911decc8a19a9db56b0bb71d04aad55cafe8e98fa9dbe7bf2e5c84b34",
+      "unchanged": true
+    }
+  },
+  "workflow_snapshot": {
+    "path": "runs/workflows/walker2d-recovery-20260927-1/state.json",
+    "whole_file_sha256_before": "c1b58b526812e0503e5dcc875f73bfcf7b74f8826126095e19a6888cc15433bb",
+    "whole_file_sha256_after": "c1b58b526812e0503e5dcc875f73bfcf7b74f8826126095e19a6888cc15433bb",
+    "whole_file_unchanged": true,
+    "s2_subtree_unchanged": true,
+    "scope": "The workflow file remains mutable as later stages run. Only immutable completed S2 subtree/config identity is required to stay equal; unrelated later-stage progress is not audited here."
+  },
+  "checks": [
+    "Successful terminal S2 attempt and exact pinned workflow/config identity",
+    "Hash-bound final report unchanged before/after",
+    "Final report/train_state/config/manifest step coherence and final validation agreement",
+    "10 epochs x21478steps=214780, exact full/recovered logging cadence and finite saved training records",
+    "Original and recovered attempt timestamps independently agree with the logging preparation",
+    "Frozen source identity agrees with recorded logging contract",
+    "All read evidence bytes unchanged; completed S2 workflow subtree stable"
+  ],
+  "limitations": [
+    "No tensors, datasets, model, simulator, GPU, network or upload calls. No tests rerun.",
+    "This audit does not rehash the entire completed model payload or independently verify W&B/HF metadata. Those are separate root-launched final checks.",
+    "No original trainer successful finish timestamp exists after interruption; original on-disk running state is stale history, not worker liveness.",
+    "At least2400 repeated updates are known; unlogged original tail, isolated interruption downtime and total project compute/GPU-hours are not established.",
+    "Recipe details from immutable saved config and executed source are not a new semantic verification of every tensor/update."
+  ],
+  "total_project_gpu_cost": null,
+  "original_artifact_mutations": 0
+}

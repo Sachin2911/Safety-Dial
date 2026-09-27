@@ -37,46 +37,34 @@
     "checkpoint_recovery": "Atomic optimizer.pt includes weights, optimizer, scheduler, RNG and deterministic batch position; resume to a fresh run directory with identical data and recipe.",
     "wandb": "https://wandb.ai/2699183-university-of-witwatersrand/safetydial-walker2d/runs/uxzgf780",
     "latest_verified_checkpoint": {
-      "step": 172000,
-      "revision": "bdfbc8afc9d53a8fa9f00fd927be9c56477edcd3",
-      "report": "docs/mainPlan/results/continuation-v2/walker_checkpoint_172000_recovery_audit.json",
-      "report_sha256": "1d1ecee6fdc50a253c6a9efe59c127389e25672777bc91c07f6d9d14ddc5927d",
-      "validation_pred_loss": 0.004324658657424152,
-      "verification_scope": "34 CPU semantic checks of the immutable original recovery bundle, model export, Adam state, scheduler, history, RNG, scalers, configuration, splits, snapshots and restartable next batch. Separate launch evidence verifies actual CUDA restore and advancing training."
+      "step": 214780,
+      "revision": "9e05478658484d0f26ea740fead9e0ab7625367e",
+      "report": "docs/mainPlan/results/continuation-v2/walker_s2_final_local_audit_20260927.json",
+      "report_sha256": "93e1b378570b8670499b76316d747f30da769ca3ca8ec42f10fe7f2c765924de",
+      "validation_pred_loss": 0.0039440737455151975,
+      "verification_scope": "Final CPU model/export, optimizer, schedule, full history, data/source identity and recovery coherence; separate HF and W&B audits below."
     },
     "latest_uploaded_checkpoint": {
       "repo_id": "Sachioster/safetydial-walker2d",
-      "revision": "1d1a673f267df9105a44bea0b9861d5498c18394",
+      "revision": "9e05478658484d0f26ea740fead9e0ab7625367e",
       "path": "lewm-a/walker2d-lewm-a-recovery-20260927-1",
-      "step": 212000,
-      "validation_pred_loss": 0.003947833785787225,
+      "step": 214780,
+      "validation_pred_loss": 0.0039440737455151975,
       "remote_repo_private": true,
-      "verified_files": {
-        "optimizer.pt": {
-          "sha256": "1a5318ea56faed65a2b38408912794cbdf55c20d2c1ad1bd895bddbab7380986",
-          "size_bytes": 217738731
-        },
-        "weights.pt": {
-          "sha256": "abbfbcbe4b0e9e2616f8069a7985bbf95d14c64991aecb541c46ac6a894bf660",
-          "size_bytes": 72267425
-        }
+      "final_tag": {
+        "name": "walker2d-lewm-a-recovery-20260927-1",
+        "target_commit": "9e05478658484d0f26ea740fead9e0ab7625367e"
       },
-      "verification_scope": "Read-only local byte/hash and metadata coherence plus pinned private HF LFS metadata; immutable fully audited origin and exact resume provenance checked. No tensors, dataset or remote content loaded.",
-      "observed_unix": 1790501556.848318,
-      "observed_utc": "2026-09-27T09:32:36.848318+00:00",
-      "worker_at_verification": {
-        "pid": 18375,
-        "start_ticks": "130742",
-        "state": "R",
-        "cpu_ticks": 896632
-      },
-      "worker_cpu_ticks_before": 896050,
-      "report": "docs/mainPlan/results/continuation-v2/walker_checkpoint_212000_upload.json"
+      "observed_utc": "2026-09-27T09:43:02.701500+00:00",
+      "report": "docs/mainPlan/results/continuation-v2/walker_checkpoint_214780_upload.json",
+      "report_sha256": "21a73425d840487f0491517dad0dece0d8760f23af9c7fb617b2b32d49b21b74",
+      "verified_payload_files": 22,
+      "verification_scope": "Pinned private final revision/tag and22 non-receipt payload hashes/sizes; no remote download/restore claim."
     },
     "interrupted_full_run": "runs/walker2d-lewm-a-continuation-20260926-1",
     "interrupted_wandb": "https://wandb.ai/2699183-university-of-witwatersrand/safetydial-walker2d/runs/vwkna5ta",
     "recovery": {
-      "status": "running_verified_after_restore",
+      "status": "s2_completed_and_verified",
       "workflow_id": "walker2d-recovery-20260927-1",
       "service": "safetydial_walker_recovery_20260927_1",
       "config": "configs/walker2d/recovery-20260927-1.yaml",
@@ -89,7 +77,44 @@
       "repeated_logged_steps": 2400,
       "planned_additional_optimizer_updates": 42780,
       "recipe_unchanged": true,
-      "old_artifacts_preserved": true
+      "old_artifacts_preserved": true,
+      "executed_additional_optimizer_updates": 42780
+    },
+    "resume_origin_verified_checkpoint": {
+      "step": 172000,
+      "revision": "bdfbc8afc9d53a8fa9f00fd927be9c56477edcd3",
+      "report": "docs/mainPlan/results/continuation-v2/walker_checkpoint_172000_recovery_audit.json",
+      "report_sha256": "1d1ecee6fdc50a253c6a9efe59c127389e25672777bc91c07f6d9d14ddc5927d",
+      "validation_pred_loss": 0.004324658657424152,
+      "verification_scope": "34 CPU semantic checks of the immutable original recovery bundle, model export, Adam state, scheduler, history, RNG, scalers, configuration, splits, snapshots and restartable next batch. Separate launch evidence verifies actual CUDA restore and advancing training."
+    },
+    "final_wandb_verification": {
+      "report": "docs/mainPlan/results/continuation-v2/walker_s2_final_wandb_audit_20260927.json",
+      "report_sha256": "af188000839dc37675ef259d5e183030b96453d8e04bda5a30b0f25a604c130c"
+    },
+    "final_training_summary": "docs/mainPlan/results/s2/walker2d-lewm-a-recovery-20260927-1-summary",
+    "s3": {
+      "report": "docs/mainPlan/results/continuation-v2/walker_s3_final_local_audit_20260927.json",
+      "report_sha256": "636a617b5e8131d5674c617e02fb5a16ffb274b2b8a0ef0429982ce44872080a",
+      "status": "completed_health_only",
+      "active_rules": [
+        "health"
+      ],
+      "speed_rule_qualified": false,
+      "probe_revision": "cb1560d7b02b4fbe6585b3c0c325a78d56b337e6",
+      "remote_durability_verification": "pending_separate_read_only_audit",
+      "source_roots": 64,
+      "source_episodes": 32,
+      "paired_branches": 192
+    },
+    "s4": {
+      "workflow_stage": "prospective_acquisition",
+      "status": "running_at_observation",
+      "observed_utc": "2026-09-27T09:47:04.305918+00:00",
+      "active_rules": [
+        "health"
+      ],
+      "outcome": "pending"
     }
   },
   "pusht": {

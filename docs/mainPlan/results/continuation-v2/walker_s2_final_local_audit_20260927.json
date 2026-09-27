@@ -1,0 +1,84 @@
+{
+  "status": "consistent_finalized_saved_evidence",
+  "observed_utc": "2026-09-27T09:43:01.146325+00:00",
+  "checker_sha256": "a8538fe74b7c3d380e5ae42a9a997191fe018488d244abff29d8cbe960546d37",
+  "original_checker_sha256": "a90a2c71629a7a8a16035bfbb854d9f78d8c0748cee5201b975da912710e7a58",
+  "workflow_config_sha256": "d0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d",
+  "prepared_source_sha256": {
+    "experiments/scripts/walker_s3_gate.py": "7f878d70799821af0455f7149b15b63c5c2b369792215ccf09df23d440914c87",
+    "experiments/helpers/walkerTrainingFinalize.py": "e298c8a3aa967af27f750cd6828f21f6e9497355393f0a64955d726384ac8269",
+    "experiments/helpers/walkerValidation.py": "8ae6e5feec69e7c7d3881f2f69d9743ef11f467b23cf6c378282ac2c0ec9a026",
+    "experiments/helpers/walkerRules.py": "97e5520edcfb55cb46f83c45089ecce0972662d546b344b1cecaf5bfd33ecfdd",
+    "experiments/helpers/walkerLewm.py": "66f6b2a911decc8a19a9db56b0bb71d04aad55cafe8e98fa9dbe7bf2e5c84b34",
+    "experiments/helpers/walkerBank.py": "1361061e3abde88279897128e597fc22d9ed755349b985c1a8bf788d4cea0008",
+    "experiments/helpers/poseProbes.py": "424e17d2d970b402858182043dc7a75d22e57f553452d412de31e927f6c5af2e",
+    "experiments/helpers/managedWorkflow.py": "e298cd2450771519e9654ed587e49bed57da7ba3019c515bb42e0af8adb7d7d0",
+    "experiments/helpers/dialMetrics.py": "80e77d25c7f3a05ebb83f1df46a9097c64893e4ea206bfd669469b0ff749a68b",
+    "configs/walker2d/recovery-20260927-1.yaml": "d0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d",
+    "experiments/scripts/walker_s2_train_lewm.py": "b591e81f8bdce7ccf92e024d5909a153c03bee529b93bf3f33878114cd53a487",
+    "experiments/helpers/walkerTrainingState.py": "f967f5ed69a026a67075585ef1ca606e6a54dc5c9690428c689fb4ff1a500a51"
+  },
+  "mode": "s2",
+  "s2": {
+    "steps": 214780,
+    "history_records": 10739,
+    "training_source_episodes": 4544,
+    "validation_source_episodes": 93,
+    "report_sha256": "dd5f1e356b4f9a4c8824a9b4b53f185185be9db484defe108192514c2aaa5f7b",
+    "checkpoint": {
+      "repo_id": "Sachioster/safetydial-walker2d",
+      "revision": "9e05478658484d0f26ea740fead9e0ab7625367e",
+      "path": "lewm-a/walker2d-lewm-a-recovery-20260927-1"
+    },
+    "source_snapshot_files": 10,
+    "cpu_exports_verified": true,
+    "training_source_bytes_verified": true,
+    "resume_origin": {
+      "run_id": "walker2d-lewm-a-continuation-20260926-1",
+      "resume_bundle": "/workspace/Safety-Dial/runs/walker2d-lewm-a-continuation-20260926-1/optimizer.pt",
+      "resume_sha256": "50279ce50cac07cc74ef0fa8757415a71e2fedc9f69a09db8699a232174b0d5c",
+      "resume_step": 172000,
+      "original_checkpoint": {
+        "repo_id": "Sachioster/safetydial-walker2d",
+        "revision": "bdfbc8afc9d53a8fa9f00fd927be9c56477edcd3",
+        "path": "lewm-a/walker2d-lewm-a-continuation-20260926-1"
+      },
+      "original_config_sha256": "11773373582b2f3b9fdb33224d4f4f3e4acea895ce732ddec36763b60a72faa7",
+      "original_splits_sha256": "e7a8083f82d7b7701587b3dcaf1c73043384c18603d617470d293de58221b4b6",
+      "original_source_receipt": {
+        "repo_id": "Sachioster/safetydial-walker2d-data",
+        "revision": "ddd4d51648d2a382725efd20d04cedebedbf8fd2",
+        "path": "data/walker2d-data-20260926-3"
+      },
+      "normalizers_equal": true,
+      "validation_cadence": 4000
+    },
+    "new_optimizer_updates": 42780,
+    "render_telemetry": {
+      "pixel_mean": 83.16150665283203,
+      "min_frame_std": 48.564632415771484,
+      "shape": [
+        128,
+        4,
+        3,
+        224,
+        224
+      ],
+      "render_fingerprint": "8298e1d623e8ecda907516ba14a1dcb6",
+      "passed": true
+    },
+    "recovered_final_report": false
+  },
+  "limitations": [
+    "No simulation, rendering, model forward pass, network call or output mutation.",
+    "Local receipts pin reported revisions; repository privacy and remote bytes are not rechecked.",
+    "S2 losses and render measurements are saved evidence, not independently rerun.",
+    "S2 tensor equality requires the optional existing CPU-only export verifier.",
+    "S3 probe R2 and horizon errors cannot be recalculated from saved per-example predictions; those were not retained.",
+    "S3 same-row minima establish paired arithmetic, but dense truth/tape logs were not retained for independent physical replay.",
+    "S3 has manifest repository provenance but no per-run executed source snapshot; preparation hashes do not retroactively establish execution identity.",
+    "S3 costs reproduce branch count times the fixed 100-step horizon, not an independent measured ledger.",
+    "Numeric source episode IDs are scoped to their dataset files; disjoint probe/roots collections rely on upstream provenance.",
+    "Health qualification is mandatory and speed qualification optional in the implemented gate; S4 has a separate later gate."
+  ]
+}
