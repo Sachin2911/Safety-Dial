@@ -73,10 +73,13 @@ consistent pose-series styles. These are presentation corrections from the immut
 report; all original outputs and the gate decision remain unchanged. The numeric
 plotting policy passed 12 focused tests and Ruff.
 
-The [data-only results archive](decomposition_archive.json) is prepared locally, including
-both numerical NPZ files and the original and corrected figures. Its private upload
-requires explicit approval after automatic review rejected the transfer; no upload
-occurred. This optional archive is separate from the managed scientific workflows.
+The [data-only results archive](decomposition_archive.json), including both numerical
+NPZ files and the original and corrected figures, is now privately stored. After the
+user explicitly requested GitHub and Hugging Face storage on 27 September, the
+[publication audit](decomposition_archive_publication.json) verified all 18 files
+(11,400,309 bytes) and the immutable tag at revision
+`e792c41aa22e95c2f6a229dc3b44cd64128c8000`. The earlier rejected attempt remains
+recorded; the later authorized upload did not change the original scientific outputs.
 
 The [E2 adaptation-bank audit](e2_adaptation_bank_audit.json) verifies 64 source-disjoint
 roots and 446 distinct guarded branches, of which 422 have complete usable training
