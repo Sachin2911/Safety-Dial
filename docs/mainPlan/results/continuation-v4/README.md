@@ -135,3 +135,10 @@ payload files to private revision `cd896c7bcbb2377140fcda988fe2ef59673b1454`. Th
 upload includes the model and retention evidence; it does not include `repair.json`,
 the saved evaluation rows or paired reporting figures. Completed output directories
 remain unchanged, and the downstream gates were neither relaxed nor retried.
+
+The [presentation supplement](repair-presentation/README.md) fixes the original
+paired-report table formatting and annotates the same 18 saved examples with units,
+complete hazard extents and explicit censoring. It explains both the first-recipe
+fallback and the 80 px fixed-margin fallback after an undefined development target.
+All saved metrics, examples, original outputs and gates remain unchanged. Sixteen
+focused CPU tests, independent provenance/code review and visual review passed.

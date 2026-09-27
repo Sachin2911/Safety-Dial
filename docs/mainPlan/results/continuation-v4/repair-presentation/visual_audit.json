@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "written_utc": "2026-09-27T01:53:01.486051+00:00",
+  "status": "all_18_figures_visually_reviewed_and_report_checked",
+  "manifest_sha256": "0de4a89c85b6efe375fb257876ab592a846a5921b1680f97a10477ac83c8f347",
+  "readme_sha256": "3643bc861b6c004aa19d48677264a96a6a7cb5d1837ad811d1f3147eab512d9d",
+  "presentation_json_sha256": "51ad9b9c764234a6dfa1c17a6d793dda8dfc300eaa47885b9a77c60f3089f0d4",
+  "original_visual_audit": {
+    "path": "docs/mainPlan/results/continuation-v4/e2_visual_reporting_audit.json",
+    "sha256": "0e9c2e4d0253e215762184a5855143a04e1cb6708198caad4f6b9dc45d02166c"
+  },
+  "figure_sha256": {
+    "dev-corrected_false_safe.png": "1fe6b6f6552b35147282f3c999ecd27291d2f013933a96cdc5ce087d972bb788",
+    "dev-new_false_rejection.png": "ba3e4300c4f096f4df229d9e6644ddd13cbae724cab484baea83d8c77baf1310",
+    "dev-new_false_safe.png": "16e7e6bb640ed6c10a9257bff16604d7bf0ef27d99fb0d01e842ba372277abb5",
+    "dev-remaining_false_safe.png": "2b69bbe29afe0707527305ecbc41c542feb07c91b44faa33d28fd534f6e40bb0",
+    "dev-restored_safe_acceptance.png": "531827ab177aa16de4d538e4935ed1ad21b5775f29ce67653bb8d51b21ff7eec",
+    "dev-unresolved_accepted_future.png": "65a9b3298e8cec9c2b3ae42bd40d6b98fe568bdffcdbcdd8b642829c9a2c9ca1",
+    "stress-corrected_false_safe.png": "7d8f41e7751698d68a984d635e0cbed72d0f34b15454f344214fc8f13915d1f7",
+    "stress-new_false_rejection.png": "b8f5916bfcaffc9ecce0e8cdb25d8fde56793cb70b4af10995ac2384a07c8290",
+    "stress-new_false_safe.png": "9ab6186950958be959f7d14c5a27a36fe375e39545ace338b02b5a4df4b4f45b",
+    "stress-remaining_false_safe.png": "731f33ab74b6967d15371ccc3705fa27ad680500c42f58f86db56a2616b0bbe2",
+    "stress-restored_safe_acceptance.png": "1f19a674bd2fef2dd77bb301fbe033ae554fcafc46756aa5078f3a7b5fbaabad",
+    "stress-unresolved_accepted_future.png": "61dc0fb0924b7e38bd6aa3ccc241c094675ad9688baafaf87798ecc0374a04c8",
+    "test-corrected_false_safe.png": "10aaa89c14130fcd156ce88ef6b0e3442f35553104926586cd01b0b0a762fb8a",
+    "test-new_false_rejection.png": "0d3bcee31f53d5516c9d943981a72eb512432cab50bc2c92d3c02b2428efc22a",
+    "test-new_false_safe.png": "64fb6b6f4908b965f13668926f8acb5ac73c35ed25407d568f314df6b544c5c2",
+    "test-remaining_false_safe.png": "67f2f1aef384b06eb047c24a210fc4a9bdc81e2f82afca65a217cdbc88f4e528",
+    "test-restored_safe_acceptance.png": "7931b6ac0caaa89ff56be90a22a20c081ea34e047cbef0e471f68358f61f20e7",
+    "test-unresolved_accepted_future.png": "ca0b7d68069606516f86edfc43ceb9733690766c6dcf9f1083ac0ce4bde77db6"
+  },
+  "visual_findings": [
+    "All18 PNGs were inspected directly from their saved bytes. Text, axis units, legends, titles and all3 panels are readable, without missing panels or text clipping.",
+    "Each PNG identifies its original bank/category/root/branch/layout and displays exact saved before/after acceptance decisions, clearances and margins.",
+    "The geometry panel labels x/y in arena pixels and downward-positive y, the arena boundary, virtual hazard, pusher path and block body path.",
+    "The full saved stress-corrected_false_safe virtual rectangle is visible, including the portion beyond the arena boundary. Geometry limits encompass all recorded path/body vertices and hazard extents.",
+    "All3 unresolved-future PNGs explicitly state that no observed violation does not establish safety, and show observed/planned horizons22/25(dev),19/25(test),13/25(stress). Their original selected final real-frame steps20/15/10 remain unchanged.",
+    "Real frame contents retain their original observation bounds. Some T footprints reach or pass the image edge in the recorded frames; these pixels were not invented or reconstructed.",
+    "Footers distinguish recorded truth from predicted trajectories and explain that saved predictions and margins both affect decisions. Green goal footprints in real frames are distinguished from virtual hazards."
+  ],
+  "report_checks": [
+    "Separate complete GFM tables for each bank contain all4 arms, including fixed-margin controls.",
+    "README explicitly records0eligible of16development evaluations and the first-recipe fallback; no development-winner claim.",
+    "README identifies margin80 as the existing undefined-target fallback, not a successful FSA match.",
+    "Undefined point FSA stays undefined. Censoring bounds are explicitly not confidence intervals. Finite bootstrap limits are conditional diagnostics with no directional-effect claim.",
+    "Original failed gate, incomplete goal retention, costs, retention summaries, examples and saved row data compare exactly to paired_report.json."
+  ],
+  "verification": {
+    "targeted_tests": "16 passed: experiments/tests/test_pusht_e2_figures.py",
+    "ruff": "passed for new script and test",
+    "original_files_unchanged": 26,
+    "bank_inputs_unchanged": 9,
+    "saved_banks_gate_retention_costs_exactly_equal": true
+  },
+  "source_sha256": {
+    "experiments/scripts/pusht_e2_figures.py": "2ee52a2bdcb8e8c06dc778559ce4bae8008e3bb379659f8b1584eb8804f53c24",
+    "experiments/tests/test_pusht_e2_figures.py": "8246e3fede2c8e60f76e58dc2f65afb227abb18f90977bfffa9bbe23affd4db4"
+  },
+  "limitations": [
+    "This is a presentation correction using fixed saved examples and outputs, not a new experiment or statistical analysis.",
+    "The utility itself does not establish remote artifact durability; parent agents handle that separately."
+  ],
+  "actions": {
+    "model_queries": 0,
+    "simulator_steps": 0,
+    "optimizer_updates": 0,
+    "original_output_edits": 0,
+    "uploads": 0,
+    "staged_or_committed": false
+  }
+}
