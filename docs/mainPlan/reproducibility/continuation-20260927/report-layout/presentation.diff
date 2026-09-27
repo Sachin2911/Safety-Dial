@@ -1,0 +1,62 @@
+--- /tmp/walker_recovery_training_summary.py
++++ /tmp/walker_recovery_training_summary_report.py
+@@ -5,7 +5,7 @@
+ folder beside the finalized S2 report. No model, simulator or network imports.
+ 
+ Example (root runs this later, after the completion barrier):
+-  uv run python /tmp/walker_recovery_training_summary.py \
++  uv run python /tmp/walker_recovery_training_summary_report.py \
+     --report docs/mainPlan/results/s2/walker2d-lewm-a-recovery-20260927-1.json \
+     --run-dir runs/walker2d-lewm-a-recovery-20260927-1 \
+     --workflow-state runs/workflows/walker2d-recovery-20260927-1/state.json \
+@@ -155,29 +155,40 @@
+     matplotlib.use("Agg")
+     import matplotlib.pyplot as plt
+ 
++    from matplotlib.ticker import StrMethodFormatter
++
++    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 10.5,
++                         "axes.labelsize": 11, "xtick.labelsize": 10.5,
++                         "ytick.labelsize": 10.5, "legend.fontsize": 10.5,
++                         "pdf.fonttype": 42, "ps.fonttype": 42})
+     steps = [row["step"] for row in history]
+-    fig, axes = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
++    fig, axes = plt.subplots(3, 1, figsize=(7, 7.1), sharex=True)
+     for ax, key, label in zip(axes, ("pred_loss", "sigreg_loss", "lr"),
+                               ("Prediction loss", "SIGReg loss", "Learning rate"), strict=True):
+         values = [row[key] for row in history]
+         ax.plot(steps, values, linewidth=0.6, color="#0072B2", label="Saved training history")
+         ax.axvline(RESUME_STEP, color="#D55E00", linestyle="--", linewidth=1.3,
+-                   label="Resume from step 172000")
++                   label="Resume from step 172,000")
+         ax.set_ylabel(label)
+         if key != "lr" and min(values) > 0:
+             ax.set_yscale("log")
+-            ax.set_ylabel(label + " (log scale)")
++            ax.set_ylabel(label + "\n(log scale)")
+         ax.grid(alpha=0.2)
+-    axes[0].legend(loc="upper right", fontsize=8)
+-    axes[-1].set_xlabel("Global optimizer step (full 214780-step horizon)")
++    handles, labels = axes[0].get_legend_handles_labels()
++    fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.54, 0.948),
++               frameon=False, fontsize=10.5, ncol=2)
++    axes[-1].set_xlabel("Global optimizer step (214,780-step horizon)")
++    axes[-1].set_xticks([0, 50000, 100000, 150000, 200000])
++    axes[-1].xaxis.set_major_formatter(StrMethodFormatter("{x:,.0f}"))
+     axes[-1].set_xlim(0, TOTAL_STEPS)
+     axes[-1].ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
+-    fig.suptitle("Walker2d LeWM-A: saved training losses and schedule", fontsize=14)
+-    fig.text(0.5, 0.025, "10739 saved records, every 20 updates. "
++    fig.suptitle("Walker2d LeWM-A: saved training history", fontsize=14, y=0.985)
++    fig.text(0.5, 0.02, "10,739 saved records, every 20 updates.\n"
+              "Dashed line marks recovery; no validation time series is inferred.",
+-             ha="center", fontsize=9)
+-    fig.tight_layout(rect=(0, 0.05, 1, 0.96))
+-    fig.savefig(output / "learning_curves.png", dpi=150)
++             ha="center", va="bottom", fontsize=10.5, linespacing=1.5)
++    fig.tight_layout(rect=(0, 0.09, 1, 0.92))
++    fig.savefig(output / "learning_curves.png", dpi=240)
++    fig.savefig(output / "learning_curves.pdf")
+     plt.close(fig)
+ 
+     recipe = summary["recipe"]

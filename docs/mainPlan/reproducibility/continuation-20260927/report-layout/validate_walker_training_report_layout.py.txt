@@ -1,0 +1,101 @@
+from pathlib import Path
+import ast
+import hashlib
+import importlib.util
+import json
+import math
+from datetime import datetime, timezone
+
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.text import Text
+
+OLD = Path("/tmp/walker_recovery_training_summary.py")
+NEW = Path("/tmp/walker_recovery_training_summary_report.py")
+OUT = Path("/tmp/walker-training-report-synthetic-20260927")
+
+def sha(p):
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+
+def normalized(tree):
+    return ast.dump(tree, include_attributes=False)
+
+old = ast.parse(OLD.read_text())
+new = ast.parse(NEW.read_text())
+old_functions = {node.name: node for node in old.body if isinstance(node, ast.FunctionDef)}
+new_functions = {node.name: node for node in new.body if isinstance(node, ast.FunctionDef)}
+assert old_functions.keys() == new_functions.keys()
+unchanged = [name for name in old_functions if name != "render"]
+assert all(normalized(old_functions[name]) == normalized(new_functions[name]) for name in unchanged)
+assert normalized(ast.Module(body=old_functions['render'].body[-4:], type_ignores=[])) == normalized(ast.Module(body=new_functions['render'].body[-4:], type_ignores=[]))
+# Only the docstring and the plotting prefix of render may differ.
+old.body = [node for node in old.body if not (isinstance(node, ast.FunctionDef) and node.name == 'render')][1:]
+new.body = [node for node in new.body if not (isinstance(node, ast.FunctionDef) and node.name == 'render')][1:]
+assert normalized(old) == normalized(new)
+assert sha(OLD) == '5c667475c61aa2540f952ff6ada193598e1acbb58c9bb63809c362d1f7fe723e'
+identities = {'original': sha(OLD), 'report_copy': sha(NEW)}
+OUT.mkdir(exist_ok=False)
+spec = importlib.util.spec_from_file_location('synthetic_summary', NEW)
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+history = [{'step': step,
+            'pred_loss': 0.05 + 0.9 * math.exp(-step / 22000) * (1 + 0.08 * math.sin(step / 400)),
+            'sigreg_loss': 0.4 + 0.6 * math.exp(-step / 70000),
+            'lr': 0.0003 * min(1, step / 5000) * (0.5 + 0.5 * math.cos(math.pi * step / 214780))}
+           for step in range(20, 214781, 20)]
+assert len(history) == 10739
+summary = {'run_id':'SYNTHETIC-LAYOUT-ONLY', 'recipe':{'fixture':True},
+           'data':{'path':'SYNTHETIC-NO-DATA-READ','sha256':'0'*64},
+           'final_saved_validation_prediction_loss':0.123,
+           'recovered_invocation_wall_clock_s':123.0, 'n_params':123456,
+           'n_clips':123456, 'split_counts':{'train':20,'validation':2},
+           'split_sha256':'0'*64, 'checkpoint':{'revision':'SYNTHETIC-NOT-A-REVISION'},
+           'upstream_revisions':{'resume_sha256':'0'*64}}
+# Entrypoints that could read real evidence are never called.
+module.prepare = lambda *a, **kw: (_ for _ in ()).throw(AssertionError('No evidence reads'))
+module.digest = lambda *a, **kw: (_ for _ in ()).throw(AssertionError('No evidence hashes through module'))
+module.tree_identity = module.digest
+checked = {}
+original_save = Figure.savefig
+
+def inspect_save(fig, *args, **kwargs):
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    fonts = [t.get_fontsize() for t in fig.findobj(match=Text) if t.get_visible() and t.get_text()]
+    assert min(fonts) >= 10
+    assert tuple(fig.get_size_inches()) == (7.0, 7.1)
+    bbox = fig.get_tightbbox(renderer)
+    assert 0 <= bbox.x0 < bbox.x1 <= 7
+    assert 0 <= bbox.y0 < bbox.y1 <= 7.1
+    assert len(fig.axes) == 3
+    for ax, key in zip(fig.axes, ('pred_loss','sigreg_loss','lr'), strict=True):
+        assert list(ax.lines[0].get_xdata()) == [r['step'] for r in history]
+        assert list(ax.lines[0].get_ydata()) == [r[key] for r in history]
+        assert list(ax.lines[1].get_xdata()) == [172000,172000]
+    checked.update({'size_inches':[7,7.1], 'minimum_text_font_pt':min(fonts),
+                    'all_drawn_content_inside_figure':True,
+                    'exact_saved_curve_values_and_recovery_line':True})
+    return original_save(fig, *args, **kwargs)
+
+Figure.savefig = inspect_save
+try:
+    module.render(summary, history, OUT)
+finally:
+    Figure.savefig = original_save
+    plt.close('all')
+readme = OUT/'README.md'
+readme.write_text('# SYNTHETIC RENDERING FIXTURE ONLY\n\nAll numeric values and lineage below are synthetic placeholders. No real training artifacts were read. This is not a training result or completion claim.\n\n'+readme.read_text())
+assert sha(OLD) == identities['original'] and sha(NEW) == identities['report_copy']
+record = {'status':'synthetic_render_and_static_invariance_passed', 'created_utc':datetime.now(timezone.utc).isoformat(),
+          'fixture_scope':'Explicitly synthetic rendering only. No actual training or S3/S4 evidence read.',
+          'source_sha256':identities, 'unchanged_functions':unchanged,
+          'render_readme_and_summary_logic_unchanged':True,
+          'all_nonrender_logic_ast_identical':True, 'synthetic_history_rows':len(history),
+          **checked, 'outputs_sha256':{p.name:sha(p) for p in sorted(OUT.iterdir()) if p.is_file()},
+          'model_queries':0, 'simulator_steps':0, 'network_calls':0,
+          'limitations':['No real completion or saved-evidence gate was executed.',
+                         'Actual final curves and their PDF placement still require visual review.']}
+(OUT/'validation.json').write_text(json.dumps(record, indent=2)+'\n')
+print(json.dumps(record,indent=2))
