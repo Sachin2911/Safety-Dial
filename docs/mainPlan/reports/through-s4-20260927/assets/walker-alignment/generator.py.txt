@@ -1,0 +1,214 @@
+#!/usr/bin/env python3
+"""Compact report-only Walker S1 view from immutable saved JSON and CSV."""
+from __future__ import annotations
+
+import argparse
+import csv
+import hashlib
+import io
+import json
+import platform
+from datetime import datetime, timezone
+from pathlib import Path
+
+import matplotlib
+import numpy as np
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+from matplotlib.ticker import MaxNLocator
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def write_json(path, value):
+    with path.open("x") as stream:
+        json.dump(value, stream, indent=2, allow_nan=False)
+        stream.write("\n")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--root", type=Path, default=Path('/workspace/Safety-Dial'))
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    root, output = args.root.resolve(), args.output.resolve()
+    source = root / "docs/mainPlan/results/continuation-v2/walker_s1_alignment"
+    if output.exists():
+        raise ValueError("Require a fresh output directory")
+    inventory = {p.name: digest(p.read_bytes()) for p in source.iterdir() if p.is_file()}
+    source_bytes = {name: (source / name).read_bytes() for name in ("traces.csv", "alignment.json")}
+    for name, data in source_bytes.items():
+        assert digest(data) == inventory[name], f"Input changed before parsing: {name}"
+    generator_bytes = Path(__file__).read_bytes()
+    report = json.loads(source_bytes["alignment.json"])
+    csv_rows = list(csv.DictReader(io.StringIO(source_bytes["traces.csv"].decode())))
+    assert report["status"] == "passed"
+    assert report["rules"]["health"] == "0.8 < height < 2.0 and -1.0 < pitch < 1.0 (strict bounds)"
+    limit = report["rules"]["signed_speed_limit"]
+    assert limit == 2.3415 and report["rules"]["dt_s"] == .008
+    selected = []
+    for episode in (0, 2):
+        matches = [w for w in report["windows"] if w["dataset"] == "setA.h5"
+                   and w["window"] == "tail" and w["episode"] == episode]
+        assert len(matches) == 1
+        window = matches[0]
+        rows = window["rows"]
+        csv_selected = [r for r in csv_rows if r["dataset"] == "setA.h5"
+                        and r["window"] == "tail" and int(r["episode"]) == episode]
+        assert len(rows) == len(csv_selected) == 24
+        assert [r["step"] for r in rows] == list(range(window["episode_length"] - 24, window["episode_length"]))
+        # Compare every saved field, including null availability and original actions.
+        for saved, recorded in zip(rows, csv_selected, strict=True):
+            for key, value in saved.items():
+                text = recorded[key]
+                if value is None:
+                    assert text == ""
+                elif isinstance(value, bool):
+                    assert text == str(value)
+                elif isinstance(value, list):
+                    assert json.loads(text) == value
+                elif isinstance(value, (int, float)):
+                    assert float(text) == value
+                else:
+                    assert text == value
+        assert all(r["successor_available"] for r in rows[:-1])
+        assert rows[-1]["successor_available"] is False
+        assert rows[-1]["expected_x_velocity"] is None
+        assert rows[-1]["expected_terminated"] is None
+        assert (rows[-1]["terminated"], rows[-1]["truncated"]) == ((0, 1) if episode == 0 else (1, 0))
+        selected.append(window)
+
+    output.mkdir(parents=True, exist_ok=False)
+    (output / "generator.py").write_bytes(generator_bytes)
+    write_json(output / "selected_rows.json", {"dataset": "setA.h5", "windows": selected})
+    plt.rcParams.update({"font.size": 10, "axes.labelsize": 10, "axes.titlesize": 10,
+                         "xtick.labelsize": 9, "ytick.labelsize": 9, "legend.fontsize": 9,
+                         "pdf.fonttype": 42, "ps.fonttype": 42})
+    fig, axes = plt.subplots(3, 2, figsize=(7, 7.4), sharex="col", sharey="row")
+    fig.subplots_adjust(left=.105, right=.98, top=.835, bottom=.285, hspace=.20, wspace=.20)
+    state_color, speed_color, cost_color = "#0072B2", "#6F45A7", "#C44432"
+    for col, window in enumerate(selected):
+        rows = window["rows"]
+        steps = np.array([r["step"] for r in rows])
+        ending = rows[-1]
+        title = "Episode 0: time-limit end" if col == 0 else "Episode 2: health terminal"
+        axes[0, col].set_title(title + f"\nRecorded term={ending['terminated']}, trunc={ending['truncated']}", pad=9)
+        for row_id, key, bounds in ((0, "height", (.8, 2.)), (1, "pitch", (-1., 1.))):
+            ax = axes[row_id, col]
+            values = [r[key] for r in rows]
+            ax.plot(steps, values, "o-", color=state_color, lw=1.6, ms=3)
+            for boundary in bounds:
+                ax.axhline(boundary, color=".40", ls=":", lw=1.2)
+            ax.plot(steps[-1], values[-1], marker="D", ms=5.5, mfc="white", mec=".15", zorder=6)
+        ax = axes[2, col]
+        velocity = np.array([r["x_velocity"] for r in rows])
+        ax.plot(steps, velocity, "o-", color=speed_color, lw=1.8, ms=3.5)
+        ax.plot(steps[:-1], [r["expected_x_velocity"] for r in rows[:-1]],
+                color="#D58C00", ls="--", lw=1.1, zorder=4)
+        costly = np.array([bool(r["cost"]) for r in rows])
+        ax.scatter(steps[costly], velocity[costly], s=19, color=cost_color, zorder=5)
+        ax.axhline(limit, color=".40", ls=":", lw=1.2)
+        ax.plot(steps[-1], velocity[-1], marker="D", ms=6, mfc=cost_color if ending["cost"] else "white",
+                mec=".15", zorder=6)
+        ax.set_xlabel("Saved row / action index t", labelpad=7)
+        for axis in axes[:, col]:
+            axis.set_xlim(steps[0] - .8, steps[-1] + .8)
+            axis.xaxis.set_major_locator(MaxNLocator(nbins=5, integer=True))
+            axis.yaxis.set_major_locator(MaxNLocator(nbins=4))
+            axis.grid(alpha=.16)
+            axis.spines[["top", "right"]].set_visible(False)
+    axes[0, 0].set_ylim(.72, 2.08)
+    axes[1, 0].set_ylim(-1.12, 1.12)
+    axes[2, 0].set_ylim(1.65, 4.12)
+    for axis, label in zip(axes[:, 0], ("Height at s[t] (m)", "Pitch at s[t] (rad)", "Velocity, t to t+1 (m/s)"), strict=True):
+        axis.set_ylabel(label)
+    fig.suptitle("Walker S1: saved state and transition alignment", x=.52, y=.982, fontsize=12)
+    fig.text(.52, .940, "Illustrative set A episodes 0 and 2; final 24 recorded rows\n"
+             "Selected from a prior post hoc audit, not a prevalence sample", ha="center", va="top", fontsize=9)
+    handles = [
+        Line2D([], [], color=state_color, marker="o", ms=3, label="Saved pre-action state"),
+        Line2D([], [], color=speed_color, marker="o", ms=3, label="Recorded transition velocity"),
+        Line2D([], [], color="#D58C00", ls="--", label="Velocity from next saved position"),
+        Line2D([], [], color=".40", ls=":", label="Health / signed-speed limits"),
+        Line2D([], [], color=cost_color, marker="o", ls="none", ms=4, label="Recorded transition cost = 1"),
+        Line2D([], [], color=".15", marker="D", mfc="white", ls="none", ms=5, label="Last row: successor unavailable"),
+    ]
+    fig.legend(handles=handles, loc="upper center", bbox_to_anchor=(.53, .213), ncol=2,
+               frameon=False, columnspacing=1.2, handlelength=2, labelspacing=.7)
+    fig.text(.105, .087, "Health: 0.8 < height < 2.0 m and -1 < pitch < 1 rad.\n"
+             f"Cost = 1 when signed transition velocity > {limit:g} m/s.\n"
+             "Final s[t+1] is absent: no terminal successor state is drawn or inferred.",
+             ha="left", va="top", fontsize=9, linespacing=1.35)
+    fig.savefig(output / "walker_alignment_compact.png", dpi=220)
+    fig.savefig(output / "walker_alignment_compact.pdf", metadata={"Title": "Saved Walker S1 alignment: illustrative tails"})
+    plt.close(fig)
+
+    (output / "README.md").write_text("""# Compact saved Walker S1 alignment view
+
+This report-only figure uses the saved `traces.csv` and `alignment.json` from
+`docs/mainPlan/results/continuation-v2/walker_s1_alignment`. No HDF5 file,
+model, simulator, GPU job or network service was opened or queried.
+
+The two columns show set A episodes 0 and 2, final 24 rows only. These are
+explicitly chosen illustrative episodes from the prior post hoc audit: a
+recorded time-limit ending and a recorded health-terminal ending. This is
+neither a prevalence estimate nor a claim of preregistered selection. The prior
+audit itself happened after pretraining began.
+
+Height and pitch belong to pre-action state s[t]. Velocity, cost and ending
+flags belong to the transition from t to t+1. The dashed velocity reconstruction
+uses the next saved position and stops before the final row, whose successor is
+absent. The final recorded velocity remains shown, but cannot be reconstructed
+from these saved positions. A healthy last saved state does not contradict a
+health-terminal transition. Its terminal successor cannot be checked here.
+
+Limits and cost markers reproduce the saved rules and fields: strict height
+(0.8, 2.0 m), pitch (-1, 1 rad), and signed velocity > 2.3415 m/s. This is not
+an absolute-speed rule. Recorded ending flags are retained, not inferred from
+the plotted pre-action states.
+
+The original CSV and JSON agree exactly for every field in all 48 selected
+rows. All original alignment-bundle file hashes were checked before and after.
+`selected_rows.json` retains the exact selected JSON windows; `manifest.json`
+records source and generator identities plus output hashes. The original
+artifacts were not modified. No new scientific metric or gate was computed.
+
+The figure is 7 by 7.4 inches with native PDF text and labels at least 9 pt.
+Keep near its native width in the final report. PNG resolution is 1540 by 1628.
+
+Reproduce to a new output directory:
+
+```sh
+uv run python runs/continuation-audit/report-walker-alignment-20260927/generator.py \\
+  --root /workspace/Safety-Dial --output /tmp/walker-alignment-review
+```
+""")
+    after = {p.name: digest(p.read_bytes()) for p in source.iterdir() if p.is_file()}
+    assert after == inventory, "Original alignment outputs changed during rendering"
+    assert Path(__file__).read_bytes() == generator_bytes, "Generator changed during rendering"
+    manifest = {
+        "kind": "report_only_saved_alignment_view", "created_utc": datetime.now(timezone.utc).isoformat(),
+        "source_directory": str(source.relative_to(root)), "source_run_id": report["run_id"],
+        "source_alignment_bundle_sha256": inventory, "source_inputs_unchanged": True,
+        "generator_sha256": digest(generator_bytes), "python": platform.python_version(),
+        "matplotlib": matplotlib.__version__, "numpy": np.__version__,
+        "selection": {"dataset": "setA.h5", "episodes": [0, 2], "final_rows_per_episode": 24,
+                      "purpose": "explicitly selected illustrative prior-audited endings",
+                      "preregistered": False, "prevalence_claim": False},
+        "scientific_scope": {"input_formats_loaded": ["CSV", "JSON"], "HDF5_loaded": False,
+                             "model_calls": 0, "simulator_calls": 0, "network_calls": 0,
+                             "new_metrics_or_gates": False},
+        "format": {"inches": [7, 7.4], "minimum_text_pt": 9, "png_dpi": 220},
+        "outputs_sha256": {p.name: digest(p.read_bytes()) for p in sorted(output.iterdir()) if p.is_file()},
+    }
+    write_json(output / "manifest.json", manifest)
+    print(json.dumps({"output": str(output), "manifest_sha256": digest((output / "manifest.json").read_bytes()),
+                      "input_hashes_unchanged": True, "selected_rows": 48}, indent=2))
+
+
+if __name__ == "__main__":
+    main()

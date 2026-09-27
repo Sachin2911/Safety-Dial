@@ -1,0 +1,309 @@
+"""Two fixed saved E2 examples, compact for A4. No new selection or queries."""
+
+from pathlib import Path
+from datetime import datetime, timezone
+import hashlib
+import json
+import sys
+
+import h5py
+import hdf5plugin  # noqa: F401
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+from matplotlib.patches import Circle, Polygon, Rectangle, Patch
+from matplotlib.text import Text
+import numpy as np
+
+ROOT = Path("/workspace/Safety-Dial")
+OUT = Path(__file__).resolve().parent
+SOURCE = ROOT / "docs/mainPlan/results/continuation-v4/repair"
+CATEGORIES = ("corrected_false_safe", "unresolved_accepted_future")
+sys.path.insert(0, str(ROOT / "experiments/scripts"))
+from pusht_e2_figures import saved_frames, plot_limits, t_polygons, decision_text, horizon_text  # noqa: E402
+
+
+def require(ok, message):
+    if not ok:
+        raise ValueError(message)
+
+
+def sha(path):
+    h = hashlib.sha256()
+    with Path(path).open("rb") as f:
+        for b in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(b)
+    return h.hexdigest()
+
+
+def inventory(path):
+    return {str(p.relative_to(ROOT)): sha(p) for p in sorted(path.rglob("*")) if p.is_file()}
+
+
+def digest_array(a):
+    a = np.ascontiguousarray(a)
+    return {
+        "shape": list(a.shape),
+        "dtype": str(a.dtype),
+        "raw_bytes_sha256": hashlib.sha256(a.tobytes()).hexdigest(),
+    }
+
+
+def plot(example, frames, category):
+    plt.rcParams.update(
+        {
+            "font.size": 11,
+            "axes.titlesize": 11,
+            "axes.labelsize": 10.5,
+            "xtick.labelsize": 10.5,
+            "ytick.labelsize": 10.5,
+            "legend.fontsize": 10.5,
+            "pdf.fonttype": 42,
+            "ps.fonttype": 42,
+        }
+    )
+    fig = plt.figure(figsize=(7, 3.65), facecolor="white")
+    ax = fig.add_axes((0.085, 0.22, 0.285, 0.555))
+    camera = [fig.add_axes((0.405, 0.22, 0.265, 0.555)), fig.add_axes((0.705, 0.22, 0.265, 0.555))]
+    states = np.asarray(example["trace"]["states"])
+    hazard = example["layout"]["hazard"]
+    limits = plot_limits(states, hazard, padding=20)
+    ax.add_patch(
+        Rectangle((0, 0), 512, 512, fill=False, edgecolor="#999999", linestyle=":", linewidth=0.8)
+    )
+    if hazard["kind"] == "box":
+        patch = Rectangle(
+            (hazard["x0"], hazard["y0"]), hazard["x1"] - hazard["x0"], hazard["y1"] - hazard["y0"]
+        )
+    else:
+        patch = Circle((hazard["cx"], hazard["cy"]), hazard["r"])
+    patch.set(facecolor="#d55e00", edgecolor="#d55e00", alpha=0.28)
+    ax.add_patch(patch)
+    ax.plot(states[:, 0], states[:, 1], color="#d29100", linewidth=1.5)
+    ax.plot(states[:, 2], states[:, 3], color="#0072b2", linewidth=1.5)
+    for polygon in t_polygons(states[0, 2:5]):
+        ax.add_patch(
+            Polygon(polygon, fill=False, edgecolor="#777777", linestyle="--", linewidth=0.9)
+        )
+    for polygon in t_polygons(states[-1, 2:5]):
+        ax.add_patch(
+            Polygon(polygon, facecolor="#0072b2", edgecolor="#0072b2", alpha=0.35, linewidth=1.1)
+        )
+    ax.set(
+        xlim=limits[0],
+        ylim=limits[1],
+        aspect="equal",
+        xticks=[0, 256, 512],
+        yticks=[0, 256, 512],
+        xlabel="x (px)",
+        ylabel="y (px; down)",
+    )
+    last = max(example["trace"]["observed_state_steps"])
+    ax.set_title(f"Recorded geometry\nsteps 0 to {last}", pad=7)
+    for panel, (step, frame) in zip(camera, frames, strict=True):
+        require(
+            frame.dtype == np.uint8 and frame.shape == (224, 224, 3),
+            "Unexpected stored camera format",
+        )
+        panel.imshow(frame, interpolation="nearest")
+        panel.set_title(f"Stored camera\nstep {step}", pad=7)
+        panel.axis("off")
+    title = (
+        "Corrected false-safe decision"
+        if category == "corrected_false_safe"
+        else "Accepted unresolved future"
+    )
+    fig.suptitle(title, fontsize=13, y=0.98)
+    fig.legend(
+        handles=[
+            Line2D([0], [0], color="#d29100", lw=2, label="Pusher path"),
+            Line2D([0], [0], color="#0072b2", lw=2, label="Block path"),
+            Patch(facecolor="#d55e00", alpha=0.28, label="Virtual hazard"),
+        ],
+        loc="lower center",
+        bbox_to_anchor=(0.54, 0.025),
+        ncol=3,
+        frameon=False,
+        columnspacing=1.2,
+        handlelength=1.4,
+    )
+    fig.canvas.draw()
+    text_sizes = [t.get_fontsize() for t in fig.findobj(Text) if t.get_visible() and t.get_text()]
+    require(min(text_sizes) >= 10.5, "Label font smaller than declared minimum")
+    stem = OUT / ("test-" + category)
+    fig.savefig(stem.with_suffix(".png"), dpi=240)
+    fig.savefig(stem.with_suffix(".pdf"))
+    plt.close(fig)
+    return {
+        "width_inches": 7,
+        "height_inches": 3.65,
+        "minimum_label_font_pt": min(text_sizes),
+        "minimum_label_font_at_6_inch_placement_pt": min(text_sizes) * 6 / 7,
+        "geometry_limits": {"x": limits[0], "y": limits[1]},
+        "geometry_observed_last_step": last,
+        "displayed_stored_camera_steps": [s for s, _ in frames],
+    }
+
+
+def main():
+    require(
+        {p.name for p in OUT.iterdir()} == {"generate.py"},
+        "Require fresh source-only output directory",
+    )
+    original_dirs = [
+        SOURCE,
+        SOURCE.parent / "repair-presentation",
+        SOURCE.parent / "repair-animations-v2",
+    ]
+    originals = {str(p.relative_to(ROOT)): inventory(p) for p in original_dirs}
+    source_paths = [
+        Path(__file__).resolve(),
+        ROOT / "experiments/scripts/pusht_e2_figures.py",
+        ROOT / "experiments/helpers/pushtGeometry.py",
+    ]
+    source_hashes = {str(p.relative_to(ROOT)): sha(p) for p in source_paths}
+    paired = json.loads((SOURCE / "paired-report/paired_report.json").read_text())
+    require(
+        sha(SOURCE / "repair.json") == paired["inputs"]["repair_report"]["sha256"],
+        "Repair report changed",
+    )
+    require(
+        sha(SOURCE / "repair_rows.npz") == paired["inputs"]["evaluation_rows"]["sha256"],
+        "Saved evaluation rows changed",
+    )
+    bank = ROOT / "data/study/pusht/continuation-v4/e1/test"
+    bank_hashes = {
+        str((bank / name).relative_to(ROOT)): expected
+        for name, expected in paired["inputs"]["bank_identities"]["test"].items()
+    }
+    require(all(sha(ROOT / p) == h for p, h in bank_hashes.items()), "Pinned test bank changed")
+    roots = json.loads((bank / "roots.json").read_text())["roots"]
+    layouts = json.loads((bank / "layouts.json").read_text())["layouts"]
+    report = {
+        "kind": "compact_saved_e2_report_examples_v1",
+        "run_id": paired["run_id"],
+        "created_utc": datetime.now(timezone.utc).isoformat(),
+        "saved_gate": paired["gate"],
+        "selection": "Exactly the two preselected paired-report test examples; no new ranking or selection.",
+        "examples": {},
+        "additional_simulator_steps": 0,
+        "additional_model_queries": 0,
+    }
+    with h5py.File(bank / "branches.h5", "r") as h5:
+        for category in CATEGORIES:
+            example = paired["banks"]["test"]["examples"][category]["example"]
+            require(example is not None, "A required preselected example is absent")
+            root = roots[example["row_id"]["root_index"]]
+            require(
+                root["root_id"] == example["root_id"]
+                and root["meta"]["episode"] == example["source_episode"]
+                and Path(example["bank_path"]).resolve() == bank.resolve()
+                and example["layout"] in layouts,
+                "Saved example/root/layout identity mismatch",
+            )
+            frames = saved_frames(example, h5)
+            require(
+                len(frames) == 2,
+                "Expected the same first/last frames as the preserved presentation",
+            )
+            branch = example["row_id"]["branch_index"]
+            observed = np.asarray(h5["observed"][branch], dtype=bool)
+            require(
+                np.array_equal(
+                    np.asarray(h5["observation_valid"][branch], dtype=bool)[observed],
+                    example["trace"]["observation_valid"],
+                ),
+                "Observation-validity trace changed",
+            )
+            style = plot(example, frames, category)
+            caption = (
+                f"Recorded open-loop test example, source episode {example['source_episode']}, root {example['root_id']}, "
+                f"branch {branch}, {example['row_id']['layout_family']} hazard. "
+                f"{decision_text(example)}. {horizon_text(example)} "
+                f"Stored camera frames are shown only at steps {frames[0][0]} and {frames[-1][0]}; "
+                "the geometry uses all saved observed states. Geometry is recorded truth, not predicted trajectories. "
+                "Dashed grey is the initial T footprint; blue fill is its final observed footprint. "
+                "The virtual hazard is drawn only on geometry; green in camera images is the saved goal. "
+                "Decision changes depend on both saved predictions and margins. This is an existing illustration, not a prevalence or closed-loop result."
+            )
+            if example["unresolved_future"]:
+                caption += " State observations end at step 19; the final valid camera endpoint is step 15. Steps 20 to 25 are unobserved. No padded or synthesized suffix is displayed."
+            report["examples"][category] = {
+                "row_id": example["row_id"],
+                "root_id": example["root_id"],
+                "source_episode": example["source_episode"],
+                "source_row_indices": example["source_row_indices"],
+                "decisions": example["decisions"],
+                "no_update_predicted_min_clearance_px": example["no_update_row"]["cmin_imagined"],
+                "adapted_predicted_min_clearance_px": example["adapted_row"]["cmin_imagined"],
+                "known_unsafe": example["known_unsafe"],
+                "censored": example["censored"],
+                "unresolved_future": example["unresolved_future"],
+                "planned_horizon_steps": example["trace"]["planned_horizon_steps"],
+                "unobserved_steps": example["trace"]["unobserved_steps"],
+                "source_example_json_sha256": hashlib.sha256(
+                    json.dumps(example, sort_keys=True, allow_nan=False).encode()
+                ).hexdigest(),
+                "observed_state_array": digest_array(np.asarray(example["trace"]["states"])),
+                "frames": [{"step": step, **digest_array(frame)} for step, frame in frames],
+                "layout": style,
+                "caption": caption,
+            }
+    for directory in original_dirs:
+        require(
+            inventory(directory) == originals[str(directory.relative_to(ROOT))],
+            "Original figure/media/result directory changed",
+        )
+    require(
+        all(sha(ROOT / p) == h for p, h in bank_hashes.items()),
+        "Pinned bank changed during rendering",
+    )
+    require(all(sha(ROOT / p) == h for p, h in source_hashes.items()), "Generator source changed")
+    (OUT / "examples.json").write_text(json.dumps(report, indent=2, allow_nan=False) + "\n")
+    lines = [
+        "# Compact saved Push-T examples for the report",
+        "",
+        "Two 7-inch-wide figures with minimum 10.5 pt labels (9 pt even at a 6-inch placement). PNG and vector PDF share the same layout. Geometry, lines and text are vector in the PDF; the genuine stored camera pixels remain raster images.",
+        "",
+        "No scientific result, example choice, prediction, camera frame, acceptance margin or gate was changed. Original results, corrected presentation and final animation directories were rehashed unchanged.",
+        "",
+        "Use the following captions with the figures; their decisions and observation limits are intentionally outside the compact image.",
+    ]
+    for category, value in report["examples"].items():
+        lines += ["", f"## {category}", "", value["caption"]]
+    (OUT / "README.md").write_text("\n".join(lines) + "\n")
+    manifest = {
+        "kind": report["kind"],
+        "run_id": paired["run_id"],
+        "source_hashes": source_hashes,
+        "bank_input_hashes": bank_hashes,
+        "original_directories_unchanged": True,
+        "original_directory_hashes": originals,
+        "saved_gate_unchanged": True,
+        "outputs_sha256": {
+            p.name: sha(p) for p in sorted(OUT.iterdir()) if p.name != "generate.py"
+        },
+        "queries": {"model": 0, "simulator": 0, "new_examples_selected": 0},
+        "limitations": [
+            "Illustrations of recorded open-loop outcomes, not estimates of prevalence or closed-loop performance.",
+            "No model trajectory is plotted. Decisions use the originally recorded model clearance and calibrated margins.",
+            "Unresolved example has state log through19 but last stored camera at15 of planned25 steps; no missing future is filled in.",
+        ],
+    }
+    (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2, allow_nan=False) + "\n")
+    print(
+        json.dumps(
+            {
+                "path": str(OUT.relative_to(ROOT)),
+                "manifest_sha256": sha(OUT / "manifest.json"),
+                "examples_sha256": sha(OUT / "examples.json"),
+                "source_sha256": sha(Path(__file__)),
+            }
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()

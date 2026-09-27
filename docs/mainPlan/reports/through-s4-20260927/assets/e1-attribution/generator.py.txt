@@ -1,0 +1,67 @@
+from pathlib import Path
+from datetime import datetime, timezone
+import hashlib, json, math
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
+repo=Path('/workspace/Safety-Dial')
+source=repo/'docs/mainPlan/results/continuation-v4/decomposition/decomposition.json'
+audit=repo/'docs/mainPlan/results/continuation-v4/development_diagnosis_audit.json'
+out=repo/'runs/continuation-audit/report-figures-20260927'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+inputs={str(p):sha(p) for p in (source,audit,Path(__file__))}
+report=json.loads(source.read_text())
+verified=json.loads(audit.read_text())
+dev=report['banks']['dev']; decision=dev['at_m0']; attribution=decision['attribution']; imagined=decision['imagined']; gate=report['gate']
+assert {key:attribution[key] for key in ('temporal','readout','imagination')} == verified['independent_attribution_counts']
+assert gate==verified['gate']
+assert sum(attribution[key] for key in ('temporal','readout','imagination'))==gate['n_attributable_false_safe']==28
+assert attribution['imagination']==gate['n_imagination']==21 and attribution['readout']==7 and attribution['temporal']==0
+assert imagined['n_accepted_censored']==1 and not math.isfinite(imagined['fsa'])
+assert imagined['n_accepted']==163 and dev['n_rows']==192 and dev['n_roots']==24
+assert decision['m']==0 and gate['role']=='development' and gate['passes'] is True
+out.mkdir(exist_ok=True)
+with plt.rc_context({'font.family':'DejaVu Sans','font.size':12,'pdf.fonttype':42}):
+ fig=plt.figure(figsize=(7.0,4.8),facecolor='white')
+ fig.text(.055,.96,'E1: where known development false-safes arose',fontsize=15,weight='bold',va='top',color='#172536')
+ fig.text(.055,.895,'Attribution denominator: 28 known false-safe decisions',fontsize=12,color='#33465b')
+ fig.text(.055,.845,'Margin 0 px; 192 decisions from 24 development roots',fontsize=10.5,color='#526176')
+ ax=fig.add_axes([.31,.40,.62,.34])
+ names=['Imagined dynamics','Real-image readout','Temporal sampling'];values=[21,7,0]
+ ax.barh([2,1,0],values,height=.6,color=['#315f80','#3a8b88','#969ea8'])
+ ax.set_yticks([2,1,0],names,fontsize=11.5)
+ ax.set_xlim(0,28);ax.set_xticks([0,7,14,21,28]);ax.tick_params(axis='y',length=0,pad=10)
+ ax.tick_params(axis='x',labelsize=10.5,colors='#526176')
+ ax.set_xlabel('Attributed decision count',fontsize=11,labelpad=9)
+ ax.grid(axis='x',color='#dbe1e8',linewidth=.7);ax.set_axisbelow(True)
+ for spine in ('top','right','left'):ax.spines[spine].set_visible(False)
+ ax.spines['bottom'].set_color('#a3afbc')
+ for y,value in zip([2,1,0],values):ax.text(value+.45,y,str(value),va='center',fontsize=12,weight='bold',color='#172536')
+ fig.text(.055,.22,'Recorded gate: passes   |   Imagination share: 75%',fontsize=11.5,weight='bold',color='#172536')
+ fig.text(.055,.145,'1 accepted unresolved future is separate from these 28.',fontsize=11,color='#804300')
+ fig.text(.055,.09,'Full-data FSA is undefined. Domain exits and censored futures\nare excluded from attribution; these counts are not an effect estimate.',fontsize=10.2,va='top',color='#33465b')
+ fig.savefig(out/'e1-development-attribution.png',dpi=220)
+ fig.savefig(out/'e1-development-attribution.pdf')
+ plt.close(fig)
+chart={'scope':'saved development evidence only','bank':'dev','margin_px':0,'n_rows':192,'n_roots':24,
+ 'attributable_known_false_safe_decisions':28,'attribution':{key:attribution[key] for key in ('imagination','readout','temporal')},
+ 'imagined_accepted':163,'accepted_unresolved':1,'full_data_fsa':None,'fsa_status':'undefined_accepted_unresolved_future',
+ 'recorded_gate':gate,'source_json_paths':['banks.dev.at_m0.attribution','banks.dev.at_m0.imagined','gate'],
+ 'interpretation':'The unresolved accepted future is not part of the 28 known attribution denominator. Counts are not independent-trial counts or a population/repair effect estimate.',
+ 'new_statistics_or_gate':False,'bootstrap_or_model_or_simulator_calls':0}
+(out/'chart_data.json').write_text(json.dumps(chart,indent=2,allow_nan=False)+'\n')
+(out/'README.md').write_text('''# Report-specific E1 development attribution figure
+
+Use `e1-development-attribution.png` in the main A4 PDF and preserve the vector PDF as a supplement. It displays saved counts only: 21 imagination, 7 real-image readout, 0 temporal among 28 attributable known development false-safes. The 1 accepted unresolved future is separate, and the full-data FSA remains undefined. It does not reclassify rows or recompute a gate, bootstrap or model.
+
+Suggested caption: "Saved development attribution at zero margin: 21 of 28 known attributable false-safe decisions are assigned to imagined dynamics, seven to real-image readout and none to temporal sampling. One accepted unresolved future is excluded from this denominator, leaving overall point FSA undefined. Counts are from 192 decisions on 24 roots and do not measure a repair effect."
+
+The archived multi-bank dial and pose plots remain unchanged. Link their full-resolution files as supplements; their dense three-column text should not be shrunk into the main A4 page. Report-specific bank panels can be used if full dial/pose detail is necessary.
+''')
+assert all(sha(Path(p))==digest for p,digest in inputs.items())
+manifest={'status':'rendered_pending_visual_review','created_utc':datetime.now(timezone.utc).isoformat(),'inputs_sha256':inputs,
+ 'input_files_unchanged':True,'saved_values_only':True,'scientific_gate_recomputed':False,'model_calls':0,'simulator_steps':0,'network_calls':0,
+ 'outputs':{p.name:{'sha256':sha(p),'bytes':p.stat().st_size} for p in sorted(out.iterdir()) if p.name != 'manifest.json'}}
+(out/'manifest.json').write_text(json.dumps(manifest,indent=2,allow_nan=False)+'\n')
+print(json.dumps({'directory':str(out),'manifest_sha256':sha(out/'manifest.json')},indent=2))
