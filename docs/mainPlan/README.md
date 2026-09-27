@@ -14,6 +14,12 @@ Walker training resumed from its verified 172,000-step checkpoint after an insta
 restart and remains in progress. These records distinguish verified evidence,
 failed diagnostic runs and results that are still pending.
 
+**Continuation scope updated 27 September 2026:** at the user's request, this run
+ends after S4, subject to the unchanged scientific gates. S5 is excluded and its
+prepared configuration remains unlaunched. Completion includes a full PDF report,
+figures and preserved videos/animations, followed by verified GitHub and private
+Hugging Face storage. See the [scope record](results/continuation-audit/completion_scope_20260927.json).
+
 Student: Sachin Mohan (2699183), BSc Honours Computer Science, University of the
 Witwatersrand. Thesis due in late November 2026.
 

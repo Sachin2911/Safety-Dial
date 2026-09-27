@@ -130,6 +130,10 @@ training, selection, random draws or gates.
 
 ## Conditional S5 recovery workflow
 
+**Excluded by the user's revised scope on 27 September:** finish through S4, then
+produce the PDF report and preserve results/media in GitHub and private Hugging Face.
+The preparation below is retained as an unlaunched record, not remaining work.
+
 The [fresh S5 configuration](../../../../configs/walker2d/recovery_s5-20260927-1.yaml)
 is prepared but **not launched**. Its [validation record](walker_s5_recovery_config_validation.json)
 checks the original comparison recipe, all four command parsers, a dry run, fresh output
