@@ -1,6 +1,6 @@
 {
   "status": "in_progress",
-  "observed_utc": "2026-09-26T23:49:06Z",
+  "observed_utc": "2026-09-27T01:14:15Z",
   "implementation_commit": "4dc99d7",
   "validation": "docs/mainPlan/results/continuation-v4/recovery_validation.json",
   "workflow": {
@@ -114,5 +114,29 @@
       "Rejected-root aggregate cost is metered, but no per-candidate journal was saved for independent reconstruction.",
       "Completed inputs do not establish repair or goal-retention success."
     ]
+  },
+  "repair_development_selection": {
+    "status": "fallback_selected_final_repair_and_retention_pending",
+    "recipes_evaluated": 16,
+    "eligible_recipe_count": 0,
+    "all_development_fsa_undefined": true,
+    "chosen_recipe": {
+      "modules": "predictor_side",
+      "loss": "teacher_forced",
+      "rollout_weight": 0.5,
+      "lr": 2e-05,
+      "weight_decay": 0.001,
+      "steps": 1000,
+      "batch_size": 64,
+      "replay_frac": 0.5,
+      "grad_clip": 1.0,
+      "seed": 20260928,
+      "ctx": 3
+    },
+    "selection_kind": "unfiltered_first_recipe_fallback_after_inconclusive_development_ranking",
+    "audit": "docs/mainPlan/results/continuation-v4/e2_development_selection_audit.json",
+    "audit_sha256": "41732c0af3693946ad8920839e6d833383a1908dd1633205da387ad076d13353",
+    "selection_log_lines_sha256": "e566e7c5e52a6db7317786728d441666c6f70a0ebb0f063f0572c47fa809c572",
+    "interpretation": "The existing deterministic first-recipe fallback follows inconclusive development ranking. It is not a development-validated optimum. Final repair and exact goal-retention gates remain unchanged and pending."
   }
 }

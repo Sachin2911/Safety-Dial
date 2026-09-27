@@ -90,7 +90,9 @@ The [adopted protocol](../../protocol.md#predictor-side-adaptation) requires dev
 choices fixed before acquisition; it does not state an additional hard eligible-recipe
 gate. A default fixed without held-out feedback can therefore be reported as a fallback
 after inconclusive development ranking, provided the unchanged final repair and retention
-gates pass. It must not be described as a development-validated optimum. The final audit
-will record actual eligible-candidate counts and fallback usage; the current run and its
-thresholds remain unchanged. An undefined rate is inconclusive evidence, not proof that
+gates pass. It must not be described as a development-validated optimum. The [development-selection audit](e2_development_selection_audit.json) confirms all 16
+ordered grid recipes were evaluated and all had undefined development false-safe rates,
+leaving zero eligible recipes. The existing first-record fallback selected predictor-side
+updates, teacher-forced loss, learning rate `2e-5` and 1,000 steps. The selected recipe
+and thresholds remain unchanged; final repair and goal retention are still pending. An undefined rate is inconclusive evidence, not proof that
 adaptation cannot repair the model.
