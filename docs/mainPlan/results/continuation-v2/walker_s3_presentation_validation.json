@@ -1,0 +1,41 @@
+{
+  "status": "prepared_validated_not_executed_on_experiment",
+  "observed_utc": "2026-09-27T07:11:58.754717+00:00",
+  "purpose": "Render finalized S3 saved evidence as readable probe, gate, decision and horizon-error tables plus two figures in a fresh sibling directory.",
+  "source_sha256": {
+    "experiments/scripts/walker_s3_figures.py": "99c4ba6e0c73b90809eed4c3527960b3ced800828386ad026baa491815005358",
+    "experiments/tests/test_walker_s3_figures.py": "23dd614d28d814358ea56f064df29b05c1630d375cc0a0c5eca9256409b6d947"
+  },
+  "verification": {
+    "focused_synthetic_tests_passed": 14,
+    "pytest_seconds": 1.96,
+    "ruff": "passed",
+    "independent_diff_review": "/root/verification_audit: no blockers",
+    "root_visual_review": {
+      "/tmp/pytest-of-root/pytest-92/test_fresh_sibling_presentatio0/figures/probe_r2.png": {
+        "sha256": "830bd5f7bd4ebb09e1521fa39e59264e0e525e5ced4dbf2e49e9a1d0faa9c341",
+        "passed": true
+      },
+      "/tmp/pytest-of-root/pytest-92/test_fresh_sibling_presentatio1/figures/horizon_errors.png": {
+        "sha256": "171554395dce9b2b898e8012fce3f03a2e767109ce1bd4c2d41ce3e9af5e0820",
+        "passed": true
+      }
+    },
+    "synthetic_only": true
+  },
+  "checks": [
+    "Require finalized managed stage, finished subprocess, exact frozen output-tree hashes and mirrored scientific inputs",
+    "Display saved gate flags, health-required/speed-optional continuation and correctly labeled provisional protocol thresholds",
+    "Preserve undefined, zero-acceptance and unresolved FSA without substituting zero or inventing intervals",
+    "Separate physical units and identify undefined horizon values as absent",
+    "Reject existing, source-nested, overlapping or non-sibling output paths",
+    "Recheck input/source hashes after output generation",
+    "No model, simulator, training or network calls"
+  ],
+  "limitations": [
+    "Preview figures use synthetic test data and are not Walker scientific results.",
+    "S3 has not run yet for the recovered full model. Actual evidence generation and visual review remain pending.",
+    "Input/source hashes establish presentation provenance, not independent replay of the underlying probe fitting or simulator trajectories.",
+    "This validation is not a rerun of the full repository test suite."
+  ]
+}

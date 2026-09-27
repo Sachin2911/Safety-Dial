@@ -104,3 +104,19 @@ and no-update evaluation rows in its run, results and private bank payload, with
 SHA256 references. A failed development gate exports development rows only.
 The change adds no model inference, simulation or random draws; 26 focused
 export and paired-estimand tests and an independent diff review passed.
+
+The [S3 presentation utility](walker_s3_presentation_validation.json) is prepared
+for the eventual probe result. Fourteen focused synthetic tests, independent review
+and synthetic figure inspection passed. It preserves the recorded gate and
+undefined values, and requires finalized, unchanged workflow outputs before
+creating a fresh sibling report. No actual S3 presentation has been generated yet.
+
+After the probe stage is finalized:
+
+```bash
+uv run python experiments/scripts/walker_s3_figures.py \
+  --run-dir runs/walker2d-probes-recovery-20260927-1 \
+  --results-dir docs/mainPlan/results/s3/walker2d-probes-recovery-20260927-1 \
+  --output-dir docs/mainPlan/results/s3/walker2d-probes-recovery-20260927-1-presentation \
+  --workflow-state runs/workflows/walker2d-recovery-20260927-1/state.json
+```
