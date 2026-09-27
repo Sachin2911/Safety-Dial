@@ -11,6 +11,10 @@ finished and stopped at its repair/retention gate; conditional acquisition, tran
 and closed-loop stages did not start. The current user-directed scope ends at S4;
 S5 is excluded. The final PDF and complete publication checks remain pending.
 
+[Walker2d animations from the trained LeWM](walker-animations/walker2d-lewm-a-recovery-20260927-1/README.md) illustrate the
+final checkpoint's imagination on saved test and stress branches and on a 2.4 s rollout. They are
+illustrations drawn from the saved S4 rows, not new statistics.
+
 The table below preserves the original launch-day record. Its E1/E2/E3 results are
 now historical development diagnostics because [the later protocol audit](continuation-audit/shared_protocol_audit.md)
 found 14 source trajectories crossing development and test roles. Its running and
