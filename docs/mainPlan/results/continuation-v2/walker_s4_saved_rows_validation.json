@@ -1,0 +1,25 @@
+{
+  "status": "implementation_validated_not_executed",
+  "observed_utc": "2026-09-27T07:02:45.198647+00:00",
+  "problem": "S4 saved baseline summaries but discarded the no-update per-tape evaluation rows and did not persist its full baseline decomposition rows, preventing a later full dial reconstruction from saved evidence.",
+  "change": "Mirror the exact already-computed baseline_decomposition_rows.json and no_update_evaluation_rows.json to fresh run, results and bank roots, with file/SHA256/byte-size references in study and manifest. A failed development gate mirrors development rows only.",
+  "file_sha256": {
+    "experiments/scripts/walker_s4_prospective.py": "ed289e2290f615bee984fca968cab11746156bf0e9b8d50e27c621a31d048b99",
+    "experiments/tests/test_walker_s4_exports.py": "95d82366fa40103f90169e7e945420a08c9d63b67e5e1fa121ce7190a8189ad9"
+  },
+  "verification": {
+    "focused_export_and_existing_pairing_tests": 26,
+    "pytest_seconds": 5.99,
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "independent_diff_review": "/root/verification_audit: no blockers",
+    "scientific_calls_rng_order": "Unchanged existing calls, no extra inference, simulation or random draws",
+    "final_test_gate": "Preserved; no final test analysis on failed development gate"
+  },
+  "execution_scope": "Only future unstarted S4 code and a focused test file changed. The active S2 trainer and its snapshots, old results, workflow recipes and gates remain unchanged. New rows will be part of the already-configured S4 bank upload.",
+  "limitations": [
+    "No S4 experiment has been executed by this validation.",
+    "The saved rows preserve Python JSON undefined float values; readers must handle undefined values explicitly.",
+    "This check does not claim a full repository test suite rerun."
+  ]
+}

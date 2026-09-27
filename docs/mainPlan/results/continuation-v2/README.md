@@ -97,3 +97,10 @@ A [30-sample check after recovery](gpu_after_walker_recovery_20260927.json) meas
 the original loss terms at their printed precision. This supports operational
 continuity; it does not establish bitwise GPU trajectory equality or arithmetic
 efficiency.
+
+Before the resumed workflow reaches S4, its [saved-row export gap was fixed](walker_s4_saved_rows_validation.json).
+The queued study now preserves both already-computed baseline decomposition rows
+and no-update evaluation rows in its run, results and private bank payload, with
+SHA256 references. A failed development gate exports development rows only.
+The change adds no model inference, simulation or random draws; 26 focused
+export and paired-estimand tests and an independent diff review passed.

@@ -7,6 +7,7 @@ selected tapes reach the simulator. Evaluation banks remain common across arms.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -40,6 +41,31 @@ from helpers.walkerRules import HORIZON_BLOCKS, propose_tapes, rule_unsafe  # no
 from helpers.walkerReporting import decomposition_report, merge_frozen_sources  # noqa: E402
 from helpers.walkerValidation import decomposition_gate, episode_role, load_source_split, upload_reference, verify_render_fingerprint  # noqa: E402
 from walker_s4_study import RootCache, analyse, clips_from_bank, replay_clips, rule_clearance, table  # noqa: E402
+
+
+def save_evaluation_rows(destinations, filename, rows):
+    """Mirror already-computed rows byte-for-byte, without inference or RNG use.
+
+    List order and numeric values are retained, including undefined float values.
+    Every report/manifest reference is relative to each of the three bundle roots.
+    Existing artifacts are never replaced, even if one destination is a reused bank.
+    """
+    if Path(filename).name != filename or not filename.endswith(".json"):
+        raise ValueError("Evaluation-row artifact must be a single JSON filename")
+    paths = [Path(destination) / filename for destination in destinations]
+    if not paths or len({path.resolve() for path in paths}) != len(paths):
+        raise ValueError("Evaluation-row destinations must be nonempty and distinct")
+    for path in paths:
+        if path.exists() or path.is_symlink():
+            raise FileExistsError(f"Preserving existing evaluation rows: {path}")
+        if not path.parent.is_dir():
+            raise FileNotFoundError(path.parent)
+    payload = (json.dumps(rows, sort_keys=True, separators=(",", ":"), default=float) + "\n").encode()
+    for path in paths:
+        with path.open("xb") as output:
+            output.write(payload)
+    return {"file": filename, "sha256": hashlib.sha256(payload).hexdigest(),
+            "bytes": len(payload)}
 
 
 def balanced_pick(candidates, need, scores):
@@ -355,14 +381,16 @@ def main() -> int:
         # Keep all final-test measurements sealed. The prerequisite uses development only.
         diagnostic = {"run_id": run_id, "status": "diagnostic_stop", "gate": dev_gate,
                       "source_identity": source_id, "final_test_evaluated": False}
+        diagnostic["saved_evaluation_rows"] = {"development": save_evaluation_rows(
+            (run_dir, results_dir, bank_dir), "development_rows.json", base_rows["dev"])}
         manifest = build_manifest(run_id=run_id, kind="s4-diagnostic", data={"source": source_id,
-            "model_sha256": gate_report["model_sha256"], "gate_sha256": file_sha256(gate_path)},
+            "model_sha256": gate_report["model_sha256"], "gate_sha256": file_sha256(gate_path),
+            "saved_evaluation_rows": diagnostic["saved_evaluation_rows"]},
             metrics=dev_gate, upstream_revisions=upstream_refs, costs={"generated_evaluation_steps": sum(len(b) * HORIZON_STEPS for b in banks.values())}, started_at=t0)
         for destination in (run_dir, results_dir, bank_dir):
             write_manifest(destination, manifest)
         for destination in (run_dir, results_dir):
             (destination / "study.json").write_text(json.dumps(diagnostic, indent=2) + "\n")
-            (destination / "development_rows.json").write_text(json.dumps(base_rows["dev"]) + "\n")
         if not args.no_upload:
             (bank_dir / "diagnostic.json").write_text(json.dumps(diagnostic, indent=2) + "\n")
             diagnostic["bank_hf_revision"] = HFStore().upload_run("walker2d-data", "banks", bank_dir, run_id=run_id)
@@ -382,6 +410,8 @@ def main() -> int:
               "active_rules": rules, "repair_rules": repair_rules, "development_gate": dev_gate, "source_identity": source_id, "acquisition_mode": "prospective",
               "target_acceptance": targets, "auc_acceptance_range": [0.2, 0.9], "decomposition": {}, "adaptation": {},
               "cost_policy": "All roots.h5 collection steps, paid seed branches, selected branches; evaluation separately"}
+    report["saved_evaluation_rows"] = {"baseline_decomposition": save_evaluation_rows(
+        (run_dir, results_dir, bank_dir), "baseline_decomposition_rows.json", base_rows)}
     sources = ["dense", "endpoint", "real_readout", "imagined"]
     for rule in rules:
         report["decomposition"][rule] = {name: table(rows, rule, 0.0, sources) for name, rows in base_rows.items()}
@@ -408,7 +438,10 @@ def main() -> int:
                                        "clearance_error": clearance_error_stats(c, np.array([row[f"cmin_dense_{rule}"] for row in rows]))}
         return metrics, rows_by_bank
 
-    report["adaptation"]["no_update"], _ = evaluate(model)
+    report["adaptation"]["no_update"], no_update_rows = evaluate(model)
+    report["saved_evaluation_rows"]["no_update_evaluation"] = save_evaluation_rows(
+        (run_dir, results_dir, bank_dir), "no_update_evaluation_rows.json", no_update_rows)
+    del no_update_rows
     replay_episodes = json.loads((Path(args.model) / "splits.json").read_text())["training"]
     replay = replay_clips(data_dir / "setA.h5", im, ctx, np.random.default_rng(20261020), args.replay_clips, scaler, episodes=replay_episodes)
     replay.save(run_dir / "replay_clips.npz")
@@ -501,7 +534,8 @@ def main() -> int:
         (destination / "study.json").write_text(json.dumps(report, indent=1, default=float) + "\n")
     evaluation_fingerprints = {name: {filename: file_sha256(bank_dir / name / filename) for filename in ("branches.h5", "roots.json")} for name in banks}
     manifest = build_manifest(run_id=run_id, kind="s4", seeds={"acquisition": args.seeds},
-        data={"source": source_id, "model_sha256": gate_report["model_sha256"], "gate_sha256": file_sha256(gate_path), "evaluation_banks": evaluation_fingerprints, "acquisition_files": acquisition_files(bank_dir, args.seeds, args.budgets)},
+        data={"source": source_id, "model_sha256": gate_report["model_sha256"], "gate_sha256": file_sha256(gate_path), "evaluation_banks": evaluation_fingerprints, "acquisition_files": acquisition_files(bank_dir, args.seeds, args.budgets),
+              "saved_evaluation_rows": report["saved_evaluation_rows"]},
         upstream_revisions=upstream_refs, costs={"evaluation_steps": report["evaluation_steps"]}, started_at=t0)
     for destination in (run_dir, results_dir, bank_dir):
         write_manifest(destination, manifest)
