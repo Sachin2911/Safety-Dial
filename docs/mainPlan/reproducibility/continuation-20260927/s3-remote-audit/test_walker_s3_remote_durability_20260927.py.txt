@@ -1,0 +1,268 @@
+import copy
+import importlib.util
+import json
+from pathlib import Path
+from types import SimpleNamespace
+
+import pytest
+import yaml
+
+SOURCE = Path('/tmp/audit_walker_s3_remote_durability_20260927.py')
+
+
+def load():
+    spec = importlib.util.spec_from_file_location('s3_remote', SOURCE)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def write(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value))
+
+
+@pytest.fixture
+def built(tmp_path):
+    m = load()
+    m.ROOT = tmp_path
+    for name in m.SOURCES:
+        dest = tmp_path / name
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_text('synthetic source')
+    m.SOURCES = {name: m.file_record(tmp_path / name)['sha256'] for name in m.SOURCES}
+    p = m.paths()
+    for key in ('run', 'results', 'model', 'data'):
+        p[key].mkdir(parents=True)
+    model_ref = {'repo_id': m.REPO_ID, 'revision': 'a' * 40, 'path': f'lewm-a/{m.MODEL_ID}'}
+    probe_ref = {'repo_id': m.REPO_ID, 'revision': 'b' * 40, 'path': f'probes/{m.RUN_ID}',
+                 'repo_type': 'model', 'run_id': m.RUN_ID}
+    data_ref = {'repo_id': m.DATA_REPO, 'revision': m.DATA_REVISION, 'path': m.DATA_PREFIX}
+    for name in ('weights.pt', 'config.json', 'scalers.npz'):
+        (p['model'] / name).write_bytes(('synthetic ' + name).encode())
+    write(p['model'] / 'hf_upload.json', dict(model_ref, repo_type='model', run_id=m.MODEL_ID))
+    write(p['model'] / 'upload_receipt.json', dict(model_ref, step=214780))
+    write(p['model'] / 'manifest.json', {'run_id': m.MODEL_ID, 'metrics': {'step': 214780},
+         'upstream_revisions': {'resume_step': 172000, 'resume_sha256': m.RESUME_SHA}})
+    write(p['s2_report'], {'run_id': m.MODEL_ID, 'steps': 214780,
+                         'checkpoint': dict(model_ref, step=214780)})
+    write(p['data'] / 'upload_receipt.json', data_ref)
+    write(p['data'] / 'splits.json', {'synthetic': True})
+    for name in ('walker_linear.pt', 'walker_mlp.pt', 'walker_linear.json', 'walker_mlp.json', 'README.md'):
+        (p['run'] / name).write_text('synthetic ' + name)
+    report = {'run_id': m.RUN_ID, 'role': 'development', 'model': str(p['model']),
+              'gate': {'go': True, 'active_rules': ['health']},
+              'probe_files_sha256': {name: m.file_record(p['run'] / name)['sha256']
+                                    for name in ('walker_linear.pt', 'walker_mlp.pt')},
+              'model_files_sha256': {name: m.file_record(p['model'] / name)['sha256']
+                                    for name in ('weights.pt', 'config.json', 'scalers.npz')},
+              'model_sha256': m.file_record(p['model'] / 'weights.pt')['sha256'],
+              'splits_sha256': m.file_record(p['data'] / 'splits.json')['sha256']}
+    manifest = {'run_id': m.RUN_ID, 'data': {'model': str(p['model']),
+                'model_sha256': report['model_sha256']},
+                'upstream_revisions': {'model': model_ref, 'data': data_ref},
+                'metrics': {'undefined': float('nan')}}
+    for key in ('run', 'results'):
+        write(p[key] / 'gate.json', report)
+        write(p[key] / 'gate_rows.json', [{'synthetic': True}])
+    write(p['run'] / 'manifest.json', manifest)
+    write(p['results'] / 'manifest.json', dict(manifest, probe_hf_revision=probe_ref['revision']))
+    write(p['run'] / 'hf_upload.json', probe_ref)
+    cfg = {'run_id': m.RUN_ID, 'model': str(p['model']), 'data_dir': str(p['data']),
+           'no_upload': False, 'n_roots': 64, 'seed': 0, 'min_unsafe': 10, 'probe_frames': 30000}
+    (p['run'] / 'config.yaml').write_text(yaml.safe_dump(cfg))
+    audit_path = tmp_path / 'local-audit.json'
+    audit = {'status': 'consistent_finalized_saved_evidence', 'mode': 'both',
+             'checker_sha256': m.LOCAL_CHECKER_SHA, 'workflow_config_sha256': m.CONFIG_SHA,
+             's2': {'steps': 214780, 'report_sha256': m.file_record(p['s2_report'])['sha256'],
+                    'checkpoint': model_ref},
+             's3': {'report_sha256': m.file_record(p['run'] / 'gate.json')['sha256'],
+                    'rows_sha256': m.file_record(p['run'] / 'gate_rows.json')['sha256'],
+                    'local_pinned_receipt': m.short_receipt(probe_ref), 'gate': report['gate']}}
+    write(audit_path, audit)
+    state = {'workflow_id': m.WORKFLOW, 'cwd': str(tmp_path), 'state_dir': str(p['state'].parent),
+             'config_sha256': m.CONFIG_SHA, 'status': 'running', 'stages': {}}
+    for sid in ('lewm_a_full', 'physical_probe_gate'):
+        state['stages'][sid] = {'status': 'completed',
+                               'attempts': [{'returncode': 0, 'finished_unix': 2.0}]}
+    state['stages']['prospective_acquisition'] = {'status': 'running', 'attempts': [{'pid': 99}]}
+    def refresh():
+        state['stages']['lewm_a_full']['output_hashes'] = {
+            str(p['model']): m.workflow_hash(m.tree_record(p['model'])),
+            str(p['s2_report']): {'kind': 'file', 'sha256': m.file_record(p['s2_report'])['sha256']}}
+        state['stages']['physical_probe_gate']['output_hashes'] = {
+            str(p[key]): m.workflow_hash(m.tree_record(p[key])) for key in ('run', 'results')}
+        state['stages']['physical_probe_gate']['output_hashes'][str(p['run'] / 'gate.json')] = {
+            'kind': 'file', 'sha256': m.file_record(p['run'] / 'gate.json')['sha256']}
+        report_now = json.loads((p['run'] / 'gate.json').read_text())
+        state['stages']['physical_probe_gate']['gate'] = {
+            'path': str(p['run'] / 'gate.json'), 'key': 'gate.go', 'passes': report_now['gate']['go'],
+            'sha256': m.file_record(p['run'] / 'gate.json')['sha256']}
+        write(p['state'], state)
+    refresh()
+    return m, p, audit_path, audit, state, refresh
+
+
+def test_complete_preflight_and_workflow_can_advance(built):
+    m, p, a, _, state, _ = built
+    result = m.prepare(a)
+    assert result['gate_go'] is True
+    state['stages']['prospective_acquisition']['attempts'][0]['progress'] = 20
+    write(p['state'], state)
+    m.recheck(result, a)
+
+
+def test_negative_health_gate_is_valid(built):
+    m, p, a, audit, state, refresh = built
+    for key in ('run', 'results'):
+        report = json.loads((p[key] / 'gate.json').read_text())
+        report['gate'] = {'go': False, 'active_rules': []}
+        write(p[key] / 'gate.json', report)
+    stage = state['stages']['physical_probe_gate']
+    stage['status'] = state['status'] = 'gate_stopped'
+    stage['attempts'][-1]['returncode'] = 2
+    state['stages']['prospective_acquisition'] = {'status': 'pending', 'attempts': []}
+    audit['s3']['gate'] = report['gate']
+    audit['s3']['report_sha256'] = m.file_record(p['run'] / 'gate.json')['sha256']
+    write(a, audit)
+    refresh()
+    assert m.prepare(a)['gate_go'] is False
+    state['stages']['prospective_acquisition']['attempts'] = [{'pid': 1}]
+    write(p['state'], state)
+    with pytest.raises(m.AuditError, match='unattempted'):
+        m.prepare(a)
+
+
+def test_running_barrier_precedes_payload_reads(built, monkeypatch):
+    m, p, a, _, state, _ = built
+    state['stages']['physical_probe_gate']['status'] = 'running'
+    write(p['state'], state)
+    monkeypatch.setattr(m, 'tree_record', lambda _: pytest.fail('opened payload before barrier'))
+    with pytest.raises(m.AuditError, match='terminal'):
+        m.prepare(a)
+
+
+@pytest.mark.parametrize('field,value', [('mode', 's2'), ('checker_sha256', 'bad'), ('status', 'failed')])
+def test_wrong_local_scientific_audit_refused(built, field, value):
+    m, _, a, audit, _, _ = built
+    audit[field] = value
+    write(a, audit)
+    with pytest.raises(m.AuditError, match='exact successful'):
+        m.prepare(a)
+
+
+def test_model_lineage_tamper_refused_even_with_updated_workflow_hash(built):
+    m, p, a, _, _, refresh = built
+    (p['model'] / 'weights.pt').write_text('different weights')
+    refresh()
+    with pytest.raises(m.AuditError, match='model/config/scaler'):
+        m.prepare(a)
+
+
+def test_post_upload_results_manifest_difference_restricted(built):
+    m, p, a, _, _, refresh = built
+    manifest = json.loads((p['results'] / 'manifest.json').read_text())
+    manifest['unexpected'] = True
+    write(p['results'] / 'manifest.json', manifest)
+    refresh()
+    with pytest.raises(m.AuditError, match='beyond the post-upload'):
+        m.prepare(a)
+
+
+def test_wrong_collection_revision_refused(built):
+    m, p, a, _, _, _ = built
+    value = json.loads((p['data'] / 'upload_receipt.json').read_text())
+    value['revision'] = 'f' * 40
+    write(p['data'] / 'upload_receipt.json', value)
+    with pytest.raises(m.AuditError, match='collection revision'):
+        m.prepare(a)
+
+
+def test_read_and_after_barrier_reject_changed_files(built):
+    m, p, a, _, _, _ = built
+    plan = m.prepare(a)
+    record = m.file_record(p['run'] / 'README.md')
+    (p['run'] / 'README.md').write_text('changed')
+    with pytest.raises(m.AuditError, match='changed before parsing'):
+        m.read(p['run'] / 'README.md', record)
+    with pytest.raises(m.AuditError, match='payload bytes'):
+        m.recheck(plan, a)
+
+
+class FakeAPI:
+    def __init__(self, m, receipt, files):
+        self.m, self.receipt, self.files = m, receipt, files
+        self.info = SimpleNamespace(id=m.REPO_ID, private=True, sha=receipt['revision'])
+        self.tag = SimpleNamespace(name=m.RUN_ID, target_commit=receipt['revision'])
+        self.entries = []
+        self.calls = []
+        self.refs_calls = 0
+        for name, rec in files.items():
+            if Path(name).name in m.IGNORED:
+                continue
+            lfs = SimpleNamespace(sha256=rec['sha256'], size=rec['size_bytes']) if name.endswith('.pt') else None
+            self.entries.append(SimpleNamespace(path=f"{receipt['path']}/{name}", size=rec['size_bytes'],
+                                                lfs=lfs, blob_id=rec['git_blob_sha1']))
+        self.change_tag_after = False
+    def repo_info(self, **kw):
+        self.calls.append(('repo_info', kw))
+        assert kw['revision'] == self.receipt['revision']
+        return self.info
+    def list_repo_refs(self, **kw):
+        self.calls.append(('list_repo_refs', kw))
+        self.refs_calls += 1
+        tag = copy.deepcopy(self.tag)
+        if self.change_tag_after and self.refs_calls > 1:
+            tag.target_commit = 'd' * 40
+        return SimpleNamespace(tags=[tag])
+    def list_repo_tree(self, **kw):
+        self.calls.append(('list_repo_tree', kw))
+        assert kw['revision'] == self.receipt['revision']
+        return iter(self.entries)
+
+
+def fake_remote(built):
+    m, _, audit, _, _, _ = built
+    p = m.prepare(audit)
+    return m, p, FakeAPI(m, p['receipt'], p['trees']['run'])
+
+
+def test_metadata_checks_all_payload_and_receipt_exclusion(built):
+    m, p, api = fake_remote(built)
+    result = m.compare_remote(api, p['receipt'], p['trees']['run'])
+    assert len(result) == 9 and 'hf_upload.json' not in result
+    assert result['walker_mlp.pt']['remote_match_method'] == 'LFS SHA256 and size'
+    assert result['gate.json']['remote_match_method'] == 'canonical Git blob SHA1 and size'
+    assert api.refs_calls == 2
+    assert set(name for name, _ in api.calls) == {'repo_info', 'list_repo_refs', 'list_repo_tree'}
+
+
+@pytest.mark.parametrize('mutation', ['private','revision','tag','missing','extra','lfs','git','size','duplicate','tag_after','receipt_uploaded'])
+def test_remote_failures_refused(built, mutation):
+    m, p, api = fake_remote(built)
+    if mutation == 'private':api.info.private = False
+    elif mutation == 'revision':api.info.sha = 'd' * 40
+    elif mutation == 'tag':api.tag.target_commit = 'd' * 40
+    elif mutation == 'missing':api.entries.pop()
+    elif mutation == 'extra':api.entries.append(SimpleNamespace(path=p['receipt']['path']+'/extra',size=1,lfs=None,blob_id='x'))
+    elif mutation == 'lfs':next(x for x in api.entries if x.lfs).lfs.sha256 = 'bad'
+    elif mutation == 'git':next(x for x in api.entries if not x.lfs).blob_id = 'bad'
+    elif mutation == 'size':api.entries[0].size += 1
+    elif mutation == 'duplicate':api.entries.append(api.entries[0])
+    elif mutation == 'tag_after':api.change_tag_after = True
+    elif mutation == 'receipt_uploaded':api.entries.append(SimpleNamespace(path=p['receipt']['path']+'/hf_upload.json',size=1,lfs=None,blob_id='x'))
+    with pytest.raises(m.AuditError):m.compare_remote(api,p['receipt'],p['trees']['run'])
+
+
+def test_deadline_not_swallowed_by_library_exception_handler():
+    m = load()
+    with pytest.raises(m.AuditDeadline):
+        try:m.deadline(None,None)
+        except Exception:pytest.fail('deadline became ordinary retriable exception')
+
+
+def test_symlink_rejected(built):
+    m, p, a, _, _, _ = built
+    (p['run'] / 'link').symlink_to(p['run'] / 'walker_linear.pt')
+    with pytest.raises(m.AuditError, match='Symlink'):
+        m.prepare(a)

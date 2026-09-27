@@ -1,0 +1,158 @@
+#!/usr/bin/env python3
+"""Report-native S3 horizon errors from exact saved gate.json arrays only."""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import math
+from datetime import datetime, timezone
+from pathlib import Path
+
+import matplotlib
+
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
+RUN_ID = 'walker2d-probes-recovery-20260927-1'
+EXPECTED_GATE_SHA = 'b85c71467edb371eb13e795a19318ed5c350fc186aa3ca04acbe0f8b92cae2e6'
+
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def dump(path, value):
+    with path.open('x') as stream:
+        json.dump(value, stream, indent=2, allow_nan=False)
+        stream.write('\n')
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--root', type=Path, default=Path('/workspace/Safety-Dial'))
+    parser.add_argument('--output', type=Path, required=True)
+    args = parser.parse_args()
+    root, output = args.root.resolve(), args.output.resolve()
+    if output.exists():
+        raise ValueError('Require a fresh report asset directory')
+    prior = root / 'docs/mainPlan/results/s3' / (RUN_ID + '-presentation')
+    gate_paths = [root / 'runs' / RUN_ID / 'gate.json',
+                  root / 'docs/mainPlan/results/s3' / RUN_ID / 'gate.json']
+    inputs = {str(p): p.read_bytes() for p in [*gate_paths, *sorted(prior.iterdir())] if p.is_file()}
+    identities = {p: {'sha256': sha(data), 'bytes': len(data)} for p, data in inputs.items()}
+    assert all(identities[str(p)]['sha256'] == EXPECTED_GATE_SHA for p in gate_paths)
+    report = json.loads(inputs[str(gate_paths[0])])
+    prior_manifest = json.loads(inputs[str(prior / 'manifest.json')])
+    assert prior_manifest['inputs_sha256'][str(gate_paths[0])] == EXPECTED_GATE_SHA
+    for name, expected in prior_manifest['files_sha256'].items():
+        assert identities[str(prior / name)]['sha256'] == expected
+    assert report['run_id'] == RUN_ID and report['role'] == 'development'
+    gate = report['gate']
+    assert gate['health_rule_ok'] is True and gate['speed_rule_ok'] is False
+    assert gate['go'] is True and gate['active_rules'] == ['health']
+    variables = ('height', 'pitch', 'speed')
+    plotted = {'run_id': RUN_ID, 'role': report['role'], 'source_gate_sha256': EXPECTED_GATE_SHA,
+               'prediction_blocks': list(range(1, 11)),
+               'units': {'height': 'm', 'pitch': 'rad', 'speed': 'm/s'},
+               'metric': 'saved mean absolute error',
+               'real_readout_abs_error_by_block': report['real_readout_abs_error_by_block'],
+               'imagined_abs_error_by_block': report['imagined_abs_error_by_block'],
+               'recorded_gate': gate, 'confidence_intervals': None,
+               'new_statistics_or_gate_decisions': False}
+    for key in ('real_readout_abs_error_by_block', 'imagined_abs_error_by_block'):
+        assert set(plotted[key]) == set(variables)
+        for values in plotted[key].values():
+            assert len(values) == 10 and all(math.isfinite(v) and v >= 0 for v in values)
+    generator = Path(__file__).read_bytes()
+    output.mkdir(parents=True, exist_ok=False)
+    (output / 'generator.py.txt').write_bytes(generator)
+    dump(output / 'plotted_data.json', plotted)
+    dump(output / 'source_hashes.json', identities)
+    plt.rcParams.update({'font.size': 11.5, 'axes.labelsize': 11.5, 'axes.titlesize': 12,
+                         'xtick.labelsize': 11.5, 'ytick.labelsize': 11.5,
+                         'legend.fontsize': 11.5, 'pdf.fonttype': 42, 'ps.fonttype': 42})
+    fig, axes = plt.subplots(3, 1, figsize=(7, 8.2), sharex=True)
+    fig.subplots_adjust(left=.13, right=.965, bottom=.18, top=.81, hspace=.40)
+    for ax, variable in zip(axes, variables, strict=True):
+        real = plotted['real_readout_abs_error_by_block'][variable]
+        imagined = plotted['imagined_abs_error_by_block'][variable]
+        ax.plot(plotted['prediction_blocks'], real, color='#0072B2', marker='o',
+                markersize=5, linewidth=1.8, label='Real-image readout')
+        ax.plot(plotted['prediction_blocks'], imagined, color='#D55E00', marker='s',
+                markersize=4.7, linewidth=1.8, linestyle='--', label='Imagined rollout')
+        ax.set_title(variable.title(), loc='left', pad=6)
+        ax.set_ylabel(f'MAE ({plotted["units"][variable]})')
+        ax.set_ylim(0, max([*real, *imagined]) * 1.13)
+        ax.set_xlim(.75, 10.25)
+        ax.set_xticks(plotted['prediction_blocks'])
+        ax.grid(alpha=.18)
+        ax.spines[['top', 'right']].set_visible(False)
+    axes[-1].set_xlabel('Prediction block', labelpad=7)
+    fig.suptitle('Walker S3: mean absolute error by horizon', fontsize=13.5, y=.982)
+    fig.text(.52, .942, 'Saved development results for all 10 prediction blocks', ha='center', va='top')
+    fig.text(.52, .905, 'Health qualified; speed did not qualify', ha='center', va='top', fontsize=12)
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(.53, .875), ncol=2,
+               frameon=False, handlelength=2.2, columnspacing=1.5)
+    fig.text(.13, .083, 'MAE = mean absolute error; physical units differ by panel.\n'
+             'No confidence intervals were saved or added.\n'
+             'Qualification follows the saved S3 gate, not these curves alone.',
+             ha='left', va='top', fontsize=10.5, linespacing=1.35)
+    fig.savefig(output / 'horizon_errors_compact.png', dpi=220)
+    fig.savefig(output / 'horizon_errors_compact.pdf',
+                metadata={'Title': 'Walker S3 saved horizon errors, health-only qualification'})
+    plt.close(fig)
+    (output / 'README.md').write_text('''# Report-native Walker S3 horizon errors
+
+This single-column figure preserves the exact saved `gate.json` error arrays
+for `walker2d-probes-recovery-20260927-1`: all ten blocks, three physical variables,
+and both real-image readout and imagined rollout. Values are copied without
+rounding, averaging, smoothing, interpolation or recomputation. Lines connect
+the recorded block values. The axes start at zero and use separate physical units.
+
+The recorded S3 gate qualifies health and does not qualify speed. Speed remains
+shown as diagnostic evidence; its presence is not qualification. Its saved
+specificity is 0.46875, below the gate's 0.8 threshold. No confidence intervals
+were saved with these arrays, and none are added. This plot does not establish
+statistical significance or recompute any scientific gate. Final report tables
+cover the separate probe R2 and decision-diagnostic results.
+
+`plotted_data.json` retains all 60 source values and the exact recorded gate.
+`source_hashes.json` identifies both matching saved gate files and every file in
+the completed S3 presentation bundle. Inputs were checked before and after
+rendering. No original artifact was changed. No model, simulator, HDF5 or
+network operation was performed.
+
+The native figure is 7 by 8.2 inches. The PNG is 1540 by 1804 pixels, and the PDF
+contains vector paths and native text. Axes/legend labels are 11.5 pt; the smallest
+footer text is 10.5 pt. Embed at full report width on its own page. The `.py.txt`
+generator is inert source evidence and can be copied to a temporary `.py` file
+for reproduction into a fresh output directory.
+
+The completed original wide PNGs were reviewed visually without editing:
+`horizon_errors.png` has readable units and correct real/imagined mapping at its
+native size; `probe_r2.png` clearly separates linear and MLP points and thresholds.
+Neither had clipped panels or misleading confidence bands. Their wide layout
+shrinks the text when placed in a narrow report column. This report view uses
+three vertical panels; it does not repeat the wide R2 chart.
+''')
+    assert all(Path(p).read_bytes() == data for p, data in inputs.items())
+    assert Path(__file__).read_bytes() == generator
+    assert json.loads((output / 'plotted_data.json').read_text()) == plotted
+    manifest = {'kind': 'report_native_saved_S3_horizon_figure', 'status': 'rendered_from_saved_arrays',
+                'created_utc': datetime.now(timezone.utc).isoformat(), 'run_id': RUN_ID,
+                'generator_sha256': sha(generator), 'input_sha256': identities,
+                'source_inputs_unchanged': True, 'recorded_active_rules': gate['active_rules'],
+                'figure_inches': [7, 8.2], 'minimum_font_pt': 10.5, 'axes_font_pt': 11.5,
+                'values_per_series': 10, 'series_count': 6, 'statistical_recomputation': False,
+                'model_calls': 0, 'simulator_steps': 0, 'network_calls': 0, 'HDF5_loaded': False,
+                'matplotlib_version': matplotlib.__version__,
+                'outputs_sha256': {p.name: sha(p.read_bytes()) for p in sorted(output.iterdir()) if p.is_file()}}
+    dump(output / 'manifest.json', manifest)
+    print(json.dumps({'output': str(output), 'manifest_sha256': sha((output / 'manifest.json').read_bytes()),
+                      'source_inputs_unchanged': True, 'source_values_preserved': 60}, indent=2))
+
+
+if __name__ == '__main__':
+    main()

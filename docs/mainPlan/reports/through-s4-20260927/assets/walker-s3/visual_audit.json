@@ -1,0 +1,49 @@
+{
+  "kind": "saved_S3_report_figure_visual_audit",
+  "status": "passed",
+  "observed_utc": "2026-09-27T09:51:12.054498+00:00",
+  "manifest_sha256": "d5f9b21687ca5093a6d2716ead9fe1a8fb8373a8398fbd6227f335b169839954",
+  "png_sha256": "a4c4cc9de2c630ba081f4b42e092c9d9fd08bd887f2958ffa9a748bb5920f73f",
+  "pdf_sha256": "54948620afca5cf3781518e261717f7ed22553cfd73d38059abeb4b5eb5d7576",
+  "generator_sha256": "7694289955972a25cf4c34c2ff1a40d466d5fa50f49b3e5e9c78e3e4d1bd8e5c",
+  "gate_sha256": "b85c71467edb371eb13e795a19318ed5c350fc186aa3ca04acbe0f8b92cae2e6",
+  "visual_review_method": "Viewed actual saved PNG bytes via base64 forwarding because the image tool filesystem sandbox cannot create a namespace.",
+  "completed_original_png_review": {
+    "horizon_errors.png": {
+      "sha256": "76acc759513ca8e185d756b1a4a063b398c3db0e065f884d2ac5b1da31153690",
+      "findings": "Readable at native width, correct source mapping and physical units, no clipped panels or confidence bands. Three-wide layout makes text small when reduced to a report column."
+    },
+    "probe_r2.png": {
+      "sha256": "f8a8bb4da411ef7fc8a547d39dc0b720872f6e7b7b61c7ba672b2dacf7ce9b26",
+      "findings": "Linear/MLP values and threshold lines are legible at native width, with no clipped points or labels. Overall qualification should be read from the saved gate, not this R2 chart alone."
+    }
+  },
+  "compact_png_findings": [
+    "All three vertical panels, axis units, labels, legend and full footer are legible and unclipped.",
+    "Blue circles/solid lines mark real-image readout; orange squares/dashed lines mark imagined rollouts consistently.",
+    "All ten blocks appear in each series; x labels1..10 are shown on the shared bottom axis.",
+    "Health qualification and speed nonqualification are explicitly stated; speed remains diagnostic.",
+    "No uncertainty bands, confidence intervals, significance claims or new statistics are introduced."
+  ],
+  "checks": {
+    "exact_saved_values_preserved": 60,
+    "minimum_native_PDF_font_pt": 10.5,
+    "native_inches": [
+      7,
+      8.2
+    ],
+    "PNG_pixels": [
+      1540,
+      1804
+    ],
+    "PDF_pages": 1,
+    "original_input_hashes_unchanged": true,
+    "plotted_arrays_equal_source_JSON": true,
+    "generator_Ruff": "passed"
+  },
+  "scope": "Report-only presentation supplement; no modifications to completed S3 evidence.",
+  "model_calls": 0,
+  "simulator_calls": 0,
+  "network_calls": 0,
+  "HDF5_loaded": false
+}

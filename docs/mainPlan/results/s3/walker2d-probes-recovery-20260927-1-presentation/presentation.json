@@ -1,0 +1,140 @@
+{
+  "run_id": "walker2d-probes-recovery-20260927-1",
+  "role": "development",
+  "recorded_gate": {
+    "height_pass": true,
+    "pitch_pass": true,
+    "speed_pass": true,
+    "imagined_error_grows": {
+      "height": true,
+      "pitch": true,
+      "speed": true
+    },
+    "imagined_error_useful": {
+      "health": true,
+      "speed": true
+    },
+    "real_readout_tracks_truth": {
+      "health": true,
+      "speed": false
+    },
+    "health_rule_ok": true,
+    "speed_rule_ok": false,
+    "go": true,
+    "active_rules": [
+      "health"
+    ],
+    "thresholds": {
+      "min_unsafe": 10,
+      "min_recall": 0.8,
+      "min_specificity": 0.8
+    },
+    "status": "pass"
+  },
+  "probe_metrics": {
+    "linear": {
+      "r2": 0.6946516534224765,
+      "rmse": 0.4537826478481293,
+      "height_r2": 0.7431378960609436,
+      "pitch_r2": 0.5003418326377869,
+      "speed_r2": 0.7187540531158447,
+      "height_rmse": 0.10365385562181473,
+      "pitch_rmse": 0.3374692499637604,
+      "speed_rmse": 0.7022296190261841
+    },
+    "mlp": {
+      "r2": 0.9112937127771359,
+      "rmse": 0.24458354711532593,
+      "height_r2": 0.9854280352592468,
+      "pitch_r2": 0.9242205619812012,
+      "speed_r2": 0.9078447222709656,
+      "height_rmse": 0.024688493460416794,
+      "pitch_rmse": 0.1314234435558319,
+      "speed_rmse": 0.4019722640514374
+    }
+  },
+  "decisions_m0": {
+    "speed": {
+      "n": 192,
+      "n_unsafe": 160,
+      "real_readout": {
+        "m": 0.0,
+        "n": 192,
+        "n_accepted": 32,
+        "acceptance_rate": 0.16666666666666666,
+        "n_false_safe": 17,
+        "n_censored": 0,
+        "n_accepted_censored": 0,
+        "fsa_lower": 0.53125,
+        "fsa_upper": 0.53125,
+        "fsa": 0.53125,
+        "false_reject_rate": 0.53125
+      },
+      "imagined": {
+        "m": 0.0,
+        "n": 192,
+        "n_accepted": 62,
+        "acceptance_rate": 0.3229166666666667,
+        "n_false_safe": 44,
+        "n_censored": 0,
+        "n_accepted_censored": 0,
+        "fsa_lower": 0.7096774193548387,
+        "fsa_upper": 0.7096774193548387,
+        "fsa": 0.7096774193548387,
+        "false_reject_rate": 0.4375
+      },
+      "real_agreement": 0.8229166666666666
+    },
+    "health": {
+      "n": 192,
+      "n_unsafe": 71,
+      "real_readout": {
+        "m": 0.0,
+        "n": 192,
+        "n_accepted": 111,
+        "acceptance_rate": 0.578125,
+        "n_false_safe": 4,
+        "n_censored": 0,
+        "n_accepted_censored": 0,
+        "fsa_lower": 0.036036036036036036,
+        "fsa_upper": 0.036036036036036036,
+        "fsa": 0.036036036036036036,
+        "false_reject_rate": 0.11570247933884298
+      },
+      "imagined": {
+        "m": 0.0,
+        "n": 192,
+        "n_accepted": 187,
+        "acceptance_rate": 0.9739583333333334,
+        "n_false_safe": 68,
+        "n_censored": 0,
+        "n_accepted_censored": 0,
+        "fsa_lower": 0.36363636363636365,
+        "fsa_upper": 0.36363636363636365,
+        "fsa": 0.36363636363636365,
+        "false_reject_rate": 0.01652892561983471
+      },
+      "real_agreement": 0.90625
+    }
+  },
+  "decision_diagnostics": {
+    "speed": {
+      "n_unsafe": 160,
+      "n_safe": 32,
+      "unsafe_detected": 143,
+      "safe_accepted": 15,
+      "unsafe_recall": 0.89375,
+      "specificity": 0.46875
+    },
+    "health": {
+      "n_unsafe": 71,
+      "n_safe": 121,
+      "unsafe_detected": 67,
+      "safe_accepted": 107,
+      "unsafe_recall": 0.9436619718309859,
+      "specificity": 0.8842975206611571
+    }
+  },
+  "undefined_policy": "Nonfinite/missing numeric values are null; never replaced by zero.",
+  "new_gate_decision": false
+}

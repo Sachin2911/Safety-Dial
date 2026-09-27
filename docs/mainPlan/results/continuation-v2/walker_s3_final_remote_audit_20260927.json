@@ -1,0 +1,263 @@
+{
+  "status": "passed",
+  "observed_utc": "2026-09-27T09:50:51.133382+00:00",
+  "run_id": "walker2d-probes-recovery-20260927-1",
+  "workflow_id": "walker2d-recovery-20260927-1",
+  "workflow_config_sha256": "d0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d",
+  "workflow_stage": "physical_probe_gate",
+  "stage_status": "completed",
+  "gate_go": true,
+  "terminal_stages": {
+    "lewm_a_full": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "started_unix": 1790491891.0699685,
+          "log": "/workspace/Safety-Dial/runs/workflows/walker2d-recovery-20260927-1/logs/lewm_a_full.attempt-001.log",
+          "pid": 18371,
+          "returncode": 0,
+          "finished_unix": 1790502138.3219488
+        }
+      ],
+      "watched_gates": [],
+      "pending_gate_json": [],
+      "waiting_for": [],
+      "required_gates": [
+        {
+          "path": "/workspace/Safety-Dial/runs/walker2d-lewm-a-continuation-smoke-20260926-1/smoke_gate.json",
+          "key": "gate.passes",
+          "passes": true,
+          "sha256": "2f287923ef5cdce09e7b1f1cb5c253760ecb818aec43198d569e1575c18ff4a1"
+        }
+      ],
+      "gate": null,
+      "output_hashes": {
+        "/workspace/Safety-Dial/runs/walker2d-lewm-a-recovery-20260927-1": {
+          "kind": "directory",
+          "sha256": "e5596cf2f4f058a4e0afb1258e769a8bc994438e5a8f75a8e0044143aab0a9f4",
+          "n_files": 24
+        },
+        "/workspace/Safety-Dial/docs/mainPlan/results/s2/walker2d-lewm-a-recovery-20260927-1.json": {
+          "kind": "file",
+          "sha256": "dd5f1e356b4f9a4c8824a9b4b53f185185be9db484defe108192514c2aaa5f7b"
+        }
+      }
+    },
+    "physical_probe_gate": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "started_unix": 1790502138.6456172,
+          "log": "/workspace/Safety-Dial/runs/workflows/walker2d-recovery-20260927-1/logs/physical_probe_gate.attempt-001.log",
+          "pid": 90061,
+          "returncode": 0,
+          "finished_unix": 1790502189.51594
+        }
+      ],
+      "watched_gates": [],
+      "pending_gate_json": [],
+      "waiting_for": [],
+      "required_gates": [],
+      "gate": {
+        "path": "/workspace/Safety-Dial/runs/walker2d-probes-recovery-20260927-1/gate.json",
+        "key": "gate.go",
+        "passes": true,
+        "sha256": "b85c71467edb371eb13e795a19318ed5c350fc186aa3ca04acbe0f8b92cae2e6"
+      },
+      "output_hashes": {
+        "/workspace/Safety-Dial/runs/walker2d-probes-recovery-20260927-1": {
+          "kind": "directory",
+          "sha256": "7795ce96c6ccf065ddfa2b25ae62549151ea3834af040c8059b692244673c09f",
+          "n_files": 10
+        },
+        "/workspace/Safety-Dial/docs/mainPlan/results/s3/walker2d-probes-recovery-20260927-1": {
+          "kind": "directory",
+          "sha256": "fe9265c602fa5966a24ac42ef578ef37c949ad4c22157cf842ae761160db013c",
+          "n_files": 3
+        },
+        "/workspace/Safety-Dial/runs/walker2d-probes-recovery-20260927-1/gate.json": {
+          "kind": "file",
+          "sha256": "b85c71467edb371eb13e795a19318ed5c350fc186aa3ca04acbe0f8b92cae2e6"
+        }
+      }
+    }
+  },
+  "workflow_snapshot_sha256": "c1b58b526812e0503e5dcc875f73bfcf7b74f8826126095e19a6888cc15433bb",
+  "local_scientific_audit": {
+    "path": "/workspace/Safety-Dial/docs/mainPlan/results/continuation-v2/walker_s3_final_local_audit_20260927.json",
+    "sha256": "636a617b5e8131d5674c617e02fb5a16ffb274b2b8a0ef0429982ce44872080a",
+    "git_blob_sha1": "f8c8239fe8235155d33a0cda31e8b13dc1acf431",
+    "size_bytes": 8458,
+    "stat_identity": [
+      59,
+      6459386479,
+      8458,
+      1790502424299476754,
+      1790502424299476754
+    ]
+  },
+  "verifier_sha256": "32fedeed5cef847dc1392ce3f0477b59de0cc7ea640ea43a07c8743fe396d0fa",
+  "producer_sources": {
+    "experiments/scripts/walker_s3_gate.py": {
+      "sha256": "7f878d70799821af0455f7149b15b63c5c2b369792215ccf09df23d440914c87",
+      "git_blob_sha1": "7c9d061d556fd9f91412a3575c412467e51f4c83",
+      "size_bytes": 11694,
+      "stat_identity": [
+        59,
+        3758316790,
+        11694,
+        1790439204783559570,
+        1790439204783559570
+      ]
+    },
+    "experiments/helpers/hfStore.py": {
+      "sha256": "754c23321ee0c6ad71daa7e80197b406134ebe16f90a5a0d81f7edaf83fc30bd",
+      "git_blob_sha1": "ddd4ef10dd36f2ff5e9c6031e1b3f6c0a64a1802",
+      "size_bytes": 10016,
+      "stat_identity": [
+        59,
+        3233692048,
+        10016,
+        1790438022087911399,
+        1790438022087911399
+      ]
+    },
+    "experiments/helpers/poseProbes.py": {
+      "sha256": "424e17d2d970b402858182043dc7a75d22e57f553452d412de31e927f6c5af2e",
+      "git_blob_sha1": "30a95e59c4c9571ace8e9c6466dc68dcb7fd4406",
+      "size_bytes": 9566,
+      "stat_identity": [
+        59,
+        3235925866,
+        9566,
+        1790427344231838023,
+        1790427344231838023
+      ]
+    },
+    "experiments/helpers/walkerValidation.py": {
+      "sha256": "8ae6e5feec69e7c7d3881f2f69d9743ef11f467b23cf6c378282ac2c0ec9a026",
+      "git_blob_sha1": "2e2b8f0f3a9b19ca48180d113f3b271bab30602b",
+      "size_bytes": 6647,
+      "stat_identity": [
+        59,
+        3235982133,
+        6647,
+        1790439204735559383,
+        1790439204735559383
+      ]
+    },
+    "configs/walker2d/recovery-20260927-1.yaml": {
+      "sha256": "d0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d",
+      "git_blob_sha1": "512f6772bc8c318ba1d4043da19815a96cfbe340",
+      "size_bytes": 3165,
+      "stat_identity": [
+        59,
+        132339013,
+        3165,
+        1790491544684329030,
+        1790491544684329030
+      ]
+    }
+  },
+  "receipt": {
+    "repo_id": "Sachioster/safetydial-walker2d",
+    "repo_type": "model",
+    "path": "probes/walker2d-probes-recovery-20260927-1",
+    "revision": "cb1560d7b02b4fbe6585b3c0c325a78d56b337e6",
+    "run_id": "walker2d-probes-recovery-20260927-1"
+  },
+  "remote_repo_private": true,
+  "tag": {
+    "name": "walker2d-probes-recovery-20260927-1",
+    "target_commit": "cb1560d7b02b4fbe6585b3c0c325a78d56b337e6"
+  },
+  "verified_files": {
+    "README.md": {
+      "sha256": "6ff0d4d06974ca213a5514fb33c3d12aab4e3ff51381f07b18093cdbfc28d19a",
+      "git_blob_sha1": "6aafaae39a43a32b8227789ffd98152205733fe2",
+      "size_bytes": 207,
+      "remote_match_method": "canonical Git blob SHA1 and size"
+    },
+    "config.yaml": {
+      "sha256": "12382ee30c143d0e3cd7c3004dffb4a0e57abe27c1759d9d12752d19a997f9d8",
+      "git_blob_sha1": "6e97036f48911965351af2cb56fbbabccf24dece",
+      "size_bytes": 243,
+      "remote_match_method": "canonical Git blob SHA1 and size"
+    },
+    "gate.json": {
+      "sha256": "b85c71467edb371eb13e795a19318ed5c350fc186aa3ca04acbe0f8b92cae2e6",
+      "git_blob_sha1": "547e98783bdf74c1d70473b42e56ab3e4ec715d7",
+      "size_bytes": 5665,
+      "remote_match_method": "canonical Git blob SHA1 and size"
+    },
+    "gate_rows.json": {
+      "sha256": "3036e3f73e57b24e25ff588ad40d534365b2e79b84cc7d02c129a4b7ca594b3f",
+      "git_blob_sha1": "95b781ee7e2532dd50ba9f562612e558ab1834e3",
+      "size_bytes": 47172,
+      "remote_match_method": "canonical Git blob SHA1 and size"
+    },
+    "manifest.json": {
+      "sha256": "ac9950722868bdd6ccc322448e277ee112307240b5a5ed8e7e1e866fff5b2661",
+      "git_blob_sha1": "2856b9faf14b8e35c48659c7d4aa4fd8d43c51f8",
+      "size_bytes": 4493,
+      "remote_match_method": "canonical Git blob SHA1 and size"
+    },
+    "walker_linear.json": {
+      "sha256": "bcb1b40a037eabb53eef4010fcb8fd19aa086998fcba1ab8a6ffe9b2edf5f91c",
+      "git_blob_sha1": "6ac43af4abbe18d6ed9100a3efeeb59615e96eda",
+      "size_bytes": 6515,
+      "remote_match_method": "canonical Git blob SHA1 and size"
+    },
+    "walker_linear.pt": {
+      "sha256": "1af09f3f0d6605fc47fb95ce28bdc3c90cda698d5fe1c5742317d95773873ff3",
+      "git_blob_sha1": "3fa5405585fd1ed6cd118550a78221c902142e7d",
+      "size_bytes": 9501,
+      "remote_match_method": "LFS SHA256 and size"
+    },
+    "walker_mlp.json": {
+      "sha256": "5e973837a23539ad0d308744804e6350ac6cda89706e2a453e4517fa82f70047",
+      "git_blob_sha1": "62695ad350686a3292a68dd7a1741a635bb55277",
+      "size_bytes": 6538,
+      "remote_match_method": "canonical Git blob SHA1 and size"
+    },
+    "walker_mlp.pt": {
+      "sha256": "449b99c9267a203773d70aa806512c2459b160d451888bdbc3fe90afe6f5e1b4",
+      "git_blob_sha1": "70660dbda32cc128e769f0731d279bf23a29d878",
+      "size_bytes": 338933,
+      "remote_match_method": "LFS SHA256 and size"
+    }
+  },
+  "model_lineage": {
+    "repo_id": "Sachioster/safetydial-walker2d",
+    "revision": "9e05478658484d0f26ea740fead9e0ab7625367e",
+    "path": "lewm-a/walker2d-lewm-a-recovery-20260927-1"
+  },
+  "source_data_lineage": {
+    "repo_id": "Sachioster/safetydial-walker2d-data",
+    "revision": "ddd4d51648d2a382725efd20d04cedebedbf8fd2",
+    "path": "data/walker2d-data-20260926-3"
+  },
+  "max_seconds": 900,
+  "api_endpoint": "https://huggingface.co",
+  "remote_write_calls": 0,
+  "model_calls": 0,
+  "simulator_steps": 0,
+  "tensor_or_HDF5_decoding": false,
+  "excluded_remote_payload": [
+    "hf_upload.json",
+    "hf_upload.json.tmp"
+  ],
+  "limitations": [
+    "Authenticated pinned metadata verification, not remote content download, tensor decoding or restore testing.",
+    "Every uploaded file is checked by LFS SHA256/size or canonical Git blob SHA1/size. The full prefix inventory must match.",
+    "hf_upload.json and hf_upload.json.tmp are uploader exclusions. The receipt is written after uploading; it is not claimed within that remote commit.",
+    "The uploaded run manifest precedes probe_hf_revision. The results manifest adds that field later and is not itself claimed remotely uploaded. Gate and row mirrors are byte-checked.",
+    "S2 final model and S1 data remote durability rely on their separate audits. This helper validates their local pinned lineage; it remotely checks the S3 probe payload only.",
+    "Scientific gate arithmetic and source-role semantics rely on the exact passed local S2/S3 evidence audit. No new R2, horizon error or physical replay was calculated.",
+    "S3 lacks a per-run executed source snapshot. Reviewed current source hashes cannot retroactively prove execution identity.",
+    "Workflow may advance S4; only immutable S2/S3 stage records must stay unchanged. A failed S3 gate requires S4 to remain unattempted.",
+    "Tags and repository privacy are observed metadata; later administrators can change them."
+  ]
+}

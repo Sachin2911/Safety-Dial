@@ -1,0 +1,379 @@
+#!/usr/bin/env python3
+"""Deferred S3 probe durability: completed local evidence and pinned private HF metadata.
+
+Requires the successful --mode both saved-evidence audit before any network access.
+Only read-only metadata API calls; never uploads, downloads, tensors, H5 or simulation.
+The only write is a fresh parent-level audit after all identity/stability checks pass.
+"""
+from __future__ import annotations
+
+import argparse
+from datetime import datetime, timezone
+import hashlib
+import json
+import math
+import os
+from pathlib import Path
+import re
+import signal
+
+import yaml
+
+ROOT = Path('/workspace/Safety-Dial')
+WORKFLOW = 'walker2d-recovery-20260927-1'
+RUN_ID = 'walker2d-probes-recovery-20260927-1'
+MODEL_ID = 'walker2d-lewm-a-recovery-20260927-1'
+CONFIG_SHA = 'd0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d'
+LOCAL_CHECKER_SHA = 'a8538fe74b7c3d380e5ae42a9a997191fe018488d244abff29d8cbe960546d37'
+RESUME_SHA = '50279ce50cac07cc74ef0fa8757415a71e2fedc9f69a09db8699a232174b0d5c'
+REPO_ID = 'Sachioster/safetydial-walker2d'
+DATA_REPO = 'Sachioster/safetydial-walker2d-data'
+DATA_PREFIX = 'data/walker2d-data-20260926-3'
+DATA_REVISION = 'ddd4d51648d2a382725efd20d04cedebedbf8fd2'
+IGNORED = {'hf_upload.json', 'hf_upload.json.tmp'}
+SOURCES = {
+    'experiments/scripts/walker_s3_gate.py': '7f878d70799821af0455f7149b15b63c5c2b369792215ccf09df23d440914c87',
+    'experiments/helpers/hfStore.py': '754c23321ee0c6ad71daa7e80197b406134ebe16f90a5a0d81f7edaf83fc30bd',
+    'experiments/helpers/poseProbes.py': '424e17d2d970b402858182043dc7a75d22e57f553452d412de31e927f6c5af2e',
+    'experiments/helpers/walkerValidation.py': '8ae6e5feec69e7c7d3881f2f69d9743ef11f467b23cf6c378282ac2c0ec9a026',
+    'configs/walker2d/recovery-20260927-1.yaml': CONFIG_SHA,
+}
+
+
+class AuditError(ValueError):
+    pass
+
+
+class AuditDeadline(BaseException):
+    pass
+
+
+def need(ok, message):
+    if not ok:
+        raise AuditError(message)
+
+
+def deadline(_signum, _frame):
+    raise AuditDeadline()
+
+
+def canonical_sha(value):
+    # Producers may preserve NaN metrics. This compares their exact JSON semantics,
+    # never treats an undefined number as finite or recomputes a scientific gate.
+    return hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest()
+
+
+def file_record(path):
+    path = Path(path)
+    need(path.is_file() and not path.is_symlink(), 'Expected a regular local file')
+    before = path.stat()
+    sha, git = hashlib.sha256(), hashlib.sha1(f'blob {before.st_size}\0'.encode())
+    with path.open('rb') as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b''):
+            sha.update(block)
+            git.update(block)
+    after = path.stat()
+    fields = ('st_dev', 'st_ino', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+    identity = [getattr(before, key) for key in fields]
+    need(identity == [getattr(after, key) for key in fields], 'Input changed while hashing')
+    return {'sha256': sha.hexdigest(), 'git_blob_sha1': git.hexdigest(),
+            'size_bytes': before.st_size, 'stat_identity': identity}
+
+
+def tree_record(directory):
+    need(directory.is_dir() and not directory.is_symlink(), 'Expected a regular output directory')
+    members = sorted(directory.rglob('*'))
+    need(not any(p.is_symlink() for p in members), 'Symlink in completed output')
+    files = {str(p.relative_to(directory)): file_record(p) for p in members if p.is_file()}
+    need(members == sorted(directory.rglob('*')), 'Output membership changed while hashing')
+    return files
+
+
+def workflow_hash(files):
+    return {'kind': 'directory', 'sha256': canonical_sha({k: v['sha256'] for k, v in files.items()}),
+            'n_files': len(files)}
+
+
+def read(path, record):
+    data = path.read_bytes()
+    need(hashlib.sha256(data).hexdigest() == record['sha256'], 'Metadata changed before parsing')
+    return json.loads(data)
+
+
+def paths():
+    return {'run': ROOT / 'runs' / RUN_ID,
+            'results': ROOT / 'docs/mainPlan/results/s3' / RUN_ID,
+            'model': ROOT / 'runs' / MODEL_ID,
+            's2_report': ROOT / 'docs/mainPlan/results/s2' / f'{MODEL_ID}.json',
+            'state': ROOT / 'runs/workflows' / WORKFLOW / 'state.json',
+            'data': ROOT / 'data/study/walker2d/continuation-20260926-2'}
+
+
+def terminal_stages(state):
+    p = paths()
+    need(state.get('workflow_id') == WORKFLOW and state.get('cwd') == str(ROOT)
+         and state.get('state_dir') == str(p['state'].parent)
+         and state.get('config_sha256') == CONFIG_SHA, 'Wrong frozen recovery workflow identity')
+    stages = {sid: state.get('stages', {}).get(sid, {})
+              for sid in ('lewm_a_full', 'physical_probe_gate')}
+    for sid, stage in stages.items():
+        allowed = ('completed',) if sid == 'lewm_a_full' else ('completed', 'gate_stopped')
+        need(stage.get('status') in allowed, 'Wait for terminal S2 and S3 before reading payloads')
+        attempts = stage.get('attempts', [])
+        need(bool(attempts), 'Missing terminal subprocess attempt')
+        last = attempts[-1]
+        finished = last.get('finished_unix')
+        need(type(finished) in (int, float) and math.isfinite(finished), 'Missing finite finish time')
+        need(last.get('returncode') == (0 if stage['status'] == 'completed' else 2),
+             'Terminal subprocess return code does not match current S3 writer')
+    need(set(stages['lewm_a_full'].get('output_hashes', {})) ==
+         {str(p['model']), str(p['s2_report'])}, 'Incomplete completed S2 output identity')
+    need(set(stages['physical_probe_gate'].get('output_hashes', {})) ==
+         {str(p['run']), str(p['results']), str(p['run'] / 'gate.json')},
+         'Incomplete terminal S3 output identity')
+    if stages['physical_probe_gate']['status'] == 'gate_stopped':
+        later = state.get('stages', {}).get('prospective_acquisition', {})
+        need(state.get('status') == 'gate_stopped' and
+             later.get('status', 'pending') in ('pending', 'waiting') and not later.get('attempts'),
+             'A failed S3 gate must leave S4 unattempted')
+    return stages
+
+
+def short_receipt(item):
+    return {key: item[key] for key in ('repo_id', 'revision', 'path')}
+
+
+def pinned(item, repo, prefix):
+    need(item.get('repo_id') == repo and item.get('path') == prefix and
+         re.fullmatch(r'[0-9a-f]{40}', item.get('revision', '')) is not None,
+         'Wrong repository, run prefix or non-pinned receipt')
+
+
+def prepare(local_audit):
+    p = paths()
+    source_records = {name: file_record(ROOT / name) for name in SOURCES}
+    need(all(source_records[name]['sha256'] == value for name, value in SOURCES.items()),
+         'Prepared producer/configuration source changed; review a new verifier version')
+    state_bytes = p['state'].read_bytes()
+    stages = terminal_stages(json.loads(state_bytes))  # Before payload or API initialization.
+    audit_record = file_record(local_audit)
+    audit = read(local_audit, audit_record)
+    need(audit.get('status') == 'consistent_finalized_saved_evidence' and
+         audit.get('mode') == 'both' and audit.get('checker_sha256') == LOCAL_CHECKER_SHA and
+         audit.get('workflow_config_sha256') == CONFIG_SHA and 's3' in audit,
+         'Require the exact successful existing local S2/S3 evidence audit')
+    trees = {key: tree_record(p[key]) for key in ('run', 'results', 'model')}
+    for key, sid in [('run', 'physical_probe_gate'), ('results', 'physical_probe_gate'),
+                     ('model', 'lewm_a_full')]:
+        need(workflow_hash(trees[key]) == stages[sid]['output_hashes'][str(p[key])],
+             'Terminal output tree hash differs')
+    required = {'config.yaml', 'walker_linear.pt', 'walker_mlp.pt', 'gate.json',
+                'gate_rows.json', 'manifest.json', 'README.md', 'hf_upload.json',
+                'walker_linear.json', 'walker_mlp.json'}
+    need(required <= set(trees['run']) and not any(n.endswith('.tmp') for n in trees['run']),
+         'Incomplete probe run or temporary file in terminal payload')
+    records = {'s2_report': file_record(p['s2_report']),
+               'data_receipt': file_record(p['data'] / 'upload_receipt.json'),
+               'data_splits': file_record(p['data'] / 'splits.json')}
+    need(stages['lewm_a_full']['output_hashes'][str(p['s2_report'])] ==
+         {'kind': 'file', 'sha256': records['s2_report']['sha256']}, 'Final S2 report changed')
+    report = read(p['run'] / 'gate.json', trees['run']['gate.json'])
+    run_manifest = read(p['run'] / 'manifest.json', trees['run']['manifest.json'])
+    results_manifest = read(p['results'] / 'manifest.json', trees['results']['manifest.json'])
+    receipt = read(p['run'] / 'hf_upload.json', trees['run']['hf_upload.json'])
+    pinned(receipt, REPO_ID, f'probes/{RUN_ID}')
+    need(receipt == dict(short_receipt(receipt), repo_type='model', run_id=RUN_ID),
+         'Probe receipt type or immutable run identity differs')
+    need(report.get('run_id') == run_manifest.get('run_id') == RUN_ID and
+         report.get('role') == 'development', 'S3 run or development-role identity differs')
+    config_bytes = (p['run'] / 'config.yaml').read_bytes()
+    need(hashlib.sha256(config_bytes).hexdigest() == trees['run']['config.yaml']['sha256'],
+         'Probe configuration changed before parsing')
+    cfg = yaml.safe_load(config_bytes)
+    need(cfg.get('run_id') == RUN_ID and (ROOT / cfg['model']).resolve() == p['model'] and
+         (ROOT / cfg['data_dir']).resolve() == p['data'] and cfg.get('no_upload') is False,
+         'Probe run/model/data configuration differs')
+    need((cfg.get('n_roots'), cfg.get('seed'), cfg.get('min_unsafe'), cfg.get('probe_frames')) ==
+         (64, 0, 10, 30000), 'Frozen S3 recipe differs')
+    need((ROOT / report['model']).resolve() == p['model'] and
+         (ROOT / run_manifest['data']['model']).resolve() == p['model'], 'Model path lineage differs')
+    for name in ('gate.json', 'gate_rows.json'):
+        need(trees['run'][name]['sha256'] == trees['results'][name]['sha256'], 'S3 evidence mirrors differ')
+    gate = report['gate']
+    saved_gate = stages['physical_probe_gate']['gate']
+    need(type(gate.get('go')) is bool and saved_gate ==
+         {'path': str(p['run'] / 'gate.json'), 'key': 'gate.go', 'passes': gate['go'],
+          'sha256': trees['run']['gate.json']['sha256']}, 'Recorded gate identity differs')
+    need(stages['physical_probe_gate']['output_hashes'][str(p['run'] / 'gate.json')] ==
+         {'kind': 'file', 'sha256': trees['run']['gate.json']['sha256']}, 'Gate output hash differs')
+    need((stages['physical_probe_gate']['status'] == 'completed') is gate['go'],
+         'Saved gate and terminal status disagree')
+    need(results_manifest.get('probe_hf_revision') == receipt['revision'], 'Results revision differs')
+    results_core = dict(results_manifest)
+    results_core.pop('probe_hf_revision')
+    need(canonical_sha(results_core) == canonical_sha(run_manifest),
+         'Run/results manifests differ beyond the post-upload revision field')
+    need('probe_hf_revision' not in run_manifest, 'Uploaded manifest cannot contain its future revision')
+    need(set(report['probe_files_sha256']) == {'walker_linear.pt', 'walker_mlp.pt'} and
+         all(trees['run'][n]['sha256'] == value for n, value in report['probe_files_sha256'].items()),
+         'Probe checkpoint hashes differ from report')
+    need(set(report['model_files_sha256']) == {'weights.pt', 'config.json', 'scalers.npz'} and
+         all(trees['model'][n]['sha256'] == value for n, value in report['model_files_sha256'].items()),
+         'Actual final model/config/scaler bytes differ from S3 lineage')
+    need(report['model_sha256'] == run_manifest['data']['model_sha256'] ==
+         trees['model']['weights.pt']['sha256'], 'Weight identity differs')
+    model_receipt = read(p['model'] / 'hf_upload.json', trees['model']['hf_upload.json'])
+    pinned(model_receipt, REPO_ID, f'lewm-a/{MODEL_ID}')
+    model_report = read(p['s2_report'], records['s2_report'])
+    model_manifest = read(p['model'] / 'manifest.json', trees['model']['manifest.json'])
+    final_receipt = read(p['model'] / 'upload_receipt.json', trees['model']['upload_receipt.json'])
+    need(model_report.get('run_id') == model_manifest.get('run_id') == MODEL_ID and
+         model_report['steps'] == model_manifest['metrics']['step'] == final_receipt['step'] == 214780,
+         'S3 did not consume the completed 214780-step recovery model')
+    need(model_report['checkpoint'] == final_receipt and
+         short_receipt(final_receipt) == short_receipt(model_receipt), 'Final model receipts disagree')
+    upstream = model_manifest['upstream_revisions']
+    need(upstream.get('resume_step') == 172000 and upstream.get('resume_sha256') == RESUME_SHA,
+         'Original 172000-step recovery lineage differs')
+    data_receipt = read(p['data'] / 'upload_receipt.json', records['data_receipt'])
+    pinned(data_receipt, DATA_REPO, DATA_PREFIX)
+    need(data_receipt['revision'] == DATA_REVISION, 'Frozen collection revision differs')
+    need(run_manifest['upstream_revisions'] ==
+         {'model': short_receipt(model_receipt), 'data': short_receipt(data_receipt)},
+         'Probe upstream model/data revisions differ')
+    need(report['splits_sha256'] == records['data_splits']['sha256'], 'Source split identity differs')
+    need(audit['s2']['steps'] == 214780 and audit['s2']['report_sha256'] == records['s2_report']['sha256']
+         and audit['s2']['checkpoint'] == short_receipt(model_receipt), 'Local S2 audit refers to different bytes')
+    need(audit['s3']['report_sha256'] == trees['run']['gate.json']['sha256'] and
+         audit['s3']['rows_sha256'] == trees['run']['gate_rows.json']['sha256'] and
+         audit['s3']['local_pinned_receipt'] == short_receipt(receipt) and
+         canonical_sha(audit['s3']['gate']) == canonical_sha(gate), 'Local S3 audit refers to different evidence')
+    return {'paths': p, 'stages': stages, 'trees': trees, 'records': records, 'sources': source_records,
+            'receipt': receipt, 'model_receipt': short_receipt(model_receipt),
+            'data_receipt': short_receipt(data_receipt), 'gate_go': gate['go'],
+            'audit_record': audit_record, 'workflow_snapshot_sha256': hashlib.sha256(state_bytes).hexdigest()}
+
+
+def compare_remote(api, receipt, files):
+    repo, revision, prefix = receipt['repo_id'], receipt['revision'], receipt['path']
+    info = api.repo_info(repo_id=repo, repo_type='model', revision=revision, timeout=30)
+    need(info.id == repo and info.private is True and info.sha == revision,
+         'Pinned remote repository/revision missing, changed or not private')
+    def tag_target():
+        tags = [x for x in api.list_repo_refs(repo_id=repo, repo_type='model').tags if x.name == RUN_ID]
+        need(len(tags) == 1 and tags[0].target_commit == revision, 'Run tag differs from pinned revision')
+    tag_target()
+    expected = {f'{prefix}/{name}': (name, rec) for name, rec in files.items()
+                if Path(name).name not in IGNORED}
+    entries = list(api.list_repo_tree(repo_id=repo, repo_type='model', revision=revision,
+                                     path_in_repo=prefix, recursive=True, expand=False))
+    remote = {}
+    for entry in entries:
+        need(entry.path.startswith(prefix + '/'), 'Remote tree entry escaped the expected run prefix')
+        if hasattr(entry, 'blob_id'):
+            need(entry.path not in remote, 'Duplicate remote file entry')
+            remote[entry.path] = entry
+        else:
+            need(hasattr(entry, 'tree_id'), 'Unknown remote tree entry type')
+    need(set(remote) == set(expected), 'Remote run contains missing or unexpected payload files')
+    verified = {}
+    for path, (name, value) in expected.items():
+        entry = remote[path]
+        need(entry.size == value['size_bytes'], 'Remote payload byte size differs')
+        if entry.lfs is not None:
+            need(entry.lfs.sha256 == value['sha256'] and entry.lfs.size == value['size_bytes'],
+                 'Remote LFS SHA256 or byte size differs')
+            method = 'LFS SHA256 and size'
+        else:
+            need(entry.blob_id == value['git_blob_sha1'], 'Remote canonical Git blob differs')
+            method = 'canonical Git blob SHA1 and size'
+        verified[name] = {k: value[k] for k in ('sha256', 'git_blob_sha1', 'size_bytes')}
+        verified[name]['remote_match_method'] = method
+    tag_target()
+    again = api.repo_info(repo_id=repo, repo_type='model', revision=revision, timeout=30)
+    need(again.id == repo and again.private is True and again.sha == revision,
+         'Remote repository privacy or pinned revision changed during audit')
+    return verified
+
+
+def recheck(plan, local_audit):
+    p = plan['paths']
+    need(terminal_stages(json.loads(p['state'].read_bytes())) == plan['stages'],
+         'Completed S2/S3 stage changed while workflow advanced')
+    need(all(tree_record(p[key]) == plan['trees'][key] for key in ('run', 'results', 'model')),
+         'Completed payload bytes or membership changed')
+    for key, path in [('s2_report', p['s2_report']), ('data_receipt', p['data'] / 'upload_receipt.json'),
+                      ('data_splits', p['data'] / 'splits.json')]:
+        need(file_record(path) == plan['records'][key], 'Lineage metadata changed')
+    need(file_record(local_audit) == plan['audit_record'], 'Local scientific audit changed')
+    need(all(file_record(ROOT / name) == record for name, record in plan['sources'].items()),
+         'Reviewed source changed during audit')
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--local-audit', type=Path, required=True)
+    parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--max-seconds', type=int, default=900)
+    args = parser.parse_args(argv)
+    need(1 <= args.max_seconds <= 1800, 'Invalid bounded deadline')
+    need(not args.output.is_symlink(), 'Audit output cannot be a symlink')
+    output = args.output.resolve()
+    need(output.parent == ROOT / 'runs/continuation-audit' and
+         re.fullmatch(r'walker_s3_remote_durability_[A-Za-z0-9_-]+\.json', output.name) and
+         not output.exists(), 'Require fresh parent audit output outside completed evidence')
+    signal.signal(signal.SIGALRM, deadline)
+    signal.setitimer(signal.ITIMER_REAL, args.max_seconds)
+    own = file_record(Path(__file__))
+    local_audit = args.local_audit.resolve()
+    plan = prepare(local_audit)
+    from dotenv import load_dotenv
+    from huggingface_hub import HfApi, get_token
+    load_dotenv(ROOT / '.env', override=False)
+    token = os.environ.get('HF_TOKEN') or get_token()
+    need(bool(token), 'Existing Hugging Face authentication required; no login attempted')
+    api = HfApi(endpoint='https://huggingface.co', token=token)
+    verified = compare_remote(api, plan['receipt'], plan['trees']['run'])
+    recheck(plan, local_audit)
+    need(file_record(Path(__file__)) == own, 'Verifier source changed')
+    result = {'status': 'passed', 'observed_utc': datetime.now(timezone.utc).isoformat(),
+              'run_id': RUN_ID, 'workflow_id': WORKFLOW, 'workflow_config_sha256': CONFIG_SHA,
+              'workflow_stage': 'physical_probe_gate', 'stage_status': plan['stages']['physical_probe_gate']['status'],
+              'gate_go': plan['gate_go'], 'terminal_stages': plan['stages'],
+              'workflow_snapshot_sha256': plan['workflow_snapshot_sha256'],
+              'local_scientific_audit': {'path': str(local_audit), **plan['audit_record']},
+              'verifier_sha256': own['sha256'], 'producer_sources': plan['sources'],
+              'receipt': plan['receipt'], 'remote_repo_private': True,
+              'tag': {'name': RUN_ID, 'target_commit': plan['receipt']['revision']},
+              'verified_files': verified, 'model_lineage': plan['model_receipt'],
+              'source_data_lineage': plan['data_receipt'], 'max_seconds': args.max_seconds,
+              'api_endpoint': 'https://huggingface.co', 'remote_write_calls': 0,
+              'model_calls': 0, 'simulator_steps': 0, 'tensor_or_HDF5_decoding': False,
+              'excluded_remote_payload': sorted(IGNORED),
+              'limitations': [
+                  'Authenticated pinned metadata verification, not remote content download, tensor decoding or restore testing.',
+                  'Every uploaded file is checked by LFS SHA256/size or canonical Git blob SHA1/size. The full prefix inventory must match.',
+                  'hf_upload.json and hf_upload.json.tmp are uploader exclusions. The receipt is written after uploading; it is not claimed within that remote commit.',
+                  'The uploaded run manifest precedes probe_hf_revision. The results manifest adds that field later and is not itself claimed remotely uploaded. Gate and row mirrors are byte-checked.',
+                  'S2 final model and S1 data remote durability rely on their separate audits. This helper validates their local pinned lineage; it remotely checks the S3 probe payload only.',
+                  'Scientific gate arithmetic and source-role semantics rely on the exact passed local S2/S3 evidence audit. No new R2, horizon error or physical replay was calculated.',
+                  'S3 lacks a per-run executed source snapshot. Reviewed current source hashes cannot retroactively prove execution identity.',
+                  'Workflow may advance S4; only immutable S2/S3 stage records must stay unchanged. A failed S3 gate requires S4 to remain unattempted.',
+                  'Tags and repository privacy are observed metadata; later administrators can change them.']}
+    with output.open('x') as stream:
+        json.dump(result, stream, indent=2, allow_nan=False)
+        stream.write('\n')
+    signal.setitimer(signal.ITIMER_REAL, 0)
+    print(json.dumps({'status': 'passed', 'path': str(output), 'sha256': file_record(output)['sha256'],
+                      'revision': plan['receipt']['revision'], 'verified_files': len(verified)}))
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except (AuditDeadline, Exception) as exc:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        print(json.dumps({'status': 'not_verified', 'exception_type': type(exc).__name__,
+                          'reason': str(exc) if isinstance(exc, AuditError) else
+                          'Deadline, local I/O or remote metadata verification failed; no completion claimed.'}))
+        raise SystemExit(1) from None

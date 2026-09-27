@@ -1,0 +1,36 @@
+{
+  "status": "prepared_synthetic_tests_and_terminal_local_preflight_passed_remote_not_executed",
+  "created_utc": "2026-09-27T09:51:04.064742+00:00",
+  "helper_sha256": "32fedeed5cef847dc1392ce3f0477b59de0cc7ea640ea43a07c8743fe396d0fa",
+  "test_source_sha256": "d1c412404d09075cc5b3b7cefadf6b58bbfbe4d7cdc67576e05ffd31ca348ef6",
+  "tests": {
+    "command": "uv run pytest -q /tmp/test_walker_s3_remote_durability_20260927.py",
+    "passed": 24,
+    "seconds": 0.4,
+    "scope": "Pure synthetic local files and fake metadata API; no actual network or workload."
+  },
+  "static_lint": {
+    "command": "uv run ruff check /tmp/audit_walker_s3_remote_durability_20260927.py /tmp/test_walker_s3_remote_durability_20260927.py --select F",
+    "passed": true
+  },
+  "actual_local_preflight": {
+    "source": "/tmp/walker_s3_remote_preflight_20260927.json",
+    "sha256": "e031a5aaa9491451766eacf8021041116a6340bf7c08d0a7b77ada6d66dc3143",
+    "status": "local_preflight_passed_remote_not_executed",
+    "after_authorization_and_terminal_barrier": true,
+    "network_calls": 0
+  },
+  "existing_helpers_considered": [
+    "/tmp/audit_walker_recovery_final_upload.py",
+    "/tmp/check-walker-recovery-final-evidence.py",
+    "/tmp/audit_walker_s4_remote_durability_20260927.py"
+  ],
+  "reason_new_helper": "Existing local S3 checker does not recheck remote privacy/payload/tag; S2 and S4 have different uploaded directories and post-upload writer ordering. S3-specific binding is required.",
+  "not_performed": [
+    "Actual remote metadata verification",
+    "Upload or download",
+    "Model/tensor/HDF5 decoding or simulation",
+    "Writes inside completed run/result/model/data directories",
+    "Commit or publication"
+  ]
+}
