@@ -1,0 +1,301 @@
+"""Pure synthetic cases only; never calls the real API or reads actual S4 outputs."""
+
+import importlib.util
+import json
+from types import SimpleNamespace as NS
+
+import pytest
+from huggingface_hub.hf_api import RepoFile, RepoFolder
+
+spec = importlib.util.spec_from_file_location(
+    "s4_remote", "/tmp/audit_walker_s4_remote_durability_20260927.py"
+)
+m = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(m)
+
+
+def write(path, data):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(data if isinstance(data, bytes) else json.dumps(data).encode())
+    return m.file_record(path)
+
+
+def remote_fixture(tmp_path, kind="model"):
+    directory = tmp_path / "payload"
+    files = {
+        name: write(directory / name, data)
+        for name, data in [
+            ("weights.pt", b"synthetic weights"),
+            ("README.md", b"synthetic README"),
+            ("hf_upload.json", b"local receipt only"),
+        ]
+    }
+    tag = m.RUN_ID + "-random-s0-b128" if kind == "model" else m.RUN_ID
+    prefix = ("adapted/" if kind == "model" else "banks/") + tag
+    receipt = {
+        "repo_id": m.REPOS[kind],
+        "repo_type": kind,
+        "path": prefix,
+        "revision": "a" * 40,
+        "run_id": tag,
+    }
+    entries = [RepoFolder(path=prefix + "/unused-folder", oid="f" * 40)]
+    for name in ("weights.pt", "README.md"):
+        item = files[name]
+        kw = {"path": prefix + "/" + name, "oid": item["git_blob_sha1"], "size": item["size_bytes"]}
+        if name == "weights.pt":
+            kw["lfs"] = {"oid": item["sha256"], "size": item["size_bytes"], "pointerSize": 128}
+        entries.append(RepoFile(**kw))
+
+    class FakeAPI:
+        def __init__(self):
+            self.info = NS(id=receipt["repo_id"], sha=receipt["revision"], private=True)
+            self.tags = [NS(name=tag, target_commit=receipt["revision"])]
+            self.entries = entries
+            self.calls = []
+
+        def repo_info(self, **kw):
+            self.calls.append(("repo_info", kw))
+            return self.info
+
+        def list_repo_refs(self, **kw):
+            self.calls.append(("list_repo_refs", kw))
+            return NS(tags=self.tags)
+
+        def list_repo_tree(self, **kw):
+            self.calls.append(("list_repo_tree", kw))
+            return self.entries
+
+    return FakeAPI(), {"directory": directory, "receipt": receipt, "files": files}
+
+
+@pytest.mark.parametrize("kind", ["model", "dataset"])
+def test_exact_private_payload_lfs_and_git(tmp_path, kind):
+    api, item = remote_fixture(tmp_path, kind)
+    result = m.compare_remote(api, item)
+    assert set(result["verified_files"]) == {"weights.pt", "README.md"}
+    assert result["excluded_local_receipts"] == ["hf_upload.json"]
+    assert result["verified_files"]["weights.pt"]["remote_match_method"] == "LFS SHA256 and size"
+    assert (
+        result["verified_files"]["README.md"]["remote_match_method"]
+        == "canonical Git blob SHA1 and size"
+    )
+    assert all(x[1]["repo_type"] == kind for x in api.calls)
+    assert sum(x[0] == "list_repo_refs" for x in api.calls) == 2
+
+
+@pytest.mark.parametrize(
+    "defect",
+    [
+        "public",
+        "wrong_repo",
+        "revision",
+        "tag",
+        "missing",
+        "extra",
+        "duplicate",
+        "size",
+        "lfs_hash",
+        "lfs_size",
+        "git_hash",
+    ],
+)
+def test_metadata_mismatch_rejected(tmp_path, defect):
+    api, item = remote_fixture(tmp_path)
+    if defect == "public":
+        api.info.private = False
+    elif defect == "wrong_repo":
+        api.info.id = "other/repo"
+    elif defect == "revision":
+        api.info.sha = "b" * 40
+    elif defect == "tag":
+        api.tags[0].target_commit = "b" * 40
+    elif defect == "missing":
+        api.entries.pop()
+    elif defect == "extra":
+        api.entries.append(RepoFile(path=item["receipt"]["path"] + "/extra", oid="b" * 40, size=1))
+    elif defect == "duplicate":
+        api.entries.append(api.entries[-1])
+    elif defect == "size":
+        api.entries[1].size += 1
+    elif defect == "lfs_hash":
+        api.entries[1].lfs.sha256 = "b" * 64
+    elif defect == "lfs_size":
+        api.entries[1].lfs.size += 1
+    elif defect == "git_hash":
+        api.entries[2].blob_id = "b" * 40
+    with pytest.raises(m.AuditError):
+        m.compare_remote(api, item)
+
+
+def test_tag_change_during_read_rejected(tmp_path):
+    api, item = remote_fixture(tmp_path)
+    original = api.list_repo_refs
+    count = 0
+
+    def changing(**kw):
+        nonlocal count
+        count += 1
+        if count == 2:
+            api.tags[0].target_commit = "b" * 40
+        return original(**kw)
+
+    api.list_repo_refs = changing
+    with pytest.raises(m.AuditError, match="Tag changed"):
+        m.compare_remote(api, item)
+
+
+def plan_fixture(tmp_path, monkeypatch, complete):
+    run, results, bank = [tmp_path / x for x in ("run", "results", "bank")]
+    for name, value in [("RUN", run), ("RESULTS", results), ("BANK", bank)]:
+        monkeypatch.setattr(m, name, value)
+    gate = {"go": complete}
+    gate_hash = write(run / "decomposition_gate.json", gate)
+    write(results / "decomposition_gate.json", gate)
+    report = {
+        "run_id": m.RUN_ID,
+        "status": "complete" if complete else "diagnostic_stop",
+        "bank_hf_revision": "a" * 40,
+    }
+    bank_receipt = {
+        "repo_id": m.REPOS["dataset"],
+        "repo_type": "dataset",
+        "path": "banks/" + m.RUN_ID,
+        "run_id": m.RUN_ID,
+        "revision": "a" * 40,
+    }
+    write(bank / "hf_upload.json", bank_receipt)
+    receipts = []
+    if complete:
+        report.update(planned_budgets=[128, 512], acquisition_seeds=[0, 1, 2], adaptation={})
+        for arm in ("random", "boundary"):
+            report["adaptation"][arm] = {}
+            for seed in (0, 1, 2):
+                report["adaptation"][arm][str(seed)] = []
+                for budget in (128, 512):
+                    name = f"{arm}-s{seed}-b{budget}"
+                    tag = m.RUN_ID + "-" + name
+                    item = {
+                        "repo_id": m.REPOS["model"],
+                        "repo_type": "model",
+                        "path": "adapted/" + tag,
+                        "run_id": tag,
+                        "revision": "a" * 40,
+                    }
+                    for filename in (
+                        "weights.pt",
+                        "config.yaml",
+                        "scalers.npz",
+                        "selection.json",
+                        "decomposition.json",
+                        "evaluation_rows.json",
+                        "manifest.json",
+                        "README.md",
+                    ):
+                        write(run / name / filename, b"synthetic")
+                    write(run / name / "hf_upload.json", item)
+                    receipts.append(item)
+                    report["adaptation"][arm][str(seed)].append(
+                        {"budget": budget, "hf_revision": "a" * 40}
+                    )
+        write(bank / "study.json", report)
+    else:
+        report["final_test_evaluated"] = False
+        write(bank / "diagnostic.json", report)
+        write(bank / "development_rows.json", [])
+    stage = {
+        "status": "completed" if complete else "gate_stopped",
+        "attempts": [{"returncode": 0 if complete else 2}],
+        "gate": {
+            "path": str(run / "decomposition_gate.json"),
+            "key": "go",
+            "passes": complete,
+            "sha256": gate_hash["sha256"],
+        },
+    }
+    trees = {
+        key: m.tree_record(path)
+        for key, path in [("run", run), ("results", results), ("bank", bank)]
+    }
+    audit = {"study_status": report["status"], "verified_model_receipts": list(reversed(receipts))}
+    return report, gate, stage, trees, audit
+
+
+@pytest.mark.parametrize("complete,expected", [(False, 1), (True, 13)])
+def test_plan_branches_and_receipt_order(tmp_path, monkeypatch, complete, expected):
+    args = plan_fixture(tmp_path, monkeypatch, complete)
+    plan = m.payload_plan(*args)
+    assert len(plan) == expected
+    assert plan[0]["receipt"]["repo_type"] == "dataset"
+
+
+@pytest.mark.parametrize("defect", ["final_test", "adapted_receipt", "success_status"])
+def test_diagnostic_never_claims_acquisition(tmp_path, monkeypatch, defect):
+    report, gate, stage, trees, audit = plan_fixture(tmp_path, monkeypatch, False)
+    if defect == "final_test":
+        report["final_test_evaluated"] = True
+    elif defect == "adapted_receipt":
+        audit["verified_model_receipts"] = [{}]
+    else:
+        stage["status"] = "completed"
+    with pytest.raises(m.AuditError):
+        m.payload_plan(report, gate, stage, trees, audit)
+
+
+def test_incomplete_full_curve_rejected(tmp_path, monkeypatch):
+    report, gate, stage, trees, audit = plan_fixture(tmp_path, monkeypatch, True)
+    report["adaptation"]["random"]["0"].pop()
+    with pytest.raises(m.AuditError):
+        m.payload_plan(report, gate, stage, trees, audit)
+
+
+def test_canonical_git_hash_and_mutation(tmp_path):
+    path = tmp_path / "file"
+    original = write(path, b"hello\n")
+    assert original["git_blob_sha1"] == "ce013625030ba8dba906f756967f9e9ca394464a"
+    tree = m.tree_record(tmp_path)
+    assert m.workflow_hash(tree)["sha256"] == m.canonical_sha({"file": original["sha256"]})
+    path.write_bytes(b"changed")
+    assert m.tree_record(tmp_path) != tree
+
+
+def test_symlink_rejected(tmp_path):
+    (tmp_path / "target").write_bytes(b"x")
+    (tmp_path / "link").symlink_to(tmp_path / "target")
+    with pytest.raises(m.AuditError):
+        m.tree_record(tmp_path)
+
+
+def test_unstarted_s4_and_bad_terminal_output_set_rejected():
+    state = {
+        "workflow_id": "walker2d-recovery-20260927-1",
+        "cwd": str(m.ROOT),
+        "config_sha256": m.CONFIG_SHA,
+        "stages": {"prospective_acquisition": {"status": "pending"}},
+    }
+    with pytest.raises(m.AuditError, match="not terminal"):
+        m.terminal_stage(state)
+    state["stages"]["prospective_acquisition"] = {
+        "status": "gate_stopped",
+        "attempts": [{"returncode": 2, "finished_unix": 1}],
+        "output_hashes": {},
+    }
+    with pytest.raises(m.AuditError, match="output set"):
+        m.terminal_stage(state)
+
+
+def test_deadline_interrupts_blocked_metadata_wait():
+    import signal
+    import time
+
+    previous = signal.getsignal(signal.SIGALRM)
+    started = time.monotonic()
+    try:
+        signal.signal(signal.SIGALRM, m.deadline)
+        signal.setitimer(signal.ITIMER_REAL, 0.03)
+        with pytest.raises(m.AuditDeadline):
+            time.sleep(0.5)
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, previous)
+    assert time.monotonic() - started < 0.4

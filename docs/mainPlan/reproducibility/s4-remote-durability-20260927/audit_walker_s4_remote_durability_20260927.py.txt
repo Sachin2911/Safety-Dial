@@ -1,0 +1,478 @@
+#!/usr/bin/env python3
+"""Deferred S4 durability check: local hashes plus pinned private HF metadata only.
+
+Requires a passed existing local S4 audit and terminal managed S4 outputs.
+No uploads/downloads, model/tensor/HDF5 parsing, simulator calls or stage launches.
+Both completed acquisition and a development-only diagnostic stop are supported.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import re
+import signal
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path("/workspace/Safety-Dial")
+RUN_ID = "walker2d-s4-recovery-20260927-1"
+RUN = ROOT / "runs" / RUN_ID
+RESULTS = ROOT / "docs/mainPlan/results/s4" / RUN_ID
+BANK = ROOT / "data/study/walker2d/continuation-20260926-2/s4" / RUN_ID
+STATE = ROOT / "runs/workflows/walker2d-recovery-20260927-1/state.json"
+CONFIG = ROOT / "configs/walker2d/recovery-20260927-1.yaml"
+CONFIG_SHA = "d0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d"
+LOCAL_CHECKER_SHA = "da0cede97b038eff4fd38f98d72b547e57f9974b5e93cca3c6570c1b903cc6d6"
+SOURCES = {
+    ROOT
+    / "experiments/scripts/walker_s4_prospective.py": "d69209c362b7987695752c12d68751d196b12a4a70d72d68f43436f307db887a",
+    ROOT
+    / "experiments/helpers/hfStore.py": "754c23321ee0c6ad71daa7e80197b406134ebe16f90a5a0d81f7edaf83fc30bd",
+    CONFIG: CONFIG_SHA,
+}
+REPOS = {
+    "model": "Sachioster/safetydial-walker2d",
+    "dataset": "Sachioster/safetydial-walker2d-data",
+}
+IGNORED = {"hf_upload.json", "hf_upload.json.tmp"}
+
+
+class AuditError(ValueError):
+    pass
+
+
+class AuditDeadline(BaseException):
+    pass
+
+
+def need(ok, message):
+    if not ok:
+        raise AuditError(message)
+
+
+def deadline(_signum, _frame):
+    raise AuditDeadline()
+
+
+def canonical_sha(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest()
+
+
+def file_record(path):
+    need(path.is_file() and not path.is_symlink(), "Expected a regular local file")
+    before = path.stat()
+    sha = hashlib.sha256()
+    git = hashlib.sha1(f"blob {before.st_size}\0".encode())
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            sha.update(block)
+            git.update(block)
+    after = path.stat()
+    fields = ("st_dev", "st_ino", "st_size", "st_mtime_ns", "st_ctime_ns")
+    identity = [getattr(before, key) for key in fields]
+    need(identity == [getattr(after, key) for key in fields], "Local file changed while hashing")
+    return {
+        "sha256": sha.hexdigest(),
+        "git_blob_sha1": git.hexdigest(),
+        "size_bytes": before.st_size,
+        "stat_identity": identity,
+    }
+
+
+def tree_record(path):
+    need(path.is_dir() and not path.is_symlink(), "Expected a regular local output directory")
+    members = sorted(path.rglob("*"))
+    need(all(not p.is_symlink() for p in members), "Symlink in local output tree")
+    files = {str(p.relative_to(path)): file_record(p) for p in members if p.is_file()}
+    need(members == sorted(path.rglob("*")), "Local output membership changed")
+    return files
+
+
+def workflow_hash(files):
+    return {
+        "kind": "directory",
+        "sha256": canonical_sha({k: v["sha256"] for k, v in files.items()}),
+        "n_files": len(files),
+    }
+
+
+def read(path, record):
+    data = path.read_bytes()
+    need(
+        hashlib.sha256(data).hexdigest() == record["sha256"],
+        "Local metadata changed before parsing",
+    )
+    return json.loads(data)
+
+
+def terminal_stage(state):
+    need(
+        state.get("workflow_id") == "walker2d-recovery-20260927-1"
+        and state.get("cwd") == str(ROOT)
+        and state.get("config_sha256") == CONFIG_SHA,
+        "Wrong workflow identity",
+    )
+    stage = state["stages"].get("prospective_acquisition", {})
+    need(
+        stage.get("status") in ("completed", "gate_stopped"),
+        "S4 is not terminal; an S3 stop creates no S4 upload to verify",
+    )
+    attempts = stage.get("attempts", [])
+    need(
+        bool(attempts)
+        and attempts[-1].get("returncode") in (0, 2)
+        and isinstance(attempts[-1].get("finished_unix"), (int, float)),
+        "S4 has no completed actual subprocess attempt",
+    )
+    expected_paths = {str(RUN), str(RESULTS), str(BANK), str(RUN / "decomposition_gate.json")}
+    need(set(stage.get("output_hashes", {})) == expected_paths, "Incomplete terminal S4 output set")
+    return stage
+
+
+def receipt(path, record, *, kind, tag, revision):
+    item = read(path, record)
+    prefix = "adapted" if kind == "model" else "banks"
+    expected = {
+        "repo_id": REPOS[kind],
+        "repo_type": kind,
+        "path": f"{prefix}/{tag}",
+        "run_id": tag,
+        "revision": revision,
+    }
+    need(
+        item == expected and bool(re.fullmatch(r"[0-9a-f]{40}", revision or "")),
+        "Wrong S4 receipt repository, type, tag, path or pinned revision",
+    )
+    return item
+
+
+def payload_plan(report, gate, stage, trees, local_audit):
+    need(
+        report.get("run_id") == RUN_ID and local_audit.get("study_status") == report.get("status"),
+        "Report/local audit identity mismatch",
+    )
+    gate_record = stage.get("gate", {})
+    need(
+        gate_record.get("path") == str(RUN / "decomposition_gate.json")
+        and gate_record.get("key") == "go"
+        and type(gate.get("go")) is bool
+        and gate_record.get("passes") is gate["go"]
+        and gate_record.get("sha256") == trees["run"]["decomposition_gate.json"]["sha256"],
+        "Wrong terminal development-gate identity",
+    )
+    need(
+        trees["run"]["decomposition_gate.json"]["sha256"]
+        == trees["results"]["decomposition_gate.json"]["sha256"],
+        "Gate mirror mismatch",
+    )
+    bank_receipt = receipt(
+        BANK / "hf_upload.json",
+        trees["bank"]["hf_upload.json"],
+        kind="dataset",
+        tag=RUN_ID,
+        revision=report.get("bank_hf_revision"),
+    )
+    result = [{"directory": BANK, "receipt": bank_receipt, "files": trees["bank"]}]
+    actual_checkpoint_dirs = {
+        name.split("/")[0]
+        for name in trees["run"]
+        if "/" in name and re.fullmatch(r"(random|boundary)-s\d+-b\d+", name.split("/")[0])
+    }
+    if report["status"] == "diagnostic_stop":
+        need(
+            stage["status"] == "gate_stopped"
+            and stage["attempts"][-1]["returncode"] == 2
+            and gate["go"] is False
+            and report.get("final_test_evaluated") is False
+            and "adaptation" not in report
+            and not actual_checkpoint_dirs
+            and local_audit.get("verified_model_receipts") == [],
+            "Diagnostic stop cannot claim adapted models or final-test evaluation",
+        )
+        need(
+            "diagnostic.json" in trees["bank"]
+            and "development_rows.json" in trees["bank"]
+            and "study.json" not in trees["bank"],
+            "Missing diagnostic bank payload",
+        )
+    else:
+        need(
+            report["status"] == "complete"
+            and stage["status"] == "completed"
+            and stage["attempts"][-1]["returncode"] == 0
+            and gate["go"] is True,
+            "Incomplete or contradictory completed acquisition",
+        )
+        need(
+            report.get("planned_budgets") == [128, 512]
+            and report.get("acquisition_seeds") == [0, 1, 2]
+            and set(report.get("adaptation", {})) == {"random", "boundary"},
+            "Changed acquisition design",
+        )
+        expected_dirs, model_receipts = set(), []
+        for arm in ("random", "boundary"):
+            need(set(report["adaptation"][arm]) == {"0", "1", "2"}, "Changed acquisition seeds")
+            for seed in (0, 1, 2):
+                curve = report["adaptation"][arm][str(seed)]
+                need([x["budget"] for x in curve] == [128, 512], "Missing acquisition budgets")
+                for point in curve:
+                    name = f"{arm}-s{seed}-b{point['budget']}"
+                    expected_dirs.add(name)
+                    files = {
+                        p[len(name) + 1 :]: value
+                        for p, value in trees["run"].items()
+                        if p.startswith(name + "/")
+                    }
+                    required = {
+                        "weights.pt",
+                        "config.yaml",
+                        "scalers.npz",
+                        "selection.json",
+                        "decomposition.json",
+                        "evaluation_rows.json",
+                        "manifest.json",
+                        "README.md",
+                        "hf_upload.json",
+                    }
+                    need(set(files) == required, "Unexpected or missing adapted checkpoint payload")
+                    item = receipt(
+                        RUN / name / "hf_upload.json",
+                        files["hf_upload.json"],
+                        kind="model",
+                        tag=f"{RUN_ID}-{name}",
+                        revision=point.get("hf_revision"),
+                    )
+                    model_receipts.append(item)
+                    result.append({"directory": RUN / name, "receipt": item, "files": files})
+        need(
+            actual_checkpoint_dirs == expected_dirs and len(model_receipts) == 12,
+            "Adapted checkpoint inventory differs from full study",
+        )
+        local_receipts = local_audit.get("verified_model_receipts")
+        need(
+            isinstance(local_receipts, list) and len(local_receipts) == 12,
+            "Missing local audited receipts",
+        )
+        need(
+            sorted(model_receipts, key=lambda x: x["run_id"])
+            == sorted(local_receipts, key=lambda x: x["run_id"]),
+            "Local audit model receipts differ",
+        )
+        need("study.json" in trees["bank"], "Missing pre-upload bank report")
+    return result
+
+
+def compare_remote(api, item):
+    local, receipt_data = item["files"], item["receipt"]
+    repo, kind, revision = (receipt_data[k] for k in ("repo_id", "repo_type", "revision"))
+    tag, prefix = receipt_data["run_id"], receipt_data["path"]
+    info = api.repo_info(repo_id=repo, repo_type=kind, revision=revision, timeout=30)
+    need(
+        info.id == repo and info.private is True and info.sha == revision,
+        "Pinned repository is missing, wrong, public or at another revision",
+    )
+    tags = [x for x in api.list_repo_refs(repo_id=repo, repo_type=kind).tags if x.name == tag]
+    need(
+        len(tags) == 1 and tags[0].target_commit == revision, "Run tag differs from pinned receipt"
+    )
+    expected = {
+        f"{prefix}/{name}": (name, value)
+        for name, value in local.items()
+        if Path(name).name not in IGNORED
+    }
+    entries = list(
+        api.list_repo_tree(
+            repo_id=repo,
+            repo_type=kind,
+            revision=revision,
+            path_in_repo=prefix,
+            recursive=True,
+            expand=False,
+        )
+    )
+    remote = {}
+    for entry in entries:
+        if hasattr(entry, "blob_id"):
+            need(entry.path not in remote, "Duplicate remote payload path")
+            remote[entry.path] = entry
+        else:
+            need(hasattr(entry, "tree_id"), "Unknown remote tree-entry type")
+    need(set(remote) == set(expected), "Remote payload has missing or unexpected files")
+    verified = {}
+    for path, (name, value) in expected.items():
+        entry = remote[path]
+        need(entry.size == value["size_bytes"], "Remote payload size mismatch")
+        if entry.lfs is not None:
+            need(
+                entry.lfs.sha256 == value["sha256"] and entry.lfs.size == value["size_bytes"],
+                "Remote LFS payload hash/size mismatch",
+            )
+            method = "LFS SHA256 and size"
+        else:
+            need(entry.blob_id == value["git_blob_sha1"], "Remote Git blob identity mismatch")
+            method = "canonical Git blob SHA1 and size"
+        verified[name] = {
+            "sha256": value["sha256"],
+            "size_bytes": value["size_bytes"],
+            "git_blob_sha1": value["git_blob_sha1"],
+            "remote_match_method": method,
+        }
+    # Tag references are mutable service metadata; check their observed target again.
+    tags_after = [x for x in api.list_repo_refs(repo_id=repo, repo_type=kind).tags if x.name == tag]
+    need(
+        len(tags_after) == 1 and tags_after[0].target_commit == revision, "Tag changed during audit"
+    )
+    return {
+        "receipt": receipt_data,
+        "remote_repo_private": True,
+        "tag_target": revision,
+        "directory": str(item["directory"]),
+        "verified_files": verified,
+        "excluded_local_receipts": [name for name in local if Path(name).name in IGNORED],
+    }
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--local-audit", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--max-seconds", type=int, default=900)
+    args = parser.parse_args()
+    need(1 <= args.max_seconds <= 1800, "Invalid bounded deadline")
+    output = args.output.resolve()
+    need(
+        output.parent == ROOT / "runs/continuation-audit"
+        and re.fullmatch(r"walker_s4_remote_durability_[A-Za-z0-9_-]+\.json", output.name)
+        and not output.exists(),
+        "Require fresh parent audit output outside completed evidence",
+    )
+    signal.signal(signal.SIGALRM, deadline)
+    signal.setitimer(signal.ITIMER_REAL, args.max_seconds)
+    own = file_record(Path(__file__))
+    source_records = {str(p): file_record(p) for p in SOURCES}
+    need(
+        all(source_records[str(p)]["sha256"] == wanted for p, wanted in SOURCES.items()),
+        "Reviewed producer or workflow source identity changed; preserve a new reviewed verifier version",
+    )
+    state_bytes = STATE.read_bytes()
+    stage = terminal_stage(json.loads(state_bytes))  # Before local payload or network work.
+    audit_record = file_record(args.local_audit)
+    audit = read(args.local_audit, audit_record)
+    need(
+        audit.get("status") == "passed"
+        and audit.get("run_id") == RUN_ID
+        and audit.get("checker_sha256") == LOCAL_CHECKER_SHA
+        and audit.get("workflow_config_sha256") == CONFIG_SHA
+        and audit.get("workflow_stage") == "prospective_acquisition"
+        and audit.get("source_output_hashes") == stage["output_hashes"],
+        "Require the exact successful existing local S4 evidence audit",
+    )
+    trees = {
+        name: tree_record(path)
+        for name, path in [("run", RUN), ("results", RESULTS), ("bank", BANK)]
+    }
+    for name, path in [("run", RUN), ("results", RESULTS), ("bank", BANK)]:
+        need(
+            workflow_hash(trees[name]) == stage["output_hashes"][str(path)],
+            "Terminal output tree changed",
+        )
+    need(
+        stage["output_hashes"][str(RUN / "decomposition_gate.json")]
+        == {"kind": "file", "sha256": trees["run"]["decomposition_gate.json"]["sha256"]},
+        "Gate output hash changed",
+    )
+    report = read(RESULTS / "study.json", trees["results"]["study.json"])
+    gate = read(RUN / "decomposition_gate.json", trees["run"]["decomposition_gate.json"])
+    plan = payload_plan(report, gate, stage, trees, audit)
+    from dotenv import load_dotenv
+    from huggingface_hub import HfApi, get_token
+
+    load_dotenv(ROOT / ".env", override=False)
+    token = os.environ.get("HF_TOKEN") or get_token()
+    need(bool(token), "Existing Hugging Face authentication is required; no login is attempted")
+    api = HfApi(endpoint="https://huggingface.co", token=token)
+    verified = [compare_remote(api, item) for item in plan]
+    for name, path in [("run", RUN), ("results", RESULTS), ("bank", BANK)]:
+        need(
+            tree_record(path) == trees[name],
+            "Local output bytes or membership changed during remote audit",
+        )
+    need(terminal_stage(json.loads(STATE.read_bytes())) == stage, "Terminal S4 stage changed")
+    need(
+        file_record(args.local_audit) == audit_record and file_record(Path(__file__)) == own,
+        "Local audit or verifier changed",
+    )
+    need(
+        all(file_record(Path(p)) == before for p, before in source_records.items()),
+        "Producer source changed",
+    )
+    result = {
+        "status": "passed",
+        "observed_utc": datetime.now(timezone.utc).isoformat(),
+        "run_id": RUN_ID,
+        "study_status": report["status"],
+        "gate_go": gate["go"],
+        "workflow_stage": "prospective_acquisition",
+        "workflow_config_sha256": CONFIG_SHA,
+        "terminal_stage_sha256": canonical_sha(stage),
+        "source_output_hashes": stage["output_hashes"],
+        "local_scientific_audit": {"path": str(args.local_audit), **audit_record},
+        "verifier_sha256": own["sha256"],
+        "producer_sources": source_records,
+        "verified_uploads": verified,
+        "model_upload_count": len(verified) - 1,
+        "dataset_upload_count": 1,
+        "max_seconds": args.max_seconds,
+        "api_endpoint": "https://huggingface.co",
+        "remote_write_calls": 0,
+        "model_calls": 0,
+        "simulator_steps": 0,
+        "tensor_or_HDF5_decoding": False,
+        "limitations": [
+            "Remote content is verified through pinned metadata, not downloaded or restored.",
+            "LFS metadata is SHA256/size; ordinary Git content uses canonical Git blob SHA1/size.",
+            "hf_upload.json and hf_upload.json.tmp are uploader exclusions, never claimed remotely durable.",
+            "S4 results/study.json adds bank_hf_revision after upload; the bank contains its exact pre-upload report. The later local result and run-level artifacts outside upload folders are not claimed uploaded.",
+            "A development diagnostic stop may archive generated sealed final banks; this does not claim final-test evaluation or completed acquisition.",
+            "Scientific semantics and checkpoint contents rely on the separately passed local evidence audit; no new metrics or tensor checks.",
+            "Run tags and privacy are observed service metadata; a later administrator can change them.",
+            "An upstream S3 stop with no S4 subprocess has no S4 upload to audit; this helper fails before API calls.",
+        ],
+    }
+    with output.open("x") as stream:
+        json.dump(result, stream, indent=2, allow_nan=False)
+        stream.write("\n")
+    signal.setitimer(signal.ITIMER_REAL, 0)
+    print(
+        json.dumps(
+            {
+                "status": "passed",
+                "path": str(output),
+                "sha256": file_record(output)["sha256"],
+                "model_upload_count": len(verified) - 1,
+                "dataset_upload_count": 1,
+            }
+        )
+    )
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (AuditDeadline, Exception) as exc:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        print(
+            json.dumps(
+                {
+                    "status": "not_verified",
+                    "exception_type": type(exc).__name__,
+                    "reason": str(exc)
+                    if isinstance(exc, AuditError)
+                    else "Deadline, local I/O or remote metadata verification failed; no completion claimed.",
+                }
+            )
+        )
+        raise SystemExit(1) from None
