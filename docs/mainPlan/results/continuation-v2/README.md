@@ -90,3 +90,10 @@ continues toward the same 214,780-update total with the unchanged 4,000-update
 validation/upload cadence. The old workflow and run remain untouched. The fresh
 [recovery workflow](../../../../configs/walker2d/recovery-20260927-1.yaml)
 retains the original S3 and S4 recipes and scientific gates under fresh output names.
+
+A [30-sample check after recovery](gpu_after_walker_recovery_20260927.json) measured
+98.47% mean GPU activity (87-100%) while the trainer advanced from 173,100 to
+173,200. The twelve repeated update records from 172,100 through 173,200 matched
+the original loss terms at their printed precision. This supports operational
+continuity; it does not establish bitwise GPU trajectory equality or arithmetic
+efficiency.
