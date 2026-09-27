@@ -149,3 +149,15 @@ boundary advantage is not an extra S5 prerequisite. S5 compares exactly 51,200 a
 transitions in each arm, excludes the common S4 seed from the exact-N adaptation
 comparison, and trains B for the same 214,780 updates. This preparation records no
 S5 experiment or scientific result.
+
+
+## S4 report preparation
+
+The saved-evidence [S4 presentation utility](../../../../experiments/scripts/walker_s4_figures.py)
+is ready for a terminal S4 stage. It supports a development diagnostic stop or a
+completed health-only/health-and-speed comparison, with readable counts and costs,
+per-seed paired FSA intervals, and PNG plus vector PDF figures. Undefined outcomes
+remain undefined. It verifies frozen output identities and writes only to a fresh
+sibling directory. [Preparation validation](walker_s4_presentation_validation.json)
+passed 16 focused tests, Ruff, source review and synthetic visual review. No actual
+S4 result has been plotted or inferred from these layout tests.
