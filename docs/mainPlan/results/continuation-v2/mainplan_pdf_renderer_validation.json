@@ -1,0 +1,142 @@
+{
+  "status": "prepared_synthetic_validation_passed",
+  "created_utc": "2026-09-27T08:12:23.848499+00:00",
+  "scope": "Renderer preparation only. No actual final report composed; no live Walker evidence read.",
+  "source": {
+    "path": "/workspace/Safety-Dial/experiments/scripts/mainplan_report_pdf.py",
+    "sha256": "199c3fddc34f8b879aadd07e99c05cb7e9dd9efb57b2229cd42c718e83c9575c"
+  },
+  "synthetic_tests": {
+    "path": "/workspace/Safety-Dial/experiments/tests/test_mainplan_report_pdf.py",
+    "sha256": "7b67d57fc0feb194026ec160c43d35622ce917c5b6b818b3a22b7a42c828f87d",
+    "command": "uv run pytest -q experiments/tests/test_mainplan_report_pdf.py",
+    "result": "15 passed in 16.81s",
+    "ruff": "All checks passed",
+    "repo_relative_renderer_discovery": true
+  },
+  "demo": {
+    "composition": "/tmp/safetydial-report-pdf-validation-20260927/spec.json",
+    "pdf": "/tmp/safetydial-report-pdf-validation-20260927/pdf-v2/report.pdf",
+    "pdf_sha256": "228f306f64214359ad88314fd22fdb8300e52afd944e8bea09c99d68dfaab8a1",
+    "manifest": "/tmp/safetydial-report-pdf-validation-20260927/pdf-v2/manifest.json",
+    "manifest_sha256": "c337d339e093276e1efa7c6a0154670203db1ea042439e8abc4f46b1e3cc312c",
+    "preview_directory": "/tmp/safetydial-report-pdf-validation-20260927/previews-v2",
+    "page_count": 8
+  },
+  "visual_review": {
+    "reviewed_pages": [
+      1,
+      5,
+      8
+    ],
+    "observations": [
+      "Cover title/author/date and draft watermark are readable.",
+      "Long table wraps within measured columns with repeated headers and continues over multiple pages.",
+      "Long caption and source label remain on the figure page; no text clipping observed.",
+      "Font sizes: body 10 pt, caption 9 pt, table 8.5 pt; measured point bounds are retained in layout.json."
+    ],
+    "synthetic_only": true
+  },
+  "final_guard": {
+    "requires": [
+      "walker_workflow_state",
+      "walker_workflow_config"
+    ],
+    "checks": [
+      "Matching workflow/config SHA and working directory",
+      "Completed S2 with exact recorded output hashes",
+      "S3 and S4 passed or valid recorded scientific gate stop",
+      "S3 stop permits only unattempted S4",
+      "Exact saved gate path/key/boolean/hash and allowed return code",
+      "No S5 stage in final workflow",
+      "All composition/evidence/figure/source identities rechecked after rendering"
+    ]
+  },
+  "cli": "uv run python experiments/scripts/mainplan_report_pdf.py --spec <composition.json> --output-dir <fresh-output> --preview-dir <fresh-preview>",
+  "limitations": [
+    "Composition must supply scientific narrative and citation text.",
+    "Figures are embedded from raster image inputs; PDF text remains selectable with embedded TrueType fonts.",
+    "Caption+figure blocks too large for a legible A4 page are explicitly refused.",
+    "This renderer checks recorded workflow integrity, not scientific gate arithmetic or claims."
+  ],
+  "model_calls": 0,
+  "simulator_steps": 0,
+  "network_calls": 0,
+  "actual_walker_evidence_reads": 0,
+  "uploads": 0,
+  "staged_or_committed": false,
+  "initial_preparation": {
+    "source": {
+      "path": "/workspace/Safety-Dial/experiments/scripts/mainplan_report_pdf.py",
+      "sha256": "4735efdbdebe16b9e64f06e01ed4e9956900900d867c454af54120b56c5339b7"
+    },
+    "synthetic_tests": {
+      "path": "/tmp/test_mainplan_report_pdf.py",
+      "sha256": "6b126a2a80d8c16c71f100c3b49e97c3b2f4b3a7215f7d6d821f4329b92752f8",
+      "command": "uv run pytest -q /tmp/test_mainplan_report_pdf.py",
+      "result": "10 passed in 15.50s",
+      "ruff": "All checks passed"
+    },
+    "demo": {
+      "composition": "/tmp/safetydial-report-pdf-validation-20260927/spec.json",
+      "pdf": "/tmp/safetydial-report-pdf-validation-20260927/pdf/report.pdf",
+      "pdf_sha256": "8a8be789a7da5f3f1337d5230c612115b2ee2373bf20dfd76d134e19e7ffff2f",
+      "manifest": "/tmp/safetydial-report-pdf-validation-20260927/pdf/manifest.json",
+      "manifest_sha256": "12d766a5bd41065d1ce72ab19d4660cb10c8c249c2f9d7f7043e99848889547a",
+      "preview_directory": "/tmp/safetydial-report-pdf-validation-20260927/previews",
+      "page_count": 8
+    }
+  },
+  "updated_utc": "2026-09-27T08:20:15.876932+00:00",
+  "near_bottom_figure_regression": {
+    "pdf": "/tmp/safetydial-report-pdf-validation-20260927/near-bottom-pdf/report.pdf",
+    "preview": "/tmp/safetydial-report-pdf-validation-20260927/near-bottom-previews/page-003.png",
+    "visual_check": "Full-width figure moved from paragraph page 2 to fresh page 3 without shrinking. Caption remains with figure; no clipping.",
+    "pdf_sha256": "2a9aebe758563cb871a1a2c306d0c22e1e699b3eeeda49f58eed5b691430fc9e"
+  },
+  "review_fixes": [
+    "Figure target size uses full fresh-page capacity before page-break decision.",
+    "Nonfinite JSON overflow is rejected by finite parse_float.",
+    "Spec, workflow state and config are hashed before interpretation; initial captured output hashes must equal independently verified workflow output identities."
+  ],
+  "independent_static_review": {
+    "reviewer": "walker_audit",
+    "reviewed_source_sha256": "199c3fddc34f8b879aadd07e99c05cb7e9dd9efb57b2229cd42c718e83c9575c",
+    "status": "no_remaining_material_blocker",
+    "review_scope": "Static renderer and workflow schema only; actual report pages still require visual/scientific review."
+  },
+  "draft_review": {
+    "path": "runs/continuation-audit/final_report_spec_20260927_draft.json",
+    "observed_sha256": "c01fceff17ad54e1bf59b602f337d7900db12eeba1620ac59c3f1f68ba4a21f9",
+    "draft_edited": false,
+    "findings_sent_to_parent": [
+      "Clarify distinct controls per root, not unproven global uniqueness.",
+      "Explain physical branches versus two virtual-hazard labels and correlated 4096 decision rows.",
+      "Include separately declared stress metrics and preserve defined zero fixed-margin FSA at low acceptance.",
+      "Report 446 paid adaptation branches versus 422 valid acquired clips.",
+      "Bind omitted construction, adaptation, S1/recovery and publication/media provenance inputs.",
+      "Define composite observed hazard contact/domain exit unsafe event and coarse interpolation source."
+    ],
+    "core_saved_numerical_claims_checked": "E2 counts, bounds, fallback, retention, costs; E1 diagnosis; S0/S1 labels, counts and provenance. No pending Walker outcomes were inferred."
+  },
+  "independent_root_review": {
+    "utc": "2026-09-27T08:24:45.667537+00:00",
+    "scope": "Renderer and actual saved-evidence draft layout, not final Walker outcome",
+    "separate_static_review": "walker_audit approved corrected renderer hash199c3fddc34f8b879aadd07e99c05cb7e9dd9efb57b2229cd42c718e83c9575c",
+    "draft_spec": "runs/continuation-audit/final_report_spec_20260927_draft.json",
+    "draft_spec_sha256": "64b6f6b112c6f6a285a12f3a5363df998e540e9e79019bb5ac441d7feed11a15",
+    "draft_pdf": "runs/continuation-audit/final-report-draft-20260927-v1/report.pdf",
+    "draft_pdf_sha256": "130509cc8570894a17ec6ce129eb5ac8f9dfd47a955599961b2e0b2a291e09c9",
+    "draft_pages": 17,
+    "root_visual_pages": [
+      6,
+      7
+    ],
+    "findings_resolved": [
+      "Figure retains full-width size on page break",
+      "Overflow JSON numbers rejected",
+      "Inputs bound before interpretation and checked after rendering"
+    ],
+    "final_report_ready": false
+  }
+}
