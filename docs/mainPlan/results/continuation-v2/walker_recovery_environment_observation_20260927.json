@@ -1,0 +1,48 @@
+{
+  "kind": "walker-recovery-environment-observation-v1",
+  "observed_utc": "2026-09-27T09:04:49.753802+00:00",
+  "workflow_id": "walker2d-recovery-20260927-1",
+  "workflow_status_at_observation": "running",
+  "stage_at_observation": "lewm_a_full",
+  "live_trainer_pid": 18375,
+  "trainer_start_ticks": "130742",
+  "python_version": "3.11.16",
+  "architecture": "x86_64",
+  "gpus": [
+    {
+      "name": "NVIDIA GeForce RTX 5090",
+      "driver_version": "595.84",
+      "memory_total": "32607 MiB",
+      "compute_capability": "12.0"
+    }
+  ],
+  "query": [
+    "nvidia-smi",
+    "--query-gpu=name,driver_version,memory.total,compute_cap",
+    "--format=csv,noheader"
+  ],
+  "previous_verified_environment": {
+    "path": "docs/mainPlan/results/continuation-v2/walker_recovery_preflight_20260927.json",
+    "sha256": "39e4856c6e0ba7d72fd06e9ac1ac36b2b5bda105b9f9dcdc69799066a78f3358",
+    "torch_cuda": "13.0",
+    "packages_unchanged": {
+      "gymnasium": "1.3.0",
+      "h5py": "3.16.0",
+      "huggingface_hub": "1.24.0",
+      "mujoco": "3.11.0",
+      "numpy": "2.4.6",
+      "pymunk": "7.3.0",
+      "scikit-learn": "1.9.0",
+      "stable-pretraining": "0.1.8",
+      "stable-worldmodel": "0.1.1",
+      "torch": "2.13.0",
+      "torchvision": "0.28.0"
+    }
+  },
+  "limits": [
+    "This is a current observation during the recovered training segment, not an independent reconstruction of every pre-restart hardware detail.",
+    "Package equivalence is cited from the preflight audit; this observation did not reinstall or re-probe every dependency.",
+    "GPU UUID was not retained because model, architecture, driver and memory suffice for the methods description."
+  ],
+  "changes_to_training": false
+}
