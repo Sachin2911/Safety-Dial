@@ -1,7 +1,7 @@
-"""The committed continuation must not require another agent's uncommitted planner edits."""
+"""The audit wrapper supports both legacy planners and the current base audit hook."""
 from __future__ import annotations
 
-import subprocess
+import hashlib
 import sys
 from pathlib import Path
 from types import ModuleType, SimpleNamespace
@@ -17,15 +17,24 @@ from helpers.plannerAudit import PlannerAuditMixin
 from helpers.safeCemT import SafePlannerT
 
 REPO = Path(__file__).resolve().parents[2]
+# Exact pre-hook source bytes are local so shallow clones and source archives
+# retain this coverage. fixtures/planner_audit_legacy/README.md records provenance.
+LEGACY_FIXTURES = Path(__file__).parent / "fixtures" / "planner_audit_legacy"
+LEGACY_SHA256 = {
+    "imagination.py": "ce28b16299b2d4d9d8f84642db34c25ecf714736d41ab34a437070e1f3d5eef6",
+    "safeCemT.py": "0c7ac2793b94325fcf0d7cec43a962a822f1c881244d7de55d4e6430f786e76a",
+}
 
 
 def archived_module(path, name, monkeypatch):
-    source = subprocess.run(["git", "show", f"HEAD:{path}"], cwd=REPO, capture_output=True,
-                            text=True, check=True).stdout
+    basename = Path(path).name
+    fixture = LEGACY_FIXTURES / (basename + ".txt")
+    source = fixture.read_bytes()
+    assert hashlib.sha256(source).hexdigest() == LEGACY_SHA256[basename]
     module = ModuleType(name)
     module.__file__ = str(REPO / path)
     monkeypatch.setitem(sys.modules, name, module)
-    exec(compile(source, f"HEAD:{path}", "exec"), module.__dict__)
+    exec(compile(source, str(fixture), "exec"), module.__dict__)
     return module
 
 
@@ -60,13 +69,13 @@ class FakeSolver:
         return {"actions": candidates.mean(1), "costs": torch.tensor([123.])}
 
 
-@pytest.mark.parametrize("revision,kind", [("head", "nominal"), ("head", "safe"),
+@pytest.mark.parametrize("revision,kind", [("legacy", "nominal"), ("legacy", "safe"),
                                           ("working", "nominal"), ("working", "safe")])
-def test_exact_plan_audit_with_committed_and_working_tree_bases(monkeypatch, revision, kind):
+def test_exact_plan_audit_with_legacy_and_working_tree_bases(monkeypatch, revision, kind):
     import stable_worldmodel.solver
 
     monkeypatch.setattr(stable_worldmodel.solver, "CEMSolver", FakeSolver)
-    if revision == "head":
+    if revision == "legacy":
         old = archived_module("experiments/helpers/imagination.py", "archived_audit_imagination", monkeypatch)
         assert not hasattr(old.NominalPlanner, "_audit")
         with monkeypatch.context() as imports:

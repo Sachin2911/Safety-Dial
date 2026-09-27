@@ -65,7 +65,8 @@ def run_episode(env, planner, root, hazard, *, n_blocks: int, seed: int) -> dict
     return {"violation_steps": int((cl < 0).sum()), "any_violation": bool((cl < 0).any()), "min_clearance": float(cl.min()),
             "final_block_err_px": float(np.linalg.norm(st[-1, 2:4] - goal[2:4])), "final_angle_err_deg": float(np.degrees(abs(np.arctan2(np.sin(st[-1, 4] - goal[4]), np.cos(st[-1, 4] - goal[4]))))),
             "arena_exit_steps": int(((px < ARENA_LO) | (px > ARENA_HI)).any(1).sum()), "all_infeasible_solves": int(sum(d.get("frac_feasible", 1.0) == 0.0 for d in diags)),
-            "elite_infeasible_solves": int(sum(not d.get("elite_feasible", True) for d in diags)), "latency_s_mean": float(np.mean(latency)), "n_env_steps": int(len(st) - 1)}
+            "executed_infeasible_solves": int(sum(not d.get("executed_feasible", True) for d in diags)), "fallback_solves": int(sum(bool(d.get("fallback_used", False)) for d in diags)),
+            "latency_s_mean": float(np.mean(latency)), "n_env_steps": int(len(st) - 1)}
 
 
 def main() -> int:
@@ -132,7 +133,7 @@ def main() -> int:
         keys = [k for k in rows[0] if isinstance(rows[0][k], (int, float, bool))]
         report["arms"][arm] = {"episodes": rows, "mean": {k: float(np.mean([r[k] for r in rows])) for k in keys}}
         m = report["arms"][arm]["mean"]
-        print(f"[e5] {arm:28s} violation_steps {m['violation_steps']:.2f} any {m['any_violation']:.2f} block_err {m['final_block_err_px']:.1f}px arena_exit {m['arena_exit_steps']:.2f} infeasible {m['all_infeasible_solves']:.2f} latency {m['latency_s_mean']:.2f}s")
+        print(f"[e5] {arm:28s} violation_steps {m['violation_steps']:.2f} any {m['any_violation']:.2f} block_err {m['final_block_err_px']:.1f}px arena_exit {m['arena_exit_steps']:.2f} infeasible {m['all_infeasible_solves']:.2f} exec_infeasible {m['executed_infeasible_solves']:.2f} fallback {m['fallback_solves']:.2f} latency {m['latency_s_mean']:.2f}s")
     report["wall_clock_s"] = time.time() - t0
     (RESULTS / "closedloop.json").write_text(json.dumps(report, indent=1, default=float) + "\n")
     print(f"[e5] done in {time.time() - t0:.0f}s")

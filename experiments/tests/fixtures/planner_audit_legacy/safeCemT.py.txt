@@ -58,7 +58,6 @@ class TConstraintCostModel(HistoryCostModel):
         big = (scored[feasible].max() if feasible.any() else scored.max()) + 1.0
         total = torch.where(feasible, scored, big + violation)
         elite = int(total.argmin(dim=1)[0])
-        self.last_elite = candidates[0, elite].detach().clone()  # least-violating candidate of this batch
         self.last_diag = {"frac_feasible": self.last_frac_feasible, "elite_feasible": bool(feasible[0, elite]), "elite_cmin": float(cmin_t[0, elite]),
                           "elite_hazard_violation": float(hazard_violation[0, elite]), "elite_arena": float(arena[0, elite]), "cmin_median": float(cmin_t.median())}
         return total

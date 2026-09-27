@@ -235,33 +235,11 @@ class NominalPlanner:
             out = solver.solve(self._info(frames, goal_frame), init_action=init)
         flat = out["actions"][0].clone()  # (T, 10) normalised
         flat[:n_hist] = hist.cpu()
-        # `last_*` describe the argmin candidate of the final sampled batch. CEM returns the
-        # mean of the final elites, which was never scored, so audit it separately and apply
-        # the declared all-infeasible fallback: execute the least-violating candidate.
-        frac_feasible = getattr(cost_model, "last_frac_feasible", 1.0)
-        diag = dict(getattr(cost_model, "last_diag", {}) or {})
-        diag.setdefault("frac_feasible", frac_feasible)
-        elite = getattr(cost_model, "last_elite", None)
-        fallback = frac_feasible == 0.0 and elite is not None
-        if fallback:
-            flat = elite.detach().cpu().clone().to(flat.dtype)
-            flat[:n_hist] = hist.cpu()
-        diag.update(self._audit(cost_model, frames, goal_frame, flat), fallback_used=bool(fallback))
         blocks = model_to_blocks(self.process, flat[n_hist:])
         res = PlanResult(blocks, flat, float(out["costs"][0]), time.time() - t0)
-        res.frac_feasible = frac_feasible
-        res.diag = diag
+        res.frac_feasible = getattr(cost_model, "last_frac_feasible", 1.0)
+        res.diag = getattr(cost_model, "last_diag", {})
         return res
-
-    @torch.inference_mode()
-    def _audit(self, cost_model, frames, goal_frame, flat: torch.Tensor) -> dict:
-        """Re-score the sequence that will be executed (S = 1) and report its feasibility."""
-        info = {k: v.unsqueeze(1) for k, v in self._info(frames, goal_frame).items()}  # (1, 1, ...)
-        cost = cost_model.get_cost(info, flat.to(self.device).unsqueeze(0).unsqueeze(0))
-        d = getattr(cost_model, "last_diag", {}) or {}
-        out = {"executed_feasible": getattr(cost_model, "last_frac_feasible", 1.0) == 1.0, "executed_cost": float(cost[0, 0])}
-        out.update({"executed_" + k[len("elite_"):]: v for k, v in d.items() if k.startswith("elite_")})
-        return out
 
 
 def next_warm_start(plan_blocks: np.ndarray) -> np.ndarray:

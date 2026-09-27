@@ -1,0 +1,39 @@
+{
+  "kind": "prior-agent-planner-work-preservation-v1",
+  "recorded_utc": "2026-09-27T08:44:13.610473+00:00",
+  "origin": "The three runtime edits predate the current continuation and were deliberately left uncommitted until the user requested complete project preservation. Their runtime bytes were reviewed and preserved without modification.",
+  "runtime_files": [
+    "experiments/helpers/imagination.py",
+    "experiments/helpers/safeCemT.py",
+    "experiments/scripts/pusht_e5_closedloop.py"
+  ],
+  "sha256": {
+    "experiments/helpers/imagination.py": "10946a015e20e1c6127d43696bbe6adae80f3a718d5b53bf39a48ee8346826b5",
+    "experiments/helpers/safeCemT.py": "c02384d2bd20c6b840427fd77b7d89c7ff12f6a0328bbafe9d054b66513513be",
+    "experiments/scripts/pusht_e5_closedloop.py": "d84a1fd14c40c03527089de9bdc5954cf02d9f84d7148c96a0988650a359fbdb",
+    "experiments/tests/test_planner_audit_compat.py": "323c7441544a2feb9334c206b83a19762d5d4841a0e1b77af4f6fe11e8484cdf",
+    "experiments/tests/fixtures/planner_audit_legacy/README.md": "72237e3ae74e85ca57fa7a8d9b92c09cd578a741de873108bdee8dfbb8852cc3",
+    "experiments/tests/fixtures/planner_audit_legacy/imagination.py.txt": "ce28b16299b2d4d9d8f84642db34c25ecf714736d41ab34a437070e1f3d5eef6",
+    "experiments/tests/fixtures/planner_audit_legacy/safeCemT.py.txt": "0c7ac2793b94325fcf0d7cec43a962a822f1c881244d7de55d4e6430f786e76a"
+  },
+  "new_change": "Compatibility tests load exact local legacy source fixtures rather than mutable HEAD or unavailable old Git history. Fixtures match commit0d625b87fa04b80bfc24f08a9a575111efd75c17.",
+  "reviewers": [
+    "walker_audit",
+    "root"
+  ],
+  "validation": {
+    "full_suite_with_prior_runtime_changes": "483 passed, 6 existing Gymnasium input warnings, before fixture portability change",
+    "focused_suite_after_fixture_change": "12 CPU compatibility/closed-loop tests passed (walker_audit)",
+    "lint": "Changed test Ruff passed",
+    "whitespace": "git diff --check passed"
+  },
+  "limits": [
+    "This preserves earlier implementation work and does not authorize or qualify E5 or S5 experiments.",
+    "Raw PlanResult.cost remains solver-reported after fallback; the current Audited planner wrapper corrects executed cost.",
+    "Raw nominal cost does not provide last_elite, so raw nominal all-infeasible fallback does not activate; the Audited wrapper separately retains and replaces candidates.",
+    "Penalty-mode feasibility reports arena compliance, not hazard safety.",
+    "Raw Safe CEM all-infeasible branch needs direct behavioral coverage before future raw-planner use.",
+    "Walker S3/S4 do not instantiate changed Push-T planner methods; S4 uses unchanged utilities from an indirect imagination import."
+  ],
+  "experiment_launches": 0
+}
