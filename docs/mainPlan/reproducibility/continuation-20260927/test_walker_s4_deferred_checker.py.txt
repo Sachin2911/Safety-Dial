@@ -1,0 +1,111 @@
+import copy
+import importlib.util
+import json
+import math
+from pathlib import Path
+import tempfile
+
+p = Path('/tmp/check_walker_s4_final_evidence.py')
+spec = importlib.util.spec_from_file_location('deferred_s4', p)
+m = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(m)
+passed = []
+
+def reject(name, f):
+    try:
+        f()
+    except (ValueError, KeyError):
+        passed.append(name)
+    else:
+        raise AssertionError(name + ' was accepted')
+
+rows = []
+for i, (truth, endpoint, readout) in enumerate([(-1, 1, 1), (-1, -1, 1), (-1, -1, -1), (1, 1, 1)]):
+    r = {'bank': 'dev', 'root_id': f'dev-r{i}', 'branch': i, 'root': i,
+         'kind': 'policy', 'speed_regime': 'below_limit', 'health_regime': 'interior',
+         'true_displacement': float(i), 'censored': False}
+    for rule in ('health', 'speed'):
+        for source, value in [('dense', truth), ('endpoint', endpoint), ('real_readout', readout), ('imagined', 1)]:
+            r[f'cmin_{source}_{rule}'] = value
+            r[f'cmin_by_block_{source}_{rule}'] = [value] * 10
+    rows.append(r)
+rate = m.rates(rows, 'health', 'imagined', 0.)
+assert rate['fsa'] == .75 and rate['n_false_safe'] == 3 and rate['n_accepted'] == 4
+passed.append('recounted observed FSA')
+assert m.attribution(rows, 'health') == {'n_false_safe_imagined': 3, 'temporal': 1, 'readout': 1, 'imagination': 1}
+passed.append('three exclusive attribution sources')
+assert m.gate_from_rows(rows, ['health'], {'min_unsafe': 3, 'min_false_safe': 3, 'min_imagination': 1, 'min_share': .3})['go']
+assert not m.gate_from_rows(rows, ['health'], {'min_unsafe': 3, 'min_false_safe': 3, 'min_imagination': 1, 'min_share': .4})['go']
+passed.append('saved-threshold gate arithmetic')
+assert math.isnan(m.rates(rows, 'health', 'imagined', 2)['fsa'])
+passed.append('zero acceptance is undefined')
+assert m.unsafe('health', 0.) and not m.unsafe('speed', 0.)
+passed.append('rule-specific exact boundary')
+updated = copy.deepcopy(rows)
+for row in updated[:2]:
+    row['cmin_imagined_health'] = -1
+
+def paired(base, after, *, lo=-.6, hi=-.1):
+    ref = m.rates(base, 'health', 'imagined', 0.); upd = m.rates(after, 'health', 'imagined', 0.)
+    point = upd['fsa'] - ref['fsa']; defined = math.isfinite(point)
+    return {'reference': ref, 'updated': upd, 'point': point, 'defined': defined, 'lo': lo, 'hi': hi,
+            'direction': 'decrease' if defined else 'undefined', 'undefined_reason': None if defined else 'accepted_censored_futures',
+            'interval_excludes_zero': defined, 'cluster_unit': 'source_episode', 'n_source_episodes': 4, 'n_roots': 4,
+            'n_boot_requested': 1000, 'n_boot': 750, 'n_boot_undefined': 250}
+
+summary = paired(rows, updated)
+m.paired_summary(summary, rows, updated, 'health', 0., 0.)
+passed.append('paired denominator point sign and bootstrap support')
+bad = copy.deepcopy(summary); bad['point'] = .25
+reject('wrong paired sign/point', lambda: m.paired_summary(bad, rows, updated, 'health', 0., 0.))
+bad = copy.deepcopy(summary); bad['updated']['n_accepted'] = 4
+reject('wrong paired acceptance denominator', lambda: m.paired_summary(bad, rows, updated, 'health', 0., 0.))
+censored = copy.deepcopy(rows); censored[-1]['censored'] = True
+future = copy.deepcopy(updated); future[-1]['censored'] = True
+summary = paired(censored, future, lo=math.nan, hi=math.nan)
+m.paired_summary(summary, censored, future, 'health', 0., 0.)
+passed.append('accepted unresolved future stays undefined')
+bad = copy.deepcopy(summary); bad.update(lo=-.6, hi=-.1)
+reject('finite conditional CI cannot rescue undefined full-data contrast', lambda: m.paired_summary(bad, censored, future, 'health', 0., 0.))
+known = copy.deepcopy(rows); known[0]['censored'] = True
+assert m.rates(known, 'health', 'imagined', 0.)['n_censored'] == 0
+passed.append('known violation resolves censored binary event')
+badrows = copy.deepcopy(updated); badrows[0]['root'] = 999
+reject('changed source episode', lambda: m.pair_rows(rows, badrows, ['health']))
+badrows = copy.deepcopy(updated); badrows[0]['cmin_dense_health'] = .5
+reject('changed physical truth', lambda: m.pair_rows(rows, badrows, ['health']))
+reject('duplicate pair identities', lambda: m.pair_rows(rows + [rows[0]], updated + [updated[0]], ['health']))
+reject('running stage blocked before files', lambda: m.terminal({'stages': {'s4': {'status': 'running'}}}, 's4', [Path('/never-read')]))
+with tempfile.TemporaryDirectory(prefix='s4-checker-synthetic-', dir='/tmp') as tmp:
+    d = Path(tmp)
+    root = {'root_id': 'acq-r0', 'episode': 2}
+    candidate = {'id': 's0-r0-c0', 'root_index': 0}
+    meta = {'roots': [root], 'n_branches': 1, 'meta': {'selected_ids': [candidate['id']], 'executed_steps': 100}}
+    ledger = {'selected_ids': [candidate['id']], 'status': 'complete', 'attempted_steps': 100, 'pending_step_upper_bound': 0}
+    (d / 'roots.json').write_text(json.dumps(meta)); (d / 'execution_ledger.json').write_text(json.dumps(ledger))
+    m.executed_round(d, [candidate['id']], {candidate['id']: candidate}, [root])
+    passed.append('selected original candidate and actual ledger counts')
+    ledger['attempted_steps'] = 99
+    (d / 'execution_ledger.json').write_text(json.dumps(ledger))
+    reject('undercharged execution', lambda: m.executed_round(d, [candidate['id']], {candidate['id']: candidate}, [root]))
+state = {"config_sha256": m.CONFIG_SHA, "cwd": str(m.ROOT)}
+m.check_workflow_identity(state)
+passed.append("exact workflow identity accepted")
+reject("wrong managed configuration SHA", lambda: m.check_workflow_identity(dict(state, config_sha256="0" * 64)))
+reject("wrong managed working directory", lambda: m.check_workflow_identity(dict(state, cwd="/tmp")))
+upstream = {key: {"repo_id": "private/" + key, "revision": "a" * 40, "path": key + "/frozen"}
+            for key in ("model", "probes", "data")}
+manifest = {"kind": "adapted", "seeds": {"seed": 2}, "upstream_revisions": upstream}
+m.check_checkpoint_provenance(manifest, 2, upstream)
+passed.append("exact checkpoint provenance accepted")
+reject("wrong adapted seed", lambda: m.check_checkpoint_provenance(dict(manifest, seeds={"seed": 0}), 2, upstream))
+reject("wrong adapted kind", lambda: m.check_checkpoint_provenance(dict(manifest, kind="baseline"), 2, upstream))
+changed = copy.deepcopy(upstream); changed["probes"]["revision"] = "b" * 40
+reject("wrong frozen probe revision", lambda: m.check_checkpoint_provenance(dict(manifest, upstream_revisions=changed), 2, upstream))
+recipe = {"seed": 0, "steps": 1500, "replay_frac": .5, "lr": 5e-5}
+m.check_adaptation_config(dict(recipe, seed=2), recipe, 2)
+passed.append("checkpoint recipe records actual acquisition seed")
+reject("default zero seed mislabeled on seed two checkpoint", lambda: m.check_adaptation_config(recipe, recipe, 2))
+reject("nonseed adaptation field changed", lambda: m.check_adaptation_config(dict(recipe, seed=2, steps=500), recipe, 2))
+print(json.dumps({'synthetic_checks_passed': len(passed), 'checks': passed,
+                  'live_artifacts_read': False, 'network_calls': 0, 'models_or_simulators': 0}, indent=2))

@@ -1,0 +1,268 @@
+#!/usr/bin/env python3
+"""Deferred final A durability audit: local bytes and read-only pinned HF metadata.
+
+Run only after lewm_a_full has completed; no live PID or tensor/model loading:
+  uv run python /tmp/audit_walker_recovery_final_upload.py \
+    --workflow-state runs/workflows/walker2d-recovery-20260927-1/state.json \
+    --output docs/mainPlan/results/continuation-v2/walker_checkpoint_214780_upload.json
+
+Reuses the pinned lightweight auditor's pure coherence check and frozen origin
+baseline. Checks the actual final run-ID tag and every pre-upload payload except
+receipts: hf_upload.json is excluded from upload; upload_receipt.json is replaced
+locally AFTER upload, so remote receipt bytes lag. The final S2 report is outside
+the uploaded run. A separate CPU semantic audit must inspect tensors/RNG/optimizer.
+The only write is the fresh audit JSON after all checks pass. Never updates an index.
+"""
+from __future__ import annotations
+
+import argparse
+from datetime import datetime, timezone
+import hashlib
+import importlib.util
+import json
+import math
+import os
+from pathlib import Path
+import sys
+
+import yaml
+
+PREVIOUS = Path('/tmp/audit_walker_recovery_upload.py')
+PREVIOUS_SHA256 = '7dc7f041021956f0f30d77675c9fa5e5822feaf3f3f8e8ae75c8e69dbe5c5fc3'
+RUN_ID = 'walker2d-lewm-a-recovery-20260927-1'
+STAGE_ID = 'lewm_a_full'
+TOTAL = 214780
+EXCLUDED_REMOTE_EQUALITY = {'hf_upload.json', 'upload_receipt.json'}
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def file_record(path):
+    path = Path(path)
+    require(path.is_file() and not path.is_symlink(), f'Expected regular input: {path}')
+    before = path.stat()
+    sha = hashlib.sha256()
+    blob = hashlib.sha1(f'blob {before.st_size}\0'.encode())
+    with path.open('rb') as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+            sha.update(chunk)
+            blob.update(chunk)
+    after = path.stat()
+    def identity(value):
+        return [value.st_dev, value.st_ino, value.st_size, value.st_mtime_ns, value.st_ctime_ns]
+    require(identity(before) == identity(after), f'Input changed while hashing: {path}')
+    return {'sha256': sha.hexdigest(), 'git_blob_sha1': blob.hexdigest(),
+            'size_bytes': after.st_size, 'stat_identity': identity(after)}
+
+
+def tree_record(directory):
+    directory = Path(directory)
+    require(directory.is_dir() and not directory.is_symlink(), 'Run must be a regular directory')
+    paths = sorted(directory.rglob('*'))
+    require(not any(path.is_symlink() for path in paths), 'Symlink in finalized run')
+    files = {str(path.relative_to(directory)): file_record(path) for path in paths if path.is_file()}
+    require(paths == sorted(directory.rglob('*')), 'Finalized run changed while hashing')
+    hashes = {name: item['sha256'] for name, item in files.items()}
+    identity = {'kind': 'directory', 'sha256': hashlib.sha256(
+        json.dumps(hashes, sort_keys=True).encode()).hexdigest(), 'n_files': len(files)}
+    return identity, files
+
+
+def completed_barrier(workflow):
+    require(workflow.get('workflow_id') == 'walker2d-recovery-20260927-1',
+            'Unexpected recovery workflow')
+    stage = workflow.get('stages', {}).get(STAGE_ID, {})
+    require(stage.get('status') == 'completed', 'Final S2 stage has not completed')
+    attempts = stage.get('attempts', [])
+    require(attempts and attempts[-1].get('returncode') == 0 and
+            attempts[-1].get('finished_unix') is not None, 'No successful terminal S2 attempt')
+    require(stage.get('output_hashes'), 'Missing completed-stage output hashes')
+    return stage
+
+
+def check_final_report(report, metadata, config, run_id):
+    state, manifest, receipt = (metadata[name] for name in
+                               ('train_state.json', 'manifest.json', 'upload_receipt.json'))
+    require(report['run_id'] == run_id and report['steps'] == TOTAL and
+            config['total_steps'] == state['step'] == receipt['step'] ==
+            manifest['metrics']['step'] == TOTAL, 'Final 214780-step identities disagree')
+    require(report['checkpoint'] == receipt, 'Final report and local final receipt differ')
+    require(report['episode_splits'] == metadata['splits.json'], 'Final report splits differ')
+    history = report['history']
+    require([row['step'] for row in history] == list(range(20, TOTAL + 1, 20)),
+            'Final report does not retain all 10739 global-step history records')
+    require(history[-50:] == state['history'], 'Final history tail differs from train state')
+    require(all(all(type(value) in (int, float) and math.isfinite(value)
+                    for value in row.values()) for row in history), 'Nonfinite training history')
+    require(math.isfinite(report['wall_clock_s']) and report['wall_clock_s'] >= 0,
+            'Invalid recovered-segment elapsed time')
+
+
+def remote_metadata(api, receipt, run_id, files):
+    """Only GET metadata APIs; receipt exclusions reflect the inspected writer order."""
+    repo, revision = receipt['repo_id'], receipt['revision']
+    remote = api.repo_info(repo_id=repo, repo_type='model', revision=revision, timeout=30)
+    require(remote.private is True and remote.sha == revision,
+            'Pinned remote revision is missing, mutable or not private')
+    tags = [tag for tag in api.list_repo_refs(repo_id=repo, repo_type='model').tags
+            if tag.name == run_id]
+    require(len(tags) == 1 and tags[0].target_commit == revision,
+            'Declared final run-ID tag does not target the pinned final commit')
+    names = sorted(set(files) - EXCLUDED_REMOTE_EQUALITY)
+    wanted = {f"{receipt['path']}/{name}": name for name in names}
+    entries = api.get_paths_info(repo_id=repo, repo_type='model', revision=revision,
+                                 paths=list(wanted))
+    require(len(entries) == len(wanted) and {entry.path for entry in entries} == set(wanted),
+            'Pinned remote final payload inventory is incomplete')
+    verified = {}
+    for entry in entries:
+        name = wanted[entry.path]
+        local = files[name]
+        require(entry.size == local['size_bytes'], f'Remote byte size differs: {name}')
+        lfs = entry.lfs
+        if name in ('optimizer.pt', 'weights.pt', 'lewm_object.ckpt'):
+            require(lfs is not None, f'Required model payload lacks LFS metadata: {name}')
+        if lfs is not None:
+            require(lfs.sha256 == local['sha256'] and lfs.size == local['size_bytes'],
+                    f'Remote LFS SHA256 or size differs: {name}')
+            method = 'LFS SHA256 and size'
+        else:
+            require(entry.blob_id == local['git_blob_sha1'], f'Remote Git blob differs: {name}')
+            method = 'Git blob SHA1 and size'
+        verified[name] = {'sha256': local['sha256'], 'size_bytes': local['size_bytes'],
+                          'remote_match_method': method,
+                          'git_blob_sha1': local['git_blob_sha1'] if lfs is None else None}
+    return verified
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--repo-root', type=Path, default=Path('/workspace/Safety-Dial'))
+    parser.add_argument('--workflow-state', type=Path, required=True)
+    parser.add_argument('--output', type=Path, required=True)
+    args = parser.parse_args(argv)
+    root = args.repo_root.resolve()
+    workflow_path = (root / args.workflow_state).resolve()
+    output = (root / args.output).resolve()
+    require(output.parent == root / 'docs/mainPlan/results/continuation-v2' and
+            output.name == 'walker_checkpoint_214780_upload.json' and not output.exists(),
+            'Require the fresh parent-level final checkpoint audit output')
+    # Check the terminal barrier before opening any training or prepared baseline files.
+    workflow_record = file_record(workflow_path)
+    workflow = json.loads(workflow_path.read_text())
+    stage = completed_barrier(workflow)
+    require(file_record(PREVIOUS)['sha256'] == PREVIOUS_SHA256, 'Prior audit source changed')
+    spec = importlib.util.spec_from_file_location('walker_upload_coherence', PREVIOUS)
+    previous = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(previous)
+    require(file_record(previous.BASELINE)['sha256'] == previous.BASELINE_SHA256,
+            'Prepared recovery baseline changed')
+    baseline = json.loads(previous.BASELINE.read_text())
+    require(Path(baseline['root']).resolve() == root and
+            baseline['run_dir'] == f'runs/{RUN_ID}', 'Unexpected baseline/run identity')
+    run, origin = root / baseline['run_dir'], root / baseline['origin_run_dir']
+    report_path = root / f'docs/mainPlan/results/s2/{RUN_ID}.json'
+    audit_path = root / baseline['full_recovery_audit']
+    origin_audit = json.loads(audit_path.read_text())
+    require(origin_audit['status'] == 'passed' and all(origin_audit['checks'].values()),
+            'Origin semantic audit did not pass')
+    protected = {'workflow_state': workflow_path, 'report': report_path, 'baseline': previous.BASELINE,
+        'origin_audit': audit_path, 'auditor': Path(__file__), 'prior_auditor': PREVIOUS,
+        'recovery_workflow': root / baseline['recovery_workflow'],
+        'hf_api_loader_source': root / 'experiments/helpers/hfStore.py'}
+    excluded_origin = {'original_training_log', 'prior_24000_audit', 'prior_172000_upload_audit'}
+    protected.update({f'origin/{name}': origin / name for name in origin_audit['file_sha256']
+                      if name not in excluded_origin})
+    before = {key: file_record(path) for key, path in protected.items()}
+    require(before['workflow_state'] == workflow_record, 'Workflow changed before audit')
+    require(before['prior_auditor']['sha256'] == PREVIOUS_SHA256 and
+            before['baseline']['sha256'] == previous.BASELINE_SHA256,
+            'Prepared audit source changed while loading')
+    require(before['origin_audit']['sha256'] == baseline['full_recovery_audit_sha256'],
+            'Origin semantic audit bytes changed')
+    require(before['recovery_workflow']['sha256'] == baseline['recovery_workflow_sha256'] ==
+            workflow['config_sha256'], 'Recovery workflow source identity changed')
+    require(all(before[f'origin/{name}']['sha256'] == value
+                for name, value in origin_audit['file_sha256'].items() if name not in excluded_origin),
+            'Audited immutable origin bytes changed')
+    tree, files = tree_record(run)
+    expected_outputs = {str(run.resolve()): tree, str(report_path.resolve()):
+                        {'kind': 'file', 'sha256': before['report']['sha256']}}
+    require(stage['output_hashes'] == expected_outputs, 'Completed S2 output tree/report hashes differ')
+    required = {'optimizer.pt', 'weights.pt', 'lewm_object.ckpt', 'train_state.json', 'manifest.json',
+                'hf_upload.json', 'upload_receipt.json', 'config.yaml', 'config.json',
+                'scalers.npz', 'splits.json', 'README.md', 'source_snapshot/sha256.json'}
+    require(required <= set(files), 'Final checkpoint export is incomplete')
+    require(not any(name.endswith('.tmp') for name in files), 'Temporary file in completed output')
+    require(all(files[name]['sha256'] == value for name, value in
+                baseline['prepared_configuration_sha256'].items()), 'Prepared recovery config changed')
+    metadata = {name: json.loads((run / name).read_text()) for name in
+                ('train_state.json', 'manifest.json', 'upload_receipt.json', 'hf_upload.json',
+                 'config.json', 'splits.json')}
+    config = yaml.safe_load((run / 'config.yaml').read_text())
+    origin_config = yaml.safe_load((origin / 'config.yaml').read_text())
+    previous.check_metadata(TOTAL, run, baseline, origin_audit, metadata, config, origin_config)
+    require(metadata['train_state.json']['recovery_sha256'] == files['optimizer.pt']['sha256'],
+            'Final atomic optimizer hash differs from train state')
+    require(all(files[name]['sha256'] == origin_audit['file_sha256'][name]
+                for name in ('config.json', 'scalers.npz', 'splits.json')),
+            'Recovered architecture/scalers/splits differ from origin')
+    sources = json.loads((run / 'source_snapshot/sha256.json').read_text())
+    require(sources == config['source_hashes'] and all(
+        files[f'source_snapshot/{name}']['sha256'] == value for name, value in sources.items()),
+        'Executed source snapshot bytes differ from declared hashes')
+    final_report = json.loads(report_path.read_text())
+    check_final_report(final_report, metadata, config, RUN_ID)
+    # No API initialization or network work until all local completion checks pass.
+    sys.path.insert(0, str(root / 'experiments'))
+    from helpers.hfStore import _load_dotenv
+    from huggingface_hub import HfApi
+    _load_dotenv()
+    require(bool(os.environ.get('HF_TOKEN')), 'HF_TOKEN unavailable')
+    receipt = metadata['upload_receipt.json']
+    verified = remote_metadata(HfApi(token=os.environ['HF_TOKEN']), receipt, RUN_ID, files)
+    require(tree_record(run) == (tree, files) and
+            {key: file_record(path) for key, path in protected.items()} == before,
+            'A local audit source changed; no mixed-version final audit is written')
+    result = {'status': 'passed', 'step': TOTAL, 'run_id': RUN_ID, 'run_dir': baseline['run_dir'],
+        'observed_utc': datetime.now(timezone.utc).isoformat(),
+        'repo_id': receipt['repo_id'], 'revision': receipt['revision'], 'path': receipt['path'],
+        'remote_repo_private': True, 'final_tag': {'name': RUN_ID, 'target_commit': receipt['revision']},
+        'verified_files': verified, 'local_final_receipt': receipt,
+        'completed_stage': {'id': STAGE_ID, 'status': stage['status'], 'output_hashes': expected_outputs},
+        'local_source_identity': before, 'local_run_files': files,
+        'validation_pred_loss': metadata['train_state.json']['val_pred_loss'],
+        'checks': {name: True for name in ('terminal_s2_stage', 'exact_output_tree_and_report_hashes',
+            'final_214780_metadata_and_history', 'pinned_private_revision', 'declared_final_tag',
+            'all_preupload_payload_metadata_matches', 'atomic_optimizer_hash',
+            'audited_origin_and_recovery_configuration', 'source_snapshot_bytes', 'local_sources_stable')},
+        'limitations': [
+            'Metadata/byte audit only. Tensor finiteness, optimizer/scheduler/RNG semantics and model/export equivalence require the separate final CPU semantic audit.',
+            'Remote hashes are authenticated pinned metadata, not downloaded content or a restore test.',
+            'hf_upload.json is excluded by the uploader. Remote upload_receipt.json predates the final local receipt; neither receipt is claimed byte-identical to the final remote commit.',
+            'The final S2 report is local, outside the uploaded run, and written after upload. Its completed-stage hash is verified; remote durability is not claimed for it.',
+            'The original data were not reread. Dataset identity is checked against the frozen semantic origin audit.',
+            'No GPU/model/simulator calls, remote writes, status/index updates or live output changes.'],
+        'index_entry_proposal': {'status': 'verified_pending_parent_index_integration',
+            'run_id': RUN_ID, 'step': TOTAL, 'audit_path': str(output.relative_to(root)),
+            'audit_sha256': 'Compute from the written artifact; omitted to avoid a self-hash cycle',
+            'repo_id': receipt['repo_id'], 'revision': receipt['revision'],
+            'verification_scope': 'Final completed-stage local hashes and pinned private HF payload/tag metadata'}}
+    with output.open('x') as handle:
+        json.dump(result, handle, indent=2, allow_nan=False)
+        handle.write('\n')
+    print(json.dumps({'status': 'passed', 'step': TOTAL, 'artifact': str(output),
+                      'artifact_sha256': file_record(output)['sha256'], 'revision': receipt['revision']}))
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as exc:
+        # HTTP exception text can contain request information; never echo it.
+        detail = str(exc) if isinstance(exc, (ValueError, FileNotFoundError)) else type(exc).__name__
+        print(json.dumps({'status': 'not_verified', 'reason': detail}), file=sys.stderr)
+        raise SystemExit(1) from None

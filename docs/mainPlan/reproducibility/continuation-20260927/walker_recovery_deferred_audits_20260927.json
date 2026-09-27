@@ -1,0 +1,22 @@
+{
+  "prepared_utc": "2026-09-27T07:03:26.285685+00:00",
+  "status": "prepared_not_executed_on_future_artifacts",
+  "sha256": {
+    "/tmp/check-walker-recovery-final-evidence.py": "a8538fe74b7c3d380e5ae42a9a997191fe018488d244abff29d8cbe960546d37",
+    "/tmp/audit_walker_recovery_upload.py": "7dc7f041021956f0f30d77675c9fa5e5822feaf3f3f8e8ae75c8e69dbe5c5fc3",
+    "/tmp/walker_recovery_upload_baseline.json": "f88042f494f658dcb54870d47e5730c9b2dee43baf3ec484bb2de0a36702b117",
+    "/tmp/safetydial_watch_walker_recovery.py": "d637d2e8567da8b6920db69b4731c11d9c541a8296aa8bc470af2b6ee74304b8",
+    "/tmp/check_walker_s4_final_evidence.py": "da0cede97b038eff4fd38f98d72b547e57f9974b5e93cca3c6570c1b903cc6d6",
+    "/tmp/walker_recovery_training_summary.py": "5c667475c61aa2540f952ff6ada193598e1acbb58c9bb63809c362d1f7fe723e",
+    "/tmp/record_walker_recovery_upload_audit.py": "ad3b05c3d9b4d63a7a6b1367541a37473e2ec820913252acaae433224262b849",
+    "/tmp/audit_walker_recovery_final_upload.py": "00c4eb761b1ade30f5fed6fbe298b3b9b108538d523d67c08be1ec8ab42176a8"
+  },
+  "next_checkpoint_command": "uv run python /tmp/audit_walker_recovery_upload.py --step 192000 --output docs/mainPlan/results/continuation-v2/walker_checkpoint_192000_upload.json",
+  "final_s2_s3_command": "uv run python /tmp/check-walker-recovery-final-evidence.py --mode both --verify-cpu-exports --verify-source-bytes",
+  "scope": "Upload auditor requires live trainer18375/start130742 and matching latest receipt. Final auditor requires terminal requested workflow stages and is independent of S4 source. Source snapshot hashes are frozen. No audit completion is claimed until the relevant command succeeds.",
+  "final_s4_command": "uv run python /tmp/check_walker_s4_final_evidence.py --output /tmp/walker_s4_recovery_final_evidence.json",
+  "final_training_summary_command": "uv run python /tmp/walker_recovery_training_summary.py --report docs/mainPlan/results/s2/walker2d-lewm-a-recovery-20260927-1.json --run-dir runs/walker2d-lewm-a-recovery-20260927-1 --workflow-state runs/workflows/walker2d-recovery-20260927-1/state.json --original-last-logged-step 174400 --output-dir docs/mainPlan/results/s2/walker2d-lewm-a-recovery-20260927-1-summary",
+  "final_s2_upload_command": "uv run python /tmp/audit_walker_recovery_final_upload.py --workflow-state runs/workflows/walker2d-recovery-20260927-1/state.json --output docs/mainPlan/results/continuation-v2/walker_checkpoint_214780_upload.json",
+  "latest_scope": "Stop at S4; NO S5. Then PDF report with figures, charts and media; GitHub and private HF publication. Authoritative amendment: docs/mainPlan/results/continuation-audit/completion_scope_20260927.json",
+  "updated_utc": "2026-09-27T08:04:20.733804+00:00"
+}

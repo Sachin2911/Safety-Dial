@@ -1,0 +1,440 @@
+#!/usr/bin/env python3
+"""Deferred local recovered Walker S2/S3 audit. Preparation alone never reads live artifacts.
+
+Run only after the requested workflow stages finish. Default: hashes/JSON/YAML and
+closed source H5 episode-length metadata; no tensor deserialization, model forward,
+rendering, simulator, network or output writes. Optional --verify-cpu-exports reuses
+an existing read-only CPU tensor verifier. --verify-source-bytes streams source H5
+hashes, without decoding trajectory data. Results are strict JSON on stdout.
+"""
+from __future__ import annotations
+
+import argparse
+from collections import Counter
+from datetime import datetime, timezone
+import hashlib
+import json
+import math
+from pathlib import Path
+import re
+import sys
+
+import numpy as np
+import yaml
+
+REPO = Path('/workspace/Safety-Dial')
+CONFIG = REPO / 'configs/walker2d/recovery-20260927-1.yaml'
+RUN = REPO / 'runs/walker2d-lewm-a-recovery-20260927-1'
+S2_REPORT = REPO / 'docs/mainPlan/results/s2/walker2d-lewm-a-recovery-20260927-1.json'
+S3_RUN = REPO / 'runs/walker2d-probes-recovery-20260927-1'
+S3_RESULTS = REPO / 'docs/mainPlan/results/s3/walker2d-probes-recovery-20260927-1'
+DATA = REPO / 'data/study/walker2d/continuation-20260926-2'
+EXPECTED_STEPS = 214780
+WORKFLOW_ID = 'walker2d-recovery-20260927-1'
+S4_RUN = REPO / 'runs/walker2d-s4-recovery-20260927-1'
+ORIGINAL_RUN = REPO / 'runs/walker2d-lewm-a-continuation-20260926-1'
+RESUME_BUNDLE = ORIGINAL_RUN / 'optimizer.pt'
+RESUME_STEP = 172000
+RESUME_SHA256 = '50279ce50cac07cc74ef0fa8757415a71e2fedc9f69a09db8699a232174b0d5c'
+ORIGINAL_REVISION = 'bdfbc8afc9d53a8fa9f00fd927be9c56477edcd3'
+ORIGINAL_CONFIG_SHA256 = '11773373582b2f3b9fdb33224d4f4f3e4acea895ce732ddec36763b60a72faa7'
+ORIGINAL_SPLITS_SHA256 = 'e7a8083f82d7b7701587b3dcaf1c73043384c18603d617470d293de58221b4b6'
+ORIGINAL_CHECKER_SHA256 = 'a90a2c71629a7a8a16035bfbb854d9f78d8c0748cee5201b975da912710e7a58'
+# Populated from source files during checker preparation, never from active run files.
+PREPARED_SOURCE_HASHES = {'experiments/scripts/walker_s3_gate.py': '7f878d70799821af0455f7149b15b63c5c2b369792215ccf09df23d440914c87', 'experiments/helpers/walkerTrainingFinalize.py': 'e298c8a3aa967af27f750cd6828f21f6e9497355393f0a64955d726384ac8269', 'experiments/helpers/walkerValidation.py': '8ae6e5feec69e7c7d3881f2f69d9743ef11f467b23cf6c378282ac2c0ec9a026', 'experiments/helpers/walkerRules.py': '97e5520edcfb55cb46f83c45089ecce0972662d546b344b1cecaf5bfd33ecfdd', 'experiments/helpers/walkerLewm.py': '66f6b2a911decc8a19a9db56b0bb71d04aad55cafe8e98fa9dbe7bf2e5c84b34', 'experiments/helpers/walkerBank.py': '1361061e3abde88279897128e597fc22d9ed755349b985c1a8bf788d4cea0008', 'experiments/helpers/poseProbes.py': '424e17d2d970b402858182043dc7a75d22e57f553452d412de31e927f6c5af2e', 'experiments/helpers/managedWorkflow.py': 'e298cd2450771519e9654ed587e49bed57da7ba3019c515bb42e0af8adb7d7d0', 'experiments/helpers/dialMetrics.py': '80e77d25c7f3a05ebb83f1df46a9097c64893e4ea206bfd669469b0ff749a68b', 'configs/walker2d/recovery-20260927-1.yaml': 'd0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d', 'experiments/scripts/walker_s2_train_lewm.py': 'b591e81f8bdce7ccf92e024d5909a153c03bee529b93bf3f33878114cd53a487', 'experiments/helpers/walkerTrainingState.py': 'f967f5ed69a026a67075585ef1ca606e6a54dc5c9690428c689fb4ff1a500a51'}
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def digest(path):
+    path = Path(path)
+    require(path.is_file() and not path.is_symlink(), f'Not a regular file: {path}')
+    before = path.stat()
+    h = hashlib.sha256()
+    with path.open('rb') as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b''):
+            h.update(chunk)
+    after = path.stat()
+    require((before.st_size, before.st_mtime_ns) == (after.st_size, after.st_mtime_ns),
+            f'File changed during audit: {path}')
+    return h.hexdigest()
+
+
+def read_json(path):
+    return json.loads(Path(path).read_text())
+
+
+def safe(value):
+    if isinstance(value, dict):
+        return {str(k): safe(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [safe(v) for v in value]
+    if isinstance(value, np.ndarray):
+        return safe(value.tolist())
+    if isinstance(value, np.generic):
+        return safe(value.item())
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    return value
+
+
+def equal(actual, expected, label):
+    require(safe(actual) == safe(expected), f'Inconsistent {label}')
+
+
+def receipt(directory):
+    for name in ('hf_upload.json', 'upload_receipt.json'):
+        path = Path(directory) / name
+        if path.is_file():
+            result = read_json(path)
+            require(re.fullmatch(r'[0-9a-f]{40}', result.get('revision', '')) is not None,
+                    f'Unpinned receipt: {path}')
+            require(bool(result.get('repo_id')) and bool(result.get('path')), f'Bad receipt: {path}')
+            return {k: result[k] for k in ('repo_id', 'revision', 'path')}
+    raise ValueError(f'Missing local runtime receipt: {directory}')
+
+
+def barrier(mode):
+    """Read only workflow state until the requested stages are terminal."""
+    cfg = yaml.safe_load(CONFIG.read_text())
+    equal(cfg['workflow_id'], WORKFLOW_ID, 'recovery workflow identity')
+    equal((REPO / cfg['state_dir']).resolve(), (REPO / 'runs/workflows' / WORKFLOW_ID).resolve(),
+          'recovery workflow state directory')
+    recipes = {stage['id']: stage for stage in cfg['stages']}
+    def argument(stage, option):
+        argv = recipes[stage]['argv']
+        require(argv.count(option) == 1, f'Expected exactly one {stage} {option}')
+        return argv[argv.index(option) + 1]
+    for stage, run_dir in (('lewm_a_full', RUN), ('physical_probe_gate', S3_RUN),
+                           ('prospective_acquisition', S4_RUN)):
+        equal(argument(stage, '--run-id'), run_dir.name, f'{stage} fresh run ID')
+    equal((REPO / argument('lewm_a_full', '--resume-from')).resolve(), RESUME_BUNDLE.resolve(),
+          'workflow resume bundle path')
+    for stage in ('physical_probe_gate', 'prospective_acquisition'):
+        equal((REPO / argument(stage, '--model')).resolve(), RUN.resolve(), f'{stage} recovered model')
+        equal((REPO / argument(stage, '--data-dir')).resolve(), DATA.resolve(), f'{stage} original data')
+    equal((REPO / argument('prospective_acquisition', '--probes')).resolve(), S3_RUN.resolve(),
+          'S4 recovered probe run')
+    state_path = REPO / cfg['state_dir'] / 'state.json'
+    state = read_json(state_path)
+    require(state['config_sha256'] == digest(CONFIG), 'Workflow configuration hash changed')
+    requested = ['lewm_a_full'] + (['physical_probe_gate'] if mode == 'both' else [])
+    stages = {}
+    for name in requested:
+        stage = state['stages'][name]
+        allowed = ['completed'] if name == 'lewm_a_full' else ['completed', 'gate_stopped']
+        require(stage['status'] in allowed, f'Wait for finalized {name}; no artifact reads authorized')
+        attempts = stage.get('attempts', [])
+        require(bool(attempts) and attempts[-1].get('finished_unix') is not None,
+                f'No completed subprocess for {name}')
+        require(attempts[-1].get('returncode') in ([0] if name == 'lewm_a_full' else [0, 2]),
+                f'Unsuccessful subprocess for {name}')
+        require(bool(stage.get('output_hashes')), f'Missing output hashes for {name}')
+        stages[name] = stage
+    sys.path.insert(0, str(REPO / 'experiments'))
+    from helpers.managedWorkflow import output_hash
+    for name, stage in stages.items():
+        for path, expected in stage['output_hashes'].items():
+            equal(output_hash(Path(path)), expected, f'{name} output {path}')
+    return stages, cfg
+
+
+
+def audit_resume_origin(cfg, manifest, roles):
+    """Check the preserved 172,000-step origin only after the final-stage barrier."""
+    equal(digest(RESUME_BUNDLE), RESUME_SHA256, 'exact verified resume bundle bytes')
+    equal(digest(ORIGINAL_RUN / 'config.yaml'), ORIGINAL_CONFIG_SHA256, 'preserved original recipe')
+    equal(digest(ORIGINAL_RUN / 'splits.json'), ORIGINAL_SPLITS_SHA256, 'preserved original split')
+    original_cfg = yaml.safe_load((ORIGINAL_RUN / 'config.yaml').read_text())
+    original_state = read_json(ORIGINAL_RUN / 'train_state.json')
+    original_manifest = read_json(ORIGINAL_RUN / 'manifest.json')
+    original_upload = read_json(ORIGINAL_RUN / 'upload_receipt.json')
+    upstream = dict(manifest['upstream_revisions'])
+    equal((REPO / cfg['resume_from']).resolve(), RESUME_BUNDLE.resolve(), 'resolved resume input')
+    equal((REPO / upstream.pop('resume_bundle')).resolve(), RESUME_BUNDLE.resolve(),
+          'manifest resume input')
+    equal(upstream.pop('resume_sha256'), RESUME_SHA256, 'manifest resume input hash')
+    equal(upstream.pop('resume_step'), RESUME_STEP, 'manifest restored step')
+    source_receipt = read_json(DATA / 'upload_receipt.json')
+    equal(upstream, source_receipt, 'recovered S2 original source receipt')
+    equal(original_manifest['upstream_revisions'], source_receipt, 'original S2 source receipt')
+    equal(original_state['step'], RESUME_STEP, 'preserved original train state step')
+    equal(original_state['recovery_bundle'], 'optimizer.pt', 'preserved recovery bundle name')
+    equal(original_state['recovery_sha256'], RESUME_SHA256, 'preserved train state bundle hash')
+    equal(original_manifest['metrics']['step'], RESUME_STEP, 'preserved original manifest step')
+    equal(original_upload['step'], RESUME_STEP, 'preserved original upload step')
+    equal(original_upload['revision'], ORIGINAL_REVISION, 'preserved original private revision')
+    origin_receipt = receipt(ORIGINAL_RUN)
+    equal(origin_receipt, {k: original_upload[k] for k in ('repo_id', 'revision', 'path')},
+          'original runtime receipts agree')
+    equal(origin_receipt['path'], f'lewm-a/{ORIGINAL_RUN.name}', 'original upload run identity')
+    equal(original_manifest['run_id'], ORIGINAL_RUN.name, 'original manifest run identity')
+    equal(cfg['model'], original_cfg['model'], 'resumed architecture')
+    equal(roles, original_cfg['episode_splits'], 'resumed source roles')
+    equal(roles, read_json(ORIGINAL_RUN / 'splits.json'), 'resumed original splits file')
+    equal(original_manifest['data']['episode_splits'], roles, 'original manifest source roles')
+    for name in ('name', 'epochs', 'batch', 'lr', 'wd', 'warmup', 'workers', 'clip_stride',
+                 'seed', 'push_every', 'max_steps', 'total_steps', 'data_order_version'):
+        equal(cfg[name], original_cfg[name], f'resumed recipe {name}')
+    equal(cfg['push_every'], 4000, 'unchanged validation RNG cadence')
+    equal(original_cfg['total_steps'], EXPECTED_STEPS, 'original full scheduler horizon')
+    equal((REPO / cfg['data']).resolve(), (REPO / original_cfg['data']).resolve(),
+          'resumed training source path')
+    for name in ('sha256', 'n_clips', 'normalisation_role', 'render_fingerprint', 'frameskip', 'history'):
+        equal(manifest['data'][name], original_manifest['data'][name], f'resumed data identity {name}')
+    with np.load(ORIGINAL_RUN / 'scalers.npz') as before, np.load(RUN / 'scalers.npz') as after:
+        equal(sorted(before.files), sorted(after.files), 'resumed scaler fields')
+        for name in before.files:
+            require(before[name].dtype == after[name].dtype and np.array_equal(before[name], after[name]),
+                    f'Changed resumed normalizer {name}')
+    original_sources = original_cfg['source_hashes']
+    equal(original_sources, original_manifest['data']['source_hashes'], 'original source snapshot identity')
+    for name, expected in original_sources.items():
+        path = (ORIGINAL_RUN / 'source_snapshot' / name).resolve()
+        require(path.is_relative_to((ORIGINAL_RUN / 'source_snapshot').resolve()), 'Original snapshot path escapes')
+        equal(digest(path), expected, f'preserved original source {name}')
+    return {'run_id': ORIGINAL_RUN.name, 'resume_bundle': str(RESUME_BUNDLE),
+            'resume_sha256': RESUME_SHA256, 'resume_step': RESUME_STEP,
+            'original_checkpoint': origin_receipt, 'original_config_sha256': ORIGINAL_CONFIG_SHA256,
+            'original_splits_sha256': ORIGINAL_SPLITS_SHA256, 'original_source_receipt': source_receipt,
+            'normalizers_equal': True, 'validation_cadence': 4000}
+
+
+def audit_s2(cpu_exports, source_bytes):
+    report = read_json(S2_REPORT)
+    cfg = yaml.safe_load((RUN / 'config.yaml').read_text())
+    state, manifest = read_json(RUN / 'train_state.json'), read_json(RUN / 'manifest.json')
+    roles = read_json(RUN / 'splits.json')
+    for actual in (report['steps'], cfg['total_steps'], state['step'], manifest['metrics']['step']):
+        require(type(actual) is int and actual == EXPECTED_STEPS, 'S2 is not exactly 214,780 steps')
+    equal(report['run_id'], RUN.name, 'S2 report run ID')
+    equal(manifest['run_id'], RUN.name, 'S2 manifest run ID')
+    for key, expected in {'epochs': 10, 'batch': 128, 'clip_stride': 1, 'data_order_version': 1}.items():
+        equal(cfg[key], expected, f'S2 recipe {key}')
+    require(cfg['max_steps'] == 0 and not cfg['smoke'], 'S2 full-run recipe was overridden')
+    equal(cfg['model'], read_json(RUN / 'config.json'), 'S2 model config')
+    for other in (cfg['episode_splits'], report['episode_splits'], manifest['data']['episode_splits']):
+        equal(other, roles, 'S2 episode splits')
+    train, val = roles['training'], roles['validation']
+    require(train and val and len(set(train)) == len(train) and len(set(val)) == len(val)
+            and not set(train).intersection(val), 'Invalid S2 whole-episode split')
+    equal(manifest['data']['normalisation_role'], 'training', 'normalizer source role')
+    equal((manifest['data']['frameskip'], manifest['data']['history']), (10, 3), 'S2 temporal setup')
+    equal(report['n_clips'], manifest['data']['n_clips'], 'S2 clip count')
+    resume_evidence = audit_resume_origin(cfg, manifest, roles)
+    source_path = (REPO / manifest['data']['path']).resolve()
+    equal(source_path, (DATA / 'setA.h5').resolve(), 'S2 training data path')
+    if source_bytes:
+        equal(digest(source_path), manifest['data']['sha256'], 'S2 source H5 bytes')
+    require(report['n_params'] > 0, 'Missing S2 parameter count')
+    equal(state.get('recovery_bundle'), 'optimizer.pt', 'recovery bundle name')
+    equal(state['recovery_sha256'], digest(RUN / 'optimizer.pt'), 'recovery bundle hash')
+    history = report['history']
+    equal([r['step'] for r in history], list(range(20, EXPECTED_STEPS + 1, 20)), 'full S2 history cadence')
+    for record in history:
+        require(all(math.isfinite(record[k]) for k in ('loss', 'pred_loss', 'sigreg_loss', 'lr', 'it_per_s')),
+                'Nonfinite S2 training telemetry')
+    equal(state['history'], history[-50:], 'S2 last 50 history records')
+    original_tail = read_json(ORIGINAL_RUN / 'train_state.json')['history']
+    prefix = [record for record in history if record['step'] <= RESUME_STEP]
+    equal(original_tail, prefix[-50:], 'resumed history retains verified original checkpoint tail')
+    equal(manifest['metrics']['train_loss'], history[-1]['loss'], 'S2 final training loss')
+    require(math.isfinite(state['val_pred_loss']), 'Nonfinite S2 validation loss')
+    equal(manifest['metrics']['val_pred_loss'], state['val_pred_loss'], 'S2 validation loss')
+    source_hashes = cfg['source_hashes']
+    require(bool(source_hashes), 'Missing executed S2 source snapshot')
+    equal(manifest['data']['source_hashes'], source_hashes, 'S2 snapshot identities')
+    for name, expected in source_hashes.items():
+        path = (RUN / 'source_snapshot' / name).resolve()
+        require(path.is_relative_to((RUN / 'source_snapshot').resolve()), 'Snapshot path escapes root')
+        equal(digest(path), expected, f'executed S2 source snapshot {name}')
+    local_receipt = read_json(RUN / 'upload_receipt.json')
+    equal(local_receipt, report['checkpoint'], 'S2 final report receipt')
+    equal(local_receipt['step'], EXPECTED_STEPS, 'S2 receipt step')
+    pinned = receipt(RUN)
+    render = report['render_validation']
+    if report.get('recovery_completion'):
+        equal(report['recovery_completion']['optimizer_steps_executed'], 0, 'finalizer extra optimization')
+        for name, expected in report['recovery_completion']['export_sha256'].items():
+            equal(digest(RUN / name), expected, f'finalizer export {name}')
+        require(render['passed'] is None, 'Recovered unavailable render telemetry was invented')
+    else:
+        equal(report['steps_per_epoch'] * cfg['epochs'], EXPECTED_STEPS, 'ten full epochs')
+        require(render['passed'] is True and render['pixel_mean'] > 5 and render['min_frame_std'] > 1,
+                'Invalid saved first-batch rendering telemetry')
+        equal(render['render_fingerprint'], manifest['data']['render_fingerprint'], 'render identity')
+    tensor_verified = False
+    if cpu_exports:
+        from helpers.walkerTrainingFinalize import verify_completed_exports
+        verified = verify_completed_exports(RUN)
+        equal(verified['bundle']['history'], history, 'CPU recovery history vs final report')
+        equal(verified['n_params'], report['n_params'], 'CPU export parameter count')
+        tensor_verified = True
+    return {'steps': EXPECTED_STEPS, 'history_records': len(history),
+            'training_source_episodes': len(train), 'validation_source_episodes': len(val),
+            'report_sha256': digest(S2_REPORT), 'checkpoint': pinned,
+            'source_snapshot_files': len(source_hashes), 'cpu_exports_verified': tensor_verified,
+            'training_source_bytes_verified': source_bytes, 'resume_origin': resume_evidence,
+            'new_optimizer_updates': EXPECTED_STEPS - RESUME_STEP,
+            'render_telemetry': render, 'recovered_final_report': bool(report.get('recovery_completion'))}
+
+
+def fsa_from_rows(clearance, unsafe):
+    accepted = clearance >= 0
+    n, na, nu, fs = len(unsafe), int(accepted.sum()), int(unsafe.sum()), int((accepted & unsafe).sum())
+    value = fs / na if na else None
+    return {'m': 0.0, 'n': n, 'n_accepted': na, 'acceptance_rate': na / n,
+            'n_false_safe': fs, 'n_censored': 0, 'n_accepted_censored': 0,
+            'fsa_lower': value, 'fsa_upper': value, 'fsa': value,
+            'false_reject_rate': int((~accepted & ~unsafe).sum()) / (n - nu) if n > nu else None}
+
+
+def audit_s3(stage, source_bytes):
+    import h5py
+    from helpers.walkerValidation import gate_decision, load_source_split
+    report, rows = read_json(S3_RUN / 'gate.json'), read_json(S3_RUN / 'gate_rows.json')
+    cfg = yaml.safe_load((S3_RUN / 'config.yaml').read_text())
+    manifest = read_json(S3_RUN / 'manifest.json')
+    results_manifest = read_json(S3_RESULTS / 'manifest.json')
+    for name in ('gate.json', 'gate_rows.json'):
+        equal(digest(S3_RUN / name), digest(S3_RESULTS / name), f'S3 mirrored {name}')
+    equal(report['run_id'], S3_RUN.name, 'S3 report run ID')
+    equal(manifest['run_id'], S3_RUN.name, 'S3 manifest run ID')
+    equal(report['role'], 'development', 'S3 qualification role')
+    equal((REPO / cfg['model']).resolve(), RUN.resolve(), 'S3 selected model')
+    equal((REPO / cfg['data_dir']).resolve(), DATA.resolve(), 'S3 selected source data')
+    equal((cfg['n_roots'], cfg['seed'], cfg['min_unsafe'], cfg['probe_frames']), (64, 0, 10, 30000), 'S3 recipe')
+    equal(report['splits_sha256'], digest(DATA / 'splits.json'), 'frozen S1 source split')
+    roles = load_source_split(DATA)
+    for name, expected in report['model_files_sha256'].items():
+        equal(digest(RUN / name), expected, f'S3 model file {name}')
+    equal(report['model_sha256'], digest(RUN / 'weights.pt'), 'S3 model weight identity')
+    equal(manifest['data']['model_sha256'], report['model_sha256'], 'S3 manifest weight identity')
+    for name, expected in report['probe_files_sha256'].items():
+        equal(digest(S3_RUN / name), expected, f'S3 probe {name}')
+    equal(manifest['metrics'], report['probes'], 'S3 probe metrics')
+    equal(manifest['data']['roots'], report['source_identity'], 'S3 root source identity')
+    sources = {}
+    for key, name in (('roots', 'roots.h5'), ('probe', 'probe.h5')):
+        identity, path = manifest['data'][key], DATA / name
+        equal(Path(identity['path']).resolve(), path.resolve(), f'{key} source path')
+        equal(identity['size'], path.stat().st_size, f'{key} source size')
+        if source_bytes:
+            equal(digest(path), identity['sha256'], f'{key} source bytes')
+        with h5py.File(path, 'r') as source:
+            sources[key] = np.asarray(source['ep_len'][:], dtype=int)
+    # Reproduce only RNG source selection from lengths, not frames, actions or outcomes.
+    rng = np.random.default_rng(cfg['seed'])
+    frames, selected_probe = 0, []
+    for episode, n in enumerate(sources['probe']):
+        selected_probe.append(episode)
+        frames += (int(n) + 1) // 2
+        if frames >= cfg['probe_frames']:
+            break
+    val = sorted(rng.choice(selected_probe, size=max(1, int(len(selected_probe) * .2)), replace=False).tolist())
+    train = sorted(set(selected_probe) - set(val))
+    equal(manifest['data']['probe_train_episodes'], train, 'S3 deterministic probe train episodes')
+    equal(manifest['data']['probe_val_episodes'], val, 'S3 deterministic probe validation episodes')
+    equal(manifest['data']['n_probe_frames'], frames, 'S3 probe frame count')
+    expected_roots = []
+    for episode, n in enumerate(sources['roots']):
+        if episode not in roles['roots']['development'] or n < 121:
+            continue
+        positions = rng.choice(np.arange(20, n - 100), size=min(2, int(n) // 200 + 1), replace=False)
+        for position in positions:
+            expected_roots.append(f'w-e{episode}-t{position}')
+            for sigma in (.1, .3):
+                rng.normal(0, sigma, (100, 6))  # Consume declared tape-draw RNG, no controls queried.
+        if len(expected_roots) >= cfg['n_roots']:
+            break
+    equal([(r['root'], r['tape']) for r in rows], [(root, tape) for root in expected_roots for tape in range(3)],
+          'S3 frozen source/RNG order and exact three paired tapes')
+    require(len(expected_roots) >= cfg['n_roots'], 'Insufficient S3 source roots')
+    source_ids = sorted({int(re.fullmatch(r'w-e(\d+)-t(\d+)', root).group(1)) for root in expected_roots})
+    equal(manifest['data']['gate_source_episodes'], source_ids, 'S3 gate source episode identity')
+    require(not set(source_ids) & (set(roles['roots']['test']) | set(roles['roots']['acquisition'])),
+            'S3 heldout/acquisition source leakage')
+    require(all(math.isfinite(r[f'{source}_{rule}']) for r in rows
+                for source in ('true', 'real', 'imag') for rule in ('health', 'speed')),
+            'Nonfinite saved paired S3 clearances')
+    diagnostics, decisions = {}, {}
+    for rule in ('health', 'speed'):
+        truth = np.asarray([r[f'true_{rule}'] for r in rows])
+        unsafe = truth <= 0 if rule == 'health' else truth < 0
+        real = np.asarray([r[f'real_{rule}'] for r in rows])
+        imag = np.asarray([r[f'imag_{rule}'] for r in rows])
+        nu, ns = int(unsafe.sum()), int((~unsafe).sum())
+        tp, tn = int(((real < 0) & unsafe).sum()), int(((real >= 0) & ~unsafe).sum())
+        diagnostics[rule] = {'n_unsafe': nu, 'n_safe': ns, 'unsafe_detected': tp,
+                             'safe_accepted': tn, 'unsafe_recall': tp / nu if nu else None,
+                             'specificity': tn / ns if ns else None}
+        decisions[rule] = {'n': len(rows), 'n_unsafe': nu, 'real_readout': fsa_from_rows(real, unsafe),
+                           'imagined': fsa_from_rows(imag, unsafe),
+                           'real_agreement': float(np.mean((real < 0) == unsafe))}
+    equal(report['decision_diagnostics'], diagnostics, 'S3 row-derived decision diagnostics')
+    equal(report['decisions_m0'], decisions, 'S3 paired row-derived FSA and counts')
+    for name in ('imagined_abs_error_by_block', 'real_readout_abs_error_by_block'):
+        for variable in ('height', 'pitch', 'speed'):
+            values = report[name][variable]
+            require(len(values) == 10 and all(math.isfinite(v) and v >= 0 for v in values),
+                    f'Invalid saved S3 horizon-error vector {name}/{variable}')
+    gate = gate_decision(report['probes']['mlp'], report['imagined_abs_error_by_block'],
+                         diagnostics, min_unsafe=cfg['min_unsafe'])
+    equal(report['gate'], gate, 'S3 declared gate arithmetic; health required, speed optional')
+    equal(stage['gate']['passes'], gate['go'], 'workflow gate result')
+    equal(stage['status'], 'completed' if gate['go'] else 'gate_stopped', 'workflow gate status')
+    equal(manifest['costs']['gate_branch_steps'], len(rows) * 100, 'S3 declared simulator-step accounting')
+    equal(manifest['upstream_revisions']['model'], receipt(RUN), 'S3 upstream final model revision')
+    equal(manifest['upstream_revisions']['data'], receipt(DATA), 'S3 upstream source revision')
+    pinned = receipt(S3_RUN)
+    equal(results_manifest['probe_hf_revision'], pinned['revision'], 'S3 result pinned probe revision')
+    result_base = dict(results_manifest)
+    result_base.pop('probe_hf_revision')
+    equal(result_base, manifest, 'S3 mirrored manifests excluding added upload revision')
+    return {'gate': gate, 'root_count': len(expected_roots), 'source_episode_count': len(source_ids),
+            'tapes_per_root': dict(Counter(Counter(r['root'] for r in rows).values())),
+            'branch_count': len(rows), 'count_derived_branch_steps': len(rows) * 100,
+            'decisions_m0': decisions, 'decision_diagnostics': diagnostics,
+            'report_sha256': digest(S3_RUN / 'gate.json'), 'rows_sha256': digest(S3_RUN / 'gate_rows.json'),
+            'source_bytes_verified': source_bytes, 'local_pinned_receipt': pinned}
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('--mode', choices=('s2', 'both'), default='both')
+    ap.add_argument('--verify-cpu-exports', action='store_true')
+    ap.add_argument('--verify-source-bytes', action='store_true')
+    args = ap.parse_args()
+    # Only source/config inputs are touched before the terminal stage barrier.
+    for name, expected in PREPARED_SOURCE_HASHES.items():
+        equal(digest(REPO / name), expected, f'prepared checker dependency {name}')
+    stages, _ = barrier(args.mode)
+    output = {'status': 'consistent_finalized_saved_evidence',
+              'observed_utc': datetime.now(timezone.utc).isoformat(),
+              'checker_sha256': digest(__file__), 'original_checker_sha256': ORIGINAL_CHECKER_SHA256,
+              'workflow_config_sha256': digest(CONFIG), 'prepared_source_sha256': PREPARED_SOURCE_HASHES,
+              'mode': args.mode, 's2': audit_s2(args.verify_cpu_exports, args.verify_source_bytes),
+              'limitations': [
+                  'No simulation, rendering, model forward pass, network call or output mutation.',
+                  'Local receipts pin reported revisions; repository privacy and remote bytes are not rechecked.',
+                  'S2 losses and render measurements are saved evidence, not independently rerun.',
+                  'S2 tensor equality requires the optional existing CPU-only export verifier.',
+                  'S3 probe R2 and horizon errors cannot be recalculated from saved per-example predictions; those were not retained.',
+                  'S3 same-row minima establish paired arithmetic, but dense truth/tape logs were not retained for independent physical replay.',
+                  'S3 has manifest repository provenance but no per-run executed source snapshot; preparation hashes do not retroactively establish execution identity.',
+                  'S3 costs reproduce branch count times the fixed 100-step horizon, not an independent measured ledger.',
+                  'Numeric source episode IDs are scoped to their dataset files; disjoint probe/roots collections rely on upstream provenance.',
+                  'Health qualification is mandatory and speed qualification optional in the implemented gate; S4 has a separate later gate.'
+              ]}
+    if args.mode == 'both':
+        output['s3'] = audit_s3(stages['physical_probe_gate'], args.verify_source_bytes)
+    # Detect mutation of any finished output directory during the complete audit.
+    barrier(args.mode)
+    print(json.dumps(safe(output), indent=2, allow_nan=False))
+
+
+if __name__ == '__main__':
+    main()

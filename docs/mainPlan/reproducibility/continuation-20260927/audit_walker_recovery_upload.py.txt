@@ -1,0 +1,252 @@
+"""Read-only local hashes and private pinned HF metadata, never tensor/content loads.
+
+Run only after the requested upload receipt exists. The only runtime write is a
+new, explicitly requested parent audit JSON, after every check has passed.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import math
+import os
+import re
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+import yaml
+
+BASELINE = Path('/tmp/walker_recovery_upload_baseline.json')
+BASELINE_SHA256 = 'f88042f494f658dcb54870d47e5730c9b2dee43baf3ec484bb2de0a36702b117'
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def sha256(path):
+    with Path(path).open('rb') as handle:
+        return hashlib.file_digest(handle, 'sha256').hexdigest()
+
+
+def file_identity(path):
+    stat = Path(path).stat()
+    return {'device': stat.st_dev, 'inode': stat.st_ino, 'size_bytes': stat.st_size,
+            'mtime_ns': stat.st_mtime_ns, 'ctime_ns': stat.st_ctime_ns}
+
+
+def worker_identity(pid, start_ticks):
+    # /proc/<pid>/stat has no environment or command arguments. A comm may contain ')'.
+    fields = Path(f'/proc/{pid}/stat').read_text().rsplit(')', 1)[1].split()
+    require(fields[19] == str(start_ticks), 'Worker PID has been reused')
+    require(fields[0] not in ('Z', 'X', 'x'), 'Worker is no longer live')
+    return {'pid': pid, 'start_ticks': fields[19], 'state': fields[0],
+            'cpu_ticks': int(fields[11]) + int(fields[12])}
+
+
+def check_metadata(step, run, baseline, origin_audit, metadata, config, origin_config):
+    receipt, hf = metadata['upload_receipt.json'], metadata['hf_upload.json']
+    state, manifest = metadata['train_state.json'], metadata['manifest.json']
+    require(step == receipt['step'] == state['step'] == manifest['metrics']['step'],
+            'Requested step, receipt, train state and manifest disagree')
+    require(math.isfinite(state['val_pred_loss']) and
+            state['val_pred_loss'] == manifest['metrics']['val_pred_loss'],
+            'Validation loss is nonfinite or differs across metadata')
+    require(all(receipt[k] == hf[k] for k in ('repo_id', 'path', 'revision')),
+            'Upload receipts disagree')
+    require(bool(re.fullmatch('[0-9a-f]{40}', receipt['revision'])),
+            'Upload receipt does not pin a commit')
+    require(receipt['repo_id'] == origin_audit['private_receipt']['repo_id'] and
+            receipt['path'] == f'lewm-a/{run.name}' and hf['repo_type'] == 'model' and
+            hf['run_id'] == manifest['run_id'] == config['run_id'] == run.name,
+            'Recovery run/repository identity differs')
+    require(state['recovery_bundle'] == 'optimizer.pt', 'Unexpected recovery authority')
+    require(config['total_steps'] == baseline['total_steps'] and
+            baseline['origin_step'] < step <= config['total_steps'],
+            'Checkpoint is outside the resumed training interval')
+    require(step % config['push_every'] == 0 or step == config['total_steps'],
+            'Checkpoint differs from the original cadence')
+    origin_path = f"{baseline['origin_run_dir']}/optimizer.pt"
+    upstream = manifest['upstream_revisions']
+    require(config['resume_from'] == upstream['resume_bundle'] == origin_path and
+            upstream['resume_step'] == baseline['origin_step'] == origin_audit['step'] and
+            upstream['resume_sha256'] == origin_audit['file_sha256']['optimizer.pt'],
+            'Resume provenance differs from the fully audited origin')
+    allowed_changes = {'run_id', 'resume_from', 'source_hashes'}
+    require({k: v for k, v in config.items() if k not in allowed_changes} ==
+            {k: v for k, v in origin_config.items() if k not in allowed_changes},
+            'Recovered training recipe differs from the audited origin')
+    require(config['source_hashes'] == manifest['data']['source_hashes'] ==
+            baseline['source_hashes'], 'Recovery source snapshot identity differs')
+    require(metadata['config.json'] == config['model'] and
+            metadata['splits.json'] == config['episode_splits'] ==
+            manifest['data']['episode_splits'], 'Model or episode split identity differs')
+    require(manifest['data']['path'] == config['data'] ==
+            origin_audit['dataset_identity']['path'] and
+            manifest['data']['sha256'] == origin_audit['dataset_identity']['recorded_sha256'],
+            'Recorded dataset identity differs')
+    history = state['history']
+    require(len(history) == 50 and
+            [r['step'] for r in history] == list(range(step - 980, step + 1, 20)) and
+            all(all(isinstance(v, (int, float)) and math.isfinite(v) for v in r.values())
+                for r in history) and history[-1]['loss'] == manifest['metrics']['train_loss'],
+            'Recorded history tail is inconsistent or nonfinite')
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--step', type=int, required=True)
+    parser.add_argument('--output', type=Path, required=True,
+                        help='Fresh parent continuation-v2 audit JSON; never inside runtime outputs')
+    args = parser.parse_args()
+    require(sha256(BASELINE) == BASELINE_SHA256, 'Prepared audit baseline changed')
+    baseline = json.loads(BASELINE.read_text())
+    root = Path(baseline['root'])
+    run = root / baseline['run_dir']
+    origin = root / baseline['origin_run_dir']
+    output = args.output if args.output.is_absolute() else root / args.output
+    output = output.resolve()
+    require(output.parent == (root / 'docs/mainPlan/results/continuation-v2').resolve()
+            and output.name == f'walker_checkpoint_{args.step}_upload.json',
+            'Output must be the requested parent checkpoint audit path')
+    require(not output.exists(), 'Refuse to overwrite an existing audit')
+    require(args.step >= 176000, 'This helper is for the recovery run checkpoints only')
+    started = datetime.now(timezone.utc).isoformat()
+    worker = baseline['worker']
+    worker_before = worker_identity(worker['pid'], worker['start_ticks'])
+    audit_path = root / baseline['full_recovery_audit']
+    require(sha256(audit_path) == baseline['full_recovery_audit_sha256'],
+            'Full semantic origin audit changed')
+    origin_audit = json.loads(audit_path.read_text())
+    require(origin_audit['status'] == 'passed' and all(origin_audit['checks'].values()),
+            'Origin semantic audit did not pass')
+    runtime = ['optimizer.pt', 'weights.pt', 'train_state.json', 'manifest.json',
+               'upload_receipt.json', 'hf_upload.json', 'config.json', 'scalers.npz']
+    paths = {name: run / name for name in runtime}
+    paths.update({name: run / name for name in baseline['prepared_configuration_sha256']})
+    paths.update({f'origin/{name}': origin / name for name in origin_audit['file_sha256']
+                  if name not in ('original_training_log',
+                                                      'prior_24000_audit',
+                                                      'prior_172000_upload_audit')})
+    paths['full_semantic_audit'] = audit_path
+    paths['recovery_workflow'] = root / baseline['recovery_workflow']
+    before = {name: file_identity(path) for name, path in paths.items()}
+    hashes = {name: sha256(path) for name, path in paths.items()}
+    require(all(file_identity(paths[n]) == v for n, v in before.items()),
+            'A checkpoint file changed while initially hashing')
+    require(all(hashes[n] == v for n, v in baseline['prepared_configuration_sha256'].items()),
+            'Recovery configuration or snapshot changed since launch')
+    require(hashes['recovery_workflow'] == baseline['recovery_workflow_sha256'],
+            'Recovery workflow configuration changed')
+    require(all(hashes[f'origin/{n}'] == origin_audit['file_sha256'][n]
+                for n in origin_audit['file_sha256'] if f'origin/{n}' in hashes),
+            'Original audited recovery bundle or metadata changed')
+    metadata = {n: json.loads((run / n).read_text()) for n in
+                ('train_state.json', 'manifest.json', 'upload_receipt.json', 'hf_upload.json',
+                 'config.json', 'splits.json')}
+    config = yaml.safe_load((run / 'config.yaml').read_text())
+    origin_config = yaml.safe_load((origin / 'config.yaml').read_text())
+    check_metadata(args.step, run, baseline, origin_audit, metadata, config, origin_config)
+    require(metadata['train_state.json']['recovery_sha256'] == hashes['optimizer.pt'],
+            'Atomic optimizer hash differs from train state')
+    require(all(hashes[n] == origin_audit['file_sha256'][n]
+                for n in ('config.json', 'scalers.npz', 'splits.json')),
+            'Model architecture, action scalers or episode split bytes changed')
+
+    # Only authenticated metadata APIs. Never call HF upload/download/snapshot methods.
+    os.environ.setdefault('HF_HUB_ETAG_TIMEOUT', '30')
+    os.environ.setdefault('HF_HUB_DOWNLOAD_TIMEOUT', '30')
+    sys.path.insert(0, str(root / 'experiments'))
+    from helpers.hfStore import _load_dotenv
+    from huggingface_hub import HfApi
+    _load_dotenv()
+    require(bool(os.environ.get('HF_TOKEN')), 'HF_TOKEN is unavailable')
+    api = HfApi(token=os.environ['HF_TOKEN'])
+    receipt = metadata['upload_receipt.json']
+    remote = api.repo_info(repo_id=receipt['repo_id'], repo_type='model',
+                           revision=receipt['revision'], timeout=30)
+    require(remote.private is True and remote.sha == receipt['revision'],
+            'Remote revision is not the pinned private repository commit')
+    wanted = {f"{receipt['path']}/{n}": n for n in ('optimizer.pt', 'weights.pt')}
+    entries = api.get_paths_info(repo_id=receipt['repo_id'], repo_type='model',
+                                 revision=receipt['revision'], paths=list(wanted))
+    require({e.path for e in entries} == set(wanted), 'Pinned remote payload files are missing')
+    verified = {}
+    for entry in entries:
+        name = wanted[entry.path]
+        require(entry.lfs is not None, f'{name} lacks remote LFS metadata')
+        require(entry.lfs.sha256 == hashes[name] and
+                entry.size == entry.lfs.size == before[name]['size_bytes'],
+                f'{name} remote LFS hash or byte size differs')
+        verified[name] = {'sha256': hashes[name], 'size_bytes': before[name]['size_bytes']}
+    worker_after = worker_identity(worker['pid'], worker['start_ticks'])
+    deadline = time.monotonic() + 30
+    while worker_after['cpu_ticks'] <= worker_before['cpu_ticks'] and time.monotonic() < deadline:
+        time.sleep(1)
+        worker_after = worker_identity(worker['pid'], worker['start_ticks'])
+    require(worker_after['cpu_ticks'] > worker_before['cpu_ticks'],
+            'Worker CPU progress was not observed; no terminal inference made')
+    after_hashes = {n: sha256(p) for n, p in paths.items()}
+    after = {n: file_identity(p) for n, p in paths.items()}
+    require(hashes == after_hashes and before == after,
+            'Checkpoint or protected origin changed during audit; no mixed-version artifact written')
+    now = datetime.now(timezone.utc)
+    report = {
+        'status': 'passed', 'repo_id': receipt['repo_id'], 'revision': receipt['revision'],
+        'path': receipt['path'], 'step': args.step, 'run_dir': baseline['run_dir'],
+        'validation_pred_loss': metadata['train_state.json']['val_pred_loss'],
+        'remote_repo_private': True, 'verified_files': verified,
+        'verification_scope': 'Read-only local byte/hash and metadata coherence plus pinned private '
+                              'HF LFS metadata; immutable fully audited origin and exact resume '
+                              'provenance checked. No tensors, dataset or remote content loaded.',
+        'audit_started_utc': started, 'observed_utc': now.isoformat(),
+        'observed_unix': now.timestamp(), 'worker_at_verification': worker_after,
+        'worker_cpu_ticks_before': worker_before['cpu_ticks'],
+        'stable_local_file_identities': after,
+        'metadata_sha256': {n: v for n, v in hashes.items() if n not in ('optimizer.pt', 'weights.pt')},
+        'checks': {k: True for k in ('checkpoint_step_agreement',
+                   'validation_loss_finite_and_agrees', 'receipt_revision_path_repository_agreement',
+                   'immutable_private_revision', 'recovery_sha256_matches_optimizer',
+                   'remote_lfs_sha256_and_sizes_match', 'local_files_and_metadata_stable',
+                   'same_worker_identity_cpu_advancing', 'recovery_configuration_unchanged',
+                   'resume_recipe_splits_scalers_and_source_identity',
+                   'resume_origin_matches_full_semantic_audit', 'original_run_remained_immutable')},
+        'full_recovery_audit_reference': baseline['full_recovery_audit'],
+        'full_recovery_audit_sha256': baseline['full_recovery_audit_sha256'],
+        'configuration_identity': {'sha256': {n: hashes[n] for n in
+                                  ('config.yaml', 'config.json', 'splits.json', 'scalers.npz',
+                                   'source_snapshot/sha256.json')},
+                                  'recovery_workflow_sha256': hashes['recovery_workflow']},
+        'resume_origin': {'run_dir': baseline['origin_run_dir'], 'step': baseline['origin_step'],
+                          'revision': origin_audit['private_receipt']['revision'],
+                          'optimizer_sha256': hashes['origin/optimizer.pt']},
+        'auditor': {'script_sha256': sha256(Path(__file__)),
+                    'prepared_baseline_sha256': BASELINE_SHA256},
+        'limitations': ['Lightweight upload audit only; checkpoint tensor contents were not '
+                        'deserialized, and this is not a fresh semantic optimizer/RNG audit.',
+                        'No dataset reads, GPU calls, remote-byte downloads, uploads, '
+                        'central status changes or active output edits.',
+                        'Only optimizer.pt and weights.pt remote payload metadata was compared; '
+                        'local metadata consistency does not assert every run file is remotely archived.'],
+    }
+    encoded = json.dumps(report, indent=2, allow_nan=False) + '\n'
+    with output.open('x') as handle:
+        handle.write(encoded)
+    print(json.dumps({'status': 'passed', 'step': args.step, 'artifact': str(output),
+                      'artifact_sha256': sha256(output), 'revision': receipt['revision'],
+                      'validation_pred_loss': report['validation_pred_loss'],
+                      'worker': worker_after}, indent=2))
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as exc:
+        # HTTP exception strings may contain request details. Never echo them or credentials.
+        detail = str(exc) if isinstance(exc, (ValueError, FileNotFoundError)) else type(exc).__name__
+        print(json.dumps({'status': 'not_verified', 'reason': detail}), file=sys.stderr)
+        raise SystemExit(1) from None

@@ -1,0 +1,55 @@
+{
+  "status": "prepared_not_executed",
+  "kind": "walker-final-upload-audit-index-entry-proposal",
+  "prepared_utc": "2026-09-27T07:58:18.708605+00:00",
+  "run_id": "walker2d-lewm-a-recovery-20260927-1",
+  "target_step": 214780,
+  "helper": {
+    "path": "/tmp/audit_walker_recovery_final_upload.py",
+    "sha256": "00c4eb761b1ade30f5fed6fbe298b3b9b108538d523d67c08be1ec8ab42176a8"
+  },
+  "argv_after_terminal_barrier": [
+    "uv",
+    "run",
+    "python",
+    "/tmp/audit_walker_recovery_final_upload.py",
+    "--workflow-state",
+    "runs/workflows/walker2d-recovery-20260927-1/state.json",
+    "--output",
+    "docs/mainPlan/results/continuation-v2/walker_checkpoint_214780_upload.json"
+  ],
+  "required_barrier": "lewm_a_full completed with successful terminal attempt and exact recorded output hashes",
+  "planned_audit_path": "docs/mainPlan/results/continuation-v2/walker_checkpoint_214780_upload.json",
+  "audit_sha256": null,
+  "verified_revision": null,
+  "verified_inventory": null,
+  "index_action": "Parent integrates only after the final helper passes and hashes the fresh audit. This proposal does not update or qualify a shared index.",
+  "checks_prepared": [
+    "full 214780 metadata and 10739-record history coherence",
+    "exact completed-stage run/report hashes",
+    "unchanged executed source snapshot and audited recovery origin",
+    "private pinned commit",
+    "actual final run-ID tag targets same commit",
+    "all remaining run payloads: remote LFS SHA256/size or Git blob SHA1/size",
+    "all local audit sources unchanged across remote metadata checks"
+  ],
+  "explicit_remote_equality_exclusions": {
+    "hf_upload.json": "Excluded by uploader; checked as local final provenance only.",
+    "upload_receipt.json": "Updated locally after upload; remote copy may contain prior checkpoint receipt.",
+    "final_s2_report": "Written afterward outside uploaded run; completed-stage local hash checked only."
+  },
+  "unverified_scope": [
+    "No tensor/model/export/optimizer/RNG semantic loading; separate final CPU audit required.",
+    "No remote content download/restore test; metadata checks only.",
+    "No dataset reread; recorded identity bound to frozen original semantic audit."
+  ],
+  "preparation_validation": {
+    "synthetic_checks_passed": 20,
+    "ruff": "passed",
+    "live_artifacts_read": 0,
+    "network_calls": 0,
+    "model_or_simulator_calls": 0,
+    "shared_index_edits": 0
+  },
+  "durability_conclusion": "Pending. No final revision or inventory has been observed by this prepared helper."
+}

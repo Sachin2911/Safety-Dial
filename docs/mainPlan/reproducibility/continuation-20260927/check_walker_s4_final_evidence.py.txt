@@ -1,0 +1,945 @@
+"""Deferred S4 saved-evidence checker. No models, simulations, HDF5 parsing or network.
+
+Only execute after the recovery workflow's prospective_acquisition stage is terminal.
+The optional report is a fresh /tmp JSON. Raw file hashing includes frozen HDF5/model
+bytes, but no tensors or trajectories are deserialized. Default deadline: 15 minutes.
+"""
+
+from __future__ import annotations
+
+import argparse
+from collections import Counter
+from datetime import datetime, timezone
+import hashlib
+import json
+import math
+from pathlib import Path
+import re
+import time
+
+import numpy as np
+import yaml
+
+ROOT = Path("/workspace/Safety-Dial")
+RUN_ID = "walker2d-s4-recovery-20260927-1"
+CONFIG = ROOT / "configs/walker2d/recovery-20260927-1.yaml"
+CONFIG_SHA = "d0fac30557892b457ae57953968e050ff05dff501cced141a87bb4f796c9ff7d"
+STATE = ROOT / "runs/workflows/walker2d-recovery-20260927-1/state.json"
+RUN = ROOT / "runs" / RUN_ID
+RESULTS = ROOT / "docs/mainPlan/results/s4" / RUN_ID
+DATA = ROOT / "data/study/walker2d/continuation-20260926-2"
+BANK = DATA / "s4" / RUN_ID
+MODEL = ROOT / "runs/walker2d-lewm-a-recovery-20260927-1"
+PROBES = ROOT / "runs/walker2d-probes-recovery-20260927-1"
+BUDGETS, SEEDS, ARMS = [128, 512], [0, 1, 2], ["random", "boundary"]
+SOURCES = ["dense", "endpoint", "real_readout", "imagined"]
+DEADLINE = math.inf
+CHECKS = Counter()
+
+
+def need(ok, message):
+    if not ok:
+        raise ValueError(message)
+    CHECKS[message] += 1
+
+
+def read(path):
+    return json.loads(Path(path).read_text())
+
+
+def digest(path):
+    path = Path(path)
+    need(path.is_file() and not path.is_symlink(), "regular immutable file")
+    before = path.stat()
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            need(time.monotonic() < DEADLINE, "bounded observation deadline")
+            h.update(chunk)
+    after = path.stat()
+    fields = ("st_dev", "st_ino", "st_size", "st_mtime_ns", "st_ctime_ns")
+    need(all(getattr(before, k) == getattr(after, k) for k in fields), "file stable while hashing")
+    return h.hexdigest()
+
+
+def tree_hash(path):
+    path = Path(path)
+    need(not path.is_symlink(), "tree is not a symlink")
+    if path.is_file():
+        return {"kind": "file", "sha256": digest(path)}
+    need(path.is_dir(), "recorded output directory exists")
+    paths = sorted(path.rglob("*"))
+    need(all(not p.is_symlink() for p in paths), "output tree has no symlinks")
+    files = {str(p.relative_to(path)): digest(p) for p in paths if p.is_file()}
+    need(paths == sorted(path.rglob("*")), "output membership stable")
+    return {
+        "kind": "directory",
+        "sha256": hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest(),
+        "n_files": len(files),
+    }
+
+
+def same(a, b):
+    if isinstance(a, dict) and isinstance(b, dict):
+        return set(a) == set(b) and all(same(a[k], b[k]) for k in a)
+    if isinstance(a, list) and isinstance(b, list):
+        return len(a) == len(b) and all(same(x, y) for x, y in zip(a, b, strict=True))
+    if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+        if math.isnan(a) or math.isnan(b):
+            return math.isnan(a) and math.isnan(b)
+        return (
+            a == b if not math.isfinite(a) or not math.isfinite(b) else math.isclose(a, b, rel_tol=1e-10, abs_tol=1e-12)
+        )
+    return a == b
+
+
+def subset(expected, saved, label):
+    need(all(k in saved and same(v, saved[k]) for k, v in expected.items()), label)
+
+
+def finite(x):
+    return isinstance(x, (float, int)) and math.isfinite(x)
+
+
+def unsafe(rule, value):
+    need(finite(value), "finite saved dense clearance")
+    return value <= 0 if rule == "health" else value < 0
+
+
+def rates(rows, rule, source, margin):
+    need(not math.isnan(margin), "decision margin is not NaN")
+    n = len(rows)
+    u = [unsafe(rule, r[f"cmin_dense_{rule}"]) for r in rows]
+    c = [r[f"cmin_{source}_{rule}"] for r in rows]
+    need(all(finite(x) for x in c), "finite saved prediction clearances")
+    flags = [r.get("censored", False) for r in rows]
+    need(all(type(x) is bool for x in flags), "explicit censor masks are booleans")
+    a = [x >= margin for x in c]
+    unresolved = [flag and not bad for flag, bad in zip(flags, u, strict=True)]
+    acc = sum(a)
+    fs = sum(x and y for x, y in zip(a, u, strict=True))
+    uc = sum(x and y for x, y in zip(a, unresolved, strict=True))
+    safe = [not x and not y for x, y in zip(u, unresolved, strict=True)]
+    ns = sum(safe)
+    nan = float("nan")
+    return {
+        "m": margin,
+        "n": n,
+        "n_accepted": acc,
+        "acceptance_rate": acc / n if n else nan,
+        "n_false_safe": fs,
+        "n_censored": sum(unresolved),
+        "n_accepted_censored": uc,
+        "fsa_lower": fs / acc if acc else nan,
+        "fsa_upper": (fs + uc) / acc if acc else nan,
+        "fsa": fs / acc if acc and not uc else nan,
+        "false_reject_rate": sum(not x and y for x, y in zip(a, safe, strict=True)) / ns if ns else nan,
+    }
+
+
+def attribution(rows, rule):
+    fs = [r for r in rows if unsafe(rule, r[f"cmin_dense_{rule}"]) and r[f"cmin_imagined_{rule}"] >= 0]
+    temporal = sum(r[f"cmin_endpoint_{rule}"] >= 0 for r in fs)
+    readout = sum(r[f"cmin_endpoint_{rule}"] < 0 and r[f"cmin_real_readout_{rule}"] >= 0 for r in fs)
+    return {
+        "n_false_safe_imagined": len(fs),
+        "temporal": temporal,
+        "readout": readout,
+        "imagination": len(fs) - temporal - readout,
+    }
+
+
+def gate_from_rows(rows, rules, thresholds):
+    evidence = {}
+    for rule in rules:
+        a = attribution(rows, rule)
+        fs = a["n_false_safe_imagined"]
+        im = a["imagination"]
+        nu = sum(unsafe(rule, r[f"cmin_dense_{rule}"]) for r in rows)
+        share = im / fs if fs else None
+        passes = (
+            nu >= thresholds["min_unsafe"]
+            and fs >= thresholds["min_false_safe"]
+            and im >= thresholds["min_imagination"]
+            and share is not None
+            and share >= thresholds["min_share"]
+        )
+        evidence[rule] = {
+            "n": len(rows),
+            "n_unsafe": nu,
+            "n_false_safe": fs,
+            "n_imagination": im,
+            "imagination_share": share,
+            "pass": passes,
+        }
+    repair = [r for r in rules if evidence[r]["pass"]]
+    return {
+        "go": bool(repair),
+        "repair_rules": repair,
+        "evidence": evidence,
+        "role": "development",
+        "thresholds": thresholds,
+        "status": "pass" if repair else "diagnostic_stop",
+    }
+
+
+def pair_rows(base, rows, rules):
+    def ids(items):
+        return [(r["bank"], r["root_id"], r["branch"]) for r in items]
+
+    need(ids(base) == ids(rows) and len(ids(rows)) == len(set(ids(rows))), "exact unique paired row identities")
+    for a, b in zip(base, rows, strict=True):
+        for k in ("root", "kind", "speed_regime", "health_regime", "true_displacement"):
+            need(a[k] == b[k], "paired source/regime/true-progress identity")
+        need(
+            type(a.get("censored", False)) is bool
+            and type(b.get("censored", False)) is bool
+            and a.get("censored", False) == b.get("censored", False),
+            "paired censor identity",
+        )
+        for rule in rules:
+            for source in ("dense", "endpoint"):
+                for prefix in ("cmin_", "cmin_by_block_"):
+                    k = f"{prefix}{source}_{rule}"
+                    need(a[k] == b[k], "exact paired physical truth and horizon identity")
+
+
+def paired_summary(saved, before, after, rule, m_before, m_after):
+    pair_rows(before, after, [rule])
+    reference, updated = rates(before, rule, "imagined", m_before), rates(after, rule, "imagined", m_after)
+    subset(reference, saved["reference"], "paired reference denominators/rates")
+    subset(updated, saved["updated"], "paired updated denominators/rates")
+    point = updated["fsa"] - reference["fsa"]
+    defined = finite(point)
+    need(same(saved["point"], point) and saved["defined"] is defined, "paired point and undefined semantics")
+    lo, hi = saved["lo"], saved["hi"]
+    need(
+        (finite(lo) and finite(hi) and -1 <= lo <= hi <= 1) or (not finite(lo) and not finite(hi)),
+        "paired interval endpoints coherent",
+    )
+    if not defined:
+        need(math.isnan(lo) and math.isnan(hi), "undefined full-data contrast has no directional interval")
+    direction = (
+        "decrease"
+        if defined and finite(hi) and hi < 0
+        else "increase"
+        if defined and finite(lo) and lo > 0
+        else "inconclusive"
+        if defined
+        else "undefined"
+    )
+    reason = (
+        "zero_acceptance"
+        if not reference["n_accepted"] or not updated["n_accepted"]
+        else "accepted_censored_futures"
+        if not defined
+        else None
+    )
+    subset(
+        {
+            "direction": direction,
+            "undefined_reason": reason,
+            "interval_excludes_zero": direction in ("decrease", "increase"),
+            "cluster_unit": "source_episode",
+            "n_source_episodes": len({r["root"] for r in after}),
+            "n_roots": len({r["root_id"] for r in after}),
+        },
+        saved,
+        "paired direction/clusters/support semantics",
+    )
+    need(
+        saved["n_boot_requested"] == 1000
+        and type(saved["n_boot"]) is int
+        and 0 <= saved["n_boot"] <= 1000
+        and saved["n_boot_undefined"] == 1000 - saved["n_boot"],
+        "paired usable bootstrap counts",
+    )
+
+
+def source_summary(saved, rows, rule, *, expanded):
+    subset(
+        {"n": len(rows), "n_unsafe": sum(unsafe(rule, r[f"cmin_dense_{rule}"]) for r in rows)},
+        saved,
+        "decomposition support counts",
+    )
+    if expanded:
+        subset(
+            {"n_source_episodes": len({r["root"] for r in rows}), "margin": 0.0}, saved, "decomposition source support"
+        )
+    for source in SOURCES:
+        subset(rates(rows, rule, source, 0.0), saved[source], "four-source decision rates")
+    if expanded:
+        need(same(saved["attribution"], attribution(rows, rule)), "first-source error attribution counts")
+
+
+def decomposition(saved, rows, rule):
+    source_summary(saved["overall"], rows, rule, expanded=True)
+    need(set(saved["by_horizon"]) == {str(i) for i in range(1, 11)}, "ten cumulative horizons recorded")
+
+    def prefix(items, k):
+        return [{**r, **{f"cmin_{s}_{rule}": r[f"cmin_by_block_{s}_{rule}"][k - 1] for s in SOURCES}} for r in items]
+
+    for k in range(1, 11):
+        need(same(saved["by_horizon"][str(k)]["seconds"], k * 0.08), "correct horizon seconds")
+        source_summary(saved["by_horizon"][str(k)], prefix(rows, k), rule, expanded=True)
+    for field in ("kind", "speed_regime", "health_regime"):
+        need(set(saved["by_regime"][field]) == {r[field] for r in rows}, "all recorded regimes retained")
+        for value, block in saved["by_regime"][field].items():
+            items = [r for r in rows if r[field] == value]
+            source_summary(block["overall"], items, rule, expanded=True)
+            for k in range(1, 11):
+                source_summary(block["by_horizon"][str(k)], prefix(items, k), rule, expanded=True)
+
+
+def check_workflow_identity(state):
+    need(
+        state.get("config_sha256") == CONFIG_SHA and state.get("cwd") == str(ROOT),
+        "managed state binds exact workflow configuration and working directory",
+    )
+
+
+def check_adaptation_config(saved_recipe, report_recipe, seed):
+    need(
+        saved_recipe == dict(report_recipe, seed=seed),
+        "checkpoint adaptation recipe records the actual acquisition seed",
+    )
+
+
+def check_checkpoint_provenance(manifest, seed, upstream):
+    need(
+        manifest.get("seeds") == {"seed": seed}
+        and manifest.get("kind") == "adapted"
+        and manifest.get("upstream_revisions") == upstream,
+        "adapted checkpoint seed kind and frozen upstream provenance",
+    )
+
+
+def terminal(state, stage_id, paths):
+    stage = state["stages"][stage_id]
+    need(stage["status"] in ("completed", "gate_stopped"), "requested stage is terminal")
+    attempts = stage.get("attempts", [])
+    need(
+        attempts and attempts[-1].get("finished_unix") is not None and attempts[-1].get("returncode") in (0, 2),
+        "terminal subprocess has a recorded finish",
+    )
+    for path in paths:
+        need(
+            str(path) in stage["output_hashes"] and tree_hash(path) == stage["output_hashes"][str(path)],
+            "frozen terminal output tree identity",
+        )
+    return stage
+
+
+def reference(path):
+    for name in ("hf_upload.json", "upload_receipt.json"):
+        if (path / name).is_file():
+            r = read(path / name)
+            return {k: r[k] for k in ("repo_id", "revision", "path") if k in r}
+    raise ValueError("Missing recorded upstream upload receipt")
+
+
+def checked_export(ref, expected_name):
+    need(ref["file"] == expected_name, "expected saved row filename")
+    for folder in (RUN, RESULTS, BANK):
+        p = folder / expected_name
+        need(digest(p) == ref["sha256"] and p.stat().st_size == ref["bytes"], "mirrored saved row hash and byte size")
+    return read(RUN / expected_name)
+
+
+def bank_rows(name, rows, cfg, rules, source_id, split):
+    n_roots = cfg["dev_roots"] if name == "dev" else cfg["test_roots"]
+    meta = read(BANK / name / "roots.json")
+    roots = meta["roots"]
+    need(
+        len(roots) == len({r["root_id"] for r in roots}) == len({r["episode"] for r in roots}) == n_roots,
+        "declared distinct evaluation roots",
+    )
+    need(meta["n_branches"] == len(rows) == n_roots * cfg["tapes"], "declared evaluation branch count")
+    role = "development" if name == "dev" else "test"
+    need(all(r["episode"] in split["roots"][role] for r in roots), "evaluation root source roles")
+    expected = {
+        "source": source_id,
+        "seed": 20261020,
+        "kind": "stress" if name == "stress" else "representative",
+        "role": role,
+        "n_roots": n_roots,
+        "n_tapes": cfg["tapes"],
+        "frameskip": 10,
+        "history": 3,
+        "horizon": 10,
+        "schema": 2,
+    }
+    need(
+        meta["meta"]["provenance"] == expected and meta["meta"]["charged_steps_per_branch"] == 100,
+        "frozen evaluation bank provenance",
+    )
+    by_id = {r["root_id"]: r for r in roots}
+    need(
+        Counter(r["root_id"] for r in rows) == Counter({r["root_id"]: cfg["tapes"] for r in roots}),
+        "every declared evaluation root has all tapes",
+    )
+    need(sorted(r["branch"] for r in rows) == list(range(len(rows))), "unique complete branch index range")
+    for row in rows:
+        need(
+            row["bank"] == name and row["root"] == by_id[row["root_id"]]["episode"],
+            "row source identity matches bank metadata",
+        )
+        for rule in rules:
+            for source in SOURCES:
+                key = f"cmin_by_block_{source}_{rule}"
+                if key not in row:
+                    continue
+                vals = row[key]
+                need(
+                    len(vals) == 10
+                    and all(finite(v) for v in vals)
+                    and all(b <= a for a, b in zip(vals, vals[1:]))
+                    and same(vals[-1], row[f"cmin_{source}_{rule}"]),
+                    "complete cumulative horizon clearance identity",
+                )
+
+
+def evaluation(saved, rows_by_bank, baseline, rules, baseline_margins):
+    for name, rows in rows_by_bank.items():
+        pair_rows(baseline[name], rows, rules)
+        computed = {
+            "state_mae_by_block": np.mean([r["state_abs_error_by_block"] for r in rows], axis=0).tolist(),
+            "displacement_mae": float(
+                np.mean([abs(r["predicted_displacement"] - r["true_displacement"]) for r in rows])
+            ),
+        }
+        subset(computed, saved[name], "saved task-progress means")
+        ordinary = [r for r in rows if r["kind"] == "policy"]
+        subset(
+            {
+                "n": len(ordinary),
+                "state_mae_by_block": np.mean([r["state_abs_error_by_block"] for r in ordinary], axis=0).tolist()
+                if ordinary
+                else None,
+                "displacement_mae": float(
+                    np.mean([abs(r["predicted_displacement"] - r["true_displacement"]) for r in ordinary])
+                )
+                if ordinary
+                else None,
+            },
+            saved[name]["ordinary_retention"],
+            "ordinary-policy retention means and support",
+        )
+        for rule in rules:
+            metric = saved[name][rule]
+            margin = saved["dev"][rule]["margin"]
+            need(same(metric["margin"], margin), "final-test margin equals recorded development margin")
+            subset(rates(rows, rule, "imagined", margin), metric["at_matched"], "matched-margin rates and denominators")
+            paired_summary(metric["paired_fsa_difference"], baseline[name], rows, rule, baseline_margins[rule], margin)
+
+
+def executed_round(path, expected_ids, candidates, acq_roots):
+    meta, ledger = read(path / "roots.json"), read(path / "execution_ledger.json")
+    n = len(expected_ids)
+    need(
+        meta["meta"]["selected_ids"] == ledger["selected_ids"] == expected_ids
+        and meta["n_branches"] == n
+        and ledger["status"] == "complete"
+        and ledger["attempted_steps"] == meta["meta"]["executed_steps"] == n * 100
+        and ledger.get("pending_step_upper_bound") == 0,
+        "completed selection order and exact charged steps",
+    )
+    ordered_roots = dict.fromkeys(candidates[i]["root_index"] for i in expected_ids)
+    need(
+        meta["roots"] == [acq_roots[i] for i in ordered_roots],
+        "selected root metadata matches frozen acquisition roots",
+    )
+
+
+def check_complete(report, cfg, manifests, rules, source_id, split, s3):
+    need(
+        report["planned_budgets"] == BUDGETS
+        and report["acquisition_seeds"] == SEEDS
+        and set(report["adaptation"]) == {"no_update", *ARMS},
+        "complete declared two-arm six-grid acquisition",
+    )
+    baseline = checked_export(
+        report["saved_evaluation_rows"]["baseline_decomposition"], "baseline_decomposition_rows.json"
+    )
+    no_update = checked_export(
+        report["saved_evaluation_rows"]["no_update_evaluation"], "no_update_evaluation_rows.json"
+    )
+    need(set(baseline) == set(no_update) == {"dev", "test", "stress"}, "all evaluation banks exported")
+    base_margins = {
+        r: report["adaptation"]["no_update"]["dev"][r]["paired_fsa_difference"]["reference"]["m"] for r in rules
+    }
+    for name, rows in baseline.items():
+        bank_rows(name, rows, cfg, rules, source_id, split)
+        for rule in rules:
+            source_summary(report["decomposition"][rule][name], rows, rule, expanded=False)
+            decomposition(report["decomposition_by_horizon_regime"][rule][name], rows, rule)
+    evaluation(report["adaptation"]["no_update"], no_update, baseline, rules, base_margins)
+    for rule in rules:
+        need(
+            same(report["target_acceptance"][rule], rates(baseline["dev"], rule, "imagined", 0.0)["acceptance_rate"]),
+            "target acceptance from baseline development only",
+        )
+    roots_blob = read(BANK / "acquisition_roots.json")
+    acq_roots = roots_blob["roots"]
+    generation = roots_blob["generation_steps"]
+    data_manifest = read(DATA / "manifest.json")
+    need(
+        generation == data_manifest["data"]["stats"]["roots"]["n_steps"],
+        "source-generation charge matches original collection ledger",
+    )
+    need(
+        len(acq_roots) == len({r["episode"] for r in acq_roots}) == cfg["acq_roots"] == 96
+        and all(r["episode"] in split["roots"]["acquisition"] for r in acq_roots),
+        "exact distinct acquisition source roots",
+    )
+    need(roots_blob["source_identity"] == source_id, "acquisition roots match source bytes")
+    need(
+        report["replay_source_training_episodes"] == read(MODEL / "splits.json")["training"],
+        "original training-only replay source identity",
+    )
+    need(digest(RUN / "replay_clips.npz") == digest(BANK / "replay_clips.npz"), "mirrored immutable replay cache")
+    subset(
+        {
+            "modules": "predictor_side",
+            "loss": "teacher_forced",
+            "lr": 5e-5,
+            "steps": 1500,
+            "ctx": 3,
+            "replay_frac": 0.5,
+            "batch_size": 64,
+        },
+        report["adaptation_recipe"],
+        "fixed adaptation mechanism and replay recipe",
+    )
+    data = manifests[0]["data"]
+    need(
+        set(data["evaluation_banks"]) == {"dev", "test", "stress"}
+        and all(set(v) == {"branches.h5", "roots.json"} for v in data["evaluation_banks"].values()),
+        "complete evaluation fingerprint inventory",
+    )
+    expected_acquisition = {"acquisition_roots.json", "replay_clips.npz"}
+    for seed in SEEDS:
+        expected_acquisition.add(f"candidates_s{seed}.json")
+        for arm in ARMS:
+            expected_acquisition.add(f"{arm}_s{seed}_selection.json")
+            expected_acquisition.update(
+                f"{arm}_s{seed}_b{budget}/{name}"
+                for budget in BUDGETS
+                for name in ("branches.h5", "roots.json", "execution_ledger.json")
+            )
+    need(set(data["acquisition_files"]) == expected_acquisition, "complete acquisition fingerprint inventory")
+    for name, hashes in data["evaluation_banks"].items():
+        for filename, expected in hashes.items():
+            need(digest(BANK / name / filename) == expected, "evaluation bank fingerprint")
+    for filename, expected in data["acquisition_files"].items():
+        need(digest(BANK / filename) == expected, "acquisition ledger and data fingerprints")
+    saved_rows, points, receipts = {}, {}, []
+    for seed in SEEDS:
+        pool_path = BANK / f"candidates_s{seed}.json"
+        pool = read(pool_path)
+        candidates = {c["id"]: c for c in pool["candidates"]}
+        need(
+            pool["seed"] == seed
+            and pool["source_identity"] == source_id
+            and len(candidates) == len(pool["candidates"]) == 96 * 8,
+            "frozen candidate pool counts/source",
+        )
+        need(
+            set(candidates) == {f"s{seed}-r{ri}-c{ci}" for ri in range(96) for ci in range(8)},
+            "exact candidate pool identifiers",
+        )
+        for c in candidates.values():
+            need(
+                c["id"].startswith(f"s{seed}-r{c['root_index']}-c")
+                and 0 <= c["root_index"] < 96
+                and len(c["tape"]) == 100
+                and all(len(a) == 6 and all(finite(v) and -1 <= v <= 1 for v in a) for a in c["tape"]),
+                "finite bounded complete candidate tapes",
+            )
+        seed_meta = read(BANK / f"seed_s{seed}" / "roots.json")
+        seed_ids = seed_meta["meta"]["selected_ids"]
+        need(
+            len(seed_ids) == len(set(seed_ids)) == 128 and set(seed_ids) <= candidates.keys(),
+            "paid common seed count and identities",
+        )
+        executed_round(BANK / f"seed_s{seed}", seed_ids, candidates, acq_roots)
+        for arm in ARMS:
+            need(set(report["adaptation"][arm]) == {"0", "1", "2"}, "all acquisition seeds retained")
+            curve = report["adaptation"][arm][str(seed)]
+            need([p["budget"] for p in curve] == BUDGETS, "all declared acquisition budgets retained")
+            selection = read(BANK / f"{arm}_s{seed}_selection.json")
+            chosen = selection["selected_candidates"]
+            chosen_ids = [c["id"] for c in chosen]
+            need(
+                selection["selection_complete"] is True
+                and selection["planned_budgets"] == BUDGETS
+                and selection["budget"] == 512
+                and selection["source_identity"] == source_id
+                and [c["id"] for c in selection["seed_candidates"]] == seed_ids
+                and all(candidates[c["id"]] == c for c in chosen + selection["seed_candidates"])
+                and len(chosen_ids) == len(set(chosen_ids)) == 512
+                and not set(chosen_ids) & set(seed_ids),
+                "complete original candidate selection and seed separation",
+            )
+            subset(
+                {"branch_steps": 51200, "horizon_steps": 100, "charged_steps": generation + 64000},
+                selection,
+                "largest-budget selection charge",
+            )
+            previous = 0
+            for point in curve:
+                budget = point["budget"]
+                selected = chosen_ids[:budget]
+                need(point["selected_ids"] == selected, "checkpoint selections are cumulative frozen prefixes")
+                costs = {
+                    "root_generation_steps": generation,
+                    "common_seed_steps": 12800,
+                    "acquired_steps": budget * 100,
+                    "charged_steps": generation + (128 + budget) * 100,
+                    "optimizer_steps": cfg["steps"],
+                    "model_candidate_queries": 0 if arm == "random" else 640 if budget == 128 else 1152,
+                }
+                subset(costs, point, "charged simulator/model/training budgets")
+                need(
+                    finite(point["training_time_s"]) and point["training_time_s"] >= 0, "recorded finite training time"
+                )
+                executed_round(BANK / f"{arm}_s{seed}_b{budget}", selected[previous:], candidates, acq_roots)
+                checkpoint = RUN / f"{arm}-s{seed}-b{budget}"
+                sel = read(checkpoint / "selection.json")
+                pm = read(checkpoint / "manifest.json")
+                check_checkpoint_provenance(pm, seed, manifests[0]["upstream_revisions"])
+                need(
+                    sel["selected_ids"] == selected
+                    and sel["seed_ids"] == sorted(seed_ids)
+                    and (ROOT / sel["candidate_file"]).resolve() == pool_path
+                    and sel["candidate_sha256"] == digest(pool_path),
+                    "checkpoint-to-candidate identity",
+                )
+                subset(costs, pm["costs"], "checkpoint manifest cost identity")
+                pcfg = yaml.safe_load((checkpoint / "config.yaml").read_text())
+                check_adaptation_config(pcfg["adaptation"], report["adaptation_recipe"], seed)
+                need(
+                    {k: v for k, v in pcfg.items() if k != "adaptation"} == cfg,
+                    "checkpoint exact saved training configuration",
+                )
+                need(
+                    digest(checkpoint / "scalers.npz") == digest(MODEL / "scalers.npz"),
+                    "unchanged adapted-checkpoint action scalers",
+                )
+                need(
+                    pm["data"]["model_sha256"] == s3["model_sha256"]
+                    and pm["data"]["probe_sha256"] == s3["probe_files_sha256"]["walker_mlp.pt"]
+                    and pm["data"]["source"] == source_id
+                    and pm["data"]["gate_sha256"] == digest(PROBES / "gate.json")
+                    and pm["data"]["weights_sha256"] == digest(checkpoint / "weights.pt"),
+                    "adapted model/probe/source/gate/weights identity",
+                )
+                p = checkpoint / "evaluation_rows.json"
+                ref = point["evaluation_rows"]
+                need(
+                    ref["file"] == str(p.relative_to(RUN)) and ref["sha256"] == digest(p),
+                    "adapted row export hash identity",
+                )
+                rows = read(p)
+                need(set(rows) == set(baseline), "adapted exports retain all banks")
+                evaluation(point["eval"], rows, baseline, rules, base_margins)
+                need(same(pm["metrics"], point["eval"]), "checkpoint metric export equality")
+                decomposed = read(checkpoint / "decomposition.json")
+                for name, items in rows.items():
+                    merged = [
+                        {
+                            **r,
+                            **{
+                                k: v
+                                for k, v in b.items()
+                                if k.startswith(("cmin_real_readout_", "cmin_by_block_real_readout_"))
+                            },
+                        }
+                        for r, b in zip(items, baseline[name], strict=True)
+                    ]
+                    for rule in rules:
+                        decomposition(decomposed[rule][name], merged, rule)
+                receipt = read(checkpoint / "hf_upload.json")
+                need(
+                    receipt["repo_type"] == "model"
+                    and receipt["repo_id"] == reference(MODEL)["repo_id"]
+                    and receipt["run_id"] == pm["run_id"] == f"{RUN_ID}-{arm}-s{seed}-b{budget}"
+                    and receipt["path"] == "adapted/" + receipt["run_id"]
+                    and receipt["revision"] == point["hf_revision"]
+                    and bool(re.fullmatch("[0-9a-f]{40}", receipt["revision"])),
+                    "pinned adapted-model runtime upload receipt",
+                )
+                receipts.append(receipt)
+                saved_rows[arm, seed, budget] = rows
+                points[arm, seed, budget] = point
+                previous = budget
+    need(len(receipts) == 12, "all twelve adapted-model receipts present")
+    paired = report["boundary_vs_random"]
+    subset(
+        {"contrast": "boundary minus random", "cluster_unit": "source_episode", "confidence_level": 0.95},
+        paired,
+        "declared paired contrast semantics",
+    )
+    need(set(paired["by_budget"]) == {"128", "512"}, "paired summary has every budget")
+    for budget in BUDGETS:
+        need(set(paired["by_budget"][str(budget)]["by_seed"]) == {"0", "1", "2"}, "paired summary has every seed")
+        for seed in SEEDS:
+            item = paired["by_budget"][str(budget)]["by_seed"][str(seed)]
+            need(
+                item["charged_steps"]
+                == points["random", seed, budget]["charged_steps"]
+                == points["boundary", seed, budget]["charged_steps"],
+                "paired comparison exactly charged",
+            )
+            for arm in ARMS:
+                need(
+                    item["evaluation_rows_sha256"][arm] == points[arm, seed, budget]["evaluation_rows"]["sha256"],
+                    "paired summary row hash identity",
+                )
+            for name in ("test", "stress"):
+                for rule in rules:
+                    paired_summary(
+                        item[name][rule],
+                        saved_rows["random", seed, budget][name],
+                        saved_rows["boundary", seed, budget][name],
+                        rule,
+                        points["random", seed, budget]["eval"]["dev"][rule]["margin"],
+                        points["boundary", seed, budget]["eval"]["dev"][rule]["margin"],
+                    )
+    need(report["evaluation_steps"] == (24 + 64 + 64) * 8 * 100, "separate complete evaluation charge")
+    return baseline["dev"], receipts
+
+
+def main():
+    global DEADLINE
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, required=True, help="Fresh JSON directly under /tmp")
+    parser.add_argument("--max-seconds", type=int, default=900)
+    args = parser.parse_args()
+    need(0 < args.max_seconds <= 1800, "finite bounded checker duration")
+    DEADLINE = time.monotonic() + args.max_seconds
+    output = args.output.resolve()
+    need(output.parent == Path("/tmp") and not output.exists(), "fresh /tmp audit output only")
+    need(digest(CONFIG) == CONFIG_SHA, "frozen recovery workflow configuration")
+    state = read(STATE)
+    check_workflow_identity(state)
+    # Refuse pending/live S4 before opening any scientific outputs.
+    stage = terminal(state, "prospective_acquisition", (RUN, RESULTS, BANK))
+    need(state["workflow_id"] == "walker2d-recovery-20260927-1", "exact recovery workflow identity")
+    terminal(state, "lewm_a_full", (MODEL,))
+    s3_stage = terminal(state, "physical_probe_gate", (PROBES,))
+    need(
+        read(MODEL / "train_state.json")["step"] == read(MODEL / "upload_receipt.json")["step"] == 214780,
+        "fully trained frozen model checkpoint",
+    )
+    need(
+        s3_stage["status"] == "completed"
+        and s3_stage["gate"]["passes"] is True
+        and s3_stage["gate"]["path"] == str(PROBES / "gate.json")
+        and s3_stage["gate"]["key"] == "gate.go"
+        and s3_stage["gate"]["sha256"] == digest(PROBES / "gate.json"),
+        "exact terminal passing S3 gate identity",
+    )
+    cfg = yaml.safe_load((RUN / "config.yaml").read_text())
+    need(cfg == yaml.safe_load((BANK / "config.yaml").read_text()), "mirrored S4 configuration")
+    need(
+        cfg["run_id"] == RUN_ID
+        and (ROOT / cfg["model"]).resolve() == MODEL
+        and (ROOT / cfg["probes"]).resolve() == PROBES
+        and (ROOT / cfg["data_dir"]).resolve() == DATA
+        and cfg["budgets"] == BUDGETS
+        and cfg["seeds"] == SEEDS
+        and cfg["tapes"] == 8
+        and cfg["seed_branches"] == 128
+        and cfg["steps"] == 1500
+        and cfg["dev_roots"] == 24
+        and cfg["test_roots"] == 64
+        and cfg["acq_roots"] == 96
+        and not cfg["no_upload"],
+        "exact planned S4 input identities and budget configuration",
+    )
+    s3 = read(PROBES / "gate.json")
+    split = read(DATA / "splits.json")
+    need(s3["gate"]["go"] is True and s3["role"] == "development", "passing frozen development S3 prerequisite")
+    for name, expected in s3["model_files_sha256"].items():
+        need(digest(MODEL / name) == expected, "S3 model/scaler identity")
+    need(
+        digest(MODEL / "weights.pt") == s3["model_sha256"]
+        and digest(PROBES / "walker_mlp.pt") == s3["probe_files_sha256"]["walker_mlp.pt"]
+        and digest(DATA / "splits.json") == s3["splits_sha256"],
+        "frozen model probe and source split identity",
+    )
+    source_id = s3["source_identity"]
+    roots_file = DATA / "roots.h5"
+    need(
+        source_id == {"path": str(roots_file), "sha256": digest(roots_file), "size": roots_file.stat().st_size},
+        "exact source roots file identity",
+    )
+    dm = read(DATA / "manifest.json")
+    data_provenance_hashes = {name: digest(DATA / name) for name in ("manifest.json", "splits.json")}
+    for name, value in dm["data"]["sha256"].items():
+        need(digest(DATA / name) == value, "original data content fingerprint")
+    need(split == dm["data"]["splits"] and split["protocol_version"] == 2, "original full source split identity")
+    groups = split["roots"]
+    all_ids = [e for ids in groups.values() for e in ids]
+    need(
+        len(all_ids) == len(set(all_ids)) and set(all_ids) == set(range(max(all_ids) + 1)),
+        "disjoint complete source role reservation",
+    )
+    need(
+        all(e % 4 == 0 for e in groups["development"])
+        and all(e % 4 == 1 for e in groups["test"])
+        and all(e % 4 in (2, 3) for e in groups["acquisition"]),
+        "fixed source episode roles",
+    )
+    manifests = [read(p / "manifest.json") for p in (RUN, RESULTS, BANK)]
+    need(all(same(m, manifests[0]) for m in manifests), "identical S4 manifest mirrors")
+    expected_upstream = {"model": reference(MODEL), "probes": reference(PROBES), "data": reference(DATA)}
+    need(manifests[0]["upstream_revisions"] == expected_upstream, "pinned upstream receipt identities")
+    subset(
+        {"source": source_id, "model_sha256": s3["model_sha256"], "gate_sha256": digest(PROBES / "gate.json")},
+        manifests[0]["data"],
+        "S4 manifest frozen source and instruments",
+    )
+    report = read(RESULTS / "study.json")
+    run_report = read(RUN / "study.json")
+
+    def strip_receipt(r):
+        return {k: v for k, v in r.items() if k != "bank_hf_revision"}
+
+    need(
+        same(strip_receipt(report), run_report)
+        and report["run_id"] == RUN_ID
+        and report["source_identity"] == source_id,
+        "run/results report identity",
+    )
+    need(
+        report["saved_evaluation_rows"] == manifests[0]["data"]["saved_evaluation_rows"],
+        "row hashes bound in report and manifests",
+    )
+    rules = s3["gate"]["active_rules"]
+    need("health" in rules and set(rules) <= {"health", "speed"}, "health-required rule set")
+    gate = read(RUN / "decomposition_gate.json")
+    need(
+        digest(RUN / "decomposition_gate.json")
+        == digest(RESULTS / "decomposition_gate.json")
+        == stage["gate"]["sha256"]
+        and stage["gate"]["path"] == str(RUN / "decomposition_gate.json")
+        and stage["gate"]["key"] == "go"
+        and stage["gate"]["passes"] is gate["go"],
+        "exact terminal development gate identity",
+    )
+    if report["status"] == "diagnostic_stop":
+        need(
+            stage["status"] == "gate_stopped"
+            and gate["go"] is False
+            and report["gate"] == gate
+            and report["final_test_evaluated"] is False
+            and "adaptation" not in report,
+            "diagnostic stop makes no completed acquisition or final-test claim",
+        )
+        need(
+            set(report["saved_evaluation_rows"]) == {"development"}
+            and not (RUN / "baseline_decomposition_rows.json").exists()
+            and not (RUN / "no_update_evaluation_rows.json").exists()
+            and not list(RUN.glob("random-s*-b*"))
+            and not list(RUN.glob("boundary-s*-b*")),
+            "diagnostic stop exports development only",
+        )
+        dev = checked_export(report["saved_evaluation_rows"]["development"], "development_rows.json")
+        bank_rows("dev", dev, cfg, rules, source_id, split)
+        need(
+            manifests[0]["costs"]["generated_evaluation_steps"] == 121600,
+            "diagnostic preserves generated evaluation cost",
+        )
+        bank_report = read(BANK / "diagnostic.json")
+        receipts = []
+    else:
+        need(
+            report["status"] == "complete"
+            and stage["status"] == "completed"
+            and gate["go"] is True
+            and report["development_gate"] == gate
+            and report["active_rules"] == rules
+            and report["repair_rules"] == gate["repair_rules"],
+            "completed acquisition branch and rule identity",
+        )
+        dev, receipts = check_complete(report, cfg, manifests, rules, source_id, split, s3)
+        bank_report = read(BANK / "study.json")
+    need(same(strip_receipt(report), bank_report), "bank mirrors pre-upload scientific report")
+    bank_receipt = read(BANK / "hf_upload.json")
+    need(
+        bank_receipt["repo_type"] == "dataset"
+        and bank_receipt["repo_id"] == reference(DATA)["repo_id"]
+        and bank_receipt["run_id"] == RUN_ID
+        and bank_receipt["path"] == "banks/" + RUN_ID
+        and bank_receipt["revision"] == report["bank_hf_revision"]
+        and bool(re.fullmatch("[0-9a-f]{40}", bank_receipt["revision"])),
+        "pinned bank runtime upload receipt",
+    )
+    thresholds = {
+        "min_unsafe": cfg["min_dev_unsafe"],
+        "min_false_safe": cfg["min_dev_false_safe"],
+        "min_imagination": cfg["min_dev_imagination"],
+        "min_share": cfg["min_imagination_share"],
+    }
+    need(
+        thresholds == {"min_unsafe": 10, "min_false_safe": 5, "min_imagination": 3, "min_share": 0.25},
+        "unchanged preregistered development gate thresholds",
+    )
+    need(same(gate_from_rows(dev, rules, thresholds), gate), "independently recounted development attribution gate")
+    # Workflow may advance elsewhere; these exact terminal stage records and outputs must not.
+    after = read(STATE)
+    check_workflow_identity(after)
+    for sid, paths in [
+        ("prospective_acquisition", (RUN, RESULTS, BANK)),
+        ("lewm_a_full", (MODEL,)),
+        ("physical_probe_gate", (PROBES,)),
+    ]:
+        need(after["stages"][sid] == state["stages"][sid], "terminal stage record unchanged during audit")
+        terminal(after, sid, paths)
+    need(digest(CONFIG) == CONFIG_SHA, "workflow configuration unchanged after audit")
+    for name, value in {**data_provenance_hashes, **dm["data"]["sha256"]}.items():
+        need(digest(DATA / name) == value, "original source data and split stable through audit")
+    summary = {
+        "status": "passed",
+        "run_id": RUN_ID,
+        "study_status": report["status"],
+        "observed_utc": datetime.now(timezone.utc).isoformat(),
+        "checker_sha256": digest(Path(__file__)),
+        "workflow_config_sha256": CONFIG_SHA,
+        "workflow_stage": "prospective_acquisition",
+        "source_output_hashes": stage["output_hashes"],
+        "gate": gate,
+        "verified_model_receipts": receipts,
+        "checks": dict(CHECKS),
+        "model_calls": 0,
+        "simulator_steps": 0,
+        "network_calls": 0,
+        "limitations": [
+            "No trajectory HDF5 arrays, simulator rollouts, probe predictions or model tensors were loaded. Saved numerical truths/predictions are accepted as evidence; raw file hashes only bind their payloads.",
+            "Source-generation and attempted-step ledgers are cross-checked arithmetically, not independently re-executed or counted from HDF5.",
+            "Bootstrap intervals and AUC/clearance-error quantiles are not regenerated. Paired summaries are checked for exact row/truth/censor identity, point/denominators, usable replicate counts, interval sign and undefined semantics.",
+            "Development-calibrated margins are applied exactly as saved across banks; threshold selection is not repeated.",
+            "All 12 adapted model receipts are required only for completed acquisition. Receipts pin the recorded runtime destination, but no remote privacy/content/durability verification is made without network access.",
+            "A diagnostic stop can have generated sealed final banks and charged their simulator steps; it is not completed acquisition or final-test evaluation.",
+        ],
+    }
+    with output.open("x") as f:
+        json.dump(summary, f, indent=2, allow_nan=False)
+        f.write("\n")
+    print(
+        json.dumps(
+            {
+                "status": "passed",
+                "study_status": report["status"],
+                "artifact": str(output),
+                "sha256": digest(output),
+                "adapted_receipts": len(receipts),
+            }
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()

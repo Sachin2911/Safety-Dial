@@ -1,0 +1,34 @@
+from pathlib import Path
+import argparse
+import hashlib
+import json
+import subprocess
+
+parser = argparse.ArgumentParser(description='Record one independently verified Walker upload and commit only its audit/status.')
+parser.add_argument('--step', type=int, required=True)
+parser.add_argument('--sha256', required=True)
+args = parser.parse_args()
+root = Path('/workspace/Safety-Dial')
+assert Path.cwd() == root
+assert not subprocess.check_output(['git', 'diff', '--cached', '--name-only'], text=True).strip()
+status_path = Path('docs/mainPlan/results/continuation-v2/continuation_status.json')
+audit_path = status_path.parent / f'walker_checkpoint_{args.step}_upload.json'
+assert hashlib.sha256(audit_path.read_bytes()).hexdigest() == args.sha256
+audit = json.loads(audit_path.read_text())
+assert audit['status'] == 'passed' and audit['step'] == args.step
+assert all(value is True for value in audit['checks'].values())
+status = json.loads(status_path.read_text())
+assert status['walker']['latest_verified_checkpoint']['step'] == 172000
+assert audit['run_dir'] == status['walker']['full_run'] == 'runs/walker2d-lewm-a-recovery-20260927-1'
+assert audit['resume_origin']['step'] == 172000
+assert audit['resume_origin']['revision'] == status['walker']['latest_verified_checkpoint']['revision']
+assert status['walker']['latest_uploaded_checkpoint']['step'] < args.step
+keys = [key for key in status['walker']['latest_uploaded_checkpoint'] if key != 'report']
+status['walker']['latest_uploaded_checkpoint'] = {key: audit[key] for key in keys}
+status['walker']['latest_uploaded_checkpoint']['report'] = str(audit_path)
+status_path.write_text(json.dumps(status, indent=2) + '\n')
+paths = [str(status_path), str(audit_path)]
+subprocess.run(['git', 'add', '--', *paths], check=True)
+subprocess.run(['git', 'diff', '--cached', '--check'], check=True)
+assert set(subprocess.check_output(['git', 'diff', '--cached', '--name-only'], text=True).splitlines()) == set(paths)
+subprocess.run(['git', 'commit', '-m', f'Verify Walker {args.step} recovery checkpoint upload'], check=True)

@@ -1,0 +1,249 @@
+#!/usr/bin/env python3
+"""Summarize finalized Walker S2 recovery using saved evidence only.
+
+Run only after workflow stage lewm_a_full is completed. Requires a fresh output
+folder beside the finalized S2 report. No model, simulator or network imports.
+
+Example (root runs this later, after the completion barrier):
+  uv run python /tmp/walker_recovery_training_summary.py \
+    --report docs/mainPlan/results/s2/walker2d-lewm-a-recovery-20260927-1.json \
+    --run-dir runs/walker2d-lewm-a-recovery-20260927-1 \
+    --workflow-state runs/workflows/walker2d-recovery-20260927-1/state.json \
+    --original-last-logged-step 174400 \
+    --output-dir docs/mainPlan/results/s2/walker2d-lewm-a-recovery-20260927-1-summary
+"""
+from __future__ import annotations
+
+import argparse
+from datetime import datetime, timezone
+import hashlib
+import json
+import math
+from pathlib import Path
+
+TOTAL_STEPS = 214780
+RESUME_STEP = 172000
+HISTORY_INTERVAL = 20
+
+
+def digest(path):
+    path = Path(path)
+    if path.is_symlink() or not path.is_file():
+        raise ValueError(f"Expected a regular input file: {path}")
+    before = path.stat()
+    h = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            h.update(chunk)
+    after = path.stat()
+    if (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns):
+        raise ValueError(f"Input changed while hashing: {path}")
+    return h.hexdigest()
+
+
+def tree_identity(path):
+    path = Path(path)
+    paths = sorted(path.rglob("*"))
+    if any(p.is_symlink() for p in paths):
+        raise ValueError("Completed input directory contains a symlink")
+    files = {str(p.relative_to(path)): digest(p) for p in paths if p.is_file()}
+    if paths != sorted(path.rglob("*")):
+        raise ValueError("Completed input directory changed while hashing")
+    return {"kind": "directory", "sha256": hashlib.sha256(
+        json.dumps(files, sort_keys=True).encode()).hexdigest(), "n_files": len(files)}, files
+
+
+def finite(value, label):
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+        raise ValueError(f"{label} must be a finite saved number")
+    return value
+
+
+def prepare(report_path, run_dir, workflow_path, original_last_logged_step, stage_id):
+    import yaml
+
+    report_path, run_dir, workflow_path = map(Path, (report_path, run_dir, workflow_path))
+    # This immutable-at-read snapshot may belong to a workflow already advancing S3.
+    workflow_bytes = workflow_path.read_bytes()
+    workflow = json.loads(workflow_bytes)
+    stage = workflow.get("stages", {}).get(stage_id, {})
+    if stage.get("status") != "completed":
+        raise ValueError(f"Finalized S2 barrier not satisfied: {stage_id} is not completed")
+    recorded = stage.get("output_hashes", {})
+    run_hash, run_files = tree_identity(run_dir)
+    report_hash = digest(report_path)
+    for path, actual in ((run_dir, run_hash), (report_path, {"kind": "file", "sha256": report_hash})):
+        if recorded.get(str(path.resolve())) != actual:
+            raise ValueError(f"Completed workflow output hash mismatch: {path}")
+    report = json.loads(report_path.read_text())
+    config = yaml.safe_load((run_dir / "config.yaml").read_text())
+    model_config = json.loads((run_dir / "config.json").read_text())
+    manifest = json.loads((run_dir / "manifest.json").read_text())
+    train = json.loads((run_dir / "train_state.json").read_text())
+    splits = json.loads((run_dir / "splits.json").read_text())
+    receipt = json.loads((run_dir / "upload_receipt.json").read_text())
+    if not all(value == TOTAL_STEPS for value in
+               (report["steps"], config["total_steps"], train["step"],
+                manifest["metrics"]["step"], receipt["step"])):
+        raise ValueError("Require the complete 214780-step finalized training result")
+    if not (report["run_id"] == manifest["run_id"] == run_dir.name == config["run_id"]):
+        raise ValueError("Final run identities disagree")
+    if report["checkpoint"] != receipt or not receipt.get("revision"):
+        raise ValueError("Final report lacks its matching pinned upload receipt")
+    if not (report["episode_splits"] == config["episode_splits"] == splits):
+        raise ValueError("Saved split evidence disagrees")
+    if config["model"] != model_config:
+        raise ValueError("Saved architecture configurations disagree")
+    upstream = manifest["upstream_revisions"]
+    if upstream.get("resume_step") != RESUME_STEP or not upstream.get("resume_sha256"):
+        raise ValueError("Expected pinned recovery lineage from step 172000")
+    if original_last_logged_step != RESUME_STEP + 2400:
+        raise ValueError("This summary requires the documented 2400 repeated logged updates")
+    history = report["history"]
+    if [row["step"] for row in history] != list(range(HISTORY_INTERVAL, TOTAL_STEPS + 1,
+                                                     HISTORY_INTERVAL)):
+        raise ValueError("Require all 10739 saved history records in exact global-step order")
+    for row in history:
+        for key in ("pred_loss", "sigreg_loss", "lr"):
+            if finite(row[key], key) < 0:
+                raise ValueError(f"Negative saved {key}")
+    validation = finite(train["val_pred_loss"], "final validation prediction loss")
+    if validation != manifest["metrics"]["val_pred_loss"]:
+        raise ValueError("Final validation metadata disagrees")
+    wall_clock = finite(report["wall_clock_s"], "recovered invocation wall_clock_s")
+    if wall_clock < 0 or report["n_params"] <= 0:
+        raise ValueError("Invalid saved elapsed time or parameter count")
+    if config["epochs"] != 10 or report["steps_per_epoch"] * config["epochs"] != TOTAL_STEPS:
+        raise ValueError("Saved 10-epoch horizon disagrees with the optimizer total")
+    recipe_keys = ("epochs", "batch", "lr", "wd", "warmup", "workers", "clip_stride",
+                   "seed", "push_every", "max_steps", "smoke")
+    summary = {
+        "run_id": report["run_id"], "optimizer_steps": TOTAL_STEPS,
+        "history_records": len(history), "history_interval_updates": HISTORY_INTERVAL,
+        "resume_step": RESUME_STEP, "recovered_segment_updates": TOTAL_STEPS - RESUME_STEP,
+        "original_last_logged_step": original_last_logged_step,
+        "repeated_logged_updates": original_last_logged_step - RESUME_STEP,
+        "rollback_evidence_scope": "Original last logged step supplied explicitly by the caller "
+            "from the prior recovery audit; no unlogged tail is inferred.",
+        "final_saved_validation_prediction_loss": validation,
+        "recovered_invocation_wall_clock_s": wall_clock,
+        "timing_scope": "wall_clock_s covers the recovered invocation only, including its setup "
+            "and checkpoint publication. It excludes elapsed time spent in the original run. "
+            "No inter-run it_per_s values are summed or converted into a total throughput.",
+        "n_clips": report["n_clips"], "n_params": report["n_params"],
+        "steps_per_epoch": report["steps_per_epoch"],
+        "recipe": {key: config[key] for key in recipe_keys},
+        "model_config": model_config,
+        "data": manifest["data"],
+        "split_counts": {key: len(value) for key, value in splits.items() if isinstance(value, list)},
+        "split_sha256": run_files["splits.json"],
+        "upstream_revisions": upstream, "checkpoint": receipt,
+        "render_validation": report.get("render_validation"),
+        "input_identity": {"report": {"path": str(report_path.resolve()), "sha256": report_hash},
+            "run_directory": {"path": str(run_dir.resolve()), **run_hash, "files_sha256": run_files},
+            "workflow_state_snapshot": {"path": str(workflow_path.resolve()),
+                "sha256": hashlib.sha256(workflow_bytes).hexdigest(),
+                "stage_id": stage_id, "stage_status": stage["status"],
+                "note": "Hash identifies bytes read for the completed-stage barrier; "
+                    "the workflow may later advance without changing these completed S2 outputs."}},
+    }
+    return summary, history
+
+
+def render(summary, history, output):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    steps = [row["step"] for row in history]
+    fig, axes = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
+    for ax, key, label in zip(axes, ("pred_loss", "sigreg_loss", "lr"),
+                              ("Prediction loss", "SIGReg loss", "Learning rate"), strict=True):
+        values = [row[key] for row in history]
+        ax.plot(steps, values, linewidth=0.6, color="#0072B2", label="Saved training history")
+        ax.axvline(RESUME_STEP, color="#D55E00", linestyle="--", linewidth=1.3,
+                   label="Resume from step 172000")
+        ax.set_ylabel(label)
+        if key != "lr" and min(values) > 0:
+            ax.set_yscale("log")
+            ax.set_ylabel(label + " (log scale)")
+        ax.grid(alpha=0.2)
+    axes[0].legend(loc="upper right", fontsize=8)
+    axes[-1].set_xlabel("Global optimizer step (full 214780-step horizon)")
+    axes[-1].set_xlim(0, TOTAL_STEPS)
+    axes[-1].ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
+    fig.suptitle("Walker2d LeWM-A: saved training losses and schedule", fontsize=14)
+    fig.text(0.5, 0.025, "10739 saved records, every 20 updates. "
+             "Dashed line marks recovery; no validation time series is inferred.",
+             ha="center", fontsize=9)
+    fig.tight_layout(rect=(0, 0.05, 1, 0.96))
+    fig.savefig(output / "learning_curves.png", dpi=150)
+    plt.close(fig)
+
+    recipe = summary["recipe"]
+    data = summary["data"]
+    text = [f"# {summary['run_id']}: finalized training summary", "",
+        "The saved model reached **214,780 optimizer updates across 10 epochs**. "
+        "The full history contains 10,739 records at 20-update intervals. "
+        "This document covers training evidence only; S3/S4 outcomes are outside its scope.", "",
+        "![Saved losses and learning-rate schedule](learning_curves.png)", "",
+        "Recovery restored the atomic bundle at **step 172,000**, then executed 42,780 updates "
+        "to the same 214,780-step horizon. The original worker had logged through 174,400, "
+        "so **2,400 already logged updates were repeated after rollback**. This duplicate "
+        "compute is separate from the final optimizer-step index; no unlogged tail is inferred.", "",
+        f"Final saved validation prediction loss: **{summary['final_saved_validation_prediction_loss']:.8g}** "
+        "at step 214,780. This is the saved scalar from train_state.json and the final manifest, "
+        "not an invented validation curve.", "",
+        f"Saved wall_clock_s: **{summary['recovered_invocation_wall_clock_s']:.3f}s**, "
+        "for the recovered invocation only. It includes that invocation's setup and checkpoint "
+        "publication and excludes the original run's elapsed time. A whole-run duration or "
+        "throughput cannot be obtained by summing inter-run it_per_s values; none is reported.", "",
+        "| Saved configuration/provenance | Value |", "|---|---|",
+        f"| Parameters | {summary['n_params']:,} |", f"| Dataset clips | {summary['n_clips']:,} |",
+        f"| Dataset | `{data['path']}` |", f"| Dataset SHA256 | `{data['sha256']}` |",
+        f"| Split counts | `{json.dumps(summary['split_counts'], sort_keys=True)}` |",
+        f"| Splits SHA256 | `{summary['split_sha256']}` |",
+        f"| Recipe | `{json.dumps(recipe, sort_keys=True)}` |",
+        f"| Final checkpoint revision | `{summary['checkpoint']['revision']}` |",
+        f"| Resume bundle SHA256 | `{summary['upstream_revisions']['resume_sha256']}` |", "",
+        "The fully saved model configuration, render validation, source/data provenance and "
+        "input hashes are retained in summary.json. The workflow's completed-stage hashes "
+        "were verified before reporting. Every curve point comes from the saved history; "
+        "no model, simulator, optimizer or network work was performed.", ""]
+    (output / "README.md").write_text("\n".join(text))
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--report", type=Path, required=True)
+    parser.add_argument("--run-dir", type=Path, required=True)
+    parser.add_argument("--workflow-state", type=Path, required=True)
+    parser.add_argument("--stage-id", default="lewm_a_full")
+    parser.add_argument("--original-last-logged-step", type=int, required=True)
+    parser.add_argument("--output-dir", type=Path, required=True)
+    args = parser.parse_args(argv)
+    report, run_dir, output = args.report.resolve(), args.run_dir.resolve(), args.output_dir.resolve()
+    if output.exists() or output.parent != report.parent or run_dir in output.parents:
+        raise ValueError("Require a fresh sibling folder beside the finalized S2 report")
+    summary, history = prepare(report, run_dir, args.workflow_state.resolve(),
+                               args.original_last_logged_step, args.stage_id)
+    output.mkdir(exist_ok=False)
+    render(summary, history, output)
+    (output / "summary.json").write_text(json.dumps(summary, indent=2, allow_nan=False) + "\n")
+    if (digest(report) != summary["input_identity"]["report"]["sha256"]
+            or tree_identity(run_dir)[0] != {key: summary["input_identity"]["run_directory"][key]
+                                             for key in ("kind", "sha256", "n_files")}):
+        raise ValueError("Finalized S2 inputs changed during reporting")
+    manifest = {"kind": "saved-walker-recovery-training-summary-v1",
+        "created_utc": datetime.now(timezone.utc).isoformat(), "run_id": summary["run_id"],
+        "generator": {"path": str(Path(__file__).resolve()), "sha256": digest(__file__)},
+        "inputs": summary["input_identity"],
+        "outputs_sha256": {p.name: digest(p) for p in sorted(output.iterdir())},
+        "additional_work": {"model_queries": 0, "simulator_steps": 0, "optimizer_updates": 0}}
+    (output / "manifest.json").write_text(json.dumps(manifest, indent=2, allow_nan=False) + "\n")
+    print(json.dumps({"output": str(output), "history_records": len(history),
+                      "manifest_sha256": digest(output / "manifest.json")}))
+
+
+if __name__ == "__main__":
+    main()
