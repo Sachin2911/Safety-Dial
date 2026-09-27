@@ -1,7 +1,11 @@
 # Push-T stress-bank recovery with fixed completed roots
 
-Status: stress-only recovery completed and uploaded after 372 passing tests. The development diagnosis passed; the managed workflow is now running repairability and goal retention. The completed v3 development
-and representative test banks are retained byte for byte. Main-study outcomes are pending.
+Status: the development diagnosis passed, but the completed E2 repair and retention
+gate did not pass on 27 September. Both the managed Push-T workflow and the waiting
+oracle stopped at that gate. Acquisition, transfer and conditional closed-loop work
+were not launched. Walker LeWM training continues in the separate
+[Walker continuation](../continuation-v2/README.md). The completed v3 development
+and representative test banks remain byte-identical.
 
 The [v3 test audit](../continuation-v3/test_bank_completion_audit.json) verifies 128 roots
 from 128 reserved source episodes, 64 per family, and 2,048 distinct stored tapes. The
@@ -44,22 +48,22 @@ It made no simulator queries or remote uploads; production execution remains sep
 
 [Prelaunch validation](recovery_validation.json) passed all 372 repository tests and
 Ruff, both workflow dry runs, the pure proposal tests and independent implementation
-and provenance review. Scientific outcomes remain pending.
+and provenance review. This validation establishes implementation readiness, not scientific success.
 
 The [managed launch record](continuation_status.json) records the active workflow and
-waiting oracle. The original failed stress data was privately archived before new
+oracle state. The original failed stress data was privately archived before new
 replay. Both completed final banks and the relocated witness are now privately uploaded.
 The recovered stress bank contains 128 roots and 2,048 branches, with 101,373 new
 simulator steps. Accounted v3/v4 bank construction and development-witness cost is
-574,008 steps, including the failed stress run. Scientific outcomes remain pending.
+574,008 steps, including the failed stress run. This scope excludes E1 evaluation and E2 repair costs.
 
 The [completed-bank audit](recovery_completion_audit.json) independently verifies every
 frozen control, exact root/layout identity, charged step and all four new private
 uploads. The development diagnosis attributes 21 of 28 known, uncensored attributable
 false-safe errors to imagined dynamics (75%), passing the predeclared development
 gate. One accepted development future remains unresolved; its false-safe rate is
-undefined, with reported bounds rather than an assumed safe label. Repairability
-and goal retention are running; successful repair is not yet established.
+undefined, with reported bounds rather than an assumed safe label. The later E2 gate
+did not establish qualified repair and goal retention.
 
 The [independent diagnosis audit](development_diagnosis_audit.json) reproduces the gate
 from the saved development rows and verifies input identities, 6,880 charged root-prefix
@@ -72,7 +76,7 @@ plotting policy passed 12 focused tests and Ruff.
 The [data-only results archive](decomposition_archive.json) is prepared locally, including
 both numerical NPZ files and the original and corrected figures. Its private upload
 requires explicit approval after automatic review rejected the transfer; no upload
-occurred. This optional archive is separate from the running scientific workflows.
+occurred. This optional archive is separate from the managed scientific workflows.
 
 The [E2 adaptation-bank audit](e2_adaptation_bank_audit.json) verifies 64 source-disjoint
 roots and 446 distinct guarded branches, of which 422 have complete usable training
@@ -81,8 +85,8 @@ horizons. All 446 traces remain stored and charged. The recorded collection cost
 reconstructed per attempt because no candidate journal was saved. The existing proposal
 allocation and arena rejection produce an approximate bank size, not exactly 512 branches.
 The [input durability audit](e2_input_durability_audit.json) verifies all 11 bank and clip
-payload files against pinned private remote metadata. Repair and goal-retention results
-remain pending.
+payload files against pinned private remote metadata. Completed repair and goal-retention
+evidence is summarized below.
 
 The [censoring and recipe-selection note](e2_gate_censoring_note.json) separates
 development eligibility, the deterministic fallback and the final held-out repair gate.
@@ -94,5 +98,40 @@ gates pass. It must not be described as a development-validated optimum. The [de
 ordered grid recipes were evaluated and all had undefined development false-safe rates,
 leaving zero eligible recipes. The existing first-record fallback selected predictor-side
 updates, teacher-forced loss, learning rate `2e-5` and 1,000 steps. The selected recipe
-and thresholds remain unchanged; final repair and goal retention are still pending. An undefined rate is inconclusive evidence, not proof that
-adaptation cannot repair the model.
+and thresholds remained unchanged. The final gate did not pass. An undefined point rate
+does not by itself prove that adaptation cannot improve the model.
+
+The [completed E2 evidence audit](e2_completion_audit.json) independently reproduces
+all saved final rows, paired truth and censor masks, margins, retention trajectories
+and gate arithmetic. At matched development-selected margins, the test evidence is:
+
+| Arm | Accepted rows | Known false-safe rows | Accepted unresolved futures | False-safe identification bounds |
+|---|---:|---:|---:|---:|
+| No update | 3,139 | 756 | 49 | 24.08% to 25.65% |
+| Adapted | 2,950 | 620 | 50 | 21.02% to 22.71% |
+| Readout correction | 2,905 | 795 | 34 | 27.37% to 28.54% |
+
+All three point rates remain undefined. These are bounds over unresolved labels in
+the saved sample, not sampling confidence intervals. A supplemental conservative
+bound places the relative reduction between 5.70% and 18.05%; even its upper bound
+is below the 25% target for these fixed accepted sets under any consistent completion
+of unresolved labels. This is not a population-effect estimate or evidence of no gain. The frozen gate requires a
+defined relative reduction of at least 25%, superiority to readout correction, clip
+retention within 15% and complete passing goal retention. It did not pass.
+
+Both goal-retention arms used the same 20 source-distinct cases and a 50-block maximum.
+All 40 case executions finished, but two baseline and four adapted trajectories
+terminated early without verified 95% whole-T goal coverage. Thus the retention
+comparison is incomplete under the existing criterion. Clip prediction MSE improved
+from 0.008682 to 0.006402 and passed its separate retention threshold; it does not
+substitute for the missing goal-retention qualification.
+
+E2 charged 58,475 simulator steps: 38,827 collection, 3,140 adaptation/readout
+contexts, 6,880 evaluation contexts and 9,628 goal-retention steps. The independent
+audit reconciles these components without rerunning models or simulations.
+
+The [model durability audit](e2_model_durability_audit.json) matches all seven uploaded
+payload files to private revision `cd896c7bcbb2377140fcda988fe2ef59673b1454`. That
+upload includes the model and retention evidence; it does not include `repair.json`,
+the saved evaluation rows or paired reporting figures. Completed output directories
+remain unchanged, and the downstream gates were neither relaxed nor retried.

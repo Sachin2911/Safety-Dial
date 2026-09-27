@@ -1,0 +1,427 @@
+{
+  "status": "evidence_verified",
+  "observed_utc": "2026-09-27T01:37:54.062746+00:00",
+  "scientific_gate": {
+    "test_fsa_no_update": null,
+    "test_fsa_adapted": null,
+    "test_fsa_readout_correction": null,
+    "relative_reduction": null,
+    "beats_readout_correction": false,
+    "retention_within_15pct": true,
+    "goal_retention_passes": false,
+    "retention_complete": false,
+    "passes": false
+  },
+  "gate_interpretation": {
+    "status": "qualification_not_established_with_undefined_matched_fsa",
+    "undefined_matched_fsa_endpoints": [
+      "no_update",
+      "adapted",
+      "readout_correction"
+    ],
+    "matched_test_evidence": {
+      "no_update": {
+        "fsa": null,
+        "fsa_lower": 0.24084103217585218,
+        "fsa_upper": 0.2564510990761389,
+        "n": 4096,
+        "n_accepted": 3139,
+        "n_false_safe": 756,
+        "n_censored": 50,
+        "n_accepted_censored": 49,
+        "acceptance_rate": 0.766357421875,
+        "point_status": "undefined_accepted_censored"
+      },
+      "adapted": {
+        "fsa": null,
+        "fsa_lower": 0.21016949152542372,
+        "fsa_upper": 0.2271186440677966,
+        "n": 4096,
+        "n_accepted": 2950,
+        "n_false_safe": 620,
+        "n_censored": 50,
+        "n_accepted_censored": 50,
+        "acceptance_rate": 0.72021484375,
+        "point_status": "undefined_accepted_censored"
+      },
+      "readout_correction": {
+        "fsa": null,
+        "fsa_lower": 0.2736660929432014,
+        "fsa_upper": 0.28537005163511187,
+        "n": 4096,
+        "n_accepted": 2905,
+        "n_false_safe": 795,
+        "n_censored": 50,
+        "n_accepted_censored": 34,
+        "acceptance_rate": 0.709228515625,
+        "point_status": "undefined_accepted_censored"
+      }
+    },
+    "relative_reduction_observed_below_threshold": false,
+    "readout_comparison_observed_not_better": false,
+    "note": "Undefined FSA does not establish an observed failure to improve. Saved censor bounds are identification bounds, not confidence intervals. Training loss is not qualification evidence; the frozen gate is unchanged."
+  },
+  "recipe_selection": {
+    "eligible_count": 0,
+    "grid_count": 16,
+    "fallback_used": true,
+    "selected_index": 0,
+    "matches_existing_frozen_selection_rule": true,
+    "additional_eligibility_gate_imposed": false,
+    "chosen_recipe": {
+      "modules": "predictor_side",
+      "loss": "teacher_forced",
+      "rollout_weight": 0.5,
+      "lr": 2e-05,
+      "weight_decay": 0.001,
+      "steps": 1000,
+      "batch_size": 64,
+      "replay_frac": 0.5,
+      "grad_clip": 1.0,
+      "seed": 20260928,
+      "ctx": 3
+    },
+    "defined_dev_fsa_candidates": 0,
+    "undefined_dev_fsa_candidates": 16
+  },
+  "bank_rows": {
+    "dev": {
+      "rows": 192,
+      "roots": 24,
+      "truth_and_censoring_recomputed_from_frozen_bank": true
+    },
+    "test": {
+      "rows": 4096,
+      "roots": 128,
+      "truth_and_censoring_recomputed_from_frozen_bank": true
+    },
+    "stress": {
+      "rows": 4096,
+      "roots": 128,
+      "truth_and_censoring_recomputed_from_frozen_bank": true
+    }
+  },
+  "retention_comparison": {
+    "complete": false,
+    "reasons": [
+      "Unresolved censored, invalid, timeout, arena-exit or unverified terminal outcomes cannot pass"
+    ],
+    "n_paired_cases": 20,
+    "n_blocks": 50,
+    "protocol": "paired-source-fixed-maximum-horizon-v2",
+    "criterion": "no detected paired degradation; not an equivalence guarantee",
+    "passes": false
+  },
+  "simulator_costs": {
+    "steps": {
+      "collection_root_generation": 16972,
+      "collection_proposals_rejected_by_arena": 0,
+      "collection_proposals_rejected_after_float32": 0,
+      "collection_branch": 21855,
+      "collection_discarded_nonfamiliar_source": 0,
+      "collection_discarded_invalid_root": 0,
+      "context_adapt_training_history": 1570,
+      "context_readout_correction_history": 1570,
+      "evaluation_dev_history": 600,
+      "evaluation_test_history": 3140,
+      "evaluation_stress_history": 3140,
+      "goal_no_update_goal_retention": 5073,
+      "goal_adapted_goal_retention": 4555
+    },
+    "branches": {
+      "collection_proposals_rejected_by_arena": 217,
+      "collection_branch": 446,
+      "collection_discarded_nonfamiliar_source": 275,
+      "collection_discarded_invalid_root": 5
+    },
+    "total_steps": 58475
+  },
+  "report_sha256": "7d537d7adf3712fd8721d530100c658b1fb9a0863ca042c2da50401ad92b2ec9",
+  "rows_sha256": "93f9fdb7a101e0456b712140e2c937cb99fdaa4df38646366b946fa1f15487d8",
+  "case_sha256": "232925805736e9d0f16ea0109f8fe43676d121be5b6367e5d8a7cd8e9ed41805",
+  "weights_sha256": "d71524ea4d47bfbb5d3d5015d42d353b960997f48fd1de47c92303923dad5216",
+  "receipt": {
+    "repo_id": "Sachioster/safetydial-pusht",
+    "repo_type": "model",
+    "path": "adapted/pusht-adapt-e2-continuation-20260926-4",
+    "revision": "cd896c7bcbb2377140fcda988fe2ef59673b1454",
+    "run_id": "pusht-adapt-e2-continuation-20260926-4"
+  },
+  "closed_h5_read_only_descriptors": [],
+  "completed_workflow_output_hashes_unchanged": true,
+  "limitations": [
+    "Per-recipe development rows are not exported. The frozen selector and fallback can be verified from saved grid summaries, but each candidate development score cannot independently be reconstructed from row evidence.",
+    "Saved model predictions, latent-retention errors and optimization logs are not independently regenerated; no model or tensor is loaded. The weights file is hashed, while its association with saved predictions relies on the recorded E2 execution path.",
+    "Individual rejected adaptation-root costs cannot be reconstructed because no E2 attempt journal was saved; aggregate metered cost remains bound to the earlier audit.",
+    "Runtime upload receipt is checked locally only; private remote bytes/metadata are not fetched by this checker.",
+    "A verified failed scientific gate is a valid audit result. No eligibility gate is added and no undefined FSA is converted to a defined estimate.",
+    "Retention bootstrap criterion is no detected paired degradation, not proof of equivalence."
+  ],
+  "checker": {
+    "path": "/tmp/check-pusht-e2-final-evidence.py",
+    "sha256": "da383dae845a82858ca607c99729a1359a68e99479d2ef94b3238f7108bfc376",
+    "prepared_before_final_evidence": true,
+    "executed_after_terminal_workflow_stage": true,
+    "assumption_fixes_during_execution": false,
+    "static_undefined_name_and_isolated_json_serializer_checks": "passed before execution",
+    "prepared_source_sha256": {
+      "experiments/scripts/pusht_e2_repair.py": "5371e7d4a75338e0c6304cf384a5e84269e66cc6ad9735b196dcc6d64d9ce15c",
+      "experiments/helpers/decomposition.py": "c386caaadc0d8b2f9c2adc4da7a74d9a4af4824180d3611945f8011e13ebbe27",
+      "experiments/helpers/dialMetrics.py": "80e77d25c7f3a05ebb83f1df46a9097c64893e4ea206bfd669469b0ff749a68b",
+      "experiments/helpers/pushtRetention.py": "3ff6764a0ad1457fba29baf6e8aea4a8e70a0b5121f6d1013187447b1ce573ff",
+      "experiments/helpers/pushtRepairReport.py": "cb910aab91f8a1e124b1705b33b29f6b4d362cd8f8ac44c0f11859e05a8c31cf",
+      "experiments/helpers/pushtGeometry.py": "ff72e9b9b3a37e86bd62a29d5b16d73e0791bb43ef716a2dda3e06600dce0863",
+      "experiments/helpers/pushtLayouts.py": "8530d07cb61476cd2da4194cc4c6c30d301aeed50191393a58c3a564db926c41",
+      "experiments/helpers/branchBank.py": "b946ab098c3ab0c31b14b21b782f7a88bb31dae47cc2ad16932a77f1b2767acb",
+      "experiments/helpers/pushtReplay.py": "37571046a91d230112808a11c012f59635aec0b5635b65948d7602ba6b5d2611"
+    },
+    "prior_audit_sha256": {
+      "docs/mainPlan/results/continuation-v4/recovery_completion_audit.json": "80b9ca64fcd0db49738b02c141b9c79c59227976aa232b653c8e303721a43ba4",
+      "docs/mainPlan/results/continuation-v4/development_diagnosis_audit.json": "561593b4b9d2ad0f93719e787abccee56fcd09a6bff0c7402b4555107f76c36d",
+      "docs/mainPlan/results/continuation-v4/e2_adaptation_bank_audit.json": "35ac17b93c13062605588f870e4b36a24ae86a71d1828e673061466f5d9868f3"
+    }
+  },
+  "workflow": {
+    "stage": "repairability_and_retention_gate",
+    "status": "gate_stopped",
+    "returncode": 0,
+    "finished_unix": 1790473000.1653385,
+    "output_hashes": {
+      "/workspace/Safety-Dial/data/study/pusht/continuation-v4/e2": {
+        "kind": "directory",
+        "sha256": "044f7121c678472cb33ebd1892cf03dad706f00ce2c7a8a3df8652c6a85a1fe8",
+        "n_files": 13
+      },
+      "/workspace/Safety-Dial/docs/mainPlan/results/continuation-v4/repair": {
+        "kind": "directory",
+        "sha256": "d1f2f87a92cfee34704868a40589816420f3e5ecb05e025508b8ed71c2d818dd",
+        "n_files": 26
+      },
+      "/workspace/Safety-Dial/runs/pusht-adapt-e2-continuation-20260926-4": {
+        "kind": "directory",
+        "sha256": "91c6b66448ee962dbddf5209a129b19a89746c5d5063d1c6ccfc0a3f8491afb6",
+        "n_files": 8
+      },
+      "/workspace/Safety-Dial/docs/mainPlan/results/continuation-v4/repair/repair.json": {
+        "kind": "file",
+        "sha256": "7d537d7adf3712fd8721d530100c658b1fb9a0863ca042c2da50401ad92b2ec9"
+      }
+    }
+  },
+  "retention_details": {
+    "no_update": {
+      "summary_recomputed_exactly": true,
+      "summary": {
+        "n": 20,
+        "n_valid": 20,
+        "n_blocks": 50,
+        "protocol": "paired-source-fixed-maximum-horizon-v2",
+        "steps_per_block": 5,
+        "termination_policy": "maximum horizon; early completion requires environment terminal and verified whole-T coverage >=0.95",
+        "n_completed_on_verified_goal": 0,
+        "arena_exits": 0,
+        "mean_final_coverage": 0.5079204486151732,
+        "mean_final_pose_error_px": 71.41686355015739
+      },
+      "full_250_step_horizons": 18,
+      "verified_early_goal_completions": 0,
+      "outcomes_failing_completeness": 2,
+      "incomplete_cases": [
+        {
+          "root_id": "retention-002",
+          "episode": 16621,
+          "case_sha256": "b453ef102fc5ae3caa7c5f8e165723ee4a8642c8e4728d03dd7e350f595d000b",
+          "valid": true,
+          "requested_steps": 250,
+          "executed_steps": 194,
+          "charged_steps": 204,
+          "censored": true,
+          "censored_future": true,
+          "terminated": true,
+          "truncated": false,
+          "completed_on_verified_goal": false,
+          "outcome_complete": false,
+          "arena_exit": false,
+          "final_coverage": 0.7916131308224135,
+          "final_pose_error_px": 16.116027269487745
+        },
+        {
+          "root_id": "retention-003",
+          "episode": 14500,
+          "case_sha256": "8a55cbc7b9cc20e63e00a3f345a7de7ba82dff53c6b66d50ca7a6870c82865d1",
+          "valid": true,
+          "requested_steps": 250,
+          "executed_steps": 179,
+          "charged_steps": 189,
+          "censored": true,
+          "censored_future": true,
+          "terminated": true,
+          "truncated": false,
+          "completed_on_verified_goal": false,
+          "outcome_complete": false,
+          "arena_exit": false,
+          "final_coverage": 0.80691896377568,
+          "final_pose_error_px": 9.888059141882614
+        }
+      ],
+      "sum_charged_steps": 5073,
+      "ledger_total_steps": 5073
+    },
+    "adapted": {
+      "summary_recomputed_exactly": true,
+      "summary": {
+        "n": 20,
+        "n_valid": 20,
+        "n_blocks": 50,
+        "protocol": "paired-source-fixed-maximum-horizon-v2",
+        "steps_per_block": 5,
+        "termination_policy": "maximum horizon; early completion requires environment terminal and verified whole-T coverage >=0.95",
+        "n_completed_on_verified_goal": 0,
+        "arena_exits": 0,
+        "mean_final_coverage": 0.42437230348283383,
+        "mean_final_pose_error_px": 69.4048093852083
+      },
+      "full_250_step_horizons": 16,
+      "verified_early_goal_completions": 0,
+      "outcomes_failing_completeness": 4,
+      "incomplete_cases": [
+        {
+          "root_id": "retention-003",
+          "episode": 14500,
+          "case_sha256": "8a55cbc7b9cc20e63e00a3f345a7de7ba82dff53c6b66d50ca7a6870c82865d1",
+          "valid": true,
+          "requested_steps": 250,
+          "executed_steps": 59,
+          "charged_steps": 69,
+          "censored": true,
+          "censored_future": true,
+          "terminated": true,
+          "truncated": false,
+          "completed_on_verified_goal": false,
+          "outcome_complete": false,
+          "arena_exit": false,
+          "final_coverage": 0.8610239401401002,
+          "final_pose_error_px": 9.916785432540115
+        },
+        {
+          "root_id": "retention-012",
+          "episode": 14089,
+          "case_sha256": "48da116710f8cb3d83850e5102b5aa323911f78c92467a4b2b3584254f8ef3c2",
+          "valid": true,
+          "requested_steps": 250,
+          "executed_steps": 51,
+          "charged_steps": 61,
+          "censored": true,
+          "censored_future": true,
+          "terminated": true,
+          "truncated": false,
+          "completed_on_verified_goal": false,
+          "outcome_complete": false,
+          "arena_exit": false,
+          "final_coverage": 0.6962335444880128,
+          "final_pose_error_px": 11.922041355991087
+        },
+        {
+          "root_id": "retention-013",
+          "episode": 2370,
+          "case_sha256": "8482593304575154c70a28398d9eb0ed84a47ad37d3168a3446a6d7d20fb1dfd",
+          "valid": true,
+          "requested_steps": 250,
+          "executed_steps": 78,
+          "charged_steps": 88,
+          "censored": true,
+          "censored_future": true,
+          "terminated": true,
+          "truncated": false,
+          "completed_on_verified_goal": false,
+          "outcome_complete": false,
+          "arena_exit": false,
+          "final_coverage": 0.7726371736063906,
+          "final_pose_error_px": 9.932154716788327
+        },
+        {
+          "root_id": "retention-015",
+          "episode": 17645,
+          "case_sha256": "aafb11dbcf8592c055da3a1287e00048716082232922310f9f8f7dfa4caff61d",
+          "valid": true,
+          "requested_steps": 250,
+          "executed_steps": 167,
+          "charged_steps": 177,
+          "censored": true,
+          "censored_future": true,
+          "terminated": true,
+          "truncated": false,
+          "completed_on_verified_goal": false,
+          "outcome_complete": false,
+          "arena_exit": false,
+          "final_coverage": 0.6200347151427853,
+          "final_pose_error_px": 2.600851311215785
+        }
+      ],
+      "sum_charged_steps": 4555,
+      "ledger_total_steps": 4555
+    }
+  },
+  "latent_retention_reported": {
+    "no_update": {
+      "latent_mse_tf": 0.0086818253621459,
+      "latent_mse_rollout": 0.04394536092877388,
+      "pose_h5_centre_px_vs_real_readout": 5.819512367248535,
+      "n": 400
+    },
+    "adapted": {
+      "latent_mse_tf": 0.006402136292308569,
+      "latent_mse_rollout": 0.03098486363887787,
+      "pose_h5_centre_px_vs_real_readout": 3.8715062141418457,
+      "n": 400
+    },
+    "within_15pct": true,
+    "verification": "Saved numerical values and gate arithmetic checked; latent model evaluation not regenerated."
+  },
+  "accounting_scope": "All actual E2 collection, prefix/context cache and goal-retention steps; upstream E1 construction and diagnosis costs remain separate. Failed/discarded adaptation collection costs remain included.",
+  "scope": "Independent read-only final E2 evidence audit. Frozen bank states and masks, persisted paired predictions, development selection summaries, 20 exact paired goal-retention cases and ledgers were checked. No model/GPU/simulator run, network access, upload, source/config/finalized-output edit, staging or commit.",
+  "retention_interpretation": "The paired retention criterion cannot be evaluated as complete: two baseline and four adapted trajectories terminate before 250 actions with coverage below 0.95. All six are preserved as censored/unverified early terminals. This is not a completed paired-degradation or equivalence test.",
+  "artifact_written_utc": "2026-09-27T01:39:56.303380+00:00",
+  "supplemental_fixed_acceptance_censor_bound": {
+    "added_utc": "2026-09-27T01:42:11.342008+00:00",
+    "status": "descriptive_saved_sample_identification_bound",
+    "scope": "Same saved test rows and each model's already fixed development-calibrated acceptance threshold; accepted sets remain unchanged.",
+    "no_update_fsa_bounds": {
+      "lower_unsimplified": "756/3139",
+      "upper_unsimplified": "805/3139",
+      "lower": 0.24084103217585218,
+      "upper": 0.2564510990761389
+    },
+    "adapted_fsa_bounds": {
+      "lower_unsimplified": "620/2950",
+      "upper_unsimplified": "670/2950",
+      "lower": 0.21016949152542372,
+      "upper": 0.2271186440677966
+    },
+    "relative_reduction_definition": "1 - adapted_FSA / no_update_FSA",
+    "conservative_interval_formula": "[1 - adapted_upper / no_update_lower, 1 - adapted_lower / no_update_upper]",
+    "relative_reduction_bounds": {
+      "lower_exact_fraction": "12707/223020",
+      "upper_exact_fraction": "42857/237475",
+      "lower": 0.056976952739664605,
+      "upper": 0.18046952310769554,
+      "lower_percent": 5.697695273966461,
+      "upper_percent": 18.046952310769555
+    },
+    "threshold": {
+      "relative_reduction": 0.25,
+      "upper_strictly_below_threshold": true,
+      "conclusion": "The 25% relative-reduction target is unreachable for these saved fixed accepted sets under any completion of their unresolved labels."
+    },
+    "joint_completion_caveat": "This is a conservative outer interval derived from marginal FSA bounds. Labels are shared across models, so simultaneous attainability of the interval endpoints is not asserted; the upper bound still excludes 25% for every consistent joint completion.",
+    "interpretation_limits": [
+      "This is not a sampling confidence interval or a population-effect estimate.",
+      "It is not evidence of no gain: the saved-sample bound allows a positive relative reduction, below the 25% target.",
+      "Development-calibrated acceptance is fixed; observed test acceptance rates differ between models. No new threshold, row selection or recalibration was performed.",
+      "Point FSA values remain undefined. The original frozen E2 gate and finalized repair report remain unchanged."
+    ],
+    "original_gate_preserved": true,
+    "original_report_sha256": "7d537d7adf3712fd8721d530100c658b1fb9a0863ca042c2da50401ad92b2ec9",
+    "previous_audit_sha256": "187972670f11fa417edfbb2c42cc3cb982116fbbdd712eb03f0430711b5cfd40"
+  }
+}

@@ -4,6 +4,16 @@ Each experiment folder holds small committed results with a manifest naming the 
 Face revisions used. Model checkpoints and banks live in the private Hugging Face
 repositories under the `Sachioster` namespace (see `infrastructure.md`).
 
+Current status, 27 September: [Walker LeWM training](continuation-v2/README.md) is
+running from scratch toward 214,780 updates. [Fresh Push-T E2](continuation-v4/README.md)
+finished and stopped at its repair/retention gate; conditional acquisition, transfer
+and closed-loop stages did not start.
+
+The table below preserves the original launch-day record. Its E1/E2/E3 results are
+now historical development diagnostics because [the later protocol audit](continuation-audit/shared_protocol_audit.md)
+found 14 source trajectories crossing development and test roles. Its running and
+queued statuses are historical, not the current execution state.
+
 | Folder | Experiment | Status (26 September 2026) |
 |---|---|---|
 | `e0/` | Assets, replay determinism, geometry, timing | **Passed.** 149 branches from 50 roots (15 mid-contact) replay bitwise identically through contact; substep mirror exact; endpoint interpolation errs by up to 52 px / 14 deg in contact |

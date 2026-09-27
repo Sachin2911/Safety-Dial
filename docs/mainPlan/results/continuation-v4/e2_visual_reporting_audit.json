@@ -1,0 +1,666 @@
+{
+  "schema_version": 1,
+  "written_utc": "2026-09-27T01:42:33.849320+00:00",
+  "status": "complete_presentation_corrections_recommended",
+  "scope": "Independent visual and reporting review of frozen E2 outputs. All 18 example PNGs were inspected from their original bytes, alongside paired markdown/JSON and final repair metadata. This is not a repeat of the numerical scientific-gate, retention-validity or remote-durability audits handled separately.",
+  "completed_output_directory": "docs/mainPlan/results/continuation-v4/repair",
+  "recorded_gate_passes": false,
+  "recorded_retention_complete": false,
+  "positive_findings": [
+    "Undefined point FSA remains null in paired_report.json and is printed as undefined in the markdown. No undefined-to-zero conversion was found.",
+    "Both displayed zero FSAs are fixed-margin development/stress rows with positive accepted counts (8 and 222) and zero accepted unresolved futures. They are not zero-acceptance placeholders; low acceptance rates are shown beside them.",
+    "All four arms (no_update, adapted, readout_correction, fixed_margin) appear for all three banks in saved data and markdown source. All accepted, unsafe and unresolved counts are retained.",
+    "Saved FSA lower/upper bounds agree with the saved unsafe, accepted and accepted-unresolved counts. These are censoring bounds, not sampling confidence intervals.",
+    "Stress and test paired contrasts remain undefined. Their finite bootstrap endpoints are accompanied by explicit warnings that finite conditional limits do not establish improvement, with 125 and 3 usable replicates respectively.",
+    "The report explicitly records the failed repair gate and incomplete failing goal retention. It does not claim successful closed-loop control.",
+    "All six deterministic example categories appear in every bank, including regressions and unresolved futures. Selection is documented as first qualifying row by fixed identity, not maximum error or prevalence.",
+    "All 18 figures have readable text, legends and three panels. Saved frame steps are observed and do not include padded unobserved futures."
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "presentation_defect",
+      "topic": "Test table interrupted without a new header",
+      "evidence": "paired_report.md:18 inserts the stress bootstrap paragraph between the initial table and test rows19-22. Those test rows have no new header/delimiter row and are not a separate GFM table. The data exist but their rendered comparison layout is broken.",
+      "source": "docs/mainPlan/results/continuation-v4/repair/paired-report/paired_report.md:18",
+      "recommendation": "In a new sibling presentation document, use a separate complete table per bank or place all confidence-interval commentary after one uninterrupted table."
+    },
+    {
+      "id": "F2",
+      "severity": "interpretation_omission",
+      "topic": "Chosen recipe is not identified as the all-undefined fallback",
+      "evidence": "paired_report.md:32 says Chosen recipe without the fallback context. The completed recipe_grid contains all16 undefined development FSAs, and chosen_recipe equals the first grid entry. The existing parent selection audit independently proves zero eligible recipes and deterministic first-record fallback. The report makes no explicit winner claim, but the omission permits that reading.",
+      "source": "docs/mainPlan/results/continuation-v4/repair/paired-report/paired_report.md:32",
+      "recommendation": "State that this recipe is the deterministic first-recipe fallback after inconclusive development ranking, not a demonstrated development winner, and link the existing selection audit. Preserve the chosen recipe and scientific gate."
+    },
+    {
+      "id": "F3",
+      "severity": "interpretation_omission",
+      "topic": "Fixed-margin80 fallback is not described",
+      "evidence": "The report calls margins development-selected and lists fixed_margin80, but the existing E2 source selects80 when its target adapted development FSA is undefined and no comparison can satisfy the matching test. The completed adapted development FSA is undefined.",
+      "source": "experiments/scripts/pusht_e2_repair.py:371",
+      "recommendation": "Explain in a new sibling note that margin80 is the existing undefined-target fallback, not an achieved match to a defined adapted FSA. Keep all four arms and their original margins/counts."
+    },
+    {
+      "id": "F4",
+      "severity": "minor_visual_limitation",
+      "topic": "Geometry units, hazard meaning and decision category need captions",
+      "evidence": "All PNG geometry axes show numeric coordinates but no x/y or px labels; the legend names only pusher and block body. PNG titles identify bank/root/branch/layout but not category or before/after decisions. Adjacent markdown supplies those decisions and px clearance values, so the embedded report is interpretable while standalone images are incomplete.",
+      "source": "experiments/helpers/pushtRepairReport.py:190",
+      "recommendation": "For later sibling presentation figures or captions, label x(px), y(px; down), the virtual hazard, category and the two decisions/margins. Do not add unsaved model trajectories or imply that a margin-driven decision change proves repaired dynamics."
+    },
+    {
+      "id": "F5",
+      "severity": "minor_visual_limitation",
+      "topic": "Censored examples need explicit observed-horizon annotation when exported",
+      "evidence": "The three unresolved-future PNGs end at stored frame20(dev),15(test),10(stress), whereas their last observed state steps are22,19,13 and planned horizon25. Existing captions correctly mark censoring; the PNGs themselves do not name the unobserved suffix.",
+      "source": "docs/mainPlan/results/continuation-v4/repair/paired-report/paired_report.md:91",
+      "recommendation": "Retain the current observed-frame-only policy and add observed/planned step counts plus an unresolved-future label if these figures are republished separately."
+    },
+    {
+      "id": "F6",
+      "severity": "minor_visual_limitation",
+      "topic": "One virtual hazard is clipped by the geometry plotting window",
+      "evidence": "stress-corrected_false_safe.png visibly clips the rectangle at the bottom of the axes. The saved rectangle extends to y=561.1896015235199, beyond the fixed y=532 plotting limit.",
+      "source": "docs/mainPlan/results/continuation-v4/repair/paired-report/stress-corrected_false_safe.png",
+      "recommendation": "A later sibling figure can expand geometry limits to show the whole saved hazard, or explicitly annotate clipping. Preserve raw stored frames unchanged; observation-frame arena clipping is not missing data to invent."
+    },
+    {
+      "id": "F7",
+      "severity": "optional_clarity_improvement",
+      "topic": "Distinguish censoring bounds from conditional bootstrap limits more directly",
+      "evidence": "The opening paragraph already explains unresolved-outcome bounds, and interval paragraphs warn against improvement claims. The table header only says FSA bounds; interval prose still leads with recorded95% root-bootstrap interval despite undefined points and only3 usable test replicates.",
+      "source": "docs/mainPlan/results/continuation-v4/repair/paired-report/paired_report.md:5",
+      "recommendation": "Label the table column Censoring bounds, not confidence intervals. Describe the finite bootstrap limits as conditional diagnostics with undefined full-data contrast; never present their sign as superiority evidence."
+    }
+  ],
+  "saved_metric_presentation_checks": [
+    {
+      "bank": "dev",
+      "arm": "no_update",
+      "fsa": null,
+      "censoring_lower_bound": 0.17177914110429449,
+      "censoring_upper_bound": 0.17791411042944785,
+      "n_accepted": 163,
+      "n_false_safe": 28,
+      "n_accepted_unresolved": 1
+    },
+    {
+      "bank": "dev",
+      "arm": "adapted",
+      "fsa": null,
+      "censoring_lower_bound": 0.1656441717791411,
+      "censoring_upper_bound": 0.17177914110429449,
+      "n_accepted": 163,
+      "n_false_safe": 27,
+      "n_accepted_unresolved": 1
+    },
+    {
+      "bank": "dev",
+      "arm": "readout_correction",
+      "fsa": null,
+      "censoring_lower_bound": 0.20245398773006135,
+      "censoring_upper_bound": 0.2085889570552147,
+      "n_accepted": 163,
+      "n_false_safe": 33,
+      "n_accepted_unresolved": 1
+    },
+    {
+      "bank": "dev",
+      "arm": "fixed_margin",
+      "fsa": 0.0,
+      "censoring_lower_bound": 0.0,
+      "censoring_upper_bound": 0.0,
+      "n_accepted": 8,
+      "n_false_safe": 0,
+      "n_accepted_unresolved": 0
+    },
+    {
+      "bank": "stress",
+      "arm": "no_update",
+      "fsa": null,
+      "censoring_lower_bound": 0.03810354857475276,
+      "censoring_upper_bound": 0.040430482838859805,
+      "n_accepted": 3438,
+      "n_false_safe": 131,
+      "n_accepted_unresolved": 8
+    },
+    {
+      "bank": "stress",
+      "arm": "adapted",
+      "fsa": null,
+      "censoring_lower_bound": 0.025354663447026863,
+      "censoring_upper_bound": 0.02776939329912466,
+      "n_accepted": 3313,
+      "n_false_safe": 84,
+      "n_accepted_unresolved": 8
+    },
+    {
+      "bank": "stress",
+      "arm": "readout_correction",
+      "fsa": null,
+      "censoring_lower_bound": 0.05853509040760037,
+      "censoring_upper_bound": 0.06098682194299724,
+      "n_accepted": 3263,
+      "n_false_safe": 191,
+      "n_accepted_unresolved": 8
+    },
+    {
+      "bank": "stress",
+      "arm": "fixed_margin",
+      "fsa": 0.0,
+      "censoring_lower_bound": 0.0,
+      "censoring_upper_bound": 0.0,
+      "n_accepted": 222,
+      "n_false_safe": 0,
+      "n_accepted_unresolved": 0
+    },
+    {
+      "bank": "test",
+      "arm": "no_update",
+      "fsa": null,
+      "censoring_lower_bound": 0.24084103217585218,
+      "censoring_upper_bound": 0.2564510990761389,
+      "n_accepted": 3139,
+      "n_false_safe": 756,
+      "n_accepted_unresolved": 49
+    },
+    {
+      "bank": "test",
+      "arm": "adapted",
+      "fsa": null,
+      "censoring_lower_bound": 0.21016949152542372,
+      "censoring_upper_bound": 0.2271186440677966,
+      "n_accepted": 2950,
+      "n_false_safe": 620,
+      "n_accepted_unresolved": 50
+    },
+    {
+      "bank": "test",
+      "arm": "readout_correction",
+      "fsa": null,
+      "censoring_lower_bound": 0.2736660929432014,
+      "censoring_upper_bound": 0.28537005163511187,
+      "n_accepted": 2905,
+      "n_false_safe": 795,
+      "n_accepted_unresolved": 34
+    },
+    {
+      "bank": "test",
+      "arm": "fixed_margin",
+      "fsa": null,
+      "censoring_lower_bound": 0.030303030303030304,
+      "censoring_upper_bound": 0.12121212121212122,
+      "n_accepted": 132,
+      "n_false_safe": 4,
+      "n_accepted_unresolved": 12
+    }
+  ],
+  "figures_reviewed": [
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/dev-corrected_false_safe.png",
+      "sha256": "ddbf0bd4c2cc947fef14f76d2f20fd5e29d09da94719cd95dd126f3385929574",
+      "bank": "dev",
+      "category": "corrected_false_safe",
+      "n_qualifying_saved_rows": 4,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/dev-new_false_safe.png",
+      "sha256": "c75c69dd929f12415a8cdc18296c704dd861c560a815c6043a4576812e8e4f97",
+      "bank": "dev",
+      "category": "new_false_safe",
+      "n_qualifying_saved_rows": 3,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/dev-remaining_false_safe.png",
+      "sha256": "cff0cca9737aa60bf9cfcd52498fc04fc5679bce2ce5cc829755cb34e8992938",
+      "bank": "dev",
+      "category": "remaining_false_safe",
+      "n_qualifying_saved_rows": 24,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/dev-restored_safe_acceptance.png",
+      "sha256": "3ef33d1820a4d131a48ce21ba44425057982db6610d385456de177dd5b155c0f",
+      "bank": "dev",
+      "category": "restored_safe_acceptance",
+      "n_qualifying_saved_rows": 7,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/dev-new_false_rejection.png",
+      "sha256": "1d3e09c65de56fa3edc2fce73c3fe108dd27ef34c184f493eef40837cc5d1405",
+      "bank": "dev",
+      "category": "new_false_rejection",
+      "n_qualifying_saved_rows": 6,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/dev-unresolved_accepted_future.png",
+      "sha256": "1cd87dff2558a07eaaf50e6baed74af214cd2ba81ce4e68dbddd3b9fd4c70b90",
+      "bank": "dev",
+      "category": "unresolved_accepted_future",
+      "n_qualifying_saved_rows": 1,
+      "frame_steps_shown": [
+        0,
+        20
+      ],
+      "last_observed_step": 22,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category.",
+        "The final stored frame precedes the 25-step planned horizon. The caption correctly says censored=True and unresolved=True, but the PNG does not explicitly label the missing suffix; it must not be presented as a fully observed safe future."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/stress-corrected_false_safe.png",
+      "sha256": "e169d87b7d828ba2259ad4d016e20ecdc36df5ff1b5e3dbf74a01ba990ecbc8c",
+      "bank": "stress",
+      "category": "corrected_false_safe",
+      "n_qualifying_saved_rows": 53,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category.",
+        "The virtual rectangle is visibly clipped by the lower geometry-panel limit y=532; saved hazard y1=561.1896015235199. This is plot-window clipping, not missing experimental geometry."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/stress-new_false_safe.png",
+      "sha256": "63d4860d8154bc4574ea1b3fdab8803e4a05db96e5fc083a61c1ca301750911d",
+      "bank": "stress",
+      "category": "new_false_safe",
+      "n_qualifying_saved_rows": 6,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/stress-remaining_false_safe.png",
+      "sha256": "2206949a90aebf3bcba9cb6dfe8febb53e09ac147706325822443e6fd4ce8356",
+      "bank": "stress",
+      "category": "remaining_false_safe",
+      "n_qualifying_saved_rows": 78,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/stress-restored_safe_acceptance.png",
+      "sha256": "b3d4d983d546d64558f04481ac26f90e3bbf7eb91e1aec6da42cadaa500151ea",
+      "bank": "stress",
+      "category": "restored_safe_acceptance",
+      "n_qualifying_saved_rows": 38,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/stress-new_false_rejection.png",
+      "sha256": "387ea1fc22bfce0ea62d20629aef0c27f1d7830b3b6d4a80bcd7b4e714cdad23",
+      "bank": "stress",
+      "category": "new_false_rejection",
+      "n_qualifying_saved_rows": 116,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/stress-unresolved_accepted_future.png",
+      "sha256": "059a695ff286178df2820768e44846ddf72b12b80045f47b63ac1eab55a2ce77",
+      "bank": "stress",
+      "category": "unresolved_accepted_future",
+      "n_qualifying_saved_rows": 8,
+      "frame_steps_shown": [
+        0,
+        10
+      ],
+      "last_observed_step": 13,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category.",
+        "The final stored frame precedes the 25-step planned horizon. The caption correctly says censored=True and unresolved=True, but the PNG does not explicitly label the missing suffix; it must not be presented as a fully observed safe future."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/test-corrected_false_safe.png",
+      "sha256": "671a2180cc7d6d41801ccc7b9af466bf93baa1a4096d2adce848f7b60ee13dcc",
+      "bank": "test",
+      "category": "corrected_false_safe",
+      "n_qualifying_saved_rows": 163,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/test-new_false_safe.png",
+      "sha256": "006cce2e5e0da0c75637da02b7870248b788d76c8942b985cf85eabf3078fa44",
+      "bank": "test",
+      "category": "new_false_safe",
+      "n_qualifying_saved_rows": 27,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/test-remaining_false_safe.png",
+      "sha256": "2de66fe5ddeb466f296262b56ce1c0f93ef4a6cf7e046f0fe937925aa4cc3ad7",
+      "bank": "test",
+      "category": "remaining_false_safe",
+      "n_qualifying_saved_rows": 593,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/test-restored_safe_acceptance.png",
+      "sha256": "5d50f16b14d403841b30b8cd108eb0a7127130536d9a0377c33fc425df41948d",
+      "bank": "test",
+      "category": "restored_safe_acceptance",
+      "n_qualifying_saved_rows": 64,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/test-new_false_rejection.png",
+      "sha256": "25c9b06161f21da05f2e236d42ed7de206f908efdbd58e5282a64c8e5b281f41",
+      "bank": "test",
+      "category": "new_false_rejection",
+      "n_qualifying_saved_rows": 118,
+      "frame_steps_shown": [
+        0,
+        25
+      ],
+      "last_observed_step": 25,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category."
+      ]
+    },
+    {
+      "path": "docs/mainPlan/results/continuation-v4/repair/paired-report/test-unresolved_accepted_future.png",
+      "sha256": "8f18bee804551da4baa245ec618f02b77762803f17b69fedfd95a3faeea72504",
+      "bank": "test",
+      "category": "unresolved_accepted_future",
+      "n_qualifying_saved_rows": 50,
+      "frame_steps_shown": [
+        0,
+        15
+      ],
+      "last_observed_step": 19,
+      "planned_horizon_steps": 25,
+      "notes": [
+        "Visually inspected the original PNG bytes. All three panels, root/branch/layout title, tick values and pusher/block legend are readable; no missing panels or text clipping observed.",
+        "The figure shows recorded truth and real frames only. Before/after predicted clearance, decisions and margins are supplied in the adjacent markdown caption.",
+        "Standalone presentation omits x/y coordinate labels and px units, a virtual-hazard legend entry, and the decision category.",
+        "The final stored frame precedes the 25-step planned horizon. The caption correctly says censored=True and unresolved=True, but the PNG does not explicitly label the missing suffix; it must not be presented as a fully observed safe future."
+      ]
+    }
+  ],
+  "recommended_followup": {
+    "kind": "fresh_sibling_presentation_supplement",
+    "suggested_path": "docs/mainPlan/results/continuation-v4/repair-presentation",
+    "scope": "Correct markdown table structure and add fallback, censoring and figure-context explanations using frozen saved inputs. Any corrected images should write only to that new sibling and carry source-report/figure hashes. No regenerated experiment, gate change, recipe change, margin recalibration or new performance inference is needed.",
+    "generated_in_this_audit": false
+  },
+  "source_and_context_sha256": {
+    "experiments/helpers/pushtRepairReport.py": "cb910aab91f8a1e124b1705b33b29f6b4d362cd8f8ac44c0f11859e05a8c31cf",
+    "experiments/scripts/pusht_e2_repair.py": "5371e7d4a75338e0c6304cf384a5e84269e66cc6ad9735b196dcc6d64d9ce15c",
+    "docs/mainPlan/results/continuation-v4/e2_development_selection_audit.json": "41732c0af3693946ad8920839e6d833383a1908dd1633205da387ad076d13353",
+    "docs/mainPlan/results/continuation-v4/e2_gate_censoring_note.json": "ee00282e2343f91824a8670a96c145c0e5e3323f7747b20f9911b0694cd0f9c8"
+  },
+  "completed_output_inventory": {
+    "docs/mainPlan/results/continuation-v4/repair/goal_retention.json": {
+      "sha256": "d8ac3f52df217ed580482eab1bbeebb0b9bd44e026d4b47cb7f261d5bcbf4d74",
+      "bytes": 3321115
+    },
+    "docs/mainPlan/results/continuation-v4/repair/goal_retention_cases.json": {
+      "sha256": "232925805736e9d0f16ea0109f8fe43676d121be5b6367e5d8a7cd8e9ed41805",
+      "bytes": 9597
+    },
+    "docs/mainPlan/results/continuation-v4/repair/manifest.json": {
+      "sha256": "0d3f3a97e8426bfa14c91c81d6de89a0b2b298d7639a763dbf73b824fa2ad202",
+      "bytes": 175878
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/dev-corrected_false_safe.png": {
+      "sha256": "ddbf0bd4c2cc947fef14f76d2f20fd5e29d09da94719cd95dd126f3385929574",
+      "bytes": 69022
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/dev-new_false_rejection.png": {
+      "sha256": "1d3e09c65de56fa3edc2fce73c3fe108dd27ef34c184f493eef40837cc5d1405",
+      "bytes": 72983
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/dev-new_false_safe.png": {
+      "sha256": "c75c69dd929f12415a8cdc18296c704dd861c560a815c6043a4576812e8e4f97",
+      "bytes": 69070
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/dev-remaining_false_safe.png": {
+      "sha256": "cff0cca9737aa60bf9cfcd52498fc04fc5679bce2ce5cc829755cb34e8992938",
+      "bytes": 62960
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/dev-restored_safe_acceptance.png": {
+      "sha256": "3ef33d1820a4d131a48ce21ba44425057982db6610d385456de177dd5b155c0f",
+      "bytes": 74462
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/dev-unresolved_accepted_future.png": {
+      "sha256": "1cd87dff2558a07eaaf50e6baed74af214cd2ba81ce4e68dbddd3b9fd4c70b90",
+      "bytes": 69065
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/manifest.json": {
+      "sha256": "d4a5c2a235d359c3ba3a2c506265ff4e7bfbad8323125862a514a21d914854c3",
+      "bytes": 198015
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/paired_report.json": {
+      "sha256": "6822bd185d51c814d9ed146ff59a6fc4eb580635c900b05423d02f87e1eef85a",
+      "bytes": 310257
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/paired_report.md": {
+      "sha256": "d0feee29cec32a4d6df0c095349367036cd6802508dc9ae3840a958ac724c5e8",
+      "bytes": 12467
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/stress-corrected_false_safe.png": {
+      "sha256": "e169d87b7d828ba2259ad4d016e20ecdc36df5ff1b5e3dbf74a01ba990ecbc8c",
+      "bytes": 70675
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/stress-new_false_rejection.png": {
+      "sha256": "387ea1fc22bfce0ea62d20629aef0c27f1d7830b3b6d4a80bcd7b4e714cdad23",
+      "bytes": 54267
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/stress-new_false_safe.png": {
+      "sha256": "63d4860d8154bc4574ea1b3fdab8803e4a05db96e5fc083a61c1ca301750911d",
+      "bytes": 65067
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/stress-remaining_false_safe.png": {
+      "sha256": "2206949a90aebf3bcba9cb6dfe8febb53e09ac147706325822443e6fd4ce8356",
+      "bytes": 68793
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/stress-restored_safe_acceptance.png": {
+      "sha256": "b3d4d983d546d64558f04481ac26f90e3bbf7eb91e1aec6da42cadaa500151ea",
+      "bytes": 68025
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/stress-unresolved_accepted_future.png": {
+      "sha256": "059a695ff286178df2820768e44846ddf72b12b80045f47b63ac1eab55a2ce77",
+      "bytes": 60173
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/test-corrected_false_safe.png": {
+      "sha256": "671a2180cc7d6d41801ccc7b9af466bf93baa1a4096d2adce848f7b60ee13dcc",
+      "bytes": 59746
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/test-new_false_rejection.png": {
+      "sha256": "25c9b06161f21da05f2e236d42ed7de206f908efdbd58e5282a64c8e5b281f41",
+      "bytes": 57291
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/test-new_false_safe.png": {
+      "sha256": "006cce2e5e0da0c75637da02b7870248b788d76c8942b985cf85eabf3078fa44",
+      "bytes": 66358
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/test-remaining_false_safe.png": {
+      "sha256": "2de66fe5ddeb466f296262b56ce1c0f93ef4a6cf7e046f0fe937925aa4cc3ad7",
+      "bytes": 71973
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/test-restored_safe_acceptance.png": {
+      "sha256": "5d50f16b14d403841b30b8cd108eb0a7127130536d9a0377c33fc425df41948d",
+      "bytes": 66426
+    },
+    "docs/mainPlan/results/continuation-v4/repair/paired-report/test-unresolved_accepted_future.png": {
+      "sha256": "8f18bee804551da4baa245ec618f02b77762803f17b69fedfd95a3faeea72504",
+      "bytes": 69780
+    },
+    "docs/mainPlan/results/continuation-v4/repair/repair.json": {
+      "sha256": "7d537d7adf3712fd8721d530100c658b1fb9a0863ca042c2da50401ad92b2ec9",
+      "bytes": 2984015
+    },
+    "docs/mainPlan/results/continuation-v4/repair/repair_rows.npz": {
+      "sha256": "93f9fdb7a101e0456b712140e2c937cb99fdaa4df38646366b946fa1f15487d8",
+      "bytes": 2817460
+    }
+  },
+  "preservation_check": {
+    "all_completed_files_unchanged": true,
+    "file_count": 26,
+    "method": "SHA256 and byte size for every completed file before and after review; complete filename sets identical."
+  },
+  "inspection_method": "view_image failed because this container cannot create its sandbox namespace. Each PNG was then read unchanged through authorized escalated filesystem access and forwarded as its original base64 image bytes for direct visual inspection. No contact sheet, crop or image regeneration was used.",
+  "actions": {
+    "new_experiments": 0,
+    "model_queries": 0,
+    "simulator_steps": 0,
+    "optimizer_steps": 0,
+    "completed_output_edits": 0,
+    "source_or_runtime_changes": 0,
+    "uploads": 0,
+    "staged_or_committed": false,
+    "new_artifacts": [
+      "docs/mainPlan/results/continuation-v4/e2_visual_reporting_audit.json"
+    ]
+  }
+}

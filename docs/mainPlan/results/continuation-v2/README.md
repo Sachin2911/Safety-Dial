@@ -66,3 +66,10 @@ adaptation training measured 98.97% mean GPU activity across 30 samples (92-100%
 with 16,333 of 32,607 MiB used. Walker and Push-T remained active together. This
 short window still does not measure arithmetic efficiency, but it provides no
 evidence of spare compute for a third large workload. Training recipes stayed fixed.
+
+Push-T E2 has now [stopped at its scientific gate](../continuation-v4/README.md):
+matched test safety rates were undefined and exact goal retention was incomplete.
+Its acquisition and oracle stages did not start. Walker full training continues.
+A [30-sample measurement after Push-T stopped](gpu_after_pusht_gate_20260927.json)
+found 98.03% mean GPU activity (89-100%), with 14,778 of 32,607 MiB used. No third
+heavy workload or change to the frozen training recipe was justified by that window.

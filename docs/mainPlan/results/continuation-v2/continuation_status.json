@@ -118,11 +118,22 @@
       "report": "docs/mainPlan/results/continuation-v2/bank_generation_failure.json",
       "partial_test_roots": 26,
       "exact_failed_run_cost_available": false,
-      "recovery": "V3 completed 128 test roots and 2,048 branches, then stress proposal construction exhausted its finite draw limit. Fresh v4 stress-only recovery completed and uploaded on all fixed test roots; development diagnosis passed and the managed study is running repairability and retention. Original artifacts and failed costs remain preserved.",
+      "recovery": "V3 completed all representative test roots; fresh v4 stress recovery and development diagnosis passed. Completed E2 did not pass the unchanged repair/retention gate, so downstream work and the oracle stopped. Original artifacts and failed costs are preserved.",
       "recovery_status": "docs/mainPlan/results/continuation-v4/continuation_status.json",
       "frozen_plan_verification": "docs/mainPlan/results/continuation-v3/frozen_plan_verification.json"
     },
-    "preserved_v2_banks": "data/study/pusht/continuation-v2/e1"
+    "preserved_v2_banks": "data/study/pusht/continuation-v2/e1",
+    "repairability": {
+      "status": "gate_stopped",
+      "report": "docs/mainPlan/results/continuation-v4/repair/repair.json",
+      "report_sha256": "7d537d7adf3712fd8721d530100c658b1fb9a0863ca042c2da50401ad92b2ec9",
+      "audit": "docs/mainPlan/results/continuation-v4/e2_completion_audit.json",
+      "audit_sha256": "c4dfa6bab2972088443c1ea1baa59152b0375d23c4e72c0c277722db8860f8ff",
+      "goal_retention_complete": false,
+      "test_point_fsa_defined": false,
+      "simulator_steps": 58475,
+      "downstream_launched": false
+    }
   },
   "workflow_configs": [
     "configs/pusht/continuation.yaml",

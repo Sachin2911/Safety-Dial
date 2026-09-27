@@ -1,6 +1,6 @@
 {
-  "status": "in_progress",
-  "observed_utc": "2026-09-27T01:14:15Z",
+  "status": "gate_stopped",
+  "observed_utc": "2026-09-27T01:43:29Z",
   "implementation_commit": "4dc99d7",
   "validation": "docs/mainPlan/results/continuation-v4/recovery_validation.json",
   "workflow": {
@@ -9,19 +9,24 @@
     "config": "configs/pusht/continuation-v4.yaml",
     "config_sha256": "8c7ca79101d78184ece45e7a68edc0d6de9b44ce1bca0c6a5d1b7a4032956103",
     "stage": "repairability_and_retention_gate",
-    "status": "running",
+    "status": "gate_stopped",
     "supervisor_pid": 769397,
-    "observed_python_pid": 776156,
-    "observed_python_start_ticks": 272393363
+    "service_state": "EXITED",
+    "last_python_pid": 776156,
+    "last_python_start_ticks": 272393363,
+    "finished_utc": "2026-09-27T01:36:40.165339+00:00",
+    "returncode": 0
   },
   "oracle": {
     "id": "pusht-oracle-continuation-20260926-4",
     "service": "safetydial_pusht_oracle_v4_continuation",
     "config": "configs/pusht/continuation-oracle-v4.yaml",
     "config_sha256": "9b06fc81944c150c5eabff2cd5765cebcd0f37df565ed23044201ad835df5bfa",
-    "status": "waiting",
+    "status": "gate_stopped",
     "attempts": 0,
-    "supervisor_pid": 769695
+    "supervisor_pid": 769695,
+    "service_state": "EXITED",
+    "reason": "Watched E2 repair gate did not pass; no oracle experiment started."
   },
   "banks_dir": "data/study/pusht/continuation-v4/e1",
   "preserved_v3_failure": "docs/mainPlan/results/continuation-v3/stress_generation_failure.json",
@@ -34,7 +39,7 @@
   },
   "source_root_plan_sha256": "fc8292fcd67f2985157e4a72433e23189dc897f183ebca1f06f098233fa6db23",
   "controls_pool_sha256": "114fb8f3aa35065eee49fbfd8e27f0e86c9bf7c37a47c246a5499ad33e1b55c1",
-  "gate_policy": "All original development diagnosis/repair, exact retention and conditional closed-loop gates remain active. Main-study outcomes are not yet established.",
+  "gate_policy": "The unchanged final repair and exact goal-retention gate did not pass. No acquisition, transfer or closed-loop stages started. The separate Walker workflow remains active.",
   "completed_bank_recovery": {
     "stage": "recover_fixed_root_stress_bank",
     "status": "completed",
@@ -116,7 +121,7 @@
     ]
   },
   "repair_development_selection": {
-    "status": "fallback_selected_final_repair_and_retention_pending",
+    "status": "fallback_selected_final_gate_not_qualified",
     "recipes_evaluated": 16,
     "eligible_recipe_count": 0,
     "all_development_fsa_undefined": true,
@@ -137,6 +142,64 @@
     "audit": "docs/mainPlan/results/continuation-v4/e2_development_selection_audit.json",
     "audit_sha256": "41732c0af3693946ad8920839e6d833383a1908dd1633205da387ad076d13353",
     "selection_log_lines_sha256": "e566e7c5e52a6db7317786728d441666c6f70a0ebb0f063f0572c47fa809c572",
-    "interpretation": "The existing deterministic first-recipe fallback follows inconclusive development ranking. It is not a development-validated optimum. Final repair and exact goal-retention gates remain unchanged and pending."
-  }
+    "interpretation": "The existing first-recipe fallback followed inconclusive development ranking, not a validated optimum. The unchanged final repair and exact goal-retention gate did not pass."
+  },
+  "completed_repair": {
+    "report": "docs/mainPlan/results/continuation-v4/repair/repair.json",
+    "sha256": "7d537d7adf3712fd8721d530100c658b1fb9a0863ca042c2da50401ad92b2ec9",
+    "gate": {
+      "test_fsa_no_update": null,
+      "test_fsa_adapted": null,
+      "test_fsa_readout_correction": null,
+      "relative_reduction": null,
+      "beats_readout_correction": false,
+      "retention_within_15pct": true,
+      "goal_retention_passes": false,
+      "retention_complete": false,
+      "passes": false
+    },
+    "point_fsa_null_meaning": "Undefined because accepted censored futures remain unresolved.",
+    "goal_retention": {
+      "paired_cases": 20,
+      "maximum_blocks_per_case": 50,
+      "baseline_unverified_early_terminations": 2,
+      "adapted_unverified_early_terminations": 4,
+      "complete": false
+    },
+    "simulator_steps": 58475,
+    "model_revision": "cd896c7bcbb2377140fcda988fe2ef59673b1454",
+    "audits": {
+      "e2_completion_audit.json": {
+        "path": "docs/mainPlan/results/continuation-v4/e2_completion_audit.json",
+        "sha256": "c4dfa6bab2972088443c1ea1baa59152b0375d23c4e72c0c277722db8860f8ff"
+      },
+      "e2_model_durability_audit.json": {
+        "path": "docs/mainPlan/results/continuation-v4/e2_model_durability_audit.json",
+        "sha256": "cc76438d8f85874055b5b4f696156d306f8bea9f69909eba60cfa79ecaafe7fc"
+      }
+    },
+    "downstream_status": "not_started_due_to_E2_gate",
+    "output_hashes": {
+      "/workspace/Safety-Dial/data/study/pusht/continuation-v4/e2": {
+        "kind": "directory",
+        "sha256": "044f7121c678472cb33ebd1892cf03dad706f00ce2c7a8a3df8652c6a85a1fe8",
+        "n_files": 13
+      },
+      "/workspace/Safety-Dial/docs/mainPlan/results/continuation-v4/repair": {
+        "kind": "directory",
+        "sha256": "d1f2f87a92cfee34704868a40589816420f3e5ecb05e025508b8ed71c2d818dd",
+        "n_files": 26
+      },
+      "/workspace/Safety-Dial/runs/pusht-adapt-e2-continuation-20260926-4": {
+        "kind": "directory",
+        "sha256": "91c6b66448ee962dbddf5209a129b19a89746c5d5063d1c6ccfc0a3f8491afb6",
+        "n_files": 8
+      },
+      "/workspace/Safety-Dial/docs/mainPlan/results/continuation-v4/repair/repair.json": {
+        "kind": "file",
+        "sha256": "7d537d7adf3712fd8721d530100c658b1fb9a0863ca042c2da50401ad92b2ec9"
+      }
+    }
+  },
+  "walker_status": "Continues separately; see continuation-v2/continuation_status.json."
 }
