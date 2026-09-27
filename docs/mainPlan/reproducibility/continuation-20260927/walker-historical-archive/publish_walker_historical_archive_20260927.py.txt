@@ -1,0 +1,94 @@
+"""Publish only the reviewed Walker historical diagnostic preservation bundle.
+User requested all work stored in GitHub/HF after S4. No blocked Push-T bytes.
+"""
+import hashlib
+import json
+from pathlib import Path
+import signal
+import sys
+from datetime import datetime, timezone
+
+ROOT = Path('/workspace/Safety-Dial')
+sys.path.insert(0, str(ROOT / 'experiments'))
+from helpers.hfStore import HFStore
+from huggingface_hub.hf_api import RepoFile
+from huggingface_hub.utils import EntryNotFoundError
+
+RUN = 'walker-historical-diagnostics-archive-20260927-1'
+BUNDLE = ROOT / 'runs' / RUN
+REPO = 'Sachioster/safetydial-walker2d'
+PREFIX = 'historical/' + RUN
+OUT = ROOT / 'docs/mainPlan/results/continuation-audit/walker_historical_archive_publication_20260927.json'
+EXPECTED_MANIFEST = 'a52f990dbe100a7d1a73b3867b9503195733e161c154ec1319ae7847887b61df'
+EXPECTED_INVENTORY = '7f49bbc5ff36c6074d734770e2d1e681e5120e79ff0d3538c69e6afc75914129'
+
+
+def inventory():
+    rows = []
+    for p in sorted(BUNDLE.rglob('*')):
+        if not p.is_file() or p.name in ('hf_upload.json', 'hf_upload.json.tmp'):
+            continue
+        assert not p.is_symlink()
+        data = p.read_bytes()
+        rows.append(dict(path=p.relative_to(BUNDLE).as_posix(), bytes=len(data), sha256=hashlib.sha256(data).hexdigest()))
+    return rows
+
+
+def main():
+    signal.alarm(900)
+    assert not OUT.exists() and not (BUNDLE / 'hf_upload.json').exists()
+    assert hashlib.sha256((BUNDLE / 'manifest.json').read_bytes()).hexdigest() == EXPECTED_MANIFEST
+    before = inventory()
+    assert len(before) == 15 and sum(x['bytes'] for x in before) == 94419402
+    assert hashlib.sha256(json.dumps(before, sort_keys=True, separators=(',', ':')).encode()).hexdigest() == EXPECTED_INVENTORY
+    m = json.loads((BUNDLE / 'manifest.json').read_text())
+    for name, record in m['inventory_excluding_manifest'].items():
+        data = (BUNDLE / name).read_bytes()
+        assert len(data) == record['bytes'] and hashlib.sha256(data).hexdigest() == record['sha256']
+        if name.startswith('runs/'):
+            assert data == (ROOT / name).read_bytes()
+    store = HFStore(namespace='Sachioster')
+    assert store.api.endpoint == 'https://huggingface.co'
+    assert store.repo_id('walker2d') == REPO
+    info = store.api.repo_info(REPO, repo_type='model')
+    assert info.private is True
+    assert RUN not in {t.name for t in store.api.list_repo_refs(REPO, repo_type='model').tags}
+    try:
+        existing = list(store.api.list_repo_tree(REPO, path_in_repo=PREFIX, repo_type='model', revision=info.sha, recursive=True))
+    except EntryNotFoundError:
+        existing = []
+    assert not existing, 'Destination prefix must be unused'
+    revision = store.upload_run('walker2d', 'historical', BUNDLE, run_id=RUN, message='Preserve superseded Walker diagnostic models with explicit provenance limits')
+    remote = {x.path[len(PREFIX) + 1:]: x for x in store.api.list_repo_tree(REPO, path_in_repo=PREFIX, repo_type='model', revision=revision, recursive=True, expand=True) if isinstance(x, RepoFile)}
+    assert set(remote) == {x['path'] for x in before}
+    comparisons = []
+    for row in before:
+        item = remote[row['path']]
+        assert item.size == row['bytes']
+        if item.lfs is not None:
+            digest = item.lfs.sha256
+            assert digest == row['sha256']
+            method = 'LFS SHA256 and byte size'
+        else:
+            data = (BUNDLE / row['path']).read_bytes()
+            digest = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
+            assert item.blob_id == digest
+            method = 'canonical Git blob SHA1 and byte size'
+        comparisons.append({**row, 'verified': True, 'method': method, 'remote_digest': digest})
+    assert store.api.repo_info(REPO, repo_type='model', revision=RUN).sha == revision
+    assert store.api.repo_info(REPO, repo_type='model').private is True
+    assert inventory() == before
+    for row in before:
+        if row['path'].startswith('runs/'):
+            assert (ROOT / row['path']).read_bytes() == (BUNDLE / row['path']).read_bytes()
+    result = dict(status='published_and_metadata_verified', observed_utc=datetime.now(timezone.utc).isoformat(), repo_id=REPO, repo_type='model', prefix=PREFIX, revision=revision, run_tag=RUN, private_at_verification=True, file_count=len(before), bytes=sum(x['bytes'] for x in before), files=comparisons, original_payloads_unchanged=True, manifest_sha256=EXPECTED_MANIFEST, inventory_sha256=EXPECTED_INVENTORY, scope='Three superseded unqualified historical Walker diagnostics only; no blocked Push-T payload', verification='Authenticated pinned metadata and stable local hashes; no remote restore or tensor deserialization', helper_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
+    OUT.write_text(json.dumps(result, indent=2) + '\n')
+    print(json.dumps({k: result[k] for k in ('status','revision','file_count','bytes')}))
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as exc:
+        print(json.dumps({'status': 'failed', 'exception_type': type(exc).__name__}), file=sys.stderr)
+        sys.exit(1)
