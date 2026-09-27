@@ -153,3 +153,14 @@ completeness, and charged E2 costs. They retain undefined point rates, distingui
 identification bounds from confidence intervals, and label full-horizon counts separately
 from goal success. [Validation](e2_summary_charts_validation.json) includes seven
 focused tests and independent source/visual review. The original E2 outputs are unchanged.
+
+
+The [recorded animations](repair-animations-v2/README.md) preserve three already-selected
+test cases: corrected false-safe, new false-safe and accepted unresolved future. Each
+has an MP4, GIF, poster and source/timing manifest. Camera pixels and geometry come
+from stored observations; the virtual hazard is drawn only on geometry. Playback is
+half speed with explicit presentation holds. The unresolved example displays no padded
+suffix and distinguishes its last camera frame at step 15 from its state log through
+step 19. Sixteen focused tests, source review, encoded-frame checks and visual review
+passed. A layout-only second rendering separates axis labels from decision text; the
+original scientific outputs, selected cases and playback schedules remain unchanged.

@@ -1,0 +1,114 @@
+{
+  "kind": "saved-e2-animation-visual-audit-v2",
+  "created_utc": "2026-09-27T08:17:51.528713+00:00",
+  "manifest_sha256": "ecbcd72e99633f86360cfc826196499977ed9eb041ebddcd4022c63b6fb35df7",
+  "animation_data_sha256": "253142dfa0a139713ebeccefc692c505ebb18888a779b5bb4669fb52469100d0",
+  "change": "Only both axes bottom 0.29 to 0.33 and height 0.49 to 0.45; top is unchanged.",
+  "directly_viewed_posters": [
+    {
+      "path": "test-corrected_false_safe.png",
+      "sha256": "a470190043bf374107adc8a25fa85b73d775916e11cc6dceab25ad81b11be7d8"
+    },
+    {
+      "path": "test-new_false_safe.png",
+      "sha256": "9784f0a7a6b2e4451b100e976cedda2f6a8c026a8f2848572beeb87bf1977ec3"
+    },
+    {
+      "path": "test-unresolved_accepted_future.png",
+      "sha256": "9d2b84bf6ecd79ef4a4b144843e7303170c1a83160380917b50a2d56cfb1353e"
+    }
+  ],
+  "decoded_video_review": {
+    "path": "test-unresolved_accepted_future.mp4",
+    "encoded_frame_index": 30,
+    "camera_step": 10
+  },
+  "media_checks": [
+    {
+      "path": "test-corrected_false_safe.mp4",
+      "sha256": "1bd70935dc94e050741f2191797f04584f06d7d68139c05fa2e2d925f2c70d55",
+      "ffprobe": {
+        "codec_name": "h264",
+        "width": 1280,
+        "height": 800,
+        "r_frame_rate": "10/1",
+        "duration": "8.000000",
+        "nb_read_frames": "80"
+      },
+      "gif_durations_ms": [
+        2000,
+        1000,
+        1000,
+        1000,
+        1000,
+        2000
+      ]
+    },
+    {
+      "path": "test-new_false_safe.mp4",
+      "sha256": "5e6caec19e8451ae8cdc6053e7bd6cb234bd1a15f23ac661288d1bed6b4019e7",
+      "ffprobe": {
+        "codec_name": "h264",
+        "width": 1280,
+        "height": 800,
+        "r_frame_rate": "10/1",
+        "duration": "8.000000",
+        "nb_read_frames": "80"
+      },
+      "gif_durations_ms": [
+        2000,
+        1000,
+        1000,
+        1000,
+        1000,
+        2000
+      ]
+    },
+    {
+      "path": "test-unresolved_accepted_future.mp4",
+      "sha256": "30c0d68a0af26a620fe1baee771cfa4c36644569020c250976706e1a92fbb11a",
+      "ffprobe": {
+        "codec_name": "h264",
+        "width": 1280,
+        "height": 800,
+        "r_frame_rate": "10/1",
+        "duration": "6.000000",
+        "nb_read_frames": "60"
+      },
+      "gif_durations_ms": [
+        2000,
+        1000,
+        1000,
+        2000
+      ]
+    }
+  ],
+  "findings": [
+    "All three posters have a visible gap between the geometry x-axis label and saved-decision text.",
+    "Titles, px axes, legends, camera step/time and explicit censoring statements remain readable.",
+    "Hazards, saved goals and trajectories remain fully inside fixed geometry limits.",
+    "The decoded MP4 frame retains the corrected separation after lossy encoding."
+  ],
+  "checks": {
+    "animation_data_byte_identical_to_v1": true,
+    "README_byte_identical_to_v1": true,
+    "all_source_bank_generator_hashes_verified": true,
+    "all26_original_repair_outputs_unchanged": true,
+    "all_v1_manifested_output_bytes_preserved": true,
+    "all_v2_output_hashes_verified": true,
+    "ffprobe_sizes_fps_duration_frame_counts_match": true,
+    "GIF_durations_match": true
+  },
+  "defects_found": [],
+  "source_sha256": {
+    "generator": "e39d062c69c45694139d3ea038010bd204937883994f9215b06de3f8e3ff780a",
+    "focused_tests": "682ffe515a705ace81a38d71190a510c08122620baa11f78e6d0cc5d4e53b98a",
+    "preserved_v1_generator": "50f166defa5254cb3dd4cc2b6dfb9f2a3c9c2d83f6accc86155868f346a35832"
+  },
+  "validation": "Ruff passed; 16 previous focused behavior tests retained unchanged. Only axes placement changed; no broad rerun.",
+  "new_scientific_work": {
+    "model_queries": 0,
+    "simulator_steps": 0,
+    "optimizer_updates": 0
+  }
+}
