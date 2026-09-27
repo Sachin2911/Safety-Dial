@@ -83,3 +83,14 @@ allocation and arena rejection produce an approximate bank size, not exactly 512
 The [input durability audit](e2_input_durability_audit.json) verifies all 11 bank and clip
 payload files against pinned private remote metadata. Repair and goal-retention results
 remain pending.
+
+The [censoring and recipe-selection note](e2_gate_censoring_note.json) separates
+development eligibility, the deterministic fallback and the final held-out repair gate.
+The [adopted protocol](../../protocol.md#predictor-side-adaptation) requires development-only
+choices fixed before acquisition; it does not state an additional hard eligible-recipe
+gate. A default fixed without held-out feedback can therefore be reported as a fallback
+after inconclusive development ranking, provided the unchanged final repair and retention
+gates pass. It must not be described as a development-validated optimum. The final audit
+will record actual eligible-candidate counts and fallback usage; the current run and its
+thresholds remain unchanged. An undefined rate is inconclusive evidence, not proof that
+adaptation cannot repair the model.

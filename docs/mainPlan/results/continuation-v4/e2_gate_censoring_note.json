@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "written_utc": "2026-09-27T00:23:06.002877+00:00",
+  "status": "read_only_interpretation_current_gate_pending",
+  "scope": "Interpret existing code and adopted protocol only. No final-test metrics inspected and no actual final gate outcome inferred from development results or E1 curves. Running outputs, recipes, thresholds and code remain untouched.",
+  "reported_context": "Parent reports undefined development matched-acceptance baseline FSA from an accepted unresolved future, and undefined FSA for the first seven recipe evaluations. These are partial development observations, not a final result.",
+  "findings": [
+    {
+      "topic": "Undefined metric semantics",
+      "conclusion": "An accepted censored future without an already observed unsafe event makes point FSA undefined. Known unsafe events remain resolved even if a later suffix is censored. Zero acceptance is also undefined. This is distinct from establishing optimizer or model failure.",
+      "source": "experiments/helpers/dialMetrics.py:33-54"
+    },
+    {
+      "topic": "Development eligibility",
+      "conclusion": "A recipe enters the eligible list when its development matched FSA is not NaN and clip retention MSE is at most 1.15 times baseline. Baseline development FSA is not part of this predicate and is only printed in the chosen-recipe comparison. Undefined development baseline alone therefore does not mathematically force the implemented final gate false.",
+      "source": "experiments/scripts/pusht_e2_repair.py:327-331"
+    },
+    {
+      "topic": "Selection when eligible recipes exist",
+      "conclusion": "The runner selects the eligible recipe with minimum development matched FSA. A later defined recipe can qualify if it also passes the clip-retention predicate; the first seven undefined entries do not determine the eventual selection.",
+      "source": "experiments/scripts/pusht_e2_repair.py:310-329"
+    },
+    {
+      "topic": "Unfiltered fallback",
+      "conclusion": "If the eligible list is empty, min(ok or dev_results, key=development_FSA) operates on the entire unfiltered grid, including retention failures and NaN keys. If its first key is NaN, later keys cannot compare less than it, so the first grid entry is retained. For the current full grid that entry is predictor_side / teacher_forced / learning_rate 2e-5 / 1000 steps. This is an ordering fallback, not evidence that a recipe met development eligibility; no explicit fallback flag is stored by the current selection code.",
+      "source": "experiments/scripts/pusht_e2_repair.py:310-331"
+    },
+    {
+      "topic": "Final gate, conditional on future final metrics",
+      "conclusion": "The final gate uses TEST matched FSA for no-update, adapted and readout-correction arms. It requires relative reduction >=0.25, adapted FSA below readout-correction FSA, clip retention within 15%, and complete passing goal retention. If the baseline TEST FSA is NaN, relative reduction is NaN and the gate cannot pass even if adapted FSA is defined. NaN adapted/readout-correction comparisons likewise cannot pass. Baseline DEV NaN is not that condition. The current final gate outcome remains pending.",
+      "source": "experiments/scripts/pusht_e2_repair.py:392-399"
+    },
+    {
+      "topic": "Work still completed after undefined development results",
+      "conclusion": "There is no early censoring stop after recipe selection. The runner retrains the selected/fallback recipe, evaluates baseline and adapted goal retention on 20 fixed cases with 50 blocks in this workflow, fits readout-only correction on the same new data, evaluates all arms, computes fixed-margin controls and paired root-bootstrap diagnostics, then saves weights, retention cases/results, raw report/rows and a paired report. Usual upload remains part of that existing run regardless of gate success.",
+      "source": "experiments/scripts/pusht_e2_repair.py:333-440"
+    },
+    {
+      "topic": "Fixed-margin fallback under undefined target",
+      "conclusion": "If the selected adapted development FSA is NaN, no finite baseline FSA can satisfy the comparison to that target; the existing fixed-margin search falls back to margin 80. That fallback must not be described as having matched a defined adapted FSA.",
+      "source": "experiments/scripts/pusht_e2_repair.py:371-376"
+    },
+    {
+      "topic": "Inconclusive censoring versus no repair",
+      "conclusion": "A false gate caused by undefined required metrics means the registered repair criterion was not established by this censored evaluation. It does not establish no repair or no possible repair. Read accepted/unsafe/unresolved counts and lower/upper bounds beside the point result. Finite conditional bootstrap endpoints cannot resolve an undefined full-data contrast. A defined comparison failing the improvement requirement, or a separate retention failure, should be identified by its own recorded component rather than conflated with censoring.",
+      "source": "experiments/helpers/pushtRepairReport.py:232-246; docs/mainPlan/protocol.md:31-42,125-136"
+    },
+    {
+      "topic": "Execution completion versus scientific qualification",
+      "conclusion": "The script can finish successfully with gate.passes=false. The managed workflow checks that recorded boolean after the E2 stage and does not thereby qualify the acquisition stage. Completion of retention/reporting is not a positive repair claim.",
+      "source": "experiments/scripts/pusht_e2_repair.py:409-442; configs/pusht/continuation-v4.yaml:120-126"
+    },
+    {
+      "topic": "Eligible-development prerequisite is not enforced downstream",
+      "conclusion": "Neither the E2 final gate nor E3 startup explicitly requires that chosen_recipe came from the eligible development list. E2 does not store an eligibility/fallback flag in the gate. E3 enforce_gate checks only the recorded E2 gate.passes boolean for non-diagnostic runs; startup additionally validates input paths, development feasibility, bank splits and basic recipe parameters, but does not inspect recipe_grid eligibility. Therefore an unfiltered fallback can theoretically pass the final test-and-retention gate and enter normal E3, for example when development FSA remains undefined but the required later test metrics are defined and pass. This is an implementation qualification limitation, not a current-result claim. The current final gate and downstream outcome remain pending.",
+      "source": "experiments/scripts/pusht_e2_repair.py:328-331,361-363,392-399; experiments/helpers/acquisitionSafety.py:45-59; experiments/scripts/pusht_e3_acquisition.py:349-380",
+      "protocol_context": "docs/mainPlan/pushT.md:122-124 and docs/mainPlan/protocol.md:80-90 require choosing and fixing the adaptation recipe on development data."
+    }
+  ],
+  "existing_test_evidence": [
+    {
+      "path": "experiments/tests/test_acquisition_protocol.py:227-243",
+      "assertion": "Accepted unresolved evaluation remains NaN, with explicit bounds and accepted-censored count."
+    },
+    {
+      "path": "tests/test_pusht_repair_report.py:85-95",
+      "assertion": "Paired report preserves the failed gate, all counts, recorded margins and nondegenerate censoring bounds."
+    },
+    {
+      "path": "tests/test_pusht_repair_report.py:134-151",
+      "assertion": "Serialized undefined FSA remains null and the report states that the full-data contrast is undefined; original report files remain unchanged."
+    }
+  ],
+  "test_scope": "Tests were read, not rerun. No direct isolated regression for the inline E2 all-NaN recipe fallback was found in the searched existing tests. Existing enforce_gate tests check failed-gate/diagnostic boundaries; no separate eligible-development-selection prerequisite is present in that helper.",
+  "sources_sha256": {
+    "experiments/scripts/pusht_e2_repair.py": "5371e7d4a75338e0c6304cf384a5e84269e66cc6ad9735b196dcc6d64d9ce15c",
+    "experiments/helpers/dialMetrics.py": "80e77d25c7f3a05ebb83f1df46a9097c64893e4ea206bfd669469b0ff749a68b",
+    "experiments/helpers/pushtRepairReport.py": "cb910aab91f8a1e124b1705b33b29f6b4d362cd8f8ac44c0f11859e05a8c31cf",
+    "docs/mainPlan/protocol.md": "60a0e31f821ee4ad295b4100c530e6ecfe32bf9129c6dcf68629eec98c5f9ee2",
+    "docs/mainPlan/pushT.md": "91be8ebb938ef07d935819b71a16c46a2d7c0e825146ffd32f7a0fa29ccfee1e",
+    "tests/test_pusht_repair_report.py": "28cc3ca0a4ce87a2f958de89aae01c83ab7a27b5d137bc96bfcf4008f2be8cb4",
+    "experiments/tests/test_acquisition_protocol.py": "c5091b084f2e81935cd0ecfbd9372e91676565fe102523eab00a94ff27e62d43",
+    "configs/pusht/continuation-v4.yaml": "8c7ca79101d78184ece45e7a68edc0d6de9b44ce1bca0c6a5d1b7a4032956103",
+    "experiments/helpers/acquisitionSafety.py": "2d70ca9491fcb8213d11b8473f6320bad84421377e5430533357c3df6e1c297b",
+    "experiments/scripts/pusht_e3_acquisition.py": "2426d67ee590c560b92728b0fed78ee58ff19d459428c4a25503a2a4663b2099"
+  },
+  "actions": {
+    "new_experiments": 0,
+    "model_queries": 0,
+    "simulator_steps": 0,
+    "final_test_metric_reads": 0,
+    "source_or_runtime_changes": 0,
+    "threshold_or_recipe_changes": 0,
+    "uploads": 0,
+    "staged_or_committed": false
+  }
+}
