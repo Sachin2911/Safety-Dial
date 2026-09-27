@@ -1,0 +1,75 @@
+{
+  "source": "docs/mainPlan/results/continuation-v4/repair-summary-charts/chart_data.json",
+  "source_sha256": "bb669d3693de426c8229df141af91792acecef8969ffd3c2bb8786ab21d8c065",
+  "scope": "representative_test_only",
+  "test": {
+    "arms": {
+      "no_update": {
+        "n": 4096,
+        "accepted": 3139,
+        "known_false_safe": 756,
+        "accepted_unresolved": 49,
+        "acceptance_rate": 0.766357421875,
+        "fsa_point": null,
+        "fsa_lower": 0.24084103217585218,
+        "fsa_upper": 0.2564510990761389,
+        "point_status": "undefined_accepted_unresolved",
+        "margin_px": 0.03674023453156025,
+        "source": "paired_report.json#/banks/test/arms/no_update/at_matched"
+      },
+      "adapted": {
+        "n": 4096,
+        "accepted": 2950,
+        "known_false_safe": 620,
+        "accepted_unresolved": 50,
+        "acceptance_rate": 0.72021484375,
+        "fsa_point": null,
+        "fsa_lower": 0.21016949152542372,
+        "fsa_upper": 0.2271186440677966,
+        "point_status": "undefined_accepted_unresolved",
+        "margin_px": 6.071947391163121,
+        "source": "paired_report.json#/banks/test/arms/adapted/at_matched"
+      },
+      "readout_correction": {
+        "n": 4096,
+        "accepted": 2905,
+        "known_false_safe": 795,
+        "accepted_unresolved": 34,
+        "acceptance_rate": 0.709228515625,
+        "fsa_point": null,
+        "fsa_lower": 0.2736660929432014,
+        "fsa_upper": 0.28537005163511187,
+        "point_status": "undefined_accepted_unresolved",
+        "margin_px": 3.802505542106649,
+        "source": "paired_report.json#/banks/test/arms/readout_correction/at_matched"
+      },
+      "fixed_margin": {
+        "n": 4096,
+        "accepted": 132,
+        "known_false_safe": 4,
+        "accepted_unresolved": 12,
+        "acceptance_rate": 0.0322265625,
+        "fsa_point": null,
+        "fsa_lower": 0.030303030303030304,
+        "fsa_upper": 0.12121212121212122,
+        "point_status": "undefined_accepted_unresolved",
+        "margin_px": 80.0,
+        "source": "paired_report.json#/banks/test/arms/fixed_margin/at_matched"
+      }
+    },
+    "n_roots": 128,
+    "relative_reduction_outer_bound": {
+      "lower": 0.056976952739664605,
+      "upper": 0.18046952310769554,
+      "lower_exact_fraction": "12707/223020",
+      "upper_exact_fraction": "42857/237475",
+      "threshold": 0.25,
+      "formula": "[1 - adapted_upper/no_update_lower, 1 - adapted_lower/no_update_upper]",
+      "interpretation": "Conservative outer identification bounds for the saved fixed accepted sets. Shared labels need not jointly attain the endpoints. Not a confidence interval or population inference."
+    },
+    "development_target_acceptance": 0.8489583333333334,
+    "interpretation": "Each arm keeps its recorded development-set threshold. Achieved test acceptance differs. Fixed margin uses the recorded 80 px fallback, not a matched test acceptance rate.",
+    "point_fsa": "All four are undefined; plotted intervals have no invented midpoint or point estimate."
+  },
+  "transform": "Multiply saved proportions by 100 for percent axes; display rounding only."
+}

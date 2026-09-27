@@ -8,6 +8,8 @@ claimed here.
 - `assets/e1-attribution`: known development false-safe attribution; the unresolved
   accepted future remains separate. Dense original dial and pose plots remain
   available as supplementary figures in the result tree.
+- `assets/e2-bounds`: saved representative-test acceptance and identification
+  bounds. FSA point estimates remain undefined; stress results stay separate.
 - `assets/pusht-examples`: two existing measured open-loop examples. Keep the
   detailed README captions with their plots, especially the unresolved suffix and
   the distinction between recorded geometry and model decision values.

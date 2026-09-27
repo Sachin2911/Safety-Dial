@@ -1,0 +1,148 @@
+"""Render saved representative-test E2 rates and identification bounds only."""
+import argparse
+from datetime import datetime, timezone
+import hashlib
+import json
+import math
+from pathlib import Path
+
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib.ticker import PercentFormatter
+
+SOURCE = Path("docs/mainPlan/results/continuation-v4/repair-summary-charts/chart_data.json")
+EXPECTED_SHA = "bb669d3693de426c8229df141af91792acecef8969ffd3c2bb8786ab21d8c065"
+ARMS = ["no_update", "adapted", "readout_correction", "fixed_margin"]
+LABELS = ["No update", "Adapted", "Readout\ncorrection", "Fixed margin\n(80 px)"]
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def inventory(directory):
+    return {str(p.resolve()): sha(p) for p in sorted(directory.rglob("*")) if p.is_file()}
+
+
+def write_json(path, value):
+    with path.open("x") as f:
+        json.dump(value, f, indent=2, allow_nan=False)
+        f.write("\n")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--repo", type=Path, default=Path.cwd())
+    parser.add_argument("--output-dir", type=Path, default=Path(__file__).resolve().parent)
+    args = parser.parse_args()
+    root, out = args.repo.resolve(), args.output_dir.resolve()
+    src = root / SOURCE
+    assert out != src.parent and src.parent not in out.parents
+    out.mkdir(parents=True, exist_ok=True)
+    existing = list(out.iterdir())
+    assert all(p == Path(__file__).resolve() for p in existing), "Output must be fresh"
+    before = inventory(src.parent)
+    before[str(Path(__file__).resolve())] = sha(Path(__file__).resolve())
+    assert before[str(src)] == EXPECTED_SHA, "Saved chart data changed"
+    data = json.loads(src.read_text())
+    saved = data["test"]
+    assert saved["n_roots"] == 128
+    assert set(saved["arms"]) == set(ARMS)
+    for arm in ARMS:
+        row = saved["arms"][arm]
+        assert row["fsa_point"] is None and row["accepted_unresolved"] > 0
+        assert row["point_status"] == "undefined_accepted_unresolved"
+        assert row["n"] == 4096
+        assert all(math.isfinite(row[k]) for k in ["acceptance_rate", "fsa_lower", "fsa_upper"])
+        assert 0 <= row["acceptance_rate"] <= 1
+        assert 0 <= row["fsa_lower"] <= row["fsa_upper"] <= 1
+
+    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 11,
+                         "axes.titlesize": 12, "axes.labelsize": 11,
+                         "xtick.labelsize": 10.5, "ytick.labelsize": 11,
+                         "pdf.fonttype": 42, "ps.fonttype": 42})
+    fig = plt.figure(figsize=(7, 4.9), facecolor="white")
+    ax = fig.add_axes([0.23, 0.29, 0.285, 0.53])
+    bx = fig.add_axes([0.625, 0.29, 0.335, 0.53], sharey=ax)
+    colors = ["#44637C", "#187F8A", "#81709A", "#A17543"]
+    for i, (arm, color) in enumerate(zip(ARMS, colors, strict=True)):
+        y = 3 - i
+        row = saved["arms"][arm]
+        rate, lower, upper = [100 * row[k] for k in ["acceptance_rate", "fsa_lower", "fsa_upper"]]
+        ax.barh(y, rate, height=0.30, color=color, zorder=3)
+        ax.text(rate + 2, y, f"{rate:.1f}%", va="center", fontsize=11)
+        bx.barh(y, upper - lower, left=lower, height=0.30, color=color, zorder=3)
+        bx.text((lower + upper) / 2, y - 0.25, f"{lower:.1f}% to {upper:.1f}%",
+                ha="center", va="top", fontsize=10.5)
+    ax.set_yticks([3, 2, 1, 0], LABELS)
+    ax.set_xlim(0, 105)
+    ax.set_xticks([0, 50, 100])
+    bx.set_xlim(0, 35)
+    bx.set_xticks([0, 10, 20, 30])
+    ax.set_ylim(-0.68, 3.55)
+    ax.set_title("Accepted plans", pad=12, loc="left", weight="bold")
+    bx.set_title("False-safe acceptance", pad=12, loc="left", weight="bold")
+    ax.set_xlabel("Share of all plans", labelpad=8)
+    bx.set_xlabel("Share of accepted plans", labelpad=8)
+    bx.tick_params(axis="y", labelleft=False)
+    for axis in [ax, bx]:
+        axis.xaxis.set_major_formatter(PercentFormatter(100, decimals=0))
+        axis.grid(axis="x", color="#E1E6EA", linewidth=0.7, zorder=0)
+        axis.set_axisbelow(True)
+        axis.tick_params(axis="y", length=0, pad=10)
+        axis.tick_params(axis="x", length=0, pad=5)
+        for spine in axis.spines.values():
+            spine.set_visible(False)
+    fig.text(0.04, 0.945, "Push-T E2: representative test decisions", fontsize=14, weight="bold")
+    fig.text(0.04, 0.887, "Saved development thresholds; achieved test acceptance differs.", fontsize=10.5)
+    fig.text(0.04, 0.135, "Every point FSA is undefined because accepted futures remain unresolved.", fontsize=10.5)
+    fig.text(0.04, 0.085, "Colored FSA bands are identification bounds, not confidence intervals.", fontsize=10.5)
+    fig.text(0.04, 0.035, "4,096 labelled cases from 128 source roots; stress results are separate.", fontsize=10.5)
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    for obj in fig.findobj(match=matplotlib.text.Text):
+        if not obj.get_visible() or not obj.get_text():
+            continue
+        assert obj.get_fontsize() >= 10
+        box = obj.get_window_extent(renderer)
+        assert box.x0 >= -1 and box.y0 >= -1 and box.x1 <= fig.bbox.width + 1 and box.y1 <= fig.bbox.height + 1, obj.get_text()
+    for ext in ["png", "pdf"]:
+        fig.savefig(out / f"e2-representative-bounds.{ext}", dpi=240,
+                    metadata={"Title": "Push-T E2 representative test identification bounds", "Author": "Sachin Mohan"})
+    plt.close(fig)
+    write_json(out / "plotted_data.json", {"source": str(SOURCE), "source_sha256": EXPECTED_SHA,
+                                         "scope": "representative_test_only", "test": saved,
+                                         "transform": "Multiply saved proportions by 100 for percent axes; display rounding only."})
+    caption = """# Compact E2 representative-test figure
+
+Use `e2-representative-bounds.png` in the report and retain the vector PDF as a supplement. Native size is 7 by 4.9 inches; all text is at least 10.5 pt except no text below 10 pt is permitted by the render check. No full-resolution original chart is changed.
+
+**Caption.** Recorded decisions on 4,096 representative-test labelled cases from 128 source roots. Left: each arm's achieved acceptance rate. Right: saved false-safe-acceptance (FSA) lower/upper identification bounds for its accepted set. All four FSA point estimates are undefined because some accepted futures have unresolved outcomes. Colored rectangular bands have no midpoint, confidence-interval interpretation or sampling uncertainty claim. The no-update, adapted and readout-correction thresholds were fixed from development; their achieved test acceptance rates differ. Fixed margin is the recorded 80 px fallback and accepts only 3.2% of plans. These are different fixed accepted sets, not matched test acceptance. Stress-bank results are separate.
+
+| Arm | Accepted / 4,096 | Known false-safe | Accepted unresolved | Acceptance | Saved FSA bounds |
+|---|---:|---:|---:|---:|---:|
+"""
+    for arm, label in zip(ARMS, LABELS, strict=True):
+        r = saved["arms"][arm]
+        caption += f"| {label.replace(chr(10), ' ')} | {r['accepted']:,} | {r['known_false_safe']:,} | {r['accepted_unresolved']:,} | {100*r['acceptance_rate']:.3f}% | {100*r['fsa_lower']:.3f}% to {100*r['fsa_upper']:.3f}% |\n"
+    caption += """
+The saved conservative outer identification interval for relative reduction, adapted versus no update on these fixed accepted sets, is 5.6977% to 18.0470%; its upper bound is below the specified 25% target. Shared unresolved labels need not jointly attain the endpoints. This is not a sampling confidence interval, a population inference, evidence of no improvement, or a replacement for the original undefined-point gate. The saved gate remains unchanged.
+
+**Provenance.** Values are copied from `docs/mainPlan/results/continuation-v4/repair-summary-charts/chart_data.json`, specifically its `test` entry. Exact unrounded values and original source pointers remain in `plotted_data.json`. Only percentage conversion and display rounding are used. No new statistical estimation, threshold selection, bootstrap, model, physics or network call is performed. The manifest hashes this source, the original chart directory and this generator before and after rendering. The fresh bundle is local report preparation, not a publication receipt.
+"""
+    with (out / "README.md").open("x") as f:
+        f.write(caption)
+    assert all(sha(Path(p)) == value for p, value in before.items()), "An input changed during rendering"
+    write_json(out / "manifest.json", {"status": "rendered_pending_visual_review", "created_utc": datetime.now(timezone.utc).isoformat(),
+               "author": "Sachin Mohan", "scope": "representative_test_only", "inputs_sha256": before,
+               "inputs_unchanged": True, "size_inches": [7, 4.9], "minimum_text_font_pt": 10.5,
+               "all_text_inside_figure": True, "model_calls": 0, "simulator_steps": 0, "network_calls": 0,
+               "new_statistical_estimates": 0, "matplotlib_version": matplotlib.__version__,
+               "files_sha256": {p.name: sha(p) for p in sorted(out.iterdir()) if p.is_file()}})
+    print(json.dumps({"output_dir": str(out), "input_sha256": EXPECTED_SHA,
+                      "files": {p.name: sha(p) for p in sorted(out.iterdir()) if p.is_file()}}, indent=2))
+
+
+if __name__ == "__main__":
+    main()
