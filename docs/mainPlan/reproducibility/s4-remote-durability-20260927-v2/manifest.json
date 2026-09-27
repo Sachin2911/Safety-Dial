@@ -1,0 +1,305 @@
+{
+  "kind": "actual_S4_remote_durability_v2_preservation",
+  "status": "actual_remote_audit_passed_and_exact_sources_preserved",
+  "preserved_utc": "2026-09-27T10:43:24.506732+00:00",
+  "run_id": "walker2d-s4-recovery-20260927-1",
+  "canonical_audit": {
+    "source": "runs/continuation-audit/walker_s4_remote_durability_20260927_v2.json",
+    "path": "docs/mainPlan/results/continuation-v2/walker_s4_final_remote_audit_20260927.json",
+    "sha256": "afe647e62df21dbc2aab035723ff9ce45fb3ce352c3acfcc534b6cf18fef70f9",
+    "bytes": 61116,
+    "byte_identical": true,
+    "observed_utc": "2026-09-27T10:40:43.484042+00:00"
+  },
+  "sources": [
+    {
+      "original_path": "/tmp/audit_walker_s4_remote_durability_20260927_v2.py",
+      "snapshot": "audit_walker_s4_remote_durability_20260927_v2.py.txt",
+      "sha256": "a855190e009388409470a36ee01c77d750415befdd7dd0139e07ae28615c453e",
+      "bytes": 19387,
+      "byte_identical": true,
+      "status": "actual successful remote verifier"
+    },
+    {
+      "original_path": "/tmp/test_walker_s4_remote_durability_20260927_v2.py",
+      "snapshot": "test_walker_s4_remote_durability_20260927_v2.py.txt",
+      "sha256": "42d9cf1b148b47235c9ec60ccb2aafe3a73220b4cae908fa87d07df6334ae7a2",
+      "bytes": 11995,
+      "byte_identical": true,
+      "status": "27 focused synthetic tests passed; not a remote execution"
+    },
+    {
+      "original_path": "/tmp/preflight_walker_s4_remote_v2_20260927.py",
+      "snapshot": "preflight_walker_s4_remote_v2_20260927.py.txt",
+      "sha256": "4eef5c9979ff2a98f903b1409efe6248985717b7efa11dfd89d759997b281b26",
+      "bytes": 3911,
+      "byte_identical": true,
+      "status": "actual local-only terminal preflight"
+    },
+    {
+      "original_path": "/tmp/walker_s4_remote_v2_local_preflight_20260927.json",
+      "snapshot": "local_preflight.json",
+      "sha256": "36e4260503ebeaad18f9e4042ffcdb55dfdc7cf6afff945dcdf6537ded9613ac",
+      "bytes": 10187,
+      "byte_identical": true,
+      "status": "actual passed local-only preflight record"
+    }
+  ],
+  "v1": {
+    "bundle": "docs/mainPlan/reproducibility/s4-remote-durability-20260927",
+    "files_sha256_unchanged": {
+      "audit_walker_s4_remote_durability_20260927.py.txt": "864b716d6bc31ba28f4e2203491ca9c9baeee5c1acdb3f1fedfe1538a03c9b91",
+      "test_walker_s4_remote_durability_20260927.py.txt": "a9f9c1a9b92a2614d598d88d809e6573d633ac752225d18cf48879b188b545c5",
+      "validation.json": "04a3f83c363df2cbf429a1074d78c4953a8f60dfc2d9d7a3dc0f534690956653",
+      "README.md": "8a7b0cb493746bcd3f563b271cc7958d5db4b3d1d7bacb2b34e9db11073eafe9",
+      "manifest.json": "b327a3108aacd7c5bf60a428dccfb2b8fec346832a143be1583a232b1178a4c9"
+    },
+    "verifier_sha256": "864b716d6bc31ba28f4e2203491ca9c9baeee5c1acdb3f1fedfe1538a03c9b91",
+    "tests_sha256": "a9f9c1a9b92a2614d598d88d809e6573d633ac752225d18cf48879b188b545c5",
+    "observed_failure_reported_by_parent": "Changed acquisition design in payload_plan before authentication/network, because required no_update was omitted from exact adaptation keys",
+    "producer_data_changed": false
+  },
+  "change": "One line: exact adaptation key set now includes required no_update; arm/model count and all remaining guards unchanged.",
+  "focused_tests": {
+    "passed": 27,
+    "elapsed_s": 0.44,
+    "ruff": "passed",
+    "new_cases": [
+      "complete schema baseline is not a new upload",
+      "missing no_update rejected",
+      "unexpected acquisition arm rejected"
+    ]
+  },
+  "remote_audit_summary": {
+    "uploads": 13,
+    "files": 163,
+    "bytes": 2056232115,
+    "by_type": {
+      "dataset": {
+        "uploads": 1,
+        "files": 67,
+        "bytes": 1458685945
+      },
+      "model": {
+        "uploads": 12,
+        "files": 96,
+        "bytes": 597546170
+      }
+    },
+    "payloads": [
+      {
+        "receipt": {
+          "repo_id": "Sachioster/safetydial-walker2d-data",
+          "repo_type": "dataset",
+          "path": "banks/walker2d-s4-recovery-20260927-1",
+          "revision": "09ac490696cecb951e83644db48e646878905f87",
+          "run_id": "walker2d-s4-recovery-20260927-1"
+        },
+        "files": 67,
+        "bytes": 1458685945,
+        "remote_repo_private": true,
+        "tag_target": "09ac490696cecb951e83644db48e646878905f87"
+      },
+      {
+        "receipt": {
+          "repo_id": "Sachioster/safetydial-walker2d",
+          "repo_type": "model",
+          "path": "adapted/walker2d-s4-recovery-20260927-1-random-s0-b128",
+          "revision": "d13de5f5c07e7ec0808b1a292ece0bcf6a0e11fc",
+          "run_id": "walker2d-s4-recovery-20260927-1-random-s0-b128"
+        },
+        "files": 8,
+        "bytes": 49792132,
+        "remote_repo_private": true,
+        "tag_target": "d13de5f5c07e7ec0808b1a292ece0bcf6a0e11fc"
+      },
+      {
+        "receipt": {
+          "repo_id": "Sachioster/safetydial-walker2d",
+          "repo_type": "model",
+          "path": "adapted/walker2d-s4-recovery-20260927-1-random-s0-b512",
+          "revision": "dcfb64ad75affdd765058c3e3880145c1518b6ce",
+          "run_id": "walker2d-s4-recovery-20260927-1-random-s0-b512"
+        },
+        "files": 8,
+        "bytes": 49798521,
+        "remote_repo_private": true,
+        "tag_target": "dcfb64ad75affdd765058c3e3880145c1518b6ce"
+      },
+      {
+        "receipt": {
+          "repo_id": "Sachioster/safetydial-walker2d",
+          "repo_type": "model",
+          "path": "adapted/walker2d-s4-recovery-20260927-1-random-s1-b128",
+          "revision": "bd855acf9c3847900a4f2d5667fc073960f27cc2",
+          "run_id": "walker2d-s4-recovery-20260927-1-random-s1-b128"
+        },
+        "files": 8,
+        "bytes": 49792721,
+        "remote_repo_private": true,
+        "tag_target": "bd855acf9c3847900a4f2d5667fc073960f27cc2"
+      },
+      {
+        "receipt": {
+          "repo_id": "Sachioster/safetydial-walker2d",
+          "repo_type": "model",
+          "path": "adapted/walker2d-s4-recovery-20260927-1-random-s1-b512",
+          "revision": "5d550a6570d5f4dda66d35c4216856a5909a1539",
+          "run_id": "walker2d-s4-recovery-20260927-1-random-s1-b512"
+        },
+        "files": 8,
+        "bytes": 49798118,
+        "remote_repo_private": true,
+        "tag_target": "5d550a6570d5f4dda66d35c4216856a5909a1539"
+      },
+      {
+        "receipt": {
+          "repo_id": "Sachioster/safetydial-walker2d",
+          "repo_type": "model",
+          "path": "adapted/walker2d-s4-recovery-20260927-1-random-s2-b128",
+          "revision": "c9e0f5d4068b495090793bb2c74d4fa97dc487fd",
+          "run_id": "walker2d-s4-recovery-20260927-1-random-s2-b128"
+        },
+        "files": 8,
+        "bytes": 49792634,
+        "remote_repo_private": true,
+        "tag_target": "c9e0f5d4068b495090793bb2c74d4fa97dc487fd"
+      },
+      {
+        "receipt": {
+          "repo_id": "Sachioster/safetydial-walker2d",
+          "repo_type": "model",
+          "path": "adapted/walker2d-s4-recovery-20260927-1-random-s2-b512",
+          "revision": "1b3e1a84cbf3e0ddb2007c52861fb3a3dda37baa",
+          "run_id": "walker2d-s4-recovery-20260927-1-random-s2-b512"
+        },
+        "files": 8,
+        "bytes": 49798204,
+        "remote_repo_private": true,
+        "tag_target": "1b3e1a84cbf3e0ddb2007c52861fb3a3dda37baa"
+      },
+      {
+        "receipt": {
+          "repo_id": "Sachioster/safetydial-walker2d",
+          "repo_type": "model",
+          "path": "adapted/walker2d-s4-recovery-20260927-1-boundary-s0-b128",
+          "revision": "e87d2aac5cdf656d81d0ade91ccab7d5d2fc84c1",
+          "run_id": "walker2d-s4-recovery-20260927-1-boundary-s0-b128"
+        },
+        "files": 8,
+        "bytes": 49792578,
+        "remote_repo_private": true,
+        "tag_target": "e87d2aac5cdf656d81d0ade91ccab7d5d2fc84c1"
+      },
+      {
+        "receipt": {
+          "repo_id": "Sachioster/safetydial-walker2d",
+          "repo_type": "model",
+          "path": "adapted/walker2d-s4-recovery-20260927-1-boundary-s0-b512",
+          "revision": "e32f32e60972d9af47b65fae76c28a3354b24513",
+          "run_id": "walker2d-s4-recovery-20260927-1-boundary-s0-b512"
+        },
+        "files": 8,
+        "bytes": 49798811,
+        "remote_repo_private": true,
+        "tag_target": "e32f32e60972d9af47b65fae76c28a3354b24513"
+      },
+      {
+        "receipt": {
+          "repo_id": "Sachioster/safetydial-walker2d",
+          "repo_type": "model",
+          "path": "adapted/walker2d-s4-recovery-20260927-1-boundary-s1-b128",
+          "revision": "7df3da587335fd5e75b1f214ff18842cf774834d",
+          "run_id": "walker2d-s4-recovery-20260927-1-boundary-s1-b128"
+        },
+        "files": 8,
+        "bytes": 49792170,
+        "remote_repo_private": true,
+        "tag_target": "7df3da587335fd5e75b1f214ff18842cf774834d"
+      },
+      {
+        "receipt": {
+          "repo_id": "Sachioster/safetydial-walker2d",
+          "repo_type": "model",
+          "path": "adapted/walker2d-s4-recovery-20260927-1-boundary-s1-b512",
+          "revision": "6f4363e451efd9478c3bf1676b5fcc586f7b11e0",
+          "run_id": "walker2d-s4-recovery-20260927-1-boundary-s1-b512"
+        },
+        "files": 8,
+        "bytes": 49798899,
+        "remote_repo_private": true,
+        "tag_target": "6f4363e451efd9478c3bf1676b5fcc586f7b11e0"
+      },
+      {
+        "receipt": {
+          "repo_id": "Sachioster/safetydial-walker2d",
+          "repo_type": "model",
+          "path": "adapted/walker2d-s4-recovery-20260927-1-boundary-s2-b128",
+          "revision": "6e141a0d741c3a7f696f47849d9da3d0f5c87b9f",
+          "run_id": "walker2d-s4-recovery-20260927-1-boundary-s2-b128"
+        },
+        "files": 8,
+        "bytes": 49792844,
+        "remote_repo_private": true,
+        "tag_target": "6e141a0d741c3a7f696f47849d9da3d0f5c87b9f"
+      },
+      {
+        "receipt": {
+          "repo_id": "Sachioster/safetydial-walker2d",
+          "repo_type": "model",
+          "path": "adapted/walker2d-s4-recovery-20260927-1-boundary-s2-b512",
+          "revision": "f91533415b8b3b5c388b1575fd74abd4c2397ee5",
+          "run_id": "walker2d-s4-recovery-20260927-1-boundary-s2-b512"
+        },
+        "files": 8,
+        "bytes": 49798538,
+        "remote_repo_private": true,
+        "tag_target": "f91533415b8b3b5c388b1575fd74abd4c2397ee5"
+      }
+    ]
+  },
+  "local_scientific_audit": {
+    "path": "/tmp/walker_s4_recovery_final_evidence.json",
+    "sha256": "da4c05a9e63185cd57500c9cd733349f8b186e84f976d34224280270aaaf1e10",
+    "git_blob_sha1": "6c474d837e91d64140e2f7b50f0a912920c704c2",
+    "size_bytes": 12388,
+    "stat_identity": [
+      59,
+      11291184937,
+      12388,
+      1790505264548130947,
+      1790505264548130947
+    ]
+  },
+  "input_sources_unchanged": true,
+  "prior_v1_bundle_unchanged": true,
+  "preservation_network_calls": 0,
+  "preservation_model_calls": 0,
+  "preservation_simulator_steps": 0,
+  "outputs": {
+    "README.md": {
+      "sha256": "bff05c1cfd9a0ba07070d3c2c17e21d934c030f2cc225f76053a0da534af85a8",
+      "bytes": 4765
+    },
+    "audit_walker_s4_remote_durability_20260927_v2.py.txt": {
+      "sha256": "a855190e009388409470a36ee01c77d750415befdd7dd0139e07ae28615c453e",
+      "bytes": 19387
+    },
+    "changes.diff": {
+      "sha256": "deeb2f4b9eae84eca5e598e0d644b8031076efb1d7bc1cf61fd08d39eb71a987",
+      "bytes": 537
+    },
+    "local_preflight.json": {
+      "sha256": "36e4260503ebeaad18f9e4042ffcdb55dfdc7cf6afff945dcdf6537ded9613ac",
+      "bytes": 10187
+    },
+    "preflight_walker_s4_remote_v2_20260927.py.txt": {
+      "sha256": "4eef5c9979ff2a98f903b1409efe6248985717b7efa11dfd89d759997b281b26",
+      "bytes": 3911
+    },
+    "test_walker_s4_remote_durability_20260927_v2.py.txt": {
+      "sha256": "42d9cf1b148b47235c9ec60ccb2aafe3a73220b4cae908fa87d07df6334ae7a2",
+      "bytes": 11995
+    }
+  }
+}

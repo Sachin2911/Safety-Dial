@@ -1,26 +1,14 @@
-# Main-plan report through S4
+# Through-S4 research report
 
-The final report is pending completion of the recovered Walker workflow and its
-scientific gates. S5 is excluded. This directory currently preserves reviewed
-compact figures for the final PDF. No final PDF or completed Walker result is
-claimed here.
+The experiments are complete through S4. Push-T stopped at the unchanged E2 repair/retention gate. Walker LeWM training completed at 214,780 updates, and the health-only S4 comparison completed all 12 adapted models. S5 was not launched.
 
-- `assets/e1-attribution`: known development false-safe attribution; the unresolved
-  accepted future remains separate. Dense original dial and pose plots remain
-  available as supplementary figures in the result tree.
-- `assets/e2-bounds`: saved representative-test acceptance and identification
-  bounds. FSA point estimates remain undefined; stress results stay separate.
-- `assets/pusht-examples`: two existing measured open-loop examples. Keep the
-  detailed README captions with their plots, especially the unresolved suffix and
-  the distinction between recorded geometry and model decision values.
-- `assets/walker-alignment`: illustrative set A episodes 0 and 2 from the saved
-  post hoc alignment audit. Use full width on a separate report page. This is not
-  a prevalence sample or a world-model qualification result.
+- [Full PDF report](pdf-v2/report.pdf)
+- [Readable report source](report.md) and [structured source](report.json)
+- [Recorded Push-T MP4/GIF examples](../../results/continuation-v4/repair-animations-v2/README.md)
+- [Walker S4 plots and full saved tables](../../results/s4/walker2d-s4-recovery-20260927-1-figures/README.md)
+- [Compact report figures](assets/)
+- [Delivery status and remote references](delivery.json)
 
-`asset_preservation.json` maps exact copies and generator snapshots to original
-paths and SHA-256 identities. Original group manifests are retained byte-for-byte;
-their paths describe generation locations. Snapshot sources end in `.py.txt` and
-may be run explicitly with Python after restoring their recorded input paths.
+The final result is mixed: adaptation improves Walker's saved dial-wide ranking score but does not show a consistent boundary-over-random advantage on the main test, and ordinary prediction errors often increase. Smaller-budget stress improvements occur with lower acceptance and do not repeat at the larger budget. The PDF records counts, uncertainty, costs, negative gates and provenance limits.
 
-The final composition, PDF, media links and publication receipts will be added
-after terminal Walker evidence is audited.
+The final PDF is the version in `pdf-v2/`; earlier local draft renders are retained separately and are not final deliverables. All media use recorded evidence. Publication is tracked separately from scientific completion in `delivery.json`.

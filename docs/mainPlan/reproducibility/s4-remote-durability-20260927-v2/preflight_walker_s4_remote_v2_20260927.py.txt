@@ -1,0 +1,57 @@
+"""Execute the verifier's exact local prelude, stopping before dotenv/HF imports."""
+import ast
+from datetime import datetime, timezone
+import hashlib
+import importlib.util
+import json
+from pathlib import Path
+import signal
+import sys
+
+source=Path('/tmp/audit_walker_s4_remote_durability_20260927_v2.py')
+output=Path('/tmp/walker_s4_remote_v2_local_preflight_20260927.json')
+assert not output.exists()
+source_bytes=source.read_bytes()
+spec=importlib.util.spec_from_file_location('s4_remote_v2',source)
+m=importlib.util.module_from_spec(spec)
+spec.loader.exec_module(m)
+module=ast.parse(source_bytes)
+main=next(node for node in module.body if isinstance(node,ast.FunctionDef) and node.name=='main')
+stop=next(i for i,node in enumerate(main.body) if isinstance(node,ast.ImportFrom) and node.module=='dotenv')
+assert not any(isinstance(n,ast.ImportFrom) and n.module in {'dotenv','huggingface_hub'} for node in main.body[:stop] for n in ast.walk(node))
+ns=dict(m.__dict__)
+old_argv=sys.argv[:]
+sys.argv=[str(source),'--local-audit','/tmp/walker_s4_recovery_final_evidence.json','--output','/workspace/Safety-Dial/runs/continuation-audit/walker_s4_remote_durability_20260927_v2.json','--max-seconds','240']
+try:
+ exec(compile(ast.Module(body=main.body[:stop],type_ignores=[]),str(source),'exec'),ns)
+ for name,path in [('run',m.RUN),('results',m.RESULTS),('bank',m.BANK)]:
+  assert m.tree_record(path)==ns['trees'][name]
+ assert m.terminal_stage(json.loads(m.STATE.read_bytes()))==ns['stage']
+ assert m.file_record(source)==ns['own']
+ assert m.file_record(Path('/tmp/walker_s4_recovery_final_evidence.json'))==ns['audit_record']
+ assert all(m.file_record(Path(p))==before for p,before in ns['source_records'].items())
+ plan=ns['plan']
+ assert len(plan)==13
+ assert sum(x['receipt']['repo_type']=='model' for x in plan)==12
+ assert sum(x['receipt']['repo_type']=='dataset' for x in plan)==1
+ result={'status':'passed_actual_terminal_local_preflight','observed_utc':datetime.now(timezone.utc).isoformat(),
+  'method':'Executed exact AST main() statements preceding first dotenv import, then repeated local tree/stage/audit/verifier/producer identity checks. No authentication or API imports/execution.',
+  'verifier':{'path':str(source),'sha256':hashlib.sha256(source_bytes).hexdigest()},
+  'tests':{'path':'/tmp/test_walker_s4_remote_durability_20260927_v2.py','sha256':hashlib.sha256(Path('/tmp/test_walker_s4_remote_durability_20260927_v2.py').read_bytes()).hexdigest(),'result':'27 passed in 0.44s; Ruff passed'},
+  'preflight_source':{'path':__file__,'sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()},
+  'prior_verifier_sha256':hashlib.sha256(Path('/tmp/audit_walker_s4_remote_durability_20260927.py').read_bytes()).hexdigest(),
+  'local_audit':{'path':'/tmp/walker_s4_recovery_final_evidence.json',**ns['audit_record']},
+  'adaptation_keys':list(ns['report']['adaptation']),
+  'terminal_stage_sha256':m.canonical_sha(ns['stage']),
+  'source_output_hashes':ns['stage']['output_hashes'],
+  'producer_sources':ns['source_records'],
+  'payloads':[{'directory':str(x['directory']),'receipt':x['receipt'],'local_files':len(x['files']),
+               'expected_remote_files':sum(Path(n).name not in m.IGNORED for n in x['files'])} for x in plan],
+  'all_local_bytes_and_source_identities_unchanged':True,'network_calls':0,'remote_checker_invoked':False,
+  'model_calls':0,'simulator_steps':0,'completed_scientific_directory_changes':False}
+ with output.open('x') as f:json.dump(result,f,indent=2);f.write('\n')
+ print(json.dumps({'status':result['status'],'payloads':len(plan),'expected_remote_files':sum(x['expected_remote_files'] for x in result['payloads']),
+  'output':str(output),'sha256':hashlib.sha256(output.read_bytes()).hexdigest(),'verifier_sha256':result['verifier']['sha256'],'tests_sha256':result['tests']['sha256']}))
+finally:
+ signal.setitimer(signal.ITIMER_REAL,0)
+ sys.argv=old_argv

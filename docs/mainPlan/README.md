@@ -6,13 +6,16 @@ supervisor, Geraud Nangue Tasse, has seen the 21 September direction and is happ
 The Walker2d track and the pretraining-versus-adaptation stretch were added on
 26 September. No experiment described in this folder had run when the plan was adopted.
 
-**Execution is now in progress.** The [validated continuation record](results/continuation-v2/README.md)
-covers rebuilt assets, replay checks and the running from-scratch Walker2d LeWM training.
-The [current Push-T continuation](results/continuation-v4/README.md) completed fresh
-bank recovery and diagnosis, then stopped at the repair and goal-retention gate.
-Walker training resumed from its verified 172,000-step checkpoint after an instance
-restart and remains in progress. These records distinguish verified evidence,
-failed diagnostic runs and results that are still pending.
+**Experiments completed through S4 on 27 September 2026.** The
+[through-S4 report](reports/through-s4-20260927/README.md) brings together the
+Push-T negative repair/retention result and the completed Walker LeWM study.
+Walker training finished at 214,780 updates after recovery, S3 qualified health only,
+and S4 completed both acquisition arms across two budgets and three seeds.
+Boundary acquisition did not show a consistent main-test advantage, and ordinary
+prediction retention regressed. Final publication status is recorded beside the report;
+scientific completion does not by itself imply that every final archive is published.
+The [earlier continuation](results/continuation-v2/README.md) and
+[Push-T record](results/continuation-v4/README.md) preserve failed and historical work.
 
 **Continuation scope updated 27 September 2026:** at the user's request, this run
 ends after S4, subject to the unchanged scientific gates. S5 is excluded and its

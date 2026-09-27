@@ -1,18 +1,18 @@
 # Which experience makes LeWM safer to use?
 
-**WORKING DRAFT: verified S2/S3; S4 and final publication pending. This is not a final PDF.**
-
 Author: Sachin Mohan
 
 Audited Push-T diagnosis and repair attempt; Walker2d LeWM study through S4
 
-Working draft, 27 September 2026: S2 and S3 verified; S4 and final publication pending
+27 September 2026
+
+**Final scientific report through S4. See the separate delivery record for publication status.**
 
 ## 1. Scope and current completion state
 
-This working draft records the audited Push-T diagnosis and completed repair attempt, the completed Walker2d LeWM training run and its health-only S3 qualification. Walker S4 terminal evidence and final publication remain pending. The user ended the continuation at S4; S5 pretraining-versus-adaptation is excluded and has not launched.
+This report covers the completed Push-T diagnosis and repair attempt and the Walker2d study through S4. Walker LeWM training finished at 214,780 updates; S3 qualified health only, and S4 completed both acquisition arms, two budgets and all three seeds. S5 pretraining-versus-adaptation is outside this completion scope and did not launch.
 
-Push-T reached a valid negative E2 repair/retention gate. That supports a measured diagnosis and a bounded unsuccessful repair attempt, not a conclusion that adaptation can never help. Walker S2 completed 214,780 updates and S3 qualified health only; speed did not qualify for the downstream comparison. These facts do not establish an S4 adaptation or acquisition effect. This composition is not a final PDF or completion certificate.
+Push-T reached a valid negative repair/retention gate: its bounded fixed-sample improvement did not meet the 25% target, with incomplete goal retention. Walker S4 shows improved auxiliary ranking after adaptation but no consistent boundary-over-random advantage on the main test, and ordinary prediction errors regress. A smaller-budget stress difference accompanies lower acceptance and does not repeat at the larger budget. These are measured outcomes of the tested designs, not claims that adaptation can never help.
 
 ## 2. Research question and experimental controls
 
@@ -50,9 +50,9 @@ Saved development attribution at zero margin: 21 of 28 known attributable false-
 
 Source: Saved decomposition.json and independent development diagnosis audit; report-only figure.
 
-Source: [Full-resolution supplement: multi-bank dial curves; any plotted observed lower bound is not a point FSA or confidence interval. Repository path: docs/mainPlan/results/continuation-v4/decomposition-figures/dial_curves_by_source.png](https://github.com/Sachin2911/Safety-Dial/blob/codex/mainplan-through-s4-20260927/docs/mainPlan/results/continuation-v4/decomposition-figures/dial_curves_by_source.png)
+Source: [Full-resolution supplement: multi-bank dial curves; any plotted observed lower bound is not a point FSA or confidence interval. Repository path: docs/mainPlan/results/continuation-v4/decomposition-figures/dial_curves_by_source.png](https://github.com/Sachin2911/Safety-Dial/blob/main/docs/mainPlan/results/continuation-v4/decomposition-figures/dial_curves_by_source.png)
 
-Source: [Full-resolution supplement: multi-bank pose error by horizon. Repository path: docs/mainPlan/results/continuation-v4/decomposition-figures/pose_error_by_horizon.png](https://github.com/Sachin2911/Safety-Dial/blob/codex/mainplan-through-s4-20260927/docs/mainPlan/results/continuation-v4/decomposition-figures/pose_error_by_horizon.png)
+Source: [Full-resolution supplement: multi-bank pose error by horizon. Repository path: docs/mainPlan/results/continuation-v4/decomposition-figures/pose_error_by_horizon.png](https://github.com/Sachin2911/Safety-Dial/blob/main/docs/mainPlan/results/continuation-v4/decomposition-figures/pose_error_by_horizon.png)
 
 ## 5. Push-T repair: fixed-sample results
 
@@ -73,7 +73,7 @@ E2 retained grid summaries and aggregate simulator metering, but not per-recipe 
 
 All point FSA values in this table are undefined. The bounds describe the possible labels of the recorded unresolved futures, not sampling uncertainty. Achieved acceptance differs across arms, so the comparison is not evidence of an exact common acceptance rate.
 
-<!-- Intended page break. No final PDF rendered yet. -->
+<!-- Page break in PDF. -->
 
 ![Saved-evidence figure](assets/e2-bounds/e2-representative-bounds.png)
 
@@ -85,7 +85,7 @@ For the fixed baseline and adapted accepted sets, a supplemental conservative re
 
 The 80 px fixed-margin arm uses an undefined-development-target fallback. Its much lower acceptance (about 3.22%) cannot be interpreted as a clean matched-acceptance solution. The unchanged E2 gate did not pass, so qualified acquisition, transfer, the oracle continuation and closed-loop work did not launch.
 
-<!-- Intended page break. No final PDF rendered yet. -->
+<!-- Page break in PDF. -->
 
 The predeclared stress bank is reported separately. It shares source roots with the representative bank, so the two are not independent replications. Its no-update, adapted and readout-correction point rates are also undefined. The fixed-margin stress point is defined at zero observed unsafe accepted decisions among 222 accepted rows, with only about 5.42% acceptance; this is not a guarantee of zero population risk and does not change the representative-test gate.
 
@@ -119,9 +119,9 @@ Goal retention used 20 fixed source-distinct cases per arm and a 50-block maximu
 
 The E2 total excludes upstream evaluation-bank construction. A separate scoped v3/v4 construction-and-witness ledger totals 574,008 steps, including the failed stress attempt; E1 evaluation adds 6,880 context steps. These scopes must not be relabeled a complete lifetime total, because an earlier failed v2 collection has no independently recoverable exact final cost.
 
-Source: [Full-resolution supplement: retention chart. Repository path: docs/mainPlan/results/continuation-v4/repair-summary-charts/retention_summary.png](https://github.com/Sachin2911/Safety-Dial/blob/codex/mainplan-through-s4-20260927/docs/mainPlan/results/continuation-v4/repair-summary-charts/retention_summary.png)
+Source: [Full-resolution supplement: retention chart. Repository path: docs/mainPlan/results/continuation-v4/repair-summary-charts/retention_summary.png](https://github.com/Sachin2911/Safety-Dial/blob/main/docs/mainPlan/results/continuation-v4/repair-summary-charts/retention_summary.png)
 
-Source: [Full-resolution supplement: charged simulator-cost chart. Repository path: docs/mainPlan/results/continuation-v4/repair-summary-charts/charged_simulator_cost.png](https://github.com/Sachin2911/Safety-Dial/blob/codex/mainplan-through-s4-20260927/docs/mainPlan/results/continuation-v4/repair-summary-charts/charged_simulator_cost.png)
+Source: [Full-resolution supplement: charged simulator-cost chart. Repository path: docs/mainPlan/results/continuation-v4/repair-summary-charts/charged_simulator_cost.png](https://github.com/Sachin2911/Safety-Dial/blob/main/docs/mainPlan/results/continuation-v4/repair-summary-charts/charged_simulator_cost.png)
 
 ## 7. Push-T measured examples and media
 
@@ -129,7 +129,7 @@ Source: [Full-resolution supplement: charged simulator-cost chart. Repository pa
 
 Recorded open-loop test example, source episode 1426, root test-familiar-c00015, branch 0, familiar hazard. No update: ACCEPT; predicted min clearance 14.6042 px, margin 0.0367402 px   |   Adapted: REJECT; predicted min clearance -12.3831 px, margin 6.07195 px. Known unsafe from the recorded observations. Observed through step 25 of 25; censored=False. Stored camera frames are shown only at steps 0 and 25; the geometry uses all saved observed states. Geometry is recorded truth, not predicted trajectories. Dashed grey is the initial T footprint; blue fill is its final observed footprint. The virtual hazard is drawn only on geometry; green in camera images is the saved goal. Decision changes depend on both saved predictions and margins. This is an existing illustration, not a prevalence or closed-loop result.
 
-<!-- Intended page break. No final PDF rendered yet. -->
+<!-- Page break in PDF. -->
 
 ![Saved-evidence figure](assets/pusht-examples/test-unresolved_accepted_future.png)
 
@@ -137,7 +137,7 @@ Recorded open-loop test example, source episode 12708, root test-familiar-c00301
 
 Source: Recorded animations: docs/mainPlan/results/continuation-v4/repair-animations-v2/README.md. Three selected test examples are provided as MP4 and GIF, with frame steps, playback holds, source hashes and observation limits. They are illustrative open-loop cases, not effect estimates or closed-loop demonstrations.
 
-Source: [Saved MP4/GIF media and playback/observation notes: docs/mainPlan/results/continuation-v4/repair-animations-v2/README.md](https://github.com/Sachin2911/Safety-Dial/blob/codex/mainplan-through-s4-20260927/docs/mainPlan/results/continuation-v4/repair-animations-v2/README.md)
+Source: [Saved MP4/GIF media and playback/observation notes: docs/mainPlan/results/continuation-v4/repair-animations-v2/README.md](https://github.com/Sachin2911/Safety-Dial/blob/main/docs/mainPlan/results/continuation-v4/repair-animations-v2/README.md)
 
 ## 8. Walker task, observability and data
 
@@ -155,7 +155,7 @@ Set A contains 2,999,673 transitions over 5,041 episodes, mostly competent behav
 
 The bounded alignment audit checked 384 health/cost labels, 376 successor-based velocities and 380 termination flags with no mismatches. Eight final successors and four benchmark terminal-health comparisons were unavailable. Probe H5 metadata copied a termination-on rendering flag although collection disabled health termination; the data were preserved and the discrepancy documented.
 
-<!-- Intended page break. No final PDF rendered yet. -->
+<!-- Page break in PDF. -->
 
 ![Saved-evidence figure](assets/walker-alignment/walker_alignment_compact.png)
 
@@ -183,7 +183,7 @@ The final local audit passed CPU export-coherence checks and source-data byte ch
 
 The recovered W&B run is recorded as finished. All 2,139 recovered training records match the saved report. The expected 11 validation checkpoint steps are present, and the final validation value matches the saved checkpoint; intermediate validation values were not independently compared. W&B is mutable service evidence, not an immutable model archive. Its fresh recovery run covers only updates after 172,000; it does not independently republish the entire original training history.
 
-<!-- Intended page break. No final PDF rendered yet. -->
+<!-- Page break in PDF. -->
 
 ![Saved-evidence figure](../../results/s2/walker2d-lewm-a-recovery-20260927-1-summary/learning_curves.png)
 
@@ -191,7 +191,7 @@ Actual saved Walker2d LeWM-A training history over the fixed 214,780-update sche
 
 Source: Completed S2 summary.json, learning_curves.png and its manifest; no new training or model evaluation.
 
-<!-- Intended page break. No final PDF rendered yet. -->
+<!-- Page break in PDF. -->
 
 The incident audit found strong evidence of a kernel/instance restart after the original worker logged through step 174,400. The precise infrastructure trigger remains unknown; post-restart OOM counters cannot exclude a pre-restart OOM. Recovery restored the verified 172,000-step model, optimizer, scheduler, random states and deterministic batch position into a fresh run. It completed 42,780 updates to the unchanged final horizon and repeated at least 2,400 previously logged updates. Any unlogged original tail is unknown, and no bitwise GPU replay equality is claimed.
 
@@ -246,7 +246,7 @@ The declared R2 thresholds are at least 0.90 for height and pitch, and provision
 
 Health recall is 67/71 and specificity is 107/121, both above the declared threshold. Speed recall is 143/160, but specificity is only 15/32 = 46.875%, so speed is excluded from the qualified S4 comparison. These supports are measured on the development branches; they do not imply independent samples or a population confidence bound.
 
-<!-- Intended page break. No final PDF rendered yet. -->
+<!-- Page break in PDF. -->
 
 **Development zero-margin decisions**
 
@@ -265,7 +265,7 @@ The nine uploaded S3 probe-run payload files and run-ID tag were verified in the
 
 Source: Evidence: completed docs/mainPlan/results/s3/walker2d-probes-recovery-20260927-1/gate.json and gate_rows.json; independent walker_s3_final_local_audit_20260927.json and walker_s3_final_remote_audit_20260927.json under docs/mainPlan/results/continuation-v2/.
 
-<!-- Intended page break. No final PDF rendered yet. -->
+<!-- Page break in PDF. -->
 
 ![Saved-evidence figure](assets/walker-s3/horizon_errors_compact.png)
 
@@ -273,15 +273,127 @@ Saved S3 mean absolute errors by prediction block for real-image readouts and im
 
 Source: Actual S3 gate.json and committed assets/walker-s3/plotted_data.json; saved-evidence compact figure.
 
-## 11. Walker S4: pending terminal evidence
+## 11. Walker S4: completed acquisition comparison
 
-S3 qualified health only. S4 is the remaining conditional Walker study, beginning with its own development diagnosis gate. Its terminal outcome remains pending in this working composition. A valid development stop will be reported with development-only evidence and no claim of final-test evaluation or completed acquisition.
+S4 completed all 12 predictor-side adaptations: random and boundary acquisition, three seeds (0, 1, 2) and cumulative additional-branch budgets 128 and 512. The analysis remains health-only. Its separate development diagnosis passed on 192 branches: 101 were unsafe, 100 were imagined false-safe decisions and 95 of those were attributed to imagined dynamics. The 95% attribution share exceeded the unchanged 25% minimum, with all minimum support counts satisfied.
 
-If S4 completes the acquisition study, the final report must include additional budgets 128/512, seeds 0/1/2 and random/boundary arms, with equal charged interaction costs and fixed training controls. It must keep representative/stress results separate and retain counts, achieved acceptance, censor status and source-clustered paired uncertainty. Saved diagnostic speed values, if present, must not be promoted to a qualified speed result.
+The shared representative and stress evaluations each contain 512 branches on the same 64 reserved source episodes, with eight tapes per root. Development uses 24 source roots; acquisition uses 96 reserved roots. Candidate tapes are saved before selection, and only selected tapes are queried in the simulator. Each acquisition seed pays for 128 common seed branches before either arm adds experience. The same test episodes are reused across models and stress, so these are paired views, not independent replications.
 
-Pending: insert the audited S4 branch, actual saved plots, exact cost scopes, model/bank revisions and resulting bounded claims. No favorable acquisition or adaptation result is assumed. S5 remains excluded, regardless of the S4 outcome.
+Each budget restarts predictor-side optimization from the same S2 model. The encoder, observation projector, their running statistics, scalers and physical readout remain frozen. The fixed recipe uses teacher forcing, 1,500 AdamW updates, batch 64, learning rate 5e-5, weight decay 0.001, 50% replay, gradient clipping 1 and history 3. Boundary selection at the larger budget may use the previous adapted predictor, while its new optimization still restarts from the common base. No test outcome is used to select the recipe.
 
-## 12. Limitations and conclusions supported so far
+The development acceptance target is 96.875%, taken from the base model at zero margin. Each model has its own development-fitted margin, fixed before test and stress evaluation. Achieved acceptance differs on those banks. Thus the saved at_matched fields name a shared development target, not exactly matched test acceptance. Adapted margins are often negative; a high accepted fraction is not evidence of safe decisions.
+
+**Equal comparison budgets, with shared allocations**
+
+| Additional branches | Source collection | Common seed | Acquired steps | Allocated total |
+| --- | --- | --- | --- | --- |
+| 128 | 300,038 | 12,800 | 12,800 | 325,638 |
+| 512 | 300,038 | 12,800 | 51,200 | 364,038 |
+
+Each branch has 100 simulator steps. Shared source and seed costs recur in the comparison rows, and the larger budget contains the smaller budget: do not sum these allocations as a lifetime total. Evaluation-bank construction is separately recorded as 121,600 steps. Candidate queries and optimization are separate computational costs.
+
+<!-- Page break in PDF. -->
+
+**Representative test: health decisions**
+
+| Arm | Seed | N | Unsafe / accepted | FSA | Acceptance |
+| --- | --- | --- | --- | --- | --- |
+| No update | n/a | n/a | 225/504 | 44.643% | 98.438% |
+| Random | 0 | 128 | 216/496 | 43.548% | 96.875% |
+| Boundary | 0 | 128 | 219/498 | 43.976% | 97.266% |
+| Random | 1 | 128 | 220/502 | 43.825% | 98.047% |
+| Boundary | 1 | 128 | 212/490 | 43.265% | 95.703% |
+| Random | 2 | 128 | 221/498 | 44.378% | 97.266% |
+| Boundary | 2 | 128 | 220/497 | 44.266% | 97.070% |
+| Random | 0 | 512 | 218/495 | 44.040% | 96.680% |
+| Boundary | 0 | 512 | 211/488 | 43.238% | 95.312% |
+| Random | 1 | 512 | 211/492 | 42.886% | 96.094% |
+| Boundary | 1 | 512 | 214/493 | 43.408% | 96.289% |
+| Random | 2 | 512 | 212/488 | 43.443% | 95.312% |
+| Boundary | 2 | 512 | 226/504 | 44.841% | 98.438% |
+
+Every row has 512 total branches and zero recorded censored or accepted-censored futures; these point FSA values are defined. FSA divides unsafe accepted by all accepted. Counts and achieved acceptance are shown together so a lower FSA cannot be mistaken for an equal-acceptance comparison.
+
+**Representative test: boundary minus random**
+
+| N | Seed | Difference (pp) | 95% interval (pp) | Saved direction |
+| --- | --- | --- | --- | --- |
+| 128 | 0 | 0.428 | [-0.155, 1.147] | inconclusive |
+| 128 | 1 | -0.559 | [-1.583, 0.326] | inconclusive |
+| 128 | 2 | -0.112 | [-0.959, 0.676] | inconclusive |
+| 512 | 0 | -0.803 | [-1.737, 0.000] | inconclusive |
+| 512 | 1 | 0.522 | [-0.091, 1.198] | inconclusive |
+| 512 | 2 | 1.399 | [0.472, 2.598] | increase |
+
+No main-test contrast has a saved interval strictly below zero. At N=512, seed 0 ends exactly at zero; seed 2 favors random by 1.399 percentage points, with saved interval [0.472, 2.598]. The remaining main-test intervals include zero. These per-cell intervals do not establish a consistent acquisition advantage across seeds and budgets.
+
+<!-- Page break in PDF. -->
+
+**Stress: health decisions**
+
+| Arm | Seed | N | Unsafe / accepted | FSA | Acceptance |
+| --- | --- | --- | --- | --- | --- |
+| No update | n/a | n/a | 358/494 | 72.470% | 96.484% |
+| Random | 0 | 128 | 337/471 | 71.550% | 91.992% |
+| Boundary | 0 | 128 | 315/450 | 70.000% | 87.891% |
+| Random | 1 | 128 | 335/470 | 71.277% | 91.797% |
+| Boundary | 1 | 128 | 312/447 | 69.799% | 87.305% |
+| Random | 2 | 128 | 351/487 | 72.074% | 95.117% |
+| Boundary | 2 | 128 | 336/473 | 71.036% | 92.383% |
+| Random | 0 | 512 | 320/457 | 70.022% | 89.258% |
+| Boundary | 0 | 512 | 316/449 | 70.379% | 87.695% |
+| Random | 1 | 512 | 329/464 | 70.905% | 90.625% |
+| Boundary | 1 | 512 | 325/459 | 70.806% | 89.648% |
+| Random | 2 | 512 | 345/480 | 71.875% | 93.750% |
+| Boundary | 2 | 512 | 351/488 | 71.926% | 95.312% |
+
+Every row has 512 total branches and zero recorded censored or accepted-censored futures; these point FSA values are defined. FSA divides unsafe accepted by all accepted. Counts and achieved acceptance are shown together so a lower FSA cannot be mistaken for an equal-acceptance comparison.
+
+**Stress: boundary minus random**
+
+| N | Seed | Difference (pp) | 95% interval (pp) | Saved direction |
+| --- | --- | --- | --- | --- |
+| 128 | 0 | -1.550 | [-2.787, -0.193] | decrease |
+| 128 | 1 | -1.478 | [-2.436, -0.525] | decrease |
+| 128 | 2 | -1.038 | [-1.805, -0.316] | decrease |
+| 512 | 0 | 0.357 | [-0.911, 1.737] | inconclusive |
+| 512 | 1 | -0.099 | [-1.077, 0.866] | inconclusive |
+| 512 | 2 | 0.051 | [-0.866, 0.808] | inconclusive |
+
+At N=128, all three stress contrasts favor boundary in the saved intervals, by about 1.04 to 1.55 percentage points. Boundary also accepts fewer branches in all three cases, by about 2.73 to 4.49 percentage points. At N=512 every stress interval includes zero. The smaller-budget finding does not repeat at the larger budget and is not an equal-acceptance transfer result.
+
+<!-- Page break in PDF. -->
+
+![Saved-evidence figure](assets/walker-s4/paired_fsa_compact.png)
+
+Exact saved boundary-minus-random FSA differences and 95% source-episode bootstrap intervals. Negative favors boundary. Test and stress are separate panels; acquisition seeds are not pooled. All 12 contrasts use 64 source episodes and 1,000 usable resamples. Each model uses a development-fitted margin, so achieved test/stress acceptance differs between arms. The intervals are pointwise and were not adjusted for the multiple seed, budget and bank comparisons. No new bootstrap was run for this report. N counts additional branches, not total charged experience.
+
+Source: Terminal study.json and compact plotted_data.json; recorded comparisons, unchanged by presentation.
+
+<!-- Page break in PDF. -->
+
+**Auxiliary ranking and ordinary-prediction retention**
+
+| Saved measure | No update | Range across 12 adapted points | Lower than baseline |
+| --- | --- | --- | --- |
+| Test AUC-dial | 0.450086 | 0.329440 to 0.360933 | 12/12 |
+| Stress AUC-dial | 0.714776 | 0.586031 to 0.625594 | 12/12 |
+| Ordinary displacement MAE (m) | 0.094034 | 0.091735 to 0.118528 | 1/12 |
+| Ordinary block-10 height MAE (m) | 0.009146 | 0.019411 to 0.049287 | 0/12 |
+| Ordinary block-10 pitch MAE (rad) | 0.024810 | 0.033158 to 0.120176 | 0/12 |
+| Ordinary block-10 speed MAE (m/s) | 0.196216 | 0.199643 to 0.279740 | 0/12 |
+
+AUC-dial is the normalized trapezoid mean of FSA over acceptance 0.2 to 0.9, where lower is better. All adapted points improve this saved ranking summary versus no update, while high-acceptance operating-point effects are small and mixed and boundary does not consistently beat random. The table gives ranges, not pooled estimates, and no confidence intervals were retained for these auxiliary measures.
+
+Ordinary retention uses 64 held-out policy tapes. All 12 adaptations worsen the recorded final-block height, pitch and speed errors; 11 of 12 worsen displacement error. Only random acquisition at seed 2 and N=128 slightly improves displacement. The speed-error row is a prediction diagnostic and does not qualify speed safety. These are open-loop prediction checks, not goal-reaching success or a closed-loop control evaluation. The results do not demonstrate repair without ordinary-prediction regression.
+
+The 12 training intervals sum to 2,415.063 seconds across 18,000 optimizer updates. The saved S4 wall interval is 2,957.664 seconds; it ends before final bank publication and process cleanup. These are elapsed timers, not measured GPU compute. Random selection records zero candidate-model queries; boundary records 640 cumulative queries at N=128 and 1,152 at N=512 per seed. The latter already includes the smaller-budget round.
+
+Independent local checks verified saved decisions, pairing, gates, source roles, selections, charges, receipts and frozen output identities. The 12 adapted model bundles and final bank were separately verified against exact private Hugging Face inventories and content hash/size metadata. This does not independently rerun the bootstrap, tensors or simulator. An initial remote-audit helper omitted the normal no-update report entry; a separately preserved one-line checker correction resolved that schema error without changing any experiment or result.
+
+Source: Evidence: terminal Walker S4 study, local and remote audit records, native presentation package and compact plotted data, all individually hashed in the report manifest.
+
+## 12. Limitations and conclusions
 
 The released Push-T model does not reveal why its original representation formed. Frozen-encoder predictor updates cannot establish learning of new encoder safety features. Simulator pose and supplied costs are privileged supervision; repeated virtual hazards do not create independent physical experience.
 
@@ -289,24 +401,30 @@ Censored futures, differing achieved acceptance, the unranked development fallba
 
 The fixed 128-root Push-T test design has no recorded pre-test E1-variance sizing justification in the audited sources. Feasibility witnesses establish recorded development routes, not solvability of every test root. Some E1 full-data FSA points remain undefined even where usable bootstrap replicates have finite interval endpoints. Those conditional intervals do not establish a defined point or a population advantage.
 
-Walker uses benchmark rules, not physical irreversibility. Sampled S1 label checks were post hoc, and original observability provenance has gaps. Completed S2 training and health-only S3 qualification do not establish a successful S4 repair or acquisition comparison. S3 per-example prediction and dense replay evidence is incomplete, and S4 remains pending. S5 and any claim comparing pretraining with adaptation are outside the requested scope.
+Walker uses benchmark rules, not physical irreversibility. Sampled S1 label checks were post hoc, and original observability provenance has gaps. S3 per-example prediction and dense replay evidence is incomplete. S4 reused 64 source episodes across acquisition models and stress; its pointwise intervals are not multiplicity-adjusted or cross-seed replications. Different achieved acceptance, ordinary-prediction regression and limited supplied health rules constrain the result. S5 and any comparison of pretraining with adaptation remain excluded.
 
-The prepared 71-item requirement matrix is an acceptance checklist, not a completion certificate. Its earlier pending S2/S3 entries are now superseded by the terminal audits cited here; S4 and final publication remain outstanding. Other limitations persist: incomplete S0/S1 provenance, post hoc sampled alignment and missing terminal successors, E2 row/journal gaps and unknown failed-v2 simulator cost. Synthetic charts and local commits alone do not prove research execution or complete remote coverage.
+Requirement-by-requirement reviews distinguish completed bounded evidence, valid negative stops, conditional work that did not activate and persistent provenance limits. These include incomplete S0/S1 provenance, post hoc sampled alignment and missing terminal successors, E2 row/journal gaps, no recorded pre-test variance sizing rationale, and unknown failed-v2 simulator cost. Archiving preserves these limits; it cannot recreate missing measurements. Final delivery status is recorded alongside the report, separately from the scientific conclusions.
 
 ## 13. Reproducibility and artifact delivery
 
-Source/configuration/results are being committed to the dedicated GitHub branch codex/mainplan-through-s4-20260927. Direct default-branch publication was rejected by automatic approval review; the isolated branch was accepted and verified. No merge into main is claimed.
+The report source, experiment code, configurations, numerical summaries, figures and media are preserved with file hashes. The paired compact figures are derived only from saved results; the MP4 and GIF examples use recorded Push-T frames and geometry, with observation cutoffs and playback timing retained. No synthesized future is shown as experimental evidence.
 
-Source: [GitHub review branch: https://github.com/Sachin2911/Safety-Dial/tree/codex/mainplan-through-s4-20260927](https://github.com/Sachin2911/Safety-Dial/tree/codex/mainplan-through-s4-20260927)
+Source: [GitHub main branch. Final publication commits and verified archive inventories are recorded in the accompanying delivery record.](https://github.com/Sachin2911/Safety-Dial/tree/main)
 
-Models and datasets use private Hugging Face repositories under Sachioster, immutable revisions and run receipts. The completed Push-T E1 report archive contains 18 verified files at revision e792c41aa22e95c2f6a229dc3b44cd64128c8000. The adapted E2 model/retention bundle is pinned at cd896c7bcbb2377140fcda988fe2ef59673b1454.
+**Verified private Hugging Face payloads**
 
-Completed Walker S2 model payload and S3 probe payload durability are separately verified at private revisions 9e05478658484d0f26ea740fead9e0ab7625367e and cb1560d7b02b4fbe6585b3c0c325a78d56b337e6, respectively. The recovered W&B run was independently observed finished with matching saved records. These checks cover their named payloads and service evidence, not the pending S4 artifacts or a final report/media publication.
+| Payload | Pinned revision |
+| --- | --- |
+| Push-T E1 numerical/presentation archive | e792c41aa22e95c2f6a229dc3b44cd64128c8000 |
+| Push-T E2 model and retention | cd896c7bcbb2377140fcda988fe2ef59673b1454 |
+| Walker S1 collection data | ddd4d51648d2a382725efd20d04cedebedbf8fd2 |
+| Walker S2 final LeWM | 9e05478658484d0f26ea740fead9e0ab7625367e |
+| Walker S3 probe payload | cb1560d7b02b4fbe6585b3c0c325a78d56b337e6 |
+| Walker S4 bank | 09ac490696cecb951e83644db48e646878905f87 |
+| Historical Walker diagnostic preservation | 2b857fe8561abadd36b71c1b0943842acc85a8b1 |
 
-The separate E2 result/media archive publication record remains prepared and blocked, with no upload revision recorded. It is distinct from the published E2 model/retention bundle. Final PDF, report-media and source delivery remains pending; this draft is not a final publication receipt.
+Twelve individual S4 model revisions and exact file inventories are listed in the S4 remote audit; S0 policies and earlier diagnostic models have separate coverage records. Historical diagnostic bundles remain unqualified. Pinned metadata checks cover the specified payloads and distinguish post-upload receipts, later external reports and archived operational logs. They are not remote restore tests.
 
-Pending: final PDF/media manifests, final GitHub commit verification and complete private Hugging Face result/media/source archives. Byte or authenticated remote-metadata verification is distinguished from an actual remote restore test. Credentials, environment files and disposable caches are excluded from publication.
+Final source/report/media publication is tracked in a separate delivery record so this PDF does not depend on its own future upload hash. That record is authoritative for publication status, approved repository paths, revisions and exclusions. Scientific input bundles are referenced by their existing pinned revisions instead of being silently duplicated. Credentials, environment files and disposable caches are excluded.
 
-## Working-source status
-
-This Markdown mirrors [report.json](report.json). Evidence and figure paths resolve relative to this report directory. Completed source artifacts remain immutable; this composition is intentionally editable until S4 and publication are audited. No final PDF or report manifest has been frozen. The parent finalization step must reconcile the actual S4 branch, archive coverage and receipts, then render to a fresh destination and inspect every page.
+Reproducibility artifacts preserve the recovered S2 execution sources, fixed recipes and source identities, the terminal workflow state, closed logs and actual audit tools. Configuration copies are distinguished from proof of executed bytes. The original interrupted stale-running workflow is retained with its incident record; no historical result is rewritten to hide the interruption or a failed gate.

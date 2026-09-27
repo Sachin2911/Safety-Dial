@@ -91,8 +91,10 @@ The Push-T probe/penalty/Safe-CEM pilot and Phase 0 locomotion triage are comple
 The new study is in progress. Block-pose probes, verified branch replay, acquisition and
 predictor-adaptation runners now exist. Read the [validated continuation record](docs/mainPlan/results/continuation-v2/README.md)
 and [current Push-T continuation](docs/mainPlan/results/continuation-v4/README.md) before
-rerunning work. From-scratch Walker2d LeWM training and the qualified Push-T continuation are still
-running; earlier diagnostic outcomes do not establish completion of the main plan.
+rerunning work. Walker2d LeWM training and the health-only S4 comparison completed on 27 September 2026.
+Push-T stopped at its unchanged E2 repair/retention gate. The user ended this continuation
+at S4; do not launch S5. See the [through-S4 report and delivery status](docs/mainPlan/reports/through-s4-20260927/README.md).
+Earlier diagnostic outcomes remain distinct from qualified results.
 
 The historical Vast volume (checkpoint copies, fitted scalers, pusher-probe cache) no longer
 exists (confirmed 26 September 2026). Committed results remain valid records; numeric

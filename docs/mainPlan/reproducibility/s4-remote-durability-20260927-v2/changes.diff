@@ -1,0 +1,11 @@
+--- v1/audit_walker_s4_remote_durability_20260927.py
++++ v2/audit_walker_s4_remote_durability_20260927_v2.py
+@@ -209,7 +209,7 @@
+         need(
+             report.get("planned_budgets") == [128, 512]
+             and report.get("acquisition_seeds") == [0, 1, 2]
+-            and set(report.get("adaptation", {})) == {"random", "boundary"},
++            and set(report.get("adaptation", {})) == {"no_update", "random", "boundary"},
+             "Changed acquisition design",
+         )
+         expected_dirs, model_receipts = set(), []
