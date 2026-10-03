@@ -1,0 +1,70 @@
+inputs:
+  model:
+    key: walker2d
+    path: lewm-a/walker2d-lewm-a-recovery-20260927-1
+    revision: 9e05478658484d0f26ea740fead9e0ab7625367e
+  probes:
+    key: walker2d
+    path: probes/walker2d-probes-recovery-20260927-1
+    revision: cb1560d7b02b4fbe6585b3c0c325a78d56b337e6
+  data:
+    key: walker2d-data
+    path: data/walker2d-data-20260926-3
+    revision: ddd4d51648d2a382725efd20d04cedebedbf8fd2
+  banks:
+    key: walker2d-data
+    path: banks/walker2d-s4-recovery-20260927-1
+    revision: 09ac490696cecb951e83644db48e646878905f87
+  policies:
+    key: walker2d
+    path: policies/walker2d-policies-complete-20260926-1
+    revision: b42e3f3e7dd80bc4d95cc2ef43c753cee96b9b55
+roots:
+  evaluation_seed: 20261003
+  extra_per_episode: 3
+  n_evaluation: 256
+  n_fitness: 96
+  n_tuning: 24
+stage: 2
+bc:
+  source: setA.h5
+  policies:
+  - PPOLag-e100
+  - PPOLag-e110
+  - PPOLag-e120
+  - PPOLag-e130
+  - PPOLag-e140
+  - PPOLag-e150
+  - PPOLag-e160
+  - PPOLag-e170
+  - PPOLag-e180
+  - PPOLag-e190
+  - PPOLag-e200
+  n_episodes: 300
+  episode_seed: 20261003
+  frame_stride: 5
+  val_fraction: 0.2
+  ridge_alphas:
+  - 0.001
+  - 0.01
+  - 0.1
+  - 1.0
+  - 10.0
+  - 100.0
+  - 1000.0
+  - 10000.0
+  selection: min validation MSE of the clipped prediction; ties go to the larger alpha
+  standardisation: mean and std of the features of all selected frames, frozen afterwards
+  refit_on_all: true
+evaluation:
+  n_workers: 12
+  max_envs: 64
+  chunk_tasks: 64
+  encode_batch: 64
+gate0:
+  rule: health
+  truth: dense
+  max_violation_ratio: 2.0
+  min_resolvable_count: 3
+  min_progress_ratio: 0.5
+  provisional: true
