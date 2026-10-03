@@ -1,0 +1,16 @@
+# Stage 0 (docs/evoPlan/README.md): fetch the pinned inputs and reproduce saved S4 numbers.
+# Declared before the check is run. Pass needs every listed row reproduced within `atol`
+# (dimensionless health clearance) with an identical accept/reject decision at margin 0.
+defaults:
+  - inputs
+  - _self_
+
+stage: 0
+check:
+  rows_file: docs/mainPlan/results/s4/walker2d-s4-recovery-20260927-1/no_update_evaluation_rows.json
+  rows_sha256: da9da8cd032341f6ff3a2ebdaf60be8d9b61e128298459e2782b0721a0b7c973
+  banks_source_sha256: 69a9f6483c31ab3975d300993cfd220a58cff0886058799ed0d523037a07700d
+  banks: [dev, test]
+  rule: health
+  atol: 1.0e-5
+  expected_policies: 42
