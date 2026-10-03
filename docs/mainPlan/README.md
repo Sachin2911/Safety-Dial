@@ -6,6 +6,9 @@ supervisor, Geraud Nangue Tasse, has seen the 21 September direction and is happ
 The Walker2d track and the pretraining-versus-adaptation stretch were added on
 26 September. No experiment described in this folder had run when the plan was adopted.
 
+**New work follows [paperIdea.md](../paperIdea.md) from 3 October 2026.** This folder
+remains the record of the completed study.
+
 **Experiments completed through S4 on 27 September 2026.** The
 [through-S4 report](reports/through-s4-20260927/README.md) brings together the
 Push-T negative repair/retention result and the completed Walker LeWM study.

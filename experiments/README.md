@@ -1,9 +1,11 @@
 # Experiments
 
-The [adopted direction](../docs/researchDirection.md) studies targeted experience for
-safer LeWM predictions. Begin new work with the [pilot checklist](../docs/research/pilot.md).
-The studies below are preserved at their existing paths so imports, outputs and
-reproduction commands remain stable.
+The [current direction](../docs/paperIdea.md) evolves safe policies inside the Walker2d
+LeWM and measures how much they cheat the imagination. Its first step is a closed-loop
+imagination harness; the files to write and their tests are listed in the
+[implementation plan](../docs/evoPlan/README.md). No code for it exists yet. The studies below
+are preserved at their existing paths so imports, outputs and reproduction commands remain
+stable.
 
 ## Completed Push-T work
 
@@ -35,11 +37,15 @@ before attempting a numerical reproduction of a previous arena constraint.
 - [Findings](../notes/phase0Report.md), [report/data](../docs/phase0/),
   [videos](../animations/README.md).
 
-## New study: implementation pending
+## Completed LeWM experience study (through S4)
 
-The first additions should be verified Push-T branching, whole-block geometry and
-block-pose diagnostics. Predictor-side adaptation and acquisition follow the gates
-in the pilot checklist. None of those new runners or trained artifacts exists yet.
+Entry points are [scripts/pusht_e*.py](scripts/) for Push-T E0 to E5 and
+[scripts/walker_s*.py](scripts/) for Walker2d S0 to S5, with helpers in `helpers/`
+(for example `walkerLewm.py`, `walkerRules.py`, `predictorAdapt.py`) and tests in
+`tests/` and `../tests/`. Results and the through-S4 report are under
+[docs/mainPlan/](../docs/mainPlan/README.md). Push-T stopped at its E2 gate, so E3 to E5
+did not launch; S5 was excluded. `WalkerImaginer` in `helpers/walkerLewm.py` replays
+fixed action tapes and is the starting point for the current direction's harness.
 
 Keep reusable Python in `helpers/`, command-line entry points in `scripts/`, consumed
 Hydra configs in `../configs/`, and generated artifacts under ignored `../data/` paths.

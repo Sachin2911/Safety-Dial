@@ -6,6 +6,10 @@ This is the authority for the research question, scope and experiment sequence.
 It supersedes the 20 September planner-selection audit and earlier proposals.
 Adoption does not imply supervisor approval, completed experiments or new trained weights.
 
+**Superseded for new work on 3 October 2026** by [paperIdea.md](paperIdea.md). This study
+ran through S4 ([report](mainPlan/reports/through-s4-20260927/README.md)); this file
+remains the authority for interpreting its results.
+
 Student: Sachin Mohan (2699183), BSc Honours Computer Science, University of the
 Witwatersrand. Supervisor: Geraud Nangue Tasse. Project name: **SafetyDial**.
 Working title: **Which Experience Makes LeWM Safer to Use?**

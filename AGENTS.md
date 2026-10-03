@@ -2,40 +2,63 @@
 
 ## Current direction
 
-**Adopted 21 September 2026:** SafetyDial studies which additional experience makes
-an existing LeWM's predictions of unsafe outcomes more reliable at the same interaction
-budget, and whether the improvement transfers to new hazards, starts and goals.
+**Chosen 3 October 2026, to be confirmed with the supervisor: evolution cheats
+imagination.** Evolve safe policies inside a learned world model, measure how selection
+pressure turns the model's false-safe errors into real violations, and test noise injected
+into imagination plus ROSARL's minmax penalty as the fix. Read
+[docs/paperIdea.md](docs/paperIdea.md) first: it holds the story, the experiment plan, the
+17 October go/no-go gate and the timeline. Then follow the
+[implementation plan](docs/evoPlan/README.md) for stages, code, tests and run sizes; its
+committed results go under `docs/evoPlan/results/`. Background is in the
+[deep-research report](docs/research/reports/Evolutionary%20safe%20RL%20with%20world%20models.md),
+the [GECCO 2027 notes](docs/gecco2027.md) and the [allocated topic](docs/allocatedTopic.md).
 
-**Main plan adopted 26 September 2026:** [docs/mainPlan/](docs/mainPlan/README.md) is the
-executable plan and controls execution details. It adds a parallel LeWM trained from
-scratch on Safety-Gymnasium Walker2d (hard go/no-go 18 October 2026) and a
-pretraining-versus-adaptation stretch. The supervisor has seen and approved the
-21 September direction. The historical Vast assets are gone; every model checkpoint now
-goes to private Hugging Face repositories.
-
-Read [docs/researchDirection.md](docs/researchDirection.md) first for the question and
-interpretation rules, then [docs/mainPlan/](docs/mainPlan/README.md) for execution. Use
-[the checkpoint reference](docs/research/checkpoints.md) for verified assets and interfaces.
-The literature boundary is in [related work](docs/research/relatedWork.md).
-
-- **Working title:** Which Experience Makes LeWM Safer to Use?
+- **Working title:** Evolution cheats imagination.
 - **Student:** Sachin Mohan (2699183), BSc Honours CS, University of the Witwatersrand.
-- **Supervisor:** Geraud Nangue Tasse.
-- **Initial task/model:** Push-T with the released `pusht/lewm` checkpoint, 192-d latents.
-- **Main constraint:** the whole T-shaped block footprint avoids a specified virtual region.
-- **Preferred repair:** freeze the encoder, observation projector and physical readout;
-  adapt predictor-side modules using new transitions and a fixed replay mixture.
-- **Core comparison:** ordinary supported experience versus predicted-boundary coverage;
-  add learned optimistic-error acquisition only after demonstrating repairability.
-- **Extensions:** transfer, then optional closed-loop Safe-CEM/penalty-CEM.
-- **Second task:** a LeWM trained from scratch on `SafetyWalker2dVelocity-v1` (speed and
-  health rules), with a pretraining-versus-adaptation stretch. Parallel and gated, never a
-  dependency of the Push-T study.
-- **Scope:** thesis due late November 2026, core results frozen 8 November; possible ICLR
-  2027 workshop. Check the actual call before citing deadlines. No publication outcome or
-  GPU runtime is assumed. Compute is an RTX 5090 on Vast.
+- **Supervisor:** Geraud Nangue Tasse (ROSARL, the minmax penalty).
+- **First environment:** `SafetyWalker2dVelocity-v1` with the health rule, using the
+  existing Walker LeWM, physical probes, PPO/PPO-Lagrangian policies and exact MuJoCo
+  snapshot branching. The first experiments need no new model training.
+- **Method:** CMA-ES over a linear latent policy (about 1,200 parameters), scored on 0.8 s
+  imagined segments started from real saved states. Candidates are ranked by ROSARL's
+  penalty, Deb's feasibility rule or a fixed penalty; noise is injected into predicted
+  latents.
+- **Ground truth:** every selected policy is replayed from the same MuJoCo snapshots.
+- **Later:** `SafetyHopperVelocity` and a LeWM ensemble from December, for the GECCO
+  version.
+- **Scope:** core results freeze 8 November 2026, thesis due late November; GECCO 2027
+  full paper expected late January 2027 (dates unconfirmed). Rent GPUs per stage and shut
+  them down between stages.
 
-## Research gates and controls
+## Controls for the current direction
+
+- Count every real simulator step, including the data used to train the LeWM. Report
+  imagined steps and wall-clock time separately.
+- Pair imagined and real outcomes on identical snapshots. Never report imagined safety as
+  real safety.
+- Safe CEM's feasibility-first ranking is prior work (Wen and Topcu, NeurIPS 2018;
+  SafeDreamer, ICLR 2024). Treat it as a credited baseline, not a contribution.
+- Zero observed violations in n episodes bounds the violation rate only at about 3/n.
+- The novelty claims rest on searches that found nothing. Rerun the checks listed in the
+  deep-research report before writing related work.
+
+## Completed LeWM experience study
+
+**Adopted 21 September 2026, completed through S4 on 27 September 2026.** It asked which
+additional experience makes an existing LeWM's predictions of unsafe outcomes more
+reliable at the same interaction budget.
+[docs/researchDirection.md](docs/researchDirection.md) holds its question and
+interpretation rules, [docs/mainPlan/](docs/mainPlan/README.md) its plan and results, and
+the [through-S4 report](docs/mainPlan/reports/through-s4-20260927/README.md) its
+conclusions. Push-T used the released `pusht/lewm` checkpoint (192-d latents) with a
+whole-T virtual hazard; Walker2d used a LeWM trained from scratch. The supervisor saw and
+approved that direction. Use [the checkpoint reference](docs/research/checkpoints.md) for
+verified assets and interfaces. Do not launch S5 or the gated E3 to E5 stages.
+
+## Research gates and controls (LeWM experience study)
+
+These governed the completed study. Its accounting and interpretation rules still apply
+when its results are cited or reused.
 
 1. Rebuild the baseline assets, validate reset-and-prefix replay and whole-T geometry.
 2. Separate dense-event sampling, real-image readout and imagined-dynamics errors.
@@ -75,20 +98,17 @@ The literature boundary is in [related work](docs/research/relatedWork.md).
 - Literature already covers failure readouts, data selection and model adaptation. A new
   cost head, margin or fine-tuning run is not automatically novel; recheck primary literature.
 
-The previous locomotion-first selection-amplification audit and irreversibility proposals
-are superseded. **Explicit exception adopted 26 September 2026:** a LeWM trained from
-scratch on Safety-Gymnasium Walker2d is a parallel track
-([docs/mainPlan/walker2d.md](docs/mainPlan/walker2d.md)) with a hard go/no-go on
-18 October 2026. It uses supplied rules, not irreversibility, and it is not a dependency of
-the Push-T study. Recovery labels, failure engineering for irreversibility, NSGA-II, HJ
-filtering and conformal guarantees remain out of scope. Do not silently restore those
-requirements.
+The earlier locomotion-first selection-amplification audit and irreversibility proposals
+are superseded. Evolutionary methods (ES, CMA-ES, constraint-handling and multi-objective
+EAs, quality-diversity) are in scope under the current direction. Recovery labels, failure
+engineering for irreversibility, HJ filtering and conformal guarantees remain out of
+scope. Do not silently restore those requirements.
 
 ## Preserved experiments and evidence
 
 See [experiments/README.md](experiments/README.md) and [notes/README.md](notes/README.md).
 The Push-T probe/penalty/Safe-CEM pilot and Phase 0 locomotion triage are completed work.
-The new study is in progress. Block-pose probes, verified branch replay, acquisition and
+The LeWM experience study is complete through S4. Block-pose probes, verified branch replay, acquisition and
 predictor-adaptation runners now exist. Read the [validated continuation record](docs/mainPlan/results/continuation-v2/README.md)
 and [current Push-T continuation](docs/mainPlan/results/continuation-v4/README.md) before
 rerunning work. Walker2d LeWM training and the health-only S4 comparison completed on 27 September 2026.
@@ -118,21 +138,25 @@ Historical notes may contain superseded interpretations; the current plan contro
 
 ## Repository map and authority
 
-1. `docs/researchDirection.md`: adopted question, scope and interpretation rules.
-2. `docs/mainPlan/`: the executable main plan (26 September 2026); controls execution.
-3. `docs/research/`: checkpoint audit and related work; `pilot.md` is the superseded
-   21 September checklist.
-4. Experiment code, notebooks and recorded results: evidence of what actually ran.
-5. `readme.md` and `AGENTS.md`: concise navigation and engineering guidance.
-6. Submitted academic deliverables: historical records, not current research requirements.
+1. `docs/paperIdea.md`: the current direction and its experiment plan.
+2. `docs/researchDirection.md`: the completed LeWM study's question, scope and
+   interpretation rules.
+3. `docs/mainPlan/`: that study's executable plan (26 September 2026) and recorded results.
+4. `docs/research/`: checkpoint audit, related work and deep-research reports; `pilot.md`
+   is the superseded 21 September checklist.
+5. Experiment code, notebooks and recorded results: evidence of what actually ran.
+6. `readme.md` and `AGENTS.md`: concise navigation and engineering guidance.
+7. Submitted academic deliverables: historical records, not current research requirements.
 
 - `experiments/*.ipynb`: completed exploration and Push-T pilots, retain outputs.
 - `experiments/helpers/`: reusable implementation; there is **no `src/` package**.
 - `experiments/scripts/`: existing runnable studies and future small entry points.
 - `notes/`: experimental findings and data references, not competing project plans.
 - `docs/safeDial/`, `docs/phase0/`: reports, LaTeX, figures and recorded results.
-- `docs/mainPlan/`: the new study's plan; its committed results go under
+- `docs/mainPlan/`: the completed LeWM study's plan; its committed results are under
   `docs/mainPlan/results/`.
+- `docs/research/reports/`, `docs/research/research_notes/`: deep-research reports and the
+  notes behind them.
 - `animations/`: preserved videos/GIFs and reproduction instructions.
 - `docs/papers/`: reference library; filenames `CEM-EVO.pdf` and `MPC-RCE.pdf` refer
   to CEM-RL and robust constrained CEM respectively. UNISafe has two historical copies.
@@ -143,7 +167,8 @@ Historical notes may contain superseded interpretations; the current plan contro
 
 Superseded proposals, brainstorming whiteboards and duplicated research drafts were
 removed during the 21 September cleanup. Tracked history is available in git. Do not
-recreate competing authorities under `reports/` or `research_notes/`.
+recreate competing authorities in top-level `reports/` or `research_notes/` folders;
+deep-research output lives under `docs/research/`.
 
 ## Checkpoints, data and Push-T gotchas
 
