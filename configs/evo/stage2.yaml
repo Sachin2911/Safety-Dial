@@ -1,0 +1,48 @@
+# Stage 2 (docs/evoPlan/README.md): behaviour-cloned starting policy theta_BC and Gate 0.
+# Declared and committed before stage 2 runs.
+#
+# Behaviour-cloning data (decided a priori from set-A composition, before any outcome): late
+# PPO-Lagrangian epochs, which never fall in set A and walk at about 1.9 m/s, give one coherent
+# gait for a linear policy; late PPO runs at about 4 m/s, beyond the benchmark speed limit, and
+# averaging the two gaits would blur both. This narrows the plan's "PPO and PPO-Lagrangian".
+#
+# Gate 0 thresholds are PROVISIONAL (to be confirmed with the supervisor). The recorded
+# policies' health-violation rate on representative roots is zero by construction (a root needs
+# at least 100 further recorded steps and the recording env terminates on the same health rule),
+# so "at most twice the recorded rate" cannot be resolved below the 3/n bound for zero events in
+# n; the user set the violation criterion on 3 October 2026 to: violations of theta_BC <=
+# max(max_violation_ratio x recorded violations, min_resolvable_count), i.e. at most 3 of 256.
+defaults:
+  - inputs
+  - roots
+  - _self_
+
+stage: 2
+bc:
+  source: setA.h5
+  policies: [PPOLag-e100, PPOLag-e110, PPOLag-e120, PPOLag-e130, PPOLag-e140, PPOLag-e150,
+             PPOLag-e160, PPOLag-e170, PPOLag-e180, PPOLag-e190, PPOLag-e200]
+  n_episodes: 300
+  episode_seed: 20261003
+  frame_stride: 5          # frames every 5 steps; a feature pairs frames 10 steps apart
+  val_fraction: 0.2        # whole episodes held out to choose the ridge strength
+  ridge_alphas: [0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1000.0, 10000.0]
+  selection: min validation MSE of the clipped prediction; ties go to the larger alpha
+  standardisation: mean and std of the features of all selected frames, frozen afterwards
+  refit_on_all: true
+evaluation:
+  # Real-evaluation protocol, fixed for the whole study: every block-end encoder call holds
+  # exactly encode_batch frames (padded) and actions are computed one task at a time, so a real
+  # outcome is a function of (policy, start state) alone, whatever the grouping, chunking or
+  # worker count (cuDNN picks TF32 or FP32 kernels by batch size).
+  n_workers: 12
+  max_envs: 64
+  chunk_tasks: 64
+  encode_batch: 64
+gate0:
+  rule: health
+  truth: dense             # simulator state at every environment step
+  max_violation_ratio: 2.0
+  min_resolvable_count: 3
+  min_progress_ratio: 0.5  # mean real forward progress of theta_BC >= 0.5 x recorded
+  provisional: true
