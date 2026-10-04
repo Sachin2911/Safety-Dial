@@ -1,0 +1,56 @@
+# Bounded research pilot under the adopted measurement-readiness route.
+# This neither passes strict Gate 0 nor authorizes a full search/fix grid.
+defaults:
+  - stage2_readiness_baseline
+  - _self_
+stage: 4-transfer-pilot-v1
+pilot:
+  source_run: walker2d-evo-s2-readiness-baseline-20261004-1
+  source_hashes: configs/evo/transfer_pilot_sources.json
+  root_role: development_after_baseline_audit
+  n_roots: 64
+  selection_roots: 32
+  assessment_roots: 32
+  root_seed: 20261017
+  use_original_gate0_test_roots: false
+residual:
+  features: fixed_Gaussian_projection_of_existing_444_visual_history_features_plus_bias
+  rank: 16
+  projection_seed: 20261018
+  projection_scale: inverse_sqrt_input_dim
+  parameters: 1021  # 60*(16+1) linear-residual coefficients plus a base-gain offset
+  base: frozen_six_member_ensemble
+  zero_parameters: exact_frozen_controller
+  candidate_seed: 20261019
+  directions: 12
+  target_raw_action_rms: [0.025, 0.05, 0.10, 0.20]
+  antithetic_signs: [-1, 1]
+  calibration: initial_features_of_selection_roots_only
+  base_gains: [0.0, 0.25, 0.50, 0.75]
+  candidate_count: 101
+  train_projection_or_base: false
+execution:
+  imagined_noise: 0.0
+  imagined_candidates_per_call: 1
+  real_candidates_per_call: 1
+  max_envs: 64
+  encode_batch: 64
+  torch_threads: 1
+  save_all_trajectories: true
+  simulator_steps: 646400
+  imagined_rows: 64640
+  reused_root_collection_steps: 247351
+  compare_zero_real_rollout_bitwise_with_archived_baseline: true
+analysis:
+  bootstrap_replicates: 2000
+  bootstrap_seed: 20261020
+  ranking_views: [all_candidates, residual_candidates_only, local_residual_rms_le_0.10]
+  transfer_screen: rho_ge_0.5_and_95pct_lower_bound_gt_zero_and_90pct_defined_bootstraps
+  undefined_rank: report_as_undefined_and_fail_screen
+  selection: Deb_on_imagined_selection_roots_only_then_progress_then_candidate_index
+  freeze_selection_before_real_evaluation: true
+  selected_effect: paired_gap_change_vs_frozen_baseline_on_assessment_roots
+  root_only_effect_for_power: 0.10
+  search_seed_power: not_established_by_single_fixed_population
+  original_gate0_changed: false
+  official_gate1_verdict: not_run_diagnostic_only
