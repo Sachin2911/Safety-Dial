@@ -1,11 +1,11 @@
 # Stage 5 implementation preparation
 
 The main study remains a review draft. A separate bounded development power pilot
-is running under protocol commit `9c043c1`; it does not include ROSARL, a new final
+completed under protocol commit `9c043c1`; it does not include ROSARL, a new final
 bank or a claim that the failed gates passed. Its scientific source files have
 not been changed during execution.
 
-## Implemented while the pilot runs
+## Implemented during the pilot
 
 The new [readiness CMA core](../../../experiments/helpers/evoReadinessCMA.py) stores
 the optimiser and its private random stream, fitness-only penalty bounds, every
@@ -52,7 +52,9 @@ transfer or a ROSARL effect.
 
 ## Remaining before a main launch
 
-Use the current pilot to inspect candidate behaviour, seed variation and runtime.
+The completed pilot reports candidate behaviour, seed variation and runtime;
+its k=0 gap amplification supports fresh-episode confirmation. ROSARL variance
+remains unmeasured, and the four-seed variance estimates are provisional.
 Integrate the checked core with the frozen residual controller, independent episode
 banks and evaluation runner. Full-model generation-boundary resume and its query counters now match.
 Keep final roots uncollected during power and

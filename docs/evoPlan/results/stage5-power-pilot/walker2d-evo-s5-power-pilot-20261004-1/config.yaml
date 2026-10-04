@@ -1,0 +1,453 @@
+inputs:
+  model:
+    key: walker2d
+    path: lewm-a/walker2d-lewm-a-recovery-20260927-1
+    revision: 9e05478658484d0f26ea740fead9e0ab7625367e
+  probes:
+    key: walker2d
+    path: probes/walker2d-probes-recovery-20260927-1
+    revision: cb1560d7b02b4fbe6585b3c0c325a78d56b337e6
+  data:
+    key: walker2d-data
+    path: data/walker2d-data-20260926-3
+    revision: ddd4d51648d2a382725efd20d04cedebedbf8fd2
+  banks:
+    key: walker2d-data
+    path: banks/walker2d-s4-recovery-20260927-1
+    revision: 09ac490696cecb951e83644db48e646878905f87
+  policies:
+    key: walker2d
+    path: policies/walker2d-policies-complete-20260926-1
+    revision: b42e3f3e7dd80bc4d95cc2ef43c753cee96b9b55
+stage: 5-power-pilot-v1
+cache:
+  run: runs/walker2d-evo-s2-block-20261004-1
+  archive_path: evo/walker2d-evo-s2-block-20261004-1
+  archive_revision: d70d6863c2bcda9834ffbd2b6dd24f9a7dd6e863
+  features_sha256: bfa0223918cf68f0df6a6afa31eb484134a3051b0eeaf388fb8c0d4c6d0d8d23
+  split_sha256: cf15d922b87db4eebd4c257b524b76af3c5e02f0348de664342ae2f390ea90ba
+  policy_sha256: bee02c23e48cf14d8b3a32cf116b1121f05393b5224327e1cf53469393645993
+policy:
+  kind: history_mlp_sequential_block_v1
+  hidden:
+  - 512
+  - 256
+  activation: relu
+  output_dim: 60
+  features: frozen_visual_features_plus_previous_executed_ten_action_block
+  standardisation: previous_bc_policy_state_float32
+  input_dim: 444
+  history_normalisation: frozen_world_model_action_scaler
+training:
+  seeds:
+  - 20261004
+  - 20261005
+  - 20261006
+  epochs: 100
+  batch_size: 1024
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  loss: raw_action_mse
+  validation: unchanged_recorded_action_targets_and_equal_family_weights
+  selection: real_validation_progress_floor_then_violations_progress_offline_mse
+  refit_on_all: false
+  shuffle_each_epoch: true
+  linear_baseline_alpha: 1.0
+  linear_baseline_fit: same_fit_episodes_only
+  role: matched_inputs_architecture_seeds_updates_only_fit_targets_change
+  arms:
+  - recorded_targets_reused
+  - clean_teacher_targets
+  initialization: fresh_same_three_seeds
+  checkpoint_epochs:
+  - 20
+  - 50
+  - 100
+  candidate_pool: declared_epochs_plus_offline_best_per_seed
+real:
+  roots: S4_development_only
+  expected_roots: 24
+  max_envs: 24
+  encode_batch: 64
+  n_workers: 0
+  cpu_threads: 1
+  compare:
+  - recorded_targets_reused
+  - clean_teacher_targets
+  stratify_by: source_policy_family
+interpretation:
+  purpose: functional_averaging_of_independent_initialisations
+  gate0: not_run
+  model_selection_uses_real_outcomes: true_validation_only
+  after_diagnostic: report_before_further_gate_or_evolution
+  teacher_identity_input: false
+  privileged_state_input: false
+  on_development_success: freeze_before_separate_gate0
+  targets_use_privileged_teacher_supervision: true
+ppo:
+  policies:
+  - PPO-e100
+  - PPO-e110
+  - PPO-e120
+  - PPO-e130
+  - PPO-e140
+  - PPO-e150
+  - PPO-e160
+  - PPO-e170
+  - PPO-e180
+  - PPO-e190
+  - PPO-e200
+  n_episodes: 300
+  episode_seed: 20261007
+  val_fraction: 0.2
+  frame_stride: 5
+coverage:
+  seed: 20261008
+  fit_episodes_per_family: 120
+  baseline: original_PPOLag_fit_pool
+  mixed: equal_samples_from_120_fit_episodes_per_family
+  samples_per_family: minimum_available_after_episode_selection
+  baseline_samples: twice_mixed_samples_per_family
+  sampling: seeded_without_replacement
+  scaling: unchanged_previous_PPOLag_feature_transform
+source:
+  run_id: walker2d-evo-s2-coverage-20261004-1
+  revision: aab43ddcba2c1209453121a705ecf10c21a560a2
+history_cache:
+  run_id: walker2d-evo-s2-action-history-20261004-1
+  revision: 3cd701b35efb69322dcd3b005a1af70755fd73e3
+  previous_actions_sha256: 304ac88fe74d6cb2a84acf3c39321d12acd213b23c881c3b1144d50fec0cfb44
+control:
+  source_run: walker2d-evo-s2-information-resume-20261004-1
+  revision: 95407b8fcf397b5261b8be49613943f696ee2d86
+  arm: visual_history
+  reuse_training_and_outcomes: true
+  original_training_updates: 13500
+validation_control:
+  source_run: walker2d-evo-s2-information-resume-20261004-1
+  roots_sha256: 577b979cecbec0a9e3a26c768a51ef7078f8757048813f6e95864a0d987f772a
+  selection_sha256: 436bb0e24f9e081858b8b64f8d26fe2e0ce4c7f0cbc1735de0dac0e22264c16f
+  progress_floor: 0.5
+  selection_uses_development: false
+collection:
+  source: setA.h5_existing_mixed_fit_indices_only
+  examples: 45986
+  steps_per_example: 10
+  simulator_steps: 459860
+  teacher: exact_source_export_from_episode_policy_id
+  feedback_interval: 1
+  action_noise: 0.0
+  start: restore_each_cached_state_with_zero_solver_warm_start
+  within_block: sequential_no_intermediate_restores
+  keep_all_examples: true
+  outcome_filtering: false
+  validation_teacher_queries: false
+ensemble:
+  source_hashes: configs/evo/ensemble_sources.json
+  arms:
+  - recorded_three
+  - clean_three
+  - combined_six
+  member_selection: best_real_validation_candidate_per_training_seed_from_existing_pool
+  seeds:
+  - 20261004
+  - 20261005
+  - 20261006
+  aggregation: arithmetic_mean_of_clipped_member_actions
+  feedback: all_members_receive_same_actual_combined_previous_block
+  no_new_training: true
+  winner_selection: validation_progress_floor_then_violations_progress_name
+  development: only_the_frozen_validation_winner
+  source_runs:
+    recorded: walker2d-evo-s2-information-resume-20261004-1
+    clean: walker2d-evo-s2-clean-targets-20261004-1
+readiness:
+  version: 1
+  scope: permit_bounded_transfer_and_power_pilot_only
+  preserves_original_gate0: true
+  original_gate0_passed: false
+  freeze_controller: true
+  fit_or_select_on_fresh_bank: false
+  meaningful_failure_increment: 0.1
+  baseline_failure_upper_ci_max: 0.9
+  baseline_gap_ci_width_max: 0.2
+  progress_ratio_lower_ci_min: 0.5
+  failure_probability_interval: Wilson_one_independent_root_per_episode
+  confidence_level: 0.95
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20261016
+  on_failure: report_and_reconsider_protocol_no_automatic_threshold_change
+  on_pass: plan_transfer_and_paired_gap_power_before_confirmatory_search
+  not_authorized_by_pass:
+  - claim_safe_controller
+  - claim_original_gate0_pass
+  - launch_full_fix_grid
+frozen_controller:
+  run_id: walker2d-evo-s2-ensemble-20261004-1
+  file: selected_policy.npz
+  sha256: deeefa4fe680ecac39c95f8cffd995c3a4ed9cf5c995e6eecaca90c7b7a7f58b
+fresh_bank:
+  source: newly_generated_whole_episodes
+  n_roots: 256
+  one_root_per_episode: true
+  max_attempted_episodes: 512
+  max_steps_per_episode: 1000
+  episode_seed_base: 920261004
+  actor_noise_seed_base: 930261004
+  sampling_seed: 20261014
+  root_sampling_seed: 20261015
+  actor_pool_rule: historical_S1_ladder_len_mean_ge_400_and_return_mean_gt_500
+  actor_pool_manifest_sha256: 49726b5f69a931aaba5295a549a1adbe2f0e773716cab410fff7511503604996
+  actor_names:
+  - PPO-e050
+  - PPO-e060
+  - PPO-e070
+  - PPO-e080
+  - PPO-e090
+  - PPO-e100
+  - PPO-e110
+  - PPO-e120
+  - PPO-e130
+  - PPO-e140
+  - PPO-e150
+  - PPO-e160
+  - PPO-e170
+  - PPO-e180
+  - PPO-e190
+  - PPO-e200
+  - PPOLag-e040
+  - PPOLag-e060
+  - PPOLag-e070
+  - PPOLag-e080
+  - PPOLag-e090
+  - PPOLag-e100
+  - PPOLag-e110
+  - PPOLag-e120
+  - PPOLag-e130
+  - PPOLag-e140
+  - PPOLag-e150
+  - PPOLag-e160
+  - PPOLag-e170
+  - PPOLag-e180
+  - PPOLag-e190
+  - PPOLag-e200
+  action_noise:
+  - 0.0
+  - 0.05
+  - 0.1
+  mixture: uniform_over_competent_actor_and_noise_pairs_per_episode
+  stop_episode: first_dense_health_violation_or_1000_steps
+  root_rule: uniform_integer_20_to_length_minus_100_exclusive
+  eligibility: episode_length_greater_than_120
+  conditioning: healthy_recorded_future_by_construction_same_as_original_representative_bank
+  count_rejected_episode_steps: true
+  role: prospective_baseline_audit_then_development_only_not_final_search_test
+  archive_full_generated_episodes: true
+assessment:
+  policies:
+  - frozen_controller
+  - exact_recorded_actions
+  horizon_sim_steps: 100
+  truth: dense_health_every_simulator_step
+  imagined: frozen_model_and_probe_block_ends
+  real_readout: frozen_probe_on_real_frames
+  estimator: paired_source_episode_bootstrap_one_root_per_episode
+  progress_ratio: ratio_of_mean_progress_paired_bootstrap
+  gap: mean_real_violation_minus_mean_imagined_violation
+  original_threshold: report_separately_without_replacing_historical_gate0
+  no_noise_fit_or_evolution: true
+pilot:
+  source_run: walker2d-evo-s2-readiness-baseline-20261004-1
+  source_hashes: configs/evo/transfer_pilot_sources.json
+  root_role: development_after_baseline_audit
+  n_roots: 64
+  selection_roots: 32
+  assessment_roots: 32
+  root_seed: 20261017
+  use_original_gate0_test_roots: false
+residual:
+  features: fixed_Gaussian_projection_of_existing_444_visual_history_features_plus_bias
+  rank: 16
+  projection_seed: 20261018
+  projection_scale: inverse_sqrt_input_dim
+  parameters: 1021
+  base: frozen_six_member_ensemble
+  zero_parameters: exact_frozen_controller
+  candidate_seed: 20261019
+  directions: 12
+  target_raw_action_rms:
+  - 0.025
+  - 0.05
+  - 0.1
+  - 0.2
+  antithetic_signs:
+  - -1
+  - 1
+  calibration: initial_features_of_selection_roots_only
+  base_gains:
+  - 0.0
+  - 0.25
+  - 0.5
+  - 0.75
+  candidate_count: 101
+  train_projection_or_base: false
+execution:
+  imagined_noise: 0.0
+  imagined_candidates_per_call: 1
+  real_candidates_per_call: 1
+  max_envs: 64
+  encode_batch: 64
+  torch_threads: 1
+  save_all_trajectories: true
+  simulator_steps: 646400
+  imagined_rows: 64640
+  reused_root_collection_steps: 247351
+  compare_zero_real_rollout_bitwise_with_archived_baseline: true
+analysis:
+  bootstrap_replicates: 2000
+  bootstrap_seed: 20261020
+  ranking_views:
+  - all_candidates
+  - residual_candidates_only
+  - local_residual_rms_le_0.10
+  transfer_screen: rho_ge_0.5_and_95pct_lower_bound_gt_zero_and_90pct_defined_bootstraps
+  undefined_rank: report_as_undefined_and_fail_screen
+  selection: Deb_on_imagined_selection_roots_only_then_progress_then_candidate_index
+  freeze_selection_before_real_evaluation: true
+  selected_effect: paired_gap_change_vs_frozen_baseline_on_assessment_roots
+  root_only_effect_for_power: 0.1
+  search_seed_power: not_established_by_single_fixed_population
+  original_gate0_changed: false
+  official_gate1_verdict: not_run_diagnostic_only
+noise_diagnostic:
+  sources: configs/evo/noise_diagnostic_sources.json
+  baseline_run: walker2d-evo-s2-readiness-baseline-20261004-1
+  transfer_run: walker2d-evo-s4-transfer-pilot-20261004-1
+  calibration_fit_episodes: 64
+  calibration_check_episodes: 64
+  role_seed: 20261022
+  exclude_all_64_transfer_episodes_from_calibration: true
+  fit_trace: cached_frozen_controller_real_latents_and_executed_actions
+  include_unsafe_frames: true
+  scale: per_dimension_one_step_residual_std_ddof1_fit_episodes_only
+  correction: zero_mean_noise_only_no_bias_subtraction
+  bias: report_fit_and_disjoint_check_mean_residual_energy
+  predictor_batch: 64
+  levels:
+  - 0.5
+  - 1.0
+  - 2.0
+  - 4.0
+  samples_per_root: 4
+  noise_seed: 20261023
+  common_random_numbers: shared_across_candidates_and_noise_levels
+  candidates_per_call: 1
+  max_batch: 256
+  zero_control: bitwise_reproduce_archived_baseline_at_original_P1_R64_n1_shape
+  report_open_loop_error_growth_on_check_episodes: true
+  archived_predictions: all_readouts_and_metrics_plus_baseline_and_selected_actions
+  candidate_selection: Deb_on_original_32_selection_roots_per_level_before_loading_real_scores
+  assessment: original_32_assessment_roots_now_development_evidence
+  ranking_views:
+  - all_candidates
+  - residual_candidates_only
+  screen: both_progress_and_violation_rho_ge_0.5_lower95_gt_zero_90pct_defined
+  bootstrap_replicates: 2000
+  bootstrap_seed: 20261024
+  multiple_levels: descriptive_development_screen_not_confirmatory_significance
+  confirm_any_promising_setting_on_new_whole_episodes: true
+  on_no_promising_level: prepare_real_simulator_evolution_fallback
+  real_steps: 0
+  optimizer_updates: 0
+  calibration_predictor_rows: 1280
+  open_loop_predictor_rows: 640
+  zero_control_predictor_rows: 640
+  noisy_predictor_rows: 1034240
+  total_predictor_rows: 1036800
+  official_gate1_run: false
+  original_gate0_changed: false
+  full_fix_grid_authorized: false
+power_pilot:
+  source_hashes: configs/evo/power_pilot_sources.json
+  role: inspected_development_bank_only_not_final_confirmation
+  baseline_run: walker2d-evo-s2-readiness-baseline-20261004-1
+  residual_run: walker2d-evo-s4-transfer-pilot-20261004-1
+  noise_run: walker2d-evo-s3-noise-diagnostic-20261004-1
+  new_episode_collection: false
+  roots:
+    fitness: 96
+    selection: 64
+    assessment: 96
+  fitness_includes_all_existing_noise_fit_roots: true
+  role_seed: 20261201
+  search_seeds:
+  - 20261211
+  - 20261212
+  - 20261213
+  - 20261214
+  population_sizes:
+  - 16
+  - 256
+  generations: 16
+  checkpoints:
+  - 1
+  - 4
+  - 16
+  noise_levels:
+  - 0.0
+  - 1.0
+  penalty: zero_penalty_matched_first_violation_termination
+  rosarl_comparison: false
+  evolved_parameters: 1020
+  base_gain: 1.0
+  feature_RMS_fit: existing_64_noise_fit_root_initial_features_only
+  feature_RMS_floor: 1.0e-06
+  sigma0: 0.01212678125181665
+  covariance: diagonal_always
+  fitness_roots_per_generation: 32
+  samples:
+    fitness_k1: 4
+    selection_k1: 16
+    audit_k1: 32
+  zero_noise_samples: 1
+  candidate_batch: 1
+  max_imagined_batch: 16384
+  selection: best_baseline_or_generation_nominee_on_fixed_selection_bank
+  selection_noise: fixed_per_search_seed_separate_from_fitness_and_assessment
+  real_after_all_selections_frozen: true
+  assessment_audits:
+  - 0.0
+  - 1.0
+  feedback: actual_executed_previous_action_block
+  real_max_envs: 64
+  encode_batch: 64
+  torch_threads: 1
+  original_gate0_changed: false
+  main_stage5_authorized: false
+  supervisor_approval_claim: false
+  run_resume: false
+  resource_cap_hours: 2
+  expected_fitness_rows: 27852800
+  expected_selection_rows: 1479680
+  expected_assessment_rows: 1647360
+  expected_zero_control_rows: 640
+  expected_total_predictor_rows: 30980480
+  expected_real_steps: 470400
+  expected_CMA_generations: 256
+  expected_candidate_evaluations: 34816
+  expected_real_policy_slots: 49
+  expected_gradient_updates: 0
+  analysis:
+    low_pressure:
+      population: 16
+      generation: 1
+    high_pressure:
+      population: 256
+      generation: 16
+    bootstrap_seed: 20261220
+    bootstrap_replicates: 2000
+    analysis: paired_seed_by_episode_gap_and_real_failure_changes
+    power: exploratory_variance_components_and_sensitivity_only
+    primary_ROSARL_contrast_power: cannot_be_established_without_ROSARL_seed_variance
+    final_bank: remain_uncollected_and_uninspected

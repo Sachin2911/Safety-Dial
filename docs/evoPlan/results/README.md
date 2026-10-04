@@ -3,9 +3,10 @@
 **Current status, 4 October 2026:** strict Gate 0 remains unpassed. The fresh
 measurement-readiness audit passed; the bounded transfer and noise diagnostics
 are complete, and every tested noise level failed the declared joint transfer
-screen. The main Stage 5 experiment has not run. A bounded development search/power
-pilot is now running under the existing readiness scope; see its protocol below.
-All 657 tests now pass, including the three new residual/selection/variance checks.
+screen. The main Stage 5 experiment has not run. The bounded development search/power
+pilot is complete: its k=0 gap increased by 10.94 pp (exploratory 95% interval
+1.30 to 20.31 pp). Noise alone did not demonstrate a reduction in amplification.
+All 661 tests pass; frozen-model generation-boundary resume also matches exactly.
 
 The user's latest decision is to stop further Gate 0 controller repairs and
 prepare Stage 5 under an explicit extension of the readiness route, with k=1 as
@@ -25,15 +26,22 @@ current requested direction.
 | [Noise diagnostic](stage3-noise-diagnostic/walker2d-evo-s3-noise-diagnostic-20261004-1/README.md) | At k=1, residual-only safety/progress rho are 0.675/0.374; all-candidate values are 0.713/0.446. Every level fails the joint screen. Predicted risk remains severely underestimated. Zero new real steps; 1,036,800 predictor rows. |
 | [Gate/environment review](gate-and-environment-review-20261004.md) | Walker2d retained, historical gates preserved. Readiness initially authorized bounded pilots only; a main experiment needs the proposed explicit extension. |
 
-The user subsequently asked to move the decision and engineering forward. The
-[bounded search/power pilot](../protocols/stage5-power-pilot-20261004.md) was
-committed as `9c043c1` before launch and is running as
-`walker2d-evo-s5-power-pilot-20261004-1`. It compares k=0 and k=1 with four paired
-search seeds, using existing development episodes and a zero extra unsafe penalty.
-Its budget is 30,980,480 predictor rows and 470,400 real steps. The exact archived
-zero-correction imagined control passed. No ROSARL comparison or new final-bank
-collection is included, and the main declaration still awaits scientific review.
-This is an in-progress status, not a result or a claim of successful selection.
+The [bounded search/power pilot](stage5-power-pilot/walker2d-evo-s5-power-pilot-20261004-1/README.md)
+completed under protocol commit `9c043c1`. Four paired seeds compared k=0 and k=1
+with zero extra unsafe penalty, using previously inspected development episodes.
+From low to high declared search pressure, k=0 real failures rose from 19.79% to
+30.73%, while imagined failures stayed at 0.52%. The k=1-minus-k=0 difference in
+gap amplification was -3.33 pp, with an interval spanning -12.83 to +6.39 pp.
+The pilot supports fresh-episode confirmation, not a claim that noise fixes cheating.
+All cost assertions passed: 30,980,480 predictor rows, 470,400 real steps, 25.65
+minutes. Imagined and real archived controls matched bitwise. No ROSARL comparison
+or new final-bank collection occurred; the main declaration still awaits review.
+
+The [full-model resume check](stage5-resume-check/walker2d-evo-s5-resume-check-20261004-1/README.md)
+passed for k=0/k=1 with another 4,400 predictor rows and zero real steps. The new
+checkpoint core and full 661-test suite pass. Main-runner integration and sizing
+of the ROSARL contrast remain before a final launch. Ten paired seeds and 320 final
+episodes remain provisional; four development seeds do not establish final power.
 
 The noise write-up and its metrics were committed in `55a7be5`. The current
 readiness-route proposal preserves that negative joint-screen result, even though
@@ -46,6 +54,7 @@ The readiness and transfer bundles are privately archived and remotely hash-veri
 at revisions `b706cfae23f30382a05ffeb58c418584d6f6b3d6` and
 `24f4881fc2b3a10992d2151db3085b21ce0e1b9d`. The complete new noise bundle is
 prepared locally (17.85 MiB); its separate upload approval is still pending.
+The completed search/power and resume bundles are also local, pending archival.
 No supervisor message or GitHub push has been sent.
 
 ## Historical baseline record, 3 October 2026
