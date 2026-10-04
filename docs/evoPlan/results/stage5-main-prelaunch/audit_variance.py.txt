@@ -1,0 +1,51 @@
+import hashlib,json,math,sys
+from pathlib import Path
+import numpy as np
+import yaml
+sys.path.insert(0,'experiments')
+from helpers.evoReadinessQueries import QueryStore,digest_array
+from helpers.evoReadinessResults import load_study_outcomes
+from helpers.evoReadinessAnalysis import analyze_readiness
+from helpers.evoRoots import load_roots_json
+root=Path.cwd();run=root/'runs/walker2d-evo-s5-variance-pilot-20261004-1'
+manifest=json.loads((run/'manifest.json').read_text());check=json.loads((run/'check.json').read_text())
+assert check['passed'] and not check['main_final_bank_touched']
+assert manifest['costs']==check['costs']
+for name,h in manifest['source_sha256'].items():
+ assert hashlib.sha256((run/'source'/name).read_bytes()).hexdigest()==h,name
+ assert hashlib.sha256((root/name).read_bytes()).hexdigest()==h,name
+cfg=yaml.safe_load((run/'config.yaml').read_text())
+roles=json.loads((root/cfg['variance_pilot']['source_roles_file']).read_text())['indices']
+base=root/'runs'/cfg['implementation']['baseline_history_run']
+all_roots=load_roots_json(base/'roots.json');ids=roles['assessment'];roots=[all_roots[i] for i in ids]
+outcomes=load_study_outcomes(run/'study',expected_roots=roots)
+identity=outcomes['provenance']['study_identity']
+folders=sorted((run/'study/searches').glob('*/queries'))+[run/'study/evaluation']
+counts={};queries=0;file_hashes={}
+for folder in folders:
+ accounting=QueryStore(folder,study_identity=identity).accounting()
+ assert not accounting['pending_queries']
+ for k,v in accounting['completed_costs'].items():counts[k]=counts.get(k,0)+v
+ for path in sorted(folder.glob('*.npz')):
+  with np.load(path,allow_pickle=False) as saved:
+   receipt=json.loads(str(saved['__receipt__']))
+   assert receipt['data_sha256']=={k:digest_array(saved[k]) for k in saved.files if k!='__receipt__'},str(path)
+  queries+=1;file_hashes[str(path.relative_to(run))]=hashlib.sha256(path.read_bytes()).hexdigest()
+assert counts['real_steps']==check['costs']['real_steps']==633600
+assert counts['predictor_rows']==check['costs']['predictor_rows']==60819200
+for current,oldname in [('baseline-real','real_controller.npz'),('reference-real','real_recorded.npz')]:
+ with np.load(run/f'study/evaluation/{current}.npz',allow_pickle=False) as now,np.load(base/oldname,allow_pickle=False) as old:
+  for key in ['actions','qpos','qvel','progress','dense_violated']:
+   assert np.array_equal(now[key],old[key][ids]),(current,key)
+  if current=='baseline-real':assert np.array_equal(now['readout'],old['readout'][ids])
+a=cfg['analysis'];recomputed=analyze_readiness(outcomes['cells'],outcomes['baseline'],search_seeds=outcomes['search_seeds'],episode_keys=outcomes['episode_keys'],population_sizes=cfg['search']['population_sizes'],checkpoints=[1,16],replicates=a['bootstrap_replicates'],bootstrap_seed=a['bootstrap_seed'])
+def same(x,y):
+ if isinstance(x,dict):return x.keys()==y.keys() and all(same(x[k],y[k]) for k in x)
+ if isinstance(x,list):return len(x)==len(y) and all(same(a,b) for a,b in zip(x,y))
+ if isinstance(x,float):return math.isclose(x,y,abs_tol=1e-12,rel_tol=1e-12)
+ return x==y
+assert same(recomputed,json.loads((run/'analysis.json').read_text()))
+record=dict(passed=True,run_id=run.name,source_files_verified=len(manifest['source_sha256']),query_archives_verified=queries,query_costs=counts,recorded_controls_bitwise_reproduced=True,complete_analysis_reproduced=True,source_episode_order_verified=True,all_selections_frozen=True,main_final_bank_touched=False,new_model_queries=0,new_real_steps=0,input_manifest_sha256=hashlib.sha256((run/'manifest.json').read_bytes()).hexdigest(),query_archive_sha256=file_hashes,generator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
+path=root/'docs/evoPlan/results/stage5-main-prelaunch/pilot_integrity.json'
+with path.open('x') as f:json.dump(record,f,indent=2);f.write('\n')
+print(json.dumps({k:v for k,v in record.items() if k!='query_archive_sha256'},indent=2))

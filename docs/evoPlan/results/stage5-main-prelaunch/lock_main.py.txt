@@ -1,0 +1,55 @@
+import copy,hashlib,json,sys
+from datetime import datetime,timezone
+from pathlib import Path
+import yaml
+sys.path.insert(0,'experiments')
+from helpers.evoReadinessProtocol import protocol_plan,launch_blockers
+root=Path.cwd();out=root/'docs/evoPlan/results/stage5-main-prelaunch'
+review_path=out/'final_sizing.json';review=json.loads(review_path.read_text())
+seeds=review['recommended_search_seeds'];assert seeds in [10,20]
+assert not (root/'runs/walker2d-evo-s5-main-20261004-1').exists()
+validation=json.loads((out/'final_validation.json').read_text())
+for name,h in validation['source_sha256'].items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==h,name
+for name,h in review['input_sha256'].items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==h,name
+cfg=yaml.safe_load((root/'configs/evo/stage5_main_candidate.yaml').read_text())
+cfg['status']='locked_for_execution';cfg['execution_enabled']=True
+cfg['search']['search_seeds']=list(range(20261101,20261101+seeds))
+cfg['bank']['evaluation_count_is_provisional_pending_power_review']=False
+cfg['inputs']['noise_archive_revision']='d164248ecb2a2b80c31b9145074528168d9ec2d1'
+cfg['claims']['main_stage5']='prospectively_locked_before_fresh_collection'
+def proof(name):
+ p=root/name;return dict(path=name,sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+decision='docs/evoPlan/protocols/stage5-user-decision-20261004.json'
+lock_path='docs/evoPlan/protocols/stage5-main-lock-20261004.json'
+evidence={
+ 'user_accepts_readiness_extension_despite_failed_transfer_screen':decision,
+ 'user_accepts_matched_termination_and_ROSARL_adaptation':decision,
+ 'search_seed_power_and_exact_batch_throughput_review_complete':'docs/evoPlan/results/stage5-main-prelaunch/final_sizing.json',
+ 'executable_protocol_code_and_tests_committed_before_new_data':'docs/evoPlan/results/stage5-main-prelaunch/final_validation.json',
+ 'all_frozen_inputs_and_noise_scale_privately_archived_and_hash_pinned':'docs/evoPlan/results/stage5-main-prelaunch/frozen_inputs.json',
+ 'final_root_and_seed_counts_locked_before_new_episode_collection':lock_path,
+ 'completed_pilot_integrity_and_query_costs_verified':'docs/evoPlan/results/stage5-main-prelaunch/pilot_integrity.json'}
+plan=protocol_plan(cfg)
+scientific={k:cfg[k] for k in ['inputs','bank','policy','search','evaluation','analysis','budget','implementation']}
+record=dict(status='locked_before_new_episode_collection',locked_at=datetime.now(timezone.utc).isoformat(),
+ scientific_decision_authority='user',supervisor_approval_claim=False,
+ original_strict_gate0='failed_preserved',transfer_screen='failed_preserved',safe_controller_claim=False,
+ final_run_directory_absent_at_lock=True,chosen_search_seeds=cfg['search']['search_seeds'],
+ independent_episode_roles={r:cfg['bank'][r+'_episodes'] for r in ['fitness','selection','evaluation']},
+ exact_counts=plan['counts'],batch_shapes=plan['batch_shapes'],
+ sizing_review=proof('docs/evoPlan/results/stage5-main-prelaunch/final_sizing.json'),
+ fresh_seed_range_check=proof('docs/evoPlan/results/stage5-main-prelaunch/fresh_seed_ranges.json'),
+ scientific_configuration_sha256=hashlib.sha256(json.dumps(scientific,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+ inference='Two declared co-primary contrasts with paired crossed-seed/episode bootstrap and 97.5% intervals; practical real-risk/progress criteria remain separate.',
+ no_final_outcome_based_count_or_endpoint_changes=True,hard_main_wall_cap_hours=12,no_automatic_retry_or_extension=True,
+ precision_scenarios=next(r['precision'] for r in review['scenarios'] if r['search_seeds']==seeds),
+ power_guarantee=False)
+with (root/lock_path).open('x') as f:json.dump(record,f,indent=2);f.write('\n')
+cfg['approval']=dict(user_authorized_execution=True,scientific_decision_authority='user',
+ user_scientific_decision_recorded=True,supervisor_scientific_decision_recorded=False,
+ user_decision_evidence=proof(decision),required_before_execution=list(evidence),
+ completed_checks={k:True for k in evidence},evidence={k:proof(p) for k,p in evidence.items()})
+assert not launch_blockers(cfg,root)
+path=root/'configs/evo/stage5_main_locked_20261004.yaml'
+with path.open('x') as f:yaml.safe_dump(cfg,f,sort_keys=False)
+print(json.dumps(dict(config=str(path.relative_to(root)),counts=plan['counts'],launch_blockers=[]),indent=2))
