@@ -1,0 +1,32 @@
+defaults:
+  - stage2_action_history
+  - _self_
+stage: 2-information-diagnostic
+policy:
+  hidden: [512, 256]
+training:
+  arms: [visual_history, state_reference]
+  checkpoint_epochs: [20, 50, 100]
+  selection: minimum_real_validation_violations_then_maximum_progress_then_offline_mse
+  candidate_pool: declared_epochs_plus_offline_best_per_seed
+validation_control:
+  source: setA.h5_existing_validation_episodes_only
+  seed: 20261012
+  roots_per_family: 32
+  progress_floor: 0.5_times_recorded_reference
+  max_candidates_per_arm: 12
+  selection_uses_development: false
+state_reference:
+  features: current_clipped_environment_observation_and_block_difference
+  normalisation: fit_samples_only
+  padding: zeros_to_match_444_inputs
+  role: privileged_diagnostic_only_not_a_visual_controller
+real:
+  compare: [visual_history, state_reference]
+interpretation:
+  model_selection_uses_real_outcomes: true_validation_only
+  gate0: not_run
+  on_visual_development_success: freeze_before_separate_gate0
+history_cache:
+  run_id: walker2d-evo-s2-action-history-20261004-1
+  previous_actions_sha256: 304ac88fe74d6cb2a84acf3c39321d12acd213b23c881c3b1144d50fec0cfb44
