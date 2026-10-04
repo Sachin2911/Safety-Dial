@@ -3,7 +3,9 @@
 **Current status, 4 October 2026:** strict Gate 0 remains unpassed. The fresh
 measurement-readiness audit passed; the bounded transfer and noise diagnostics
 are complete, and every tested noise level failed the declared joint transfer
-screen. No Stage 5 search has run. All 654 tests passed at the latest code check.
+screen. The main Stage 5 experiment has not run. A bounded development search/power
+pilot is now running under the existing readiness scope; see its protocol below.
+All 657 tests now pass, including the three new residual/selection/variance checks.
 
 The user's latest decision is to stop further Gate 0 controller repairs and
 prepare Stage 5 under an explicit extension of the readiness route, with k=1 as
@@ -22,6 +24,16 @@ current requested direction.
 | [Transfer pilot](stage4-transfer-pilot/walker2d-evo-s4-transfer-pilot-20261004-1/README.md) | Baseline plus 96 residual candidates: zero imagined violations, 14 to 49 real failures per 64 roots. Safety ranking undefined. Declared screen fails; official Gate 1 not run. |
 | [Noise diagnostic](stage3-noise-diagnostic/walker2d-evo-s3-noise-diagnostic-20261004-1/README.md) | At k=1, residual-only safety/progress rho are 0.675/0.374; all-candidate values are 0.713/0.446. Every level fails the joint screen. Predicted risk remains severely underestimated. Zero new real steps; 1,036,800 predictor rows. |
 | [Gate/environment review](gate-and-environment-review-20261004.md) | Walker2d retained, historical gates preserved. Readiness initially authorized bounded pilots only; a main experiment needs the proposed explicit extension. |
+
+The user subsequently asked to move the decision and engineering forward. The
+[bounded search/power pilot](../protocols/stage5-power-pilot-20261004.md) was
+committed as `9c043c1` before launch and is running as
+`walker2d-evo-s5-power-pilot-20261004-1`. It compares k=0 and k=1 with four paired
+search seeds, using existing development episodes and a zero extra unsafe penalty.
+Its budget is 30,980,480 predictor rows and 470,400 real steps. The exact archived
+zero-correction imagined control passed. No ROSARL comparison or new final-bank
+collection is included, and the main declaration still awaits scientific review.
+This is an in-progress status, not a result or a claim of successful selection.
 
 The noise write-up and its metrics were committed in `55a7be5`. The current
 readiness-route proposal preserves that negative joint-screen result, even though
