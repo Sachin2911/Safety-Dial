@@ -1,0 +1,48 @@
+inputs:
+  model:
+    key: walker2d
+    path: lewm-a/walker2d-lewm-a-recovery-20260927-1
+    revision: 9e05478658484d0f26ea740fead9e0ab7625367e
+  probes:
+    key: walker2d
+    path: probes/walker2d-probes-recovery-20260927-1
+    revision: cb1560d7b02b4fbe6585b3c0c325a78d56b337e6
+  data:
+    key: walker2d-data
+    path: data/walker2d-data-20260926-3
+    revision: ddd4d51648d2a382725efd20d04cedebedbf8fd2
+  banks:
+    key: walker2d-data
+    path: banks/walker2d-s4-recovery-20260927-1
+    revision: 09ac490696cecb951e83644db48e646878905f87
+  policies:
+    key: walker2d
+    path: policies/walker2d-policies-complete-20260926-1
+    revision: b42e3f3e7dd80bc4d95cc2ef43c753cee96b9b55
+stage: 5-resume-check-v1
+validation:
+  source_hashes: configs/evo/power_pilot_sources.json
+  baseline_run: walker2d-evo-s2-readiness-baseline-20261004-1
+  residual_run: walker2d-evo-s4-transfer-pilot-20261004-1
+  noise_run: walker2d-evo-s3-noise-diagnostic-20261004-1
+  seed: 20261230
+  population: 4
+  generations: 2
+  pause_after_generation: 1
+  fitness_bank: first_8_existing_noise_fit_indices
+  selection_bank: first_4_existing_noise_check_indices
+  fitness_roots_per_generation: 4
+  noise_levels:
+  - 0.0
+  - 1.0
+  samples_k1: 4
+  penalty_mode: zero
+  sigma0: 0.01212678125181665
+  feature_RMS_floor: 1.0e-06
+  expected_predictor_rows: 4400
+  expected_real_steps: 0
+  expected_gradient_updates: 0
+  duplicate_validation_queries_included: true
+  main_stage5: false
+  rosarl_compared: false
+  automatic_retry: false

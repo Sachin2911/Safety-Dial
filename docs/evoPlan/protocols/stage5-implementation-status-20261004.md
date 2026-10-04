@@ -41,16 +41,20 @@ Four new focused tests passed. Together with the existing CMA-ES regression suit
 - A partial selection interruption preserves its journal and cannot silently
   rerun already charged fitness queries.
 
-The last full project suite, run for the active power pilot before this new core,
-had 657 passing tests. The new core has not yet been integrated into a main-study
-entry point or validated on full frozen-model searches. These focused synthetic
-checks do not establish successful locomotion, transfer or a ROSARL effect.
+The full project suite subsequently passed with the new core: 661 tests,
+49 warnings, 79.29 seconds. Ruff passed. The new core has not yet been integrated into a main-study
+entry point. The subsequent [frozen-model validation](../results/stage5-resume-check/walker2d-evo-s5-resume-check-20261004-1/README.md)
+passed at k=0 and k=1: complete and resumed searches matched candidates, nominees,
+picks, penalty bounds and query counts exactly. Its 4,400 predictor rows include
+both copies of each validation search. It used zero real steps and the zero extra
+penalty objective only. These checks do not establish successful locomotion,
+transfer or a ROSARL effect.
 
 ## Remaining before a main launch
 
 Use the current pilot to inspect candidate behaviour, seed variation and runtime.
 Integrate the checked core with the frozen residual controller, independent episode
-banks and evaluation runner. Validate full-model resume at a completed generation
-and reconcile all query counters. Keep final roots uncollected during power and
+banks and evaluation runner. Full-model generation-boundary resume and its query counters now match.
+Keep final roots uncollected during power and
 runtime planning. Lock the final config before collection, after the requested
 scientific review of the readiness extension and ROSARL adaptation.
