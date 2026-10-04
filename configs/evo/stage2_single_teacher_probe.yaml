@@ -1,0 +1,11 @@
+defaults:
+  - inputs
+  - _self_
+stage: 2-single-teacher-probe
+teachers: [PPO-e200, PPOLag-e200]
+roots: existing_24_development
+horizon_steps: 100
+actions: noiseless_teacher_every_environment_step
+new_simulator_steps: 4800
+purpose: test_whether_one_fixed_teacher_can_cover_both_source_families
+selection: diagnostic_only_no_gate0_or_controller_training
