@@ -1,0 +1,329 @@
+{
+  "costs": {
+    "cached_lag_frames_reused": 60000,
+    "history_renders": 72,
+    "imagined": {
+      "encodes": 72,
+      "imagined_rows": 480,
+      "real_steps": 0,
+      "renders": 0,
+      "wall_s": 0.12769304984249175
+    },
+    "new_ppo_bc_encodes": 58681,
+    "new_ppo_bc_renders": 58681,
+    "new_real_steps": 7200,
+    "optimizer_updates": 27000,
+    "real_executor": {
+      "encodes": 480,
+      "imagined_rows": 0,
+      "real_steps": 4800,
+      "renders": 480,
+      "wall_s": 0.9997789689805359
+    },
+    "updates_per_arm": {
+      "baseline": 13500,
+      "mixed": 13500
+    },
+    "upstream_costs_from_cache_manifest": {
+      "bc_data_source": "subset of existing setA; no new collection",
+      "bc_frames_rendered": 60000,
+      "imagined_history_frames_rendered": 768,
+      "imagined_rows": 2560,
+      "main_process_encodes": 60768,
+      "probe_collection_steps_reused": 300347,
+      "real_executor_counters": {
+        "encodes": 3328,
+        "imagined_rows": 0,
+        "real_steps": 25600,
+        "renders": 3328,
+        "wall_s": 8.894758697948419
+      },
+      "real_steps_bc": 25600,
+      "real_steps_recorded_replay": 25600,
+      "root_collection_steps_reused": 300038,
+      "setA_collection_steps_reused": 2999673
+    }
+  },
+  "created_utc": "2026-10-04T11:48:45+00:00",
+  "data": {
+    "lag_cache_sha256": "bfa0223918cf68f0df6a6afa31eb484134a3051b0eeaf388fb8c0d4c6d0d8d23",
+    "lag_split_sha256": "cf15d922b87db4eebd4c257b524b76af3c5e02f0348de664342ae2f390ea90ba",
+    "policy_sha256": {
+      "baseline": "3565d56383611f0dc9039b184c3ed0150355f3796cd83c7b59262940b35c64fa",
+      "mixed": "8af0286f65f4eea53ff830d668ea2ea8df13b5a02d3e6c11b3e726ff734b5939"
+    },
+    "ppo_cache_sha256": "d96951ad2ff594be127179ef9a4487f076140c80fc49f96299d9137c3472139c",
+    "sample_indices_sha256": "dacb159977cd5e82fb9c5839c504e880a8a33a298a37b11a3c866066d75b4c58"
+  },
+  "gate0_run": false,
+  "hardware": {
+    "container_id": "54138859",
+    "cpu_visible": 256,
+    "cuda_available": true,
+    "gpu": "NVIDIA GeForce RTX 5090",
+    "gpu_capability": "12.0",
+    "gpu_memory_gb": 33.7,
+    "hostname": "b14410026c54",
+    "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+    "public_ipaddr": "81.27.69.177",
+    "python": "3.11.16",
+    "threads": {
+      "cpu_quota_cores": 30.71999,
+      "threads": 8,
+      "visible_cores": 256
+    },
+    "torch_cuda": "13.0",
+    "vast_containerlabel": "C.54138859"
+  },
+  "implementation_sha256": {
+    "configs/evo/stage2_coverage.yaml": "767fc2caf9c6b0fd6ed4867b58532e2af636031ed98ab85f316b38c979e2aef6",
+    "experiments/helpers/evoCoverage.py": "d186a7cb61cd3fa9292f49c95588fe6f9897b691b30c2fd7932b73c4aeec7089",
+    "experiments/helpers/evoMlpPolicy.py": "dddb8d82bed8d435d2b37ef20235254dfe4097bdc3d90cab9b4accadbd5f09a9",
+    "experiments/helpers/evoMlpReal.py": "4e903c43917baf336a5096cc49c67b270b298e7b2313f1e305909934d6a4ffa4",
+    "experiments/scripts/evo_block_bc_init.py": "e60b36d2a415768ba6c9ea771eb81d103e513f5e00f39f5233a1c9b0816484c6",
+    "experiments/scripts/evo_coverage_diagnostic.py": "b820f52bda97d92e83677877b05471a3661d2020b61863700fb1c9ca12766ac1",
+    "experiments/scripts/evo_mlp_diagnostic.py": "5cd99395c68dc98498eb27628bd2d4a49d49a81e1563ab847e84d59a055c625f"
+  },
+  "kind": "evo-s2-coverage-diagnostic",
+  "metrics": {
+    "development": {
+      "baseline": {
+        "imagined_violation_rate": 0.0,
+        "n": 24,
+        "progress_mean": 1.7098041952935965,
+        "progress_ratio_recorded": 0.810480064388155,
+        "real_readout_violation_rate": 0.375,
+        "violation_rate": 0.375,
+        "violation_wilson": [
+          0.21159367559548778,
+          0.5729003755732572
+        ],
+        "violations": 9
+      },
+      "mixed": {
+        "imagined_violation_rate": 0.0,
+        "n": 24,
+        "progress_mean": 2.092565908105929,
+        "progress_ratio_recorded": 0.9919164759371341,
+        "real_readout_violation_rate": 0.2916666666666667,
+        "violation_rate": 0.16666666666666666,
+        "violation_wilson": [
+          0.06678676328632951,
+          0.3585307064969906
+        ],
+        "violations": 4
+      }
+    },
+    "offline": {
+      "baseline": {
+        "optimizer_updates": 13500,
+        "selected": {
+          "epoch": 4,
+          "fit_raw_mse": 0.1255393890336785,
+          "seed": 20261005,
+          "val_mse": 0.23395085002151095
+        },
+        "training_samples": 45986,
+        "trials": [
+          {
+            "epoch": 3,
+            "fit_raw_mse": 0.12815522882131974,
+            "seed": 20261004,
+            "val_mse": 0.23879657246632446
+          },
+          {
+            "epoch": 4,
+            "fit_raw_mse": 0.1255393890336785,
+            "seed": 20261005,
+            "val_mse": 0.23395085002151095
+          },
+          {
+            "epoch": 3,
+            "fit_raw_mse": 0.12852143254964662,
+            "seed": 20261006,
+            "val_mse": 0.2370577726476485
+          }
+        ],
+        "validation_by_family": {
+          "PPO": {
+            "block_mean_mse": 0.2168407440185547,
+            "full_block_mse": 0.33616966009140015,
+            "mse_per_offset": [
+              0.3313296437263489,
+              0.343159943819046,
+              0.35048893094062805,
+              0.3441384732723236,
+              0.334588885307312,
+              0.33388301730155945,
+              0.3282248377799988,
+              0.3310123383998871,
+              0.3323197364807129,
+              0.33255088329315186
+            ],
+            "predicted_within_block_rms": 0.12878981232643127,
+            "target_within_block_rms": 0.3212762773036957,
+            "within_block_mse": 0.11932893097400665
+          },
+          "PPOLag": {
+            "block_mean_mse": 0.007155063096433878,
+            "full_block_mse": 0.1317320317029953,
+            "mse_per_offset": [
+              0.13107432425022125,
+              0.1307831108570099,
+              0.12994402647018433,
+              0.12872515618801117,
+              0.13129441440105438,
+              0.13149958848953247,
+              0.13268409669399261,
+              0.13213704526424408,
+              0.13276197016239166,
+              0.13641636073589325
+            ],
+            "predicted_within_block_rms": 0.16962525248527527,
+            "target_within_block_rms": 0.39362651109695435,
+            "within_block_mse": 0.12457697838544846
+          }
+        }
+      },
+      "mixed": {
+        "optimizer_updates": 13500,
+        "selected": {
+          "epoch": 63,
+          "fit_raw_mse": 0.07488282040900208,
+          "seed": 20261005,
+          "val_mse": 0.08780687923853128
+        },
+        "training_samples": 45986,
+        "trials": [
+          {
+            "epoch": 46,
+            "fit_raw_mse": 0.07748041252128837,
+            "seed": 20261004,
+            "val_mse": 0.08824702358557428
+          },
+          {
+            "epoch": 63,
+            "fit_raw_mse": 0.07488282040900208,
+            "seed": 20261005,
+            "val_mse": 0.08780687923853128
+          },
+          {
+            "epoch": 70,
+            "fit_raw_mse": 0.07476927037704237,
+            "seed": 20261006,
+            "val_mse": 0.08814000529935048
+          }
+        ],
+        "validation_by_family": {
+          "PPO": {
+            "block_mean_mse": 0.006178929470479488,
+            "full_block_mse": 0.04917371645569801,
+            "mse_per_offset": [
+              0.047610990703105927,
+              0.04717038571834564,
+              0.04677736759185791,
+              0.04759225621819496,
+              0.048040468245744705,
+              0.048406559973955154,
+              0.050336804240942,
+              0.05035409703850746,
+              0.051290787756443024,
+              0.054157525300979614
+            ],
+            "predicted_within_block_rms": 0.24727965891361237,
+            "target_within_block_rms": 0.3212762773036957,
+            "within_block_mse": 0.04299478232860565
+          },
+          "PPOLag": {
+            "block_mean_mse": 0.005936070345342159,
+            "full_block_mse": 0.12644004821777344,
+            "mse_per_offset": [
+              0.12850947678089142,
+              0.12673838436603546,
+              0.125993549823761,
+              0.12445046007633209,
+              0.12600864470005035,
+              0.1262136995792389,
+              0.12682034075260162,
+              0.12583649158477783,
+              0.1257418543100357,
+              0.12808695435523987
+            ],
+            "predicted_within_block_rms": 0.1990327537059784,
+            "target_within_block_rms": 0.39362651109695435,
+            "within_block_mse": 0.1205039769411087
+          }
+        }
+      }
+    }
+  },
+  "packages": {
+    "gymnasium": "1.3.0",
+    "h5py": "3.16.0",
+    "huggingface_hub": "1.24.0",
+    "mujoco": "3.11.0",
+    "numpy": "2.4.6",
+    "pymunk": "7.3.0",
+    "scikit-learn": "1.9.0",
+    "stable-pretraining": "0.1.8",
+    "stable-worldmodel": "0.1.1",
+    "torch": "2.13.0",
+    "torchvision": "0.28.0"
+  },
+  "repo": {
+    "branch": "main",
+    "commit": "a3b5dbd1dd032727ad68e1e8960f19ee9c9c26f7",
+    "dirty": true,
+    "path": "/workspace/Safety-Dial",
+    "remote": "https://github.com/Sachin2911/Safety-Dial.git"
+  },
+  "run_id": "walker2d-evo-s2-coverage-20261004-1",
+  "seeds": {
+    "coverage": 20261008,
+    "ppo_episodes": 20261007,
+    "training": [
+      20261004,
+      20261005,
+      20261006
+    ]
+  },
+  "upstream_lewm": null,
+  "upstream_revisions": {
+    "banks": {
+      "path": "banks/walker2d-s4-recovery-20260927-1",
+      "repo_id": "Sachioster/safetydial-walker2d-data",
+      "repo_type": "dataset",
+      "revision": "09ac490696cecb951e83644db48e646878905f87"
+    },
+    "cloning_cache": {
+      "path": "evo/walker2d-evo-s2-block-20261004-1",
+      "repo_id": "Sachioster/safetydial-walker2d",
+      "revision": "d70d6863c2bcda9834ffbd2b6dd24f9a7dd6e863"
+    },
+    "data": {
+      "path": "data/walker2d-data-20260926-3",
+      "repo_id": "Sachioster/safetydial-walker2d-data",
+      "repo_type": "dataset",
+      "revision": "ddd4d51648d2a382725efd20d04cedebedbf8fd2"
+    },
+    "model": {
+      "path": "lewm-a/walker2d-lewm-a-recovery-20260927-1",
+      "repo_id": "Sachioster/safetydial-walker2d",
+      "repo_type": "model",
+      "revision": "9e05478658484d0f26ea740fead9e0ab7625367e"
+    },
+    "policies": {
+      "path": "policies/walker2d-policies-complete-20260926-1",
+      "repo_id": "Sachioster/safetydial-walker2d",
+      "repo_type": "model",
+      "revision": "b42e3f3e7dd80bc4d95cc2ef43c753cee96b9b55"
+    },
+    "probes": {
+      "path": "probes/walker2d-probes-recovery-20260927-1",
+      "repo_id": "Sachioster/safetydial-walker2d",
+      "repo_type": "model",
+      "revision": "cb1560d7b02b4fbe6585b3c0c325a78d56b337e6"
+    }
+  },
+  "wall_clock_s": 61.68439793586731
+}
