@@ -1,0 +1,145 @@
+inputs:
+  model:
+    key: walker2d
+    path: lewm-a/walker2d-lewm-a-recovery-20260927-1
+    revision: 9e05478658484d0f26ea740fead9e0ab7625367e
+  probes:
+    key: walker2d
+    path: probes/walker2d-probes-recovery-20260927-1
+    revision: cb1560d7b02b4fbe6585b3c0c325a78d56b337e6
+  data:
+    key: walker2d-data
+    path: data/walker2d-data-20260926-3
+    revision: ddd4d51648d2a382725efd20d04cedebedbf8fd2
+  banks:
+    key: walker2d-data
+    path: banks/walker2d-s4-recovery-20260927-1
+    revision: 09ac490696cecb951e83644db48e646878905f87
+  policies:
+    key: walker2d
+    path: policies/walker2d-policies-complete-20260926-1
+    revision: b42e3f3e7dd80bc4d95cc2ef43c753cee96b9b55
+stage: 2-clean-targets-diagnostic
+cache:
+  run: runs/walker2d-evo-s2-block-20261004-1
+  archive_path: evo/walker2d-evo-s2-block-20261004-1
+  archive_revision: d70d6863c2bcda9834ffbd2b6dd24f9a7dd6e863
+  features_sha256: bfa0223918cf68f0df6a6afa31eb484134a3051b0eeaf388fb8c0d4c6d0d8d23
+  split_sha256: cf15d922b87db4eebd4c257b524b76af3c5e02f0348de664342ae2f390ea90ba
+  policy_sha256: bee02c23e48cf14d8b3a32cf116b1121f05393b5224327e1cf53469393645993
+policy:
+  kind: history_mlp_sequential_block_v1
+  hidden:
+  - 512
+  - 256
+  activation: relu
+  output_dim: 60
+  features: frozen_visual_features_plus_previous_executed_ten_action_block
+  standardisation: previous_bc_policy_state_float32
+  input_dim: 444
+  history_normalisation: frozen_world_model_action_scaler
+training:
+  seeds:
+  - 20261004
+  - 20261005
+  - 20261006
+  epochs: 100
+  batch_size: 1024
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  loss: raw_action_mse
+  validation: unchanged_recorded_action_targets_and_equal_family_weights
+  selection: real_validation_progress_floor_then_violations_progress_offline_mse
+  refit_on_all: false
+  shuffle_each_epoch: true
+  linear_baseline_alpha: 1.0
+  linear_baseline_fit: same_fit_episodes_only
+  role: matched_inputs_architecture_seeds_updates_only_fit_targets_change
+  arms:
+  - recorded_targets_reused
+  - clean_teacher_targets
+  initialization: fresh_same_three_seeds
+  checkpoint_epochs:
+  - 20
+  - 50
+  - 100
+  candidate_pool: declared_epochs_plus_offline_best_per_seed
+real:
+  roots: S4_development_only
+  expected_roots: 24
+  max_envs: 24
+  encode_batch: 64
+  n_workers: 0
+  cpu_threads: 1
+  compare:
+  - recorded_targets_reused
+  - clean_teacher_targets
+  stratify_by: source_policy_family
+interpretation:
+  purpose: demonstration_coverage_with_equal_training_sample_and_update_budgets
+  gate0: not_run
+  model_selection_uses_real_outcomes: true_validation_only
+  after_diagnostic: report_before_further_gate_or_evolution
+  teacher_identity_input: false
+  privileged_state_input: false
+  on_development_success: freeze_before_separate_gate0
+  targets_use_privileged_teacher_supervision: true
+ppo:
+  policies:
+  - PPO-e100
+  - PPO-e110
+  - PPO-e120
+  - PPO-e130
+  - PPO-e140
+  - PPO-e150
+  - PPO-e160
+  - PPO-e170
+  - PPO-e180
+  - PPO-e190
+  - PPO-e200
+  n_episodes: 300
+  episode_seed: 20261007
+  val_fraction: 0.2
+  frame_stride: 5
+coverage:
+  seed: 20261008
+  fit_episodes_per_family: 120
+  baseline: original_PPOLag_fit_pool
+  mixed: equal_samples_from_120_fit_episodes_per_family
+  samples_per_family: minimum_available_after_episode_selection
+  baseline_samples: twice_mixed_samples_per_family
+  sampling: seeded_without_replacement
+  scaling: unchanged_previous_PPOLag_feature_transform
+source:
+  run_id: walker2d-evo-s2-coverage-20261004-1
+  revision: aab43ddcba2c1209453121a705ecf10c21a560a2
+history_cache:
+  run_id: walker2d-evo-s2-action-history-20261004-1
+  revision: 3cd701b35efb69322dcd3b005a1af70755fd73e3
+  previous_actions_sha256: 304ac88fe74d6cb2a84acf3c39321d12acd213b23c881c3b1144d50fec0cfb44
+control:
+  source_run: walker2d-evo-s2-information-resume-20261004-1
+  revision: 95407b8fcf397b5261b8be49613943f696ee2d86
+  arm: visual_history
+  reuse_training_and_outcomes: true
+  original_training_updates: 13500
+validation_control:
+  source_run: walker2d-evo-s2-information-resume-20261004-1
+  roots_sha256: 577b979cecbec0a9e3a26c768a51ef7078f8757048813f6e95864a0d987f772a
+  selection_sha256: 436bb0e24f9e081858b8b64f8d26fe2e0ce4c7f0cbc1735de0dac0e22264c16f
+  progress_floor: 0.5
+  selection_uses_development: false
+collection:
+  source: setA.h5_existing_mixed_fit_indices_only
+  examples: 45986
+  steps_per_example: 10
+  simulator_steps: 459860
+  teacher: exact_source_export_from_episode_policy_id
+  feedback_interval: 1
+  action_noise: 0.0
+  start: restore_each_cached_state_with_zero_solver_warm_start
+  within_block: sequential_no_intermediate_restores
+  keep_all_examples: true
+  outcome_filtering: false
+  validation_teacher_queries: false

@@ -1,0 +1,23 @@
+defaults:
+  - stage2_clean_targets
+  - _self_
+stage: 2-ensemble-diagnostic
+ensemble:
+  source_hashes: configs/evo/ensemble_sources.json
+  arms: [recorded_three, clean_three, combined_six]
+  member_selection: best_real_validation_candidate_per_training_seed_from_existing_pool
+  seeds: [20261004, 20261005, 20261006]
+  aggregation: arithmetic_mean_of_clipped_member_actions
+  feedback: all_members_receive_same_actual_combined_previous_block
+  no_new_training: true
+  winner_selection: validation_progress_floor_then_violations_progress_name
+  development: only_the_frozen_validation_winner
+  source_runs:
+    recorded: walker2d-evo-s2-information-resume-20261004-1
+    clean: walker2d-evo-s2-clean-targets-20261004-1
+interpretation:
+  purpose: functional_averaging_of_independent_initialisations
+  gate0: not_run
+  model_selection_uses_real_outcomes: true_validation_only
+  teacher_identity_input: false
+  privileged_state_input: false
