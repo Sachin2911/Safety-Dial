@@ -90,6 +90,33 @@ class QueryStore:
             raise ValueError('cost counters must be nondecreasing integer counts')
         return {k:int(v) for k,v in costs.items()}
 
+    def _validate_receipt(self, receipt, key, *, request=None, expected_costs=None):
+        if 'receipt_sha256' in receipt and receipt['receipt_sha256'] != digest_json(
+                {k: v for k, v in receipt.items() if k != 'receipt_sha256'}):
+            raise ValueError('saved query receipt checksum mismatch')
+        if receipt.get('study_identity') != self.study_identity or receipt.get('key') != key:
+            raise ValueError('saved query study or key differs from its archive')
+        if request is not None and receipt.get('request') != request:
+            raise ValueError('saved query has different inputs (request changed)')
+        costs = receipt.get('costs')
+        if not isinstance(costs, dict) or any(
+                not isinstance(v, int) or isinstance(v, bool) or v < 0 for v in costs.values()):
+            raise ValueError('saved query costs must be nonnegative integer counters')
+        recorded = receipt.get('requested_costs')
+        if recorded is not None:
+            if not isinstance(recorded, dict) or any(
+                    not isinstance(v, int) or isinstance(v, bool) or v < 0 for v in recorded.values()):
+                raise ValueError('saved requested costs are invalid')
+            expected_identity = digest_json(dict(study=self.study_identity, key=key,
+                request=receipt['request'], expected_costs=recorded))
+            if receipt.get('identity') != expected_identity:
+                raise ValueError('saved query request or requested costs changed')
+            if expected_costs is not None and recorded != expected_costs:
+                raise ValueError('saved requested costs differ from declared shape')
+        for expected in [recorded, expected_costs]:
+            if expected is not None and any(costs.get(k) != v for k, v in expected.items()):
+                raise ValueError('saved query charged costs differ from declared shape')
+
     def execute(self, key, *, request, expected_costs, callback, read_costs):
         if not re.fullmatch(r'[A-Za-z0-9_.-]+',key):
             raise ValueError('query key must be a simple filename component')
@@ -101,6 +128,7 @@ class QueryStore:
             with np.load(path,allow_pickle=False) as saved:
                 receipt = json.loads(str(saved['__receipt__']))
                 arrays = {k:saved[k].copy() for k in saved.files if k!='__receipt__'}
+            self._validate_receipt(receipt, key, request=request, expected_costs=expected_costs)
             if receipt['identity'] != identity or receipt['study_identity'] != self.study_identity:
                 raise ValueError('saved query has different inputs or requested costs')
             if receipt['data_sha256'] != {k:digest_array(v) for k,v in arrays.items()}:
@@ -130,8 +158,9 @@ class QueryStore:
             if any(costs.get(k) != v for k,v in expected_costs.items()):
                 raise ValueError(f'measured costs differ from requested shape: {costs}')
             receipt = dict(identity=identity,study_identity=self.study_identity,key=key,
-                request=request,costs=costs,completed_at=time.time(),
+                request=request,requested_costs=expected_costs,costs=costs,completed_at=time.time(),
                 data_sha256={k:digest_array(v) for k,v in arrays.items()})
+            receipt['receipt_sha256'] = digest_json(receipt)
             entry.update(phase='committing',measured_costs=costs)
             atomic_json(pending,entry)
             _atomic(path,lambda f:np.savez_compressed(f,**arrays,__receipt__=json.dumps(receipt,sort_keys=True)))
@@ -148,8 +177,7 @@ class QueryStore:
         for path in sorted(self.directory.glob('*.npz')):
             with np.load(path,allow_pickle=False) as saved:
                 receipt=json.loads(str(saved['__receipt__']))
-            if receipt['study_identity'] != self.study_identity:
-                raise ValueError('mixed studies in query store')
+            self._validate_receipt(receipt, path.stem)
             receipts.append(dict(key=receipt['key'],costs=receipt['costs']))
             for key,value in receipt['costs'].items():
                 totals[key]=totals.get(key,0)+value

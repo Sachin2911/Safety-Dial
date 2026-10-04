@@ -1,0 +1,71 @@
+{
+  "created_at": "2026-10-04T17:41:33.374057+00:00",
+  "scope": "Independent review, offline Monte Carlo analysis, and prelaunch validation repairs",
+  "source_sha256": {
+    "experiments/helpers/evoReadinessProtocol.py": "499db9b6476b249b28d681f3760593c887dc952ee23cecaf311547cd9f09cb3d",
+    "experiments/helpers/evoReadinessQueries.py": "9d53ef9269bfa1231fad51e31898235478c98c53e89850174236e4a96f725033",
+    "experiments/scripts/evo_pilot_mc_audit.py": "09fa63a3636d42cd91646e40c09be866c4f582c2cea26c07e64865f135a49d43",
+    "experiments/tests/test_evo_readiness_prelaunch_audit.py": "1a51c1205b8ba28814afac37e0e17c40b1d7f01d766810694f188d5af8ef83ef",
+    "experiments/tests/test_evo_pilot_mc_audit.py": "e1b704d46b52b07b5cc39a508798d9f31b6a8a7e94d1688ca93b0f28ab161c24"
+  },
+  "fixes": [
+    "Unsupported fixed scoring, clipping, evaluation and inference settings now fail during protocol planning.",
+    "Invalid sample counts, pressure endpoints, seeds, bootstrap settings and nonfinite wall-time caps fail before data collection.",
+    "Cached receipts validate request, key, declared costs and nonnegative integer measured counters.",
+    "New receipts bind all receipt metadata with a checksum and retain requested costs for accounting verification.",
+    "Legacy receipts remain readable; expected costs are checked on reuse. Legacy accounting without requested-cost metadata cannot reconstruct unknown original expected costs."
+  ],
+  "verification": {
+    "full_suite": "722 passed, 49 warnings in 83.47s",
+    "ruff": "passed",
+    "whitespace": "passed",
+    "legacy_real_pipeline_queries_verified": 30,
+    "legacy_pipeline_new_queries": 0,
+    "original_reproductions": "prelaunch_review.json",
+    "benchmark_queries_verified": 31,
+    "benchmark_source_files_verified": 105,
+    "existing_benchmark_model_path_unchanged": true
+  },
+  "current_main_counts": {
+    "search_runs": 120,
+    "selected_policy_slots": 360,
+    "new_source_roots": 480,
+    "fitness_predictor_rows": 172032000,
+    "selection_predictor_rows": 11097600,
+    "final_audit_predictor_rows": 39072000,
+    "total_predictor_rows": 222201600,
+    "final_real_steps": 11584000,
+    "maximum_source_collection_steps": 1920000,
+    "maximum_new_real_steps": 13504000,
+    "initial_history_renders_and_encodes": 1440,
+    "fingerprint_renders_per_process": 64,
+    "gradient_updates": 0
+  },
+  "remaining_launch_blockers": [
+    "protocol is a disabled review draft, not locked for execution",
+    "supervisor decision on readiness extension and ROSARL adaptation is not recorded",
+    "prelaunch requirement incomplete: supervisor_accepts_readiness_extension_despite_failed_transfer_screen",
+    "prelaunch requirement incomplete: supervisor_accepts_matched_termination_and_ROSARL_adaptation",
+    "prelaunch requirement incomplete: search_seed_power_and_exact_batch_throughput_review_complete",
+    "prelaunch requirement incomplete: executable_protocol_code_and_tests_committed_before_new_data",
+    "prelaunch requirement incomplete: all_inputs_and_noise_scale_privately_archived_and_hash_pinned",
+    "prelaunch requirement incomplete: final_root_and_seed_counts_locked_before_new_episode_collection",
+    "final episode and search-seed counts remain provisional",
+    "noise calibration has no pinned private archive revision"
+  ],
+  "scientific_status": {
+    "main_experiment_started": false,
+    "supervisor_approval_claim": false,
+    "new_scientific_outcomes": false,
+    "monte_carlo_analysis": "retrospective, fixed development policies and episodes only",
+    "pilot_k1_audit_mc_se_percentage_points": 0.12021865114296966,
+    "main_conditional_worst_case_mc_se_percentage_points": 0.3125
+  },
+  "archive_status": "Read-only checks found no immutable run tags for the six completed new bundles; no upload was performed.",
+  "incremental_costs": {
+    "real_steps": 0,
+    "predictor_rows": 0,
+    "new_source_episodes": 0,
+    "training_updates": 0
+  }
+}

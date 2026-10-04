@@ -1,0 +1,43 @@
+{
+  "scope": "Independent offline prelaunch review; synthetic mutations only, production configuration unchanged",
+  "protocol_semantics": [
+    {
+      "case": "full_horizon_return",
+      "accepted": true,
+      "execution_plan_unchanged": true
+    },
+    {
+      "case": "changed_action_clipping",
+      "accepted": true,
+      "execution_plan_unchanged": true
+    },
+    {
+      "case": "disabled_reference",
+      "accepted": true,
+      "execution_plan_unchanged": true
+    }
+  ],
+  "cached_query_receipt": {
+    "corrupted_cost_accepted": true,
+    "actual_measured_rows": 10,
+    "returned_rows": 999
+  },
+  "findings": [
+    {
+      "priority": "P1",
+      "file": "experiments/helpers/evoReadinessProtocol.py",
+      "issue": "Protocol edits to return semantics or action clipping can be accepted while the execution plan remains unchanged.",
+      "impact": "A reviewed protocol revision could be recorded but not implemented. Current candidate values agree with current code.",
+      "required_fix": "Reject unsupported semantic settings before creating a run or loading assets."
+    },
+    {
+      "priority": "P2",
+      "file": "experiments/helpers/evoReadinessQueries.py",
+      "issue": "Cached-query reuse accepts a corrupted measured-cost receipt despite expected costs being supplied.",
+      "impact": "Resume can carry incorrect accounting; the final evaluation loader checks its own receipts but search and collection reuse do not perform the same checks.",
+      "required_fix": "Validate saved request/key/expected costs and nonnegative integer counters on cached reuse and accounting."
+    }
+  ],
+  "new_model_queries": 0,
+  "new_real_steps": 0
+}

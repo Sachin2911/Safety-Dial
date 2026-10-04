@@ -4,6 +4,7 @@ The existing review draft stays disabled. A locked executable protocol must be
 supported by the recorded scientific decision and completed prelaunch evidence.
 """
 import hashlib
+import math
 from pathlib import Path
 import re
 
@@ -15,7 +16,96 @@ from helpers.evoReadinessStudy import SearchSpec
 PENALTIES={'zero_penalty_matched_termination':'zero','rosarl_style':'rosarl_style'}
 
 
+
+# These fields describe fixed implementation behavior, not selectable alternatives.
+# Reject a changed scientific declaration rather than silently running the old method.
+_SUPPORTED = {
+    'policy.initial_residual': 'zero',
+    'policy.clipping': [-1, 1],
+    'policy.coordinate_scale': 'inverse_RMS_of_projected_features_on_existing_noise_fit_roots',
+    'search.optimizer': 'separable_CMA_ES',
+    'search.paired_seed_streams_across_arms': True,
+    'search.noise_streams': 'separate_fitness_selection_evaluation_common_across_candidates_within_role',
+    'search.scoring.shared_task_return': 'progress_strictly_before_first_imagined_violation_or_full_horizon_if_safe',
+    'search.scoring.zero_penalty': 'mean_shared_task_return',
+    'search.scoring.rosarl_style': 'mean_shared_task_return_plus_violation_times_V_MIN_minus_V_MAX',
+    'search.scoring.bounds': 'cumulative_min_max_shared_task_returns_from_fitness_batches_only_per_run',
+    'search.scoring.update_bounds': 'once_on_full_generation_before_ranking',
+    'search.scoring.stop_compute_at_violation': False,
+    'search.scoring.tie_break': 'chronological_candidate_id',
+    'search.nominee': 'best_candidate_of_each_generation_on_that_generations_fitness_batch',
+    'search.incumbent_rescoring': 'rescore_all_cached_nominees_with_current_fitness_only_bounds',
+    'search.final_test_used_for_selection': False,
+    'evaluation.evaluate_distribution_mean': False,
+    'evaluation.real_steps_per_episode_always': 100,
+    'evaluation.truth': 'dense_health_every_step',
+    'evaluation.real_baseline_once': True,
+    'evaluation.exact_recorded_tape_reference_once': True,
+    'analysis.gap': 'real_violation_minus_mean_imagined_violation_at_declared_audit_noise',
+    'analysis.primary_family': ['unpenalised_k0_gap_high_minus_low_gt_zero',
+        'own_noise_gap_amplification_k1_rosarl_minus_k0_unpenalised_lt_zero'],
+    'analysis.primary_intervals': 'two_sided_97.5pct_each_Bonferroni_family_95pct',
+    'analysis.secondary_intervals': 'descriptive_95pct',
+    'analysis.resampling': 'independent_search_seed_and_evaluation_episode_axes_with_all_arms_paired',
+    'budget.no_auto_extension': True,
+}
+
+
+def _validate_execution_contract(config):
+    for path, expected in _SUPPORTED.items():
+        value = config
+        for part in path.split('.'):
+            if not isinstance(value, dict) or part not in value:
+                raise ValueError(f'missing implemented protocol setting: {path}')
+            value = value[part]
+        if value != expected or (isinstance(expected, bool) and value is not expected):
+            raise ValueError(f'unsupported protocol setting: {path}')
+
+    def integer(path, value, minimum=1, maximum=None):
+        if (not isinstance(value, int) or isinstance(value, bool) or value < minimum
+                or (maximum is not None and value > maximum)):
+            raise ValueError(f'invalid integer protocol setting: {path}')
+
+    b, s, a = config['bank'], config['search'], config['analysis']
+    for key in ['fitness_episodes', 'selection_episodes', 'evaluation_episodes',
+                'max_attempts_per_required_root', 'max_steps_per_source_episode']:
+        integer('bank.' + key, b[key])
+    for key in ['environment_seed_bases', 'actor_noise_seed_bases']:
+        for role, value in b[key].items():
+            integer(f'bank.{key}.{role}', value, 0, 2**32 - 1)
+    integer('search.generations', s['generations'])
+    integer('search.fitness_roots_per_generation', s['fitness_roots_per_generation'])
+    for value in s['population_sizes']:
+        integer('search.population_sizes', value, 2)
+    for value in s['search_seeds']:
+        integer('search.search_seeds', value, 0, 2**32 - 2)
+    for value in s['checkpoints']:
+        integer('search.checkpoints', value, 0)
+    for label, samples in [('fitness_samples', s['fitness_samples']),
+                           ('selection_samples', s['selection_samples']),
+                           ('audit_samples', config['evaluation']['audit_samples'])]:
+        if set(samples) != {'zero_noise', 'positive_noise'}:
+            raise ValueError(f'invalid sample roles: {label}')
+        for value in samples.values():
+            integer(label, value)
+    integer('analysis.bootstrap_replicates', a['bootstrap_replicates'], 2)
+    integer('analysis.bootstrap_seed', a['bootstrap_seed'], 0)
+    for label in ['low_pressure', 'high_pressure']:
+        point = a[label]
+        if point['population'] not in s['population_sizes'] or point['generation'] not in s['checkpoints'] or point['generation'] == 0:
+            raise ValueError(f'analysis endpoint is absent from search grid: {label}')
+    for label, value in [('initial_CMA_sigma', config['policy']['initial_CMA_sigma']),
+                         ('coordinate_RMS_floor', config['policy']['coordinate_RMS_floor']),
+                         ('maximum_GPU_hours_proposed', config['budget']['maximum_GPU_hours_proposed'])]:
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value <= 0:
+            raise ValueError(f'finite positive protocol setting required: {label}')
+    loss = a['proposed_allowable_relative_progress_loss']
+    if isinstance(loss, bool) or not isinstance(loss, (int, float)) or not math.isfinite(loss) or not 0 <= loss < 1:
+        raise ValueError('progress loss must be finite and in [0, 1)')
+
+
 def protocol_plan(config):
+    _validate_execution_contract(config)
     bank,search,evaluation=config['bank'],config['search'],config['evaluation']
     if set(search['penalty_modes'])!=set(PENALTIES) or sorted(search['noise_levels'])!=[0.,1.]:
         raise ValueError('the declared main study requires both noise levels and both penalty modes')
