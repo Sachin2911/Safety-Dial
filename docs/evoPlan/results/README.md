@@ -1,11 +1,49 @@
 # Evolution study results (docs/evoPlan)
 
+**Current status, 4 October 2026:** strict Gate 0 remains unpassed. The fresh
+measurement-readiness audit passed; the bounded transfer and noise diagnostics
+are complete, and every tested noise level failed the declared joint transfer
+screen. No Stage 5 search has run. All 654 tests passed at the latest code check.
+
+The user's latest decision is to stop further Gate 0 controller repairs and
+prepare Stage 5 under an explicit extension of the readiness route, with k=1 as
+the proposed main imagination setting. The
+[Stage 5 declaration](../protocols/stage5-readiness-draft-20261004.md) is a draft
+for supervisor review, not an approved launch or a retrospective gate pass.
+The earlier [direct-simulator fallback preparation](fallback-preparation-20261004.md)
+is retained as history and deferred by this decision. Earlier reports' next-step
+recommendations reflect their dates; this index and the new draft record the
+current requested direction.
+
+| Completed work | Current finding |
+|---|---|
+| [Controller repair sequence](stage2-status-20261004.md), [clean targets](stage2-clean-targets/walker2d-evo-s2-clean-targets-20261004-1/README.md), [ensemble](stage2-ensemble/walker2d-evo-s2-ensemble-20261004-1/README.md) | Repeated development failures remain. These reused 24-root diagnostics are not independent confirmation. Further controller repairs are stopped. |
+| [Fresh readiness baseline](stage2-readiness-baseline/walker2d-evo-s2-readiness-baseline-20261004-1/README.md) | 51/256 real versus 2/256 imagined violations, 100.3% of recorded progress. Separate pilot-readiness criteria pass; strict controller criterion fails. |
+| [Transfer pilot](stage4-transfer-pilot/walker2d-evo-s4-transfer-pilot-20261004-1/README.md) | Baseline plus 96 residual candidates: zero imagined violations, 14 to 49 real failures per 64 roots. Safety ranking undefined. Declared screen fails; official Gate 1 not run. |
+| [Noise diagnostic](stage3-noise-diagnostic/walker2d-evo-s3-noise-diagnostic-20261004-1/README.md) | At k=1, residual-only safety/progress rho are 0.675/0.374; all-candidate values are 0.713/0.446. Every level fails the joint screen. Predicted risk remains severely underestimated. Zero new real steps; 1,036,800 predictor rows. |
+| [Gate/environment review](gate-and-environment-review-20261004.md) | Walker2d retained, historical gates preserved. Readiness initially authorized bounded pilots only; a main experiment needs the proposed explicit extension. |
+
+The noise write-up and its metrics were committed in `55a7be5`. The current
+readiness-route proposal preserves that negative joint-screen result, even though
+it supersedes the report's recommendation to move next to direct-simulator evolution.
+At k=0, zero predicted violations do not preclude selection-induced increases in
+real failures through progress optimisation. At k=1, improved ordering does not
+establish calibrated probabilities or safe controllers.
+
+The readiness and transfer bundles are privately archived and remotely hash-verified
+at revisions `b706cfae23f30382a05ffeb58c418584d6f6b3d6` and
+`24f4881fc2b3a10992d2151db3085b21ce0e1b9d`. The complete new noise bundle is
+prepared locally (17.85 MiB); its separate upload approval is still pending.
+No supervisor message or GitHub push has been sent.
+
+## Historical baseline record, 3 October 2026
+
 Committed results of the [implementation plan](../README.md). Run bundles are in the private
 model repository `Sachioster/safetydial-walker2d` under `evo/<run_id>`, each pinned by the
 revision in its `hf_upload.json`. Every run folder holds its resolved `config.yaml` and a
 `manifest.json` (git commit, packages, hardware, seeds, input revisions, costs).
 
-**Status, 3 October 2026: stopped at a failed Gate 0 (stage 2).** Stages 3 to 7 have not run.
+**Historical status at the close of 3 October 2026:** stopped at a failed Gate 0. The chronology below records that earlier state; the current 4 October status is above.
 
 | Stage | Run | Outcome |
 |---|---|---|
@@ -43,17 +81,19 @@ cloning error at all.
 | Each block's mean action held for the block, 12.5 Hz | 126 (49%) | 1.83 |
 | Each block's first action held (sample and hold), 12.5 Hz | 211 (82%) | 1.73 |
 
-Holding one action for 0.08 s already makes about half of the segments violate, so no policy in
-the planned class (one held action per block) can meet the Gate 0 threshold.
+The recorded-policy mean-action replay fails in about half of segments. This diagnoses harm
+from that replay interface; it does not prove that every possible policy using held actions
+must fail. The earlier impossibility interpretation was too strong. Later controllers emit
+ten distinct actions per block; their failures remain separate evidence.
 
 ## What the plan prescribes, and the open decisions
 
 The plan's response to a Gate 0 failure: change the policy class before continuing, either
 output the full 60-d block instead of a held action, or use a small MLP, and evolve a
 low-dimensional perturbation around the behaviour-cloned weights. The diagnostic favours the
-60-d block (the exact recorded blocks never violate open loop); a small MLP that still holds one
-action per block would keep the 49% floor. Any new policy class needs its own pre-registered
-Gate 0 run with the same thresholds. These choices await the user (and supervisor).
+60-d block (the exact recorded blocks never violate open loop). The 49% rate was measured for
+mean-action replay, not a proven lower bound for a separately learned held-action MLP. Any new policy class needs its own pre-registered
+Gate 0 run with the same thresholds. Those were the open choices on 3 October; the later diagnostics and current decision above supersede that action list.
 
 Provisional, to be confirmed with the supervisor: Gate 0 thresholds (including the 3-of-256
 floor), Gate 1 and Gate 2 thresholds, and the ROSARL adaptation (V_MIN - V_MAX from running
