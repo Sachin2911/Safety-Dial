@@ -1,0 +1,66 @@
+# Bounded engineering/power pilot permitted by the adopted readiness route.
+# This does not execute the supervisor-review main declaration or a ROSARL comparison.
+defaults:
+  - stage3_noise_diagnostic
+  - _self_
+stage: 5-power-pilot-v1
+power_pilot:
+  source_hashes: configs/evo/power_pilot_sources.json
+  role: inspected_development_bank_only_not_final_confirmation
+  baseline_run: walker2d-evo-s2-readiness-baseline-20261004-1
+  residual_run: walker2d-evo-s4-transfer-pilot-20261004-1
+  noise_run: walker2d-evo-s3-noise-diagnostic-20261004-1
+  new_episode_collection: false
+  roots: {fitness: 96, selection: 64, assessment: 96}
+  fitness_includes_all_existing_noise_fit_roots: true
+  role_seed: 20261201
+  search_seeds: [20261211, 20261212, 20261213, 20261214]
+  population_sizes: [16, 256]
+  generations: 16
+  checkpoints: [1, 4, 16]
+  noise_levels: [0.0, 1.0]
+  penalty: zero_penalty_matched_first_violation_termination
+  rosarl_comparison: false
+  evolved_parameters: 1020
+  base_gain: 1.0
+  feature_RMS_fit: existing_64_noise_fit_root_initial_features_only
+  feature_RMS_floor: 0.000001
+  sigma0: 0.01212678125181665
+  covariance: diagonal_always
+  fitness_roots_per_generation: 32
+  samples: {fitness_k1: 4, selection_k1: 16, audit_k1: 32}
+  zero_noise_samples: 1
+  candidate_batch: 1
+  max_imagined_batch: 16384
+  selection: best_baseline_or_generation_nominee_on_fixed_selection_bank
+  selection_noise: fixed_per_search_seed_separate_from_fitness_and_assessment
+  real_after_all_selections_frozen: true
+  assessment_audits: [0.0, 1.0]
+  feedback: actual_executed_previous_action_block
+  real_max_envs: 64
+  encode_batch: 64
+  torch_threads: 1
+  original_gate0_changed: false
+  main_stage5_authorized: false
+  supervisor_approval_claim: false
+  run_resume: false  # partial failures retained; no silent recomputation or callback-state resume
+  resource_cap_hours: 2
+  expected_fitness_rows: 27852800
+  expected_selection_rows: 1479680
+  expected_assessment_rows: 1647360
+  expected_zero_control_rows: 640
+  expected_total_predictor_rows: 30980480
+  expected_real_steps: 470400
+  expected_CMA_generations: 256
+  expected_candidate_evaluations: 34816
+  expected_real_policy_slots: 49  # shared baseline plus 16 searches x 3 checkpoints
+  expected_gradient_updates: 0
+  analysis:
+    low_pressure: {population: 16, generation: 1}
+    high_pressure: {population: 256, generation: 16}
+    bootstrap_seed: 20261220
+    bootstrap_replicates: 2000
+    analysis: paired_seed_by_episode_gap_and_real_failure_changes
+    power: exploratory_variance_components_and_sensitivity_only
+    primary_ROSARL_contrast_power: cannot_be_established_without_ROSARL_seed_variance
+    final_bank: remain_uncollected_and_uninspected
