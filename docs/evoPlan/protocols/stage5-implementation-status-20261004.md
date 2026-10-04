@@ -1,9 +1,10 @@
 # Stage 5 implementation preparation
 
 The main workflow is integrated and its orchestration has passed synthetic
-end-to-end validation. The latest full project suite passes 722 tests. Five additional offline sizing tests also pass. The actual main
-study remains a disabled review candidate; no scientific approval, ROSARL effect
-or new final evaluation bank is claimed.
+end-to-end validation. The latest full project suite passes 730 tests, including offline sizing and user-authorized pilot checks. The original main candidate remains disabled. The user has now
+[explicitly authorized the readiness extension and four-arm study](stage5-user-decision-20261004.json).
+A new bounded development variance pilot will inform the final sample-size review.
+No supervisor approval, ROSARL effect or new final evaluation bank is claimed.
 
 ## Completed components
 
@@ -85,8 +86,9 @@ tests passed. Plausible unmeasured ROSARL variance scenarios still give less tha
 sample-size lock is claimed. The executable candidate stays unchanged at ten
 provisional seeds and 320 evaluation episodes.
 
-Record the scientific decision on the readiness extension and observed-return
-ROSARL adaptation. Complete private archival and pin the noise revision. Commit
-and lock scoring, role splits, sample sizes, seeds, budgets and endpoints before
-collecting the main episodes. Historical strict Gate 0 and joint transfer-screen
+The user's scientific decision is recorded separately from supervisor approval.
+The exact noise bundle was privately uploaded with explicit permission and all
+24 remote files verified at revision `d164248ecb2a2b80c31b9145074528168d9ec2d1`.
+Complete the bounded variance pilot, then commit and lock scoring, role splits,
+sample sizes, seeds, budgets and endpoints before collecting the main episodes. Historical strict Gate 0 and joint transfer-screen
 failures remain failures; no controller repairs or environment change are planned.

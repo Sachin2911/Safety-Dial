@@ -6,13 +6,15 @@ are complete, and every tested noise level failed the declared joint transfer
 screen. The main Stage 5 experiment has not run. The bounded development search/power
 pilot is complete: its k=0 gap increased by 10.94 pp (exploratory 95% interval
 1.30 to 20.31 pp). Noise alone did not demonstrate a reduction in amplification.
-The latest full suite passed 722 tests; frozen-model generation-boundary resume also matches exactly.
+The latest full suite passed 730 tests; frozen-model generation-boundary resume also matches exactly.
 
-The user's latest decision is to stop further Gate 0 controller repairs and
-prepare Stage 5 under an explicit extension of the readiness route, with k=1 as
-the proposed main imagination setting. The
-[Stage 5 declaration](../protocols/stage5-readiness-draft-20261004.md) is a draft
-for supervisor review, not an approved launch or a retrospective gate pass.
+The user has now [explicitly authorized](../protocols/stage5-user-decision-20261004.json)
+proceeding with the four-arm readiness study while retaining Walker2d, stopping
+further controller repairs and preserving the failed historical gates. This is
+direct user authorization, not a claim of supervisor approval. A bounded four-arm
+development variance pilot precedes the final sample-size lock and fresh episode
+collection. The original [Stage 5 draft](../protocols/stage5-readiness-draft-20261004.md)
+remains a historical review candidate; no main final episodes have been collected.
 The earlier [direct-simulator fallback preparation](fallback-preparation-20261004.md)
 is retained as history and deferred by this decision. Earlier reports' next-step
 recommendations reflect their dates; this index and the new draft record the
@@ -65,8 +67,9 @@ establish calibrated probabilities or safe controllers.
 
 The readiness and transfer bundles are privately archived and remotely hash-verified
 at revisions `b706cfae23f30382a05ffeb58c418584d6f6b3d6` and
-`24f4881fc2b3a10992d2151db3085b21ce0e1b9d`. The complete new noise bundle is
-prepared locally (17.85 MiB); its separate upload approval is still pending.
+`24f4881fc2b3a10992d2151db3085b21ce0e1b9d`. The user approved the exact 24-file noise bundle (18,712,515 bytes); it is now
+privately archived at `d164248ecb2a2b80c31b9145074528168d9ec2d1` and
+[all remote files were hash-verified](stage3-noise-diagnostic/walker2d-evo-s3-noise-diagnostic-20261004-1/remote_verification.json).
 The completed search/power and resume bundles are also local, pending archival.
 No supervisor message or GitHub push has been sent.
 

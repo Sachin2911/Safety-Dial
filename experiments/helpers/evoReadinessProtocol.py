@@ -179,6 +179,33 @@ def protocol_plan(config):
                 batch_shapes=shapes,counts=counts)
 
 
+
+def scientific_decision_blockers(approval, repository):
+    """Recognize explicit user authorization without asserting supervisor approval."""
+    authority = approval.get('scientific_decision_authority', 'supervisor')
+    if authority == 'supervisor':
+        return [] if approval.get('supervisor_scientific_decision_recorded') is True else [
+            'supervisor decision on readiness extension and ROSARL adaptation is not recorded']
+    if authority != 'user' or approval.get('user_scientific_decision_recorded') is not True:
+        return ['a recognized explicit scientific decision is not recorded']
+    proof = approval.get('user_decision_evidence', {})
+    path = Path(repository) / str(proof.get('path', ''))
+    if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != proof.get('sha256'):
+        return ['explicit user decision evidence is missing or changed']
+    import json
+    try:
+        record = json.loads(path.read_text())
+    except (ValueError, OSError):
+        return ['explicit user decision evidence is unreadable']
+    if (record.get('kind') != 'explicit_user_authorization'
+            or record.get('readiness_extension_accepted') is not True
+            or record.get('matched_termination_rosarl_adaptation_accepted') is not True
+            or record.get('supervisor_approval_claim') is not False
+            or not record.get('user_messages')):
+        return ['explicit user decision does not cover the proposed scientific extension']
+    return []
+
+
 def launch_blockers(config,repository):
     """Read-only preflight. Return concrete unmet prerequisites; never enable a draft."""
     repository=Path(repository)
@@ -186,8 +213,7 @@ def launch_blockers(config,repository):
     if config.get('status')!='locked_for_execution' or config.get('execution_enabled') is not True:
         blockers.append('protocol is a disabled review draft, not locked for execution')
     approval=config.get('approval',{})
-    if approval.get('supervisor_scientific_decision_recorded') is not True:
-        blockers.append('supervisor decision on readiness extension and ROSARL adaptation is not recorded')
+    blockers.extend(scientific_decision_blockers(approval, repository))
     required=approval.get('required_before_execution',[])
     completed=approval.get('completed_checks',{})
     evidence=approval.get('evidence',{})
