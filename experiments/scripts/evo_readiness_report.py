@@ -32,7 +32,7 @@ def interval(value, *, percent=True):
     return f"{scale * value['point']:.2f} [{scale * value['lo']:.2f}, {scale * value['hi']:.2f}]{suffix}"
 
 
-def render(run, output):
+def render(run, output, ledger=None):
     run, output = Path(run), Path(output)
     names = ['analysis.json', 'manifest.json', 'config.yaml']
     names += ['costs.json'] if (run / 'costs.json').is_file() else ['check.json']
@@ -59,6 +59,11 @@ def render(run, output):
                 for c in a['curves']]
     if len(observed) != len(expected) or set(observed) != expected:
         raise ValueError('report requires the complete declared cell grid')
+    ledger_data = json.loads(Path(ledger).read_text()) if ledger is not None else None
+    if ledger_data is not None:
+        if run.name not in {r['run_id'] for r in ledger_data['evolution_runs']}:
+            raise ValueError('cost ledger must include this completed run')
+        inputs['cost_ledger'] = digest(ledger)
     output.mkdir(parents=True, exist_ok=False)
     status = 'Fresh final episodes' if is_main else 'Development pilot: previously inspected episodes'
     plt.rcParams.update({'font.size': 10, 'axes.spines.top': False, 'axes.spines.right': False,
@@ -153,6 +158,12 @@ def render(run, output):
         'Historical Gate 0 and the transfer screen remain failures. Inference is conditional on the frozen assets, '
         'fitness/selection banks and source distribution. The branches are 0.8 seconds long and do not establish safe '
         'full-episode control. A degenerate bootstrap interval does not prove zero population risk. Every declared cell is included in `all_cells.csv`; rates there are fractions, not percentages.', '']
+    if ledger_data is not None:
+        (output / 'cost_ledger.json').write_text(json.dumps(ledger_data, indent=2) + '\n')
+        text += [f"The [scoped cost ledger](cost_ledger.json) records {ledger_data['recorded_evolution_real_steps']:,} real steps across preserved evolution runs, including this run. "
+            f"The shared original set-A, probe and root data add {ledger_data['shared_original_collection_total']:,} collection steps. "
+            f"The original world model reached optimizer index {ledger_data['original_LeWM_final_optimizer_index']:,}. "
+            'PPO/PPO-Lagrangian training interactions and some older failed-run costs remain unquantified, so these records do not establish a complete lifetime cost.', '']
     (output / 'README.md').write_text('\n'.join(text))
     provenance = dict(input_directory=str(run.resolve()), input_sha256=inputs,
         generator_sha256=digest(__file__), new_model_queries=0, new_real_steps=0,
@@ -165,8 +176,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--ledger', type=Path)
     args = parser.parse_args()
-    print(json.dumps(render(args.run, args.output), indent=2))
+    print(json.dumps(render(args.run, args.output, args.ledger), indent=2))
 
 
 if __name__ == '__main__':

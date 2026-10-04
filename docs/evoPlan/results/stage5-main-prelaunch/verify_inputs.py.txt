@@ -1,0 +1,41 @@
+import hashlib,json,sys
+from pathlib import Path
+from datetime import datetime,timezone
+sys.path.insert(0,'experiments')
+from helpers.hfStore import HFStore
+import yaml
+root=Path.cwd();store=HFStore();records=[]
+cfg=yaml.safe_load(Path('configs/evo/inputs.yaml').read_text())['inputs']
+specs=[]
+for name,spec in cfg.items():
+ local=root/'data/hf'/store.repo_id(spec['key']).split('/')[-1]/spec['path']
+ receipt=json.loads((local/'hf_download.json').read_text())
+ assert receipt['revision']==spec['revision']
+ files=[p.relative_to(local).as_posix() for p in local.rglob('*') if p.is_file() and '.cache' not in p.parts and p.name!='hf_download.json']
+ specs.append((name,local,receipt,files))
+main=yaml.safe_load(Path('configs/evo/stage5_variance_pilot.yaml').read_text())
+source=json.loads(Path('configs/evo/power_pilot_sources.json').read_text())
+controller=main['inputs']['controller_run']
+source.setdefault(controller,{})['selected_policy.npz']=main['inputs']['controller_sha256']
+for run_id,files in source.items():
+ local=root/'runs'/run_id;receipt=json.loads((local/'hf_upload.json').read_text())
+ specs.append((run_id,local,receipt,list(files)))
+for name,local,receipt,files in specs:
+ info=store.api.repo_info(receipt['repo_id'],repo_type=receipt['repo_type'],revision=receipt['revision'])
+ assert info.private and info.sha==receipt['revision']
+ remote=store.api.get_paths_info(receipt['repo_id'],paths=[receipt['path']+'/'+f for f in files],repo_type=receipt['repo_type'],revision=receipt['revision'])
+ lookup={r.path:r for r in remote};verified={}
+ for filename in files:
+  p=local/filename;r=lookup[receipt['path']+'/'+filename];n=p.stat().st_size
+  assert r.size==n,(name,filename,'size')
+  sha=hashlib.sha256();blob=hashlib.sha1(f'blob {n}\0'.encode())
+  with p.open('rb') as handle:
+   while chunk:=handle.read(1024*1024):sha.update(chunk);blob.update(chunk)
+  lfs=getattr(r,'lfs',None)
+  if lfs:assert sha.hexdigest()==lfs.sha256,(name,filename,'lfs')
+  else:assert blob.hexdigest()==r.blob_id,(name,filename,'blob')
+  verified[filename]=dict(bytes=n,sha256=sha.hexdigest(),remote_content_match=True)
+ records.append(dict(name=name,**{k:receipt[k] for k in ['repo_id','repo_type','path','revision']},private=True,files=verified))
+ print(name,len(verified),'verified',flush=True)
+output=Path('docs/evoPlan/results/stage5-main-prelaunch/frozen_inputs.json');output.parent.mkdir(parents=True,exist_ok=True)
+with output.open('x') as handle:json.dump(dict(verified_at=datetime.now(timezone.utc).isoformat(),passed=True,operation='read-only remote object metadata and local byte-hash comparison at immutable revisions',records=records,predictor_rows=0,real_steps=0),handle,indent=2);handle.write('\n')
