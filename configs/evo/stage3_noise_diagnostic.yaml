@@ -1,0 +1,48 @@
+# Declared after the failed transfer pilot, before calibrating or evaluating noise.
+# User accepted this bounded diagnostic on 4 October 2026.
+defaults:
+  - stage4_transfer_pilot
+  - _self_
+stage: 3-noise-diagnostic-v1
+noise_diagnostic:
+  sources: configs/evo/noise_diagnostic_sources.json
+  baseline_run: walker2d-evo-s2-readiness-baseline-20261004-1
+  transfer_run: walker2d-evo-s4-transfer-pilot-20261004-1
+  calibration_fit_episodes: 64
+  calibration_check_episodes: 64
+  role_seed: 20261022
+  exclude_all_64_transfer_episodes_from_calibration: true
+  fit_trace: cached_frozen_controller_real_latents_and_executed_actions
+  include_unsafe_frames: true
+  scale: per_dimension_one_step_residual_std_ddof1_fit_episodes_only
+  correction: zero_mean_noise_only_no_bias_subtraction
+  bias: report_fit_and_disjoint_check_mean_residual_energy
+  predictor_batch: 64
+  levels: [0.5, 1.0, 2.0, 4.0]
+  samples_per_root: 4
+  noise_seed: 20261023
+  common_random_numbers: shared_across_candidates_and_noise_levels
+  candidates_per_call: 1
+  max_batch: 256
+  zero_control: bitwise_reproduce_archived_baseline_at_original_P1_R64_n1_shape
+  report_open_loop_error_growth_on_check_episodes: true
+  archived_predictions: all_readouts_and_metrics_plus_baseline_and_selected_actions
+  candidate_selection: Deb_on_original_32_selection_roots_per_level_before_loading_real_scores
+  assessment: original_32_assessment_roots_now_development_evidence
+  ranking_views: [all_candidates, residual_candidates_only]
+  screen: both_progress_and_violation_rho_ge_0.5_lower95_gt_zero_90pct_defined
+  bootstrap_replicates: 2000
+  bootstrap_seed: 20261024
+  multiple_levels: descriptive_development_screen_not_confirmatory_significance
+  confirm_any_promising_setting_on_new_whole_episodes: true
+  on_no_promising_level: prepare_real_simulator_evolution_fallback
+  real_steps: 0
+  optimizer_updates: 0
+  calibration_predictor_rows: 1280
+  open_loop_predictor_rows: 640
+  zero_control_predictor_rows: 640
+  noisy_predictor_rows: 1034240
+  total_predictor_rows: 1036800
+  official_gate1_run: false
+  original_gate0_changed: false
+  full_fix_grid_authorized: false
