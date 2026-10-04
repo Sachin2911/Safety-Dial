@@ -6,7 +6,7 @@ are complete, and every tested noise level failed the declared joint transfer
 screen. The main Stage 5 experiment has not run. The bounded development search/power
 pilot is complete: its k=0 gap increased by 10.94 pp (exploratory 95% interval
 1.30 to 20.31 pp). Noise alone did not demonstrate a reduction in amplification.
-All 666 tests pass; frozen-model generation-boundary resume also matches exactly.
+All 680 tests pass; frozen-model generation-boundary resume also matches exactly.
 
 The user's latest decision is to stop further Gate 0 controller repairs and
 prepare Stage 5 under an explicit extension of the readiness route, with k=1 as
@@ -39,10 +39,12 @@ or new final-bank collection occurred; the main declaration still awaits review.
 
 The [full-model resume check](stage5-resume-check/walker2d-evo-s5-resume-check-20261004-1/README.md)
 passed for k=0/k=1 with another 4,400 predictor rows and zero real steps. The new
-checkpoint core and full 666-test suite pass. The [integrated scheduling/evaluation check](stage5-pipeline-check/walker2d-evo-s5-pipeline-check-20261004-1/README.md)
-also passed, using 6,400 additional predictor rows and 4,000 real steps. Fresh-bank
-collection/main-launch integration, the declared main analysis and sizing of the
-ROSARL contrast remain before a final launch. Ten paired seeds and 320 final
+checkpoint core and full 680-test suite pass. The [integrated scheduling/evaluation check](stage5-pipeline-check/walker2d-evo-s5-pipeline-check-20261004-1/README.md)
+also passed, using 6,400 additional predictor rows and 4,000 real steps. The [fresh-bank workflow check](stage5-bank-check/walker2d-evo-s5-bank-check-20261004-1/README.md)
+also passed on six new development episodes, costing 5,440 real steps and zero
+predictor rows. Main estimators and the query-free protocol checks now have focused
+tests. Main-launch/final-query integration and sizing of the ROSARL contrast remain
+before a final launch. Ten paired seeds and 320 final
 episodes remain provisional; four development seeds do not establish final power.
 
 The noise write-up and its metrics were committed in `55a7be5`. The current

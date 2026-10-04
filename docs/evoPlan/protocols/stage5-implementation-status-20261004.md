@@ -85,3 +85,31 @@ adaptation and source archival are still required before a main launch. The new
 components do not alter those scientific decisions or enable the disabled draft.
 
 After pipeline integration, the full regression suite passed with 666 tests, 49 warnings, in 76.55 seconds. Ruff passed.
+
+## Fresh-bank workflow, analysis and protocol checks
+
+The [six-episode source-bank validation](../results/stage5-bank-check/walker2d-evo-s5-bank-check-20261004-1/README.md)
+passed under declaration commit `8ba746e`. Collection and initial-history encoding
+paused/resumed without duplicating completed queries. Six independent development
+roots cost 5,440 real steps and 18 history encodes, with zero world-model predictor
+rows, training updates or candidate-controller outcomes. These episodes cannot
+be relabelled as the main final evaluation bank.
+
+The collector stores every source attempt, charges rejected episodes, halts at
+fixed role-level attempt caps and retains completed trajectory prefixes on failure.
+Encoded banks pin source episodes, root contents and encoder identity. Partial
+attempts and unresolved query journals still require reconciliation before replay.
+
+`evoReadinessAnalysis.py` implements the declared crossed-bootstrap estimators,
+paired co-primary and descriptive contrasts, baseline changes, common-k0 audits
+and real-risk/progress checks. `evoReadinessProtocol.py` derives search specifications,
+role ranges and exact budgets, and exposes the outstanding launch prerequisites.
+Fourteen focused tests passed. The query-free preflight reproduces the draft costs
+and correctly refuses to label the unreviewed draft execution-ready.
+
+Remaining integration: the guarded main entry point, verified loading of the final
+query archives into the declared analysis, and initial clipped-residual diagnostics.
+An exact main-shape benchmark and a reviewed variance plan are still needed before
+locking main counts. Scientific review and archival prerequisites remain unchanged.
+
+After adding bank workflows, estimators and preflight, the full regression suite passed: 680 tests, 49 warnings, 77.59 seconds. Ruff passed.

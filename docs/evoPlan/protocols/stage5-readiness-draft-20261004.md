@@ -5,7 +5,9 @@ that further attempts to repair the controller for strict Gate 0 stop, and that
 Stage 5 be proposed under the readiness route. This supersedes preparation of the
 direct-simulator fallback as the next action. The supervisor's scientific decision
 is still required by the user's request. No message has been sent to the supervisor,
-no new episode bank has been generated and no Stage 5 search has begun.
+no main final episode bank has been generated and the main Stage 5 experiment has
+not begun. Separate development search and engineering checks have since completed;
+see the [current results index](../results/README.md).
 
 The [review configuration](../../../configs/evo/stage5_readiness_draft.yaml)
 is explicitly disabled. Exact root/seed counts and scoring need approval and a
