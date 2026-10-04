@@ -1,0 +1,245 @@
+{
+  "costs": {
+    "cached_bc_frames_reused": 60000,
+    "history_renders": 72,
+    "imagined": {
+      "encodes": 72,
+      "imagined_rows": 480,
+      "real_steps": 0,
+      "renders": 0,
+      "wall_s": 0.19487268291413784
+    },
+    "new_real_steps": 7200,
+    "optimizer_updates": 14100,
+    "real_executor": {
+      "encodes": 480,
+      "imagined_rows": 0,
+      "real_steps": 4800,
+      "renders": 480,
+      "wall_s": 0.9999273411231115
+    },
+    "upstream_costs_from_cache_manifest": {
+      "bc_data_source": "subset of existing setA; no new collection",
+      "bc_frames_rendered": 60000,
+      "imagined_history_frames_rendered": 768,
+      "imagined_rows": 2560,
+      "main_process_encodes": 60768,
+      "probe_collection_steps_reused": 300347,
+      "real_executor_counters": {
+        "encodes": 3328,
+        "imagined_rows": 0,
+        "real_steps": 25600,
+        "renders": 3328,
+        "wall_s": 8.894758697948419
+      },
+      "real_steps_bc": 25600,
+      "real_steps_recorded_replay": 25600,
+      "root_collection_steps_reused": 300038,
+      "setA_collection_steps_reused": 2999673
+    }
+  },
+  "created_utc": "2026-10-04T11:27:36+00:00",
+  "data": {
+    "cache_sha256": "bfa0223918cf68f0df6a6afa31eb484134a3051b0eeaf388fb8c0d4c6d0d8d23",
+    "mlp_policy_sha256": "70adac4f43e4d9e3fb23ecae71ef106a4b8e9fa91127dc89a74c50a4386a49ea",
+    "split_sha256": "cf15d922b87db4eebd4c257b524b76af3c5e02f0348de664342ae2f390ea90ba"
+  },
+  "gate0_run": false,
+  "hardware": {
+    "container_id": "54138859",
+    "cpu_visible": 256,
+    "cuda_available": true,
+    "gpu": "NVIDIA GeForce RTX 5090",
+    "gpu_capability": "12.0",
+    "gpu_memory_gb": 33.7,
+    "hostname": "b14410026c54",
+    "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+    "public_ipaddr": "81.27.69.177",
+    "python": "3.11.16",
+    "threads": {
+      "cpu_quota_cores": 30.71999,
+      "threads": 8,
+      "visible_cores": 256
+    },
+    "torch_cuda": "13.0",
+    "vast_containerlabel": "C.54138859"
+  },
+  "implementation_sha256": {
+    "configs/evo/stage2_mlp.yaml": "5304cbe1f640ee2ef7c3bb50142e7d1539300b580f6d90209e225d0fbf7f5884",
+    "experiments/helpers/evoMlpFit.py": "ab3da5023a74703c95167a498aacbd5acf73ed0dd3f118484f027d35556b6eb5",
+    "experiments/helpers/evoMlpPolicy.py": "dddb8d82bed8d435d2b37ef20235254dfe4097bdc3d90cab9b4accadbd5f09a9",
+    "experiments/helpers/evoMlpReal.py": "4e903c43917baf336a5096cc49c67b270b298e7b2313f1e305909934d6a4ffa4",
+    "experiments/scripts/evo_mlp_diagnostic.py": "5cd99395c68dc98498eb27628bd2d4a49d49a81e1563ab847e84d59a055c625f"
+  },
+  "kind": "evo-s2-mlp-diagnostic",
+  "metrics": {
+    "development": {
+      "linear": {
+        "imagined_violation_rate": 0.0,
+        "n": 24,
+        "progress_mean": 1.7937751010609488,
+        "progress_ratio_recorded": 0.8502838882999154,
+        "real_readout_violation_rate": 0.5833333333333334,
+        "violation_rate": 0.5416666666666666,
+        "violation_wilson": [
+          0.3507486535891948,
+          0.72108666268789
+        ],
+        "violations": 13
+      },
+      "mlp": {
+        "imagined_violation_rate": 0.08333333333333333,
+        "n": 24,
+        "progress_mean": 1.683664077383441,
+        "progress_ratio_recorded": 0.7980891458810807,
+        "real_readout_violation_rate": 0.4583333333333333,
+        "violation_rate": 0.375,
+        "violation_wilson": [
+          0.21159367559548778,
+          0.5729003755732572
+        ],
+        "violations": 9
+      }
+    },
+    "offline": {
+      "linear": {
+        "block_mean_mse": 0.007430724799633026,
+        "full_block_mse": 0.13330398499965668,
+        "mse_per_offset": [
+          0.13121962547302246,
+          0.13148830831050873,
+          0.13110509514808655,
+          0.13042716681957245,
+          0.13262706995010376,
+          0.13331764936447144,
+          0.134817972779274,
+          0.1347011774778366,
+          0.1352022886276245,
+          0.13813263177871704
+        ],
+        "predicted_within_block_rms": 0.16783368587493896,
+        "target_within_block_rms": 0.39362651109695435,
+        "within_block_mse": 0.12587326765060425
+      },
+      "mlp": {
+        "block_mean_mse": 0.004567660856992006,
+        "full_block_mse": 0.11537249386310577,
+        "mse_per_offset": [
+          0.11893835663795471,
+          0.11713503301143646,
+          0.11620628088712692,
+          0.1150972843170166,
+          0.11513104289770126,
+          0.11459163576364517,
+          0.11417248100042343,
+          0.11390089243650436,
+          0.11324184387922287,
+          0.11531108617782593
+        ],
+        "predicted_within_block_rms": 0.22565236687660217,
+        "target_within_block_rms": 0.39362651109695435,
+        "within_block_mse": 0.11080483347177505
+      },
+      "n_fit_episodes": 240,
+      "n_fit_samples": 47280,
+      "n_val_episodes": 60,
+      "n_val_samples": 11820,
+      "optimizer_updates": 14100,
+      "refit_on_validation": false,
+      "selected": {
+        "epoch": 82,
+        "fit_raw_mse": 0.09863675037767682,
+        "seed": 20261004,
+        "val_mse": 0.11537249668737115
+      },
+      "selected_policy_n_params": 139196,
+      "trials": [
+        {
+          "epoch": 82,
+          "fit_raw_mse": 0.09863675037767682,
+          "seed": 20261004,
+          "val_mse": 0.11537249668737115
+        },
+        {
+          "epoch": 91,
+          "fit_raw_mse": 0.09838263759556559,
+          "seed": 20261005,
+          "val_mse": 0.11826192656222666
+        },
+        {
+          "epoch": 64,
+          "fit_raw_mse": 0.1021808088405685,
+          "seed": 20261006,
+          "val_mse": 0.11660289422487534
+        }
+      ]
+    }
+  },
+  "packages": {
+    "gymnasium": "1.3.0",
+    "h5py": "3.16.0",
+    "huggingface_hub": "1.24.0",
+    "mujoco": "3.11.0",
+    "numpy": "2.4.6",
+    "pymunk": "7.3.0",
+    "scikit-learn": "1.9.0",
+    "stable-pretraining": "0.1.8",
+    "stable-worldmodel": "0.1.1",
+    "torch": "2.13.0",
+    "torchvision": "0.28.0"
+  },
+  "repo": {
+    "branch": "main",
+    "commit": "e8f650b34ca401dcc90e77202e237a037824ac8a",
+    "dirty": true,
+    "path": "/workspace/Safety-Dial",
+    "remote": "https://github.com/Sachin2911/Safety-Dial.git"
+  },
+  "run_id": "walker2d-evo-s2-mlp-20261004-1",
+  "seeds": {
+    "training": [
+      20261004,
+      20261005,
+      20261006
+    ]
+  },
+  "upstream_lewm": null,
+  "upstream_revisions": {
+    "banks": {
+      "path": "banks/walker2d-s4-recovery-20260927-1",
+      "repo_id": "Sachioster/safetydial-walker2d-data",
+      "repo_type": "dataset",
+      "revision": "09ac490696cecb951e83644db48e646878905f87"
+    },
+    "cloning_cache": {
+      "path": "evo/walker2d-evo-s2-block-20261004-1",
+      "repo_id": "Sachioster/safetydial-walker2d",
+      "revision": "d70d6863c2bcda9834ffbd2b6dd24f9a7dd6e863"
+    },
+    "data": {
+      "path": "data/walker2d-data-20260926-3",
+      "repo_id": "Sachioster/safetydial-walker2d-data",
+      "repo_type": "dataset",
+      "revision": "ddd4d51648d2a382725efd20d04cedebedbf8fd2"
+    },
+    "model": {
+      "path": "lewm-a/walker2d-lewm-a-recovery-20260927-1",
+      "repo_id": "Sachioster/safetydial-walker2d",
+      "repo_type": "model",
+      "revision": "9e05478658484d0f26ea740fead9e0ab7625367e"
+    },
+    "policies": {
+      "path": "policies/walker2d-policies-complete-20260926-1",
+      "repo_id": "Sachioster/safetydial-walker2d",
+      "repo_type": "model",
+      "revision": "b42e3f3e7dd80bc4d95cc2ef43c753cee96b9b55"
+    },
+    "probes": {
+      "path": "probes/walker2d-probes-recovery-20260927-1",
+      "repo_id": "Sachioster/safetydial-walker2d",
+      "repo_type": "model",
+      "revision": "cb1560d7b02b4fbe6585b3c0c325a78d56b337e6"
+    }
+  },
+  "wall_clock_s": 24.930312871932983
+}

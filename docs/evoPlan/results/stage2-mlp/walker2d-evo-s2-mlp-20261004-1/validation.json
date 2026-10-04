@@ -1,0 +1,25 @@
+{
+  "full_suite": {
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 uv run pytest -q",
+    "passed": 614,
+    "failed": 0,
+    "skipped": 0,
+    "warnings": 49,
+    "elapsed_seconds": 73.45
+  },
+  "new_tests": {
+    "count": 4,
+    "coverage": [
+      "training and stateless deployment parity",
+      "validation-only saved checkpoint selection and seeded repeatability",
+      "development-only protocol",
+      "CUDA physics, grouping invariance, real and imagined feedback"
+    ]
+  },
+  "lint": {
+    "command": "uv run ruff check .",
+    "passed": true
+  },
+  "prior_experiment_files": "unchanged; new modules and result paths only",
+  "gate0_rerun": false
+}
