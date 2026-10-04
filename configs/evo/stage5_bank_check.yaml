@@ -1,0 +1,26 @@
+# Prospective engineering check only; these episodes will never be the main final bank.
+defaults:
+  - inputs
+  - _self_
+stage: 5-bank-check-v1
+validation:
+  source_actor_pool_config: stage2_readiness_baseline
+  roots_per_role: 2
+  maximum_attempts_per_required_root: 4
+  maximum_steps_per_episode: 1000
+  environment_seed_bases: {fitness: 1802610040, selection: 1812610040, evaluation: 1822610040}
+  actor_noise_seed_bases: {fitness: 1902610040, selection: 1912610040, evaluation: 1922610040}
+  pause_after_new_episode_attempts: 1
+  pause_after_new_encoded_roots: 2
+  maximum_real_steps: 24000
+  expected_encoded_roots: 6
+  expected_history_renders_and_encodes: 18
+  fingerprint_renders: 64
+  expected_predictor_rows: 0
+  expected_gradient_updates: 0
+  source_actor_noise_mixture: same_frozen_uniform_readiness_pool
+  controller_queries: none
+  data_role_after_collection: inspected_development_validation_not_main_final
+  main_stage5: false
+  rosarl_compared: false
+  automatic_retry_after_failure: false
