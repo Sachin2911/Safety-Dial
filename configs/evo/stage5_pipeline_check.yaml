@@ -1,0 +1,36 @@
+# Bounded integration validation, existing development episodes, zero extra penalty.
+defaults:
+  - inputs
+  - _self_
+stage: 5-pipeline-check-v1
+validation:
+  source_hashes: configs/evo/power_pilot_sources.json
+  baseline_run: walker2d-evo-s2-readiness-baseline-20261004-1
+  residual_run: walker2d-evo-s4-transfer-pilot-20261004-1
+  noise_run: walker2d-evo-s3-noise-diagnostic-20261004-1
+  recorded_file_sha256: d7e55fb8fc3eff2c53d47efdbac44971ac31e6c29ac2b6d9221cf26664263dc4
+  search_seeds: [20261231, 20261232]
+  population: 4
+  generations: 2
+  checkpoints: [0, 1, 2]
+  search_pause_after_completed_generations: 1
+  evaluation_pause_after_completed_queries: 3
+  fitness_bank: first_8_existing_noise_fit_indices
+  selection_bank: first_4_existing_noise_check_indices
+  evaluation_bank: next_4_existing_noise_check_indices
+  fitness_roots_per_generation: 4
+  noise_levels: [0.0, 1.0]
+  positive_noise_samples: 4
+  penalty_mode: zero
+  sigma0: 0.01212678125181665
+  feature_RMS_floor: 0.000001
+  expected_search_predictor_rows: 4400
+  expected_audit_predictor_rows: 2000
+  expected_total_predictor_rows: 6400
+  expected_real_steps: 4000
+  expected_gradient_updates: 0
+  expected_selected_slots: 8
+  expected_evaluation_queries: 30
+  main_stage5: false
+  rosarl_compared: false
+  automatic_retry_after_failure: false
