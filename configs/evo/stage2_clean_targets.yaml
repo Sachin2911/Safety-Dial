@@ -1,0 +1,52 @@
+# Declared before teacher relabelling or fitting. Only training targets change.
+defaults:
+  - stage2_action_history
+  - _self_
+stage: 2-clean-targets-diagnostic
+policy:
+  hidden: [512, 256]
+training:
+  arms: [recorded_targets_reused, clean_teacher_targets]
+  checkpoint_epochs: [20, 50, 100]
+  candidate_pool: declared_epochs_plus_offline_best_per_seed
+  selection: real_validation_progress_floor_then_violations_progress_offline_mse
+  validation: unchanged_recorded_action_targets_and_equal_family_weights
+  role: matched_inputs_architecture_seeds_updates_only_fit_targets_change
+history_cache:
+  run_id: walker2d-evo-s2-action-history-20261004-1
+  revision: 3cd701b35efb69322dcd3b005a1af70755fd73e3
+  previous_actions_sha256: 304ac88fe74d6cb2a84acf3c39321d12acd213b23c881c3b1144d50fec0cfb44
+control:
+  source_run: walker2d-evo-s2-information-resume-20261004-1
+  revision: 95407b8fcf397b5261b8be49613943f696ee2d86
+  arm: visual_history
+  reuse_training_and_outcomes: true
+  original_training_updates: 13500
+validation_control:
+  source_run: walker2d-evo-s2-information-resume-20261004-1
+  roots_sha256: 577b979cecbec0a9e3a26c768a51ef7078f8757048813f6e95864a0d987f772a
+  selection_sha256: 436bb0e24f9e081858b8b64f8d26fe2e0ce4c7f0cbc1735de0dac0e22264c16f
+  progress_floor: 0.5
+  selection_uses_development: false
+collection:
+  source: setA.h5_existing_mixed_fit_indices_only
+  examples: 45986
+  steps_per_example: 10
+  simulator_steps: 459860
+  teacher: exact_source_export_from_episode_policy_id
+  feedback_interval: 1
+  action_noise: 0.0
+  start: restore_each_cached_state_with_zero_solver_warm_start
+  within_block: sequential_no_intermediate_restores
+  keep_all_examples: true
+  outcome_filtering: false
+  validation_teacher_queries: false
+real:
+  compare: [recorded_targets_reused, clean_teacher_targets]
+interpretation:
+  gate0: not_run
+  model_selection_uses_real_outcomes: true_validation_only
+  teacher_identity_input: false
+  privileged_state_input: false
+  targets_use_privileged_teacher_supervision: true
+  on_development_success: freeze_before_separate_gate0
