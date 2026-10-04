@@ -1,0 +1,25 @@
+# Full-block Gate 0 revision, declared before any revised evaluation on 4 October 2026.
+# Inherits the original data selection, ridge grid, roots, and provisional thresholds.
+# The only scientific change is predicting the 10 sequential actions instead of their mean.
+defaults:
+  - stage2
+  - _self_
+
+policy:
+  kind: linear_sequential_block_v1
+  features: [z_t, z_t_minus_z_previous_block]
+  output_dim: 60
+  n_params: 23100
+  action_order: time_major
+  action_steps_per_block: 10
+  environment_hz: 125
+  observation_hz: 12.5
+bc:
+  target: next_10_sequential_actions_time_major
+# Reusing the already inspected evaluation roots is a development gate rerun, not a
+# new untouched confirmatory test. No tuning on these outcomes or threshold changes.
+interpretation:
+  evaluation_role: development_gate_rerun
+  selection: offline_validation_mse_only
+  on_fail: stop_before_stage3_and_diagnose
+  on_pass: benchmark_and_transfer_check_before_evolution
