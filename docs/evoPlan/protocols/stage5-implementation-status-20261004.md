@@ -60,3 +60,28 @@ banks and evaluation runner. Full-model generation-boundary resume and its query
 Keep final roots uncollected during power and
 runtime planning. Lock the final config before collection, after the requested
 scientific review of the readiness extension and ROSARL adaptation.
+
+## Integrated study scheduling and evaluation
+
+The subsequent [pipeline validation](../results/stage5-pipeline-check/walker2d-evo-s5-pipeline-check-20261004-1/README.md)
+passed under declaration commit `c38ef5c`. Four small k=0/k=1 searches and eight
+checkpoint selections exercised search pause/resume, an all-selections freeze,
+paired real/imagined evaluation, evaluation pause/resume and zero-cost reuse of
+completed work. Both the controller and recorded-tape reference reproduced their
+archived simulator outcomes bitwise. All 6,400 predictor rows and 4,000 real steps
+were charged; no new episodes or model/controller training were used.
+
+`evoReadinessQueries.py` records each complete query as one atomic numeric archive,
+including input identity, output hashes and measured costs. Partial queries retain
+journals and refuse automatic replay. `evoReadinessStudy.py` schedules every arm,
+freezes all picks, verifies bank identity and evaluation settings, and then evaluates
+the complete frozen set. Five new focused tests cover leakage, interrupted costs,
+corruption, scheduling and trajectory consistency.
+
+Remaining engineering: integrate fresh-bank collection and the main entry point;
+implement the declared crossed-bootstrap main analysis; run an exact final-batch
+benchmark once sample sizes are locked. The reviewed readiness extension, ROSARL
+adaptation and source archival are still required before a main launch. The new
+components do not alter those scientific decisions or enable the disabled draft.
+
+After pipeline integration, the full regression suite passed with 666 tests, 49 warnings, in 76.55 seconds. Ruff passed.
