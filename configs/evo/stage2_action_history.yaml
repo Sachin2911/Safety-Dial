@@ -1,0 +1,25 @@
+defaults:
+  - stage2_coverage
+  - _self_
+stage: 2-action-history-diagnostic
+source:
+  run_id: walker2d-evo-s2-coverage-20261004-1
+  revision: aab43ddcba2c1209453121a705ecf10c21a560a2
+policy:
+  kind: history_mlp_sequential_block_v1
+  input_dim: 444
+  features: frozen_visual_features_plus_previous_executed_ten_action_block
+  history_normalisation: frozen_world_model_action_scaler
+training:
+  arms: [zero_history, action_history]
+  role: equal_architecture_and_budget_previous_action_ablation
+  initialization: fresh_same_three_seeds
+  # Original mixed fit samples and family-balanced validation, no extra collection.
+real:
+  compare: [zero_history, action_history]
+interpretation:
+  gate0: not_run
+  model_selection_uses_real_outcomes: false
+  teacher_identity_input: false
+  privileged_state_input: false
+  on_development_success: freeze_candidate_before_separate_gate0
