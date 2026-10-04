@@ -1,0 +1,31 @@
+inputs:
+  model:
+    key: walker2d
+    path: lewm-a/walker2d-lewm-a-recovery-20260927-1
+    revision: 9e05478658484d0f26ea740fead9e0ab7625367e
+  probes:
+    key: walker2d
+    path: probes/walker2d-probes-recovery-20260927-1
+    revision: cb1560d7b02b4fbe6585b3c0c325a78d56b337e6
+  data:
+    key: walker2d-data
+    path: data/walker2d-data-20260926-3
+    revision: ddd4d51648d2a382725efd20d04cedebedbf8fd2
+  banks:
+    key: walker2d-data
+    path: banks/walker2d-s4-recovery-20260927-1
+    revision: 09ac490696cecb951e83644db48e646878905f87
+  policies:
+    key: walker2d
+    path: policies/walker2d-policies-complete-20260926-1
+    revision: b42e3f3e7dd80bc4d95cc2ef43c753cee96b9b55
+stage: 2-single-teacher-probe
+teachers:
+- PPO-e200
+- PPOLag-e200
+roots: existing_24_development
+horizon_steps: 100
+actions: noiseless_teacher_every_environment_step
+new_simulator_steps: 4800
+purpose: test_whether_one_fixed_teacher_can_cover_both_source_families
+selection: diagnostic_only_no_gate0_or_controller_training
