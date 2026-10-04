@@ -1,7 +1,7 @@
 # Stage 5 implementation preparation
 
 The main workflow is integrated and its orchestration has passed synthetic
-end-to-end validation. The full project suite passes 691 tests. The actual main
+end-to-end validation. The latest full project suite passes 722 tests. Five additional offline sizing tests also pass. The actual main
 study remains a disabled review candidate; no scientific approval, ROSARL effect
 or new final evaluation bank is claimed.
 
@@ -54,10 +54,36 @@ not demonstrate a full-model four-arm main run.
 
 ## Remaining before the main launch
 
-The [bounded batch benchmark](stage5-batch-benchmark-20261004.md) is declared for
-all six proposed model-query shapes on existing features. After measuring runtime,
-review variance between search seeds, including the currently unmeasured ROSARL
-contrast. The proposed ten paired seeds and 320 final episodes remain provisional.
+The [bounded batch benchmark](../results/stage5-batch-benchmark/walker2d-evo-s5-batch-benchmark-20261004-1/benchmark.json)
+completed all six proposed model-query shapes: 590,400 predictor rows, zero real
+steps, and a 2.72-hour model-only projection for the ten-seed candidate. Independent
+verification checked all 31 query archives and 105 source snapshots. The largest
+query allocated about 1.15 GiB of CUDA memory. This projection excludes simulation,
+collection, encoding, archival, analysis and interruptions.
+
+The [independent validation](../results/stage5-independent-audit/validation.json)
+closed two prelaunch gaps: unsupported protocol semantics now fail before collection,
+and cached query receipts check declared costs and metadata integrity. The final
+full regression suite passed 722 tests with 49 warnings in 83.47 seconds; Ruff passed.
+The existing 30-query real pipeline archive remains readable without new queries.
+
+The [offline Monte Carlo audit](../results/stage5-independent-audit/mc_precision.json)
+verified all 48 saved 32-sample pilot audits against the reported probabilities.
+For the k=1 high-minus-low comparison, estimated conditional audit sampling SE is
+0.12 percentage points. This supports pooled audit precision only: individual
+root probabilities remain noisy, and ROSARL effects and search-seed variance are
+not measured by this check.
+
+The [sizing sensitivity review](../results/stage5-independent-audit/sizing_review.json)
+compares 10, 20 and 30 paired seeds with the same 320-root batch shapes. Twenty
+seeds is a review candidate, with 5.45 model-only hours and an illustrative 11.37
+hours under twice the scaled pilot nonfitness time plus a one-hour reserve. The
+reserve and scaling are assumptions, not an end-to-end benchmark or runtime bound.
+Thirty seeds exceeds the 12-hour cap under that scenario. Five focused arithmetic
+tests passed. Plausible unmeasured ROSARL variance scenarios still give less than
+80% power for a 10-point effect at twenty seeds, so no power guarantee or final
+sample-size lock is claimed. The executable candidate stays unchanged at ten
+provisional seeds and 320 evaluation episodes.
 
 Record the scientific decision on the readiness extension and observed-return
 ROSARL adaptation. Complete private archival and pin the noise revision. Commit
