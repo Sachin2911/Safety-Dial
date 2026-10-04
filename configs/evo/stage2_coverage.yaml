@@ -1,0 +1,35 @@
+# Declared before collecting new cloning features or looking at development outcomes.
+# Main comparison: same MLP and training budget, different demonstration coverage.
+defaults:
+  - stage2_mlp
+  - _self_
+
+stage: 2-coverage-diagnostic
+ppo:
+  policies: [PPO-e100, PPO-e110, PPO-e120, PPO-e130, PPO-e140, PPO-e150,
+             PPO-e160, PPO-e170, PPO-e180, PPO-e190, PPO-e200]
+  n_episodes: 300
+  episode_seed: 20261007
+  val_fraction: 0.2
+  frame_stride: 5
+coverage:
+  seed: 20261008
+  fit_episodes_per_family: 120
+  baseline: original_PPOLag_fit_pool
+  mixed: equal_samples_from_120_fit_episodes_per_family
+  samples_per_family: minimum_available_after_episode_selection
+  baseline_samples: twice_mixed_samples_per_family
+  sampling: seeded_without_replacement
+  scaling: unchanged_previous_PPOLag_feature_transform
+training:
+  validation: equal_family_weighted_clipped_mse_on_common_validation_episodes
+  role: matched_frame_budget_PPOLag_only_vs_equal_PPO_PPOLag
+  arms: [baseline, mixed]
+  # All inherited network settings, seeds, epochs and batch size stay unchanged.
+real:
+  compare: [baseline, mixed, recorded_actions]
+interpretation:
+  purpose: demonstration_coverage_with_equal_training_sample_and_update_budgets
+  gate0: not_run
+  model_selection_uses_real_outcomes: false
+  after_diagnostic: report_before_further_gate_or_evolution
