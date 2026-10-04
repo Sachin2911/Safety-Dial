@@ -1,0 +1,28 @@
+# Prospective timing check on repeated existing development features only.
+status: declared_engineering_validation
+main_protocol: configs/evo/stage5_main_candidate.yaml
+main_protocol_sha256: e2ab4730ab30d54faf9d4db6a8a68f9d2ba466c49fbd925e6fd7ab06fc5358e3
+warmup_repeats: 2
+measured_repeats: 3
+horizon_blocks: 10
+max_batch: 16384
+seed: 20261301
+expected_predictor_rows: 590400
+expected_real_steps: 0
+expected_training_updates: 0
+calibration_roots: 64
+root_order: cycle_existing_noise_fit_indices_to_requested_batch_size
+independent_new_episodes: 0
+initial_action_diagnostic_random_candidates: 16
+initial_action_diagnostic_zero_candidates: 1
+expected_diagnostic_policy_calls: 18
+shapes:
+  - {role: fitness, noise_k: 0.0, roots: 32, samples: 1}
+  - {role: fitness, noise_k: 1.0, roots: 32, samples: 4}
+  - {role: selection, noise_k: 0.0, roots: 64, samples: 1}
+  - {role: selection, noise_k: 1.0, roots: 64, samples: 16}
+  - {role: evaluation, noise_k: 0.0, roots: 320, samples: 1}
+  - {role: evaluation, noise_k: 1.0, roots: 320, samples: 32}
+main_stage5: false
+rosarl_compared: false
+automatic_retry_after_failure: false
