@@ -1,0 +1,33 @@
+defaults:
+  - stage2_action_history
+  - _self_
+stage: 2-context-diagnostic
+policy:
+  kind: context_mlp_sequential_block_v1
+  hidden: [512, 256]
+  input_dim: 696
+  features: three_visual_frames_and_two_previous_executed_blocks
+training:
+  arms: [short_context, full_context]
+  checkpoint_epochs: [20, 50, 100]
+  role: equal_architecture_temporal_context_ablation
+  selection: real_validation_progress_floor_then_violations_progress_offline_mse
+validation_control:
+  source_run: walker2d-evo-s2-information-resume-20261004-1
+  roots_sha256: 577b979cecbec0a9e3a26c768a51ef7078f8757048813f6e95864a0d987f772a
+  selection_sha256: 436bb0e24f9e081858b8b64f8d26fe2e0ce4c7f0cbc1735de0dac0e22264c16f
+  progress_floor: 0.5
+  selection_uses_development: false
+history_cache:
+  run_id: walker2d-evo-s2-action-history-20261004-1
+  previous_actions_sha256: 304ac88fe74d6cb2a84acf3c39321d12acd213b23c881c3b1144d50fec0cfb44
+context:
+  early_rows: exclude_rows_without_two_complete_previous_blocks_in_both_arms
+  older_visual_normalisation: frozen_block_difference_scaler
+  short_context_control: zero_older_difference_and_older_action_block
+interpretation:
+  model_selection_uses_real_outcomes: true_validation_only
+  gate0: not_run
+sampling:
+  seed: 20261013
+  family_balance: equal_counts_after_excluding_incomplete_context_rows
