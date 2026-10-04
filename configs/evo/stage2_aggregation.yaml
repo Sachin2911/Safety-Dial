@@ -1,0 +1,41 @@
+# Declared before new collection, fitting, or development outcome inspection.
+defaults:
+  - stage2_coverage
+  - _self_
+stage: 2-aggregation-diagnostic
+source:
+  run_id: walker2d-evo-s2-coverage-20261004-1
+  revision: aab43ddcba2c1209453121a705ecf10c21a560a2
+collection:
+  seed: 20261009
+  roots_per_family: 64
+  source: setA.h5_existing_selected_fit_episodes_only
+  min_root_step: 20
+  horizon: 100
+  boundaries: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
+  control: source_teacher_rollout
+  treatment: frozen_coverage_mixed_student_rollout
+  teacher: source_episode_actor_no_noise
+  targets: ten_sequential_teacher_actions_after_exact_prefix_replay
+  filtering: no_health_or_outcome_filtering
+  simulator_steps_per_arm: 83200
+  aggregate_iterations: 1
+augmentation:
+  seed: 20261010
+  fraction: 0.25
+  original_samples: shared_without_replacement_within_family
+  new_samples: balanced_repetition_same_root_block_indices_both_arms
+training:
+  arms: [teacher_states, student_states]
+  role: paired_teacher_labels_on_teacher_vs_student_states
+  initialization: from_scratch_same_three_seeds
+  validation: unchanged_coverage_common_family_balanced_recorded_action_validation
+  # Inherit 100 epochs, batch 1024, AdamW, and three seeds. No real-outcome selection.
+real:
+  compare: [teacher_states, student_states]
+  source_reference: reuse_archived_mixed_and_recorded_outcomes
+interpretation:
+  purpose: effect_of_student_state_coverage_with_matched_teacher_supervision_and_budgets
+  gate0: not_run
+  model_selection_uses_real_outcomes: false
+  after_diagnostic: report_before_further_gate_or_evolution
