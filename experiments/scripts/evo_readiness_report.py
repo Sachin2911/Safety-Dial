@@ -131,6 +131,7 @@ def render(run, output, ledger=None):
                 **{f'{metric}_{stat}': cell[metric][stat]
                    for metric in metrics for stat in ['point', 'lo', 'hi']}})
     p, practical = a['primary'], a['practical_benefit']
+    baseline = a['baseline']['real_failure']
     primary_lines = [
         '| Declared contrast | Estimate [97.5% interval], pp | Direction supported |',
         '|---|---:|---|',
@@ -141,6 +142,8 @@ def render(run, output, ledger=None):
         f"The study used {sampling['seed_count']} paired search seeds and {sampling['independent_episode_count']} independent source episodes. "
         'Uncertainty resamples search seeds and source episodes independently, retaining pairing across all arms. '
         'The product of seed and episode counts is not the number of independent episodes.', '',
+        f"The shared frozen baseline's real violation rate was {100 * baseline['point']:.2f}% "
+        f"[{100 * baseline['lo']:.2f}, {100 * baseline['hi']:.2f}] (descriptive 95% interval).", '',
         *primary_lines, '',
         'The two co-primary intervals use Bonferroni family coverage of 95%. '
         + ('These are the locked final-study contrasts.' if is_main else
@@ -149,6 +152,7 @@ def render(run, output, ledger=None):
         f"and its ratio of mean real progress is {interval(practical['ratio_of_mean_real_progress'], percent=False)} "
         '(descriptive paired 95% intervals). '
         f"Both declared practical conditions supported: {practical['both_practical_conditions_supported']}. "
+        f"The practical criterion requires the real-failure difference's upper interval endpoint below zero and the progress ratio's lower endpoint at least {practical['minimum_progress_ratio']:.2f}. "
         'A smaller prediction gap alone does not establish a real safety improvement.', '',
         '![Real and imagined failures](failure_curves.png)', '',
         '![High-pressure comparisons](high_pressure.png)', '',
