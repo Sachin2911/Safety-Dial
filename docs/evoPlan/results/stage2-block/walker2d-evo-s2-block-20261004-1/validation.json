@@ -1,0 +1,30 @@
+{
+  "targeted_tests": {
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 uv run pytest -q experiments/tests/test_evo_block.py",
+    "passed": 7,
+    "elapsed_seconds": 24.74
+  },
+  "full_suite": {
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 uv run pytest -q",
+    "passed": 610,
+    "skipped": 0,
+    "failed": 0,
+    "warnings": 49,
+    "elapsed_seconds": 74.33
+  },
+  "lint": {
+    "command": "uv run ruff check .",
+    "passed": true
+  },
+  "render_fingerprint": "matches pinned setA.h5",
+  "historical_experiment_files": "unchanged from 10e8d16",
+  "posthoc_validation_mse_reproduction": "matched gate0.json to 1e-12",
+  "source_sha256": {
+    "configs/evo/stage2_block.yaml": "e8693c909fd4b39ffe608af4eb044dae0590828b4a752ab7100451c39e9f5e72",
+    "experiments/helpers/evoBlockPolicy.py": "71b2ffa906a4c6063d71fe15fe95b30aa5b72f43668ee5a1ebf348a7c993a8f8",
+    "experiments/helpers/evoBlockReal.py": "aacdb75950abef5168123c0026a4e76fa513eb5842f8b39808a07a397e173c01",
+    "experiments/scripts/evo_block_bc_init.py": "e60b36d2a415768ba6c9ea771eb81d103e513f5e00f39f5233a1c9b0816484c6",
+    "experiments/scripts/evo_block_gate0_report.py": "637f88023718a38b57934fe21f681ddd01381ed9c3929069b3a52dd8c459812b",
+    "experiments/tests/test_evo_block.py": "a5bea0e166bcd63260ecb0b8f862c4943df79f3825c7a1f4c4020f25d687b121"
+  }
+}

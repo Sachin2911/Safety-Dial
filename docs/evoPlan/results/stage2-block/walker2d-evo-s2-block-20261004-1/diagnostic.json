@@ -1,0 +1,100 @@
+{
+  "interpretation": "post-hoc diagnosis; no new policies evaluated, no threshold changes",
+  "inputs_sha256": {
+    "runs/walker2d-evo-s2-block-20261004-1/gate0.json": "91679d9af5f5b28abbdc062a7d15fe1d90e0b72d8a346c6141d770e388d8bc65",
+    "runs/walker2d-evo-s2-block-20261004-1/evaluation_rows.json": "ee547c95f5e2ff3e6cde2c63ea08299649c2c775d26c7b11ac6c4540661c3f05",
+    "docs/evoPlan/results/stage2/walker2d-evo-s2-20261003-1/gate0.json": "ea37241dc9c67e15b720219682aceb709d4dfc767f8e313c743eb44c6b6e63d7",
+    "docs/evoPlan/results/stage2/walker2d-evo-s2-20261003-1/evaluation_rows.json": "ed42de2b22e4dd60bad48067469207b037a5fcac25b4a18632b05c189f56ee9e",
+    "runs/walker2d-evo-s2-block-20261004-1/bc_features.npz": "bfa0223918cf68f0df6a6afa31eb484134a3051b0eeaf388fb8c0d4c6d0d8d23",
+    "data/hf/safetydial-walker2d-data/data/walker2d-data-20260926-3/roots.h5": "69a9f6483c31ab3975d300993cfd220a58cff0886058799ed0d523037a07700d",
+    "/workspace/Safety-Dial/experiments/scripts/evo_block_gate0_report.py": "637f88023718a38b57934fe21f681ddd01381ed9c3929069b3a52dd8c459812b"
+  },
+  "costs": {
+    "new_real_steps": 0,
+    "new_imagined_rows": 0,
+    "new_renders": 0
+  },
+  "paired": {
+    "new_violation_rate_ci_clustered": {
+      "point": 0.63671875,
+      "lo": 0.55078125,
+      "hi": 0.7188476562499995,
+      "n_boot": 2000,
+      "n_clusters": 64
+    },
+    "violation_rate_difference_new_minus_old": {
+      "point": -0.03125,
+      "lo": -0.0859375,
+      "hi": 0.01953125,
+      "n_boot": 2000,
+      "n_clusters": 64
+    },
+    "progress_difference_new_minus_old": {
+      "point": -0.06949024044076524,
+      "lo": -0.10672906734472953,
+      "hi": -0.03326141349639784,
+      "n_boot": 2000,
+      "n_clusters": 64
+    },
+    "both_unsafe": 145,
+    "newly_safe": 26,
+    "newly_unsafe": 18,
+    "both_safe": 67
+  },
+  "first_unsafe_step_index_median_among_unsafe": 54.0,
+  "by_source_policy_family": {
+    "PPO": {
+      "n": 104,
+      "violations": 101,
+      "old_violations": 96,
+      "progress_mean": 1.9294405713614642
+    },
+    "PPOLag": {
+      "n": 152,
+      "violations": 62,
+      "old_violations": 75,
+      "progress_mean": 1.208533156834239
+    }
+  },
+  "validation_same_action_target": {
+    "sequential_block": {
+      "full_block_mse": 0.13330398700772667,
+      "block_mean_mse": 0.007430724937469814,
+      "within_block_mse": 0.12587326207025684,
+      "predicted_within_block_rms": 0.16783367221287157,
+      "target_within_block_rms": 0.3936265044104093,
+      "mse_per_offset": [
+        0.131219709493977,
+        0.1314880175471139,
+        0.1311052164093291,
+        0.13042758812771965,
+        0.13262706676325683,
+        0.13331783640856273,
+        0.1348179706784726,
+        0.13470138932502995,
+        0.13520232943548496,
+        0.13813274588832147
+      ]
+    },
+    "held_mean": {
+      "full_block_mse": 0.16236597200696593,
+      "block_mean_mse": 0.007424147032607971,
+      "within_block_mse": 0.15494182497435796,
+      "predicted_within_block_rms": 7.179319160861011e-17,
+      "target_within_block_rms": 0.3936265044104093,
+      "mse_per_offset": [
+        0.18850100314556745,
+        0.17171214596643838,
+        0.15719857450365887,
+        0.1469658846011742,
+        0.14346183425801318,
+        0.14359054343417743,
+        0.14975154706746577,
+        0.15876730464698055,
+        0.1736036683210255,
+        0.19010721412515963
+      ]
+    },
+    "n_samples": 11820
+  }
+}
