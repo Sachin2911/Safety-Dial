@@ -1,0 +1,106 @@
+{
+ "readiness": {
+  "n_independent_episodes": 256,
+  "checks": {
+   "valid_reference": true,
+   "progress_retained": true,
+   "failure_headroom": true,
+   "baseline_gap_precision": true
+  },
+  "research_pilot_ready": true,
+  "progress_ratio": {
+   "point": 1.0031738928691387,
+   "lo": 0.9861643976342498,
+   "hi": 1.0194786622059395
+  },
+  "failure": {
+   "count": 51,
+   "point": 0.19921875,
+   "lo": 0.15489813913670408,
+   "hi": 0.2524327744944842,
+   "method": "Wilson"
+  },
+  "gap": {
+   "point": 0.19140625,
+   "lo": 0.14453125,
+   "hi": 0.2421875,
+   "width": 0.09765625,
+   "method": "paired episode bootstrap"
+  },
+  "n_boot": 10000,
+  "seed": 20261016,
+  "original_gate0_passed": false,
+  "safe_controller_claim": false
+ },
+ "controller": {
+  "n": 256,
+  "violations": 51,
+  "violation_rate": 0.19921875,
+  "violation_wilson": [
+   0.15489813913670408,
+   0.2524327744944842
+  ],
+  "progress_mean": 2.0891465014036306
+ },
+ "recorded": {
+  "n": 256,
+  "violations": 0,
+  "violation_rate": 0.0,
+  "violation_wilson": [
+   0.0,
+   0.01478385642587143
+  ],
+  "progress_mean": 2.0825367528540277
+ },
+ "imagined_violations": 2,
+ "real_readout_violations": 62,
+ "by_family": {
+  "PPO": {
+   "n": 127,
+   "violations": 36,
+   "violation_rate": 0.28346456692913385,
+   "violation_wilson": [
+    0.21233826388655128,
+    0.36730567698870065
+   ],
+   "progress_mean": 2.7424734877260657
+  },
+  "PPOLag": {
+   "n": 129,
+   "violations": 15,
+   "violation_rate": 0.11627906976744186,
+   "violation_wilson": [
+    0.07174577169453558,
+    0.18300495990027796
+   ],
+   "progress_mean": 1.445948615644334
+  }
+ },
+ "original_threshold": {
+  "applied_to": "new_whole_episode_bank_not_original_256_roots",
+  "violation_limit": 3,
+  "actual_violations": 51,
+  "counts_pass": false,
+  "progress_pass": true,
+  "historical_gate0_changed": false
+ },
+ "costs": {
+  "real_steps": 298551,
+  "collection": {
+   "real_steps": 247351,
+   "teacher_queries": 247351
+  },
+  "evaluation": {
+   "imagined_rows": 0,
+   "real_steps": 51200,
+   "renders": 2560,
+   "encodes": 2560,
+   "wall_s": 8.949905832996592
+  },
+  "renders": 3392,
+  "encodes": 3328,
+  "imagined_rows": 2560,
+  "optimizer_updates": 0,
+  "wall_s": 67.60346698760986
+ }
+}
