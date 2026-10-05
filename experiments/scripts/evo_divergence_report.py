@@ -98,6 +98,54 @@ def audit(run):
     return config,pool,summary,all_cells,evidence,costs
 
 
+
+def timing_supplement(run, cells, summary, costs):
+    """Post-run descriptive checks, counted independently of summary helpers."""
+    result = dict(status='Post-run descriptive supplement; no new model or simulator queries', roles={})
+    def unsafe(x):
+        return (x[...,0]<=.8)|(x[...,0]>=2.)|(x[...,1]<=-1.)|(x[...,1]>=1.)
+    for role, rows in cells.items():
+        failed = np.stack([c['dense_violated'] for c in rows])
+        first = np.stack([c['dense_first_step'] for c in rows])
+        truth = np.stack([c['truth'] for c in rows])
+        real = np.stack([c['real_readout'] for c in rows])
+        pred = np.stack([c['predicted_readout'] for c in rows],axis=1)
+        block = np.minimum(first//10,9)
+        ci, ri = np.indices(first.shape)
+        endpoint = unsafe(truth)[ci,ri,block]&failed
+        probe_event = unsafe(real)[ci,ri,block]&endpoint
+        probe_ever = unsafe(real).any(-1)
+        mode_event = unsafe(pred)[:,ci,ri,block]&endpoint[None]
+        error = np.abs(pred[...,:2]-real[None,...,:2])
+        exceeded = (error[...,0]>.05)|(error[...,1]>.1)
+        before = (exceeded&(((np.arange(10)+1)*10 < (first+1)[...,None])&failed[...,None])[None]).any(-1)
+        s = summary[role]
+        assert int(endpoint.sum())==s['event_endpoint_visible']
+        assert int(probe_event.sum())==s['real_readout_event_detection']['numerator']
+        data = dict(failed_pairs=int(failed.sum()),healthy_pairs=int((~failed).sum()),
+            probe_segment_true_positives=int((probe_ever&failed).sum()),
+            probe_segment_false_negatives=int((~probe_ever&failed).sum()),
+            probe_segment_false_positives=int((probe_ever&~failed).sum()),modes={})
+        for m,name in enumerate(MODES):
+            assert int(mode_event[m].sum())==s['modes'][name]['event_endpoint_detection']['numerator']
+            assert int(before[m].sum())==s['modes'][name]['divergence_before_dense_failure']['numerator']
+            data['modes'][name] = dict(event_detected=int(mode_event[m].sum()),
+                divergence_before_failure=int(before[m].sum()),
+                healthy_with_any_exceedance=int((exceeded[m].any(-1)&~failed).sum()),
+                healthy_with_first_endpoint_exceedance=int((exceeded[m,...,0]&~failed).sum()),
+                failed_with_first_endpoint_exceedance=int((exceeded[m,...,0]&failed).sum()))
+        data['selected_candidates'] = {str(i):dict(probe_event_detected=int(probe_event[i].sum()),
+            unsafe_event_endpoints=int(endpoint[i].sum()),probe_segment_true_positives=int((probe_ever[i]&failed[i]).sum()),
+            failed_pairs=int(failed[i].sum())) for i in [0,1,31,33]}
+        result['roles'][role] = data
+    launch = json.loads((run/'launch.json').read_text())
+    result['timing'] = dict(budget_clock_seconds=costs['wall_s'],
+        corrected_process_seconds=launch['started_at']+costs['wall_s']-launch['replacement_process_started_at'],
+        note='Budget clock includes the retained zero-query failure and repair interval; process time includes setup and output writes.')
+    result['independent_primary_point_counts_verified'] = True
+    return result
+
+
 def render(run,config,pool,summary,cells,evidence,costs):
     dest = ROOT/'docs/evoPlan/results/stage6-divergence'/run.name
     dest.mkdir(parents=True,exist_ok=True)
@@ -106,6 +154,8 @@ def render(run,config,pool,summary,cells,evidence,costs):
         assert json.loads(analysis_path.read_text())==summary,'analysis changed on offline replay'
     analysis_path.write_text(json.dumps(summary,indent=2)+'\n')
     (dest/'integrity_audit.json').write_text(json.dumps(evidence,indent=2)+'\n')
+    supplement = timing_supplement(run,cells,summary,costs)
+    (dest/'timing_supplement.json').write_text(json.dumps(supplement,indent=2)+'\n')
     lines = ['# Where Walker imagination diverges before real failure','',
         'This is an exploratory retrospective diagnostic on the complete fixed 89-candidate '
         'pool and previously exposed source episodes. No new simulator steps or controller '
@@ -135,9 +185,14 @@ def render(run,config,pool,summary,cells,evidence,costs):
         f'All {evidence["query_archives_verified"]} new query archives verified. '
         f'All {evidence["original_closed_loop_readouts_bitwise_reproduced"]} original k0 check-bank '
         'readouts reproduced bitwise. Dense event times and latent errors were recomputed. '
-        f'New cost: {costs["predictor_rows"]:,} predictor rows in {costs["wall_s"]/60:.2f} minutes; '
+        f'New cost: {costs["predictor_rows"]:,} predictor rows; '
+        f'{supplement["timing"]["corrected_process_seconds"]:.2f} seconds in the corrected process, '
+        f'{costs["wall_s"]/60:.2f} minutes on the inherited budget clock '
+        '(including the retained zero-query failure and repair interval); '
         'zero simulator steps, renders, image encodes and gradient updates. Parent simulator '
         'and training costs remain additional.','',
+        'See [interpretation](INTERPRETATION.md) and timing_supplement.json for healthy-trajectory '
+        'exceedances and eventual versus immediate probe detection. These post-run checks are descriptive.','',
         '![Detection and error growth](divergence_summary.png)','',
         '![Deterministic examples](failure_traces.png)','']
     (dest/'REPORT.md').write_text('\n'.join(lines))
