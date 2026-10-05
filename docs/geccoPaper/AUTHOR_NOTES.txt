@@ -1,8 +1,8 @@
 GECCO full-paper draft, 5 October 2026
 
-Open named.pdf. This is the named ACM sigconf draft for sharing, with author
-names and no review line numbers. It has 8 pages total; the body and
-acknowledgements end on page 7, followed by references. main.pdf remains the
+Open named.pdf. This is the named ACM sigconf draft for sharing, with Sachin Mohan
+as the sole listed author and no review line numbers. It has 8 pages total; the body and
+acknowledgements end on page 7; references begin on page 8. main.pdf remains the
 anonymous review variant built from the same text. Both remain within the
 working limit of 8 body pages excluding references.
 
@@ -15,11 +15,11 @@ has an ACM accessibility description. Rights/DOI/ISBN values are placeholders.
 Build
   In this directory: make (or make named)
   Anonymous variant: make anonymous
-  Regenerate numeric figures: make figures
+  Regenerate charts and the saved-image layout: make figures
   From repository root: uv run python experiments/helpers/geccoPaper.py
   To rerender saved pictures: add --render to that Python command.
 The document builds from committed assets without the private run data. Rebuilding
-numeric figures uses committed Stage 5 and Stage 6 analyses. Rerendering the pictures also
+figures uses committed Stage 5 and Stage 6 analyses plus the three saved frame PNGs. Rerendering the pictures also
 requires the archived run directory and the existing MuJoCo environment. It
 restores recorded qpos/qvel and renders three images, with zero simulator steps
 and zero model queries. Figure provenance JSON records the source hashes and
@@ -108,8 +108,20 @@ All 612 uploaded file hashes were verified after explicit upload approval.
 The completed interpretation, integrity audit, and archive receipt are in
   docs/evoPlan/results/stage6-repair/walker2d-evo-s6-repair-20261005-1/.
 repair_provenance.json records this paper update's sources, numeric checks,
-PDF hashes, and build validation. The PDFs were visually reviewed on pages 1,
-6, and 7. Both builds resolve citations/references and have no horizontal
-text overflow; a roughly 1.1-point final bibliography balancing warning remains.
+PDF hashes, and build validation. All seven figures and the eight-page named layout were visually reviewed.
+Both builds resolve citations/references and have no horizontal text overflow.
+The named build warns that bibliography balancing starts in the second column;
+the final references page was inspected and remains readable.
 BibTeX also reports missing optional metadata on several existing entries.
 These are draft-format issues, not missing citations or numerical failures.
+
+Figure and authorship revision, 5 October 2026
+The named draft lists only Sachin Mohan, including running headers. Scholarly
+citations remain intact. All seven figures now use consistent serif typography,
+vector PDF text and linework, and 300 dpi PNG previews. Figure 2 separates the
+search path from the withheld evaluation episodes, which enter only after the
+selection freeze. The primary contrasts use an uncluttered forest plot; the
+repair comparison uses horizontal points and intervals with shared row labels.
+Legends and axis labels are sized for the actual column width. The simulator
+strip is recomposed from the unchanged saved PNGs, with panel letters and times.
+No experiment outputs, plotted values or interval definitions changed.

@@ -32,10 +32,8 @@
 \author{Sachin Mohan}
 \affiliation{\institution{University of the Witwatersrand}\city{Johannesburg}\country{South Africa}}
 \email{2699183@students.wits.ac.za}
-\author{Geraud Nangue Tasse}
-\affiliation{\institution{University of the Witwatersrand}\city{Johannesburg}\country{South Africa}}
 % Corresponding-author details should be confirmed before a camera-ready version.
-\renewcommand{\shortauthors}{Mohan and Nangue Tasse}
+\renewcommand{\shortauthors}{Mohan}
 
 \begin{abstract}
 Learned world models let evolutionary search evaluate thousands of controllers
@@ -340,9 +338,10 @@ start state per episode. All selections were frozen before final evaluation.
 In imagination, controllers act on predicted latents; in MuJoCo, on newly
 rendered images. Paired start states therefore do not imply identical action
 sequences.}
-\Description{A flow diagram links disjoint source episodes, four-method
-evolutionary search, a freeze of all 720 selected controllers, and paired final
-evaluation.}
+\Description{A two-path flow diagram separates 96 fitness and 64 selection episodes
+used for search from 320 withheld evaluation episodes. Four arms, 20 seeds and
+three population sizes yield 240 searches and 720 frozen policy slots. The
+withheld episodes enter only the paired imagination and MuJoCo audit.}
 \label{fig:protocol}
 \end{figure*}
 
@@ -622,7 +621,7 @@ make that probe reliable on predicted latents.
 \centering
 \includegraphics[width=\linewidth]{figures/predictor_repair.pdf}
 \caption{Exploratory repair audit: 24 reused source episodes, 89 fixed
-candidates. Bars average the three fitting seeds for repaired arms; whiskers
+candidates. Points average the three fitting seeds for repaired arms; whiskers
 are source-episode bootstrap 95\% intervals. Detection is at the first unsafe
 block endpoint, not an advance warning. False alarms use still-healthy
 endpoints. Predictor-only repair passes the frozen gate.}
@@ -744,11 +743,10 @@ selection of controller risk, followed by fresh confirmation and evaluation
 across longer episodes, other robots and independently pretrained models.
 
 \begin{acks}
-OpenAI Codex assisted with software development, analysis tooling, manuscript
-drafting and figure-generation code. Claude (Anthropic) assisted with revising
-the manuscript text and figure code. Numerical figures are generated from saved
-experiment outputs; simulator images render saved states. The authors remain
-responsible for verifying the text, analysis and references before submission.
+OpenAI Codex assisted with software, analysis tooling, drafting and figure code;
+Claude (Anthropic) assisted with text and figure revisions. Figures use saved
+experiment outputs and simulator states. The author remains responsible for
+verifying the text, analysis and references before submission.
 \end{acks}
 
 \bibliographystyle{ACM-Reference-Format}
