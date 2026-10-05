@@ -35,6 +35,7 @@ def source_inventory(protocol):
              str(protocol.resolve().relative_to(ROOT)), 'pyproject.toml', 'uv.lock',
              'configs/evo/inputs.yaml', 'configs/evo/power_pilot_sources.json',
              'configs/evo/stage2_readiness_baseline.yaml',
+             'scripts/managed/evo_followup_development.sh',
              'docs/evoPlan/protocols/stage6-followup-20261005.md']
     files += [str(p.relative_to(ROOT)) for p in (ROOT/'experiments/helpers').glob('*.py')]
     files += [str(p.relative_to(ROOT)) for p in (ROOT/'experiments/tests').glob('test_evo_followup*.py')]
