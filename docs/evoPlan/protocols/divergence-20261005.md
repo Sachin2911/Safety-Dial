@@ -42,6 +42,8 @@ Freeze and commit the protocol and executable sources before inference. Hash the
 
 ```bash
 uv run python experiments/scripts/evo_divergence.py
-uv run python experiments/scripts/evo_divergence.py --execute --run-id walker2d-evo-s6-divergence-20261005-1
-uv run python experiments/scripts/evo_divergence_report.py runs/walker2d-evo-s6-divergence-20261005-1
+uv run python experiments/scripts/evo_divergence.py --execute --run-id walker2d-evo-s6-divergence-20261005-2
+uv run python experiments/scripts/evo_divergence_report.py runs/walker2d-evo-s6-divergence-20261005-2
 ```
+
+The initial allocated run `walker2d-evo-s6-divergence-20261005-1` failed during CPU/GPU input conversion before any predictor call. Its source snapshot, failure record and explicit zero-cost pending query are retained. The corrected run `walker2d-evo-s6-divergence-20261005-2` uses a new identity and inherits the original absolute deadline; no pending query is silently replayed or removed.

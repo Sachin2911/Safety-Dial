@@ -122,6 +122,19 @@ def main():
     else:
         started = time.time()
         launch = dict(identity=identity,started_at=started,deadline=started+3600*c['max_hours'])
+        if c.get('inherited_deadline_from'):
+            previous = ROOT/c['inherited_deadline_from']
+            failed = json.loads((previous/'failure.json').read_text())
+            if any(failed['current_process_costs'].values()) or list((previous/'queries').rglob('*.npz')):
+                raise ValueError('deadline inheritance here is restricted to zero-query failed attempts')
+            journals = list((previous/'queries').rglob('*.pending.json'))
+            if not journals or any(any(json.loads(p.read_text())['measured_costs'].values()) for p in journals):
+                raise ValueError('failed attempt must have explicit zero-cost journals')
+            old_launch = json.loads((previous/'launch.json').read_text())
+            launch.update(started_at=old_launch['started_at'],deadline=old_launch['deadline'],
+                          replacement_process_started_at=started,
+                          retained_zero_query_attempt=str(previous.relative_to(ROOT)),
+                          retained_failure_sha256=file_sha256(previous/'failure.json'))
         run.write_json('launch.json',launch)
         for name in names:
             target = run.run_dir/'source'/name

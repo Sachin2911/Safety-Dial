@@ -7,7 +7,7 @@
   },
   "focused_suite_after_additional_window_test": {
     "command": "uv run pytest -q experiments/tests/test_evo_divergence.py",
-    "passed": 15
+    "passed": 16
   },
   "lint": {
     "command": "uv run ruff check .",
@@ -30,5 +30,12 @@
     "predictor_rows": 0,
     "real_steps": 0,
     "resolution": "Snapshot transitive helper imports; preserve all unrelated edits."
+  },
+  "zero_query_runtime_failure": {
+    "run": "walker2d-evo-s6-divergence-20261005-1",
+    "reason": "CUDA tensor passed to NumPy-based action normalization adapter",
+    "predictor_rows": 0,
+    "real_steps": 0,
+    "resolution": "Normalize from a CPU array; regression uses the actual adapter on CUDA. Replacement run preserves failed attempt deadline and journals."
   }
 }

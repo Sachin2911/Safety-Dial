@@ -46,7 +46,7 @@ def refreshed_predictions(imaginer, z_history, real_z, history_actions, real_act
         raise ValueError('finite latent histories and actions required')
     full_real = torch.cat([zh,real],1)
     hist = imaginer.flat(history_actions)
-    future = imaginer.flat(actions.reshape(len(zh),10,10,6))
+    future = imaginer.flat(actions.cpu().numpy().reshape(len(zh),10,10,6))
     buffer = torch.zeros((len(zh),12,60),device=imaginer.device)
     buffer[:,:2] = hist
     predictions = []

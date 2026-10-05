@@ -178,3 +178,14 @@ def test_source_snapshot_follows_transitive_imports_not_unrelated_helpers(tmp_pa
     (directory/'second.py').write_text('value=2\n')
     (directory/'unrelated.py').write_text('value=3\n')
     assert module.imported_helpers([entry],tmp_path)==[directory/'first.py',directory/'second.py']
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(),reason='CUDA required')
+def test_real_normalization_adapter_on_cuda_and_no_query_before_conversion():
+    from helpers.evoImagine import ClosedLoopImaginer
+    _,zh,real,hist,actions=setup(1.)
+    model=Transition().cuda().eval()
+    im=ClosedLoopImaginer(model,(np.zeros(6),np.ones(6)),None,device='cuda')
+    out=refreshed_predictions(im,zh,real,hist,actions,1)
+    assert np.array_equal(out.cpu().numpy(),real)
+    assert model.rows==20
