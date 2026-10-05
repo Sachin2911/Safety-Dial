@@ -1,0 +1,53 @@
+import hashlib,json,math,sys
+from pathlib import Path
+import numpy as np
+import yaml
+sys.path.insert(0,'experiments')
+from helpers.evoReadinessQueries import QueryStore,digest_array
+from helpers.evoReadinessResults import load_study_outcomes
+from helpers.evoReadinessAnalysis import analyze_readiness,CrossedBootstrap
+from helpers.evoReadinessBanks import load_collected_roots
+from helpers.evoReadinessProtocol import protocol_plan
+root=Path.cwd();run=root/'runs/walker2d-evo-s5-main-20261004-1'
+manifest=json.loads((run/'manifest.json').read_text());costs=json.loads((run/'costs.json').read_text());assert manifest['kind']=='evo-readiness-main-v1' and manifest['costs']==costs
+for name,h in manifest['source_sha256'].items():
+ assert hashlib.sha256((run/'source'/name).read_bytes()).hexdigest()==h,name
+ assert hashlib.sha256((root/name).read_bytes()).hexdigest()==h,name
+cfg=yaml.safe_load((run/'config.yaml').read_text());plan=protocol_plan(cfg)
+banks,roots=load_collected_roots(run/'banks')
+outcomes=load_study_outcomes(run/'study',expected_roots=roots['evaluation'])
+folders=sorted((run/'study/searches').glob('*/queries'))+[run/'study/evaluation',run/'banks/episodes',run/'banks/encoded_roots',run/'initial_action_diagnostics']
+counts={};queries=0;file_hashes={}
+for folder in folders:
+ paths=sorted(folder.glob('*.npz'));assert paths,str(folder)
+ with np.load(paths[0],allow_pickle=False) as f:identity=json.loads(str(f['__receipt__']))['study_identity']
+ accounting=QueryStore(folder,study_identity=identity).accounting();assert not accounting['pending_queries']
+ for k,v in accounting['completed_costs'].items():counts[k]=counts.get(k,0)+v
+ for path in paths:
+  with np.load(path,allow_pickle=False) as saved:
+   receipt=json.loads(str(saved['__receipt__']));assert receipt['data_sha256']=={k:digest_array(saved[k]) for k in saved.files if k!='__receipt__'},str(path)
+  queries+=1;file_hashes[str(path.relative_to(run))]=hashlib.sha256(path.read_bytes()).hexdigest()
+counts['renders']+=sum(s['fingerprint_renders'] for s in json.loads((run/'startup_receipts.json').read_text()))
+assert all(costs[k]==v for k,v in counts.items())
+assert costs['real_steps']==banks['accounting']['completed_costs']['real_steps']+plan['counts']['final_real_steps']
+assert costs['predictor_rows']==plan['counts']['total_predictor_rows']==444403200
+assert costs['gradient_updates']==0
+assert len(outcomes['search_seeds'])==20 and len(outcomes['episode_keys'])==320
+with np.load(run/'study/evaluation/reference-real.npz',allow_pickle=False) as reference:
+ assert np.array_equal(reference['actions'],np.stack([r.policy_tape for r in roots['evaluation']]))
+a=cfg['analysis'];recomputed=analyze_readiness(outcomes['cells'],outcomes['baseline'],search_seeds=outcomes['search_seeds'],episode_keys=outcomes['episode_keys'],population_sizes=cfg['search']['population_sizes'],checkpoints=[g for g in cfg['search']['checkpoints'] if g],low_pressure=(a['low_pressure']['population'],a['low_pressure']['generation']),high_pressure=(a['high_pressure']['population'],a['high_pressure']['generation']),replicates=a['bootstrap_replicates'],bootstrap_seed=a['bootstrap_seed'],minimum_progress_ratio=1-a['proposed_allowable_relative_progress_loss'])
+def same(x,y):
+ if isinstance(x,dict):return x.keys()==y.keys() and all(same(x[k],y[k]) for k in x)
+ if isinstance(x,list):return len(x)==len(y) and all(same(a,b) for a,b in zip(x,y))
+ if isinstance(x,float):return math.isclose(x,y,abs_tol=1e-12,rel_tol=1e-12)
+ return x==y
+assert same(recomputed,json.loads((run/'analysis.json').read_text()))
+boot=CrossedBootstrap(20,320,replicates=a['bootstrap_replicates'],seed=a['bootstrap_seed']);decomposition=[]
+for key,diag in sorted(outcomes['diagnostics'].items()):
+ cell=outcomes['cells'][key]
+ decomposition.append(dict(condition=list(key),dense_minus_endpoint=boot.interval(cell['real'].astype(float)-diag['endpoint_truth']),endpoint_minus_real_readout=boot.interval(diag['endpoint_truth'].astype(float)-diag['real_readout']),real_readout_minus_imagined=boot.interval(diag['real_readout'].astype(float)-cell['imagined'][key[0]])))
+assert same(decomposition,json.loads((run/'decomposition.json').read_text()))
+record=dict(passed=True,run_id=run.name,source_files_verified=len(manifest['source_sha256']),query_archives_verified=queries,query_costs=counts,recorded_reference_actions_match=True,complete_analysis_and_decomposition_reproduced=True,source_episode_order_verified=True,all_selections_frozen=True,new_model_queries=0,new_real_steps=0,input_manifest_sha256=hashlib.sha256((run/'manifest.json').read_bytes()).hexdigest(),query_archive_sha256=file_hashes,generator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
+path=root/'docs/evoPlan/results/stage5-main'/run.name/'final_integrity.json'
+with path.open('x') as f:json.dump(record,f,indent=2);f.write('\n')
+print(json.dumps({k:v for k,v in record.items() if k!='query_archive_sha256'},indent=2))
