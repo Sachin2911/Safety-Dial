@@ -1,6 +1,18 @@
 # Evolution study results (docs/evoPlan)
 
-**Current status, 4 October 2026:** strict Gate 0 remains unpassed. The fresh
+**Current status, 5 October 2026:** the [locked Stage 5 main study](stage5-main/walker2d-evo-s5-main-20261004-1/README.md) completed on 20 paired search seeds and 320 fresh final episodes. All 240 searches and 720 selected checkpoints completed; all selections were frozen before final evaluation. The independent audit verified 118 frozen source files and 11,322 query archives and reproduced the complete analysis and decomposition. Prelaunch regression validation passed 732 tests.
+
+Both declared primary comparisons were supported: control gap amplification was +10.39 percentage points (adjusted 97.5% interval +6.70 to +14.25), and the combined method reduced amplification by 7.22 points (2.49 to 12.18). At high pressure, actual failure fell from 29.56% to 22.36% relative to the control, with 99.04% progress retention. The frozen baseline's failure rate was 16.88%, so the result demonstrates partial mitigation of optimization-induced harm, not safety improvement over the starting controller. Historical Gate 0 and joint transfer-screen failures remain unchanged; short branches do not establish full-episode safety.
+
+The [main figures and full cell table](stage5-main/walker2d-evo-s5-main-20261004-1/report/README.md) and [descriptive supplement](stage5-main/walker2d-evo-s5-main-20261004-1/supplement/README.md) include the common-k0 audit, baseline changes, factorial comparisons, and all equal-offspring comparisons. Execution charged 444,403,200 predictor rows and 23,567,921 real simulator steps, with zero gradient updates, in 6.819 hours. The [completion audit](stage5-main/walker2d-evo-s5-main-20261004-1/completion_audit.json) records the evidence for each requirement.
+
+The four-seed variance pilot is [privately archived and verified](stage5-variance-pilot/walker2d-evo-s5-variance-pilot-20261004-1/remote_verification.json). The main study's exact 11,743-file, 11,619,385,219-byte bundle is prepared and [awaiting separate user upload approval](stage5-main/walker2d-evo-s5-main-20261004-1/archive_request.json). The local descriptive supplement does not change that pending payload. No supervisor approval, supervisor message, or GitHub push is claimed.
+
+## Historical development status before the main study
+
+The following preserves the earlier development state; the completed main study and current archive status are recorded above.
+
+**Historical pre-main status, 4 October 2026:** strict Gate 0 remains unpassed. The fresh
 measurement-readiness audit passed; the bounded transfer and noise diagnostics
 are complete, and every tested noise level failed the declared joint transfer
 screen. The main Stage 5 experiment has not run. The bounded development search/power
@@ -80,7 +92,7 @@ model repository `Sachioster/safetydial-walker2d` under `evo/<run_id>`, each pin
 revision in its `hf_upload.json`. Every run folder holds its resolved `config.yaml` and a
 `manifest.json` (git commit, packages, hardware, seeds, input revisions, costs).
 
-**Historical status at the close of 3 October 2026:** stopped at a failed Gate 0. The chronology below records that earlier state; the current 4 October status is above.
+**Historical status at the close of 3 October 2026:** stopped at a failed Gate 0. The chronology below records that earlier state; the current 5 October status is above.
 
 | Stage | Run | Outcome |
 |---|---|---|

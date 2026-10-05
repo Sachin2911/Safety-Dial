@@ -1,0 +1,146 @@
+"""Complete declared descriptive plots from a finished, hash-checked readiness run."""
+import csv
+import hashlib
+import itertools
+import json
+import sys
+from pathlib import Path
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
+sys.path.insert(0, 'experiments')
+from helpers.evoReadinessAnalysis import CrossedBootstrap
+
+root = Path.cwd()
+run = root / 'runs/walker2d-evo-s5-main-20261004-1'
+docs = root / 'docs/evoPlan/results/stage5-main' / run.name
+out = docs / 'supplement'
+assert not out.exists()
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+request = json.loads((docs / 'upload_inventory.json').read_text())
+expected = {x['path']: x['sha256'] for x in request['inventory']}
+inputs = ['analysis.json', 'analysis/paired_axes.json', 'analysis/paired_outcomes.npz']
+for name in inputs:
+    assert sha(run / name) == expected[name], name
+analysis = json.loads((run / 'analysis.json').read_text())
+axes = json.loads((run / 'analysis/paired_axes.json').read_text())
+assert axes['search_seeds'] == analysis['sampling']['search_seeds']
+assert len(set(axes['episode_keys'])) == 320
+with np.load(run / 'analysis/paired_outcomes.npz', allow_pickle=False) as saved:
+    data = {k: saved[k].astype(float) for k in saved.files}
+key = lambda c: (c['noise_k'], c['penalty_mode'], c['population'], c['generation'])
+indices = {key(c): i for i, c in enumerate(axes['conditions'])}
+assert len(indices) == 36 and set(indices) == {key(c) for c in analysis['curves']}
+boot = CrossedBootstrap(20, 320, replicates=10000, seed=20261120)
+rows = []
+for original in analysis['curves']:
+    c = dict(original)
+    i = indices[key(c)]
+    noise = int(c['noise_k'])
+    own = data[f'imagined_k{noise}'][i]
+    for name, values in [('real_failure', data['real'][i]), ('real_progress', data['progress'][i]),
+                         ('imagined_failure', own), ('gap_common_k0', data['real'][i] - data['imagined_k0'][i])]:
+        np.testing.assert_allclose(values.mean(1), c[name]['seed_means'], rtol=0, atol=1e-12)
+    c['imagined_common_k0'] = boot.interval(data['imagined_k0'][i])
+    c['imagined_change_from_baseline'] = boot.interval(own - data[f'baseline_imagined_k{noise}'])
+    c['progress_change_from_baseline'] = boot.interval(data['progress'][i] - data['baseline_progress'])
+    rows.append(c)
+
+arms = [(0., 'zero'), (0., 'rosarl_style'), (1., 'zero'), (1., 'rosarl_style')]
+colors = ['#3465a4', '#b15b22', '#23875e', '#91469b']
+label = lambda arm: f'k={arm[0]:g}, ' + ('zero penalty' if arm[1] == 'zero' else 'ROSARL-style')
+out.mkdir()
+plt.rcParams.update({'font.size': 10, 'axes.spines.top': False, 'axes.spines.right': False,
+                     'savefig.dpi': 180, 'font.family': 'DejaVu Sans'})
+def plot(name, metrics, title, zero=False):
+    fig, axs = plt.subplots(len(metrics), 3, figsize=(14, 3.5 * len(metrics)), squeeze=False)
+    for row, (metric, scale, ylabel) in enumerate(metrics):
+        for col, pop in enumerate([16, 64, 256]):
+            ax = axs[row, col]
+            for arm, color in zip(arms, colors):
+                cells = sorted([c for c in rows if (c['noise_k'], c['penalty_mode']) == arm and c['population'] == pop], key=lambda c: c['generation'])
+                x = [c['offspring_evaluations'] for c in cells]
+                y = np.array([[c[metric][s] for s in ['point', 'lo', 'hi']] for c in cells]) * scale
+                ax.plot(x, y[:, 0], color=color, marker='o', label=label(arm))
+                ax.fill_between(x, y[:, 1], y[:, 2], color=color, alpha=.10)
+            if zero:
+                ax.axhline(0, color='black', linewidth=.7, linestyle=':')
+            ax.set_xscale('log')
+            ax.set_xticks([pop, pop * 4, pop * 16], [str(pop), str(pop * 4), str(pop * 16)])
+            ax.minorticks_off()
+            ax.set(xlabel='Offspring evaluated (population × generation)', title=f'Population {pop}')
+            if col == 0:
+                ax.set_ylabel(ylabel)
+            ax.grid(alpha=.2)
+    handles, labels = axs[0, 0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc='lower center', ncol=4, fontsize=9)
+    fig.suptitle(title + '\nFresh final episodes; descriptive paired 95% intervals')
+    fig.tight_layout(rect=(0, .04, 1, .94))
+    for ext in ['png', 'pdf']:
+        fig.savefig(out / f'{name}.{ext}', bbox_inches='tight')
+    plt.close(fig)
+plot('gap_and_progress', [('gap_own_noise', 100, 'Real minus own-noise imagined risk (pp)'), ('real_progress', 1, 'Real progress (m)')], 'Prediction gap and movement across search pressure')
+plot('common_k0_audit', [('imagined_common_k0', 100, 'Imagined violation under common k=0 (%)'), ('gap_common_k0', 100, 'Real minus common k=0 imagined risk (pp)')], 'Every arm evaluated under the same k=0 audit')
+plot('baseline_changes', [('real_failure_change_from_baseline', 100, 'Change in real violation rate (pp)'), ('imagined_change_from_baseline', 100, 'Change in own-noise imagined risk (pp)'), ('progress_change_from_baseline', 1, 'Change in real progress (m)')], 'Changes from the shared frozen baseline', zero=True)
+plot('baseline_gap_changes', [('own_gap_change_from_baseline', 100, 'Own-noise gap change (pp)'), ('common_k0_gap_change_from_baseline', 100, 'Common k=0 gap change (pp)')], 'Prediction-gap changes from baseline', zero=True)
+
+matched = []
+for arm in arms:
+    groups = {}
+    for k in indices:
+        if k[:2] == arm:
+            groups.setdefault(k[2] * k[3], []).append(k)
+    for budget, keys in sorted(groups.items()):
+        for b, a in itertools.combinations(sorted(keys), 2):
+            i, j = indices[a], indices[b]
+            noise = int(arm[0])
+            real = data['real'][i] - data['real'][j]
+            own = data[f'imagined_k{noise}'][i] - data[f'imagined_k{noise}'][j]
+            common = data['imagined_k0'][i] - data['imagined_k0'][j]
+            matched.append(dict(arm=list(arm), offspring=budget, comparison_a=list(a[2:]), comparison_b=list(b[2:]),
+                real_failure_difference=boot.interval(real), imagined_failure_difference=boot.interval(own),
+                own_gap_difference=boot.interval(real - own), common_k0_gap_difference=boot.interval(real - common),
+                real_progress_difference=boot.interval(data['progress'][i] - data['progress'][j])))
+assert len(matched) == 20
+(out / 'matched_budget_contrasts.json').write_text(json.dumps(matched, indent=2) + '\n')
+(out / 'descriptive_factorial_contrasts.json').write_text(json.dumps(analysis['descriptive_factorial_contrasts'], indent=2) + '\n')
+metrics = ['real_failure', 'imagined_failure', 'imagined_common_k0', 'gap_own_noise', 'gap_common_k0', 'real_progress',
+           'real_failure_change_from_baseline', 'imagined_change_from_baseline', 'progress_change_from_baseline',
+           'own_gap_change_from_baseline', 'common_k0_gap_change_from_baseline']
+fields = ['noise_k', 'penalty_mode', 'population', 'generation', 'offspring_evaluations']
+with (out / 'all_diagnostic_cells.csv').open('w', newline='') as f:
+    writer = csv.DictWriter(f, fieldnames=fields + [f'{m}_{s}' for m in metrics for s in ['point', 'lo', 'hi']], lineterminator='\n')
+    writer.writeheader()
+    for c in rows:
+        writer.writerow({**{k: c[k] for k in fields}, **{f'{m}_{s}': c[m][s] for m in metrics for s in ['point', 'lo', 'hi']}})
+def interval(v, scale=100):
+    return f"{scale * v['point']:.2f} [{scale * v['lo']:.2f}, {scale * v['hi']:.2f}]"
+text = ['# Declared descriptive reporting supplement', '',
+    'These figures complete the pressure curves, common-noise audits, and baseline-change views requested in the readiness declaration. '
+    'They use the completed study and the same paired crossed-seed/episode bootstrap. No model or simulator queries were made. '
+    'All intervals here are descriptive 95% intervals; they do not replace either adjusted primary comparison.', '',
+    'The original analysis already contains the factorial contrasts and most plotted intervals. '
+    'Intervals for common-k0 imagined rates, imagined-rate changes, absolute progress changes, and all 20 equal-offspring pairwise comparisons '
+    'were rendered after study completion from saved paired arrays. Their reporting was motivated by the declaration, and no final outcome selected which cells to include. '
+    'Equal offspring counts are not equal predictor-query costs across noisy and noiseless arms.', '',
+    '| High-pressure paired comparison | Actual failure difference, pp [95% interval] | Progress ratio [95% interval] |',
+    '|---|---:|---:|']
+for c in analysis['descriptive_factorial_contrasts']:
+    text.append(f"| {c['contrast']} | {interval(c['real_failure_difference'])} | {interval(c['real_progress_ratio'], 1)} |")
+text += ['', 'The penalty-only k=0 real-failure interval includes zero. The penalty-at-k=1 and both conditional noise contrasts have negative real-failure intervals. '
+    'These conditional contrasts do not establish a statistically tested interaction or universal superiority. '
+    'Baseline comparisons continue to show that evolution worsened safety relative to the frozen starting controller.', '']
+for name in ['gap_and_progress', 'common_k0_audit', 'baseline_changes', 'baseline_gap_changes']:
+    text += [f'![{name.replace("_", " ")}]({name}.png)', '']
+text += ['All [equal-offspring comparisons](matched_budget_contrasts.json), [factorial contrasts](descriptive_factorial_contrasts.json), '
+         'and [diagnostic cell estimates](all_diagnostic_cells.csv) are included. The data are 320 independent episodes crossed with 20 seeds, '
+         'not 6,400 independent episodes. Historical gate failures and short-branch limitations remain unchanged.', '']
+(out / 'README.md').write_text('\n'.join(text))
+(out / 'generator.py.txt').write_text(Path(__file__).read_text())
+provenance = dict(input_sha256={name: sha(run / name) for name in inputs}, generator_sha256=sha(Path(__file__)),
+    bootstrap_replicates=10000, bootstrap_seed=20261120, cells=36, matched_budget_pairs=20,
+    compact_arrays_match_all_saved_cell_seed_means=True, new_model_queries=0, new_real_steps=0,
+    primary_results_unchanged=True, outputs_sha256={p.name: sha(p) for p in sorted(out.iterdir())})
+(out / 'provenance.json').write_text(json.dumps(provenance, indent=2) + '\n')
+print(json.dumps({k: v for k, v in provenance.items() if k not in ['outputs_sha256', 'input_sha256']}, indent=2))
