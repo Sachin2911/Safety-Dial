@@ -46,6 +46,6 @@ All 534 inference archives, 363 input hashes, 51 frozen source hashes, and three
 
 Study cost: 3,000 predictor and 3,000 probe updates, 768,000 fitting rows for each, 320,400 new inference predictor rows, and 97.17 seconds for the local workflow. Engineering CUDA tests additionally used 16 synthetic predictor fitting rows. There were zero new simulator steps, renders, image encodes, or encoder updates. Historical interaction and training costs remain additional.
 
-The experiment is complete locally. Three new checkpoints and the reproducibility bundle remain local because automatic approval review rejected external upload, including after the existing private destination was verified. Private archival required by AGENTS.md remains pending separate approval; nothing from this run has been uploaded.
+The experiment and private archival are complete. Following explicit user approval of the prepared bundle, all three checkpoints and 612 total files were uploaded to the existing private repository at revision `5a4fc59e534aa3cebad64c448625c1bb6a4b1f30`. Every uploaded file hash and the immutable run tag verified. [Archive record](ARCHIVE.md). Initial automatic upload rejections are retained in the approval history; they are resolved.
 
 See [report and figure](REPORT.md), [analysis](analysis.json), [paired changes](paired_changes.json), [latent supplement](latent_supplement.json), [integrity audit](integrity_audit.json), and [prospective protocol](../../../protocols/repair-20261005.md).

@@ -9,4 +9,4 @@ Predictor-only adaptation improves local failure prediction and passes the froze
 - [Protocol](../../protocols/repair-20261005.md)
 - [Prelaunch validation](prelaunch/validation.json)
 
-Private checkpoint archival is pending separate upload approval. Numeric artifacts and checkpoints remain under runs/walker2d-evo-s6-repair-20261005-1, outside git.
+Private checkpoint archival is complete with explicit user approval. See the [verified archive record](walker2d-evo-s6-repair-20261005-1/ARCHIVE.md). Numeric artifacts and checkpoints also remain under runs/walker2d-evo-s6-repair-20261005-1, outside git.
