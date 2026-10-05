@@ -1,0 +1,325 @@
+% Anonymous short/poster draft. Working limit: four pages including references.
+% GECCO 2027's call still repeats 2026 text as checked on 5 October 2026.
+% Build with: latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+\documentclass[dvipsnames,format=sigconf,anonymous=true,review=true]{acmart}
+\setcopyright{none}
+\settopmatter{printacmref=false}
+\acmDOI{}
+\acmISBN{}
+\acmYear{2027}
+\copyrightyear{2027}
+\acmConference[GECCO '27]{Genetic and Evolutionary Computation Conference}{July 12--16, 2027}{Krak\'{o}w, Poland}
+\acmBooktitle{Genetic and Evolutionary Computation Conference Companion (GECCO '27)}
+\newcommand{\rosarl}{ROSARL}
+\begin{document}
+\raggedbottom
+\title{Evolution Cheats Imagination: Auditing Safety Gaps in a Learned Walker2d Model}
+\author{Sachin Mohan}
+\affiliation{\institution{University of the Witwatersrand}\city{Johannesburg}\country{South Africa}}
+\email{2699183@students.wits.ac.za}
+\author{Geraud Nangue Tasse}
+\affiliation{\institution{University of the Witwatersrand}\city{Johannesburg}\country{South Africa}}
+% Corresponding-author details should be confirmed before a camera-ready version.
+\renewcommand{\shortauthors}{Mohan and Nangue Tasse}
+
+\begin{abstract}
+Evolutionary search in a learned world model can select policies whose imagined
+safety does not survive execution. We audit this effect in Walker2d by evolving
+residual policies inside a frozen visual latent model and replaying selected
+policies from identical saved simulator states. A prospectively locked study
+crosses latent noise and a return-range safety penalty over 20 paired search
+seeds, three population sizes, and 320 fresh final source episodes. Increasing
+search from population 16 at generation 1 to population 256 at generation 16
+increases the control's real-minus-imagined failure gap by 10.39 percentage points
+(adjusted 97.5\% interval: 6.70 to 14.25). Noise plus penalty reduces this
+amplification by 7.22 points (2.49 to 12.18). At high search pressure, actual
+failure falls from 29.56\% to 22.36\%, retaining 99.04\% of control progress.
+However, the starting controller fails on only 16.88\% of the same episodes.
+The result demonstrates partial mitigation of optimization-induced harm,
+not a safe controller or an improvement over the starting policy.
+\end{abstract}
+
+\begin{CCSXML}
+<ccs2012><concept><concept_id>10010147.10010257.10010293.10011809</concept_id><concept_desc>Computing methodologies~Bio-inspired approaches</concept_desc><concept_significance>500</concept_significance></concept><concept><concept_id>10010147.10010257.10010258.10010261</concept_id><concept_desc>Computing methodologies~Reinforcement learning</concept_desc><concept_significance>300</concept_significance></concept></ccs2012>
+\end{CCSXML}
+\ccsdesc[500]{Computing methodologies~Bio-inspired approaches}
+\ccsdesc[300]{Computing methodologies~Reinforcement learning}
+\keywords{neuroevolution, world models, model exploitation, safety evaluation}
+\maketitle
+
+\section{Introduction and Related Work}
+Learned world models make repeated policy evaluation inexpensive, but search
+optimizes the learned evaluator rather than the physical system. Errors that
+appear modest on ordinary trajectories can become consequential when selection
+repeatedly rewards optimistic predictions. For safety, a policy may appear to
+avoid failure while violating the constraint when executed.
+
+This problem is not new. Ha and Schmidhuber evolved controllers in learned
+dreams and used stochasticity to improve transfer~\citep{ha2018worldmodels}.
+Recent action-sequence audits report that larger proposal pools can worsen
+selection under latent prediction error~\citep{li2026asar}. Safety-aware
+model-based planning also predates this study: Guided Safe Shooting uses
+MAP-Elites planners~\citep{paolo2022guss}, while SafeDreamer combines world-model
+planning and Lagrangian methods~\citep{huang2024safedreamer}. We do not claim
+that noisy imagination, safe evolutionary planning, or return penalties are
+new individually.
+
+Our contribution is a controlled empirical audit of \emph{evolved policy}
+selection in a frozen visual world model. We measure a predeclared change in
+real-minus-imagined failure as search pressure increases, test a four-arm
+noise/penalty combination, and separately check actual failure and useful
+progress. The final comparison uses fresh source episodes and freezes every
+selected policy before inspecting its simulator outcomes. The starting
+controller remains an explicit reference: reducing the damage caused by search
+is distinct from improving that controller.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/walker_example.pdf}
+\caption{An illustrative control-policy branch, rendered from saved simulator
+states. The model predicts no health violation, but dense simulator checks first
+detect one at step 62 (0.496\,s). This is the first such final-bank example for
+the first search seed at high pressure, selected for illustration rather than
+as a representative effect estimate.}
+\Description{Three Walker2d images at 0, 0.4, and 0.8 seconds show a saved actual
+trajectory whose imagined audit missed a health violation.}
+\label{fig:walker}
+\end{figure}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/protocol.pdf}
+\caption{Locked study design. Source episodes are disjoint across roles, with
+one root per episode. All selections precede final evaluation. Policies close
+the loop on predicted latents in imagination and on newly rendered observations
+in MuJoCo; paired starts do not imply identical action tapes.}
+\Description{A flow diagram links disjoint source episodes, four-arm evolutionary
+search, a freeze of all 720 selected policy slots, and paired final audits.}
+\label{fig:protocol}
+\end{figure*}
+
+\section{Policy Search and Safety Measurement}
+\paragraph{Environment and frozen assets.}
+We use the Walker2d simulator underlying \texttt{SafetyWalker2dVelocity-v1},
+with a \emph{health} constraint: torso height must remain strictly between
+0.8 and 2.0\,m, and pitch between $-1$ and $1$ rad. This differs from the
+benchmark's velocity-cost constraint. Actual failure means any violation at
+one of the 100 simulator steps in a 0.8\,s branch. Termination is disabled for
+branch measurement, retaining post-failure states and progress. ``Real'' below
+means execution in MuJoCo, not on physical hardware.
+
+A previously trained Walker2d LeWorldModel (LeWM)~\citep{maes2026lewm}, its
+192-dimensional encoder, physical readouts, and six-member visual-history base
+controller remain frozen. We evolve a linear residual with 1,020 parameters
+($60\times17$) on a fixed 16-dimensional projection plus bias. Each visual
+update produces ten sequential six-motor actions; actions are clipped to
+$[-1,1]$. Visual feedback runs at 12.5\,Hz and actions at 125\,Hz. The base gain
+is fixed at one. The residual starts at zero, with RMS-preconditioned coordinates
+and initial search scale chosen for an expected unclipped action RMS of 0.05.
+
+\paragraph{Noise and scoring.}
+At each predicted block, we perturb the latent before readout and subsequent
+policy feedback:
+\begin{equation}
+ z_{t+1}=M(z_{t-2:t},a_{t-2:t})+k\,\sigma\odot\epsilon_t,
+ \qquad \epsilon_t\sim\mathcal{N}(0,I).
+\label{eq:noise}
+\end{equation}
+The fixed per-coordinate scale $\sigma$ is the sample standard deviation of
+one-step teacher-forced residuals on earlier development data. It is not a
+state-dependent uncertainty estimate or a calibrated safety bound. We compare
+$k\in\{0,1\}$. The noisy latent enters later history windows as well as the
+policy and health readout.
+
+Let $v$ indicate any imagined health violation and $u$ denote imagined forward
+progress strictly before the first violating block, or the full horizon if
+safe. The two fitness rules are
+\begin{equation}
+ F_0=\mathbb{E}[u], \qquad
+ F_P=\mathbb{E}\left[u+v(V_{\min}-V_{\max})\right].
+\label{eq:score}
+\end{equation}
+Both rules truncate the scored task return identically; the control simply has
+no additional violation penalty. $V_{\min}$ and $V_{\max}$ are cumulative
+extrema of observed task returns from that search's fitness batches, updated
+once per generation before ranking. This is a \rosarl{}-style adaptation of
+the return-range penalty~\citep{tasse2026simple}, not the original algorithm
+or a transfer of its safety guarantees. Rollout computation itself continues
+after violation.
+
+\paragraph{Evolution and selection.}
+Separable CMA-ES~\citep{ros2008sep} searches with populations 16, 64, and 256
+for 16 generations. Each generation uses 32 roots sampled without replacement
+from 96 fitness episodes, shared across arms for a paired seed/generation.
+Noisy fitness uses four samples per root. One nominee per generation is
+rescored on 64 fixed selection roots, using 16 samples for $k=1$ and the
+current fitness-only penalty bounds. At generations 1, 4, and 16, the best
+of the baseline and all nominees so far is selected. Zero-noise queries use
+one sample. Candidate noise streams are shared within each role, while fitness,
+selection, and final evaluation use separate streams.
+
+
+
+\section{Experimental Protocol}
+The design in Figure~\ref{fig:protocol} uses twenty paired search seeds, giving $20\times4\times3=240$ searches and 720
+selected policy slots. The model, controller, noise scale, sample size, endpoints,
+and analysis were locked before collecting 480 fresh source episodes. A
+four-seed development pilot informed a timing and precision review; the final
+20-seed design fit a predeclared 12-hour cap. Earlier controller-readiness and
+joint transfer screens had failed, and the continuation did not relabel them
+as passed.
+
+Episodes come from a fixed competent-actor pool with action-noise scales
+0, 0.05, and 0.10. Collection stops at the first health violation or 1,000 steps.
+For each sufficiently long episode, one root is sampled with a three-frame
+history and room for a 100-step recorded continuation. This conditions the
+source distribution on survival of the collection policy around the root;
+it is not an arbitrary-start safety evaluation. The 96/64/320 fitness,
+selection, and final roles have disjoint episode seeds. The final 320 episodes
+are reused across policies for pairing, not treated as 6,400 independent
+observations per method.
+
+Every selected policy is executed from the same final snapshots used in its
+imagined audit. It is audited at both $k=0$ and $k=1$, with 32 samples per root
+for the latter. The declared primary gap uses each method's own noise setting:
+\begin{equation}
+ D_{m,p}=\overline{v}^{\,\mathrm{real}}_{m,p}
+          -\overline{v}^{\,\mathrm{imag}}_{m,p},\qquad
+ A_m=D_{m,H}-D_{m,L},
+\end{equation}
+where $L=(16,1)$ and $H=(256,16)$ specify population and generation. The two
+co-primary contrasts are $A_C$ for control and $A_{NP}-A_C$ for noise plus
+penalty versus control. Gap reduction alone could reflect increased imagined
+failure, so actual failure and progress are assessed separately.
+
+We use 10,000 paired bootstrap replicates, independently resampling search
+seeds and source episodes with replacement, preserving method/pressure pairing.
+The two primary intervals have 97.5\% coverage each (Bonferroni family coverage
+95\%). Other intervals are descriptive 95\% intervals. Practical criteria
+require a negative actual-failure difference and a lower progress-ratio bound
+above 0.90. Inference is conditional on the frozen assets and shared
+fitness/selection banks.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/failure_pressure.pdf}
+\caption{Actual simulator failure across the complete population/generation grid.
+Shading shows descriptive pointwise 95\% crossed-bootstrap intervals. The dashed
+line is the frozen baseline's 16.88\% failure rate. Larger search budgets generally
+worsen control safety; the primary test compares the declared endpoints rather
+than asserting monotonicity. Curves share the same 320 final source episodes.}
+\Description{Three panels show actual failure rates for four methods over generations
+1, 4, and 16 at populations 16, 64, and 256. Noise plus penalty ends below the
+control, while both remain above the frozen baseline.}
+\label{fig:pressure}
+\end{figure*}
+
+\section{Results}
+\paragraph{Both declared primary comparisons are supported.}
+The control gap increases by 10.39 percentage points (pp), with adjusted
+97.5\% interval $[6.70,14.25]$. Noise plus penalty reduces this amplification
+by 7.22\,pp, with contrast interval $[-12.18,-2.49]$
+(Figure~\ref{fig:primary}). These are contrasts between low and high pressure,
+not the high-pressure gap itself. Figure~\ref{fig:pressure} shows all grid cells.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/primary_contrasts.pdf}
+\caption{The two co-primary contrasts. Positive control amplification means a
+larger real-minus-imagined gap. Negative change in amplification means that noise
+plus penalty reduces this increase relative to control.}
+\Description{The control contrast is plus 10.39 percentage points with interval
+6.70 to 14.25; the combined-method contrast is minus 7.22 with interval minus
+12.18 to minus 2.49. Both intervals exclude zero.}
+\label{fig:primary}
+\end{figure}
+
+\paragraph{Actual failures fall relative to the evolved control.}
+Figure~\ref{fig:walker} illustrates a missed violation. At high pressure, the combined method fails on 22.36\% of paired evaluations
+versus 29.56\% for control (Table~\ref{tab:main}). The paired difference is
+$-7.20$\,pp, descriptive 95\% interval $[-10.98,-3.70]$. Mean full-horizon
+forward progress is 2.146 versus 2.167\,m: the ratio is 0.9904, interval
+$[0.9824,0.9978]$, exceeding the 0.90 retention threshold. Both practical
+criteria pass, with a small measured progress reduction of about 0.96\%.
+
+\begin{table}[t]
+\caption{High pressure: population 256, generation 16. Imagined failure uses
+each arm's own noise; the baseline row uses $k=0$. Evolved rates average
+20 seeds on 320 shared episodes. Full-horizon progress includes post-failure
+motion.}
+\label{tab:main}
+\centering
+\small
+\input{tables/high_pressure.tex}
+\end{table}
+
+The four arms separate noise and penalty descriptively. At high pressure,
+adding the penalty without noise changes actual failure by $-2.09$\,pp
+($[-5.39,0.59]$); with noise the change is $-3.30$\,pp
+($[-6.16,-0.48]$). These secondary intervals are not multiplicity-adjusted
+and do not establish an interaction. The noisy search also uses more model
+samples, so a noise-specific effect at equal model-compute cost is not isolated.
+
+\paragraph{The starting controller remains safer.}
+The baseline fails on 54/320 episodes (16.88\%). The combined method increases
+failure relative to it by 5.48\,pp ($[2.56,8.44]$). The result therefore supports
+\emph{partial mitigation of harm from optimization}, not improvement over the
+starting controller. Imagined failure is still much lower than actual failure:
+4.95\% versus 22.36\% for the combined method. These imagined probabilities
+are not calibrated risks, and the primary gap is not conditional false-safe
+acceptance among accepted policies.
+
+\begin{table}[t]
+\caption{Main-study compute. A predictor row is one latent transition
+per sample. Final audits include selected policies, the baseline, and reference
+action tapes.}
+\label{tab:costs}
+\centering
+\small
+\begin{tabular}{lrr}
+\toprule
+Phase & Simulator steps & Predictor rows \\
+\midrule
+Source collection & 463,921 & 0 \\
+Fitness & 0 & 344,064,000 \\
+Selection & 0 & 22,195,200 \\
+Final audits & 23,104,000 & 78,144,000 \\
+\midrule
+Total & 23,567,921 & 444,403,200 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Limitations and Conclusion}
+This study covers one environment, one frozen model/controller combination,
+and short branches on a survival-conditioned source distribution. Development
+choices, including $k=1$, were informed by earlier observations, although final
+episodes and analysis endpoints were separated prospectively. Model seeds,
+fitness-bank variation, full episodes, other environments, and a real-fitness
+search control are not tested. Baseline health failures and the failed earlier
+transfer screens preclude a safe-controller claim.
+
+Table~\ref{tab:costs} separates collection, search, and audit costs. The main run
+completed in 6.819 hours with zero gradient updates.
+The preserved evolution-stage ledger totals 26,838,972 simulator steps, with
+3,600,058 additional shared original collection steps. Historical actor-training
+and other upstream costs remain unquantified; these are not lifetime totals.
+An independent audit checked 118 frozen source files and 11,322 numeric query
+archives and reproduced the analysis from saved outputs. The exact main bundle
+is privately archived; it is not yet an anonymous public replication package.
+
+Evolutionary pressure measurably amplifies a safety-relevant model error.
+Residual-scaled latent noise and a return-range penalty reduce that
+amplification and actual failures against the evolved control, but do not undo
+all damage from search. Independent simulator evaluation and comparison with
+the starting policy are essential to interpreting the apparent improvement.
+
+\begin{acks}
+OpenAI Codex assisted with software development, analysis tooling, manuscript
+drafting, and figure-generation code. Numerical charts use saved experiment
+outputs; simulator pictures render saved states. This draft requires author
+review of the text, analysis, and references before submission.
+\end{acks}
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+\end{document}

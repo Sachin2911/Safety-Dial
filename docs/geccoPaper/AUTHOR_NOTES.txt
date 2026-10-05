@@ -1,0 +1,76 @@
+GECCO short/poster draft, 5 October 2026
+
+Open main.pdf. The anonymous ACM sigconf draft is four pages including references.
+It contains four figures (a saved-state image sequence, a protocol diagram, the
+full actual-failure grid, and the two primary contrasts) and two tables (method
+outcomes and charged main-study compute). Figure PDFs are vector graphics except
+for the authentic simulator images; PNG versions and the three separate images
+are also included. Every figure has an ACM accessibility description.
+
+Build
+  In this directory: make
+  From repository root: uv run python experiments/helpers/geccoPaper.py
+  To rerender saved pictures: add --render to that Python command.
+The document builds from committed assets without the private run data. Rebuilding
+numeric figures uses the committed Stage 5 analysis. Rerendering the pictures also
+requires the archived run directory and the existing MuJoCo environment. It
+restores recorded qpos/qvel and renders three images, with zero simulator steps
+and zero model queries. Figure provenance JSON records the source hashes and
+example selection. The archived dense_first_step is zero-based: index 61 means
+completed step 62, at 0.496 seconds.
+
+Scientific interpretation
+The primary result is a real-minus-imagined failure-gap contrast, not false-safe
+acceptance conditional on a safety filter. The noise scale is fixed per latent
+coordinate from development residuals, not state-dependent uncertainty. The
+penalty adapts observed branch-return extrema, not exact state-value extrema or
+a proven minmax bound. The combined method mitigates search-induced harm but
+remains worse than the starting controller. The paper preserves failed historical
+gates, source-distribution conditioning, unequal model sampling, post-failure
+progress, and incomplete upstream cost accounting. No new scientific queries
+were performed to write the paper. Source analysis and locked experiments remain
+unchanged.
+
+Venue and citation checks
+The official 2027 homepage confirms Krakow, 12-16 July 2027. As of this check,
+the 2027 Call for Papers still repeats the 2026 call, so four pages including
+references is a working poster-paper limit, not a verified new 2027 rule:
+https://gecco-2027.sigevo.org/HomePage
+https://gecco-2027.sigevo.org/Call+for+Papers
+https://gecco-2026.sigevo.org/Call+for+Papers
+The bibliography uses the verified 2026 RLJ return-range paper, rather than
+inventing a 2026 venue for the 2023 ROSARL preprint. The RLJ pre-proceedings page
+still leaves page numbers unset:
+https://rlj.cs.umass.edu/2026/papers/Paper96.html
+Other primary sources are linked directly in references.bib.
+
+The literature refresh checked dream-policy evolution, GuSS, SafeDreamer, LeWM,
+proposal overgeneration, and the ARC-Bench/JEPA-TTT/Spectral-Target overlaps from
+the research checklist. Targeted searches also covered safe latent-model policy
+evolution and GECCO 2026 poster competitors. This is not a completed systematic
+citation-network review of every item in the historical checklist. The draft
+makes a bounded empirical contribution claim, not a claim that no prior work
+exists or that any ingredient is new. The outstanding broad novelty sweep should
+be repeated before submission if stronger novelty language is proposed.
+
+Before submission
+Authors should review the scientific interpretation and bibliography, confirm the
+actual 2027 format, and confirm the author list and corresponding-author details.
+The PDF hides authors and identifying archive links. The source and this local
+provenance package are not anonymous supplementary material. The private data
+archive is not publicly accessible to reviewers. Do not describe it as public
+replication material without preparing an appropriate anonymous artifact.
+
+The draft includes an AI-assistance disclosure in the acknowledgements source;
+ACM's anonymous option suppresses that environment in the review PDF. Retain and
+review the disclosure in a camera-ready version and follow the final venue's
+instructions for anonymous disclosure. Copyright/DOI/ISBN fields are unset;
+replace them only with acceptance-specific ACM metadata. No acceptance,
+submission, funding, or author approval is claimed.
+
+Saved artifacts
+All paper sources, images, figure generation code, and the compiled PDF are saved
+in Git. The main scientific bundle remains separately archived at immutable
+Hugging Face revision 081050f26263354f5936b39c29912c301c6722d7 in the private repo
+Sachioster/safetydial-walker2d, under evo/walker2d-evo-s5-main-20261004-1.
+The later descriptive supplement is saved in the Git results directory.
