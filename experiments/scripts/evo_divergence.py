@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Locate prediction drift before failure using saved Walker development trajectories."""
 import argparse
+import ast
 import json
 import os
 from pathlib import Path
@@ -27,6 +28,36 @@ from helpers.evoReadinessQueries import QueryStore, digest_json
 from helpers.evoReadinessRuntime import load_frozen_runtime
 from helpers.evoReadinessStudy import checked_real_output
 from helpers.runManifest import build_manifest, file_sha256
+
+
+
+def imported_helpers(entry_points, repository=ROOT):
+    """Snapshot the actual helper import closure, excluding unrelated concurrent work."""
+    repository = Path(repository)
+    pending = list(entry_points)
+    visited, helpers = set(), set()
+    while pending:
+        path = Path(pending.pop()).resolve()
+        if path in visited:
+            continue
+        visited.add(path)
+        tree = ast.parse(path.read_text())
+        modules = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                modules += [a.name for a in node.names if a.name.startswith('helpers.')]
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                if node.module.startswith('helpers.'):
+                    modules.append(node.module)
+                elif node.module == 'helpers':
+                    modules += ['helpers.'+a.name for a in node.names]
+        for name in modules:
+            target = repository/'experiments'/Path(*name.split('.')).with_suffix('.py')
+            if not target.is_file():
+                raise ValueError(f'unresolved local import: {name}')
+            helpers.add(target)
+            pending.append(target)
+    return sorted(helpers)
 
 
 def main():
@@ -66,7 +97,7 @@ def main():
     source = [Path(__file__),args.protocol,ROOT/'experiments/scripts/evo_divergence_report.py',
         ROOT/'pyproject.toml',ROOT/'uv.lock',ROOT/'docs/evoPlan/protocols/divergence-20261005.md',
         ROOT/'scripts/managed/evo_divergence.sh']
-    source += list((ROOT/'experiments/helpers').glob('*.py'))
+    source += imported_helpers([Path(__file__),ROOT/'experiments/scripts/evo_divergence_report.py'])
     source += list((ROOT/'experiments/tests').glob('test_evo_divergence*.py'))
     names = sorted({str(p.resolve().relative_to(ROOT)) for p in source})
     subprocess.run(['git','ls-files','--error-unmatch','--',*names],cwd=ROOT,check=True,stdout=subprocess.DEVNULL)

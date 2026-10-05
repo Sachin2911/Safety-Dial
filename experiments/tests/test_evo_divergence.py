@@ -162,3 +162,19 @@ def test_full_three_frame_and_three_action_windows_at_refresh_boundaries():
     torch.testing.assert_close(windows[1][0,:,0],torch.tensor([.4,1.,2.]))
     torch.testing.assert_close(windows[2][0,:,0],torch.tensor([1.,2.,3.]))
     assert not buffers[0][:,3:].any()
+
+
+def test_source_snapshot_follows_transitive_imports_not_unrelated_helpers(tmp_path):
+    import importlib.util
+    path=Path(__file__).resolve().parents[1]/'scripts/evo_divergence.py'
+    spec=importlib.util.spec_from_file_location('divergence_launcher',path)
+    module=importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    directory=tmp_path/'experiments/helpers'
+    directory.mkdir(parents=True)
+    entry=tmp_path/'entry.py'
+    entry.write_text('from helpers.first import value\n')
+    (directory/'first.py').write_text('import helpers.second\nvalue=1\n')
+    (directory/'second.py').write_text('value=2\n')
+    (directory/'unrelated.py').write_text('value=3\n')
+    assert module.imported_helpers([entry],tmp_path)==[directory/'first.py',directory/'second.py']
