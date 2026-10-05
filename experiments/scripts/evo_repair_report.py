@@ -34,6 +34,16 @@ def paired_changes(base, arm, truth, first, seed, replicates):
     return out
 
 
+
+def verify_nomination(actual, expected):
+    """NPZ layout changes can shift floating reductions by machine precision."""
+    assert actual['index']==expected['index']
+    assert actual['eligible']==expected['eligible']
+    np.testing.assert_array_equal(actual['imagined_risk'],expected['imagined_risk'])
+    np.testing.assert_allclose(actual['imagined_progress'],expected['imagined_progress'],rtol=1e-12,atol=1e-12)
+    return float(np.max(np.abs(np.asarray(actual['imagined_progress'])-expected['imagined_progress'])))
+
+
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('run',type=Path)
@@ -84,10 +94,10 @@ def main():
             assert int((alarm&mask[None]).sum())==summary[role][arm]['teacher_forced']['event_detection']['numerator']
     choice=select_repair({a:summary['development'][a]['teacher_forced'] for a in ARMS},c['gate'])
     assert choice==analysis['choice']
-    assert nominate(data['original_closed'],c['minimum_progress_ratio'])==nomination['nominations']['original']
+    nomination_roundoff={'original':verify_nomination(nominate(data['original_closed'],c['minimum_progress_ratio']),nomination['nominations']['original'])}
     if choice['chosen']:
         with np.load(run/'repaired_development_closed.npz') as f:
-            assert nominate(f['readout'],c['minimum_progress_ratio'])==nomination['nominations']['repaired']
+            nomination_roundoff['repaired']=verify_nomination(nominate(f['readout'],c['minimum_progress_ratio']),nomination['nominations']['repaired'])
     assert controller_audit(nomination['nominations'],data,np.arange(n,2*n),c)==analysis['controller_audit']
     gates={a:repair_gate(summary['audit']['baseline']['teacher_forced'],summary['audit'][a]['teacher_forced'],c['gate']) for a in ARMS[1:]}
     assert gates==analysis['audit_gates']
@@ -101,7 +111,8 @@ def main():
     audit=dict(passed=True,source_hashes=len(d['source_sha256']),input_hashes=len(d['input_sha256']),
         query_archives=len(list((run/'queries').glob('*.npz'))),checkpoint_hashes=len(completion['checkpoints']),
         numerical_summaries_reproduced=True,independent_event_counts_verified=True,
-        development_choice_reproduced=True,controller_nominations_reproduced=True,
+        development_choice_reproduced=True,controller_nominations_reproduced=True,nomination_progress_max_roundoff=nomination_roundoff,
+        nomination_progress_tolerance=dict(rtol=1e-12,atol=1e-12),
         whole_episode_splits_disjoint=True,accounting_reconciled=True,
         report_script_sha256=file_sha256(Path(__file__)))
     (dest/'integrity_audit.json').write_text(json.dumps(audit,indent=2)+'\n')

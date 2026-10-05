@@ -1,0 +1,37 @@
+repair:
+  execution_enabled: true
+  parent_run: runs/walker2d-evo-s6-candidate-quality-20261005-1
+  divergence_run: runs/walker2d-evo-s6-divergence-20261005-2
+  candidates: 89
+  episodes_per_role: 24
+  split_seed: 20261601
+  seeds:
+  - 20261611
+  - 20261612
+  - 20261613
+  probe_steps: 1000
+  predictor_steps: 1000
+  batch: 256
+  probe_lr: 0.0001
+  predictor_lr: 1.0e-05
+  physical_loss_weight: 0.1
+  weight_decay: 0.0001
+  fitting_failure_fraction: 0.5
+  physical_scale:
+  - 0.2
+  - 0.5
+  - 5.0
+  gradient_norm_clip: 1.0
+  inference_modes:
+  - teacher_forced
+  - real_action_tape
+  gate:
+    minimum_detection_gain: 0.1
+    maximum_false_alarm_increase: 0.02
+    maximum_healthy_mae_ratio: 1.25
+  minimum_progress_ratio: 0.9
+  bootstrap_seed: 20261609
+  bootstrap_replicates: 2000
+  max_hours: 1.0
+  archive_private: false
+  archive_destination_after_approval: Sachioster/safetydial-walker2d
