@@ -1,18 +1,25 @@
-GECCO short/poster draft, 5 October 2026
+GECCO full-paper draft, 5 October 2026
 
-Open main.pdf. The anonymous ACM sigconf draft is four pages including references.
-It contains four figures (a saved-state image sequence, a protocol diagram, the
-full actual-failure grid, and the two primary contrasts) and two tables (method
-outcomes and charged main-study compute). Figure PDFs are vector graphics except
-for the authentic simulator images; PNG versions and the three separate images
-are also included. Every figure has an ACM accessibility description.
+Open named.pdf. This is the named ACM sigconf draft for sharing, with author
+names and no review line numbers. It has 8 pages total; the body and
+acknowledgements end on page 7, followed by references. main.pdf remains the
+anonymous review variant built from the same text. Both remain within the
+working limit of 8 body pages excluding references.
+
+The draft has seven figures (saved-state images, protocol, actual-failure grid,
+primary contrasts, gap decomposition, candidate quality, and predictor repair),
+one algorithm and two tables. The later candidate, divergence and repair
+analyses reuse development episodes and are explicitly exploratory. Every figure
+has an ACM accessibility description. Rights/DOI/ISBN values are placeholders.
 
 Build
-  In this directory: make
+  In this directory: make (or make named)
+  Anonymous variant: make anonymous
+  Regenerate numeric figures: make figures
   From repository root: uv run python experiments/helpers/geccoPaper.py
   To rerender saved pictures: add --render to that Python command.
 The document builds from committed assets without the private run data. Rebuilding
-numeric figures uses the committed Stage 5 analysis. Rerendering the pictures also
+numeric figures uses committed Stage 5 and Stage 6 analyses. Rerendering the pictures also
 requires the archived run directory and the existing MuJoCo environment. It
 restores recorded qpos/qvel and renders three images, with zero simulator steps
 and zero model queries. Figure provenance JSON records the source hashes and
@@ -31,10 +38,28 @@ progress, and incomplete upstream cost accounting. No new scientific queries
 were performed to write the paper. Source analysis and locked experiments remain
 unchanged.
 
-Venue and citation checks
+The new evidence replaces the earlier blanket claim that the readout works and
+only dynamics are at fault. Eventual segment detection differs from detection
+at the first failure-containing endpoint; the real-image probe is imperfect at
+onset. Replaying exact real actions misses nearly every first unsafe endpoint,
+while frequent real-history refresh partly restores detection. The separate
+predictor repair improves one-step audit detection from 11.3% to 67.7%, with
+false alarms rising from 0.39% to 0.85%. All three fitting seeds are retained.
+The repaired-model nominee fails 3/24 real audit branches versus baseline 2/24,
+so the paper claims no controller improvement or promotion. The repaired model
+was not used in a new evolutionary search. Its audit is held out within the
+repair procedure but was exposed by earlier diagnostics, not fresh confirmation.
+
+The main study remains the prospectively locked result. Follow-up engineering
+gates and source-episode bootstrap intervals are separate and exploratory.
+The next proposed experiment is a controller-risk ranking audit, not a result
+already obtained. Fitting seeds share the same pretrained model and do not
+establish generalization to independently trained world models.
+
+Earlier venue and citation checks
 The official 2027 homepage confirms Krakow, 12-16 July 2027. As of this check,
-the 2027 Call for Papers still repeats the 2026 call, so four pages including
-references is a working poster-paper limit, not a verified new 2027 rule:
+the 2027 Call for Papers still repeats the 2026 call, so eight pages excluding
+references is the working full-paper limit, not a verified new 2027 rule:
 https://gecco-2027.sigevo.org/HomePage
 https://gecco-2027.sigevo.org/Call+for+Papers
 https://gecco-2026.sigevo.org/Call+for+Papers
@@ -56,7 +81,8 @@ be repeated before submission if stronger novelty language is proposed.
 Before submission
 Authors should review the scientific interpretation and bibliography, confirm the
 actual 2027 format, and confirm the author list and corresponding-author details.
-The PDF hides authors and identifying archive links. The source and this local
+Only main.pdf hides authors; named.pdf deliberately includes them. Neither PDF
+includes identifying private archive links. The source and this local
 provenance package are not anonymous supplementary material. The private data
 archive is not publicly accessible to reviewers. Do not describe it as public
 replication material without preparing an appropriate anonymous artifact.
@@ -64,7 +90,7 @@ replication material without preparing an appropriate anonymous artifact.
 The draft includes an AI-assistance disclosure in the acknowledgements source;
 ACM's anonymous option suppresses that environment in the review PDF. Retain and
 review the disclosure in a camera-ready version and follow the final venue's
-instructions for anonymous disclosure. Copyright/DOI/ISBN fields are unset;
+instructions for anonymous disclosure. Copyright/DOI/ISBN fields contain template placeholders;
 replace them only with acceptance-specific ACM metadata. No acceptance,
 submission, funding, or author approval is claimed.
 
@@ -74,3 +100,16 @@ in Git. The main scientific bundle remains separately archived at immutable
 Hugging Face revision 081050f26263354f5936b39c29912c301c6722d7 in the private repo
 Sachioster/safetydial-walker2d, under evo/walker2d-evo-s5-main-20261004-1.
 The later descriptive supplement is saved in the Git results directory.
+
+The repair bundle is privately archived under
+  evo/walker2d-evo-s6-repair-20261005-1
+at immutable revision 5a4fc59e534aa3cebad64c448625c1bb6a4b1f30 in the same repo.
+All 612 uploaded file hashes were verified after explicit upload approval.
+The completed interpretation, integrity audit, and archive receipt are in
+  docs/evoPlan/results/stage6-repair/walker2d-evo-s6-repair-20261005-1/.
+repair_provenance.json records this paper update's sources, numeric checks,
+PDF hashes, and build validation. The PDFs were visually reviewed on pages 1,
+6, and 7. Both builds resolve citations/references and have no horizontal
+text overflow; a roughly 1.1-point final bibliography balancing warning remains.
+BibTeX also reports missing optional metadata on several existing entries.
+These are draft-format issues, not missing citations or numerical failures.

@@ -1,4 +1,4 @@
-"""Build GECCO short-paper figures and tables from frozen study results.
+"""Build GECCO paper figures and tables from frozen study results.
 
 Run from repository root: uv run python experiments/helpers/geccoPaper.py [--render]
 --render additionally restores saved MuJoCo poses for an illustrative image strip.
@@ -21,6 +21,12 @@ from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 ROOT = Path(__file__).resolve().parents[2]
 RUN_ID = 'walker2d-evo-s5-main-20261004-1'
 SOURCE = ROOT / 'docs/evoPlan/results/stage5-main' / RUN_ID
+DIAGNOSTIC = (ROOT / 'docs/evoPlan/results/stage6-candidate-quality'
+              / 'walker2d-evo-s6-candidate-quality-20261005-1')
+REPAIR = (ROOT / 'docs/evoPlan/results/stage6-repair'
+          / 'walker2d-evo-s6-repair-20261005-1')
+DIVERGENCE = (ROOT / 'docs/evoPlan/results/stage6-divergence'
+              / 'walker2d-evo-s6-divergence-20261005-2')
 OUT = ROOT / 'docs/geccoPaper'
 ARMS = [(0., 'zero', 'Control', '#333333', 'o'),
         (0., 'rosarl_style', 'Penalty', '#D55E00', 's'),
@@ -97,6 +103,74 @@ def build():
         ax.add_patch(FancyArrowPatch((x1, .97), (x2, .97), arrowstyle='-|>',
                                     mutation_scale=10, color='#59717F'))
     save(fig, 'protocol')
+
+    # Split each high-pressure gap into missed between-block events, real-image
+    # readout error and the remaining imagined-versus-real-readout difference.
+    decomposition = json.loads((SOURCE / 'decomposition.json').read_text())
+    parts = [('dense_minus_endpoint', 'Between-block events', '#BBBBBB'),
+             ('endpoint_minus_real_readout', 'Readout on real frames', '#D55E00'),
+             ('real_readout_minus_imagined', 'Imagined vs. real frames', '#0072B2')]
+    fig, ax = plt.subplots(figsize=(3.35, 1.45))
+    for y, (k, penalty, label, _, _) in enumerate(ARMS[::-1]):
+        d = next(e for e in decomposition if e['condition'] == [k, penalty, 256, 16])
+        pos = neg = 0.
+        for key, part, color in parts:
+            v = 100 * d[key]['point']
+            ax.barh(y, v, left=pos if v >= 0 else neg, color=color, height=.6,
+                    label=part if y == 0 else None)
+            pos, neg = (pos + v, neg) if v >= 0 else (pos, neg + v)
+        ax.plot(pos + neg, y, 'k|', ms=9, mew=1.4)
+    ax.axvline(0, color='#888888', lw=.8)
+    ax.set(yticks=range(4), yticklabels=[x[2] for x in ARMS[::-1]],
+           xlabel='Contribution to actual-minus-imagined failure (pp)', xlim=(-10, 40))
+    ax.legend(ncol=3, loc='upper center', bbox_to_anchor=(.42, 1.3), frameon=False,
+              fontsize=6.5, handlelength=1)
+    ax.grid(axis='x', alpha=.15)
+    save(fig, 'gap_decomposition')
+
+    # Exploratory fixed-pool diagnostic: development-check failure against how far
+    # each candidate moves the starting controller's actions on the same inputs.
+    pool = json.loads((DIAGNOSTIC / 'analysis.json').read_text())
+    styles = {'baseline': ('Starting controller', '#000000', '*', 60),
+              'imagined_winner': ('Imagined winner', '#D55E00', 'D', 16),
+              'contracted_winner': ('Contracted winner', '#E69F00', 'v', 14),
+              'capped_winner': ('Capped winner', '#CC79A7', 's', 12),
+              'population_sample': ('Population sample', '#0072B2', 'o', 12),
+              'random_direction': ('Random direction', '#009E73', '^', 12)}
+    fig, ax = plt.subplots(figsize=(3.35, 1.9))
+    for kind, (label, color, marker, size) in styles.items():
+        members = [r for r in pool['candidates'] if r['origins'][0]['kind'] == kind]
+        ax.scatter([r['action_delta_rms'] for r in members],
+                   [100 * r['check_failure'] for r in members], s=size, marker=marker,
+                   color=color, alpha=.85, lw=0, label=label, zorder=3 if kind == 'baseline' else 2)
+    ax.axhline(100 * pool['baseline_failure'], ls='--', color='#777777', lw=1)
+    ax.set(xlabel='Same-input action change from starting controller (RMS)',
+           ylabel='Check failure (%)', ylim=(0, 32))
+    ax.legend(ncol=3, loc='lower center', bbox_to_anchor=(.45, 1.0), frameon=False,
+              fontsize=6.5, handletextpad=.2, columnspacing=.8)
+    ax.grid(alpha=.15)
+    save(fig, 'candidate_quality')
+
+    repair = json.loads((REPAIR / 'analysis.json').read_text())
+    repair_arms = ['baseline', 'probe', 'dynamics', 'combined']
+    labels = ['Original', 'Probe', 'Predictor', 'Both']
+    colors = ['#777777', '#0072B2', '#009E73', '#D55E00']
+    fig, axes = plt.subplots(1, 2, figsize=(3.35, 1.85))
+    for ax, key, title in zip(axes, ['event_detection', 'false_alarm'],
+                             ['Failure-endpoint detection', 'Healthy-endpoint false alarms']):
+        vals = [repair['audit'][arm]['teacher_forced'][key] for arm in repair_arms]
+        points = np.array([v['point'] for v in vals])*100
+        bounds = np.array([[v['lo'], v['hi']] for v in vals])*100
+        ax.bar(np.arange(4), points, color=colors, width=.7)
+        ax.errorbar(np.arange(4), points, yerr=np.stack([points-bounds[:, 0], bounds[:, 1]-points]),
+                    fmt='none', ecolor='black', capsize=2, lw=.8)
+        ax.set_xticks(np.arange(4), labels, rotation=40, ha='right', fontsize=7)
+        ax.set_title(title, fontsize=7)
+        ax.set_ylabel('%', fontsize=7)
+        ax.tick_params(axis='y', labelsize=7)
+        ax.grid(axis='y', alpha=.15)
+    fig.tight_layout(w_pad=.8)
+    save(fig, 'predictor_repair')
 
     table = [r'\begin{tabular}{lrrr}', r'\toprule',
              r'Method & Actual (\%) & Imagined (\%) & Progress (m) \\', r'\midrule']
@@ -181,11 +255,17 @@ if __name__ == '__main__':
     if args.render:
         render_example()
     provenance = {'run_id': RUN_ID, 'sources': {
-        str((SOURCE/'analysis.json').relative_to(ROOT)):
-        hashlib.sha256((SOURCE/'analysis.json').read_bytes()).hexdigest()},
+        str(path.relative_to(ROOT)):
+        hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in [SOURCE/'analysis.json', SOURCE/'decomposition.json',
+                     DIAGNOSTIC/'analysis.json', DIVERGENCE/'analysis.json',
+                     REPAIR/'analysis.json', REPAIR/'paired_changes.json']},
         'generator': str(Path(__file__).relative_to(ROOT)),
+        'generator_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         'new_model_queries': 0, 'new_simulator_steps': 0,
         'curve_intervals': 'Descriptive pointwise 95% crossed seed/episode bootstrap.',
         'primary_intervals': '97.5% each; Bonferroni family coverage 95%.',
-        'baseline_imagined_table': 'k0 audit; noisy baseline audit is reported in source analysis.'}
+        'baseline_imagined_table': 'k0 audit; noisy baseline audit is reported in source analysis.',
+        'candidate_quality': 'Exploratory Stage 6 fixed pool on reused development episodes.',
+        'predictor_repair': 'Exploratory reused audit: 24 source episodes, 89 correlated candidates, three fitting seeds; 95% whole-episode bootstrap.'}
     (OUT/'figure_provenance.json').write_text(json.dumps(provenance, indent=2)+'\n')
