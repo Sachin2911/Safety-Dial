@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+.env
+.python-version.local
+
+# uv / tooling
+.uv/
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# Experiment artifacts (local / sync; do not commit contents)
+checkpoints/*
+!checkpoints/.gitkeep
+data/*
+!data/.gitkeep
+runs/*
+!runs/.gitkeep
+wandb/
+outputs/
+multirun/
+
+# Vendored upstream clones (recreated by scripts/download_data.py)
+third_party/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Secrets
+*.pem
+.env.*
+!.env.example
+
+# LaTeX build junk
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# MuJoCo writes this on first render
+MUJOCO_LOG.TXT
