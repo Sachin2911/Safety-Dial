@@ -70,7 +70,7 @@ The current research does not inherit their outstanding execution steps.
 - Original root [README](legacy/provenance/readme.md.txt) and
   [agent guidance](legacy/provenance/AGENTS.md.txt), preserved as historical text.
 
-The paper library and current manipulation reviews remain under the root `docs/`.
+Current manipulation reviews remain under the root `docs/`.
 Relative symlinks make those shared references available from the historical layout.
 Local datasets and upstream checkouts also remain in root `data/` and `third_party/`.
 The archive's `.venv` is a relative link to the root environment, preserving old local
@@ -110,6 +110,11 @@ manifest. Shared references are listed separately. New archive navigation and to
 outside that frozen inventory.
 Full original permission modes are recorded; the verifier compares executable status
 because Git does not preserve group-write permissions across checkouts.
+
+On 13 October 2026, Sachin requested removal of the root `docs/papers/` library.
+Its shared archive symlink was also removed, leaving 14 active shared paths.
+The retired link is recorded in `manifest.json`; archived source and evidence hashes
+are unchanged. Historical links to the removed paper PDFs remain in preserved text.
 
 ```bash
 uv run python archive/verify.py

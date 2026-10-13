@@ -17,9 +17,10 @@ for task continuation under learned safety filtering.
 
 ## References and academic context
 
-- [Paper library](papers/).
 - [Allocated topic](allocatedTopic.md).
 - [GECCO notes](gecco2027.md), with their original verification dates.
+- [LaTeX research proposal template](templates/research-proposal/README.md), adapted
+  from the supplied Tristan Bester proposal with editable honours metadata and chapters.
 
 ## Earlier work
 

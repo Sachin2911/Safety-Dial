@@ -26,7 +26,7 @@ method, timelines or run gates as the new implementation plan.
 
 1. `oracle.md`: central authority for the current research focus and decisions.
 2. `docs/research/`: current literature reviews, supporting notes and asset audits.
-3. `docs/papers/`: shared reference library.
+3. `docs/templates/`: reusable document source templates.
 4. `experiments/`: workspace for new implementation; add reusable Python under `helpers/`
    and entry points under `scripts/`. There is no `src/` package.
 5. `scripts/`, `configs/download/`, `pyproject.toml`, `uv.lock`: shared setup and downloads.

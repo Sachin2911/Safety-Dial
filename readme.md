@@ -13,7 +13,7 @@ finding meaningful, avoidable stalls. The method and experiment plan are still o
 ## Current workspace
 
 - [Research and documentation](docs/README.md): the manipulation literature, UNISafe asset
-  and compute audits, reference papers and academic context.
+  and compute audits, proposal template and academic context.
 - [Research oracle](oracle.md): decisions, scope and unresolved questions.
 - [Experiment workspace](experiments/README.md): where new implementation will go.
 - [Agent and engineering guidance](AGENTS.md).
