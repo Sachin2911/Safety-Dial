@@ -5,6 +5,8 @@ for task continuation under learned safety filtering.
 
 ## Current research
 
+- [Research Concept Note](researchConceptNote.pdf), with
+  [editable LaTeX source and build instructions](researchConceptNote/README.md).
 - [Safe manipulation progress and robustness](research/reports/Safe%20manipulation%20progress%20and%20robustness.md):
   the detailed comparison that led to choosing task continuation.
 - [Task-continuation focus](research/research_notes/task-continuation-focus-20261008.md):

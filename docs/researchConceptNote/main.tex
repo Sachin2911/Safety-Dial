@@ -1,0 +1,82 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[british]{babel}
+\usepackage{charter}
+\usepackage[margin=1in]{geometry}
+\usepackage[skip=0.5\baselineskip,indent=0pt]{parskip}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{needspace}
+\usepackage{enumitem}
+\usepackage{csquotes}
+\usepackage[
+  backend=biber,
+  style=authoryear-comp,
+  sorting=nyt,
+  maxcitenames=2,
+  maxbibnames=99,
+  giveninits=true,
+  uniquename=init,
+  dashed=false
+]{biblatex}
+\addbibresource{references.bib}
+\DeclareCiteCommand{\parencite}[\mkbibbrackets]
+  {\usebibmacro{cite:init}\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}\usebibmacro{cite}}
+  {}
+  {\usebibmacro{postnote}}
+\usepackage[
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue,
+  bookmarksnumbered=true
+]{hyperref}
+\usepackage{bookmark}
+
+\input{metadata}
+\hypersetup{
+  pdftitle={Research Concept Note: \WorkingTitle},
+  pdfauthor={\StudentName},
+  pdfsubject={Initial honours research concept for discussion}
+}
+\setlist{nosep,topsep=0.5\baselineskip,leftmargin=*}
+\AddToHook{cmd/section/before}{\Needspace{6\baselineskip}}
+\renewcommand*{\bibfont}{\small}
+\setlength{\bibitemsep}{0.5\baselineskip}
+\pagestyle{plain}
+
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+  \setlength{\parskip}{0pt}
+  \centering
+  \vspace*{0.55in}
+  {\Large\bfseries Research Concept Note\par}
+  \vspace{1\baselineskip}
+  {\large\bfseries \WorkingTitle\par}
+  \vspace{1.5\baselineskip}
+  {\StudentName\par}
+  {\StudentNumber\par}
+  \vspace{1.25\baselineskip}
+  {Supervised by:\par}
+  {\SupervisorName\par}
+  \vspace{0.75\baselineskip}
+  {\SchoolName\par}
+  {\UniversityName\par}
+  \vspace{1\baselineskip}
+  {\DocumentDate\par}
+  \vfill
+  \includegraphics[height=3in]{assets/wits-crest.jpg}\par
+  \vspace{1\baselineskip}
+  {\small Initial research concept for discussion\par}
+  {\small \DegreeName\par}
+  \vspace*{0.3in}
+\end{titlepage}
+\pagenumbering{arabic}
+\hypersetup{pageanchor=true}
+
+\input{concept-note}
+\end{document}

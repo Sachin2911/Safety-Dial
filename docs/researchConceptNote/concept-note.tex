@@ -1,0 +1,42 @@
+% User-supplied wording. Change formatting only unless explicitly requested.
+\section*{Where the idea came from}
+
+\begin{itemize}
+  \item My areas of interest have always been:
+  \begin{itemize}
+    \item World Models
+    \item Safe RL
+    \item Genetic Algorithms
+    \item Robotic Arms and Envs
+  \end{itemize}
+  \item Hence, I would really like to devote my research to something that intersects these fields.
+  \item My interest in World Models came from reading the LeWM paper, a JEPA base WM that is super easy to train. Safe RL came from the ROSARL paper and Safety Gymnasium paper. Genetic Algorithms as it is the overarching topic I need my research to focus on and also from the CMA-ES implementation I tried out on an adverserial LLM fine-tuning project. And in terms of Robotic Manipulation, I think of the VLA work from physical intelligence, Nvidia Isaac Labs, and the Franka arm.
+  \item Initially, when looking at the UNISafe paper, the Safety FIlter looks like it works really well at preventing unsafe actions. However, this ends up hampering task progress, and so then a thought comes into mind: How can we have the full safety but also good task progress too?
+  \item And so, through a little bit of research and idea exploration, that’s how the research question got formulated:
+\end{itemize}
+
+\begin{quote}
+  Can evolutionary adaptation be used to improve task completion for a pre-trained robotic manipulation policy operating under a learned world-model-based safety filter, without increasing physical safety violations?
+\end{quote}
+
+\clearpage
+\section*{Problem and Motivation}
+
+The big problem is that safety intervention can change the actions executed by a robot and thus the situations that is encounters afterwards. Because of this, a pretrained task policy can struggle to continue under these changes. This gives us a good opportunity to investigate how task behaviour can adapt to the presence of a learned safety filter.
+
+\section*{Potential Contribution}
+
+Understand how evo adaptation can improve safe task completion, what behavioral changes produce that improvement, and how it compares with ordinary policy learning through the same filter.
+
+\section*{Open Questions}
+
+\begin{enumerate}[itemsep=0.5\baselineskip]
+  \item What is the precise problem? Are we targetting continuation or improve overall behavior under filtering?
+  \item What is causing the lost task progress?
+  \item Are the failures avoidable or not? Is there some alternative behaviour that can complete the same task under the safety constraints?
+  \item What does safety actually mean for us? Which physical outcomes count as violations?
+  \item How does filtering affect policy learning?
+  \item What role should/does the WM play? Is it going to provide representations, safety preds? Both?
+  \item What should the evolution adapt? The whole policy, a compact residual, selected params? High-level behavior or give alternatives?
+  \item When should the adaptation happen?
+\end{enumerate}
