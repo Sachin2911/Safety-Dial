@@ -36,27 +36,12 @@ tests, reports, notebook outputs and videos. Nothing was selected for deletion.
 The archive index explains the layout, provenance and reproduction entry points. Earlier
 plans and scheduled-job configurations describe their original studies.
 
-## Environment
+## Setup
 
-Python 3.11 and `uv` remain the shared environment for the repository.
-
-```bash
-bash scripts/setup.sh
-uv run python scripts/download_data.py --cfg job
-```
-
-The downloader retains the existing Push-T/Cube interfaces. Downloading those assets is
-optional for the new research direction. Local data, credentials and upstream checkouts
-remain at their existing root locations.
-
-Run preserved code through the archive launcher, which uses the root environment and
-sets the historical working directory:
+Clone the repository and install the platform dependencies:
 
 ```bash
-bash archive/run.sh python experiments/scripts/safe_dial_pusht.py --help
-bash archive/run.sh python -m pytest -q
-uv run python archive/verify.py
+git clone https://github.com/Sachin2911/Safety-Dial.git
+cd Safety-Dial
+bash scripts/vast/setup.sh
 ```
-
-See [archive verification](archive/verification.md) for the checks performed during the
-reorganisation and the local multiprocessing-test limitation.

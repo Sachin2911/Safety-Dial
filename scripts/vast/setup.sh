@@ -1,116 +1,108 @@
 #!/usr/bin/env bash
-# Manual platform setup after connecting to an "evo safety filter" instance.
-# Run from a repository clone: bash scripts/vast/setup.sh
-# This prepares the base image's existing environment. Nothing runs at instance boot.
+# Explicit platform installation in the Vast image's existing Python 3.12 environment.
 set +x
 set -euo pipefail
+umask 077
 
-if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
-    printf 'Usage: bash scripts/vast/setup.sh\n'
-    printf 'Install the pinned Isaac and PyTorch platform using uv after connecting to Vast.\n'
-    exit 0
-fi
-if (($#)); then
-    printf 'Unknown argument. Usage: bash scripts/vast/setup.sh\n' >&2
-    exit 1
-fi
+usage() {
+    cat <<'HELP'
+Usage: bash scripts/vast/setup.sh [--dry-run | --check]
+  (no flag)  Install/reconcile the pinned platform, validate CUDA, register Jupyter.
+  --dry-run  Check host prerequisites and print the plan; no installs or state writes.
+  --check    Validate installed package pins and CUDA; no installs or state writes.
+Requires Ubuntu 24.04 x86-64, /venv/main Python 3.12, uv and an NVIDIA GPU.
+Research repositories, data and checkpoints are separate preparation steps.
+HELP
+}
+mode=install
+case "${1:-}" in
+    '') ;;
+    --dry-run) mode=plan ;;
+    --check) mode=check ;;
+    --help|-h) usage; exit 0 ;;
+    *) usage >&2; exit 2 ;;
+esac
+if (($# > 1)); then usage >&2; exit 2; fi
 
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-repo_root="$(cd -- "${script_dir}/../.." && pwd)"
+repo_root="$(cd -- "$script_dir/../.." && pwd)"
 state_dir=/workspace/.evo-safety-filter
 runtime_python=/venv/main/bin/python
-lab_revision=6bfde876089661e116dc5a5d9c6805f18127fe32
-if [[ ! -x "$runtime_python" ]]; then
-    printf 'Run this script on the Vast base image with /venv/main/bin/python.\n' >&2
-    exit 1
-fi
-if [[ "${EUID}" -ne 0 ]]; then
-    printf 'Run as root on the Vast instance to install the required system libraries.\n' >&2
-    exit 1
-fi
-mkdir -p "$state_dir"
-exec > >(tee -a "$state_dir/setup.log") 2>&1
+requirements="$repo_root/configs/vast/requirements-linux-py312.txt"
+overrides="$repo_root/configs/vast/uv-overrides.txt"
+checker="$script_dir/check_platform.py"
 
-trap 'printf "Setup failed. See /workspace/.evo-safety-filter/setup.log\n" >&2' ERR
-exec 9>"$state_dir/setup.lock"
-flock 9
+for command in uv nvidia-smi flock sha256sum dpkg-query apt-get git; do
+    command -v "$command" >/dev/null || { printf 'Missing command: %s\n' "$command" >&2; exit 1; }
+done
+[[ -x "$runtime_python" ]] || { printf 'Missing /venv/main/bin/python\n' >&2; exit 1; }
+[[ -s "$requirements" && -s "$overrides" ]] || { printf 'Missing platform pins\n' >&2; exit 1; }
+"$runtime_python" "$checker" --host-only
 
-if [[ -f "$state_dir/ready" ]]; then
-    printf 'evo safety filter platform was already installed.\n'
+if [[ "$mode" == check ]]; then
+    exec "$runtime_python" "$checker"
+fi
+if [[ "$mode" == plan ]]; then
+    printf 'Target: %s\nRequirements: %s\nOverrides: %s\n' "$runtime_python" "$requirements" "$overrides"
+    printf 'Install Ubuntu libraries, pinned CUDA 13.0 PyTorch and Isaac packages using uv.\n'
+    printf 'Validate all package pins and CUDA; register Evo safety filter Jupyter kernel.\n'
+    printf 'Logs and validation records: %s\n' "$state_dir"
+    df -h /venv/main /workspace
     exit 0
 fi
+[[ "$EUID" -eq 0 ]] || { printf 'Installation requires root for Ubuntu libraries.\n' >&2; exit 1; }
+mkdir -p "$state_dir"
+exec 9>"$state_dir/setup.lock"
+flock -n 9 || { printf 'Another platform setup is running.\n' >&2; exit 1; }
+exec > >(tee -a "$state_dir/setup.log") 2>&1
+trap 'rm -f "$state_dir/ready" "$state_dir/versions.json.tmp"; printf "Setup failed; rerun after checking %s/setup.log\n" "$state_dir" >&2' ERR
+trap 'rm -f "$state_dir/ready" "$state_dir/versions.json.tmp"; exit 130' INT TERM
 
-printf 'Installing evo safety filter platform using uv.\n'
-"$runtime_python" - <<'PY'
-import platform
-import sys
-
-assert sys.version_info[:2] == (3, 12), sys.version
-assert platform.machine() == "x86_64", platform.machine()
-PY
-nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv
-
-export DEBIAN_FRONTEND=noninteractive
-apt-get update -qq
-apt-get install -y --no-install-recommends \
-    libgl1 libegl1 libglvnd0 libglu1-mesa libvulkan1 vulkan-tools \
-    libx11-6 libxcursor1 libxi6 libxinerama1 libxrandr2 libxrender1 \
-    libxext6 libsm6 libice6 libnss3 libglib2.0-0 libgomp1 libxt6 \
-    libasound2t64 ffmpeg
-
-command -v uv
-cp -- "$repo_root/configs/vast/uv-overrides.txt" "$state_dir/uv-overrides.txt"
-cp -- "$repo_root/configs/vast/requirements-linux-py312.txt" \
-    "$state_dir/requirements-linux-py312.txt"
-test -s "$state_dir/uv-overrides.txt"
-test -s "$state_dir/requirements-linux-py312.txt"
-
-# Use Lab's matching overrides and the CUDA 13.0 wheels. The public rc1 wheel
-# still requests Sim 6.1, so install the pinned 3.0 branch's aggregate package.
-uv pip install --python "$runtime_python" --no-cache \
-    --torch-backend cu130 \
-    --extra-index-url https://pypi.nvidia.com \
-    --index-strategy unsafe-best-match --prerelease allow \
-    --overrides "$state_dir/uv-overrides.txt" \
-    --requirement "$state_dir/requirements-linux-py312.txt"
-
-"$runtime_python" - <<'PY'
-import importlib.metadata as metadata
-import json
-from pathlib import Path
-import sys
-
-import torch
-
-assert sys.version_info[:2] == (3, 12), sys.version
-assert torch.__version__.split("+")[0] == "2.11.0", torch.__version__
-assert torch.version.cuda == "13.0", torch.version.cuda
-assert metadata.version("torchvision").split("+")[0] == "0.26.0"
-assert metadata.version("isaacsim") == "6.2.0.0", metadata.version("isaacsim")
-assert torch.cuda.is_available(), "CUDA is unavailable in the container"
-torch.ones((16, 16), device="cuda").square().sum().item()
-torch.cuda.synchronize()
-versions = {
-    "python": sys.version.split()[0],
-    "torch": torch.__version__,
-    "torchvision": metadata.version("torchvision"),
-    "pytorch_cuda": torch.version.cuda,
-    "isaaclab": metadata.version("isaaclab"),
-    "isaacsim": metadata.version("isaacsim"),
-    "gpu": torch.cuda.get_device_name(0),
-    "compute_capability": torch.cuda.get_device_capability(0),
-    "validation": "Package versions and a CUDA tensor operation; renderer untested",
-}
-Path("/workspace/.evo-safety-filter/versions.json").write_text(
-    json.dumps(versions, indent=2) + "\n"
+fingerprint="$(cat "$requirements" "$overrides" "$checker" "${BASH_SOURCE[0]}" | sha256sum | cut -d ' ' -f 1)"
+packages=(
+    libgl1 libegl1 libglvnd0 libglu1-mesa libvulkan1 vulkan-tools
+    libx11-6 libxcursor1 libxi6 libxinerama1 libxrandr2 libxrender1
+    libxext6 libsm6 libice6 libnss3 libglib2.0-0 libgomp1 libxt6
+    libasound2t64 ffmpeg build-essential cmake pkg-config
 )
-print(json.dumps(versions, indent=2))
-PY
+missing=()
+for package in "${packages[@]}"; do
+    if [[ "$(dpkg-query -W -f='${Status}' "$package" 2>/dev/null || true)" != 'install ok installed' ]]; then
+        missing+=("$package")
+    fi
+done
 
+validated=false
+if [[ -f "$state_dir/ready" && "$(cat "$state_dir/ready")" == "$fingerprint" && ${#missing[@]} -eq 0 ]]; then
+    printf 'Checking the previously installed platform.\n'
+    if "$runtime_python" "$checker" > "$state_dir/versions.json.tmp"; then
+        validated=true
+    else
+        printf 'Environment drift detected; reconciling the pinned packages.\n'
+    fi
+fi
+# No previous success marker survives a partial or failed reconciliation.
+rm -f "$state_dir/ready"
+if [[ "$validated" != true ]]; then
+    if ((${#missing[@]})); then
+        export DEBIAN_FRONTEND=noninteractive
+        apt-get update -qq
+        apt-get install -y --no-install-recommends "${missing[@]}"
+    fi
+    # Install rather than sync: retain the base image's Jupyter/management packages.
+    # --no-config isolates this from the older research project's uv configuration.
+    uv --no-config pip install --python "$runtime_python" \
+        --torch-backend cu130 --extra-index-url https://pypi.nvidia.com \
+        --index-strategy unsafe-best-match --prerelease allow \
+        --overrides "$overrides" --requirement "$requirements"
+    "$runtime_python" "$checker" > "$state_dir/versions.json.tmp"
+fi
 "$runtime_python" -m ipykernel install --prefix /usr/local \
     --name evo-safety-filter --display-name 'Evo safety filter (Python 3.12)'
-uv pip freeze --python "$runtime_python" > "$state_dir/installed.txt"
-printf '%s\n' "$lab_revision" > "$state_dir/isaaclab-revision.txt"
-touch "$state_dir/ready"
-printf 'Platform ready. Choose the Evo safety filter kernel in Jupyter.\n'
-printf 'Isaac Sim rendering and the UNISafe port still need GPU smoke tests.\n'
+cp -- "$requirements" "$state_dir/requirements-linux-py312.txt"
+cp -- "$overrides" "$state_dir/uv-overrides.txt"
+mv -- "$state_dir/versions.json.tmp" "$state_dir/versions.json"
+printf '%s\n' "$fingerprint" > "$state_dir/ready.tmp"
+mv -- "$state_dir/ready.tmp" "$state_dir/ready"
+printf 'Platform packages and CUDA verified. Select Evo safety filter (Python 3.12) in Jupyter.\n'
+printf 'Run Python with /venv/main/bin/python. Simulator and cameras still require smoke tests.\n'

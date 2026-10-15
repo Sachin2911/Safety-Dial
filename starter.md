@@ -94,7 +94,7 @@ cat /workspace/.evo-safety-filter/versions.json
 After setup succeeds, choose **Evo safety filter (Python 3.12)** in Jupyter. For SSH commands, use
 `/venv/main/bin/python` explicitly. A `ready` marker is written under
 `/workspace/.evo-safety-filter/` only after the version checks and a CUDA tensor operation
-succeed. Successful installation is skipped when rerunning the script. Failures leave the
+succeed. Reruns validate all package pins, source provenance and CUDA before skipping installation. Failures leave the
 marker absent; inspect the log and rerun the setup command to retry. No retry runs at boot.
 The template retains `OMNI_KIT_ACCEPT_EULA=yes` for unattended Isaac Sim use after setup
 and includes no credentials.
@@ -104,8 +104,9 @@ during creation. Installation, GPU execution, PhysX, RTX rendering,
 cameras and UNISafe have not yet been tested on a rented host. The immediate engineering
 task is to connect, run the manual setup and then verify a small simulator and camera smoke test.
 
-Safety-Dial's root Python pin and project lockfile have not yet been migrated to this
-stack. Update those dependencies before using the repository's setup on the instance.
+Safety-Dial's root Python pin is now 3.12, and root setup dispatches to the platform
+installer on Vast. The root project lockfile still describes earlier research dependencies;
+do not sync it into this platform before research dependency integration.
 Maintain one project environment during integration; the base platform installation is
 not evidence that the existing project lock or original UNISafe requirements are compatible.
 After platform verification, continue with the recorded-data and manipulation pilot below.

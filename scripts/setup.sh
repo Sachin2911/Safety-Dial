@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
-# SafetyDial environment setup (local laptop or Vast.ai).
+# SafetyDial setup: current RTX platform on Vast; legacy research environment elsewhere.
 #
 # In a clone:
 #   bash scripts/setup.sh
-#   bash scripts/setup.sh --pull    # git pull, then setup
+#   bash scripts/setup.sh --dry-run # Vast: host preflight without installing
+#   bash scripts/setup.sh --check   # Vast: verify installed platform
+#   bash scripts/setup.sh --pull    # legacy local environment only
 #
 # Vast On-start (paste this, or curl | bash). Clones/pulls then re-runs from the repo:
 #   curl -fsSL https://raw.githubusercontent.com/Sachin2911/Safety-Dial/main/scripts/setup.sh | bash
@@ -23,6 +25,17 @@ is_vast() {
     || [[ -n "${CONTAINER_ID:-}" ]] \
     || [[ -n "${VAST_CONTAINERLABEL:-}" ]]
 }
+
+# The current Vast platform has its own pinned specification and uses /venv/main.
+# Dispatch before legacy dotenv, credential persistence or project sync helpers run.
+if is_vast; then
+  setup_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+  if [[ ! -f "${setup_dir}/vast/setup.sh" ]]; then
+    printf 'Clone Safety-Dial first, then run bash scripts/vast/setup.sh.\n' >&2
+    exit 1
+  fi
+  exec bash "${setup_dir}/vast/setup.sh" "$@"
+fi
 
 want_pull=0
 for arg in "$@"; do

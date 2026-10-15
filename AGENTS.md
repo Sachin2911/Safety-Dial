@@ -74,8 +74,14 @@ and study-specific interpretation rules when reusing old work, not as a current 
 
 ## Environment and engineering
 
-- Package manager: `uv`; Python is pinned to 3.11 in `.python-version`.
-- Setup: `bash scripts/setup.sh`, or `uv sync --frozen --extra dev`.
+- Current Vast platform: Python 3.12 in `/venv/main`, managed with `uv` and
+  `configs/vast/requirements-linux-py312.txt` plus `uv-overrides.txt`.
+- Setup: `bash scripts/vast/setup.sh`; `--dry-run` preflights, `--check` validates.
+  Root `scripts/setup.sh` dispatches to this installer on Vast before legacy helpers.
+- `.python-version` is 3.12. Root `pyproject.toml`/`uv.lock` still specify earlier research
+  dependencies and do not own the current platform. Do not root-sync them into `/venv/main`.
+  Use `/venv/main/bin/python` for platform commands until research dependency integration.
+  The legacy reproduction commands below apply to an explicitly prepared legacy environment.
 - Use `uv run python ...`, `uv run python -m pytest`, and `uv run ruff check .`.
   Using `python -m pytest` keeps tests in the project interpreter.
 - Run legacy entry points/tests with `bash archive/run.sh python ...`. It changes to

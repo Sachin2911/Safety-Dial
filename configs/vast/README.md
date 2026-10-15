@@ -28,7 +28,9 @@ Clone the repository, then explicitly start the separate installation step:
 cd /workspace
 git clone https://github.com/Sachin2911/Safety-Dial.git
 cd Safety-Dial
+bash scripts/vast/setup.sh --dry-run
 bash scripts/vast/setup.sh
+bash scripts/vast/setup.sh --check
 ```
 
 For an existing clone, enter that directory and run the last command. Run it as root
@@ -45,9 +47,11 @@ dependency overrides. The snapshot was resolved before the original template was
 
 The installer prepares the base image's existing `/venv/main` environment. It does not
 create another project environment, run the repository's older root setup, download
-research datasets or checkpoints, or launch experiments. Safety-Dial's root Python pin
-and lockfile still need migration before using its setup with this stack. Keep one
-maintained project environment when integrating the repository.
+research datasets or checkpoints, or launch experiments. The root Python pin is now 3.12, and `bash scripts/setup.sh` dispatches here on Vast.
+The platform snapshot and overrides are the dependency authority for this installation.
+The root `pyproject.toml` and `uv.lock` still describe the earlier research dependencies;
+do not run root `uv sync` or an automatically syncing `uv run` against this platform.
+Integrating research dependencies is a separate step. Use `/venv/main/bin/python` now.
 
 Inspect installation progress and the resulting versions on the rented instance:
 
@@ -58,10 +62,34 @@ cat /workspace/.evo-safety-filter/versions.json
 
 After successful manual setup, choose **Evo safety filter (Python 3.12)** in Jupyter;
 refresh the kernel list if needed. In SSH, use `/venv/main/bin/python` explicitly.
-The `ready` marker is written only after version assertions and a GPU tensor operation
-succeed. A lock prevents concurrent setup, and the marker skips repeated installation.
-Failures leave the marker absent; inspect the log and rerun the setup command to retry.
-Installation never retries automatically at instance boot.
+The `ready` marker contains a fingerprint of the installer, checker and dependency files.
+Every rerun checks all pinned distributions, Isaac Lab's source revision, core PyTorch
+imports and a CUDA matrix multiplication before skipping package installation. Changed
+inputs, missing system libraries or package drift trigger reconciliation. Jupyter kernel
+registration is refreshed on every successful setup. A lock rejects concurrent installers.
+Failures during installation remove the marker; rerun the same command to retry. Cached
+package downloads are reused. Installation never retries automatically at instance boot.
+
+`--dry-run` checks Python, OS, architecture, tools and GPU driver, then prints the plan
+and free disk space. It does not resolve or download packages. `--check` verifies the
+installed snapshot and CUDA without installing or writing setup state. Neither flag
+establishes simulator or camera compatibility. The checker stops before installation when all visible GPUs are known to lack
+RT cores, including A100. An accepted GPU name is not proof of rendering compatibility;
+RTX-capable hardware still needs a simulator and camera smoke test.
+
+Secrets remain in the inherited environment. This installer does not source `.env`, log
+credentials, persist logins, or copy environment variables into `/etc/environment`. No
+GitHub or Hugging Face token is required for these public platform dependencies.
+Ubuntu libraries are installed only when missing; NVIDIA drivers are never installed.
+`uv pip install --python /venv/main/bin/python` retains unrelated base-image packages,
+including Jupyter. This is a pinned platform installation, not a hermetic container image.
+The requirements snapshot is version-pinned but does not contain artifact hashes.
+
+`versions.json` records the validated versions and scope of the checks. It marks simulator
+and camera validation as not run. The selected stack remains a development release.
+On 15 October 2026 the updated installer passed syntax checks, package-validator tests
+and host rejection checks here; the detected GPU was an A100 40 GB. No package installation or
+simulator execution was performed as part of that script-development check.
 
 The template retains `OMNI_KIT_ACCEPT_EULA=yes` for unattended Isaac Sim use after manual
 setup. Package resolution and template settings were checked, but installation and GPU
@@ -81,3 +109,14 @@ Sources:
 - [Pinned source and dependency constraints](https://github.com/isaac-sim/IsaacLab/tree/6bfde876089661e116dc5a5d9c6805f18127fe32)
 - [Vast template settings](https://docs.vast.ai/guides/templates/template-settings)
 - [Vast base-image startup](https://github.com/vast-ai/base-image)
+
+Installer verification (no platform installation required):
+
+```bash
+bash -n scripts/vast/setup.sh scripts/setup.sh
+/venv/main/bin/python -m unittest discover -s scripts/vast/tests -v
+```
+
+Environment targeting follows [uv's documented Python selection](https://docs.astral.sh/uv/pip/environments/).
+See [NVIDIA's GPU requirements](https://docs.isaacsim.omniverse.nvidia.com/latest/installation/requirements.html)
+for the distinction between CUDA-capable hardware and supported RTX rendering hardware.
