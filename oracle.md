@@ -1,10 +1,16 @@
 # Oracle: task continuation under safety filtering
 
-**Central reference for the research rethink. Updated 8 October 2026.**
+**Central reference for the research rethink. Updated 15 October 2026.**
 
 We have chosen to focus on helping a robotic manipulation agent complete its task when
 a learned safety filter intervenes. This choice remains conditional on finding meaningful,
 avoidable stalls in an accessible task. The specific method and experiment plan remain open.
+
+On 15 October 2026, Sachin also selected three adjacent ideas for further exploration:
+evolutionary active perception, selection of safety-model training data, and evolved
+temporal safety monitors. These are candidate supporting studies or alternative directions.
+Task continuation remains the chosen conditional focus; no switch or combined experiment
+plan has been decided.
 
 Use this document to develop the current focus. Earlier proposals and experiment plans
 remain records of their respective studies; their methods, deadlines and gates are not
@@ -84,6 +90,78 @@ previous thesis schedule.
 Physical robustness can become a later extension if changing conditions helps explain
 the same continuation problem. The immediate focus is understanding task progress under
 safety intervention in one concrete manipulation setting.
+
+## Adjacent directions to explore
+
+The following questions broaden the exploration across sensing, safety-model learning and
+monitoring. They do not depend on first establishing avoidable continuation stalls, although
+each could help explain or address lost progress under filtering. Their usefulness,
+implementation burden and specific contribution still need investigation. The linked work
+provides foundations, not evidence that these questions are novel or already solved.
+
+### Evolutionary active perception
+
+> Can evolution discover short sensing motions that improve safety predictions and
+> subsequent manipulation?
+
+A safety filter may intervene because a contact or object is poorly observed. Evolution
+could search a compact description of camera poses or inspection movements that gather
+useful information before manipulation. A world model could supply representations,
+predictions and uncertainty estimates for safety assessment.
+
+A bounded first study could use one task with controlled occlusion and compare fixed
+observation, a scripted inspection and evolved inspection. Evaluate prediction errors,
+safe completion, physical violations and time spent gathering information. Lower predicted
+uncertainty alone could reflect misplaced confidence. Inspection actions must remain under
+safety filtering, and their interactions count toward the budget. A pretrained model's
+usefulness under changed viewpoints needs checking; viewpoint changes may require training.
+
+[Active Perception and Representation for Robotic Manipulation](https://arxiv.org/abs/2003.06734)
+provides a manipulation foundation. The proposed emphasis is gathering information that
+makes learned safety assessment more useful.
+
+### Evolutionary selection of safety-model training data
+
+> Can evolutionary selection produce a better safety model from the same amount of
+> training data?
+
+The coverage of a safety model's training examples may matter more than their raw number.
+Evolution could select trajectory subsets or sampling proportions from a fixed pool,
+seeking coverage of different failure mechanisms. One bounded implementation could freeze
+the visual encoder and train a small failure predictor for each candidate selection.
+
+Compare with random, class-balanced and uncertainty-based selection at matched data and
+training budgets. Keep trajectory-level training, selection-validation and final test splits
+separate. Measure missed failures and false alarms on untouched trajectories, then assess
+closed-loop completion and physical violations. Filter interventions are not ground-truth
+physical failure labels. Account for acquisition of the original pool and all candidate
+training and evaluation, including discarded selections.
+
+[UNISafe](https://arxiv.org/html/2505.00779) supplies a relevant foundation through its use of
+successful and failed trajectories. The proposed question concerns safety-data coverage and
+generalization; it does not assume that evolutionary subset selection outperforms simpler
+sampling methods.
+
+### Evolved temporal safety monitors
+
+> Can genetic programming discover short temporal rules that predict manipulation
+> failures early enough for useful intervention?
+
+Warning signs such as rising contact force, gradual slipping or persistent object tilting
+develop over time. Genetic programming could construct interpretable rules over observation
+histories, using signals available to the deployed robot. Learned visual or world-model
+features are possible inputs; additional force or tactile sensing is an open choice.
+
+Begin with recorded trajectories and evaluate missed failures, false alarms and warning
+time on held-out episodes. Compare with single-step predictors, simple temporal rules and
+a learned sequence predictor using comparable information. A later closed-loop study would
+test whether responding to warnings improves actual safety and completion. Physical
+violation definitions remain fixed while the monitor is learned. A predictive warning is
+not a certified barrier function or a guarantee of safe intervention.
+
+[Interpretable Early Failure Detection via Machine Learning and Trace Checking-based Monitoring](https://arxiv.org/abs/2508.17786)
+already uses genetic programming to learn temporal properties from historical traces.
+The manipulation-specific monitoring and intervention contribution would need establishing.
 
 ## Research trail
 
