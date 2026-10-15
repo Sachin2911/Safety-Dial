@@ -111,6 +111,20 @@ Maintain one project environment during integration; the base platform installat
 not evidence that the existing project lock or original UNISafe requirements are compatible.
 After platform verification, continue with the recorded-data and manipulation pilot below.
 
+## Engineering progress on the rented host
+
+The initial platform smoke tests now run on an RTX 3090 with 24 GB VRAM. The pretrained
+UNISafe files have been verified and mirrored privately on Hugging Face at a pinned
+revision. Frozen-model diagnostics and the migrated block-plucking environment acceptance
+tests are implemented; commands, outputs and migration details are in
+[the experiment guide](experiments/README.md#unisafe-engineering-checks).
+
+These checks cover inference on the three bundled failure recordings and simulator
+reset/camera/control/outcome wiring. Injected simulator outcomes test the task logic;
+they are not autonomous policy results. The earlier platform-planning text above records
+the setup decision before execution. We still need paired filtered/unfiltered controller
+rollouts to establish a performance baseline and investigate task continuation.
+
 ## Where to begin
 
 Begin with a small UNISafe block-plucking pilot, using its pretrained components to

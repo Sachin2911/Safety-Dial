@@ -45,3 +45,24 @@ git clone https://github.com/Sachin2911/Safety-Dial.git
 cd Safety-Dial
 bash scripts/vast/setup.sh
 ```
+
+## Pretrained UNISafe checkpoints
+
+The original Google Drive checkpoints are mirrored in the private
+[Sachioster/unisafe-pretrained](https://huggingface.co/Sachioster/unisafe-pretrained)
+model repository. With `HF_TOKEN` available, install the additive dependencies and
+download the pinned revision with all original file hashes verified:
+
+```bash
+bash scripts/setup_unisafe.sh
+```
+
+The source revision and manifest hash are recorded in
+[configs/download/unisafe.json](configs/download/unisafe.json). Files are saved under
+ignored `data/unisafe/pretrained/`: `latest.pt` is the Dreamer checkpoint and
+`filter/model/` contains actor/critic snapshots from steps 10000 through 200000.
+The mirror includes original configuration, provenance and tensor inspection metadata.
+Frozen inference and the migrated environment have executable checks in
+[experiments/README.md](experiments/README.md#unisafe-engineering-checks). Run both with
+`bash scripts/smoke_unisafe.sh` after `bash scripts/setup_unisafe.sh`. Closed-loop
+policy performance remains unvalidated.
