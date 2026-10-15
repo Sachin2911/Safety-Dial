@@ -8958,5 +8958,282 @@
       "runs/unisafe/adaptation-grasp-pilot-20261015/summary.json": "7dd189721168eb4f3528244c4d351b14f271be7d44bc9b94e5c7cf8f7ae93078"
     },
     "limits": "Development results are exploratory; confidence intervals do not correct for selection. Renderer history makes independence approximate. Frozen filters do not guarantee unchanged safety rates."
+  },
+  "initial_search_reconstruction_audit": {
+    "status": "pass",
+    "search": "runs/unisafe/adaptation-search-dev-20261015",
+    "methods": {
+      "evolution": {
+        "replicas": 1,
+        "episodes": 48,
+        "environment_steps": 5360,
+        "physics_steps": 26800,
+        "summed_worker_elapsed_seconds": 555.321502931416,
+        "outcomes": {
+          "timeout": 10,
+          "success": 32,
+          "physical_failure": 5,
+          "boundary_exit": 1
+        },
+        "updates": 3,
+        "pretrained_weight_updates": 0
+      },
+      "policy_gradient": {
+        "replicas": 1,
+        "episodes": 48,
+        "environment_steps": 5631,
+        "physics_steps": 28155,
+        "summed_worker_elapsed_seconds": 568.0831156149507,
+        "outcomes": {
+          "timeout": 13,
+          "success": 31,
+          "physical_failure": 3,
+          "boundary_exit": 1
+        },
+        "updates": 3,
+        "pretrained_weight_updates": 0
+      },
+      "random": {
+        "replicas": 1,
+        "episodes": 48,
+        "environment_steps": 5837,
+        "physics_steps": 29185,
+        "summed_worker_elapsed_seconds": 585.1967112608254,
+        "outcomes": {
+          "timeout": 13,
+          "success": 28,
+          "physical_failure": 5,
+          "boundary_exit": 2
+        },
+        "updates": 3,
+        "pretrained_weight_updates": 0
+      }
+    },
+    "training_history": [
+      {
+        "method": "evolution",
+        "search_seed": 2026,
+        "generation": 0,
+        "cumulative_training_episodes_per_replica": 16,
+        "mean_population_utility": 0.43554583333333335,
+        "candidate_fitness": [
+          0.4988666666666667,
+          0.4965166666666667,
+          0.9968,
+          -0.25
+        ],
+        "outcomes": {
+          "timeout": 5,
+          "success": 9,
+          "physical_failure": 1,
+          "boundary_exit": 1
+        }
+      },
+      {
+        "method": "evolution",
+        "search_seed": 2026,
+        "generation": 1,
+        "cumulative_training_episodes_per_replica": 32,
+        "mean_population_utility": 0.5591291666666667,
+        "candidate_fitness": [
+          0.49563333333333337,
+          0.7466833333333334,
+          -0.0006333333333333468,
+          0.9948333333333333
+        ],
+        "outcomes": {
+          "success": 11,
+          "timeout": 3,
+          "physical_failure": 2
+        }
+      },
+      {
+        "method": "evolution",
+        "search_seed": 2026,
+        "generation": 2,
+        "cumulative_training_episodes_per_replica": 48,
+        "mean_population_utility": 0.6224583333333333,
+        "candidate_fitness": [
+          0.9973,
+          0.24723333333333333,
+          0.4979,
+          0.7474
+        ],
+        "outcomes": {
+          "success": 12,
+          "timeout": 2,
+          "physical_failure": 2
+        }
+      },
+      {
+        "method": "policy_gradient",
+        "search_seed": 2026,
+        "generation": 0,
+        "cumulative_training_episodes_per_replica": 16,
+        "mean_population_utility": 0.43554583333333335,
+        "candidate_fitness": [
+          0.4988666666666667,
+          0.4965166666666667,
+          0.9968,
+          -0.25
+        ],
+        "outcomes": {
+          "timeout": 5,
+          "success": 9,
+          "physical_failure": 1,
+          "boundary_exit": 1
+        }
+      },
+      {
+        "method": "policy_gradient",
+        "search_seed": 2026,
+        "generation": 1,
+        "cumulative_training_episodes_per_replica": 32,
+        "mean_population_utility": 0.7479208333333334,
+        "candidate_fitness": [
+          0.99705,
+          0.7480833333333333,
+          0.49853333333333333,
+          0.7480166666666667
+        ],
+        "outcomes": {
+          "success": 12,
+          "timeout": 4
+        }
+      },
+      {
+        "method": "policy_gradient",
+        "search_seed": 2026,
+        "generation": 2,
+        "cumulative_training_episodes_per_replica": 48,
+        "mean_population_utility": 0.4981916666666667,
+        "candidate_fitness": [
+          0.7481166666666668,
+          0.7484666666666666,
+          0.49829999999999997,
+          -0.0021166666666666556
+        ],
+        "outcomes": {
+          "success": 10,
+          "physical_failure": 2,
+          "timeout": 4
+        }
+      },
+      {
+        "method": "random",
+        "search_seed": 2026,
+        "generation": 0,
+        "cumulative_training_episodes_per_replica": 16,
+        "mean_population_utility": 0.43554583333333335,
+        "candidate_fitness": [
+          0.4988666666666667,
+          0.4965166666666667,
+          0.9968,
+          -0.25
+        ],
+        "outcomes": {
+          "timeout": 5,
+          "success": 9,
+          "physical_failure": 1,
+          "boundary_exit": 1
+        }
+      },
+      {
+        "method": "random",
+        "search_seed": 2026,
+        "generation": 1,
+        "cumulative_training_episodes_per_replica": 32,
+        "mean_population_utility": 0.3109375,
+        "candidate_fitness": [
+          0.7474999999999999,
+          0.24883333333333335,
+          -0.0005166666666666653,
+          0.24793333333333334
+        ],
+        "outcomes": {
+          "success": 8,
+          "timeout": 5,
+          "physical_failure": 2,
+          "boundary_exit": 1
+        }
+      },
+      {
+        "method": "random",
+        "search_seed": 2026,
+        "generation": 2,
+        "cumulative_training_episodes_per_replica": 48,
+        "mean_population_utility": 0.5601875,
+        "candidate_fitness": [
+          0.49688333333333334,
+          0.4969,
+          0.24956666666666666,
+          0.9974
+        ],
+        "outcomes": {
+          "success": 11,
+          "timeout": 3,
+          "physical_failure": 2
+        }
+      }
+    ],
+    "search_decisions_reconstructed_exactly": true,
+    "common_initial_population_checks": [
+      {
+        "search_seed": 2026,
+        "methods": [
+          "evolution",
+          "random"
+        ],
+        "episodes_each": 16,
+        "control_steps_each": 2143
+      },
+      {
+        "search_seed": 2026,
+        "methods": [
+          "evolution",
+          "policy_gradient"
+        ],
+        "episodes_each": 16,
+        "control_steps_each": 2143
+      }
+    ],
+    "all_model_queries": {
+      "encoder": 16828,
+      "posterior": 33656,
+      "task_actor": 16828,
+      "uncertainty_ensemble": 16828,
+      "imagined_step": 16828,
+      "safety_actor": 33656,
+      "safety_critic": 33656,
+      "failure_head": 16828
+    },
+    "source_summary_sha256": {
+      "runs/unisafe/adaptation-search-dev-20261015/evolution-2026/generation-00/summary.json": "b1884b5021b1efedf9904d0dfdf29a565d71830481aed1e53669bc6916798427",
+      "runs/unisafe/adaptation-search-dev-20261015/evolution-2026/generation-01/summary.json": "ad6b52fe38a20b90abd40097751f115622046e451da3a53f436a684f7605faa4",
+      "runs/unisafe/adaptation-search-dev-20261015/evolution-2026/generation-02/summary.json": "b0a265588f00478d0d4a50c60f2d59536e5785f56b059cbd0911aa9262c1fea1",
+      "runs/unisafe/adaptation-search-dev-20261015/policy_gradient-2026/generation-00/summary.json": "76818d453abf79a9626de770749b1a44d467b2f184d50b52dfc761bfcbcf0608",
+      "runs/unisafe/adaptation-search-dev-20261015/policy_gradient-2026/generation-01/summary.json": "ea79e5eb2bed3704e1e5174af2229c37ee21dc04d58f0c0ad7499d930ef47b62",
+      "runs/unisafe/adaptation-search-dev-20261015/policy_gradient-2026/generation-02/summary.json": "0df98512aa47ef30c65f26b98f3fd9a867c468cc9af6c39e0c5608db77aed486",
+      "runs/unisafe/adaptation-search-dev-20261015/random-2026/generation-00/summary.json": "6e6687768eb8f33b70342953ad6b435ab8d13906cf67a13a66845e12cc753321",
+      "runs/unisafe/adaptation-search-dev-20261015/random-2026/generation-01/summary.json": "5e30b353d3614c5a2f9e0f5d44272560a93fa5b053050d9dfbcbeea7f5c54751",
+      "runs/unisafe/adaptation-search-dev-20261015/random-2026/generation-02/summary.json": "e29e3aaf541bb6baead7f8e9b437ed40aefa2ae0bff9db9dfb084632de353628"
+    },
+    "environment_steps": 16828,
+    "physics_steps": 84140,
+    "search_elapsed_seconds": 1740.4519674703479,
+    "limits": "These are training outcomes across evaluated candidates, not held-out performance of final controllers. Every duplicate and elite reevaluation counts. Equal episode caps do not give equal realized step or wall-time costs. Exact reconstruction validates the recorded optimizer procedure, not its optimality or novelty. Training renderer history depends on preceding trials."
+  },
+  "replicated_initial_population_partial_audit": {
+    "status": "pass",
+    "search_seed": 2027,
+    "methods": [
+      "evolution",
+      "random"
+    ],
+    "generation": 0,
+    "episodes_each": 16,
+    "control_steps_each": 3642,
+    "matching": "All initial states and recorded step fields including camera hashes match bitwise, excluding inference timings. Both physical evaluations count.",
+    "remaining": "Policy-gradient comparison waits for its first generation."
   }
 }

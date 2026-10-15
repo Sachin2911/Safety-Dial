@@ -137,7 +137,12 @@ interventions begin. Holding the proposed gripper closed briefly completes this 
 at 2.8 seconds with the same filter enabled. Rapid switching worsens the later arm motion,
 but removing it alone does not complete extraction. This is a hand-timed prevention probe,
 not a general fix or demonstrated recovery from the stalled state.
-No evolutionary target or training study has been selected.
+An ongoing [adaptation study](docs/research/research_notes/UNISafe%20adaptation%20development.md)
+now tests an automatic grasp-aware release delay, comparing evolution, random search,
+categorical policy gradient and fixed rules under the unchanged filter. This is a
+provisional response to the diagnosed weakness on the migrated stack. Independent
+validation and reserved evaluation are pending; no evolutionary advantage or general
+safety improvement has been established.
 
 ## Where to begin
 

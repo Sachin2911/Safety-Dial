@@ -364,3 +364,29 @@ estimate an optimizer's average performance across its training seeds.
 Raw runs, videos and checkpoints remain ignored. Preserve compact results and hashes with
 the report. A failed batch retains partial artifacts and cancels queued jobs; inspect and
 count partial interactions before retrying anything in a new directory.
+
+
+After a search finishes, reconstruct its candidate choices, ordering, recorded fitness and
+optimizer states, and verify the shared initial populations:
+
+```bash
+/venv/main/bin/python experiments/scripts/unisafe_adaptation_search_report.py \
+    --search runs/unisafe/my-search --output runs/unisafe/my-search-audit
+```
+
+The resulting utility figure describes evaluated training populations, not held-out
+performance. It does not establish optimizer superiority.
+
+The dated study also has an interaction ledger:
+
+```bash
+/venv/main/bin/python experiments/scripts/unisafe_adaptation_ledger.py \
+    --require-complete --output runs/unisafe/adaptation-study-20261015/final-ledger.json
+```
+
+This command inventories the current dated study's worker runs and refuses to certify a
+complete ledger until reserved evaluation finishes. Omit `--require-complete` only for an
+explicitly partial progress snapshot. Incomplete workers are listed separately; their
+recorded steps are lower bounds. Earlier shared baseline, causal and engineering work is
+separate, with uninstrumented migration attempts explicitly identified. Aggregate launcher
+and worker timers overlap and must not be added together.

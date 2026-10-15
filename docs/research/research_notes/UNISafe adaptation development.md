@@ -208,3 +208,26 @@ and, when present, the first evolutionary physical failure or boundary exit. Sel
 criteria remain attached to each video; neither example stands in for the full frequencies.
 The handoff ends at completed audits, leaving interpretation and research completion for
 separate review.
+
+
+## Search reconstruction and cost scope
+
+The completed 2026 search has now been reconstructed from its saved random seeds and
+physical outcomes. All candidate parameters, episode orders, mean fitness values and
+optimizer states match the recorded values exactly for evolution, random search and
+policy gradient. This checks the implemented search procedure, not its optimality. The
+training-utility figure remains a description of evaluated populations, with no held-out
+performance interpretation.
+
+For the repeated study, evolution and random search also reproduce all 16 first-generation
+trajectories for search seed 2027 exactly: 3,642 control steps each. The policy-gradient
+and remaining search-seed checks await their runs. All physical evaluations count.
+
+The new ledger inventories actual worker summaries and avoids adding aggregate search or
+batch totals a second time. Partial workers are explicitly separated from exact completed
+counts. Earlier shared foundations include the audited baseline and causal probes, recorded
+inference, and five instrumented 60-step environment acceptances. Initial migration attempts
+also include an environment record without step instrumentation and a failed integration
+with unknown partial model-query cost. These are not assigned zero cost or represented as
+part of an exact whole-project total. The current adaptation study's complete costs will be
+reported separately from these earlier foundations.
