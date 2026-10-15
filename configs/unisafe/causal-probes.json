@@ -1,0 +1,9 @@
+{
+  "scope": "Exploratory physical interventions for the shown seed-1 filtered video; repeats the same two preceding episodes. Each job also runs a trailing unfiltered episode which is counted but not a matched comparator after the probe changes renderer history.",
+  "jobs": [
+    {"name": "no-filter-after-50", "args": ["--seeds", "0", "1", "--diagnostic-probe", "no_filter"], "purpose": "Bypass replacements from step 50; keep shadow queries and RNG. Simulator-only causal control, not a proposed safe controller."},
+    {"name": "arm-clip", "args": ["--seeds", "0", "1", "--diagnostic-probe", "arm_clip"], "purpose": "Remove rotation-coordinate binarization only in the target episode."},
+    {"name": "modal-next", "args": ["--seeds", "0", "1", "--diagnostic-probe", "modal_next"], "purpose": "Use the modal hypothetical next state for the safety value while consuming the original RNG draw. This changes the safety estimator."},
+    {"name": "hold-gripper", "args": ["--seeds", "0", "1", "--diagnostic-probe", "hold_gripper"], "purpose": "Override the proposed gripper to closed during steps 43 through 62; assess the modified proposal with the same released filter."}
+  ]
+}

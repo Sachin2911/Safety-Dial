@@ -83,7 +83,13 @@ world-model and safety-filter components. A first migrated 20-seed comparison no
 runtime and outcomes: both arms completed 2/20 tasks, failed on 2/20 and timed out on 16/20.
 The unfinished episodes have low object progress, but avoidable filter-induced stalls
 have not been established. Rendering differences and basic task recovery need further
-investigation. The environment and world model are not yet fixed.
+investigation. A matched replay of the shown filtered seed-1 episode now isolates premature
+gripper opening before the first intervention: briefly holding the proposed gripper closed
+completes that case at 2.8 seconds with the same filter enabled. This demonstrates avoidable
+loss of progress in one case, not a filter-induced stall or recovery from an existing stall.
+The policy's reason for opening early and generalization remain unresolved; see the
+[release and switching diagnosis](docs/research/reports/UNISafe%20release%20and%20switching%20diagnosis.md).
+The environment and world model are not yet fixed.
 
 We have also left open the behavioural parameters to adapt, the evolutionary algorithm,
 the role of ROSARL, and the training and evaluation budgets. Holding the world model and

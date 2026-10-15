@@ -28,6 +28,12 @@ def main():
     parser.add_argument("--continuation-at-step", type=int, default=300)
     parser.add_argument("--uncertainty-threshold", type=float)
     parser.add_argument("--reachability-threshold", type=float)
+    parser.add_argument(
+        "--diagnostic-probe",
+        choices=("none", "no_filter", "arm_clip", "modal_next", "hold_gripper"),
+        default="none",
+    )
+    parser.add_argument("--probe-seed", type=int, default=1)
     args = parser.parse_args()
     settings = json.loads(args.config.read_text())
     for key in (
@@ -44,6 +50,8 @@ def main():
         settings["episode_length_s"] = args.episode_length
     settings["continuation_policy_seed_offset"] = args.continuation_policy_seed_offset
     settings["continuation_at_step"] = args.continuation_at_step
+    settings["diagnostic_probe"] = args.diagnostic_probe
+    settings["probe_seed"] = args.probe_seed
     output = args.output or ROOT / "runs/unisafe" / datetime.now(UTC).strftime(
         "baseline-%Y%m%dT%H%M%SZ"
     )
@@ -164,6 +172,9 @@ def main():
                 random.seed(policy_seed)
                 np.random.seed(policy_seed)
                 torch.manual_seed(policy_seed)
+                controller.settings = dict(settings)
+                if seed != settings["probe_seed"] or mode != "filtered":
+                    controller.settings["diagnostic_probe"] = "none"
                 controller.reset()
                 frames = [frame(obs, f"{mode}, seed {seed}, reset")]
                 frames[0].save(destination / "reset.png")

@@ -233,3 +233,63 @@ stalled state. Failed bounded probes do not prove that recovery is impossible.
 
 The baseline-stage results and remaining research questions are recorded in
 [the pilot report](../docs/research/reports/UNISafe%20baseline%20pilot.md).
+
+## UNISafe release and switching probes
+
+The [single-case diagnosis](../docs/research/reports/UNISafe%20release%20and%20switching%20diagnosis.md)
+separates premature task-policy opening from later filter switching in primary filtered
+seed 1. These exploratory probes use frozen weights. The baseline defaults are unchanged.
+
+Replay recorded inputs without simulating and sample conditional model decisions:
+
+```bash
+/venv/main/bin/python experiments/scripts/unisafe_switching_probe.py \
+    --episode runs/unisafe/my-baseline/seed-001-filtered \
+    --output runs/unisafe/my-switching-probe --samples 256
+```
+
+This verifies the original action/value/decision trace before interpreting additional
+samples. The selected frames and timings target the recorded seed-1 case. Extra sampling
+restores the replay RNG state and reports sample-weighted model queries separately.
+
+Run the four physical probes with the same preceding episode order:
+
+```bash
+/venv/main/bin/python experiments/scripts/unisafe_followups.py \
+    --baseline runs/unisafe/my-baseline --plan configs/unisafe/causal-probes.json \
+    --output runs/unisafe/my-causal-probes
+/venv/main/bin/python experiments/scripts/unisafe_causal_analysis.py \
+    --primary runs/unisafe/my-baseline --runs runs/unisafe/my-causal-probes \
+    --offline runs/unisafe/my-switching-probe
+```
+
+The baseline entry point accepts `--diagnostic-probe` and `--probe-seed` (default 1).
+Probes apply only to the selected seed's filtered episode. `none` is the default.
+`no_filter` suppresses replacements from zero-based step 50 while retaining shadow
+queries; it is a simulator causal control, not a proposed safe controller. `arm_clip`
+removes backup rotation-coordinate binarization. `modal_next` substitutes the modal
+hypothetical next state after consuming the original random draw. Both change the safety
+controller. `hold_gripper` sets the proposed gripper to -1 during steps 43 through 62,
+before assessment by the unchanged filter. Its timings are specific to this diagnosed
+case. It is not an automatic recovery controller.
+
+`task_proposed_action` preserves the unmodified policy proposal; `proposed_action` records
+what the filter actually assesses, including an explicit gripper override. The trace also
+records the probe, override, suppression and backup convention. Every warmup and trailing
+episode counts toward interactions. The trailing unfiltered episode is not a matched
+comparator after the target changes renderer history. The analyzer validates matching
+observed prefixes; it does not claim arbitrary simulator snapshot restoration.
+
+Render the saved sensors and synchronized action/state labels without new simulation:
+
+```bash
+/venv/main/bin/python experiments/scripts/unisafe_explain_video.py \
+    --episode runs/unisafe/my-baseline/seed-001-filtered \
+    --comparison-episode runs/unisafe/my-causal-probes/hold-gripper/seed-001-filtered \
+    --output runs/unisafe/my-causal-probes/video
+```
+
+The comparison uses fixed front cameras and labels a held terminal frame after the
+candidate ends. Recorded success says nothing about unobserved post-termination stability.
+Raw runs and videos remain ignored; the tracked report preserves compact evidence and
+artifact hashes.

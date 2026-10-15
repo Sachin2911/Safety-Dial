@@ -131,6 +131,12 @@ controller contract, continuation diagnostics, interaction costs and limitations
 Matching initial physical states did not produce identical reset images between paired
 arms, and task proposals diverged before filtering. The many unfinished episodes warrant
 investigation, but this pilot does not yet isolate avoidable filter-induced stalls.
+A subsequent [matched video diagnosis](docs/research/reports/UNISafe%20release%20and%20switching%20diagnosis.md)
+shows that filtered seed 1 loses its grasp after the task policy opens early, before safety
+interventions begin. Holding the proposed gripper closed briefly completes this one case
+at 2.8 seconds with the same filter enabled. Rapid switching worsens the later arm motion,
+but removing it alone does not complete extraction. This is a hand-timed prevention probe,
+not a general fix or demonstrated recovery from the stalled state.
 No evolutionary target or training study has been selected.
 
 ## Where to begin

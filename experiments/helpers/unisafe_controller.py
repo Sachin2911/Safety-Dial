@@ -43,6 +43,7 @@ class FrozenController:
         self.task_latent = self.filter_latent = self.previous_executed = None
         self.queries = Counter()
         self.pending_prediction = None
+        self.step_index = 0
 
     @torch.inference_mode()
     def act(self, obs, mode, diagnostic=False):
@@ -63,11 +64,20 @@ class FrozenController:
         raw = self.agent._task_behavior.actor(task_feat).mode()
         proposal = raw.clone()
         proposal[:, -1] *= 2
+        task_proposal = proposal.clone()
+        probe = self.settings.get("diagnostic_probe", "none")
+        gripper_override = probe == "hold_gripper" and 43 <= self.step_index < 63
+        if gripper_override:
+            proposal[:, -1] = -1.0
         self.queries["task_actor"] += 1
         uncertainty = self.agent._disag_ensemble.intrinsic_reward_penn(
             torch.cat((feat, proposal), -1)
         )
         imagined = self.wm.dynamics.img_step(self.filter_latent, proposal, sample=True)
+        if probe == "modal_next":
+            # Consume the original random draw before substituting the mode, so
+            # this diagnostic preserves the task policy's RNG schedule.
+            imagined["stoch"] = self.wm.dynamics.get_dist(imagined).mode()
         next_feat = self.wm.dynamics.get_feat(imagined)
         next_best, _ = self.safety.select_action(next_feat, eval_mode=True)
         q1, q2 = (
@@ -82,10 +92,10 @@ class FrozenController:
         value_trigger = min(q1.item(), q2.item()) < self.settings["reachability_threshold"]
         would_intervene = uncertainty_trigger or value_trigger
         candidate = proposal.clone()
-        candidate[:, :6] = backup_arm_action(
-            backup, self.settings["backup_postprocess"], self.settings["action_denom"]
-        )
-        intervened = mode == "filtered" and would_intervene
+        convention = "arm_clip" if probe == "arm_clip" else self.settings["backup_postprocess"]
+        candidate[:, :6] = backup_arm_action(backup, convention, self.settings["action_denom"])
+        suppressed = probe == "no_filter" and self.step_index >= 50
+        intervened = mode == "filtered" and would_intervene and not suppressed
         selected = candidate if intervened else proposal.clone()
         environment_action = normalized_to_environment(selected)
         executed = environment_action / 0.15
@@ -94,6 +104,11 @@ class FrozenController:
         self.queries["failure_head"] += 1
         row = {
             "raw_task_action": raw[0].tolist(),
+            "task_proposed_action": task_proposal[0].tolist(),
+            "diagnostic_probe": probe,
+            "probe_gripper_override": gripper_override,
+            "probe_filter_suppressed": suppressed,
+            "backup_postprocess": convention,
             "proposed_action": proposal[0].tolist(),
             "backup_raw_arm_action": backup[0].tolist(),
             "backup_candidate_action": candidate[0].tolist(),
@@ -130,6 +145,7 @@ class FrozenController:
         for value in (proposal, candidate, environment_action, feat, uncertainty, q1, q2):
             if not torch.isfinite(value).all():
                 raise RuntimeError("Non-finite online controller output")
+        self.step_index += 1
         return environment_action, row
 
     @torch.inference_mode()

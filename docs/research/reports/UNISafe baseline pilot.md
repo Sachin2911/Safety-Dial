@@ -201,3 +201,12 @@ migrated stack, settle the safety-action convention, and establish a successful 
 under controlled observations and the same safety constraints. Ordinary task-policy learning
 with the same filter remains an essential later comparison. No training, evolutionary
 search, ROSARL integration or method selection was performed here.
+
+## Subsequent diagnosis of the shown video
+
+A later [matched seed-1 investigation](UNISafe%20release%20and%20switching%20diagnosis.md)
+isolates premature task-policy gripper opening before the first safety intervention. A
+brief gripper hold completes that case under the same filter. The earlier results and
+unsuccessful follow-ups above remain unchanged; the new probes have a separate interaction
+ledger. This establishes avoidable loss of progress in one episode, not a filter-induced
+stall or recovery from the already-stalled state.
