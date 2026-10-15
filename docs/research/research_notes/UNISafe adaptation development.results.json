@@ -9235,5 +9235,177 @@
     "control_steps_each": 3642,
     "matching": "All initial states and recorded step fields including camera hashes match bitwise, excluding inference timings. Both physical evaluations count.",
     "remaining": "Policy-gradient comparison waits for its first generation."
+  },
+  "replicated_seed2027_repeatability": {
+    "status": "completed_with_model_value_differences",
+    "search_seed": 2027,
+    "generation": 0,
+    "comparisons": [
+      {
+        "reference": "evolution",
+        "candidate": "random",
+        "episodes_each": 16,
+        "control_steps_each": 3642,
+        "full_recorded_repeatability": true,
+        "differences": []
+      },
+      {
+        "reference": "evolution",
+        "candidate": "policy_gradient",
+        "episodes_each": 16,
+        "control_steps_each": 3642,
+        "full_recorded_repeatability": false,
+        "differences": [
+          {
+            "episode_index": 15,
+            "seed": 23,
+            "differences": [
+              {
+                "step": 113,
+                "key": "backup_raw_arm_action",
+                "max_absolute_difference": 0.06483446061611176
+              },
+              {
+                "step": 113,
+                "key": "backup_candidate_action",
+                "max_absolute_difference": 0.06483446061611176
+              },
+              {
+                "step": 113,
+                "key": "uncertainty",
+                "max_absolute_difference": 0.0012769699096679688
+              },
+              {
+                "step": 113,
+                "key": "next_q1",
+                "max_absolute_difference": 0.0037598609924316406
+              },
+              {
+                "step": 113,
+                "key": "next_q2",
+                "max_absolute_difference": 0.0037529468536376953
+              },
+              {
+                "step": 113,
+                "key": "next_min_q",
+                "max_absolute_difference": 0.0037529468536376953
+              },
+              {
+                "step": 113,
+                "key": "failure_prediction",
+                "max_absolute_difference": 1.5228437428748602e-16
+              },
+              {
+                "step": 114,
+                "key": "backup_raw_arm_action",
+                "max_absolute_difference": 0.06583011150360107
+              },
+              {
+                "step": 114,
+                "key": "backup_candidate_action",
+                "max_absolute_difference": 0.06583011150360107
+              },
+              {
+                "step": 114,
+                "key": "uncertainty",
+                "max_absolute_difference": 0.002206563949584961
+              },
+              {
+                "step": 114,
+                "key": "next_q1",
+                "max_absolute_difference": 0.0002716183662414551
+              },
+              {
+                "step": 114,
+                "key": "next_q2",
+                "max_absolute_difference": 0.0001552104949951172
+              },
+              {
+                "step": 114,
+                "key": "next_min_q",
+                "max_absolute_difference": 0.0001552104949951172
+              },
+              {
+                "step": 114,
+                "key": "failure_prediction",
+                "max_absolute_difference": 1.1243037403513094e-14
+              },
+              {
+                "step": 115,
+                "key": "backup_raw_arm_action",
+                "max_absolute_difference": 0.10220420360565186
+              },
+              {
+                "step": 115,
+                "key": "backup_candidate_action",
+                "max_absolute_difference": 0.10220420360565186
+              },
+              {
+                "step": 115,
+                "key": "uncertainty",
+                "max_absolute_difference": 0.06887674331665039
+              },
+              {
+                "step": 115,
+                "key": "next_q1",
+                "max_absolute_difference": 0.0021611452102661133
+              },
+              {
+                "step": 115,
+                "key": "next_q2",
+                "max_absolute_difference": 0.0021609067916870117
+              },
+              {
+                "step": 115,
+                "key": "next_min_q",
+                "max_absolute_difference": 0.0021609067916870117
+              },
+              {
+                "step": 115,
+                "key": "failure_prediction",
+                "max_absolute_difference": 1.7706116520882498e-13
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "identical_recorded_states_cameras_actions_and_intervention_decisions": true,
+    "affected_case": "policy_gradient versus evolution, episode index 15, initial seed 23, steps 113-115 inclusive",
+    "scope": "All 48 actual physical episodes remain counted. This audit adds zero simulator steps and zero model queries. The source of internal model-value differences remains unresolved; exact full-model repeatability must not be claimed."
+  },
+  "replicated_seed2027_repeatability_summary": {
+    "episodes_each": 16,
+    "reference_control_steps": 3642,
+    "candidate_control_steps": 3642,
+    "initial_states_equal": true,
+    "trajectory_lengths_equal": true,
+    "control_trajectories_equal": true,
+    "outcomes_and_fitness_equal": true,
+    "all_recorded_fields_equal_except_timing": false,
+    "differing_field_step_counts": {
+      "backup_candidate_action": 3,
+      "backup_raw_arm_action": 3,
+      "failure_prediction": 3,
+      "next_min_q": 3,
+      "next_q1": 3,
+      "next_q2": 3,
+      "uncertainty": 3
+    },
+    "maximum_absolute_differences": {
+      "uncertainty": 0.06887674331665039,
+      "next_q2": 0.0037529468536376953,
+      "failure_prediction": 1.7706116520882498e-13,
+      "next_q1": 0.0037598609924316406,
+      "backup_raw_arm_action": 0.10220420360565186,
+      "next_min_q": 0.0037529468536376953,
+      "backup_candidate_action": 0.10220420360565186
+    },
+    "first_recorded_difference": {
+      "episode_index": 15,
+      "step": 113,
+      "field": "backup_candidate_action"
+    },
+    "limits": "Differences remain visible even when executed trajectories and outcomes agree. This checks recorded quantities, not hidden simulator or model state."
   }
 }

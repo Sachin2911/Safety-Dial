@@ -231,3 +231,26 @@ also include an environment record without step instrumentation and a failed int
 with unknown partial model-query cost. These are not assigned zero cost or represented as
 part of an exact whole-project total. The current adaptation study's complete costs will be
 reported separately from these earlier foundations.
+
+
+## Repeatability qualification during replicated training
+
+The completed initial population for search seed 2027 has identical recorded physical
+states, camera hashes, task/executed actions, intervention decisions and outcomes across
+all three methods: 16 episodes and 3,642 control steps each. However, the policy-gradient
+run differs from evolution/random in seven model-output fields during steps 113–115 of
+its last episode (initial-condition seed 23). The differing fields are the unused backup
+proposal, uncertainty, both safety values and the failure prediction. No replacement is
+applied on those steps; both trajectories complete at step 116 with two earlier interventions.
+
+The maximum uncertainty difference is 0.06888, the maximum safety-value difference about
+0.00376, and the maximum backup-coordinate difference 0.10221. Settings, checkpoints,
+platform versions and relevant implementation hashes match. The source of this numerical
+or hidden-state difference has not been established. Recorded observations and actions
+are insufficient to claim equality of all internal model state. No controller or model
+setting was changed in response, and the training comparisons continue as declared.
+
+The search report now reports full recorded equality separately from equality of executed
+trajectories and outcomes. It preserves and exposes discrepancies rather than suppressing
+them or calling full-model repeatability established. The reserved evaluation will still
+check each observed prefix and report its scope explicitly.
