@@ -30,9 +30,34 @@ def matched_prefix(reference, candidate):
     cameras_match = all(a[i]["camera_sha256"] == b[i]["camera_sha256"] for i in range(compare_count))
     after_match = all(a[i]["after"] == b[i]["after"] for i in range(preceding))
     equal_lengths_if_no_change = first is not None or len(a) == len(b)
-    passed = initial_error == 0 and states_match and cameras_match and after_match and equal_lengths_if_no_change
+    observed_equal = initial_error == 0 and states_match and cameras_match and after_match and equal_lengths_if_no_change
+    if first is None:
+        cause, attributable, same_task = "no executed-action difference", equal_lengths_if_no_change, None
+    else:
+        left, right = a[first], b[first]
+        same_task = left["task_proposed_action"] == right["task_proposed_action"]
+        proposal_changed = left["proposed_action"] != right["proposed_action"]
+        declared_adapter = left.get("adapter_gripper_override", False) or right.get("adapter_gripper_override", False)
+        reference_mode = json.loads((reference / "summary.json").read_text())["mode"]
+        candidate_mode = json.loads((candidate / "summary.json").read_text())["mode"]
+        same_assessment = (
+            left["would_intervene"] == right["would_intervene"]
+            and left["backup_candidate_action"] == right["backup_candidate_action"]
+        )
+        if same_task and proposal_changed and declared_adapter:
+            cause, attributable = "declared task-adapter proposal", True
+        elif (same_task and not proposal_changed and reference_mode != candidate_mode
+              and same_assessment and left["intervened"] != right["intervened"]):
+            cause, attributable = "declared filter-mode difference", True
+        else:
+            cause, attributable = "not isolated by recorded controller fields", False
     return {
-        "pass": passed, "first_executed_action_difference_step": first,
+        "pass": observed_equal and attributable,
+        "observed_prefix_equal": observed_equal,
+        "first_difference_has_declared_controller_cause": attributable,
+        "first_difference_cause": cause,
+        "task_proposal_equal_at_first_difference": same_task,
+        "first_executed_action_difference_step": first,
         "identical_preceding_actions": preceding, "max_initial_state_error": initial_error,
         "physical_observations_equal_through_first_change": states_match,
         "camera_hashes_equal_through_first_change": cameras_match,

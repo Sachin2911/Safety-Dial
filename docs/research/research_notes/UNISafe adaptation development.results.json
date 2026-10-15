@@ -8932,6 +8932,20 @@
       "source": "Recorded front RGB frames, nearest-neighbor enlargement and synchronized labels; no new simulation.",
       "limits": "Individual illustration selected by the stated rule; frequencies come from the full outcome table. Terminal frames are held and labelled. No arbitrary snapshot restoration or post-termination stability claim.",
       "elapsed_time_note": "This development rendering was not timed; subsequent rendering code instruments elapsed time."
+    },
+    "first_difference_cause_audit": {
+      "pass": true,
+      "observed_prefix_equal": true,
+      "first_difference_has_declared_controller_cause": true,
+      "first_difference_cause": "declared task-adapter proposal",
+      "task_proposal_equal_at_first_difference": true,
+      "first_executed_action_difference_step": 32,
+      "identical_preceding_actions": 32,
+      "max_initial_state_error": 0.0,
+      "physical_observations_equal_through_first_change": true,
+      "camera_hashes_equal_through_first_change": true,
+      "preceding_transitions_equal": true,
+      "equal_lengths_if_actions_never_change": true
     }
   },
   "replicated_protocol_sha256": "64b47d797877db237b2337931add85deff35f5c6f14a77aaf33eec8f01f9fef8",
@@ -9407,5 +9421,44 @@
       "field": "backup_candidate_action"
     },
     "limits": "Differences remain visible even when executed trajectories and outcomes agree. This checks recorded quantities, not hidden simulator or model state."
+  },
+  "source_choice_audit": {
+    "scope": "Read-only source/configuration audit; no new simulation or model queries.",
+    "mirrored_task_identifier": "Isaac-Takeoff-Franka-IK-Rel-v0",
+    "mirrored_action_repeat_metadata": 2,
+    "released_make_env_calls": [
+      "parse_env_cfg",
+      "gym.make",
+      "DreamerVecEnvWrapper",
+      "wrappers.NormalizeActions",
+      "wrappers.SelectAction",
+      "wrappers.UUID"
+    ],
+    "underlying_env_step_calls_per_wrapper_step": 1,
+    "released_decimation": 5,
+    "released_physics_dt_s": 0.01,
+    "released_control_dt_s": 0.05,
+    "normal_termination_fields": [
+      "time_out",
+      "ee_position",
+      "cube_2_dropping",
+      "cube_3_dropping",
+      "success",
+      "failure"
+    ],
+    "hard_termination_fields": [],
+    "hard_differences": "Changes block dimensions, top mass, robot starting pose and success/failure geometry thresholds; termination callbacks including timeout are all commented out.",
+    "decision": "Continue the regular-task study. Do not silently substitute the hard configuration or infer a missing action-repeat wrapper from metadata. A hard-task experiment requires explicit outcome/timeout restoration and separate migration acceptance.",
+    "source_sha256": {
+      "third_party/UNISafe/takeoff/takeoff_env_cfg.py": "bb629c1df7c27587c9bf36b09e04013f9227d1b8c1595ea2d36fff6f87b15071",
+      "third_party/UNISafe/takeoff/hard_takeoff_env_cfg.py": "e7f38286ecf184c4f16c062b96431955e5bfc656479953de9e16e199ec451e8e",
+      "third_party/UNISafe/dreamerv3_torch/dreamer.py": "5fe121746253a5e7855ed87343f1299ee3f33ad2796e79272d24f39f95bf4059",
+      "third_party/UNISafe/dreamerv3_torch/dreamer_wrapper.py": "c5ae6eb21adb8267d63fb90ec051dea215faecdee6370709b4c2d3cc6f7e427d",
+      "data/unisafe/pretrained/filter_config.json": "750593a1f26993ea0bfbba54aa3c659e3af80ab871c8cb80c4eaed7df694db49"
+    },
+    "limits": "Current released source and mirrored metadata do not recover every detail of historical checkpoint training.",
+    "environment_steps": 0,
+    "model_queries": 0,
+    "elapsed_seconds": 0.00622263178229332
   }
 }

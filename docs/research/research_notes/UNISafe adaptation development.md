@@ -254,3 +254,32 @@ The search report now reports full recorded equality separately from equality of
 trajectories and outcomes. It preserves and exposes discrepancies rather than suppressing
 them or calling full-model repeatability established. The reserved evaluation will still
 check each observed prefix and report its scope explicitly.
+
+
+## Source choice and first-action attribution
+
+A read-only source check confirms that the mirrored configuration names
+`Isaac-Takeoff-Franka-IK-Rel-v0`. Although its generic metadata says `action_repeat=2`,
+the released `make_env` does not instantiate an action-repeat wrapper. The Isaac wrapper
+calls the underlying environment once per action, with five 0.01-second physics steps:
+20 Hz control. This provides no basis for adding an extra action hold to the baseline.
+It does not recover every historical checkpoint-training setting.
+
+The alternative hard task changes geometry, top-block mass, starting pose and outcome
+thresholds, but all of its termination callbacks, including timeout, are commented out.
+It cannot be substituted as a validated benchmark without explicit outcome restoration
+and separate migration acceptance. The regular-task study therefore continues as declared.
+No simulator interactions or model queries were added by this source audit.
+
+Before reserved testing, the observed-prefix audit was strengthened to check the cause of
+the first changed action. An adapter comparison must retain the same original task proposal
+at that step and show the declared proposal modification. A filtered/unfiltered comparison
+must retain the same task proposal and shadow assessment while changing the replacement
+mode. Otherwise the case is flagged as not isolated by the recorded fields, even if its
+preceding states and camera hashes agree. All cases remain in aggregate outcome statistics.
+This still does not establish equality of unrecorded simulator or model state.
+
+The development seed-8 pair passes the stronger check at step 32. Three focused tests cover
+unexplained task-action differences, intended gripper overrides, and filter-mode changes
+with matching versus differing shadow assessments. The earlier acceptance records are
+preserved; the additional audit is saved separately. No runtime controller was changed.
