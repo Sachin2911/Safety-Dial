@@ -183,3 +183,28 @@ provide 192 training episodes per method. Only their finalists enter validation;
 runs remain separately counted development. Validation selects one deployment controller
 per method. Reserved tests therefore compare selected controllers, not the average of all
 optimizer replicas, and cannot by themselves establish broad optimizer superiority.
+
+
+## Audit and evaluation handoff
+
+The expanded audit now recomputes terminal outcome classification, end-effector boundary
+violations and exact per-step model-query accounting as well as the existing action and
+geometry checks. It passes on all 64 command-history and grasp-aware pilot episodes
+(12,055 control steps), including physical failures and a boundary exit, and on the
+351-step fresh-process pair. These are offline checks with no additional interactions.
+
+A [recorded automatic-adapter comparison](../../../runs/unisafe/adaptation-paircheck-serial-20261015/video/comparison.mp4)
+uses that previously selected development seed, not a held-out example. The 301-frame,
+20 fps video displays actual front-camera recordings and labels both terminal-frame holds.
+Its 15.05-second duration includes the reset frame. The rule succeeds at 2.55 seconds;
+the original run times out at 15 seconds. No post-termination stability is simulated.
+
+The managed evaluation handoff waits for the specific live search/validation process to
+exit, then checks the declared training budget, audits training and validation artifacts,
+freezes candidates and runtime/analysis source hashes, and starts the reserved comparison.
+It records each stage and does not automatically retry failed simulator jobs. Held-out
+video examples use the first numerical seed with an evolutionary success over baseline
+and, when present, the first evolutionary physical failure or boundary exit. Selection
+criteria remain attached to each video; neither example stands in for the full frequencies.
+The handoff ends at completed audits, leaving interpretation and research completion for
+separate review.

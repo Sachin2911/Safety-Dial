@@ -51,6 +51,10 @@ def main():
     batch = json.loads((args.batch / "summary.json").read_text())
     plan = json.loads((args.batch / "plan.json").read_text())
     assert batch["status"] == "complete", "Inspect and account for incomplete jobs before evaluating"
+    assert sha256(plan["validation"]) == plan["validation_sha256"]
+    declared = {j["name"]: j["plan"] for j in plan["jobs"]}
+    assert len(declared) == len(plan["jobs"]) == len(batch["jobs"])
+    assert set(declared) == {j["name"] for j in batch["jobs"]}
     directories = [Path(j["directory"]) for j in batch["jobs"]]
     subprocess.run([
         sys.executable, str(ROOT / "experiments/scripts/unisafe_adaptation_analyze.py"),
@@ -61,6 +65,8 @@ def main():
     for directory in directories:
         run = json.loads((directory / "summary.json").read_text())
         assert len(run["episodes"]) == 1, "This evaluation expects fresh processes per episode"
+        assert json.loads((directory / "plan.json").read_text()) == declared[directory.name]
+        assert run["episodes"][0]["job"] == declared[directory.name]["episodes"][0]
         if reference_provenance is None:
             reference_provenance = run["model_provenance"]
         assert run["model_provenance"] == reference_provenance
@@ -73,9 +79,16 @@ def main():
         paths.setdefault(method, {})[seed] = directory / "episode-0000"
         for relative in ("summary.json", "episode-0000/steps.jsonl", "episode-0000/observations.npz"):
             artifacts[str(directory / relative)] = sha256(directory / relative)
+    expected_groups = {c["method"] for c in plan["selected"]} | {"baseline-unfiltered", "evolution-unfiltered"}
+    assert set(groups) == expected_groups
     for method, cases in groups.items():
         expected = plan["reserved_seeds"][:32] if method.endswith("-unfiltered") else plan["reserved_seeds"]
         assert set(cases) == set(expected), (method, len(cases), len(expected))
+        selected_method = method.removesuffix("-unfiltered")
+        selected = next(c for c in plan["selected"] if c["method"] == selected_method)
+        for episode in cases.values():
+            assert episode["job"]["adapter"] == selected["adapter"]
+            assert episode["mode"] == ("unfiltered" if method.endswith("-unfiltered") else "filtered")
     prefixes = []
     for method, cases in groups.items():
         if method == "baseline":

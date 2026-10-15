@@ -8782,7 +8782,181 @@
         "runs/unisafe/adaptation-paircheck-serial-20261015/grasp-delay20-seed8/summary.json": "0b4ccb60c1cc6fa0ad404240fa6d7e2f244dd65fd5b3a03c83926437d15b48c4"
       },
       "limits": "Development results are exploratory; confidence intervals do not correct for selection. Renderer history makes independence approximate. Frozen filters do not guarantee unchanged safety rates."
+    },
+    "expanded_artifact_audit": {
+      "status": "complete",
+      "groups": {
+        "baseline": {
+          "episodes": 1,
+          "outcomes": {
+            "timeout": 1
+          },
+          "safe_success_rate": 0.0,
+          "safe_success_wilson95": [
+            0.0,
+            0.7934506856227626
+          ],
+          "physical_failure_wilson95": [
+            0.0,
+            0.7934506856227626
+          ],
+          "environment_steps": 300,
+          "interventions": 52,
+          "mean_utility": 0.0,
+          "episodes_detail": [
+            {
+              "seed": 8,
+              "outcome": "timeout",
+              "steps": 300,
+              "interventions": 52,
+              "adapter_override_steps": 0,
+              "job": {
+                "name": "baseline",
+                "seed": 8,
+                "adapter": {
+                  "hold_steps": 0,
+                  "min_close_steps": 3,
+                  "min_aperture": 0.005
+                }
+              }
+            }
+          ]
+        },
+        "grasp-delay20": {
+          "episodes": 1,
+          "outcomes": {
+            "success": 1
+          },
+          "safe_success_rate": 1.0,
+          "safe_success_wilson95": [
+            0.20654931437723745,
+            1.0
+          ],
+          "physical_failure_wilson95": [
+            0.0,
+            0.7934506856227626
+          ],
+          "environment_steps": 51,
+          "interventions": 0,
+          "mean_utility": 0.9966,
+          "episodes_detail": [
+            {
+              "seed": 8,
+              "outcome": "success",
+              "steps": 51,
+              "interventions": 0,
+              "adapter_override_steps": 19,
+              "job": {
+                "name": "grasp-delay20",
+                "seed": 8,
+                "adapter": {
+                  "hold_steps": 20,
+                  "min_close_steps": 3,
+                  "min_aperture": 0.005
+                }
+              }
+            }
+          ]
+        }
+      },
+      "comparisons": {
+        "grasp-delay20": {
+          "paired_initial_condition_seeds": [
+            8
+          ],
+          "safe_success_rate_difference": 1.0,
+          "paired_seed_bootstrap95": [
+            1.0,
+            1.0
+          ],
+          "max_initial_physical_error": 0.0,
+          "reset_camera_mae_by_seed_front_wrist": [
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "scope": "Descriptive seed-cluster bootstrap. Sequential rendered inputs may differ; this is not exact counterfactual branching."
+        }
+      },
+      "environment_steps": 351,
+      "physics_steps": 1755,
+      "model_queries": {
+        "encoder": 351,
+        "posterior": 702,
+        "task_actor": 351,
+        "uncertainty_ensemble": 351,
+        "imagined_step": 351,
+        "safety_actor": 702,
+        "safety_critic": 702,
+        "failure_head": 351
+      },
+      "worker_elapsed_seconds_sum": 74.53191563859582,
+      "artifact_audit": "passed all episode states/actions, frozen filter settings and source hashes",
+      "source_summary_sha256": {
+        "runs/unisafe/adaptation-paircheck-serial-20261015/baseline-seed8/summary.json": "59cb2765c95a271140de62a7d0bd5636302d29ed256f73e25e1400596818a568",
+        "runs/unisafe/adaptation-paircheck-serial-20261015/grasp-delay20-seed8/summary.json": "0b4ccb60c1cc6fa0ad404240fa6d7e2f244dd65fd5b3a03c83926437d15b48c4"
+      },
+      "limits": "Development results are exploratory; confidence intervals do not correct for selection. Renderer history makes independence approximate. Frozen filters do not guarantee unchanged safety rates."
+    },
+    "video": {
+      "reference": "runs/unisafe/adaptation-paircheck-serial-20261015/baseline-seed8/episode-0000",
+      "candidate": "runs/unisafe/adaptation-paircheck-serial-20261015/grasp-delay20-seed8/episode-0000",
+      "candidate_label": "Automatic grasp delay, 20 steps",
+      "selection": "Previously selected development seed 8, used to accept the sequential fresh-process runner. This is not a held-out test illustration.",
+      "prefix_audit": {
+        "pass": true,
+        "first_executed_action_difference_step": 32,
+        "identical_preceding_actions": 32,
+        "max_initial_state_error": 0.0,
+        "physical_observations_equal_through_first_change": true,
+        "camera_hashes_equal_through_first_change": true,
+        "preceding_transitions_equal": true,
+        "equal_lengths_if_actions_never_change": true
+      },
+      "frames": 301,
+      "fps": 20.0,
+      "movie_duration_seconds_including_reset_frame": 15.05,
+      "environment_steps": 0,
+      "model_queries": 0,
+      "training_updates": 0,
+      "source_artifact_sha256": {
+        "runs/unisafe/adaptation-paircheck-serial-20261015/baseline-seed8/episode-0000/summary.json": "2bd939987d690b044398eac7360028c9ac35404a21ffe25d847cd1031015cf42",
+        "runs/unisafe/adaptation-paircheck-serial-20261015/baseline-seed8/episode-0000/steps.jsonl": "78c4a24c1b7a76905cc67c77d5e618da9187b925bd0856960cf9ec1028d02f18",
+        "runs/unisafe/adaptation-paircheck-serial-20261015/baseline-seed8/episode-0000/observations.npz": "602f6e7928e0d98720c3622923b246f4b3db86807fa9c7f7814bfe8e1ecf4e42",
+        "runs/unisafe/adaptation-paircheck-serial-20261015/grasp-delay20-seed8/episode-0000/summary.json": "91e6e1dbb60f1a9f42a599ca3ca833916e0f3ba121447dad2be1252db9561bd5",
+        "runs/unisafe/adaptation-paircheck-serial-20261015/grasp-delay20-seed8/episode-0000/steps.jsonl": "ea3094f64d2bdf7626d5c840d878a7b73ec072632843511c3a64fd13c5204e99",
+        "runs/unisafe/adaptation-paircheck-serial-20261015/grasp-delay20-seed8/episode-0000/observations.npz": "63f7446de81df4c97bd20723be8a6ac559848fd479b81277ea829809dbc66691"
+      },
+      "movie_sha256": "2c0d888e1f69c772232658ec7304851f972d9d151703a3522b8e2e0acc6788fe",
+      "source": "Recorded front RGB frames, nearest-neighbor enlargement and synchronized labels; no new simulation.",
+      "limits": "Individual illustration selected by the stated rule; frequencies come from the full outcome table. Terminal frames are held and labelled. No arbitrary snapshot restoration or post-termination stability claim.",
+      "elapsed_time_note": "This development rendering was not timed; subsequent rendering code instruments elapsed time."
     }
   },
-  "replicated_protocol_sha256": "64b47d797877db237b2337931add85deff35f5c6f14a77aaf33eec8f01f9fef8"
+  "replicated_protocol_sha256": "64b47d797877db237b2337931add85deff35f5c6f14a77aaf33eec8f01f9fef8",
+  "expanded_pilot_audit": {
+    "status": "complete",
+    "groups": {},
+    "comparisons": {},
+    "environment_steps": 12055,
+    "physics_steps": 60275,
+    "model_queries": {
+      "encoder": 12055,
+      "posterior": 24110,
+      "task_actor": 12055,
+      "uncertainty_ensemble": 12055,
+      "imagined_step": 12055,
+      "safety_actor": 24110,
+      "safety_critic": 24110,
+      "failure_head": 12055
+    },
+    "worker_elapsed_seconds_sum": 1327.9979621767998,
+    "artifact_audit": "passed all episode states/actions, frozen filter settings and source hashes",
+    "source_summary_sha256": {
+      "runs/unisafe/adaptation-pilot-20261015/summary.json": "7237c0152c1e60669ff203a00d32dde79dafdf0d0a5b1f08928185f26b388111",
+      "runs/unisafe/adaptation-grasp-pilot-20261015/summary.json": "7dd189721168eb4f3528244c4d351b14f271be7d44bc9b94e5c7cf8f7ae93078"
+    },
+    "limits": "Development results are exploratory; confidence intervals do not correct for selection. Renderer history makes independence approximate. Frozen filters do not guarantee unchanged safety rates."
+  }
 }

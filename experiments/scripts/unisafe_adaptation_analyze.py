@@ -28,7 +28,7 @@ def wilson(k, n):
 
 
 def geometry(state):
-    c = np.asarray(state["cube_positions"])
+    c = np.asarray(state["cube_positions"], dtype=np.float32)
 
     def stacked(i, j):
         delta = c[i] - c[j]
@@ -65,6 +65,11 @@ def main():
             assert summary["settings"][key] == expected
         assert summary["environment_steps"] == sum(e["steps"] for e in summary["episodes"])
         assert summary["physics_steps"] == summary["environment_steps"] * 5
+        assert summary["training_updates"] == 0
+        assert summary["settings"]["diagnostic_interval"] == 0
+        assert summary["query_counts"] == dict(sum(
+            (Counter(e["query_counts"]) for e in summary["episodes"]), Counter()
+        ))
         total_steps += summary["environment_steps"]
         physics_steps += summary["physics_steps"]
         queries.update(summary["query_counts"])
@@ -76,13 +81,39 @@ def main():
             assert len(rows) == e["steps"]
             assert e["final_state"] == rows[-1]["after"]
             assert e["interventions"] == sum(r["intervened"] for r in rows)
-            assert e["physical_failure"] == any(r["after"]["physical_failure"] for r in rows)
+            failed = any(r["after"]["physical_failure"] for r in rows)
+            boundary = any(r["termination_terms"]["ee_position"] for r in rows)
+            expected_outcome = (
+                "physical_failure" if failed else "boundary_exit" if boundary
+                else "success" if rows[-1]["termination_terms"]["success"]
+                else "timeout" if rows[-1]["truncated"] else "other_termination"
+            )
+            assert not rows[0]["before"]["physical_failure"], "Invalid initial geometry"
+            assert e["outcome"] == expected_outcome
+            assert e["safe_success"] == (expected_outcome == "success")
+            assert e["physical_failure"] == failed and e["boundary_exit"] == boundary
+            assert e["final_terms"] == rows[-1]["termination_terms"]
+            assert e["success"] == rows[-1]["termination_terms"]["success"]
+            assert e["timeout"] == rows[-1]["truncated"]
+            assert e["simulation_time_s"] == rows[-1]["simulation_time_s"]
+            assert e["completion_time_s"] == (e["simulation_time_s"] if e["safe_success"] else None)
+            expected_queries = {k: len(rows) * multiplier for k, multiplier in (
+                ("encoder", 1), ("posterior", 2), ("task_actor", 1), ("uncertainty_ensemble", 1),
+                ("imagined_step", 1), ("safety_actor", 2), ("safety_critic", 2), ("failure_head", 1),
+            )}
+            assert e["query_counts"] == expected_queries
             for i, row in enumerate(rows):
                 assert row["step"] == i
                 if i:
                     assert row["before"] == rows[i - 1]["after"]
                 geometry(row["before"])
                 geometry(row["after"])
+                x, y = np.asarray(row["after"]["eef_pos"][:2], dtype=np.float32)
+                outside = not (np.float32(.3) <= x <= np.float32(.7) and -np.float32(.3) <= y <= np.float32(.3))
+                assert row["termination_terms"]["ee_position"] == outside
+                assert row["termination_terms"]["failure"] == row["after"]["physical_failure"]
+                assert row["termination_terms"]["success"] == row["after"]["physical_success"]
+                assert row["diagnostic_probe"] == "none"
                 task = np.array(row["raw_task_action"])
                 task[-1] *= 2
                 np.testing.assert_allclose(task, row["task_proposed_action"], atol=1e-7, rtol=0)

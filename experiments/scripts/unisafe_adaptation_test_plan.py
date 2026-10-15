@@ -59,6 +59,10 @@ def main():
         "experiments/helpers/unisafe_environment.py",
         "experiments/helpers/unisafe_source.py",
         "configs/unisafe/baseline.json",
+        "experiments/helpers/unisafe_statistics.py",
+        "experiments/scripts/unisafe_adaptation_analyze.py",
+        "experiments/scripts/unisafe_adaptation_evaluate.py",
+        "experiments/scripts/unisafe_adaptation_video.py",
     ]
     result = {
         "workers": 1, "scope": "64 reserved seeds per selected filtered controller; 32 unfiltered ablation seeds",
