@@ -21,27 +21,33 @@ current Isaac Lab 3.0 development line, then adapt the other components around t
 This platform choice does not establish UNISafe compatibility or fix the research task.
 
 A private template named **evo safety filter** was created and read back successfully in
-the Vast account. Select it under [My Templates](https://cloud.vast.ai/templates/).
+the Vast account. Sachin subsequently chose to defer research package installation until
+after connecting, so startup now runs only the base image's normal entrypoint. Select the
+template under [My Templates](https://cloud.vast.ai/templates/).
 
 - Template ID: `766408`.
-- Template hash: `d74256e6978247cbe2c15310d2bee664`.
+- Template hash after removing boot-time installation: `73fcff5e93110dbb229ec73b7e43421c`.
 - Base image: `vastai/base-image`, tag
   `cuda-13.0.3-cudnn-devel-ubuntu24.04-py312-2026-09-07`.
 - Operating system and Python: **Ubuntu 24.04, Python 3.12**.
-- CUDA toolkit: **13.0.3**. PyTorch wheel runtime: **CUDA 13.0**, selected with `cu130`.
+- CUDA toolkit in the base image: **13.0.3**.
+- Access and storage: **JupyterLab and SSH with direct connections; 200 GB disk default**.
+
+The separate manual setup script installs the following pinned software stack using `uv`:
+
 - PyTorch: **2.11.0+cu130**; torchvision: **0.26.0+cu130**;
   torchaudio: **2.11.0+cu130**.
+- PyTorch wheel runtime: **CUDA 13.0**, selected with `cu130`.
 - Isaac Sim: **6.2.0.0**.
 - Isaac Lab: pinned 3.0 source revision
   `6bfde876089661e116dc5a5d9c6805f18127fe32`.
-- Access and storage: **JupyterLab and SSH with direct connections; 200 GB disk default**.
 
 The published Isaac Lab `3.0.0rc1` wheel inspected during setup still requests Isaac Sim
-6.1, while the current 3.0 branch targets Sim 6.2. The template therefore builds Lab's
+6.1, while the current 3.0 branch targets Sim 6.2. The manual setup therefore builds Lab's
 aggregate package from the pinned source revision and uses its matching dependency
 overrides. This is a development release line, not a general-availability release. PyTorch
-2.11.0 is selected to match this Lab stack; the template does not automatically upgrade
-PyTorch or follow a moving Lab branch on each boot.
+2.11.0 is selected to match this Lab stack. Neither package installation nor upgrades run
+automatically at instance boot.
 
 Offer filters request one GPU with at least 24 GB VRAM, 32 GB RAM, eight effective CPU
 cores, x86-64, CUDA 13.0 driver capability, driver 580.95.05 or newer, at least 99%
@@ -51,36 +57,52 @@ headroom beyond the VRAM filter. Rental, storage and bandwidth costs depend on t
 Creating this template did not rent an instance.
 
 The configuration, package snapshot, source revision and creation record are saved under
-[configs/vast/](configs/vast/README.md). The template embeds the
-[provisioning script](scripts/vast/evo-safety-filter.sh), resolved requirements and dependency
-overrides. [create_template.py](scripts/vast/create_template.py) records how it was created
-and checks for an existing private template with the same name.
+[configs/vast/](configs/vast/README.md). The [manual setup script](scripts/vast/setup.sh)
+reads the resolved requirements and matching overrides from the repository, rather than
+embedding them in the template. [create_template.py](scripts/vast/create_template.py)
+supports creation and an explicit `--update` mode for the existing template.
 
-### First boot and remaining setup
+### Connect first, then install manually
 
-First boot installs the platform using `uv` into the base image's existing `/venv/main`
-environment. Downloads and building Lab can take substantial time. The template does not
-download research datasets or checkpoints, clone Safety-Dial or UNISafe, or launch research
-runs. It sets `OMNI_KIT_ACCEPT_EULA=yes` for unattended Isaac Sim use and includes no
-credentials.
+First boot initializes Vast's normal access services. There is no research installer or
+research boot hook. The base image still needs to be pulled, but downloading and installing
+PyTorch, Lab, Sim and their dependencies happens only when the manual script is invoked.
+Changing the template affects future rentals; it does not change an existing instance.
 
-Use these commands on the rented instance to inspect provisioning:
+After connecting, clone the repository and run the setup as root on the Vast instance:
 
 ```bash
-tail -f /workspace/.evo-safety-filter/provision.log
+cd /workspace
+git clone https://github.com/Sachin2911/Safety-Dial.git
+cd Safety-Dial
+bash scripts/vast/setup.sh
+```
+
+If the clone already exists, enter its directory and run the last command. The script
+installs system libraries and uses `uv` with the pinned package snapshot in the base
+image's existing `/venv/main` environment. Downloads and building Lab can take substantial
+time during this explicit setup step. No research datasets, checkpoints or experiments
+are downloaded or launched by it.
+
+Use these commands on the rented instance to inspect the manual installation:
+
+```bash
+tail -f /workspace/.evo-safety-filter/setup.log
 cat /workspace/.evo-safety-filter/versions.json
 ```
 
-Choose **Evo safety filter (Python 3.12)** in Jupyter. For SSH commands, use
+After setup succeeds, choose **Evo safety filter (Python 3.12)** in Jupyter. For SSH commands, use
 `/venv/main/bin/python` explicitly. A `ready` marker is written under
 `/workspace/.evo-safety-filter/` only after the version checks and a CUDA tensor operation
-succeed. Successful provisioning is skipped on later boots; failures leave the marker
-absent and can be retried after inspecting the log.
+succeed. Successful installation is skipped when rerunning the script. Failures leave the
+marker absent; inspect the log and rerun the setup command to retry. No retry runs at boot.
+The template retains `OMNI_KIT_ACCEPT_EULA=yes` for unattended Isaac Sim use after setup
+and includes no credentials.
 
-Package resolution, template privacy, access settings, disk allocation and the embedded
-files were verified during creation. Installation, GPU execution, PhysX, RTX rendering,
+Package resolution, template privacy, access settings and disk allocation were verified
+during creation. Installation, GPU execution, PhysX, RTX rendering,
 cameras and UNISafe have not yet been tested on a rented host. The immediate engineering
-task is to verify provisioning and run a small simulator and camera smoke test there.
+task is to connect, run the manual setup and then verify a small simulator and camera smoke test.
 
 Safety-Dial's root Python pin and project lockfile have not yet been migrated to this
 stack. Update those dependencies before using the repository's setup on the instance.

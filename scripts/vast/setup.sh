@@ -1,24 +1,46 @@
 #!/usr/bin/env bash
-# Platform provisioning for the private Vast template "evo safety filter".
-# This prepares the image's existing environment, without cloning research code.
+# Manual platform setup after connecting to an "evo safety filter" instance.
+# Run from a repository clone: bash scripts/vast/setup.sh
+# This prepares the base image's existing environment. Nothing runs at instance boot.
+set +x
 set -euo pipefail
 
+if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+    printf 'Usage: bash scripts/vast/setup.sh\n'
+    printf 'Install the pinned Isaac and PyTorch platform using uv after connecting to Vast.\n'
+    exit 0
+fi
+if (($#)); then
+    printf 'Unknown argument. Usage: bash scripts/vast/setup.sh\n' >&2
+    exit 1
+fi
+
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+repo_root="$(cd -- "${script_dir}/../.." && pwd)"
 state_dir=/workspace/.evo-safety-filter
 runtime_python=/venv/main/bin/python
 lab_revision=6bfde876089661e116dc5a5d9c6805f18127fe32
+if [[ ! -x "$runtime_python" ]]; then
+    printf 'Run this script on the Vast base image with /venv/main/bin/python.\n' >&2
+    exit 1
+fi
+if [[ "${EUID}" -ne 0 ]]; then
+    printf 'Run as root on the Vast instance to install the required system libraries.\n' >&2
+    exit 1
+fi
 mkdir -p "$state_dir"
-exec > >(tee -a "$state_dir/provision.log") 2>&1
+exec > >(tee -a "$state_dir/setup.log") 2>&1
 
-trap 'printf "Provisioning failed. See /workspace/.evo-safety-filter/provision.log\n" >&2' ERR
-exec 9>"$state_dir/provision.lock"
+trap 'printf "Setup failed. See /workspace/.evo-safety-filter/setup.log\n" >&2' ERR
+exec 9>"$state_dir/setup.lock"
 flock 9
 
 if [[ -f "$state_dir/ready" ]]; then
-    printf 'evo safety filter platform was already provisioned.\n'
+    printf 'evo safety filter platform was already installed.\n'
     exit 0
 fi
 
-printf 'Preparing evo safety filter platform.\n'
+printf 'Installing evo safety filter platform using uv.\n'
 "$runtime_python" - <<'PY'
 import platform
 import sys
@@ -37,6 +59,9 @@ apt-get install -y --no-install-recommends \
     libasound2t64 ffmpeg
 
 command -v uv
+cp -- "$repo_root/configs/vast/uv-overrides.txt" "$state_dir/uv-overrides.txt"
+cp -- "$repo_root/configs/vast/requirements-linux-py312.txt" \
+    "$state_dir/requirements-linux-py312.txt"
 test -s "$state_dir/uv-overrides.txt"
 test -s "$state_dir/requirements-linux-py312.txt"
 

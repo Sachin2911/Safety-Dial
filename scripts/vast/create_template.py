@@ -1,8 +1,7 @@
-"""Create the private Vast platform template without renting an instance."""
+"""Create or update the private Vast template without installing research packages."""
 
+import argparse
 import ast
-import base64
-import gzip
 import json
 from pathlib import Path
 import shlex
@@ -10,47 +9,46 @@ import subprocess
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--update", action="store_true", help="Update the recorded template")
+    parser.add_argument("--dry-run", action="store_true", help="Print settings without API calls")
+    args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
     config_path = root / "configs/vast/evo-safety-filter.json"
+    record_path = config_path.with_name("created-template.json")
     config = json.loads(config_path.read_text())
-    state_dir = "/workspace/.evo-safety-filter"
-    chunks = ["#!/usr/bin/env bash\nset -euo pipefail\n", f"mkdir -p {state_dir}\n"]
-    for source_key, target in (
-        ("provision_script", "provision.sh"),
-        ("requirements_file", "requirements-linux-py312.txt"),
-        ("overrides_file", "uv-overrides.txt"),
-    ):
-        data = (root / config[source_key]).read_bytes()
-        encoded = base64.b64encode(gzip.compress(data, mtime=0)).decode()
-        chunks.append(
-            f"base64 --decode <<'EVO_DATA' | gzip --decompress > {state_dir}/{target}\n"
-            f"{encoded}\nEVO_DATA\n"
-        )
-    chunks.append(
-        "cat > /etc/vast_boot.d/80-evo-safety-filter.sh <<'EVO_HOOK'\n"
-        f"bash {state_dir}/provision.sh || "
-        "printf 'evo safety filter provisioning failed; check provision.log\\n' >&2\n"
-        "EVO_HOOK\n"
-        "exec /opt/instance-tools/bin/entrypoint.sh\n"
-    )
-    onstart = "".join(chunks)
+    onstart = config["onstart_cmd"]
     subprocess.run(["bash", "-n"], input=onstart, text=True, check=True)
+    if config["private"] is not True:
+        raise SystemExit("This tool only manages private templates.")
 
-    query = "private=true name=" + config["name"].replace(" ", "_")
+    record = json.loads(record_path.read_text()) if args.update else {}
+    if args.dry_run:
+        print(json.dumps({"update": args.update, "record": record, "config": config}, indent=2))
+        return
+
+    query = (
+        f"private=true id={record['id']}"
+        if args.update
+        else "private=true name=" + config["name"].replace(" ", "_")
+    )
     existing = subprocess.run(
         ["vastai", "search", "templates", query], capture_output=True, text=True, check=True
     )
     rows = json.loads(existing.stdout)
     if isinstance(rows, dict):
         rows = rows.get("templates", [])
-    if rows:
-        raise SystemExit("A private template with this name already exists. Inspect it first.")
+    if args.update:
+        if len(rows) != 1 or rows[0]["name"] != config["name"]:
+            raise SystemExit("Could not identify the recorded private template.")
+        command = ["vastai", "update", "template", rows[0]["hash_id"]]
+    else:
+        if rows:
+            raise SystemExit("A private template with this name exists. Use --update to change it.")
+        command = ["vastai", "create", "template"]
 
     env = " ".join(f"-e {shlex.quote(k + '=' + v)}" for k, v in config["env"].items())
-    command = [
-        "vastai",
-        "create",
-        "template",
+    command += [
         "--name",
         config["name"],
         "--image",
@@ -60,10 +58,6 @@ def main() -> None:
         "--desc",
         config["description"],
         "--env=" + env,
-        "--ssh",
-        "--jupyter",
-        "--direct",
-        "--jupyter-lab",
         "--jupyter-dir",
         config["jupyter_dir"],
         "--disk_space",
@@ -75,16 +69,29 @@ def main() -> None:
         "--readme",
         (root / "configs/vast/README.md").read_text(),
     ]
+    for key, flag in (
+        ("ssh", "--ssh"),
+        ("jupyter", "--jupyter"),
+        ("direct", "--direct"),
+        ("jupyter_lab", "--jupyter-lab"),
+    ):
+        if config[key]:
+            command.append(flag)
     result = subprocess.run(command, capture_output=True, text=True, check=True)
-    prefix = "New Template: "
-    response = next((line for line in result.stdout.splitlines() if line.startswith(prefix)), None)
-    if response is None:
-        raise SystemExit("Vast did not confirm template creation: " + result.stdout)
-    saved = ast.literal_eval(response.removeprefix(prefix))
+    prefix = "updated template: " if args.update else "New Template: "
+    response = result.stdout.strip()
+    if not response.startswith(prefix):
+        raise SystemExit("Vast did not confirm the template change: " + response)
+    payload = response.removeprefix(prefix)
+    saved = json.loads(payload) if args.update else ast.literal_eval(payload)
     record = {k: saved.get(k) for k in ("id", "hash_id", "name")}
-    config_path.with_name("created-template.json").write_text(json.dumps(record, indent=2) + "\n")
+    if not all(record.values()):
+        raise SystemExit(
+            "Vast returned incomplete template metadata; read it back before retrying."
+        )
+    record_path.write_text(json.dumps(record, indent=2) + "\n")
     print(json.dumps(record, indent=2))
-    print(f"Embedded startup command: {len(onstart.encode())} bytes. No instance rented.")
+    print("Startup runs the base entrypoint only. No research installation or instance rental.")
 
 
 if __name__ == "__main__":

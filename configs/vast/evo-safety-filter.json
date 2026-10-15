@@ -3,7 +3,7 @@
   "image": "vastai/base-image",
   "image_tag": "cuda-13.0.3-cudnn-devel-ubuntu24.04-py312-2026-09-07",
   "image_digest_verified": "sha256:c1d2b5326fae806b04d2c2d97a2b3948d0ccb0026dd3085e9a2ad55e304193f8",
-  "description": "Python 3.12, PyTorch 2.11.0 cu130, pinned Isaac Lab 3.0 source and Isaac Sim 6.2. Headless manipulation research foundation with Jupyter and SSH.",
+  "description": "Ubuntu 24.04, Python 3.12 and CUDA 13.0.3 base with Jupyter and SSH. Research packages are installed manually using the repository's uv setup script after connecting.",
   "private": true,
   "disk_space_gb": 200,
   "ssh": true,
@@ -20,7 +20,8 @@
     "UV_HTTP_TIMEOUT": "300",
     "UV_LINK_MODE": "copy"
   },
-  "provision_script": "scripts/vast/evo-safety-filter.sh",
+  "onstart_cmd": "exec /opt/instance-tools/bin/entrypoint.sh",
+  "setup_script": "scripts/vast/setup.sh",
   "requirements_file": "configs/vast/requirements-linux-py312.txt",
   "overrides_file": "configs/vast/uv-overrides.txt",
   "isaaclab_revision": "6bfde876089661e116dc5a5d9c6805f18127fe32",
