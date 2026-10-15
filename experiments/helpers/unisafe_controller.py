@@ -34,9 +34,10 @@ def model_observation(obs, first=False):
 
 
 class FrozenController:
-    def __init__(self, agent, safety, settings):
+    def __init__(self, agent, safety, settings, proposal_adapter=None):
         self.agent, self.safety, self.settings = agent, safety, settings
         self.wm = agent._wm
+        self.proposal_adapter = proposal_adapter
         self.reset()
 
     def reset(self):
@@ -44,9 +45,11 @@ class FrozenController:
         self.queries = Counter()
         self.pending_prediction = None
         self.step_index = 0
+        if self.proposal_adapter is not None:
+            self.proposal_adapter.reset()
 
     @torch.inference_mode()
-    def act(self, obs, mode, diagnostic=False):
+    def act(self, obs, mode, diagnostic=False, adapter_observation=None):
         data = self.wm.preprocess(obs)
         embed = self.wm.encoder(data)
         self.queries["encoder"] += 1
@@ -65,6 +68,11 @@ class FrozenController:
         proposal = raw.clone()
         proposal[:, -1] *= 2
         task_proposal = proposal.clone()
+        adapter_log = {}
+        if self.proposal_adapter is not None:
+            proposal, adapter_log = self.proposal_adapter(
+                proposal, obs if adapter_observation is None else adapter_observation, task_feat
+            )
         probe = self.settings.get("diagnostic_probe", "none")
         gripper_override = probe == "hold_gripper" and 43 <= self.step_index < 63
         if gripper_override:
@@ -103,6 +111,7 @@ class FrozenController:
         failure_probability = self.wm.heads["failure"](feat).mean.item()
         self.queries["failure_head"] += 1
         row = {
+            **adapter_log,
             "raw_task_action": raw[0].tolist(),
             "task_proposed_action": task_proposal[0].tolist(),
             "diagnostic_probe": probe,

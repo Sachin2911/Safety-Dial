@@ -76,6 +76,16 @@ does not establish that a changed policy has the same violation rate, and zero o
 violations does not establish zero risk. Simulator interactions, model queries and elapsed
 time should be accounted for separately, including adaptation and candidate evaluation.
 
+## Authorized experimental exploration
+
+Sachin subsequently authorized continued diagnosis, evolutionary experiments and other
+environments if needed until a solid result is established. The current bounded exploration
+adapts gripper-release behavior under the unchanged UNISafe filter, comparing evolution,
+random search, a simple fixed rule and policy-gradient learning in the same adapter family.
+These are provisional experimental choices, not a conclusion about the best method or
+research contribution. Development, validation and reserved test seeds are separated in the
+[development protocol and log](docs/research/research_notes/UNISafe%20adaptation%20development.md).
+
 ## Decisions still open
 
 UNISafe is a candidate starting point because its release contains relevant task-policy,

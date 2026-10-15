@@ -1,0 +1,33 @@
+{
+  "purpose": "Verify the new worker and disabled adapter reproduce the first three recorded baseline episodes despite omitting deterministic decoder diagnostics.",
+  "record_cameras": true,
+  "episodes": [
+    {
+      "name": "identity",
+      "seed": 0,
+      "mode": "unfiltered",
+      "adapter": {
+        "hold_steps": 0,
+        "min_close_steps": 3
+      }
+    },
+    {
+      "name": "identity",
+      "seed": 0,
+      "mode": "filtered",
+      "adapter": {
+        "hold_steps": 0,
+        "min_close_steps": 3
+      }
+    },
+    {
+      "name": "identity",
+      "seed": 1,
+      "mode": "filtered",
+      "adapter": {
+        "hold_steps": 0,
+        "min_close_steps": 3
+      }
+    }
+  ]
+}

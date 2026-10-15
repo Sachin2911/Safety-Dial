@@ -1,0 +1,92 @@
+{
+  "status": "development_protocol",
+  "question": "Can task adaptation prevent premature release and improve measured safe completion under the unchanged released UNISafe filter?",
+  "success_definition": "The released compound success predicate INCLUDING middle/base XY > 0.07 m. Paper-table discrepancy is a separate diagnostic and does not relabel the primary task.",
+  "failure_definition": "Released physical failure and end-effector boundary predicates, unchanged.",
+  "development_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "training_seeds": [
+    20,
+    21,
+    22,
+    23
+  ],
+  "validation_seeds": [
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107
+  ],
+  "reserved_test_seeds": {
+    "start": 1000,
+    "stop_exclusive": 1064
+  },
+  "reserved_stress_seeds": {
+    "start": 2000,
+    "stop_exclusive": 2032
+  },
+  "adapter_information": "Task command history plus measured finger joint positions. All optimization methods and the fixed-delay control use the same signals. Object states and outcome flags are evaluation-only.",
+  "initial_search_space": {
+    "hold_steps": [
+      0,
+      5,
+      10,
+      15,
+      20,
+      30,
+      45,
+      60
+    ],
+    "min_close_steps": [
+      1,
+      2,
+      3,
+      5,
+      8
+    ],
+    "min_aperture": [
+      0.003,
+      0.006,
+      0.009
+    ]
+  },
+  "initial_comparisons": [
+    "frozen baseline",
+    "fixed release delay",
+    "elitist mutation search",
+    "uniform random search",
+    "episodic categorical policy gradient over the same adapter"
+  ],
+  "utility": "success: 1 - 0.02*steps/horizon; physical failure or boundary exit: -1; unfinished: 0",
+  "selection": "Development can change the search representation. Freeze implementation and selected candidates before viewing reserved test outcomes. Select parameters on training/validation only.",
+  "measurement": "Safe success, physical failure, boundary exits and unfinished episodes together; task time, command switching, simulator steps, model queries and all adaptation costs. Same filter is not a safety guarantee.",
+  "matching": "Randomize method order within seed for sequential runs. Verify initial physical states and report reset image differences. Use fresh-process matched subsets before attributing individual effects causally.",
+  "solid_result": "Replicable behavior across unseen initial conditions with uncertainty intervals and simple/learning controls. A reproducible negative optimizer result is valid; do not claim an evolutionary advantage unless supported. Other environments are an option if this task cannot support a meaningful study.",
+  "limits": "This is a migrated release, not established reproduction of the original training environment. No real robot or real-world safety claim. Equal evaluation caps are not equal realized control-step costs; report both.",
+  "adapter_kind": "grasp_release_delay",
+  "development_revision": "Command-history-only pilot remains separately counted. Grasp-aware representation added after development failures due to empty-finger closure; no validation or reserved test has been viewed."
+}

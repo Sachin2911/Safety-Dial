@@ -1,0 +1,35 @@
+{
+  "purpose": "Acceptance of aperture-gated release delay: reproduce seed-0 warmups and match the shown seed-1 prefix, then identify the release event from sensors without a hand-timed step.",
+  "record_cameras": true,
+  "episodes": [
+    {
+      "name": "identity",
+      "seed": 0,
+      "mode": "unfiltered",
+      "adapter": {
+        "hold_steps": 0,
+        "min_close_steps": 3
+      }
+    },
+    {
+      "name": "identity",
+      "seed": 0,
+      "mode": "filtered",
+      "adapter": {
+        "hold_steps": 0,
+        "min_close_steps": 3
+      }
+    },
+    {
+      "name": "identity",
+      "seed": 1,
+      "mode": "filtered",
+      "adapter": {
+        "hold_steps": 20,
+        "min_close_steps": 3,
+        "min_aperture": 0.005
+      },
+      "adapter_kind": "grasp_release_delay"
+    }
+  ]
+}
