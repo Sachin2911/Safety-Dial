@@ -29,7 +29,9 @@ For example, imagine a robot extracting a block from a tower. Its filter interru
 that appears dangerous. The robot then repeatedly attempts a rejected movement or cannot
 continue from its new position. Useful adaptation might improve what it does next, or
 change its earlier approach so that this interaction no longer prevents completion.
-This is an illustrative failure, not an outcome we have reproduced in UNISafe.
+This remains an illustrative filter-induced failure. The first migrated UNISafe pilot
+observed widespread low-progress timeouts in both filtered and unfiltered arms, with
+causal attribution still unresolved; see the [pilot report](docs/research/reports/UNISafe%20baseline%20pilot.md).
 
 ## How the components fit
 
@@ -77,9 +79,11 @@ time should be accounted for separately, including adaptation and candidate eval
 ## Decisions still open
 
 UNISafe is a candidate starting point because its release contains relevant task-policy,
-world-model and safety-filter components. Its runtime baseline, avoidable-stall prevalence
-and evaluation cost still need to be established. The environment and world model are
-not yet fixed.
+world-model and safety-filter components. A first migrated 20-seed comparison now measures
+runtime and outcomes: both arms completed 2/20 tasks, failed on 2/20 and timed out on 16/20.
+The unfinished episodes have low object progress, but avoidable filter-induced stalls
+have not been established. Rendering differences and basic task recovery need further
+investigation. The environment and world model are not yet fixed.
 
 We have also left open the behavioural parameters to adapt, the evolutionary algorithm,
 the role of ROSARL, and the training and evaluation budgets. Holding the world model and
@@ -172,3 +176,5 @@ The manipulation-specific monitoring and intervention contribution would need es
 - [Detailed task-continuation literature](docs/research/research_notes/Safe%20manipulation%20progress%20and%20robustness/task_progress_after_intervention.md).
 - [Available assets and evolutionary scope](docs/research/research_notes/Safe%20manipulation%20progress%20and%20robustness/feasibility_and_evolutionary_scope.md).
 - [UNISafe compute and compatibility audit](docs/research/reports/UNISafe%20inference%20and%20training%20compute.md).
+
+- [Migrated UNISafe baseline and continuation diagnostics](docs/research/reports/UNISafe%20baseline%20pilot.md).

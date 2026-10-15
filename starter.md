@@ -122,8 +122,16 @@ tests are implemented; commands, outputs and migration details are in
 These checks cover inference on the three bundled failure recordings and simulator
 reset/camera/control/outcome wiring. Injected simulator outcomes test the task logic;
 they are not autonomous policy results. The earlier platform-planning text above records
-the setup decision before execution. We still need paired filtered/unfiltered controller
-rollouts to establish a performance baseline and investigate task continuation.
+the setup decision before execution.
+
+A migrated autonomous baseline now covers 20 seeds with and without the frozen safety
+filter. Each arm completed 2/20 tasks, failed physically on 2/20, and timed out on 16/20.
+The [baseline pilot report](docs/research/reports/UNISafe%20baseline%20pilot.md) records the
+controller contract, continuation diagnostics, interaction costs and limitations.
+Matching initial physical states did not produce identical reset images between paired
+arms, and task proposals diverged before filtering. The many unfinished episodes warrant
+investigation, but this pilot does not yet isolate avoidable filter-induced stalls.
+No evolutionary target or training study has been selected.
 
 ## Where to begin
 

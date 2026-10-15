@@ -38,18 +38,17 @@ def main():
     try:
         import numpy as np
         import torch
-        from isaaclab.envs import ManagerBasedRLEnv
         from PIL import Image, ImageDraw
         from takeoff.config.franka.takeoff_ik_rel_env_cfg import FrankaTakeoffEnvCfg
 
-        from helpers.unisafe_environment import normalized_to_environment
+        from helpers.unisafe_environment import make_environment, normalized_to_environment
 
         cfg = FrankaTakeoffEnvCfg()
         cfg.scene.num_envs = 1
         cfg.seed = args.seed
         cfg.sim.device = "cuda:0"
         cfg.compute_final_obs = True  # Preserve actual terminal observations for the test log.
-        env = ManagerBasedRLEnv(cfg=cfg)
+        env = make_environment(cfg)
         init_physics_calls = env.sim.get_physics_step_count()
         checks, trace, frames = {}, [], []
         reset_calls = 0
@@ -96,6 +95,17 @@ def main():
             done = bool((terminated | truncated).item())
             automatic_resets += int(done)
             terminal_obs = info["final_obs"] if done else obs
+            if done:
+                for name in ("front_cam", "wrist_cam"):
+                    assert (
+                        terminal_obs["rgb_camera"][name].data_ptr()
+                        != obs["rgb_camera"][name].data_ptr()
+                    ), "Terminal camera aliases the reset buffer"
+                terminal_positions = terminal_obs["policy"]["cube_positions"].clone()
+                env.observation_manager.compute()
+                torch.testing.assert_close(
+                    terminal_obs["policy"]["cube_positions"], terminal_positions
+                )
             event = {
                 "step": len(trace),
                 "phase": phase,
@@ -227,8 +237,17 @@ def main():
                 assert not event["terms"]["failure"], event
             else:
                 assert event["terminated"] and event["terms"]["failure"], event
+            positions = np.asarray(event["cube_positions"]).reshape(3, 3)
+            if scenario in ("cube_2_drop", "cube_3_drop"):
+                index = 1 if scenario == "cube_2_drop" else 2
+                assert positions[index, 2] < 0.13, positions
+            elif scenario == "cube_3_displaced":
+                assert np.linalg.norm(positions[2, :2] - positions[0, :2]) > 0.10, positions
+            elif scenario == "success":
+                assert np.linalg.norm(positions[1, :2] - positions[0, :2]) > 0.07, positions
             outcome_checks[scenario] = {"before_step": immediate, "after_step": event["terms"]}
         checks["injected_outcome_tests"] = outcome_checks
+        checks["terminal_buffers_preserved_across_auto_reset"] = True
         frames[0].save(
             output / "controls_and_outcomes.gif",
             save_all=True,

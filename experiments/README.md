@@ -111,9 +111,9 @@ also verifies that the two released snapshots agree on those shared weights.
 
 The original environment targeted Isaac Sim 4.2. Running on Sim 6.2 / Lab 3 does not
 establish identical physics, rendering, historical success rates or identical trajectories
-across devices. The current acceptance run uses an RTX 3090. Full controller integration,
-explicit online filter settings and paired filtered/unfiltered rollouts are the next
-baseline stage. These scripts perform no training and establish no avoidable-stall claim.
+across devices. The current acceptance run uses an RTX 3090. The autonomous baseline described below separately connects the controller and records
+explicit filter settings and physical outcomes. The engineering checks alone establish no
+avoidable-stall claim. Neither workflow trains the models.
 
 All three bundled recordings are labelled failure examples. Their collection code can
 relabel preceding transitions and substitute previous observations at termination. Their
@@ -153,3 +153,83 @@ uv --no-config pip compile configs/unisafe/requirements.txt \
   --output-file configs/unisafe/requirements-lock.txt
 bash scripts/vast/setup.sh --check
 ```
+
+## UNISafe autonomous baseline and diagnosis
+
+Run the frozen controller and analysis together:
+
+```bash
+bash scripts/baseline_unisafe.sh runs/unisafe/my-baseline
+
+# Small integration pilot; do not pool its episodes into the primary estimate.
+bash scripts/baseline_unisafe.sh runs/unisafe/my-pilot --seeds 0 1
+```
+
+The default [configuration](../configs/unisafe/baseline.json) runs 20 seeds with and
+without filtering, alternating order. Both arms reset to the same physical state, checked
+to within 1e-6, and use the same policy seed. The saved reset-image differences matter:
+matching physical tensors does not establish identical rendered inputs, contact solver
+state or exact counterfactual branching. The unfiltered arm computes a shadow filter to
+match the model-query and random-draw schedule while executing its task proposal.
+
+The filter uses snapshot 200000, uncertainty threshold 4.3 from the saved training config,
+and reachability threshold 0.1 and action denominator 1 from the released function defaults.
+The release does not establish the missing evaluation settings, so these values define
+this migrated pilot. They are not a recovered paper evaluation configuration.
+
+The released action postprocessor binarizes the last of six safety-action coordinates.
+That coordinate controls arm rotation, while the task's actual gripper is coordinate seven.
+`--backup-postprocess released` preserves this behavior for the primary baseline.
+`--backup-postprocess arm_clip` removes that binarization as a separately labelled diagnostic.
+It changes the controller and must not be pooled with the primary results.
+
+The task and filter retain separate recurrent states: the task posterior is sampled, the
+filter posterior uses its mode, and hypothetical proposal dynamics are sampled. Both tracks
+receive the normalized action actually executed after clipping. The filter preserves the
+task's gripper proposal when replacing the six arm coordinates. Ground-truth object states
+and outcome flags are logged for evaluation; the learned encoder uses RGB and end-effector
+state. No weights are trained or adapted.
+
+Each episode saves `steps.jsonl` with proposed, backup, selected and executed actions,
+intervention triggers, predicted safety, physical geometry and timing. `observations.npz`
+contains both cameras and end-effector state, including the true terminal observation.
+`rollout.gif` provides a visual check. A cloned terminal snapshot prevents the simulator's
+automatic reset from overwriting terminal camera/state buffers. The engineering acceptance
+test now also exercises this buffer ownership and verifies terminal injected geometry.
+
+`summary.json` records outcomes, model provenance, settings, interaction counts, resets,
+render calls, model queries and elapsed time. `analysis/` contains episode metrics, paired
+outcomes, uncertainty intervals and plots for unfinished episodes. Its low-progress flag
+means the middle block moved less than 2 mm over the last three seconds. It describes a
+trace; it does not diagnose a restrictive filter or establish avoidability.
+
+For the bounded follow-up protocol, after completing the primary run:
+
+```bash
+/venv/main/bin/python experiments/scripts/unisafe_followups.py \
+    --baseline runs/unisafe/my-baseline --output runs/unisafe/my-followups
+```
+
+[The diagnostic plan](../configs/unisafe/diagnostics.json) records all selected seeds and
+variants: extend the horizon to 30 seconds; change future stochastic draws after step 300
+without resetting physical or recurrent state; remove the sixth-coordinate binarization;
+and try different stochastic draws from the initial state. This plan was chosen after
+inspecting the initial pilot and is exploratory. The RNG change affects both sampled task
+posteriors and imagined filter predictions, not just task behavior.
+
+After the follow-ups and a fresh environment acceptance run, audit the evidence together:
+
+```bash
+/venv/main/bin/python experiments/scripts/unisafe_diagnose.py \
+    --baseline runs/unisafe/my-baseline --followups runs/unisafe/my-followups \
+    --pilot runs/unisafe/my-pilot --environment-check runs/unisafe/my-acceptance
+```
+
+This compares the full recorded 300-step prefixes for the continuation probes and accounts
+for every completed autonomous diagnostic, including unsuccessful alternatives. Even a
+matching observed prefix is not validation of simulator snapshot restoration. A successful
+alternative from an initial state is also weaker evidence than recovering from a validated
+stalled state. Failed bounded probes do not prove that recovery is impossible.
+
+The baseline-stage results and remaining research questions are recorded in
+[the pilot report](../docs/research/reports/UNISafe%20baseline%20pilot.md).

@@ -24,3 +24,37 @@ def normalized_to_environment(action):
     The environment's IK action term subsequently multiplies the six arm values by 0.5.
     """
     return (action * 0.15).clamp(-0.15, 0.15)
+
+
+def clone_observation(value):
+    """Detach observations from simulator-owned camera and state buffers."""
+    if isinstance(value, dict):
+        return {key: clone_observation(item) for key, item in value.items()}
+    return value.clone()
+
+
+def make_environment(cfg):
+    """Preserve terminal images/state before Isaac Lab's same-step automatic reset."""
+    from isaaclab.envs import ManagerBasedRLEnv
+
+    class RecordedEnvironment(ManagerBasedRLEnv):
+        _inside_step = False
+        terminal_snapshot = None
+
+        def step(self, action):
+            self.terminal_snapshot = None
+            self._inside_step = True
+            try:
+                result = super().step(action)
+            finally:
+                self._inside_step = False
+            if self.terminal_snapshot is not None:
+                result[4]["final_obs"] = self.terminal_snapshot
+            return result
+
+        def _reset_idx(self, env_ids):
+            if self._inside_step:
+                self.terminal_snapshot = clone_observation(self.observation_manager.compute())
+            return super()._reset_idx(env_ids)
+
+    return RecordedEnvironment(cfg=cfg)

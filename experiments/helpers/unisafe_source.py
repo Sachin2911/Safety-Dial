@@ -175,6 +175,7 @@ def save_implementation(output):
         ("experiments/helpers", "unisafe*.py"),
         ("experiments/scripts", "unisafe*.py"),
         ("configs/unisafe", "*.txt"),
+        ("configs/unisafe", "*.json"),
         ("configs/download", "unisafe.json"),
         ("configs/vast", "requirements-linux-py312.txt"),
         ("configs/vast", "uv-overrides.txt"),
