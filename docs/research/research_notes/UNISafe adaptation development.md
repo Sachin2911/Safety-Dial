@@ -108,5 +108,78 @@ steps, with the task completing at 2.80 seconds and no intervention or physical 
 It is an acceptance case, not a generalization estimate.
 
 Raw evidence: `runs/unisafe/adaptation-grasp-acceptance-20261015/acceptance.json`.
-The gripper-aware development pilot and subsequent optimization comparisons are in progress.
-Their outcomes, independent validation and reserved tests remain outstanding.
+The gripper-aware development pilot is now complete:
+
+| Delay | Successes / 8 | Physical failures / 8 | Boundary exits / 8 | Timeouts / 8 |
+| --- | ---: | ---: | ---: | ---: |
+| 0, frozen control | 0 | 1 | 0 | 7 |
+| 10 steps | 5 | 1 | 0 | 2 |
+| 20 steps | 7 | 0 | 0 | 1 |
+| 40 steps | 6 | 2 | 0 | 0 |
+
+This adds 32 episodes, 4,571 control steps and 22,855 physics steps. The artifact audit
+passes. The seven successful 20-step-delay cases include two with one safety intervention;
+most finish without an intervention. The remaining timeout never acquires qualifying grasp
+evidence, so the adapter does not override its gripper. This is primarily a grasp-maintenance
+result, not yet evidence of a filter-specific adaptation benefit. The unchanged-policy count
+differs from the first pilot because preceding trajectories change renderer history. Both
+pilots retain all outcomes; these development runs do not establish exact counterfactuals.
+
+Raw evidence: `runs/unisafe/adaptation-grasp-pilot-20261015/`.
+The initial optimization comparisons are complete below. Independent validation and reserved tests remain outstanding.
+
+## Evaluation execution and selection
+
+A concurrency trial started two fresh simulator processes while the pilot was running.
+Their startup consumed CPU and slowed the active pilot considerably. Both were deliberately
+stopped before creating an episode or making model queries. Their retained status records
+confirm zero additional control steps and preserve elapsed startup time. This does not prove
+that parallel Isaac execution is impossible. The container has a CPU quota equivalent to
+7.68 cores despite exposing 32 CPUs; subsequent fresh-process evaluation uses one worker.
+
+Validation will compare training finalists and fixed delays of 10, 20 and 40 steps on
+separate seeds. The common selection rule first prefers candidates with no more observed
+violations than the baseline on validation, then maximizes utility. If no candidate passes
+that empirical screen, the least-violating candidate remains explicitly flagged. This is
+not a safety guarantee. The final test plan freezes selected parameters and source hashes
+before using reserved seeds. An unfiltered ablation for the selected evolutionary adapter
+and baseline is planned on the first 32 reserved seeds, with shadow queries retained, to
+distinguish a general task improvement from an interaction specific to the filter.
+
+
+## Initial search comparison and fresh-process acceptance
+
+The first search seed, 2026, is complete. Each method used three generations of four
+candidates, each evaluated on the same four training starts: 48 episodes per method.
+These are outcomes during optimization, not performance estimates of the final policies.
+
+| Method | Successes / 48 | Physical failures | Boundary exits | Timeouts | Control steps |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Evolution | 32 | 5 | 1 | 10 | 5,360 |
+| Random search | 28 | 5 | 2 | 13 | 5,837 |
+| Categorical policy gradient | 31 | 3 | 1 | 13 | 5,631 |
+
+All 144 episodes, 16,828 control steps and 84,140 physics steps pass the action, geometry,
+filter and source-hash audit. The first generation has identical candidates and ordering
+across the three methods. All 16 trajectories and 2,143 steps per method match bitwise,
+including physical observations, camera hashes, model values and actions; only timing
+fields differ. All three actual evaluations remain counted. Later repeated candidate
+fitness varies with preceding trajectories and renderer history, which limits conclusions
+from training fitness alone. The small development differences do not rank the optimizers.
+
+A sequential fresh-process check on previously inspected seed 8 also passes. Baseline and
+20-step grasp delay have identical physical states, camera hashes and actions until the
+adapter first changes the gripper at step 32. The baseline times out after 300 steps; the
+adapter succeeds after 51 steps. Both actual runs add 351 control steps and 1,755 physics
+steps. This accepts the fresh-process evaluation procedure on this host, not arbitrary
+snapshot restoration or a general success-rate claim. The stopped concurrency trial remains
+separately recorded.
+
+Before viewing validation or test outcomes, the
+[replicated protocol](../../../configs/unisafe/adaptation-replicated.json) adds the fixed
+control's 40-step and 5 mm settings to every optimizer's domain. Three new search RNG seeds
+(2027, 2028, 2029), each with four generations of four candidates on four training starts,
+provide 192 training episodes per method. Only their finalists enter validation; the 2026
+runs remain separately counted development. Validation selects one deployment controller
+per method. Reserved tests therefore compare selected controllers, not the average of all
+optimizer replicas, and cannot by themselves establish broad optimizer superiority.

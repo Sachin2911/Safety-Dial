@@ -88,5 +88,25 @@
   "solid_result": "Replicable behavior across unseen initial conditions with uncertainty intervals and simple/learning controls. A reproducible negative optimizer result is valid; do not claim an evolutionary advantage unless supported. Other environments are an option if this task cannot support a meaningful study.",
   "limits": "This is a migrated release, not established reproduction of the original training environment. No real robot or real-world safety claim. Equal evaluation caps are not equal realized control-step costs; report both.",
   "adapter_kind": "grasp_release_delay",
-  "development_revision": "Command-history-only pilot remains separately counted. Grasp-aware representation added after development failures due to empty-finger closure; no validation or reserved test has been viewed."
+  "development_revision": "Command-history-only pilot remains separately counted. Grasp-aware representation added after development failures due to empty-finger closure; no validation or reserved test has been viewed.",
+  "fixed_candidates": [
+    {
+      "hold_steps": 10,
+      "min_close_steps": 3,
+      "min_aperture": 0.005
+    },
+    {
+      "hold_steps": 20,
+      "min_close_steps": 3,
+      "min_aperture": 0.005
+    },
+    {
+      "hold_steps": 40,
+      "min_close_steps": 3,
+      "min_aperture": 0.005
+    }
+  ],
+  "validation_selection_rule": "Within each method, prefer candidates with observed physical-failure-plus-boundary count no larger than the frozen baseline on validation. Among them maximize mean terminal utility; break exact ties by canonical parameter JSON. If none qualify, choose the smallest violation count then utility, and flag the unmet screen. This does not imply general safety.",
+  "unfiltered_test_seed_count": 32,
+  "unfiltered_ablation": "Evaluate the selected evolutionary adapter and frozen baseline without replacement, retaining shadow filter queries, on the first 32 reserved test seeds. Compare adaptation gains with and without filtering; do not assume a filter-specific benefit."
 }

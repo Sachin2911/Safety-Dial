@@ -293,3 +293,74 @@ The comparison uses fixed front cameras and labels a held terminal frame after t
 candidate ends. Recorded success says nothing about unobserved post-termination stability.
 Raw runs and videos remain ignored; the tracked report preserves compact evidence and
 artifact hashes.
+
+## UNISafe task-adapter study
+
+The [development log](../docs/research/research_notes/UNISafe%20adaptation%20development.md)
+records the current grasp-maintenance experiments. Their held-out evaluation is still
+pending. The adapter uses task command history and measured finger positions to delay
+release after a stable grasp. It changes only the gripper proposal, before the unchanged
+filter assesses the action. Ground-truth object states are evaluation inputs only.
+
+Use the existing Python 3.12 environment and run long experiments through supervisor on
+Vast. Each command requires a new output directory; reruns never silently replace evidence.
+For an isolated acceptance check before a new evaluation:
+
+```bash
+/venv/main/bin/python experiments/scripts/unisafe_adaptation_batch.py \
+    --plan configs/unisafe/adaptation-paircheck-serial.json \
+    --output runs/unisafe/my-paircheck
+/venv/main/bin/python experiments/scripts/unisafe_adaptation_paircheck.py \
+    --batch runs/unisafe/my-paircheck
+```
+
+The check compares fresh simulator processes on an already inspected development seed.
+It verifies physical states, camera hashes and executed-action prefixes before divergence.
+It does not restore arbitrary simulator snapshots. One worker avoids the CPU contention
+observed during concurrent simulator startup on this instance.
+
+The replicated protocol uses equal training episode caps and the same parameter domain
+for evolution, random search and categorical policy gradient:
+
+```bash
+/venv/main/bin/python experiments/scripts/unisafe_adaptation_search.py \
+    --protocol configs/unisafe/adaptation-replicated.json \
+    --search-seeds 2027 2028 2029 --generations 4 --population 4 \
+    --output runs/unisafe/my-search
+/venv/main/bin/python experiments/scripts/unisafe_adaptation_validate.py \
+    --protocol configs/unisafe/adaptation-replicated.json \
+    --search runs/unisafe/my-search --output runs/unisafe/my-validation
+```
+
+Policy gradient learns an episodic distribution over this restricted adapter family; it
+is not full Dreamer fine-tuning. Every candidate, elite reevaluation and failed episode
+counts. Compare actual simulator steps and elapsed time as well as equal episode caps.
+Validation includes the frozen baseline and fixed delays, selecting one controller per
+method using the declared utility and empirical violation screen. This screen does not
+provide a safety guarantee.
+
+Only after validation and implementation review, freeze selected controllers and run the
+reserved comparison:
+
+```bash
+/venv/main/bin/python experiments/scripts/unisafe_adaptation_test_plan.py \
+    --protocol configs/unisafe/adaptation-replicated.json \
+    --validation runs/unisafe/my-validation --output runs/unisafe/my-test-plan.json
+/venv/main/bin/python experiments/scripts/unisafe_adaptation_batch.py \
+    --plan runs/unisafe/my-test-plan.json --output runs/unisafe/my-test
+/venv/main/bin/python experiments/scripts/unisafe_adaptation_evaluate.py \
+    --batch runs/unisafe/my-test --output runs/unisafe/my-test-analysis
+```
+
+The plan freezes source hashes and evaluates 64 held-out initial-condition seeds for each
+of five selected filtered controllers, plus 32 unfiltered cases each for evolution and
+baseline. All 384 episodes run in fresh processes. Unfiltered runs retain shadow filter
+queries. The final audit includes physical outcomes, action transforms, matched observed
+prefixes, exact paired success contrasts, multiplicity adjustment and a descriptive filter
+interaction contrast. The seeds are held out from this adaptation study; overlap with
+original checkpoint training is unknown. A comparison of selected controllers does not
+estimate an optimizer's average performance across its training seeds.
+
+Raw runs, videos and checkpoints remain ignored. Preserve compact results and hashes with
+the report. A failed batch retains partial artifacts and cancels queued jobs; inspect and
+count partial interactions before retrying anything in a new directory.

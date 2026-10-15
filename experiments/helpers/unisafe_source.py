@@ -6,6 +6,7 @@ import json
 import re
 import shutil
 import subprocess
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -15,6 +16,17 @@ UPSTREAM_REVISION = "ab0fdf87f38edefa48b54a291ec5b7156c17b6e0"
 def sha256(path):
     with Path(path).open("rb") as stream:
         return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+
+def write_if_changed(path, text):
+    """Keep verified runtime sources stable and never expose partial Python files."""
+    if path.exists() and path.read_text() == text:
+        return
+    with tempfile.NamedTemporaryFile(mode="w", dir=path.parent, delete=False) as stream:
+        temporary = Path(stream.name)
+        stream.write(text)
+    temporary.replace(path)
 
 
 def prepare_source():
@@ -155,7 +167,7 @@ def prepare_source():
                 )
         destination = runtime / rel
         destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_text(text)
+        write_if_changed(destination, text)
         manifest["files"].append(
             {
                 "path": str(rel),
@@ -164,7 +176,7 @@ def prepare_source():
                 "modified": text != original,
             }
         )
-    (runtime / "compatibility.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    write_if_changed(runtime / "compatibility.json", json.dumps(manifest, indent=2) + "\n")
     return runtime
 
 

@@ -49,6 +49,7 @@ def main():
     parser.add_argument("runs", type=Path, nargs="+")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--baseline", default="delay-0")
+    parser.add_argument("--audit-only", action="store_true", help="Audit repeated training trials without estimating performance rates")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     groups, paired, paths = defaultdict(list), defaultdict(dict), defaultdict(dict)
@@ -98,6 +99,8 @@ def main():
                 physical = np.clip(np.asarray(selected) * .15, -.15, .15)
                 np.testing.assert_allclose(physical, row["environment_action"], atol=2e-8, rtol=0)
                 np.testing.assert_allclose(physical / .15, row["executed_normalized_action"], atol=2e-7, rtol=0)
+            if args.audit_only:
+                continue
             name = e["job"]["name"]
             assert e["seed"] not in paired[name], "Use distinct names for repeated training replicas"
             paired[name][e["seed"]] = e
@@ -155,6 +158,9 @@ def main():
         "limits": "Development results are exploratory; confidence intervals do not correct for selection. Renderer history makes independence approximate. Frozen filters do not guarantee unchanged safety rates.",
     }
     (args.output / "summary.json").write_text(json.dumps(result, indent=2) + "\n")
+    if args.audit_only:
+        print("Artifact audit passed; control steps:", total_steps)
+        return
     fig, axis = plt.subplots(figsize=(9, 4), layout="constrained")
     labels = list(aggregate)
     base = np.zeros(len(labels))

@@ -146,23 +146,72 @@
         "checkpoint_loading": "strict; only ._orig_mod key components removed"
       },
       "summary_sha256": "f70c04e5b34b725cbfaa1718f94e58efba56274c2e5dbdd5a039bf77585794ad"
+    },
+    {
+      "directory": "runs/unisafe/adaptation-grasp-pilot-20261015",
+      "episodes": 32,
+      "environment_steps": 4571,
+      "physics_steps": 22855,
+      "elapsed_seconds": 635.7842088080943,
+      "outcomes": {
+        "success": 18,
+        "timeout": 10,
+        "physical_failure": 4
+      },
+      "query_counts": {
+        "encoder": 4571,
+        "posterior": 9142,
+        "task_actor": 4571,
+        "uncertainty_ensemble": 4571,
+        "imagined_step": 4571,
+        "safety_actor": 9142,
+        "safety_critic": 9142,
+        "failure_head": 4571
+      },
+      "model_provenance": {
+        "source_revision": "ab0fdf87f38edefa48b54a291ec5b7156c17b6e0",
+        "compatibility_sha256": "e972d84a36ab33e50546f6b405ecb0b66d4c2ed9ac3cc178b41bb724cb4558ee",
+        "checkpoint_sha256": "c304e4223bdbedb9de005c9663d12c32bcaeac998bf936eac13cd90a0f56bf4d",
+        "filter_step": 200000,
+        "filter_sha256": {
+          "actor": "9219b9abd19bc34a4982ae9206abdc6afa7546abf984e87dc7b50be958fbbd06",
+          "critic1": "5edaa0cc89dc4c953de2e7e462cd754d1fb36497113dbbd3953fc7c3cd82d9bb",
+          "critic2": "0c2f6a46573d9f5bd183f40efddf1858434550bdd8a7c48198f734f348a7a8c7"
+        },
+        "filter_config_sha256": "750593a1f26993ea0bfbba54aa3c659e3af80ab871c8cb80c4eaed7df694db49",
+        "mirror": {
+          "repo_id": "Sachioster/unisafe-pretrained",
+          "revision": "39bd3c84a1c9f3e84891eb09b1122d252c84e9c9",
+          "private": true,
+          "url": "https://huggingface.co/Sachioster/unisafe-pretrained",
+          "manifest_sha256": "d6d540fda8ebed4b80eb7f4d6551161def10f57d44ccbac7b775b340d76ebd00",
+          "source_archive_sha256": "a8fa0698e9ee8f1b4254f8373776a81c4ef251b36573082f8a4ec60a7f6b7e02"
+        },
+        "config_changes": {
+          "compile": false,
+          "device": "cuda",
+          "camera_regex": ".*_cam$"
+        },
+        "checkpoint_loading": "strict; only ._orig_mod key components removed"
+      },
+      "summary_sha256": "7dd189721168eb4f3528244c4d351b14f271be7d44bc9b94e5c7cf8f7ae93078"
     }
   ],
   "completed_physical_totals": {
-    "episodes": 38,
-    "environment_steps": 9040,
-    "physics_steps": 45200,
-    "elapsed_seconds": 879.9265934303403
+    "episodes": 70,
+    "environment_steps": 13611,
+    "physics_steps": 68055,
+    "elapsed_seconds": 1515.7108022384346
   },
   "physical_queries": {
-    "encoder": 9040,
-    "posterior": 18080,
-    "task_actor": 9040,
-    "uncertainty_ensemble": 9040,
-    "imagined_step": 9040,
-    "safety_actor": 18080,
-    "safety_critic": 18080,
-    "failure_head": 9040
+    "encoder": 13611,
+    "posterior": 27222,
+    "task_actor": 13611,
+    "uncertainty_ensemble": 13611,
+    "imagined_step": 13611,
+    "safety_actor": 27222,
+    "safety_critic": 27222,
+    "failure_head": 13611
   },
   "command_history_only_pilot": {
     "status": "complete",
@@ -7257,5 +7306,1483 @@
     "paper_source": "https://arxiv.org/html/2505.00779v2#A4.T12",
     "limits": "Reduced success removes only the released code's 7 cm distance component while retaining its other geometry thresholds. The paper table omits that component; this does not establish the exact historical checkpoint training predicate. Learned heads are predictions, not causes or physical outcome measurements."
   },
-  "pending": "Gripper-aware pilot, optimization, independent validation and reserved tests. No test claims yet."
+  "pending": "Three new search replicas per method, independent validation and reserved tests. No held-out generalization claim yet.",
+  "grasp_pilot": {
+    "status": "complete",
+    "groups": {
+      "delay-20": {
+        "episodes": 8,
+        "outcomes": {
+          "success": 7,
+          "timeout": 1
+        },
+        "safe_success_rate": 0.875,
+        "safe_success_wilson95": [
+          0.5291118177871464,
+          0.9775825085499433
+        ],
+        "physical_failure_wilson95": [
+          0.0,
+          0.32440756488388023
+        ],
+        "environment_steps": 890,
+        "interventions": 102,
+        "mean_utility": 0.8700833333333333,
+        "episodes_detail": [
+          {
+            "seed": 0,
+            "outcome": "success",
+            "steps": 28,
+            "interventions": 0,
+            "adapter_override_steps": 9,
+            "job": {
+              "name": "delay-20",
+              "seed": 0,
+              "adapter": {
+                "hold_steps": 20,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 1,
+            "outcome": "timeout",
+            "steps": 300,
+            "interventions": 100,
+            "adapter_override_steps": 0,
+            "job": {
+              "name": "delay-20",
+              "seed": 1,
+              "adapter": {
+                "hold_steps": 20,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 2,
+            "outcome": "success",
+            "steps": 110,
+            "interventions": 0,
+            "adapter_override_steps": 12,
+            "job": {
+              "name": "delay-20",
+              "seed": 2,
+              "adapter": {
+                "hold_steps": 20,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 3,
+            "outcome": "success",
+            "steps": 53,
+            "interventions": 1,
+            "adapter_override_steps": 12,
+            "job": {
+              "name": "delay-20",
+              "seed": 3,
+              "adapter": {
+                "hold_steps": 20,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 4,
+            "outcome": "success",
+            "steps": 46,
+            "interventions": 1,
+            "adapter_override_steps": 15,
+            "job": {
+              "name": "delay-20",
+              "seed": 4,
+              "adapter": {
+                "hold_steps": 20,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 5,
+            "outcome": "success",
+            "steps": 192,
+            "interventions": 0,
+            "adapter_override_steps": 20,
+            "job": {
+              "name": "delay-20",
+              "seed": 5,
+              "adapter": {
+                "hold_steps": 20,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 6,
+            "outcome": "success",
+            "steps": 48,
+            "interventions": 0,
+            "adapter_override_steps": 12,
+            "job": {
+              "name": "delay-20",
+              "seed": 6,
+              "adapter": {
+                "hold_steps": 20,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 7,
+            "outcome": "success",
+            "steps": 113,
+            "interventions": 0,
+            "adapter_override_steps": 15,
+            "job": {
+              "name": "delay-20",
+              "seed": 7,
+              "adapter": {
+                "hold_steps": 20,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          }
+        ]
+      },
+      "delay-40": {
+        "episodes": 8,
+        "outcomes": {
+          "success": 6,
+          "physical_failure": 2
+        },
+        "safe_success_rate": 0.75,
+        "safe_success_wilson95": [
+          0.40927543031016883,
+          0.9285207872478909
+        ],
+        "physical_failure_wilson95": [
+          0.071479212752109,
+          0.5907245696898311
+        ],
+        "environment_steps": 565,
+        "interventions": 41,
+        "mean_utility": 0.49638333333333334,
+        "episodes_detail": [
+          {
+            "seed": 0,
+            "outcome": "success",
+            "steps": 46,
+            "interventions": 2,
+            "adapter_override_steps": 25,
+            "job": {
+              "name": "delay-40",
+              "seed": 0,
+              "adapter": {
+                "hold_steps": 40,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 1,
+            "outcome": "success",
+            "steps": 61,
+            "interventions": 8,
+            "adapter_override_steps": 0,
+            "job": {
+              "name": "delay-40",
+              "seed": 1,
+              "adapter": {
+                "hold_steps": 40,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 2,
+            "outcome": "success",
+            "steps": 136,
+            "interventions": 0,
+            "adapter_override_steps": 20,
+            "job": {
+              "name": "delay-40",
+              "seed": 2,
+              "adapter": {
+                "hold_steps": 40,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 3,
+            "outcome": "success",
+            "steps": 59,
+            "interventions": 0,
+            "adapter_override_steps": 13,
+            "job": {
+              "name": "delay-40",
+              "seed": 3,
+              "adapter": {
+                "hold_steps": 40,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 4,
+            "outcome": "physical_failure",
+            "steps": 52,
+            "interventions": 22,
+            "adapter_override_steps": 0,
+            "job": {
+              "name": "delay-40",
+              "seed": 4,
+              "adapter": {
+                "hold_steps": 40,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 5,
+            "outcome": "success",
+            "steps": 53,
+            "interventions": 1,
+            "adapter_override_steps": 17,
+            "job": {
+              "name": "delay-40",
+              "seed": 5,
+              "adapter": {
+                "hold_steps": 40,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 6,
+            "outcome": "success",
+            "steps": 79,
+            "interventions": 0,
+            "adapter_override_steps": 17,
+            "job": {
+              "name": "delay-40",
+              "seed": 6,
+              "adapter": {
+                "hold_steps": 40,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 7,
+            "outcome": "physical_failure",
+            "steps": 79,
+            "interventions": 8,
+            "adapter_override_steps": 40,
+            "job": {
+              "name": "delay-40",
+              "seed": 7,
+              "adapter": {
+                "hold_steps": 40,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          }
+        ]
+      },
+      "delay-0": {
+        "episodes": 8,
+        "outcomes": {
+          "timeout": 7,
+          "physical_failure": 1
+        },
+        "safe_success_rate": 0.0,
+        "safe_success_wilson95": [
+          0.0,
+          0.32440756488388023
+        ],
+        "physical_failure_wilson95": [
+          0.02241749145005667,
+          0.4708881822128535
+        ],
+        "environment_steps": 2127,
+        "interventions": 538,
+        "mean_utility": -0.125,
+        "episodes_detail": [
+          {
+            "seed": 0,
+            "outcome": "timeout",
+            "steps": 300,
+            "interventions": 103,
+            "adapter_override_steps": 0,
+            "job": {
+              "name": "delay-0",
+              "seed": 0,
+              "adapter": {
+                "hold_steps": 0,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 1,
+            "outcome": "timeout",
+            "steps": 300,
+            "interventions": 50,
+            "adapter_override_steps": 0,
+            "job": {
+              "name": "delay-0",
+              "seed": 1,
+              "adapter": {
+                "hold_steps": 0,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 2,
+            "outcome": "timeout",
+            "steps": 300,
+            "interventions": 77,
+            "adapter_override_steps": 0,
+            "job": {
+              "name": "delay-0",
+              "seed": 2,
+              "adapter": {
+                "hold_steps": 0,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 3,
+            "outcome": "timeout",
+            "steps": 300,
+            "interventions": 45,
+            "adapter_override_steps": 0,
+            "job": {
+              "name": "delay-0",
+              "seed": 3,
+              "adapter": {
+                "hold_steps": 0,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 4,
+            "outcome": "physical_failure",
+            "steps": 27,
+            "interventions": 8,
+            "adapter_override_steps": 0,
+            "job": {
+              "name": "delay-0",
+              "seed": 4,
+              "adapter": {
+                "hold_steps": 0,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 5,
+            "outcome": "timeout",
+            "steps": 300,
+            "interventions": 76,
+            "adapter_override_steps": 0,
+            "job": {
+              "name": "delay-0",
+              "seed": 5,
+              "adapter": {
+                "hold_steps": 0,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 6,
+            "outcome": "timeout",
+            "steps": 300,
+            "interventions": 128,
+            "adapter_override_steps": 0,
+            "job": {
+              "name": "delay-0",
+              "seed": 6,
+              "adapter": {
+                "hold_steps": 0,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 7,
+            "outcome": "timeout",
+            "steps": 300,
+            "interventions": 51,
+            "adapter_override_steps": 0,
+            "job": {
+              "name": "delay-0",
+              "seed": 7,
+              "adapter": {
+                "hold_steps": 0,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          }
+        ]
+      },
+      "delay-10": {
+        "episodes": 8,
+        "outcomes": {
+          "success": 5,
+          "timeout": 2,
+          "physical_failure": 1
+        },
+        "safe_success_rate": 0.625,
+        "safe_success_wilson95": [
+          0.30574239460262737,
+          0.8631557141764026
+        ],
+        "physical_failure_wilson95": [
+          0.02241749145005667,
+          0.4708881822128535
+        ],
+        "environment_steps": 989,
+        "interventions": 36,
+        "mean_utility": 0.4978416666666666,
+        "episodes_detail": [
+          {
+            "seed": 0,
+            "outcome": "success",
+            "steps": 54,
+            "interventions": 0,
+            "adapter_override_steps": 10,
+            "job": {
+              "name": "delay-10",
+              "seed": 0,
+              "adapter": {
+                "hold_steps": 10,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 1,
+            "outcome": "success",
+            "steps": 51,
+            "interventions": 0,
+            "adapter_override_steps": 10,
+            "job": {
+              "name": "delay-10",
+              "seed": 1,
+              "adapter": {
+                "hold_steps": 10,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 2,
+            "outcome": "timeout",
+            "steps": 300,
+            "interventions": 0,
+            "adapter_override_steps": 0,
+            "job": {
+              "name": "delay-10",
+              "seed": 2,
+              "adapter": {
+                "hold_steps": 10,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 3,
+            "outcome": "success",
+            "steps": 45,
+            "interventions": 1,
+            "adapter_override_steps": 10,
+            "job": {
+              "name": "delay-10",
+              "seed": 3,
+              "adapter": {
+                "hold_steps": 10,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 4,
+            "outcome": "timeout",
+            "steps": 300,
+            "interventions": 30,
+            "adapter_override_steps": 0,
+            "job": {
+              "name": "delay-10",
+              "seed": 4,
+              "adapter": {
+                "hold_steps": 10,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 5,
+            "outcome": "physical_failure",
+            "steps": 130,
+            "interventions": 4,
+            "adapter_override_steps": 7,
+            "job": {
+              "name": "delay-10",
+              "seed": 5,
+              "adapter": {
+                "hold_steps": 10,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 6,
+            "outcome": "success",
+            "steps": 60,
+            "interventions": 0,
+            "adapter_override_steps": 10,
+            "job": {
+              "name": "delay-10",
+              "seed": 6,
+              "adapter": {
+                "hold_steps": 10,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          },
+          {
+            "seed": 7,
+            "outcome": "success",
+            "steps": 49,
+            "interventions": 1,
+            "adapter_override_steps": 10,
+            "job": {
+              "name": "delay-10",
+              "seed": 7,
+              "adapter": {
+                "hold_steps": 10,
+                "min_close_steps": 3,
+                "min_aperture": 0.005
+              }
+            }
+          }
+        ]
+      }
+    },
+    "comparisons": {
+      "delay-20": {
+        "paired_initial_condition_seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "safe_success_rate_difference": 0.875,
+        "paired_seed_bootstrap95": [
+          0.625,
+          1.0
+        ],
+        "max_initial_physical_error": 0.0,
+        "reset_camera_mae_by_seed_front_wrist": [
+          [
+            2.70025634765625,
+            2.6427815755208335
+          ],
+          [
+            1.7626953125,
+            2.91131591796875
+          ],
+          [
+            2.2617390950520835,
+            2.6467488606770835
+          ],
+          [
+            1.9102376302083333,
+            2.65673828125
+          ],
+          [
+            1.9323933919270833,
+            2.4883626302083335
+          ],
+          [
+            1.9852294921875,
+            2.6867268880208335
+          ],
+          [
+            1.7241007486979167,
+            2.5723673502604165
+          ],
+          [
+            2.03277587890625,
+            2.75604248046875
+          ]
+        ],
+        "scope": "Descriptive seed-cluster bootstrap. Sequential rendered inputs may differ; this is not exact counterfactual branching."
+      },
+      "delay-40": {
+        "paired_initial_condition_seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "safe_success_rate_difference": 0.75,
+        "paired_seed_bootstrap95": [
+          0.375,
+          1.0
+        ],
+        "max_initial_physical_error": 0.0,
+        "reset_camera_mae_by_seed_front_wrist": [
+          [
+            1.9233194986979167,
+            2.5054931640625
+          ],
+          [
+            1.7582194010416667,
+            2.5499471028645835
+          ],
+          [
+            2.0206095377604165,
+            2.9153238932291665
+          ],
+          [
+            2.0072835286458335,
+            3.04638671875
+          ],
+          [
+            2.2784016927083335,
+            2.52899169921875
+          ],
+          [
+            2.3511149088541665,
+            2.911376953125
+          ],
+          [
+            1.9543050130208333,
+            2.658203125
+          ],
+          [
+            2.1384073893229165,
+            2.6149088541666665
+          ]
+        ],
+        "scope": "Descriptive seed-cluster bootstrap. Sequential rendered inputs may differ; this is not exact counterfactual branching."
+      },
+      "delay-10": {
+        "paired_initial_condition_seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "safe_success_rate_difference": 0.625,
+        "paired_seed_bootstrap95": [
+          0.25,
+          0.875
+        ],
+        "max_initial_physical_error": 0.0,
+        "reset_camera_mae_by_seed_front_wrist": [
+          [
+            2.0966389973958335,
+            2.2533772786458335
+          ],
+          [
+            1.9166666666666667,
+            2.7462361653645835
+          ],
+          [
+            2.1278076171875,
+            2.7999674479166665
+          ],
+          [
+            1.9619954427083333,
+            2.9027099609375
+          ],
+          [
+            1.9545694986979167,
+            2.8089599609375
+          ],
+          [
+            1.8304646809895833,
+            2.3318684895833335
+          ],
+          [
+            1.6131591796875,
+            2.4723714192708335
+          ],
+          [
+            2.0652058919270835,
+            3.07537841796875
+          ]
+        ],
+        "scope": "Descriptive seed-cluster bootstrap. Sequential rendered inputs may differ; this is not exact counterfactual branching."
+      }
+    },
+    "environment_steps": 4571,
+    "physics_steps": 22855,
+    "model_queries": {
+      "encoder": 4571,
+      "posterior": 9142,
+      "task_actor": 4571,
+      "uncertainty_ensemble": 4571,
+      "imagined_step": 4571,
+      "safety_actor": 9142,
+      "safety_critic": 9142,
+      "failure_head": 4571
+    },
+    "worker_elapsed_seconds_sum": 635.7842088080943,
+    "artifact_audit": "passed all episode states/actions, frozen filter settings and source hashes",
+    "source_summary_sha256": {
+      "runs/unisafe/adaptation-grasp-pilot-20261015/summary.json": "7dd189721168eb4f3528244c4d351b14f271be7d44bc9b94e5c7cf8f7ae93078"
+    },
+    "limits": "Development results are exploratory; confidence intervals do not correct for selection. Renderer history makes independence approximate. Frozen filters do not guarantee unchanged safety rates."
+  },
+  "stopped_startup_trial": {
+    "status": "stopped",
+    "reason": "Concurrent simulator startup consumed CPU and slowed the existing pilot from approximately 25 seconds per full episode to roughly 170 seconds. Both check workers were still initializing and had created no episode directory. Deliberately stopped this startup trial; preserve it and use sequential fresh-process evaluation.",
+    "workers_confirmed_dead": true,
+    "jobs": [
+      {
+        "name": "baseline-seed8",
+        "status": "stopped_before_episodes",
+        "directory": "runs/unisafe/adaptation-paircheck-20261015/baseline-seed8",
+        "pid": 64831,
+        "started_unix": 1792100610.0351782,
+        "observed_elapsed_seconds_to_stop_audit": 267.1178412437439,
+        "environment_steps": 0,
+        "model_queries": 0,
+        "training_updates": 0
+      },
+      {
+        "name": "grasp-delay20-seed8",
+        "status": "stopped_before_episodes",
+        "directory": "runs/unisafe/adaptation-paircheck-20261015/grasp-delay20-seed8",
+        "pid": 64832,
+        "started_unix": 1792100610.0354095,
+        "observed_elapsed_seconds_to_stop_audit": 267.1176950931549,
+        "environment_steps": 0,
+        "model_queries": 0,
+        "training_updates": 0
+      }
+    ],
+    "environment_steps": 0,
+    "model_queries": 0,
+    "training_updates": 0,
+    "limits": "Elapsed times include the interval until this stop audit; concurrent worker times overlap. This does not establish that parallel Isaac execution is impossible."
+  },
+  "development_search": {
+    "status": "complete",
+    "runs": [
+      {
+        "method": "evolution",
+        "search_seed": 2026,
+        "generation": 0,
+        "genes": [
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            2,
+            1,
+            2
+          ],
+          [
+            7,
+            0,
+            1
+          ],
+          [
+            2,
+            4,
+            2
+          ]
+        ],
+        "fitness": [
+          0.4988666666666667,
+          0.4965166666666667,
+          0.9968,
+          -0.25
+        ],
+        "outcomes": {
+          "timeout": 5,
+          "success": 9,
+          "physical_failure": 1,
+          "boundary_exit": 1
+        },
+        "episodes": 16,
+        "environment_steps": 2143,
+        "physics_steps": 10715,
+        "worker_elapsed_seconds": 220.47549396008253,
+        "directory": "runs/unisafe/adaptation-search-dev-20261015/evolution-2026/generation-00"
+      },
+      {
+        "method": "evolution",
+        "search_seed": 2026,
+        "generation": 1,
+        "genes": [
+          [
+            7,
+            0,
+            1
+          ],
+          [
+            7,
+            1,
+            2
+          ],
+          [
+            7,
+            1,
+            2
+          ],
+          [
+            5,
+            2,
+            1
+          ]
+        ],
+        "fitness": [
+          0.49563333333333337,
+          0.7466833333333334,
+          -0.0006333333333333468,
+          0.9948333333333333
+        ],
+        "outcomes": {
+          "success": 11,
+          "timeout": 3,
+          "physical_failure": 2
+        },
+        "episodes": 16,
+        "environment_steps": 1797,
+        "physics_steps": 8985,
+        "worker_elapsed_seconds": 185.21499244868755,
+        "directory": "runs/unisafe/adaptation-search-dev-20261015/evolution-2026/generation-01"
+      },
+      {
+        "method": "evolution",
+        "search_seed": 2026,
+        "generation": 2,
+        "genes": [
+          [
+            5,
+            2,
+            1
+          ],
+          [
+            5,
+            4,
+            2
+          ],
+          [
+            7,
+            0,
+            1
+          ],
+          [
+            3,
+            0,
+            1
+          ]
+        ],
+        "fitness": [
+          0.9973,
+          0.24723333333333333,
+          0.4979,
+          0.7474
+        ],
+        "outcomes": {
+          "success": 12,
+          "timeout": 2,
+          "physical_failure": 2
+        },
+        "episodes": 16,
+        "environment_steps": 1420,
+        "physics_steps": 7100,
+        "worker_elapsed_seconds": 149.63101652264595,
+        "directory": "runs/unisafe/adaptation-search-dev-20261015/evolution-2026/generation-02"
+      },
+      {
+        "method": "random",
+        "search_seed": 2026,
+        "generation": 0,
+        "genes": [
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            2,
+            1,
+            2
+          ],
+          [
+            7,
+            0,
+            1
+          ],
+          [
+            2,
+            4,
+            2
+          ]
+        ],
+        "fitness": [
+          0.4988666666666667,
+          0.4965166666666667,
+          0.9968,
+          -0.25
+        ],
+        "outcomes": {
+          "timeout": 5,
+          "success": 9,
+          "physical_failure": 1,
+          "boundary_exit": 1
+        },
+        "episodes": 16,
+        "environment_steps": 2143,
+        "physics_steps": 10715,
+        "worker_elapsed_seconds": 212.48573481291533,
+        "directory": "runs/unisafe/adaptation-search-dev-20261015/random-2026/generation-00"
+      },
+      {
+        "method": "random",
+        "search_seed": 2026,
+        "generation": 1,
+        "genes": [
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            6,
+            2,
+            1
+          ],
+          [
+            2,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            0
+          ]
+        ],
+        "fitness": [
+          0.7474999999999999,
+          0.24883333333333335,
+          -0.0005166666666666653,
+          0.24793333333333334
+        ],
+        "outcomes": {
+          "success": 8,
+          "timeout": 5,
+          "physical_failure": 2,
+          "boundary_exit": 1
+        },
+        "episodes": 16,
+        "environment_steps": 2148,
+        "physics_steps": 10740,
+        "worker_elapsed_seconds": 212.6416983641684,
+        "directory": "runs/unisafe/adaptation-search-dev-20261015/random-2026/generation-01"
+      },
+      {
+        "method": "random",
+        "search_seed": 2026,
+        "generation": 2,
+        "genes": [
+          [
+            3,
+            1,
+            0
+          ],
+          [
+            4,
+            2,
+            0
+          ],
+          [
+            1,
+            4,
+            2
+          ],
+          [
+            4,
+            1,
+            2
+          ]
+        ],
+        "fitness": [
+          0.49688333333333334,
+          0.4969,
+          0.24956666666666666,
+          0.9974
+        ],
+        "outcomes": {
+          "success": 11,
+          "timeout": 3,
+          "physical_failure": 2
+        },
+        "episodes": 16,
+        "environment_steps": 1546,
+        "physics_steps": 7730,
+        "worker_elapsed_seconds": 160.06927808374166,
+        "directory": "runs/unisafe/adaptation-search-dev-20261015/random-2026/generation-02"
+      },
+      {
+        "method": "policy_gradient",
+        "search_seed": 2026,
+        "generation": 0,
+        "genes": [
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            2,
+            1,
+            2
+          ],
+          [
+            7,
+            0,
+            1
+          ],
+          [
+            2,
+            4,
+            2
+          ]
+        ],
+        "fitness": [
+          0.4988666666666667,
+          0.4965166666666667,
+          0.9968,
+          -0.25
+        ],
+        "outcomes": {
+          "timeout": 5,
+          "success": 9,
+          "physical_failure": 1,
+          "boundary_exit": 1
+        },
+        "episodes": 16,
+        "environment_steps": 2143,
+        "physics_steps": 10715,
+        "worker_elapsed_seconds": 212.54076551645994,
+        "directory": "runs/unisafe/adaptation-search-dev-20261015/policy_gradient-2026/generation-00"
+      },
+      {
+        "method": "policy_gradient",
+        "search_seed": 2026,
+        "generation": 1,
+        "genes": [
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            7,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            3,
+            3,
+            0
+          ]
+        ],
+        "fitness": [
+          0.99705,
+          0.7480833333333333,
+          0.49853333333333333,
+          0.7480166666666667
+        ],
+        "outcomes": {
+          "success": 12,
+          "timeout": 4
+        },
+        "episodes": 16,
+        "environment_steps": 1699,
+        "physics_steps": 8495,
+        "worker_elapsed_seconds": 174.22547697648406,
+        "directory": "runs/unisafe/adaptation-search-dev-20261015/policy_gradient-2026/generation-01"
+      },
+      {
+        "method": "policy_gradient",
+        "search_seed": 2026,
+        "generation": 2,
+        "genes": [
+          [
+            4,
+            1,
+            0
+          ],
+          [
+            5,
+            1,
+            0
+          ],
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            5,
+            1,
+            2
+          ]
+        ],
+        "fitness": [
+          0.7481166666666668,
+          0.7484666666666666,
+          0.49829999999999997,
+          -0.0021166666666666556
+        ],
+        "outcomes": {
+          "success": 10,
+          "physical_failure": 2,
+          "timeout": 4
+        },
+        "episodes": 16,
+        "environment_steps": 1789,
+        "physics_steps": 8945,
+        "worker_elapsed_seconds": 181.31687312200665,
+        "directory": "runs/unisafe/adaptation-search-dev-20261015/policy_gradient-2026/generation-02"
+      }
+    ],
+    "episodes": 144,
+    "environment_steps": 16828,
+    "physics_steps": 84140,
+    "query_counts": {
+      "encoder": 16828,
+      "posterior": 33656,
+      "task_actor": 16828,
+      "uncertainty_ensemble": 16828,
+      "imagined_step": 16828,
+      "safety_actor": 33656,
+      "safety_critic": 33656,
+      "failure_head": 16828
+    },
+    "pretrained_weight_updates": 0,
+    "optimizer_updates": 9,
+    "elapsed_seconds": 1740.4519674703479,
+    "worker_elapsed_seconds_overlapping": 1708.601329807192,
+    "selection_scope": "Training only; finalists require separate validation before test"
+  },
+  "common_initial_population_audit": {
+    "status": "pass",
+    "methods": [
+      "evolution",
+      "random",
+      "policy_gradient"
+    ],
+    "generation": 0,
+    "episodes_each": 16,
+    "control_steps_each": 2143,
+    "matching": "All initial states and recorded fields including camera hashes, proposed/executed actions and model decisions match bitwise; only inference timings excluded.",
+    "accounting": "All three full physical evaluations remain counted."
+  },
+  "development_search_artifact_audit": {
+    "status": "complete",
+    "groups": {},
+    "comparisons": {},
+    "environment_steps": 16828,
+    "physics_steps": 84140,
+    "model_queries": {
+      "encoder": 16828,
+      "posterior": 33656,
+      "task_actor": 16828,
+      "uncertainty_ensemble": 16828,
+      "imagined_step": 16828,
+      "safety_actor": 33656,
+      "safety_critic": 33656,
+      "failure_head": 16828
+    },
+    "worker_elapsed_seconds_sum": 1708.601329807192,
+    "artifact_audit": "passed all episode states/actions, frozen filter settings and source hashes",
+    "source_summary_sha256": {
+      "runs/unisafe/adaptation-search-dev-20261015/evolution-2026/generation-00/summary.json": "b1884b5021b1efedf9904d0dfdf29a565d71830481aed1e53669bc6916798427",
+      "runs/unisafe/adaptation-search-dev-20261015/evolution-2026/generation-01/summary.json": "ad6b52fe38a20b90abd40097751f115622046e451da3a53f436a684f7605faa4",
+      "runs/unisafe/adaptation-search-dev-20261015/evolution-2026/generation-02/summary.json": "b0a265588f00478d0d4a50c60f2d59536e5785f56b059cbd0911aa9262c1fea1",
+      "runs/unisafe/adaptation-search-dev-20261015/random-2026/generation-00/summary.json": "6e6687768eb8f33b70342953ad6b435ab8d13906cf67a13a66845e12cc753321",
+      "runs/unisafe/adaptation-search-dev-20261015/random-2026/generation-01/summary.json": "5e30b353d3614c5a2f9e0f5d44272560a93fa5b053050d9dfbcbeea7f5c54751",
+      "runs/unisafe/adaptation-search-dev-20261015/random-2026/generation-02/summary.json": "e29e3aaf541bb6baead7f8e9b437ed40aefa2ae0bff9db9dfb084632de353628",
+      "runs/unisafe/adaptation-search-dev-20261015/policy_gradient-2026/generation-00/summary.json": "76818d453abf79a9626de770749b1a44d467b2f184d50b52dfc761bfcbcf0608",
+      "runs/unisafe/adaptation-search-dev-20261015/policy_gradient-2026/generation-01/summary.json": "ea79e5eb2bed3704e1e5174af2229c37ee21dc04d58f0c0ad7499d930ef47b62",
+      "runs/unisafe/adaptation-search-dev-20261015/policy_gradient-2026/generation-02/summary.json": "0df98512aa47ef30c65f26b98f3fd9a867c468cc9af6c39e0c5608db77aed486"
+    },
+    "limits": "Development results are exploratory; confidence intervals do not correct for selection. Renderer history makes independence approximate. Frozen filters do not guarantee unchanged safety rates."
+  },
+  "fresh_process_acceptance": {
+    "summary": {
+      "status": "complete",
+      "jobs": [
+        {
+          "name": "baseline-seed8",
+          "status": "complete",
+          "directory": "runs/unisafe/adaptation-paircheck-serial-20261015/baseline-seed8",
+          "pid": 74001,
+          "started_unix": 1792102725.086987,
+          "returncode": 0,
+          "elapsed_seconds": 51.58166591078043,
+          "episodes": 1,
+          "environment_steps": 300,
+          "physics_steps": 1500,
+          "query_counts": {
+            "encoder": 300,
+            "posterior": 600,
+            "task_actor": 300,
+            "uncertainty_ensemble": 300,
+            "imagined_step": 300,
+            "safety_actor": 600,
+            "safety_critic": 600,
+            "failure_head": 300
+          },
+          "outcomes": {
+            "timeout": 1
+          }
+        },
+        {
+          "name": "grasp-delay20-seed8",
+          "status": "complete",
+          "directory": "runs/unisafe/adaptation-paircheck-serial-20261015/grasp-delay20-seed8",
+          "pid": 74711,
+          "started_unix": 1792102776.6698492,
+          "returncode": 0,
+          "elapsed_seconds": 29.4843405559659,
+          "episodes": 1,
+          "environment_steps": 51,
+          "physics_steps": 255,
+          "query_counts": {
+            "encoder": 51,
+            "posterior": 102,
+            "task_actor": 51,
+            "uncertainty_ensemble": 51,
+            "imagined_step": 51,
+            "safety_actor": 102,
+            "safety_critic": 102,
+            "failure_head": 51
+          },
+          "outcomes": {
+            "success": 1
+          }
+        }
+      ],
+      "completed_episodes": 2,
+      "completed_environment_steps": 351,
+      "completed_physics_steps": 1755,
+      "completed_model_queries": {
+        "encoder": 351,
+        "posterior": 702,
+        "task_actor": 351,
+        "uncertainty_ensemble": 351,
+        "imagined_step": 351,
+        "safety_actor": 702,
+        "safety_critic": 702,
+        "failure_head": 351
+      },
+      "elapsed_seconds": 81.06919609382749,
+      "sum_process_elapsed_seconds_overlapping": 81.06600646674633,
+      "failed_job_count": 0,
+      "automatic_retries": 0,
+      "limits": "If any job failed, completed totals omit its partial artifacts; audit and include those before reporting study totals. Concurrent wall times overlap."
+    },
+    "prefix_audit": {
+      "pass": true,
+      "first_executed_action_difference_step": 32,
+      "identical_preceding_actions": 32,
+      "max_initial_state_error": 0.0,
+      "physical_observations_equal_through_first_change": true,
+      "camera_hashes_equal_through_first_change": true,
+      "preceding_transitions_equal": true,
+      "equal_lengths_if_actions_never_change": true,
+      "baseline": "runs/unisafe/adaptation-paircheck-serial-20261015/baseline-seed8/episode-0000",
+      "candidate": "runs/unisafe/adaptation-paircheck-serial-20261015/grasp-delay20-seed8/episode-0000",
+      "environment_steps": 351,
+      "physics_steps": 1755,
+      "limits": "Engineering acceptance on development seed 8; not a generalization estimate or arbitrary simulator snapshot."
+    },
+    "artifact_audit": {
+      "status": "complete",
+      "groups": {
+        "baseline": {
+          "episodes": 1,
+          "outcomes": {
+            "timeout": 1
+          },
+          "safe_success_rate": 0.0,
+          "safe_success_wilson95": [
+            0.0,
+            0.7934506856227626
+          ],
+          "physical_failure_wilson95": [
+            0.0,
+            0.7934506856227626
+          ],
+          "environment_steps": 300,
+          "interventions": 52,
+          "mean_utility": 0.0,
+          "episodes_detail": [
+            {
+              "seed": 8,
+              "outcome": "timeout",
+              "steps": 300,
+              "interventions": 52,
+              "adapter_override_steps": 0,
+              "job": {
+                "name": "baseline",
+                "seed": 8,
+                "adapter": {
+                  "hold_steps": 0,
+                  "min_close_steps": 3,
+                  "min_aperture": 0.005
+                }
+              }
+            }
+          ]
+        },
+        "grasp-delay20": {
+          "episodes": 1,
+          "outcomes": {
+            "success": 1
+          },
+          "safe_success_rate": 1.0,
+          "safe_success_wilson95": [
+            0.20654931437723745,
+            1.0
+          ],
+          "physical_failure_wilson95": [
+            0.0,
+            0.7934506856227626
+          ],
+          "environment_steps": 51,
+          "interventions": 0,
+          "mean_utility": 0.9966,
+          "episodes_detail": [
+            {
+              "seed": 8,
+              "outcome": "success",
+              "steps": 51,
+              "interventions": 0,
+              "adapter_override_steps": 19,
+              "job": {
+                "name": "grasp-delay20",
+                "seed": 8,
+                "adapter": {
+                  "hold_steps": 20,
+                  "min_close_steps": 3,
+                  "min_aperture": 0.005
+                }
+              }
+            }
+          ]
+        }
+      },
+      "comparisons": {
+        "grasp-delay20": {
+          "paired_initial_condition_seeds": [
+            8
+          ],
+          "safe_success_rate_difference": 1.0,
+          "paired_seed_bootstrap95": [
+            1.0,
+            1.0
+          ],
+          "max_initial_physical_error": 0.0,
+          "reset_camera_mae_by_seed_front_wrist": [
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "scope": "Descriptive seed-cluster bootstrap. Sequential rendered inputs may differ; this is not exact counterfactual branching."
+        }
+      },
+      "environment_steps": 351,
+      "physics_steps": 1755,
+      "model_queries": {
+        "encoder": 351,
+        "posterior": 702,
+        "task_actor": 351,
+        "uncertainty_ensemble": 351,
+        "imagined_step": 351,
+        "safety_actor": 702,
+        "safety_critic": 702,
+        "failure_head": 351
+      },
+      "worker_elapsed_seconds_sum": 74.53191563859582,
+      "artifact_audit": "passed all episode states/actions, frozen filter settings and source hashes",
+      "source_summary_sha256": {
+        "runs/unisafe/adaptation-paircheck-serial-20261015/baseline-seed8/summary.json": "59cb2765c95a271140de62a7d0bd5636302d29ed256f73e25e1400596818a568",
+        "runs/unisafe/adaptation-paircheck-serial-20261015/grasp-delay20-seed8/summary.json": "0b4ccb60c1cc6fa0ad404240fa6d7e2f244dd65fd5b3a03c83926437d15b48c4"
+      },
+      "limits": "Development results are exploratory; confidence intervals do not correct for selection. Renderer history makes independence approximate. Frozen filters do not guarantee unchanged safety rates."
+    }
+  },
+  "replicated_protocol_sha256": "64b47d797877db237b2337931add85deff35f5c6f14a77aaf33eec8f01f9fef8"
 }
