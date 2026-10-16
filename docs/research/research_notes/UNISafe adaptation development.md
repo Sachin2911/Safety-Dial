@@ -325,3 +325,48 @@ Validation has started with 31 candidates on eight separate initial-condition se
 the unchanged baseline. No within-method finalist duplicates reduced this count. The
 declared rule will select one controller per method before the reserved test plan is
 frozen. Validation and reserved-test conclusions remain pending.
+
+
+## Validation selection and reserved-test freeze
+
+All 248 validation episodes are complete. The unchanged baseline has two physical failures
+and six timeouts on the eight validation starts. The selected candidates are:
+
+| Method | Hold steps | Minimum closing steps | Minimum aperture per finger | Validation successes / 8 | Observed violations |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Evolution | 15 | 3 | 5 mm | 8 | 0 |
+| Random search | 60 | 1 | 5 mm | 8 | 0 |
+| Categorical policy gradient | 15 | 3 | 6 mm | 8 | 0 |
+| Fixed rule | 40 | 3 | 5 mm | 7 | 0 |
+| Unchanged baseline | 0 | 3 | 5 mm | 0 | 2 |
+
+The fixed rule's remaining episode times out. These are selection-set outcomes from eight
+starts, not unbiased generalization or safety estimates. The evolved and policy-gradient
+controllers choose almost the same parameters; the observed validation results do not
+establish an evolutionary advantage. All selected adaptations meet the declared observed
+violation screen. This screen does not establish a population risk bound.
+
+A separate selection audit recomputes all 31 candidates' outcome counts, steps, utility
+and violations from their eight worker episodes, checks their exact seed coverage and
+training-finalist hashes, and verifies each selected controller against the declared rule.
+It passes. Validation adds 19,956 control steps and 99,780 physics steps, with 1,854.02 seconds
+of measured launcher time. Worker timers overlap that value. No pretrained weights change.
+
+The full training and validation artifact audits also pass: all 88,868 control steps and
+444,340 physics steps across these two phases satisfy the recorded state/action, outcome,
+filter-setting, model-query and source-hash checks. This total excludes the earlier
+development runs, which remain separately counted. The training decision audit's
+repeatability qualification remains unchanged.
+
+The reserved plan freezes five selected filtered controllers on 64 new starts each and
+baseline/evolution without replacement on 32 starts each: 384 fresh-process episodes in
+total. Parameters and runtime/analysis hashes were frozen at source commit
+`b45e72052cc3dd10ddb98ee27e107d355fd709d5`, before the first reserved trial. The original
+filter settings and shadow-query ablation are preserved. The reserved batch is now running;
+its final outcomes, prefix audits, videos, full cost ledger and research review remain
+pending.
+
+Raw evidence: `runs/unisafe/adaptation-validation-20261015/selection-audit.json` and
+`runs/unisafe/adaptation-evaluation-20261015/`. The compact evidence includes all candidate
+validation metrics, the selection and physical audits, the selected parameters and a hash
+of the complete frozen test plan.
