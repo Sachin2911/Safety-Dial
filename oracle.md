@@ -1,6 +1,6 @@
 # Oracle: task continuation under safety filtering
 
-**Central reference for the research rethink. Updated 15 October 2026.**
+**Central reference for the research rethink. Updated 16 October 2026.**
 
 We have chosen to focus on helping a robotic manipulation agent complete its task when
 a learned safety filter intervenes. This choice remains conditional on finding meaningful,
@@ -79,12 +79,18 @@ time should be accounted for separately, including adaptation and candidate eval
 ## Authorized experimental exploration
 
 Sachin subsequently authorized continued diagnosis, evolutionary experiments and other
-environments if needed until a solid result is established. The current bounded exploration
-adapts gripper-release behavior under the unchanged UNISafe filter, comparing evolution,
+environments if needed until a solid result is established. The completed bounded study
+adapted gripper-release behavior under the unchanged UNISafe filter, comparing evolution,
 random search, a simple fixed rule and policy-gradient learning in the same adapter family.
-These are provisional experimental choices, not a conclusion about the best method or
-research contribution. Development, validation and reserved test seeds are separated in the
-[development protocol and log](docs/research/research_notes/UNISafe%20adaptation%20development.md).
+The completed reserved evaluation improves completion from 2/64 for baseline to 54/64 for
+evolution, 55/64 for a fixed rule, 56/64 for random search and 54/64 for categorical policy
+gradient. Evolution has seven physical failures and one boundary exit, versus six physical
+failures for baseline. Most of the completion gain persists without filtering. This establishes
+a useful grasp-maintenance response on the migrated stack, with no demonstrated evolutionary
+advantage, filter-specific continuation benefit or unchanged safety risk. See the
+[completed study](docs/research/reports/UNISafe%20grasp%20maintenance%20and%20evolutionary%20adaptation.md)
+and [development protocol and log](docs/research/research_notes/UNISafe%20adaptation%20development.md).
+The initial empirical objective is complete; the broader research contribution remains open.
 
 ## Decisions still open
 
@@ -97,7 +103,8 @@ investigation. A matched replay of the shown filtered seed-1 episode now isolate
 gripper opening before the first intervention: briefly holding the proposed gripper closed
 completes that case at 2.8 seconds with the same filter enabled. This demonstrates avoidable
 loss of progress in one case, not a filter-induced stall or recovery from an existing stall.
-The policy's reason for opening early and generalization remain unresolved; see the
+The actor's reason for opening early remains unresolved. The automatic adapter's reserved
+results above now extend the behavioral correction beyond that case; see the
 [release and switching diagnosis](docs/research/reports/UNISafe%20release%20and%20switching%20diagnosis.md).
 The environment and world model are not yet fixed.
 

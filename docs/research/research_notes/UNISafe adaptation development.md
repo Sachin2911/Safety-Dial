@@ -1,8 +1,9 @@
 # UNISafe adaptation development
 
-**Started 15 October 2026; updated 16 October 2026, ongoing.** Sachin authorized continued
+**Started 15 October 2026; completed 16 October 2026.** Sachin authorized continued
 diagnosis, evolutionary experiments and other environments if needed, with a solid empirical result as the goal.
-This is an experiment log, not a completed result or a claim of evolutionary novelty.
+This log preserves the development sequence. The [completed report](../reports/UNISafe%20grasp%20maintenance%20and%20evolutionary%20adaptation.md)
+contains reserved results and interpretation; no evolutionary advantage was established.
 
 The starting evidence is the
 [matched release diagnosis](../reports/UNISafe%20release%20and%20switching%20diagnosis.md).
@@ -126,7 +127,7 @@ differs from the first pilot because preceding trajectories change renderer hist
 pilots retain all outcomes; these development runs do not establish exact counterfactuals.
 
 Raw evidence: `runs/unisafe/adaptation-grasp-pilot-20261015/`.
-The initial optimization comparisons are complete below. Independent validation and reserved tests remain outstanding.
+The initial optimization comparisons are complete below. At this stage, independent validation and reserved tests were outstanding.
 
 ## Evaluation execution and selection
 
@@ -324,7 +325,7 @@ Validation has started with 31 candidates on eight separate initial-condition se
 248 episodes in total: nine finalists per optimization method, three fixed controls and
 the unchanged baseline. No within-method finalist duplicates reduced this count. The
 declared rule will select one controller per method before the reserved test plan is
-frozen. Validation and reserved-test conclusions remain pending.
+frozen. At this stage, validation and reserved-test conclusions were pending.
 
 
 ## Validation selection and reserved-test freeze
@@ -362,11 +363,37 @@ The reserved plan freezes five selected filtered controllers on 64 new starts ea
 baseline/evolution without replacement on 32 starts each: 384 fresh-process episodes in
 total. Parameters and runtime/analysis hashes were frozen at source commit
 `b45e72052cc3dd10ddb98ee27e107d355fd709d5`, before the first reserved trial. The original
-filter settings and shadow-query ablation are preserved. The reserved batch is now running;
-its final outcomes, prefix audits, videos, full cost ledger and research review remain
-pending.
+filter settings and shadow-query ablation are preserved. This freeze preceded the reserved
+batch; its completed results and research review are recorded below.
 
 Raw evidence: `runs/unisafe/adaptation-validation-20261015/selection-audit.json` and
 `runs/unisafe/adaptation-evaluation-20261015/`. The compact evidence includes all candidate
 validation metrics, the selection and physical audits, the selected parameters and a hash
 of the complete frozen test plan.
+
+
+## Completed reserved evaluation and research review
+
+All 384 reserved jobs completed without failure or retry. Every recorded physical transition
+passes the artifact audit, and all 320 declared observed-prefix comparisons pass. The two
+predeclared comparison videos have been reviewed against the physical traces. The full
+[report and evidence](../reports/UNISafe%20grasp%20maintenance%20and%20evolutionary%20adaptation.md)
+provide outcomes, uncertainty, parameters, videos and costs.
+
+Across 64 starts, baseline has 2 successes, 6 physical failures and 56 timeouts. Evolution
+has 54 successes, 7 physical failures, 1 boundary exit and 2 timeouts. Fixed, random and
+policy-gradient adaptations have 55, 56 and 54 successes respectively. The paired
+completion gain over baseline is 81.25 percentage points, with a conservative exact 95%
+interval of 61.22 to 90.85 points. There is no demonstrated evolutionary advantage.
+
+On the first 32 starts, filtered adaptation improves success from 0 to 28; unfiltered
+adaptation improves it from 0 to 26. This supports basic grasp maintenance, without an
+established filter-specific continuation contribution. Physical violations remain, and
+unchanged or improved safety has not been established. Seed 1006 illustrates a top-block
+height failure despite maintaining the middle-block grasp and intervening twice.
+
+The final ledger includes 1,424 completed adaptation episodes, 166,697 control steps and
+833,485 physics steps, with no incomplete workers. Earlier baseline, causal, engineering
+and uninstrumented migration work remains separate. The original training repeatability
+qualification is unchanged. No additional environment or stress evaluation was needed to
+establish this bounded empirical result. The broader research question remains open.

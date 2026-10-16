@@ -296,11 +296,13 @@ artifact hashes.
 
 ## UNISafe task-adapter study
 
-The [development log](../docs/research/research_notes/UNISafe%20adaptation%20development.md)
-records the current grasp-maintenance experiments. Their held-out evaluation is still
-pending. The adapter uses task command history and measured finger positions to delay
-release after a stable grasp. It changes only the gripper proposal, before the unchanged
-filter assesses the action. Ground-truth object states are evaluation inputs only.
+The [completed report](../docs/research/reports/UNISafe%20grasp%20maintenance%20and%20evolutionary%20adaptation.md)
+records 384 reserved trials: completion improves substantially, but evolution does not
+outperform the simple controls and physical violations remain. The
+[development log](../docs/research/research_notes/UNISafe%20adaptation%20development.md)
+preserves the experimental decisions. The adapter uses task command history and measured
+finger positions to delay release after a stable grasp. It changes only the gripper proposal,
+before the unchanged filter assesses the action. Ground-truth object states are evaluation inputs only.
 
 Use the existing Python 3.12 environment and run long experiments through supervisor on
 Vast. Each command requires a new output directory; reruns never silently replace evidence.
@@ -390,3 +392,32 @@ explicitly partial progress snapshot. Incomplete workers are listed separately; 
 recorded steps are lower bounds. Earlier shared baseline, causal and engineering work is
 separate, with uninstrumented migration attempts explicitly identified. Aggregate launcher
 and worker timers overlap and must not be added together.
+
+
+The completed study's frozen two-job demonstration is available without repeating search:
+
+```bash
+/venv/main/bin/python experiments/scripts/unisafe_adaptation_batch.py \
+    --plan docs/research/reports/assets/unisafe-grasp-maintenance-20261016/demonstration-plan.json \
+    --output runs/unisafe/my-grasp-demonstration
+```
+
+It uses the known seed-1000 baseline and evolutionary example in separate processes and
+checks the frozen source hashes. It is a demonstration, not a fresh holdout. No rerun was
+needed for the published videos; those use the original reserved recordings. All selected
+controllers and their parameter values are preserved in the report's compact evidence.
+Future research needs new test seeds and its own declared accounting scope.
+
+Regenerate the compact evidence and figures from the retained study artifacts, without
+simulator execution or model queries, into a new directory:
+
+```bash
+/venv/main/bin/python experiments/scripts/unisafe_adaptation_report.py \
+    --evaluation runs/unisafe/adaptation-evaluation-20261015 \
+    --ledger runs/unisafe/adaptation-study-20261015/final-ledger.json \
+    --output runs/unisafe/my-report-export
+```
+
+The exporter checks counts, current frozen-source hashes, video hashes and exact paired
+p-values independently with SciPy. It preserves the known training repeatability limitation
+through the development record, and keeps earlier shared costs separate from this study.

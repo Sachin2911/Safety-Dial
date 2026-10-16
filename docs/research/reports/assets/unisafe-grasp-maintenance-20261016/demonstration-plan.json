@@ -1,0 +1,61 @@
+{
+  "workers": 1,
+  "scope": "Recorded seed-1000 example, now known. A rerun is demonstration, not new holdout evidence.",
+  "source_commit": "b45e72052cc3dd10ddb98ee27e107d355fd709d5",
+  "frozen_sources_sha256": {
+    "experiments/scripts/unisafe_adaptation_worker.py": "08b80513d0243a722e06f54efdb46d8d322fbaa92bf56b2832ff4c0ecf1e0a3f",
+    "experiments/scripts/unisafe_adaptation_batch.py": "b987c14cb03bc58330a38e2e8ac602a2fda7f9f32f6561e16a37b761829538a1",
+    "experiments/helpers/unisafe_adaptation.py": "6ab2010e7123fc595c3044dd84726e02d5c3008aa0e136d4733c930e99f19a5c",
+    "experiments/helpers/unisafe_controller.py": "7ecf9ffc43e352369e5a7970600cbb5f934e3f9e53a587ed28c627b07bec7a9b",
+    "experiments/helpers/unisafe_model.py": "a86601dbdf6f1ea5de3510bc783cb9e96efb75af1b18e781c62148a8b3eae8cc",
+    "experiments/helpers/unisafe_environment.py": "28344b3627c07f3dc0dd2fb6388b8aff61547dd2d12ab11c2eac1d4daca0286a",
+    "experiments/helpers/unisafe_source.py": "1779589665f1451b90186e99cf01c245d1a3c6b4eccfc9d2351dce858a8be2fb",
+    "configs/unisafe/baseline.json": "056fed5eaea93869f6e085ccb6409d82f9f1a58ee5dcc1cc92154ae675b77e71",
+    "experiments/helpers/unisafe_statistics.py": "9ffa877ba3fef5137aad217273898845251f49502089f72b65f92d8de8419cec",
+    "experiments/scripts/unisafe_adaptation_analyze.py": "f50307f75b03acd02e4c8a33352b2fb94248a2560be4de45205f970d6db6494f",
+    "experiments/scripts/unisafe_adaptation_evaluate.py": "84768979a0134a76c81babfa1e280fded38668114e3807a2528fa33640a7de39",
+    "experiments/scripts/unisafe_adaptation_video.py": "78c51c435a55a4a330ccf89615d086325529ee52e13aef51ddc5e699c63255c2"
+  },
+  "jobs": [
+    {
+      "name": "evolution-seed1000",
+      "plan": {
+        "purpose": "Reserved evaluation; one episode in a fresh simulator process",
+        "adapter_kind": "grasp_release_delay",
+        "record_cameras": true,
+        "episodes": [
+          {
+            "name": "evolution",
+            "seed": 1000,
+            "mode": "filtered",
+            "adapter": {
+              "hold_steps": 15,
+              "min_close_steps": 3,
+              "min_aperture": 0.005
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "baseline-seed1000",
+      "plan": {
+        "purpose": "Reserved evaluation; one episode in a fresh simulator process",
+        "adapter_kind": "grasp_release_delay",
+        "record_cameras": true,
+        "episodes": [
+          {
+            "name": "baseline",
+            "seed": 1000,
+            "mode": "filtered",
+            "adapter": {
+              "hold_steps": 0,
+              "min_close_steps": 3,
+              "min_aperture": 0.005
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

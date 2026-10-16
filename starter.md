@@ -137,12 +137,16 @@ interventions begin. Holding the proposed gripper closed briefly completes this 
 at 2.8 seconds with the same filter enabled. Rapid switching worsens the later arm motion,
 but removing it alone does not complete extraction. This is a hand-timed prevention probe,
 not a general fix or demonstrated recovery from the stalled state.
-An ongoing [adaptation study](docs/research/research_notes/UNISafe%20adaptation%20development.md)
-now tests an automatic grasp-aware release delay, comparing evolution, random search,
-categorical policy gradient and fixed rules under the unchanged filter. This is a
-provisional response to the diagnosed weakness on the migrated stack. Independent
-validation and reserved evaluation are pending; no evolutionary advantage or general
-safety improvement has been established.
+The completed [adaptation study](docs/research/reports/UNISafe%20grasp%20maintenance%20and%20evolutionary%20adaptation.md)
+evaluates an automatic grasp-aware release delay on 64 reserved starts per filtered method.
+Completion improves from 2/64 for baseline to 54/64 for evolution, 55/64 for a fixed rule,
+56/64 for random search and 54/64 for categorical policy gradient. Evolution still has
+seven physical failures and one boundary exit, versus six physical failures for baseline.
+The gain mostly persists without filtering. We now have an explained weakness and a tested
+response, but no demonstrated evolutionary advantage or filter-specific continuation result.
+Use the fixed rule as a strong comparator and investigate residual physical failures before
+claiming a safety improvement. The earlier recommendations below record the starting plan;
+current evidence and the next research decision are in the completed report.
 
 ## Where to begin
 
