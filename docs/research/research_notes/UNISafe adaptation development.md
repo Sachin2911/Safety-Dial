@@ -1,7 +1,7 @@
 # UNISafe adaptation development
 
-**15 October 2026, ongoing.** Sachin authorized continued diagnosis, evolutionary
-experiments and other environments if needed, with a solid empirical result as the goal.
+**Started 15 October 2026; updated 16 October 2026, ongoing.** Sachin authorized continued
+diagnosis, evolutionary experiments and other environments if needed, with a solid empirical result as the goal.
 This is an experiment log, not a completed result or a claim of evolutionary novelty.
 
 The starting evidence is the
@@ -220,8 +220,9 @@ training-utility figure remains a description of evaluated populations, with no 
 performance interpretation.
 
 For the repeated study, evolution and random search also reproduce all 16 first-generation
-trajectories for search seed 2027 exactly: 3,642 control steps each. The policy-gradient
-and remaining search-seed checks await their runs. All physical evaluations count.
+trajectories for search seed 2027 exactly: 3,642 control steps each. The remaining
+initial-population checks are now complete, with the qualification below. All physical
+evaluations count.
 
 The new ledger inventories actual worker summaries and avoids adding aggregate search or
 batch totals a second time. Partial workers are explicitly separated from exact completed
@@ -283,3 +284,44 @@ The development seed-8 pair passes the stronger check at step 32. Three focused 
 unexplained task-action differences, intended gripper overrides, and filter-mode changes
 with matching versus differing shadow assessments. The earlier acceptance records are
 preserved; the additional audit is saved separately. No runtime controller was changed.
+
+
+## Completed replicated training
+
+All 576 declared training episodes are complete: three search seeds, four generations,
+four candidates and four initial-condition seeds per method. The complete decision audit
+reconstructs every candidate, evaluation order, measured fitness and optimizer state
+exactly. This checks the implementation and recorded optimization procedure; the separate
+full physical-artifact audit is queued after validation.
+
+| Method | Training episodes | Successes | Physical failures | Boundary exits | Timeouts | Control steps |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Evolution | 192 | 128 | 15 | 2 | 47 | 21,462 |
+| Random search | 192 | 122 | 15 | 1 | 54 | 23,839 |
+| Categorical policy gradient | 192 | 121 | 16 | 2 | 53 | 23,611 |
+
+These are outcomes of evaluated training candidates, including unsuccessful candidates and
+elite reevaluations. They are not held-out estimates of the selected controllers and do
+not establish optimizer superiority. The common episode cap yields different actual
+interaction costs. The replicated search adds 68,912 control steps and 344,560 physics
+steps, with a measured search elapsed time of 7,119.66 seconds. The 6,997.99-second sum of
+worker timers overlaps that elapsed time and must not be added to it. Twelve updates per
+method give 36 optimizer updates; only the categorical policy-gradient updates use gradient
+descent, and no pretrained weights are updated.
+
+All three methods have equal recorded initial-population control trajectories and outcomes
+for every search seed. For seeds 2028 and 2029, all recorded fields other than timing match
+exactly over 2,861 and 1,201 steps per method, respectively. The previously documented
+seed-2027 discrepancy in unused model outputs remains visible; the full audit reports
+`complete_with_repeatability_differences`, not universal bitwise repeatability.
+
+Raw evidence: `runs/unisafe/adaptation-search-replicated-20261015/reconstruction-audit/`.
+Its training-utility plot is descriptive, not a final-controller performance comparison.
+The compact evidence record now includes the reconstruction results, query accounting,
+source-summary hashes and plot hash.
+
+Validation has started with 31 candidates on eight separate initial-condition seeds,
+248 episodes in total: nine finalists per optimization method, three fixed controls and
+the unchanged baseline. No within-method finalist duplicates reduced this count. The
+declared rule will select one controller per method before the reserved test plan is
+frozen. Validation and reserved-test conclusions remain pending.
