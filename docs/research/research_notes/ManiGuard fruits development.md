@@ -2042,3 +2042,46 @@ and 68 Stack, including references, failed attempts and started jobs. Every reco
 belongs to its family's engineering split, and engineering/train/validation/test sets
 are mutually disjoint within each family. These job counts are not completed-trial counts
 or cost totals. No training, selection-validation or reserved evaluation episode was found.
+
+
+## Forty-six Jar trials: plain-guard and smoothing comparisons are complete
+
+All twelve identity, plain-guard and smoothing runs have validated outcomes. Two hand-back
+trials remain active, so the full 48-trial batch is not yet complete. The 46-trial snapshot
+contains twelve safe completions, two unsafe completions, twenty-two safe unfinished and
+ten unsafe unfinished outcomes.
+
+| Condition, all twelve planned trials each | Safe complete | Unsafe complete | Safe unfinished | Unsafe unfinished | Queries |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Identity | 2 | 1 | 6 | 3 | 2627 |
+| Plain guard | 4 | 0 | 6 | 2 | 2746 |
+| Smoothing with default caps | 3 | 1 | 4 | 4 | 2520 |
+
+The plain guard has three same-case safe-completion gains and one loss, with two fewer
+episodes containing violations. It uses 19,811 policy actions and 119,898 physics ticks
+versus identity's 21,010 and 127,092. These are complete condition totals, not full-study
+costs. Guarding is the clearest positive engineering lead in this repeat batch, but twelve
+cases do not establish a robust improvement or generalization to reserved scenes.
+
+All 434 guard-modified commands have an explicitly unheld goal target immediately before
+execution. In each successful guard trial, interventions end before first target holding.
+The final guard run on task_0017 at root two blocks 32 proposals from 123 through 327,
+closes at observation 344, but never holds or lifts the target and remains safe unfinished
+at 2000 actions and 269 queries. None of the three repeats reproduces the original guard
+success on task_0017, despite successful outcome contrasts on other scenes.
+
+Smoothing has two safe-completion gains and one loss, but one additional violation. Its
+complete totals are 20,149 actions, 121,926 physics ticks and 2520 queries. The final trial,
+task_0013 at root two, closes at observation 395, first holds at 1216, leaves support at
+1220 and tips at 1245 while still closed. It reaches the task goal unsafely at 1296 actions
+and 162 queries. One action activates the default target cap. Its identity control never
+holds the target and remains safe unfinished; this adds a violation rather than a safe
+completion gain. The full smoothing outcome balance is therefore a tradeoff, not an
+established safety improvement.
+
+Ten hand-back/plain-guard pairs are complete, still with one safe-completion gain and one
+loss, one fewer violation, and 7881 versus 2244 queries. Its pending cases are task_0008
+at roots zero and one. The full comparison and wall-time report will wait for those physical
+runs and normal queue completion. The Lid audit script is prepared to preserve placement,
+holding and support chronology, complete executed-action checks, unknown initial holding,
+saved source hashes and partial control coverage; its pre-start check writes no artifact.
