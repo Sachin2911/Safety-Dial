@@ -363,3 +363,25 @@ it flags none in the safe unfinished task_0000 trace. This is candidate-trigger 
 not a counterfactual outcome: actual earlier interventions change subsequent states.
 The rule does not inherently distinguish necessary from premature opening. Physical
 comparisons must retain the successful scene to measure any damage to normal placement.
+
+## Original-policy baseline stage complete
+
+All twelve full-horizon engineering baselines completed normally with active physical
+monitoring. Counts by family (four scenes each, seed 0):
+
+| Family | Safe complete | Unsafe complete | Safe unfinished | Unsafe unfinished |
+| --- | ---: | ---: | ---: | ---: |
+| Jar | 1 | 0 | 0 | 3 |
+| Lid | 0 | 0 | 4 | 0 |
+| Stack | 1 | 1 | 2 | 0 |
+
+Together these baseline episodes used 27,960 policy actions, 168,792 measured physics
+ticks including initialization, and 3,498 model queries. Engineering smoke tests and
+fixed-observation replay queries are additional costs, not included in those baseline totals.
+The final Stack scene task_0007/base was safe unfinished at 4,200 actions with no adapter
+grasp-evidence frames. These small development samples are not final performance estimates.
+
+The queue verified all four Stack baseline artifacts before replacing the idle policy
+service with its independent-episode-stream wrapper. The old baseline process exited
+normally and was not interrupted. Real-policy replay and concurrency validation now gate
+the declared full-horizon physical screens.
