@@ -2133,3 +2133,58 @@ Lid's fresh reference completed 32 actions and four queries; all six strict inte
 replay queries passed, including agreement with the reference's first proposal. Physical
 Lid batch PID 233183 started under policy PID 230565; two of sixteen outcomes had completed
 when its start record was saved. No optimizer, selection-validation or reserved trial has run.
+
+
+## Six Lid guard trials and isolated implementation of the joint-limit correction
+
+Six Lid outcomes are audited: zero safe completions, one unsafe completion, four safe
+unfinished and one unsafe unfinished. Two identity/guard pairs are complete, with no
+safe-completion gain or loss and equal violation counts; guard uses 1459 queries versus
+identity's 300 over these pairs. Partial coverage is not a final performance comparison.
+
+On task_0003/root two, identity first holds at observation 145, leaves support without
+lid placement at 146 and completes unsafely after 489 actions and 62 queries. The guard
+first holds at 153, begins blocking at proposal 163, violates at observation 171 and
+remains unsafe unfinished at 1900 actions and 1220 queries. All 1198 modified commands
+occur while the goal target is held. Neither trial ever records the lid on the container.
+
+At proposal 170, the guard predicts +0.6762268 mm, below its unchanged 1 mm lift threshold,
+and permits the original action. Measured end-effector rise to observation 171 is
++0.6698370 mm, and support becomes false while the container is held without its lid.
+Clipping the requested target to the pinned robot limits leaves this prediction unchanged.
+The previous and following proposals are blocked. This is a separate trigger-tolerance
+limitation; the Jar joint-limit correction is not claimed to repair this boundary.
+
+The task_0014/root-one guard briefly records lid placement at observations 542 through 545
+but never holds the target and remains safe unfinished. It changes two unheld-target
+commands at proposals 512 and 540. Identity also remains safe unfinished, without lid
+placement or target holding. The initial task_0006/root-one guard is inactive and never
+places or holds; task_0008/root-two identity briefly places the lid at 616 through 622
+but never holds. Safe inactivity is not counted as a guard repair.
+
+Implemented the controller-limit-aware variant in the isolated checkout
+`/workspace/Safety-Dial-guard-limits`, commit `731648391d4b19c8262d92d3a74857a912fe578a`.
+The running checkout's implementation is unchanged. An explicit `guard_joint_limits`
+flag defaults to false for legacy compatibility; the corrected configs enable it.
+Live robot controller position limits and has-limit masks enter the recorded frame.
+Only the target used for the guard estimate is clipped; accepted policy actions keep
+the original controller path. Corrected events retain requested and feasible-target
+predictions, and executed records clarify that they describe environment input commands.
+The prediction mode stays fixed across optimizer comparisons.
+
+Ninety focused tests and Ruff pass, including the exact recorded Jar failure, unchanged
+feasible-target decisions, bounded-joint masks, missing/malformed limits, explicit mode
+validation and controller-index selection. Offline replay of all 24 completed Jar guard
+and hand-back traces reproduces 41,913 adapted actions and guard/countdown decisions,
+including 13,198 recorded query boundaries, with the correction disabled. This replay
+makes no simulator interactions or new policy calls. Old 48-trial records still validate
+under the added default configuration field.
+
+Declared a twelve-episode follow-up in the isolated commit: the original and corrected
+plain guard and hand-back variants on the diagnosed task_0008 scene, roots zero, one and
+two. Within each pair only the prediction flag changes. This is an engineering correction
+check, not a claim of broad improvement over identity. Activate it only after the unchanged
+Lid comparison finishes normally and its outcomes/costs are audited, then require a new
+32-action corrected-guard reference with live limits and a strict six-query replay.
+Physical correction testing remains outstanding; the local isolated commit has not yet
+been activated or pushed as runtime code on the research branch.

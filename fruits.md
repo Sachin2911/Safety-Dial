@@ -268,7 +268,12 @@ confirms matching declared settings and code, with differing initial images and 
 proposals. None of the three task_0017 guard repeats safely completes, limiting the
 repeatability of that original case. Across the full guard repeat set, all 434 modified
 commands occur while the goal target is explicitly unheld. The running Lid comparison
-is testing the same prerequisite idea on observed container-lifting failures.
+is testing the same prerequisite idea on observed container-lifting failures. Its first
+six audited trials contain no safe completion; the first unsafe matched case violates
+before lid placement under both identity and the guard. At that guard boundary, a
+0.676 mm predicted rise is below the unchanged 1 mm trigger, and measured rise is
+0.670 mm. Joint-limit clipping does not change that prediction, so this is a separate
+trigger-tolerance limitation rather than the diagnosed Jar clipping mismatch.
 
 The completed Jar return comparison also exposes a concrete limitation in this guard's
 lift estimate. On task_0008/root zero, an action predicted to move downward instead lifts
@@ -276,8 +281,10 @@ an open jar: its requested second-joint target lies beyond the lower joint limit
 controller clips the target internally, reversing the estimated vertical direction.
 The [boundary audit](docs/research/research_notes/ManiGuard%20fruits%20Jar%20guard%20lift%20prediction%20mismatch.json)
 finds a raw prediction of -5.18 mm, a limit-aware prediction of +14.60 mm, and measured
-motion of +13.67 mm. A corrected guard must account for the controller's feasible targets
-and be physically tested; this offline reconstruction does not establish a repair. The
+motion of +13.67 mm. A controller-limit-aware variant is implemented in an isolated checkout and passes
+90 focused tests plus exact compatibility replay of 41,913 old guard/hand-back actions.
+Its declared twelve-trial original/corrected comparison remains pending after the Lid
+batch. These software checks do not establish a physical repair. The
 current Lid comparison retains the original guard so its declared results remain interpretable.
 
 ## 4. Preserve a useful grasp through premature release requests
