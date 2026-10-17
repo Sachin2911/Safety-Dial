@@ -13,7 +13,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'experiments'))
 
-from helpers.maniguard_search import search_state, terminal_utility, validate_protocol
+from helpers.maniguard_search import audit_generation, search_state, validate_protocol
 from helpers.unisafe_search import AdapterSearch
 
 
@@ -38,7 +38,9 @@ def main():
                      'experiments/helpers/maniguard_search.py',
                      'experiments/helpers/unisafe_search.py',
                      'experiments/scripts/maniguard_batch.py',
-                     'experiments/helpers/maniguard_jobs.py'):
+                     'experiments/helpers/maniguard_jobs.py',
+                     'experiments/helpers/maniguard_batch_report.py',
+                     'experiments/helpers/maniguard_results.py'):
         raw = (ROOT / relative).read_bytes()
         (implementation / Path(relative).name).write_bytes(raw)
         hashes[relative] = hashlib.sha256(raw).hexdigest()
@@ -79,22 +81,23 @@ def main():
                           'elapsed_seconds': time.monotonic() - started,
                           'accounting': 'Count all preserved process records and episode ledgers, including failed work.'})
                     raise RuntimeError(f'Search stopped on infrastructure failure: {directory}')
-                evidence = [json.loads(line) for line in (directory / 'evidence.jsonl').read_text().splitlines()]
-                if len(evidence) != len(jobs):
-                    raise ValueError('Candidate evidence is incomplete')
-                fitness = []
-                for candidate in range(len(genes)):
-                    matched = [row for row in evidence if row['label'] == f'candidate-{candidate}']
-                    if len(matched) != len(protocol['training_episodes']):
-                        raise ValueError('Every candidate needs the same number of training episodes')
-                    fitness.append(float(np.mean([terminal_utility(row) for row in matched])))
+                try:
+                    audit = audit_generation(directory, plan)
+                except (OSError, ValueError, KeyError, TypeError) as exc:
+                    write(output / 'failure.json', {'stage': directory.name,
+                          'validation_error': {'type': type(exc).__name__, 'message': str(exc)},
+                          'partial_artifacts': str(directory),
+                          'elapsed_seconds': time.monotonic() - started,
+                          'accounting': 'Preserve all physical work, including rejected evidence.'})
+                    raise
+                write(output / (directory.name + '.audit.json'), audit)
+                fitness = audit['fitness']
                 optimizer.tell(genes, fitness)
                 write(output / (directory.name + '.optimizer.json'), search_state(optimizer))
-                totals = {key: sum(row['ledger'][key] for row in evidence) for key in
-                          ('physics_steps', 'physics_seconds', 'env_step_attempts', 'env_steps_returned',
-                           'policy_queries', 'policy_query_seconds', 'policy_control_steps')}
+                totals = audit['batch_report']['recorded_cost_totals']
                 progress.append({'method': method, 'search_seed': seed, 'generation': generation,
-                                 'genes': genes, 'fitness': fitness, 'episodes': len(evidence),
+                                 'genes': genes, 'fitness': fitness, 'episodes': len(jobs),
+                                 'candidate_outcomes': audit['candidate_outcomes'],
                                  'counts': totals, 'elapsed_seconds': time.monotonic() - stage_started,
                                  'directory': str(directory)})
                 write(output / 'progress.json', progress)

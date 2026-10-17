@@ -1,11 +1,14 @@
 """Protocol checks and shared objective for matched compact-controller search."""
 
 import itertools
+import json
 from copy import deepcopy
+from pathlib import Path
 
 import numpy as np
 
 from helpers.maniguard_adaptation import AdapterConfig
+from helpers.maniguard_batch_report import OUTCOMES, summarize_batch
 from helpers.unisafe_search import AdapterSearch
 
 METHODS = ('evolution', 'random', 'policy_gradient')
@@ -60,6 +63,39 @@ def terminal_utility(evidence):
     """
     completion = evidence['safe_completion'] or evidence['unsafe_completion']
     return float(completion) - 2 * float(evidence['violation'])
+
+
+def audit_generation(directory, expected_plan):
+    """Derive fitness from complete physical records matched to the proposed generation."""
+    directory = Path(directory)
+    if json.loads((directory / 'plan.json').read_text()) != expected_plan:
+        raise ValueError('Saved generation plan differs from the proposed candidates')
+    if not (directory / 'complete.json').is_file():
+        raise ValueError('Generation is missing its batch completion marker')
+    report = summarize_batch(directory)
+    if report['statuses'] != {'completed': len(expected_plan['jobs'])}:
+        raise ValueError('Every proposed candidate episode must complete and validate')
+    if (report['started_episodes_missing_cost_fields']
+            or report['started_episodes_with_unverified_physics_attachment']
+            or report['finished_processes_missing_elapsed_seconds']):
+        raise ValueError('Generation has incomplete physical or process cost accounting')
+    labels = [f'candidate-{i}' for i in range(len(expected_plan['genes']))]
+    if {row['label'] for row in report['episodes']} != set(labels):
+        raise ValueError('Generation candidate labels do not match its proposed genes')
+    common_episodes = None
+    fitness, outcomes = [], []
+    for label in labels:
+        matched = [row for row in report['episodes'] if row['label'] == label]
+        episodes = {(row['family'], row['scene'], row['seed']) for row in matched}
+        if len(episodes) != len(matched):
+            raise ValueError('Candidate has duplicate scene/seed evaluations')
+        if common_episodes is None:
+            common_episodes = episodes
+        if episodes != common_episodes:
+            raise ValueError('Candidates must share the same scene/seed evaluations')
+        fitness.append(float(np.mean([terminal_utility(row['result']) for row in matched])))
+        outcomes.append({name: sum(row['result'][name] for row in matched) for name in OUTCOMES})
+    return {'fitness': fitness, 'candidate_outcomes': outcomes, 'batch_report': report}
 
 
 def search_state(optimizer):

@@ -91,8 +91,13 @@ This is a training preference, not a safety guarantee. REINFORCE learns a distri
 over the same adapter parameters; pretrained VLA weights remain frozen. Finalists require
 separate validation before reserved testing. Optimizer states, source hashes, proposed
 candidates, all episode costs and failures are saved. A failed stage stops the search;
-its partial interactions must still enter the study accounting. No search budget has yet
-been selected or executed for ManiGuard.
+its partial interactions must still enter the study accounting. Before any optimizer update,
+the runner audits the saved generation plan against its proposed candidates, validates each
+physical result and safety monitor, requires complete cost accounting, and checks that every
+candidate received the same distinct scene/seed pairs. Fitness is derived from those physical
+records, not the cached `evidence.jsonl` summaries. Every generation saves its full audit and
+four outcome counts per candidate. No search budget has yet been selected or executed for
+ManiGuard.
 
 The optional `--parallel-clients` policy-server flag keeps a separate sampling stream
 for each episode identifier. Batch `--workers 2` requires that server metadata explicitly

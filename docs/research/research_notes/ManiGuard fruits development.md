@@ -1087,3 +1087,34 @@ idle Lid server to Stack, passed a fresh 32-action reference and strict interlea
 and started the declared 24-trial Stack motion comparison. Existing physical jobs were
 not interrupted. No optimizer training, selection validation or reserved evaluation has
 run; the broader study remains in progress.
+
+## Validate physical search evidence before optimizer updates
+
+Review of the prepared search runner found that it previously accepted cached
+`evidence.jsonl` rows after a successful batch process, checking row and label counts but
+not revalidating their association with the proposed candidate plan. The runner now checks
+the saved generation plan, completion marker, every process/result/safety monitor and full
+cost accounting through the batch auditor. It also rejects duplicate or unequal candidate
+scene/seed allocations. Only then does it derive fitness and call the optimizer update.
+Each generation retains the audit and all four candidate outcome counts; rejected evidence
+writes a failure record and preserves all physical work for accounting.
+
+Seven added cases exercise incorrect cached success claims, a different saved candidate
+plan, missing completion, a corrupt physical monitor, missing query accounting, and two
+forms of unmatched scene/seed allocation. The focused search/result/batch suite passes
+47 tests; the changed Python files pass Ruff. These are CPU correctness checks, not
+physical search outcomes. No optimizer episode was launched. Runtime controllers and live
+screen plans were unchanged while the Stack motion trials continued.
+
+## First Stack motion repeats completed
+
+The first two of 24 motion-comparison trials have completed and validated. The tightest
+0.01/0.01 joint-target cap on task_0010 root two changes 1115 of 4200 commands, but
+remains unsafe unfinished. Its first violation is `all_stack_upright` at observation 997;
+the extracted target is still upright at that observation. This capped run still records
+a stack-upright violation. The task_0013 root-one identity control remains
+safe unfinished after 4200 actions. These are different scenes and seeds, and their full
+within-scene/root comparisons are pending, so this partial snapshot cannot rank the caps.
+The [motion progress record](ManiGuard%20fruits%20Stack%20motion%20progress.json) preserves
+all 24 planned statuses, actual recorded costs including partial work, completed diagnostics
+and trace hashes. The batch process and next two episode processes remain live.
