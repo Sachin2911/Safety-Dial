@@ -21,6 +21,7 @@ from helpers.maniguard_phase2_families import (
     validate_scene_access,
 )
 from helpers.maniguard_phase2_model import genome_hash, identity_genome, load_model
+from helpers.maniguard_phase2_protocol import IMPLEMENTATION_FILES
 from helpers.maniguard_phase2_source import prepare_runtime
 
 
@@ -102,6 +103,7 @@ def main():
               ROOT / "experiments/helpers/maniguard_source.py",
               ROOT / "experiments/helpers/maniguard_adaptation.py",
               ROOT / "experiments/helpers/maniguard_client.py"]
+    paths += [ROOT / relative for relative in IMPLEMENTATION_FILES]
     paths += list((ROOT / "configs/maniguard/phase2").glob("*.json"))
     for path in sorted(set(paths)):
         relative = path.relative_to(ROOT)

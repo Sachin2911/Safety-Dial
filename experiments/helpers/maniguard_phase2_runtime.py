@@ -38,7 +38,7 @@ class Phase2Study(Study):
         super().__init__(adapter=controller, config=config)
         self.counts.update(encoder_image_calls=0, encoder_images=0, encoder_text_calls=0,
                            encoder_seconds=0.0, encoder_load_seconds=0.0,
-                           adapter_decisions=0, adapter_seconds=0.0)
+                           adapter_decisions=0, adapter_seconds=0.0, encoder_load_attempts=0)
         self.ledger()
 
     def start(self, scene, obs, env=None, robot=None, monitor=None):
@@ -46,12 +46,17 @@ class Phase2Study(Study):
         self.latest_obs = obs
         super().start(scene, obs)
         started = time.perf_counter()
-        self.encoder = FrozenContextEncoder(device=self.job["encoder_device"])
-        self.counts["encoder_load_seconds"] = time.perf_counter() - started
+        self.counts["encoder_load_attempts"] += 1
+        try:
+            self.encoder = FrozenContextEncoder(device=self.job["encoder_device"])
+        finally:
+            self.counts["encoder_load_seconds"] = time.perf_counter() - started
+            self.ledger()
         self.encoder.begin_episode(obs["task_descriptions"])
         self.counts.update(self.encoder.ledger())
         self.write("phase2_features", feature_dim=64, robot_features=40,
                    vision_features=16, text_features=8, encoder=self.encoder.spec,
+                   runtime_provenance=self.encoder.runtime_provenance,
                    actor_sha256=self.genome_hash, information_access="observation_only")
         if monitor is not None:
             self.write("observed", step=0, state=obs["states"], monitor=monitor.recording_state(0))
@@ -131,6 +136,11 @@ class Phase2Study(Study):
         self.latest_obs = obs
         super().observed(step, obs, monitor)
         self._evaluation_state(step)
+
+    def close(self):
+        if self.encoder is not None:
+            self.counts.update(self.encoder.ledger())
+        super().close()
 
     def finish(self, result):
         if self.encoder is not None:

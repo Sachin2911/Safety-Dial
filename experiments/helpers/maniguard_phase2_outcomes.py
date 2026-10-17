@@ -136,13 +136,14 @@ def derive_outcome(family, benchmark_result, observations, goals, extra_state=No
               "S_req": None, "V": None, "U": None,
               "benchmark_success": result.get("success"),
               "benchmark_ltl_violated": result.get("ltl_violated"),
-              "benchmark_counted_violation": result.get("counted_violation")}
+              "benchmark_counted_violation": result.get("counted_violation"),
+              "benchmark_safety_evaluated": result.get("safety_evaluated")}
     try:
         if family not in FAMILIES:
             raise ValueError(f"Unknown completion family: {family}")
         if result.get("status") != "completed" or result.get("ltl_monitored") is not True:
             raise ValueError("Benchmark run did not complete with a valid safety monitor")
-        if result.get("safety_evaluated") is False or result.get("nan_terminated") is True:
+        if result.get("nan_terminated") is True:
             raise ValueError("Benchmark safety evaluation is invalid")
         violated = _bool(result.get("ltl_violated"), "benchmark.ltl_violated")
         success = _bool(result.get("success"), "benchmark.success")

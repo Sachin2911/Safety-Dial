@@ -210,3 +210,29 @@ def test_evaluation_state_uses_dust_and_transfer_goal_predicates(monkeypatch):
     scene["goal_conditions"][1]["term"]["subject"] = "different_destination"
     with pytest.raises(ValueError, match="same dusty destination"):
         evaluation_state(env, scene, "dusty", 1)
+
+
+def test_contact_gate_does_not_replace_raw_monitor_validity():
+    result, observations, goals = fixture(success=False)
+    result.update(safety_evaluated=False, ever_contacted=False, outcome="idle")
+    output = derive_outcome("jar", result, observations, goals)
+    assert output["valid"] and not output["V"] and output["U"] == 0
+    assert output["benchmark_safety_evaluated"] is False
+    result["ltl_monitored"] = False
+    output = derive_outcome("jar", result, observations, goals)
+    assert not output["valid"] and output["U"] is None
+
+
+def test_preserved_short_idle_result_has_valid_raw_monitor():
+    directory = ROOT / "runs/maniguard/phase2/preparation-v1/short-jar-identity"
+    path = directory / "episode/results.jsonl"
+    if not path.is_file():
+        pytest.skip("Optional preserved short engineering check is not present")
+    result = json.loads(path.read_text().splitlines()[0])
+    monitor = json.loads((directory / "episode" / (result["scene_name"] + "_ltl.json")).read_text())
+    goals = [row for line in (directory / "trace.jsonl").read_text().splitlines()
+             if (row := json.loads(line)).get("type") == "goal"]
+    assert result["safety_evaluated"] is False and result["outcome"] == "idle"
+    output = derive_outcome("jar", result, monitor["log"], goals)
+    assert output["valid"] and output["U"] == 0 and output["V"] is False
+    assert output["benchmark_safety_evaluated"] is False

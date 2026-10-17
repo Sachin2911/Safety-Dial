@@ -1,7 +1,7 @@
 {
   "schema": "maniguard-phase2-requirements-v1",
   "objective": "Implement phase2.md fully and push regularly",
-  "plan_sha256": "29155a2b03c660feea760f64d0283d243bd3ef3f4127f1eb525ebba2f918da13",
+  "plan_sha256": "cc9344afcca49dc4dfe80f60c11472a737bc71aa9ff6cda093ca17fbc132a1f0",
   "status": "active",
   "requirements": [
     {
@@ -12,8 +12,11 @@
       "status": "partial",
       "evidence": [
         "phase2.md",
-        "experiments/helpers/maniguard_phase2_model.py"
-      ]
+        "experiments/helpers/maniguard_phase2_model.py",
+        "experiments/helpers/maniguard_phase2_results.py",
+        "runs/maniguard/phase2/reports/preparation-partial-v2/report.json"
+      ],
+      "progress_note": "The shared runtime has short engineering evidence on Jar and Stack only; all-family performance remains unmeasured."
     },
     {
       "id": "prior_work",
@@ -40,8 +43,10 @@
       "evidence": [
         "configs/maniguard/phase2/families.json",
         "configs/maniguard/phase2/sources.json",
-        "experiments/tests/test_maniguard_phase2_families.py"
-      ]
+        "experiments/tests/test_maniguard_phase2_families.py",
+        "runs/maniguard/phase2/setup/service-clutter-v1/service.json"
+      ],
+      "progress_note": "All six families are registered. Jar/Stack short checks validate routing; Clutter policy startup failed before physics and is under diagnosis. Six-family initialization is incomplete."
     },
     {
       "id": "splits",
@@ -63,8 +68,11 @@
       "evidence": [
         "experiments/helpers/maniguard_phase2_features.py",
         "experiments/tests/test_maniguard_phase2_features.py",
-        "runs/maniguard/phase2/setup/encoder-smoke.json"
-      ]
+        "runs/maniguard/phase2/setup/encoder-smoke.json",
+        "runs/maniguard/phase2/reports/preparation-partial-v2/report.json",
+        "experiments/tests/test_maniguard_phase2_results.py"
+      ],
+      "progress_note": "Timestamped features were audited in six shared-runtime Jar/Stack short checks; no reserved-family features or outcomes were used."
     },
     {
       "id": "recurrent",
@@ -74,8 +82,10 @@
       "status": "partial",
       "evidence": [
         "experiments/helpers/maniguard_phase2_model.py",
-        "experiments/tests/test_maniguard_phase2_model.py"
-      ]
+        "experiments/tests/test_maniguard_phase2_model.py",
+        "runs/maniguard/phase2/reports/preparation-partial-v2/report.json"
+      ],
+      "progress_note": "Offline deterministic activation on 48 recorded engineering feature rows: 10/14 sampled actors and 14/16 diagnostic mutations change choices across inputs with hidden state reset. Identity remains constant; this is not learning or performance evidence."
     },
     {
       "id": "composition",
@@ -85,8 +95,11 @@
       "status": "partial",
       "evidence": [
         "experiments/helpers/maniguard_phase2_adapter.py",
-        "experiments/tests/test_maniguard_phase2_adapter.py"
-      ]
+        "experiments/tests/test_maniguard_phase2_adapter.py",
+        "runs/maniguard/phase2/preparation-v1/attempts/short-jar-composition.json",
+        "runs/maniguard/phase2/preparation-v1/attempts/short-stack-composition.json"
+      ],
+      "progress_note": "Fixed composition executed valid 32-action engineering checks on Jar and Stack; full-horizon behavior remains unmeasured."
     },
     {
       "id": "identity",
@@ -95,8 +108,10 @@
       "acceptance": "Proposal/environment-input parity and saved initial populations",
       "status": "partial",
       "evidence": [
-        "experiments/tests/test_maniguard_phase2_runtime.py"
-      ]
+        "experiments/tests/test_maniguard_phase2_runtime.py",
+        "runs/maniguard/phase2/preparation-v1/audits/short-jar-identity-comparison-v2.json"
+      ],
+      "progress_note": "Jar queries occur at 0/8/16/24 and proposals equal adapted actions in each executor. Initial state hashes match but both image hashes differ, so identical-start cross-run trajectory equivalence is not established."
     },
     {
       "id": "evolution",
@@ -136,8 +151,12 @@
       "plan_sections": "7",
       "requirement": "Unchanged, fixed and contextual baselines",
       "acceptance": "Training-only selection and common validation episodes",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "experiments/helpers/maniguard_phase2_preparation_report.py",
+        "runs/maniguard/phase2/reports/preparation-partial-v2/report.json"
+      ],
+      "progress_note": "Reference-selection code is tested; no fixed reference is selected before all 24 full training cases validate. Contextual threshold is unchanged."
     },
     {
       "id": "completion",
@@ -147,16 +166,23 @@
       "status": "partial",
       "evidence": [
         "configs/maniguard/phase2/completion.json",
-        "experiments/tests/test_maniguard_phase2_outcomes.py"
-      ]
+        "experiments/tests/test_maniguard_phase2_outcomes.py",
+        "docs/research/research_notes/ManiGuard phase2 completion contract.md",
+        "runs/maniguard/phase2/preparation-v1/attempts/short-jar-identity.json"
+      ],
+      "progress_note": "Corrected safety_evaluated interpretation: it is an engagement gate, not raw monitor validity. Raw ltl_violated defines V; missing monitoring remains invalid. Re-audit preserves raw artifacts and prior receipt verdicts."
     },
     {
       "id": "fitness",
       "plan_sections": "8",
       "requirement": "Macro utility S_req-2V reconstructed from validated records",
       "acceptance": "Independent generation fitness audits",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "experiments/helpers/maniguard_phase2_results.py",
+        "experiments/tests/test_maniguard_phase2_results.py"
+      ],
+      "progress_note": "Supplemental S_req-2V and family-balanced aggregation are implemented and audited on short records; no generation or training fitness has been measured."
     },
     {
       "id": "selection",
@@ -171,8 +197,14 @@
       "plan_sections": "7,9",
       "requirement": "Count all interactions, queries, tuning, failures, encoder and walltime",
       "acceptance": "Whole-study accounting plus action/query/GPU-hour ceilings before launch",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "experiments/helpers/maniguard_phase2_preparation_report.py",
+        "runs/maniguard/phase2/reports/preparation-partial-v2/report.json",
+        "runs/maniguard/phase2/setup/encoder-loader-failure-v1.json",
+        "runs/maniguard/phase2/setup/service-clutter-v1/service.json"
+      ],
+      "progress_note": "All eight physical attempts counted once despite re-audits. Setup inference is separate; one-GPU reservation includes idle/setup once. The partial report stops before the Clutter startup deadline completes. Full preparation and measured pilot costing remain incomplete."
     },
     {
       "id": "preparation",
@@ -181,8 +213,10 @@
       "acceptance": "Predeclared plans and complete process/cost records",
       "status": "partial",
       "evidence": [
-        "configs/maniguard/phase2/preparation.json"
-      ]
+        "configs/maniguard/phase2/preparation.json",
+        "runs/maniguard/phase2/reports/preparation-partial-v2/report.json"
+      ],
+      "progress_note": "8/12 short checks are valid on Jar/Stack; 0/24 full preparation episodes have run. Clutter startup is being diagnosed before physics. No retry or full-performance claim is inferred."
     },
     {
       "id": "pilot",
@@ -253,24 +287,40 @@
       "plan_sections": "11",
       "requirement": "Verified family server routing and episode isolation",
       "acceptance": "Integration tests plus livehandshakes/physical references",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "experiments/helpers/maniguard_phase2_runtime.py",
+        "experiments/tests/test_maniguard_phase2_runtime.py",
+        "runs/maniguard/phase2/reports/preparation-partial-v2/report.json",
+        "runs/maniguard/phase2/setup/service-clutter-v1/service.json"
+      ],
+      "progress_note": "Jar/Stack original, identity, composition and stochastic short checks validate runtime integration. Clutter service startup has not validated; all-family routing remains incomplete."
     },
     {
       "id": "provenance",
       "plan_sections": "11",
       "requirement": "Code/source hashes, checkpoints, feature andaction provenance",
       "acceptance": "Saved source snapshots and artifact checksums for everyepisode",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "experiments/helpers/maniguard_phase2_audit.py",
+        "experiments/helpers/maniguard_phase2_results.py",
+        "runs/maniguard/phase2/reports/preparation-partial-v2/report.json"
+      ],
+      "progress_note": "Terminal audits verify saved source hashes and archived policy/family/encoder contracts. The partial report copies receipts, setup evidence, canonical audits, features and audit code. Historical live imports are not independently attested."
     },
     {
       "id": "documentation",
       "plan_sections": "11,12",
       "requirement": "Reproduction docs,reports,figures and final requirements audit",
       "acceptance": "Runnable instructions and evidence mapped to everyrequirement",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/research/research_notes/ManiGuard phase2 development.md",
+        "experiments/scripts/maniguard_phase2_preparation_report.py",
+        "runs/maniguard/phase2/reports/preparation-partial-v2/report.json"
+      ],
+      "progress_note": "Development log and immutable partial preparation report are updated; final results, figures and full requirements audit remain outstanding."
     },
     {
       "id": "publication",
@@ -280,5 +330,65 @@
       "status": "pending",
       "evidence": []
     }
-  ]
+  ],
+  "evidence_checkpoint": {
+    "updated_utc": "2026-10-17T22:20:55.328579+00:00",
+    "scope": "Eight short engineering checks only; no full preparation, pilot, learning or reserved-evaluation result.",
+    "report": "runs/maniguard/phase2/reports/preparation-partial-v2/report.json",
+    "valid_short_checks": 8,
+    "short_check_ceiling": 12,
+    "full_preparation_episodes": 0,
+    "full_preparation_ceiling": 24,
+    "pilot_episodes": 0,
+    "episode_counts": {
+      "policy_control_steps": 256,
+      "policy_queries": 40,
+      "physics_steps": 2224
+    },
+    "setup_inclusive_counts": {
+      "policy_control_steps": 256,
+      "policy_queries": 40,
+      "physics_steps": 2224,
+      "encoder_image_calls": 53,
+      "encoder_images": 106,
+      "encoder_text_calls": 7,
+      "adapter_decisions": 48,
+      "actor_rpc_attempts": 0
+    },
+    "reservation_snapshot": {
+      "timestamp": 1792275655.3285787,
+      "reservation_started_at": 1792272868,
+      "reserved_gpus": 1,
+      "wall_seconds": 2787.328578710556,
+      "allocated_gpu_seconds": 2787.328578710556
+    },
+    "preparation_complete": false,
+    "pilot_protocol_frozen": false,
+    "training_ready": false,
+    "prior_accounting_ready": false,
+    "clutter_startup": {
+      "status": "failed_before_physics_under_diagnosis",
+      "evidence": "runs/maniguard/phase2/setup/service-clutter-v1/service.json",
+      "deadline_seconds": 180,
+      "finished_unix_seconds": 1792275661.002887,
+      "clutter_physical_episodes": 0
+    },
+    "claims_not_established": [
+      "identical-start rollout equivalence",
+      "full-task performance",
+      "learning improvement",
+      "evolutionary advantage",
+      "reserved family transfer"
+    ]
+  },
+  "original_plan_sha256": "29155a2b03c660feea760f64d0283d243bd3ef3f4127f1eb525ebba2f918da13",
+  "latest_checkpoint": {
+    "report": "runs/maniguard/phase2/reports/preparation-partial-v3/report.json",
+    "short_attempts": 10,
+    "valid_short_attempts": 9,
+    "failed_short_attempts": 1,
+    "full_preparation_attempts": 0,
+    "pilot_attempts": 0,
+    "state": "encoder_provenance_repair_and_bounded_preparation_recovery"
+  }
 }

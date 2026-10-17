@@ -25,6 +25,7 @@ from helpers.maniguard_phase2_model import (
 class FakeEncoder:
     def __init__(self, device=None):
         self.spec = {"schema": "test-only-encoder", "checkpoint_sha256": "fixture"}
+        self.runtime_provenance = {"test_only": "loaded-module-and-owning-distribution"}
         self.text_features = None
         self.text_calls = 0
         self.images = []
@@ -344,3 +345,25 @@ def test_baseline_cli_routes_identity_to_original_executor_before_physics(monkey
     source = Path(invoked[0][0]).read_text()
     assert "from helpers.maniguard_runtime import STUDY" in source
     assert "from helpers.maniguard_phase2_runtime import STUDY" not in source
+
+
+def test_close_preserves_encoder_work_that_failed_between_decisions(study_factory):
+    study = study_factory()
+    study.encoder.ledger = lambda: {"encoder_image_calls": 0, "encoder_images": 0,
+                                    "encoder_text_calls": 1, "encoder_image_attempts": 1,
+                                    "encoder_text_attempts": 1, "encoder_seconds": 1.25}
+    study.close()
+    ledger = json.loads((study.output / "ledger.json").read_text())
+    assert ledger["encoder_image_attempts"] == 1
+    assert ledger["encoder_seconds"] == 1.25
+    assert ledger["phase"] == "process_exited_without_result"
+
+
+def test_runtime_records_loaded_encoder_provenance_separately(study_factory):
+    study = study_factory()
+    study.trace.flush()
+    rows = [json.loads(line) for line in (study.output / 'trace.jsonl').read_text().splitlines()]
+    row = next(item for item in rows if item['type'] == 'phase2_features')
+    assert row['runtime_provenance'] == study.encoder.runtime_provenance
+    assert row['encoder'] == study.encoder.spec
+    assert 'runtime_provenance' not in row['encoder']

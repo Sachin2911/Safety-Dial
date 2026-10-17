@@ -1,0 +1,60 @@
+{
+  "schema": "maniguard-phase2-aac-joint-v1",
+  "status": "unfrozen_pure_core",
+  "baseline_name": "AAC-joint",
+  "purpose": "Pure execution-scheduler core; not integrated, costed, or approved as an additional experiment arm.",
+  "source": {
+    "paper": "https://arxiv.org/html/2604.04161v2",
+    "repository": "https://github.com/Adaptive-Action-Chunking/libero",
+    "revision": "ff8c8e421f7805b5845a72d07fbd8f1171df74bf",
+    "selector_path": "action_optimization/action_entropy_pi05.py",
+    "selector_sha256": "afccedc7198187373dfba9a967544f46f482328a9578933d65967ddfdb75ae74",
+    "helper_path": "action_optimization/help_function.py",
+    "helper_sha256": "d162661c8f5a4ace9c014247a53ddcd9bdc14686dffbfd8ac4d0e9af6f217b36",
+    "license": "MIT",
+    "license_copyright": "Copyright (c) 2023 Lifelong Robot Learning",
+    "license_url": "https://github.com/Adaptive-Action-Chunking/libero/blob/ff8c8e421f7805b5845a72d07fbd8f1171df74bf/LICENSE"
+  },
+  "settings": {
+    "sample_count": 20,
+    "max_prefix": 16,
+    "joint_scale_radians": 0.2,
+    "covariance_epsilon": 0.000001,
+    "movement_threshold": 1.0,
+    "gripper_movement_weight": 0.2,
+    "gripper_entropy_weight": 1.0
+  },
+  "selection_contract": {
+    "entropy": "Gaussian entropy with sample covariance plus epsilon*I for all seven normalized joint coordinates, plus Bernoulli gripper entropy.",
+    "binary_gripper": "proposal[7] >= 0 means open; signs only affect entropy, original commands are executed unchanged.",
+    "normalization": "(absolute_joint_target - current_measured_joint) / joint_scale_radians; one fixed scale shared by all joints and families.",
+    "entropy_horizon": "max(2, first_argmax(diff(cumulative_mean_entropy)) + 1), matching the pinned author indexing.",
+    "movement": "L2 normalized sample-zero endpoint displacement from measured joints, plus gripper_movement_weight if sample-zero gripper sign changed within the prefix.",
+    "movement_floor": "First prefix k>=2 whose movement strictly exceeds the threshold; if none, use the available prefix length. Null threshold disables this floor for diagnostics.",
+    "horizon": "max(entropy_horizon, movement_horizon), with singleton input returning one; no padding or grid quantization.",
+    "execution": "Exact copy of sample zero up to selected horizon, preserving input dtype and values.",
+    "numerics": "Float64 np.mean over each prefix and first np.argmax, without near-tie tolerance. Constant step entropy can produce nonconstant rounded prefix means, as in the pinned author implementation."
+  },
+  "fidelity_limits": [
+    "Joint-space adaptation, not reproduction of the original Cartesian-delta benchmark.",
+    "One seven-dimensional Gaussian replaces separate three-dimensional position and rotation Gaussians.",
+    "Joint endpoint displacement replaces summed Cartesian translation and composed rotation in the movement floor.",
+    "Scale 0.2 radians and movement threshold 1.0 are proposed engineering settings, not selected from results.",
+    "The shared sixteen-action prefix can truncate a longer native VLA prediction; no discarded tail enters decisions.",
+    "A singleton chunk executes one action, extending the undefined empty-argmax author case; at least two samples are required.",
+    "Upstream pi0.5 launch threshold four differs from paper appendix threshold three; neither is imported as a joint-space threshold.",
+    "No policy sampling, simulator integration, wall-time validation, or empirical safety claim is implemented here."
+  ],
+  "freeze_requirements": {
+    "settings_frozen": false,
+    "allowed_feasibility_data": "Training/development-only cases predeclared by the main protocol; no reserved scenes or withheld family outcomes.",
+    "shared_parameters": "One normalization, movement threshold, sample count, and covariance regularizer across all families.",
+    "required_accounting": [
+      "independent proposal samples and RNG stream provenance",
+      "policy requests and denoising work",
+      "simulator steps including parameter selection",
+      "peak memory and elapsed time",
+      "explicit protocol amendment and bounded budget before live evaluation"
+    ]
+  }
+}

@@ -37,6 +37,7 @@ def main():
         "device": "cuda", "precision": "fp32",
     }
     record.update({'loader': 'open_clip.openai.load_openai_model; official TorchScript weights rebuilt as eager module', 'activation': 'QuickGELU', 'preprocess': 'bicubic shortest-side resize then center crop; OpenAI mean/std; RGB', 'projection_algorithm': 'NumPy float64 QR cast to float32', 'timing': 'wall time including preprocessing, device transfer and projection; synchronized GPU'})
+    record.update({'projection_sha256': ['be89829839b7f6cf569d769d0138cc212f989d8ac04e5f3931cf8d8d6ac9a6c3', '7053045c89a23896de3aac41730e57201a77732941a4431b10ecbede3c07bead'], 'runtime_versions': {'numpy': '1.26.4', 'torch': '2.6.0+cu124', 'torchvision': '0.21.0+cu124', 'Pillow': '11.0.0', 'open_clip_torch': '3.2.0', 'ftfy': '6.3.1', 'timm': '1.0.30', 'safetensors': '0.8.0'}})
     manifest = ROOT / "configs/maniguard/phase2/encoder.json"
     text = json.dumps(record, indent=2) + "\n"
     if manifest.exists() and manifest.read_text() != text:

@@ -1,10 +1,20 @@
 # Phase 2: shared evolutionary adaptation for safe manipulation
 
-**Status: research plan, 17 October 2026.** Sachin endorsed moving from individual
-ManiGuard repairs to a shared method with evidence across tasks. This document records
-that direction and proposes a bounded implementation and evaluation programme. The new
-controller, family integrations and experiments have not been implemented or run.
-Numerical budgets are planning defaults to cost and freeze before execution.
+**Original research plan: 17 October 2026.** Sachin endorsed moving from individual
+ManiGuard repairs to a shared method with evidence across tasks. This document preserves
+that direction and the proposed implementation and evaluation programme.
+
+**Implementation checkpoint, 17 October 2026:** the shared controller and supporting
+runtime are implemented. Ten short engineering attempts have been consumed: eight valid
+Jar/Stack checks, one valid Clutter original-executor check and one failed Clutter identity
+initialization. The failure occurred before policy actions and remains invalid with its
+costs retained. No full preparation episode, comparative pilot, learning result or reserved
+evaluation has run. Clutter's policy startup is repaired; encoder-version provenance and
+a bounded recovery within the preparation allocation are being resolved. The [development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
+and [requirements ledger](docs/research/research_notes/ManiGuard%20phase2%20requirements.json)
+record the current evidence and limitations. Preparation assignments are separately
+frozen; the pilot and main-study numerical budgets below remain planning defaults to
+cost and freeze before those evaluations.
 
 ## 1. Research objective and intended contribution
 
@@ -97,17 +107,19 @@ unchanged physical risk.
 ## 5. Family coverage and held-out design
 
 The six families and full horizons are verified against the pinned upstream pipeline
-inventory and joint-evaluation configs, referenced by [the source manifest](configs/maniguard/sources.json).
-Local preparation currently covers only three.
+inventory and joint-evaluation configs, referenced by
+[the phase-two source manifest](configs/maniguard/phase2/sources.json). Assets and
+checkpoints are local for Jar, Stack, Lid and Clutter. Phase-two physical engineering
+checks currently cover Jar and Stack only; metadata preparation is not behavioral validation.
 
 | Family | Base tasks | Full action horizon | Current local state | Proposed role |
 | --- | ---: | ---: | --- | --- |
-| Jar transport | 26 | 2,000 | Assets, policy pin and evaluated runner | Development and pilot |
-| Stack retrieve | 28 | 4,200 | Assets, policy pin and evaluated runner | Development and pilot |
-| Lid transport | 30 | 1,900 | Assets, policy pin and evaluated runner | Existing development evidence; later cross-family check |
-| Clutter pickup | 55 | 1,100 | Family assets/checkpoint not prepared | Add to pilot for a different task structure |
-| Cabinet pickup | 35 | 5,700 | Family assets/checkpoint not prepared | Reserve for transfer |
-| Dusty transfer | 26 | 5,100 | Family assets/checkpoint not prepared | Reserve for transfer |
+| Jar transport | 26 | 2,000 | Assets/policy; four valid phase-two short checks | Development and pilot |
+| Stack retrieve | 28 | 4,200 | Assets/policy; four valid phase-two short checks | Development and pilot |
+| Lid transport | 30 | 1,900 | Phase-one assets/policy and evaluated runner; no phase-two run | Existing development evidence; later cross-family check |
+| Clutter pickup | 55 | 1,100 | Policy verified; original executor checked; encoder initialization repair | Add to pilot for a different task structure |
+| Cabinet pickup | 35 | 5,700 | Metadata and policy pin recorded; local assets not prepared | Reserve for transfer |
+| Dusty transfer | 26 | 5,100 | Metadata and policy pin recorded; local assets not prepared | Reserve for transfer |
 
 Use Jar, Stack and Clutter for the first joint pilot. Lid has already informed the design;
 excluding it from pilot training does not make it an untouched research family. Its

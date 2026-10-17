@@ -8,7 +8,7 @@ import argparse
 import hashlib
 import json
 import os
-import subprocess
+import signal
 import sys
 import time
 from pathlib import Path
@@ -17,12 +17,12 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments"))
 
 from helpers.maniguard_phase2_model import genome_hash, identity_genome, load_model
-
-
-def atomic_json(path, value):
-    temporary = path.with_suffix(".tmp")
-    temporary.write_text(json.dumps(value, indent=2, allow_nan=False) + "\n")
-    temporary.replace(path)
+from helpers.maniguard_phase2_services import (
+    active_episode_processes,
+    atomic_json,
+    execution_lease,
+    run_fresh_episode,
+)
 
 
 def load_preparation(path):
@@ -38,13 +38,66 @@ def load_preparation(path):
     return protocol
 
 
-def main():
+
+def process_succeeded(record):
+    process = record.get("process", {})
+    return (record.get("returncode") == 0 and not record.get("process_error") and
+            not any(process.get(key) for key in (
+                "error", "cleanup_error", "timed_out", "interrupted", "orphaned_descendants",
+                "process_group_remaining")))
+
+
+def audit_attempt(record):
+    if record["job"]["baseline_executor"]:
+        from helpers.maniguard_results import read_episode
+        row = read_episode(Path(record["output"]))
+        row["valid"] = True
+    else:
+        from helpers.maniguard_phase2_results import read_episode
+        row = read_episode(Path(record["output"]))
+    return row
+
+
+def reaudit_attempt(path, job, protocol_sha256):
+    record = json.loads(path.read_text())
+    if (record.get("status") not in ("valid", "invalid") or "returncode" not in record
+            or record.get("job") != job or record.get("protocol_sha256") != protocol_sha256):
+        raise ValueError("Reaudit requires the matching terminal attempt; no unresolved processes")
+    before = {key: record.get(key) for key in ("status", "evidence", "audit_error")}
+    before["receipt_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+    record.setdefault("audit_history", []).append(before)
+    started = time.perf_counter()
+    record["status"] = "invalid"
+    record.pop("audit_error", None)
+    try:
+        row = audit_attempt(record)
+        record["evidence"] = row
+        if process_succeeded(record) and row["valid"]:
+            record["status"] = "valid"
+    except (ValueError, OSError, KeyError, TypeError) as error:
+        record["audit_error"] = {"type": type(error).__name__, "message": str(error)}
+    record["reaudit"] = {
+        "elapsed_seconds": time.perf_counter() - started,
+        "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "physics_rerun": False,
+        "source_hashes": {str(source.relative_to(ROOT)): hashlib.sha256(source.read_bytes()).hexdigest()
+                          for source in (ROOT / "experiments/helpers").glob("maniguard_phase2_*.py")},
+    }
+    atomic_json(path, record)
+    return record
+
+
+def _main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--jobs", nargs="+", required=True)
+    parser.add_argument("--reaudit", action="store_true",
+                        help="Reanalyse terminal saved attempts; preserve prior verdicts and do no physics")
     parser.add_argument("--protocol", type=Path,
                         default=ROOT / "configs/maniguard/phase2/preparation.json")
     parser.add_argument("--output", type=Path,
                         default=ROOT / "runs/maniguard/phase2/preparation-v1")
+    parser.add_argument("--reservation", type=Path,
+                        default=ROOT / "runs/maniguard/phase2/setup/reservation.json")
     parser.add_argument("--model", type=Path,
                         default=ROOT / "data/maniguard/phase2/models/identity.npz")
     args = parser.parse_args()
@@ -68,6 +121,13 @@ def main():
         atomic_json(snapshot, protocol)
     for job in jobs:
         receipt_path = receipts / (job["job_id"] + ".json")
+        if args.reaudit:
+            record = reaudit_attempt(receipt_path, job, protocol["sha256"])
+            print(json.dumps({"job": job["job_id"], "status": record["status"],
+                              "physics_rerun": False}), flush=True)
+            if record["status"] != "valid":
+                raise RuntimeError("Saved attempt remains invalid after reaudit")
+            continue
         if receipt_path.exists():
             raise ValueError("Already claimed; inspect authoritative process state before recovery: "
                              + job["job_id"])
@@ -89,6 +149,23 @@ def main():
         spent = sum(row.get("elapsed_seconds", row["timeout_seconds"]) for row in relevant)
         if spent + timeout > hour_limit * 3600:
             raise ValueError("Insufficient remaining preparation time ceiling for another attempt")
+        reservation = json.loads(args.reservation.read_text())
+        if reservation.get("allocated_gpus") != 1:
+            raise ValueError("This preparation plan budgets one allocated GPU")
+        allocated_seconds = time.time() - reservation["start_unix_seconds"]
+        global_hours = protocol["budget"]["integration_gpu_hour_ceiling"]
+        if not short:
+            global_hours += protocol["budget"]["full_preparation_gpu_hour_ceiling"]
+            if relevant:
+                import calendar
+                first_full = min(calendar.timegm(time.strptime(row["started_utc"],
+                                 "%Y-%m-%dT%H:%M:%SZ")) for row in relevant)
+                if time.time() - first_full + timeout > hour_limit * 3600:
+                    raise ValueError("Full preparation reservation ceiling would be exceeded")
+        if allocated_seconds < 0 or allocated_seconds + timeout > global_hours * 3600:
+            raise ValueError("Preparation GPU reservation ceiling would be exceeded")
+        if active_episode_processes():
+            raise RuntimeError("A manipulation episode is already active; preparation remains unclaimed")
         episode = output / job["job_id"]
         command = [sys.executable, "-u", str(ROOT / "experiments/scripts/maniguard_phase2_episode.py"),
                    "--family", job["family"], "--scene", job["scene"],
@@ -107,45 +184,64 @@ def main():
                   "protocol_sha256": protocol["sha256"], "timeout_seconds": timeout,
                   "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                   "coordinator_pid": os.getpid(), "output": str(episode),
+                  "allocated_gpu_seconds_before_attempt": allocated_seconds,
+                  "reservation_sha256": hashlib.sha256(args.reservation.read_bytes()).hexdigest(),
                   "launcher_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
         # Exclusive claim is durable before spawning physics work.
         with receipt_path.open("x") as stream:
             stream.write(json.dumps(record, indent=2) + "\n")
-        started = time.monotonic()
+            stream.flush()
+            os.fsync(stream.fileno())
+        directory_fd = os.open(receipts, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(directory_fd)
+        finally:
+            os.close(directory_fd)
         print("Starting " + job["job_id"], flush=True)
         environment = dict(os.environ, OMNI_KIT_ALLOW_ROOT="1", OMP_NUM_THREADS="4",
                            OPENBLAS_NUM_THREADS="4")
-        with (output / (job["job_id"] + ".log")).open("x") as log:
-            try:
-                completed = subprocess.run(command, cwd=ROOT, env=environment, stdout=log,
-                                           stderr=subprocess.STDOUT, timeout=timeout, check=False)
-                record["returncode"] = completed.returncode
-            except (OSError, subprocess.TimeoutExpired) as error:
-                record["returncode"] = None
-                record["process_error"] = str(error)
-        record["elapsed_seconds"] = time.monotonic() - started
+        def on_started(process, record=record, receipt_path=receipt_path):
+            record["process"] = process
+            atomic_json(receipt_path, record)
+
+        process = run_fresh_episode(command, output / (job["job_id"] + ".log"), timeout,
+                                    env=environment, on_started=on_started)
+        record["process"] = process
+        record["returncode"] = process["returncode"]
+        record["elapsed_seconds"] = process["process_elapsed_seconds"]
         record["status"] = "invalid"
         try:
-            if job["baseline_executor"]:
-                from helpers.maniguard_results import read_episode
-                row = read_episode(episode)
-                row["valid"] = True
-            else:
-                from helpers.maniguard_phase2_results import read_episode
-                row = read_episode(episode)
+            row = audit_attempt(record)
             record["evidence"] = row
-            if record["returncode"] == 0 and row["valid"]:
+            if process_succeeded(record) and row["valid"]:
                 record["status"] = "valid"
         except (ValueError, OSError, KeyError, TypeError) as error:
             record["audit_error"] = {"type": type(error).__name__, "message": str(error)}
         finally:
-            if (episode / "ledger.json").exists():
-                record["ledger"] = json.loads((episode / "ledger.json").read_text())
+            try:
+                if (episode / "ledger.json").exists():
+                    record["ledger"] = json.loads((episode / "ledger.json").read_text())
+            except (OSError, ValueError) as error:
+                record["status"] = "invalid"
+                record["ledger_read_error"] = {"type": type(error).__name__, "message": str(error)}
+            # Process completion and its cost survive malformed outcome/accounting files.
             atomic_json(receipt_path, record)
         print(json.dumps({"job": job["job_id"], "status": record["status"],
                           "elapsed_seconds": record["elapsed_seconds"]}), flush=True)
         if record["status"] != "valid":
             raise RuntimeError("Preparation failed; attempt/costs preserved and queue stopped")
+
+
+def main():
+    def interrupted(signum, frame):
+        raise SystemExit(f"Preparation interrupted by signal {signum}")
+
+    previous = signal.signal(signal.SIGTERM, interrupted)
+    try:
+        with execution_lease():
+            _main()
+    finally:
+        signal.signal(signal.SIGTERM, previous)
 
 
 if __name__ == "__main__":

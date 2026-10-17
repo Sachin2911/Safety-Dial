@@ -307,10 +307,12 @@
       "stack",
       "clutter"
     ],
-    "assignment_status": "pending explicit preparation plan",
+    "assignment_status": "assignments_frozen_before_new_behavior",
+    "manifest": "configs/maniguard/phase2/preparation.json",
     "selection_partition": "train",
     "integration_partition": "engineering"
   },
+  "freeze_provenance": null,
   "freeze_checks": {
     "preparation_plan": {
       "passed": false,
@@ -352,30 +354,57 @@
     "configs/maniguard/phase2/families.json": "e38b55a14ae96314bda9c83178fe0dd68a030ef45f9ec1d571e5e21df18a0958",
     "configs/maniguard/phase2/splits.json": "78df5ce80dfd501eae33850fee6bc5cf84c87080c49121c0bfb692f70707c862",
     "configs/maniguard/phase2/sources.json": "fd76ca78a84796731f5366eea8b254dde18f28267f2871910ead2bb52c1b9478",
-    "configs/maniguard/phase2/encoder.json": "d37868e9a0e5f01af317b866c2b77dbf7e2fdaa708e277944877dc2a26324d47"
+    "configs/maniguard/phase2/encoder.json": "668c57049f16c04d81f65d1e924c6bc243e0d27609460c4825b2724da5bf6097",
+    "configs/maniguard/phase2/completion.json": "0f8a75bce655573902d1c013cf7522db6232000ae4c6442e5b82c463c1b84a40",
+    "configs/maniguard/phase2/preparation.json": "54067819eaf807b2a40618bc12cafaa8f10b3be573f111f21139fcf2b4bc64cd"
   },
   "implementation_files": {
     "experiments/helpers/maniguard_phase2_model.py": "d1580bbcbfe11489cadc02c08a1aa906c2c63dd381d3b5a41caddf8b30db4338",
     "experiments/helpers/maniguard_phase2_optim.py": "72e2437267f7e52f44d1e5ba33b385525ffd1f86509ed576cd2e361b510f911f",
-    "experiments/helpers/maniguard_phase2_features.py": "de711c8c15091acd0c7205d4a7b0b104cb38847381467121102ac520a7c0fc15",
-    "experiments/helpers/maniguard_phase2_protocol.py": "4aa0510e499ac234131133fb7bb88ce8daf10a5867d5c6173e0a9e2ff10d432c"
+    "experiments/helpers/maniguard_phase2_features.py": "6c693651d4d533edad070a54dcfd3d8d8d577bb1f6c249e3324ae9d89fbe5580",
+    "experiments/helpers/maniguard_phase2_adapter.py": "0caec7219ee0e40b79ddb05dedca7e05fd11c30412278de2472dd4043553e591",
+    "experiments/helpers/maniguard_phase2_families.py": "03680acfe307e3fa6ae23a38f0424ef054b9384c3c91149e8aa55677d17256ba",
+    "experiments/helpers/maniguard_phase2_runtime.py": "c86419660dbf2143c90370ec27f7ac45a03e7fd79166c10f944ba1d027082fb2",
+    "experiments/helpers/maniguard_phase2_source.py": "a1a840ccc57be1bd55867529fe0c3d5ee1b8e249e3ff8f9a2e1533c77a5aa5a6",
+    "experiments/helpers/maniguard_phase2_outcomes.py": "33ecc9013f8547608adf8790e8cb4592ef396a094a7b7ca9a8379b6d5b859e58",
+    "experiments/helpers/maniguard_phase2_results.py": "8fda79e125d6cdde9f3c574869db4f5e66e9a3ac386f5558580b466f2a295a87",
+    "experiments/helpers/maniguard_phase2_audit.py": "7e07b5c2762cb5cb10d5bac4b523643cee73c8fa26e1f1c578d4d44f6000b3fa",
+    "experiments/helpers/maniguard_phase2_protocol.py": "476fdd96b1f864f106b44100cbf8b62fb687e3eae0272f523a7d862040461025",
+    "experiments/helpers/maniguard_phase2_preparation_report.py": "c2ec1b37b46b6979d9f042625580bbfa0a0c6fed78f6451d7f331f3524c0d426",
+    "experiments/helpers/maniguard_phase2_coordinator.py": "3be43d5ccf73a30101445a5429ded35ff136f83d14f95a5bad7c99834d8e0f7d",
+    "experiments/helpers/maniguard_phase2_services.py": "4de24d24d7704345c70fcf2203f911bab747ce0fde7ac83ac2c69659c233a365",
+    "experiments/helpers/maniguard_runtime.py": "b0843186f6a0bedd93d1af3e97af2d884dac87d92e6ee13688872a920134b60a",
+    "experiments/helpers/maniguard_source.py": "92b0352f5dfa8db2a0bcb0fc15716d59701940ef4516dbff6fb14bca4f1b01ed",
+    "experiments/helpers/maniguard_adaptation.py": "009574057fb44eae43b105a38e39281b7e53a308ad2b6286136436d8670edb50",
+    "experiments/helpers/maniguard_results.py": "549b3ad6bfe7793438db075bdc5988885a06b1963ce147160d76436ae7c761c0",
+    "experiments/helpers/maniguard_client.py": "548154aa19702fbced239698027d1cc3cbf43e7c2c87f5c607dfe7d14f97639c",
+    "experiments/helpers/maniguard_policy.py": "732bd477c7f284688702360c561972937f3267ee0241266bbba456b18c4f3445",
+    "experiments/helpers/maniguard_policy_provenance.py": "701929ecb3f7c603b53ad3e702fa35ba1e0e1f779b461b0ce84e7ab4aa9b3a34",
+    "experiments/helpers/maniguard_parallel_policy.py": "f23127c3a4495069e543f4824c411f35689836c35dbf57c172207ce8374a8c53",
+    "experiments/scripts/maniguard_phase2_episode.py": "8890b2759cd1b5e3b7f001b3184c8745ef6f91e906445cf13430905ff32d7232",
+    "experiments/scripts/maniguard_phase2_train.py": "8bbc469d0bd7617c061387bb390ac62365a3cb1c8e186887ed8015f3d43a0381",
+    "experiments/scripts/maniguard_phase2_prepare.py": "4c2087d3bd82ad28705bff40f481b7fce99b072c922357f7d03c1a3c312e142e",
+    "experiments/scripts/maniguard_phase2_preparation_report.py": "4ebee5b495ce07ea39c2cc34b6d61b45c1f7ec7580ba6a3477ad2e7ee3769bfc",
+    "experiments/scripts/maniguard_serve.py": "c3cfc77ba082ed095ad7ffef2381517a270dca88ee0964378840b10f4cf5e28f",
+    "scripts/maniguard/serve.sh": "6407dfc8a1c375f09b0191d0446f7e768e3701bd7e521426df94f37805932015"
   },
   "schedule_sha256": "2d2cb254c1ab8b4dd0b51d73f4e31511aeb8f4052dd7422ceedd8f8dfd5ca152",
   "resource_envelope": {
     "scheduled_full_episodes": 522,
     "scheduled_policy_actions_max": 1270200,
     "preparation_full_episodes_max": 24,
-    "preparation_policy_actions_max": 100800,
+    "preparation_policy_actions_max": 58400,
+    "preparation_action_basis": "Sum of the frozen full-job family horizons and short-job caps.",
     "short_checks_max": 12,
     "short_check_actions_max_each": 32,
     "short_policy_actions_max": 384,
     "all_full_episodes_max": 546,
-    "policy_actions_max": 1371384,
+    "policy_actions_max": 1328984,
     "control_hz": 20,
     "physics_hz": 120,
-    "control_physics_ticks_max": 8228304,
-    "normal_interval_successful_queries_max": 342846,
-    "exhaustion_safe_successful_queries_max": 1371384,
+    "control_physics_ticks_max": 7973904,
+    "normal_interval_successful_queries_max": 332246,
+    "exhaustion_safe_successful_queries_max": 1328984,
     "queries_note": "Normal minimum interval four actions; short-chunk exhaustion can query earlier. At most one successful query per policy action; reject empty chunks. Failed/inference-only queries are separately counted.",
     "excluded_from_action_bounds": [
       "initialization steps and physics ticks",
@@ -385,7 +414,8 @@
     "gpu_hour_definition": "Sum of allocated GPU-hours across devices; not the sum of overlapping process durations.",
     "gpu_hours_status": "provisional_until_preparation_costing",
     "measured_wall_hours_estimate": null,
+    "estimate_scope": "Prior continuous reservation plus projected pilot episode process time; future idle and unmeasured policy lifecycle overhead are excluded. This is a feasibility estimate, not a hard runtime bound. Service startup and idle time still consume the enforced allocated-GPU ceiling.",
     "failure_rule": "Count every attempted interaction and stop affected work on infrastructure failure. No unbudgeted replacement episodes or free retries."
   },
-  "sha256": "c8a9eb882b4981dd6766cfa4807bf9a7e2c55883c03fc92cbc68f5909a9517a0"
+  "sha256": "28180f2a06affcafbac76f034783fc398e41aea160f441a3c0ee6263e98e1de2"
 }
