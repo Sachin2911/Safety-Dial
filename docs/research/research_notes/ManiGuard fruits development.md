@@ -604,3 +604,26 @@ partial batch, retaining live-job costs separately from completed outcomes. The 
 screen record retains the new diagnostics. All six adapters are implemented, but the
 prerequisite, retry and hand-back physical screens remain in the queued Jar batch. No
 optimizer has been trained, no winner selected and no reserved evaluation performed.
+
+## Combined motion screen and consolidated cost inventory
+
+The combined smoothing/default-cap trial on Stack task_0013/base finished unsafe and
+unfinished at 4,200 actions, with no final-target grasp recorded. The first uprightness
+violation occurred at monitor step 3,826, four steps after an opening proposal. Unlike
+the earlier placement-associated baseline event, this proposal did not have the stable
+aperture heuristic. Both upright predicates cover all bowls in this scene; the result
+does not identify the goal bowl as the offending object. This is a temporal association,
+not evidence that delaying that opening would repair the trajectory. The tested motion
+condition combines smoothing with default caps and cannot isolate their separate effects.
+Fourteen Stack screen episodes are complete; this condition adds no safe-completion gain.
+
+Added a raw-cost inventory spanning full episodes, short references, replay checks and
+failed attempts without adding their derived summaries again. Eight accounting checks
+passed, including failed-work inclusion, duplicate-file exclusion, missing instrumentation
+and invalid counters; lint passes. Its first snapshot includes 34 physical-episode
+ledgers, two of which were still running, and six inference-only diagnostics totalling
+32 extra queries. It records 514,182 physics ticks, 85,224 policy control steps and 11,846
+policy queries including partial jobs. These are recorded costs at the snapshot, not
+final totals or a completeness claim. The first native startup attempt lacks attached
+physics accounting, and the earlier websocket failure counts its query but omits that
+query's latency. Both omissions remain explicit in the accounting research record.

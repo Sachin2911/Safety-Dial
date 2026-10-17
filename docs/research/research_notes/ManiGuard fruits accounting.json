@@ -1,0 +1,55 @@
+{
+  "scope": "Partial engineering study accounting snapshot; includes incomplete running work, failed work and inference-only diagnostics. Not a performance result or final study cost.",
+  "snapshot": "runs/maniguard/reports/accounting-0001.json",
+  "snapshot_sha256": "b15582033795de0c9bf2d9781c637d7da84df5cc743eaeca6f2cde7ae07faf2a",
+  "snapshot_started_at": "2026-10-17T12:02:32.521760+00:00",
+  "snapshot_finished_at": "2026-10-17T12:02:32.558724+00:00",
+  "record_types": {
+    "physical_episode": 34,
+    "inference_diagnostic": 6
+  },
+  "recorded_cost_totals": {
+    "physics_steps": 514182,
+    "physics_seconds": 4284.850223472342,
+    "env_step_attempts": 85554,
+    "env_steps_returned": 85554,
+    "policy_queries": 11846,
+    "policy_query_seconds": 3037.9450579541735,
+    "policy_control_steps": 85224,
+    "elapsed_seconds": 10025.29400673043
+  },
+  "records_with_issues": [
+    {
+      "path": "engineering/jar-0013-smoke-v1/ledger.json",
+      "sha256": "fb43d9a8eb8290c0c7972a594e5cd7ffecc9166f9435b3ed3e67f0bc6e092882",
+      "kind": "physical_episode",
+      "recorded_status": "initialization",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0.0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 0,
+        "policy_query_seconds": 0.0,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 5.865003913640976e-05
+      },
+      "issues": [
+        "Physics accounting attachment unverified; zero is not proof of no work"
+      ]
+    }
+  ],
+  "known_historical_omissions": [
+    {
+      "record": "engineering/jar-0013-smoke-v1/ledger.json",
+      "issue": "Native startup failure before physics attachment. The zero counters and tiny initial elapsed value cannot measure all startup work or wall time; no task environment or policy query completed."
+    },
+    {
+      "record": "engineering/jar-0013-smoke-v2/ledger.json",
+      "issue": "The failed first query is counted, but the old runtime omitted its latency. The recorded zero policy_query_seconds is incomplete. Subsequent runtimes preserve failed-query latency."
+    }
+  ],
+  "interpretation": "A snapshot of running jobs is not atomic. Status fields are recorded phases, not verified live handles or validated outcomes. Elapsed seconds sum episode/diagnostic durations, not study wall time; policy-query latency can include server queueing. Derived reports and queue durations are excluded to avoid double counting.",
+  "inference_query_count": 32,
+  "inference_query_note": "All six checks count, including the failed old-process replay and the first wrapper check whose cross-process comparison used the wrong seed. Derived summaries are not added again."
+}

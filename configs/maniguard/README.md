@@ -126,3 +126,20 @@ data/maniguard/envs/sim/bin/python experiments/scripts/maniguard_batch_report.py
   --batch runs/maniguard/stack-fixed-screens-v1 \
   --output runs/maniguard/reports/stack-progress.json
 ```
+
+For costs across batches, standalone physical references and inference diagnostics, use:
+
+```bash
+data/maniguard/envs/sim/bin/python experiments/scripts/maniguard_accounting.py \
+  --runs runs/maniguard \
+  --output runs/maniguard/reports/accounting-snapshot.json
+```
+
+This inventories raw episode ledgers and inference check records, including failed and
+partial work. It hashes the records read and excludes derived reports and queue durations
+to avoid counting the same interaction twice. Missing ledgers, missing fields and
+unverified physics attachment remain visible. A running snapshot is not atomic and does
+not verify live handles or physical outcomes. Recorded costs can still omit historical
+work: see `ManiGuard fruits accounting.json` in the research notes for the first native
+startup failure and the earlier failed query whose latency was not recorded. Elapsed
+time sums are not total study wall time.
