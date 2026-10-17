@@ -1561,3 +1561,23 @@ are not a comparison pair. Updated the immutable five-trial snapshot and current
 record with full diagnoses, costs and motion audits. There are still no completed
 candidate/control pairs. The remaining 43 Jar trials and subsequent 16 Lid trials remain
 part of the declared follow-up round; no runtime or experiment plan was changed.
+
+
+## Sixth Jar repeat completes safely under smoothing
+
+The task_0002 root-two smoothing trial completes safely in 931 actions and 117 queries.
+It first closes at observation 327, holds the target at 847 and leaves support at 850.
+All 931 arm proposals change, while gripper commands remain unchanged. Four smoothed
+targets exceed the active cap before clipping, at proposals 916 to 919. This successful
+condition therefore includes both smoothing and occasional active capping. Complete
+monitor coverage records no safety violation; command/state alignment and displacement
+bounds validate. Maximum commanded and measured steps are 0.04567322 and 0.04479656
+radians respectively.
+
+The earlier settling/requery trial on this same scene and root remained safe unfinished
+without closing or grasping after 2000 actions and 1285 queries. These are separate
+physical starts, not deterministic counterfactuals, and the unchanged-policy and plain-guard
+trials for this scene/root remain pending. The success supplies a useful outcome contrast
+without establishing an improvement over the unchanged policy or a benefit from a safety
+filter. Across the first six repeats there is one safe completion, three safe unfinished
+and two unsafe unfinished outcomes. The full comparison continues unchanged.

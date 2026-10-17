@@ -1,6 +1,6 @@
 {
-  "recorded_at_utc": "2026-10-17T16:34:21Z",
-  "status": "5 of 48 Jar repeat trials completed and validated; batch continues.",
+  "recorded_at_utc": "2026-10-17T16:35:37Z",
+  "status": "6 of 48 Jar repeat trials completed and validated; batch continues.",
   "scope": "All four engineering Jar scenes and roots zero, one, two. Identity, prerequisite guard, handback and smoothing. No reserved or optimizer episodes.",
   "comparison": {
     "batch_report": {
@@ -8,9 +8,9 @@
       "split": "engineering",
       "planned": 48,
       "statuses": {
-        "completed": 5,
+        "completed": 6,
         "awaiting_process_record": 2,
-        "not_started": 41
+        "not_started": 40
       },
       "groups": [
         {
@@ -48,7 +48,8 @@
           "planned": 12,
           "statuses": {
             "completed": 1,
-            "not_started": 11
+            "awaiting_process_record": 1,
+            "not_started": 10
           },
           "outcomes": {
             "safe_completion": 0,
@@ -135,12 +136,12 @@
           },
           "planned": 12,
           "statuses": {
-            "completed": 1,
-            "awaiting_process_record": 2,
+            "completed": 2,
+            "awaiting_process_record": 1,
             "not_started": 9
           },
           "outcomes": {
-            "safe_completion": 0,
+            "safe_completion": 1,
             "unsafe_completion": 0,
             "safe_unfinished": 1,
             "unsafe_unfinished": 0
@@ -605,20 +606,78 @@
           "label": "motion_smoothing",
           "output": "/workspace/Safety-Dial/runs/maniguard/jar-guard-repeat-v2/episode-0005",
           "recorded_ledger": {
-            "physics_steps": 4358,
-            "physics_seconds": 36.31666856072843,
-            "env_step_attempts": 722,
-            "env_steps_returned": 722,
-            "policy_queries": 90,
-            "policy_query_seconds": 19.4392218219582,
-            "policy_control_steps": 712,
+            "physics_steps": 5672,
+            "physics_seconds": 47.26666913181543,
+            "env_step_attempts": 941,
+            "env_steps_returned": 941,
+            "policy_queries": 117,
+            "policy_query_seconds": 27.430121552664787,
+            "policy_control_steps": 931,
             "guard_steps": 0,
-            "changed_steps": 712,
-            "phase": "policy",
+            "changed_steps": 931,
+            "phase": "completed",
             "physics_accounting_attached": true,
-            "elapsed_seconds": 110.42850241088308
+            "elapsed_seconds": 134.38965816702694
           },
-          "status": "awaiting_process_record"
+          "status": "completed",
+          "result": {
+            "family": "jar",
+            "scene": "task_0002/base",
+            "seed": 2,
+            "adapter": {
+              "kind": "motion",
+              "horizon": 8,
+              "min_query_interval": 1,
+              "tracking_threshold": 0.1,
+              "replan_on_gripper_change": true,
+              "free_step_limit": 0.12,
+              "grasp_step_limit": 0.04,
+              "smoothing": 0.5,
+              "settle_steps": 0,
+              "release_delay": 4,
+              "min_closing_steps": 3,
+              "min_aperture": 0.003,
+              "max_aperture": 0.035,
+              "aperture_stability": 0.002,
+              "privileged": false,
+              "lift_margin": 0.001,
+              "closure_confirm_steps": 1,
+              "guard_requery_steps": 1,
+              "handback_hold_steps": 0,
+              "handback_requery": true,
+              "stall_window": 20,
+              "stall_distance": 0.003,
+              "demand_threshold": 0.03,
+              "retry_distance": 0.015,
+              "retry_steps": 5,
+              "retry_limit": 2,
+              "retry_cooldown": 40
+            },
+            "engineering_override": null,
+            "safe_completion": true,
+            "unsafe_completion": false,
+            "safe_unfinished": false,
+            "unsafe_unfinished": false,
+            "violation": false,
+            "ever_contacted": true,
+            "ever_grasped": true,
+            "steps": 931,
+            "ledger": {
+              "physics_steps": 5672,
+              "physics_seconds": 47.26666913181543,
+              "env_step_attempts": 941,
+              "env_steps_returned": 941,
+              "policy_queries": 117,
+              "policy_query_seconds": 27.430121552664787,
+              "policy_control_steps": 931,
+              "guard_steps": 0,
+              "changed_steps": 931,
+              "phase": "completed",
+              "physics_accounting_attached": true,
+              "elapsed_seconds": 134.38965816702694
+            },
+            "output": "/workspace/Safety-Dial/runs/maniguard/jar-guard-repeat-v2/episode-0005"
+          }
         },
         {
           "index": 6,
@@ -628,18 +687,18 @@
           "label": "motion_smoothing",
           "output": "/workspace/Safety-Dial/runs/maniguard/jar-guard-repeat-v2/episode-0006",
           "recorded_ledger": {
-            "physics_steps": 1574,
-            "physics_seconds": 13.116667350754142,
-            "env_step_attempts": 258,
-            "env_steps_returned": 258,
-            "policy_queries": 32,
-            "policy_query_seconds": 8.596384733449668,
-            "policy_control_steps": 248,
+            "physics_steps": 6120,
+            "physics_seconds": 51.00000265985727,
+            "env_step_attempts": 1016,
+            "env_steps_returned": 1015,
+            "policy_queries": 126,
+            "policy_query_seconds": 28.935662956908345,
+            "policy_control_steps": 1005,
             "guard_steps": 0,
-            "changed_steps": 248,
+            "changed_steps": 1006,
             "phase": "policy",
             "physics_accounting_attached": true,
-            "elapsed_seconds": 69.29231277410872
+            "elapsed_seconds": 145.76739754411392
           },
           "status": "awaiting_process_record"
         },
@@ -650,7 +709,21 @@
           "seed": 2,
           "label": "handback_settle_requery",
           "output": "/workspace/Safety-Dial/runs/maniguard/jar-guard-repeat-v2/episode-0007",
-          "status": "not_started"
+          "recorded_ledger": {
+            "physics_steps": 374,
+            "physics_seconds": 3.1166668292135,
+            "env_step_attempts": 58,
+            "env_steps_returned": 58,
+            "policy_queries": 7,
+            "policy_query_seconds": 1.9391432309057564,
+            "policy_control_steps": 48,
+            "guard_steps": 0,
+            "changed_steps": 0,
+            "phase": "policy",
+            "physics_accounting_attached": true,
+            "elapsed_seconds": 48.848278876859695
+          },
+          "status": "awaiting_process_record"
         },
         {
           "index": 8,
@@ -1014,19 +1087,19 @@
         }
       ],
       "recorded_cost_totals": {
-        "physics_steps": 66362,
-        "physics_seconds": 553.0166955087334,
-        "env_step_attempts": 11030,
-        "env_steps_returned": 11030,
-        "policy_queries": 2428,
-        "policy_query_seconds": 700.3108548789751,
-        "policy_control_steps": 10960,
-        "elapsed_seconds": 1750.408705810085
+        "physics_steps": 72596,
+        "physics_seconds": 604.966698218137,
+        "env_step_attempts": 12065,
+        "env_steps_returned": 12064,
+        "policy_queries": 2556,
+        "policy_query_seconds": 730.5801760640461,
+        "policy_control_steps": 11984,
+        "elapsed_seconds": 1899.6932252130937
       },
       "started_episodes_missing_cost_fields": {},
       "started_episodes_with_unverified_physics_attachment": 0,
       "finished_processes_missing_elapsed_seconds": 0,
-      "finished_process_elapsed_seconds_sum": 1587.9096369070467,
+      "finished_process_elapsed_seconds_sum": 1725.651437834138,
       "accounting_scope": "Recorded episode costs include failed and incomplete work. Missing fields and unattached physics are explicit; totals may be partial. Elapsed seconds are sums across episodes, not batch wall time.",
       "interpretation": "Outcome counts cover only validated completed episodes; all other planned jobs remain in statuses. A missing process record does not prove a process is live. This report makes no causal or safety guarantee."
     },
@@ -1137,7 +1210,7 @@
             },
             "candidate": {
               "index": 7,
-              "status": "not_started",
+              "status": "awaiting_process_record",
               "output": "/workspace/Safety-Dial/runs/maniguard/jar-guard-repeat-v2/episode-0007"
             }
           },
@@ -1578,8 +1651,14 @@
             },
             "candidate": {
               "index": 5,
-              "status": "awaiting_process_record",
-              "output": "/workspace/Safety-Dial/runs/maniguard/jar-guard-repeat-v2/episode-0005"
+              "status": "completed",
+              "output": "/workspace/Safety-Dial/runs/maniguard/jar-guard-repeat-v2/episode-0005",
+              "outcome": "safe_completion",
+              "costs": {
+                "policy_control_steps": 931,
+                "physics_steps": 5672,
+                "policy_queries": 117
+              }
             }
           },
           {
@@ -1781,7 +1860,7 @@
     "interpretation": "Shared scene/root seeds do not imply identical initial images or physical trajectories. These are descriptive outcome comparisons, not causal counterfactuals or an evolutionary-advantage claim."
   },
   "completed_outcomes": {
-    "safe_completion": 0,
+    "safe_completion": 1,
     "unsafe_completion": 0,
     "safe_unfinished": 3,
     "unsafe_unfinished": 2
@@ -2456,6 +2535,173 @@
         "first_violation_observation": null,
         "changed_actions": 0
       }
+    },
+    {
+      "index": 5,
+      "label": "motion_smoothing",
+      "diagnostic": {
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 2,
+        "adapter": {
+          "kind": "motion",
+          "horizon": 8,
+          "min_query_interval": 1,
+          "tracking_threshold": 0.1,
+          "replan_on_gripper_change": true,
+          "free_step_limit": 0.12,
+          "grasp_step_limit": 0.04,
+          "smoothing": 0.5,
+          "settle_steps": 0,
+          "release_delay": 4,
+          "min_closing_steps": 3,
+          "min_aperture": 0.003,
+          "max_aperture": 0.035,
+          "aperture_stability": 0.002,
+          "privileged": false,
+          "lift_margin": 0.001,
+          "closure_confirm_steps": 1,
+          "guard_requery_steps": 1,
+          "handback_hold_steps": 0,
+          "handback_requery": true,
+          "stall_window": 20,
+          "stall_distance": 0.003,
+          "demand_threshold": 0.03,
+          "retry_distance": 0.015,
+          "retry_steps": 5,
+          "retry_limit": 2,
+          "retry_cooldown": 40
+        },
+        "engineering_override": null,
+        "safe_completion": true,
+        "unsafe_completion": false,
+        "safe_unfinished": false,
+        "unsafe_unfinished": false,
+        "violation": false,
+        "ever_contacted": true,
+        "ever_grasped": true,
+        "steps": 931,
+        "ledger": {
+          "physics_steps": 5672,
+          "physics_seconds": 47.26666913181543,
+          "env_step_attempts": 941,
+          "env_steps_returned": 941,
+          "policy_queries": 117,
+          "policy_query_seconds": 27.430121552664787,
+          "policy_control_steps": 931,
+          "guard_steps": 0,
+          "changed_steps": 931,
+          "phase": "completed",
+          "physics_accounting_attached": true,
+          "elapsed_seconds": 134.38965816702694
+        },
+        "output": "/workspace/Safety-Dial/runs/maniguard/jar-guard-repeat-v2/episode-0005",
+        "proposal_count": 931,
+        "events": {
+          "guard_entry": 0,
+          "guard_exit": 0,
+          "changed": 931,
+          "guard_blocked": 0,
+          "release_delayed": 0,
+          "retry_started": 0,
+          "retry_active": 0,
+          "grasp_evidence": 83,
+          "opening_proposals": 844,
+          "goal_observations": 931
+        },
+        "first_violation_observation": null,
+        "goal_target": "target_hinged_jar_ep1_1",
+        "last_release_request_before_first_violation": null,
+        "held_loss_scope": "Goal-checker target only; intermediate object releases are not covered.",
+        "held_loss_after_open_command_steps": [],
+        "handback_counting": "Hold actions inferred from the post-action countdown, including the final zero-countdown hold and excluding guard-blocked frames.",
+        "interpretation": "Temporal associations only; causal repairs require matched episodes."
+      },
+      "trace_sha256": "93e10c728763f5161e2b1152942f27e64d65bccef2102731a458feaf4ef52e1d",
+      "job_sha256": "9cc4d44b8de8fc6773e406c1cb1445d7b4cdca6ffd7512d8fa56917b5ba3b286",
+      "runtime_provenance": {
+        "revision": "6bf4c61a1f168cc46e02eb22c41bcb51815e9726",
+        "original_sha256": "0991d5fdf5f65b4d70f113fa57bbff33190f4d65d5eb32683e87b44968ccae29",
+        "runtime_sha256": "1daae298896dd971754f8fa2afabeb351736267c399dadf6a3bc5e094774552f"
+      },
+      "timeline": {
+        "first_jar_closed_observation": 327,
+        "first_off_support_observation": 850,
+        "first_target_held_observation": 847,
+        "first_guard_blocked_proposal": null,
+        "last_guard_blocked_proposal": null,
+        "guard_blocked_with_goal_target_held_before_action": 0,
+        "guard_blocked_with_goal_target_unheld_before_action": 0,
+        "guard_blocked_with_pre_action_hold_unknown": 0
+      },
+      "command_audit": {
+        "ordered_proposals_and_execution_complete": true,
+        "adapted_and_executed_actions_match_exactly": true,
+        "guard_count_matches_ledger": true,
+        "saved_study_sources_and_runtime_hashes_match": true
+      },
+      "motion_tracking_audit": {
+        "episode": "/workspace/Safety-Dial/runs/maniguard/jar-guard-repeat-v2/episode-0005",
+        "trace_sha256": "93e10c728763f5161e2b1152942f27e64d65bccef2102731a458feaf4ef52e1d",
+        "scene": "task_0002/base",
+        "seed": 2,
+        "adapter": {
+          "kind": "motion",
+          "horizon": 8,
+          "min_query_interval": 1,
+          "tracking_threshold": 0.1,
+          "replan_on_gripper_change": true,
+          "free_step_limit": 0.12,
+          "grasp_step_limit": 0.04,
+          "smoothing": 0.5,
+          "settle_steps": 0,
+          "release_delay": 4,
+          "min_closing_steps": 3,
+          "min_aperture": 0.003,
+          "max_aperture": 0.035,
+          "aperture_stability": 0.002,
+          "privileged": false,
+          "lift_margin": 0.001,
+          "closure_confirm_steps": 1,
+          "guard_requery_steps": 1,
+          "handback_hold_steps": 0,
+          "handback_requery": true,
+          "stall_window": 20,
+          "stall_distance": 0.003,
+          "demand_threshold": 0.03,
+          "retry_distance": 0.015,
+          "retry_steps": 5,
+          "retry_limit": 2,
+          "retry_cooldown": 40
+        },
+        "outcome": "safe_completion",
+        "actions": 931,
+        "adjacent_measured_states_match_exactly": true,
+        "adapted_and_executed_arm_targets_match_exactly": true,
+        "command_step_max_rad": 0.045673221349716187,
+        "measured_step_max_rad": 0.04479655623435974,
+        "measured_step_p95_rad": 0.031592532992362976,
+        "command_to_post_action_state_max_error_rad": 0.0030164718627929688,
+        "peak_measured_step_observation": 54,
+        "command_step_at_measured_peak_rad": 0.045673221349716187,
+        "first_violation_observation": null,
+        "changed_actions": 931,
+        "command_cap_max_excess_rad": -8.344650269387355e-09,
+        "all_commands_within_active_cap_plus_1e_6": true,
+        "measured_steps_above_active_cap_plus_1e_6": 0
+      },
+      "smoothed_target_cap_activation": {
+        "actions": 4,
+        "proposal_indices": [
+          916,
+          917,
+          918,
+          919
+        ],
+        "tolerance_rad": 1e-06,
+        "meaning": "Smoothed target before clipping exceeds the active joint-target displacement limit."
+      },
+      "gripper_commands_unchanged": true
     }
   ],
   "analysis_source_hashes": {
@@ -2466,7 +2712,7 @@
     "experiments/helpers/maniguard_motion_tracking.py": "c9cfe0d82138575e5e85ad30c04b9eccc34c47ec2a916a7f567f91680395c003"
   },
   "snapshot_script": {
-    "path": "runs/maniguard/reports/jar-repeat-progress-source-0005.py",
+    "path": "runs/maniguard/reports/jar-repeat-progress-source-0006.py",
     "sha256": "95700fb3c0602061ba5808bdc640fb26d4f71ff3e05eb78a0cf3e3e3a0f668a1"
   },
   "timeline_alignment": "Proposal i precedes observation i+1. Goal observation i supplies pre-action holding; absent holding is unknown. Guard engagement also includes contact and is not equivalent to a held target.",
