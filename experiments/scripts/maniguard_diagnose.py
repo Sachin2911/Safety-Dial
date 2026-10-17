@@ -24,6 +24,8 @@ def diagnose(output):
     last_release_request = None
     release_before_violation = None
     goal_target = None
+    previous_guard_blocked = False
+    previous_handback_remaining = 0
     rows = [json.loads(line) for line in (Path(output) / 'trace.jsonl').read_text().splitlines()]
     query_steps = {row['step'] for row in rows if row['type'] == 'query'}
     chunk_limit = None
@@ -35,6 +37,19 @@ def diagnose(output):
         elif row['type'] == 'proposal':
             proposals += 1
             event = row['event']
+            blocked = event['guard_blocked']
+            remaining = event.get('handback_remaining', 0)
+            counts['guard_entry'] += int(blocked and not previous_guard_blocked)
+            counts['guard_exit'] += int(previous_guard_blocked and not blocked)
+            if verdict['adapter']['kind'] == 'handback':
+                # The saved countdown is AFTER the action: its final hold has zero
+                # remaining. A blocked frame can retain a positive countdown but
+                # belongs to the guard, not the post-intervention hold.
+                holding = not blocked and (remaining > 0 or (
+                    previous_handback_remaining > 0 and not previous_guard_blocked))
+                counts['handback_hold_inferred'] += int(holding)
+            previous_guard_blocked = blocked
+            previous_handback_remaining = remaining
             for key in ('changed', 'guard_blocked', 'release_delayed', 'retry_started',
                         'retry_active', 'grasp_evidence'):
                 counts[key] += int(event[key])
@@ -79,6 +94,8 @@ def diagnose(output):
             'held_loss_scope': 'Goal-checker target only; intermediate object releases are not covered.',
             'held_loss_after_open_command_steps': (releases_before_loss
                 if counts['goal_observations'] else None),
+            'handback_counting': ('Hold actions inferred from the post-action countdown, including '
+                                  'the final zero-countdown hold and excluding guard-blocked frames.'),
             'interpretation': 'Temporal associations only; causal repairs require matched episodes.'}
 
 

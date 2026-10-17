@@ -762,3 +762,42 @@ physical-reference comparison. The 40-episode Jar screen has now started with tw
 workers under the same server process. These reference/replay checks verify inference
 isolation; they do not add task-performance evidence or establish deterministic physics.
 Their full costs are retained in the screen-progress record and raw ledgers.
+
+## First physical prerequisite and hand-back completions
+
+The first two Jar motion trials, both on task_0008/base, were unsafe unfinished at the
+full 2,000-action horizon. Combined smoothing/default caps first violated uprightness
+at step 662; the tighter motion caps first violated it at 351. Both jars were open and
+still on their support at the first violation. Neither trial supplies a demonstrated
+motion repair. The repeated identity control for this scene is still pending.
+
+On task_0013/base, the privileged prerequisite guard and hand-back controller both
+intervened and completed safely. The plain guard blocked 19 commands across 18 guard
+entries/exits, completing in 1,527 actions and 201 queries. Hand-back with four-action
+settling blocked 57 commands across 42 entries/exits and applied 100 additional hold
+actions, completing in 1,497 actions and 274 queries. It requested 108 early intervention
+replans. The 100 holds were inferred from saved post-action countdowns, including the
+final zero-countdown hold and excluding renewed guard blocks, then checked against
+the exact set of changed nonblocked actions. Every such arm target equalled the
+measured joint state and preserved the proposed gripper command.
+
+These runs verify physical operation and continuation after actual interventions.
+They do not establish a repair: the original identity baseline already safely
+completed this scene in 998 actions and 125 queries. The same-server repeated identity
+control is still pending (Jar job 15), and the small difference between the two new
+completions is not evidence of a hand-back advantage. The first interventions occur
+with open gripper commands and target contact while closure is incomplete; a blocked
+linearized upward proposal is not proof that the original action would have violated
+the physical prerequisite. Both guards use explicitly privileged object/contact state.
+
+The new `ManiGuard fruits Jar screen progress.json` retains the completed evidence and
+comparison limitations. Two diagnostic checks passed for interrupted hand-back holds
+and a guard with no exit; lint passes. Only reporting code changed, so the running
+controllers and declared physical settings remain as originally launched.
+
+The fifth completed Jar screen, release delay on task_0008/base, safely completed in
+710 actions and 89 queries, but it delayed zero releases and changed zero commands.
+It is not evidence that the release rule repaired the original unsafe unfinished
+baseline. Its contemporaneous identity control is still pending (job 11). This
+untriggered success further reinforces the need to inspect actual interventions and
+replicate outcomes before attributing a changed result to an adapter.
