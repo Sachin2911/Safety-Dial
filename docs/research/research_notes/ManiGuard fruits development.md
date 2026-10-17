@@ -1247,3 +1247,21 @@ Refreshed the current progress summary from validated records and removed older 
 control prose from its current-state fields; those historical snapshots remain in Git
 and this log. The repeated comparison remains incomplete, so no overall condition ranking
 or optimizer claim follows. Subsequent experiment queues remain unchanged.
+
+## Fifteen Stack repeats and a second cracker control
+
+Fifteen of 24 motion-repeat trials are validated: zero safe completions, one unsafe
+completion, seven safe unfinished and seven unsafe unfinished. The tight cap on
+task_0010 root one changes 892 commands, never holds the target, and remains unsafe
+unfinished after first violating stack uprightness at observation 249. Its same-scene/root
+control is still running.
+
+The task_0010 root-zero unchanged control also remains unsafe unfinished without a
+held target, first violating stack uprightness at observation 975 while the target itself
+is upright. Its wider-cap counterpart likewise remains unsafe unfinished, with an earlier
+first violation at 195. The timing contrast is descriptive rather than a causal estimate
+because the physical starts are not identical. Six completed condition comparisons now
+reuse four unique controls: none changes safe completion, and three have an additional
+violation relative to their completed control. Coverage remains incomplete and differs
+between caps, so these partial comparisons are not a condition ranking. The next two
+physical episodes remain live and all later queues retain their existing dependencies.
