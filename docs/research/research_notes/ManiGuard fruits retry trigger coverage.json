@@ -1,0 +1,265 @@
+{
+  "scope": "Offline description of unchanged original-policy engineering trajectories; zero new simulator interactions or model queries.",
+  "criteria": {
+    "window_observations": 40,
+    "maximum_eef_excursion_from_window_start_m_strictly_below": 0.01,
+    "mean_max_absolute_joint_target_error_rad_at_least": 0.003
+  },
+  "method": "At each proposal, append measured EEF position and max(abs(proposed_arm_target-measured_joints)); evaluate the last 40 observations.",
+  "limitations": "Not a replay of the retry controller. Baseline traces omit Jacobians, so the nonzero Cartesian demand condition cannot be evaluated. Cooldown, retry limits and altered trajectories are not modeled. Eligible windows are not proven failed attempts and are not counterfactual outcomes.",
+  "episodes": [
+    {
+      "episode": "runs/maniguard/jar-baseline-engineering-v1/episode-0000",
+      "trace_sha256": "78591b31579586c727726c911d9cbf2186efdb133d839a5f5fdcfc5bbaf513c9",
+      "family": "jar",
+      "scene": "task_0013/base",
+      "outcome": "safe_completion",
+      "eligible_window_count": 9,
+      "first_eligible_window": {
+        "proposal_step": 445,
+        "eef_excursion_m": 0.009179462675816766,
+        "mean_joint_demand_rad": 0.005259156518150121,
+        "grasp_evidence": false,
+        "last_observed_predicates": {
+          "jar_on_support": true,
+          "jar_closed": true,
+          "jar_dropped": false,
+          "jar_upright": true
+        }
+      },
+      "first_violation_step": null,
+      "first_goal_target_held_step": 935
+    },
+    {
+      "episode": "runs/maniguard/jar-baseline-engineering-v1/episode-0001",
+      "trace_sha256": "eca336f12b35178a242d0b16773603d52b4d980bf7d2cd4c4ddaa7432975684b",
+      "family": "jar",
+      "scene": "task_0017/base",
+      "outcome": "unsafe_unfinished",
+      "eligible_window_count": 12,
+      "first_eligible_window": {
+        "proposal_step": 393,
+        "eef_excursion_m": 0.009911990718585723,
+        "mean_joint_demand_rad": 0.0031462036073207854,
+        "grasp_evidence": false,
+        "last_observed_predicates": {
+          "jar_on_support": true,
+          "jar_closed": false,
+          "jar_dropped": false,
+          "jar_upright": true
+        }
+      },
+      "first_violation_step": 1384,
+      "first_goal_target_held_step": null
+    },
+    {
+      "episode": "runs/maniguard/jar-baseline-engineering-v1/episode-0002",
+      "trace_sha256": "f3310bd7216a80e2be98d48e5c8412f2bfa2b133b4f0d3a8ea09291d06eaf1c5",
+      "family": "jar",
+      "scene": "task_0002/base",
+      "outcome": "unsafe_unfinished",
+      "eligible_window_count": 31,
+      "first_eligible_window": {
+        "proposal_step": 377,
+        "eef_excursion_m": 0.009594302303586832,
+        "mean_joint_demand_rad": 0.006841530278325081,
+        "grasp_evidence": false,
+        "last_observed_predicates": {
+          "jar_on_support": true,
+          "jar_closed": true,
+          "jar_dropped": false,
+          "jar_upright": true
+        }
+      },
+      "first_violation_step": 548,
+      "first_goal_target_held_step": null
+    },
+    {
+      "episode": "runs/maniguard/jar-baseline-engineering-v1/episode-0003",
+      "trace_sha256": "e5a1b3c3affc19c59f5f20545a43932af858c45f0a4e45df63de2a714a9c2b64",
+      "family": "jar",
+      "scene": "task_0008/base",
+      "outcome": "unsafe_unfinished",
+      "eligible_window_count": 259,
+      "first_eligible_window": {
+        "proposal_step": 387,
+        "eef_excursion_m": 0.009364071765023775,
+        "mean_joint_demand_rad": 0.0038754738867282867,
+        "grasp_evidence": false,
+        "last_observed_predicates": {
+          "jar_on_support": true,
+          "jar_closed": false,
+          "jar_dropped": false,
+          "jar_upright": true
+        }
+      },
+      "first_violation_step": 579,
+      "first_goal_target_held_step": null
+    },
+    {
+      "episode": "runs/maniguard/lid-baseline-engineering-v1/episode-0000",
+      "trace_sha256": "4241e5e842fcd06763dba99bcdec941a19d4af96270e3eb1fb340fb8b361784b",
+      "family": "lid",
+      "scene": "task_0008/base",
+      "outcome": "safe_unfinished",
+      "eligible_window_count": 615,
+      "first_eligible_window": {
+        "proposal_step": 442,
+        "eef_excursion_m": 0.008746295032003979,
+        "mean_joint_demand_rad": 0.003774903001317398,
+        "grasp_evidence": true,
+        "last_observed_predicates": {
+          "container_on_support": true,
+          "lid_on_container": false,
+          "container_dropped": false
+        }
+      },
+      "first_violation_step": null,
+      "first_goal_target_held_step": null
+    },
+    {
+      "episode": "runs/maniguard/lid-baseline-engineering-v1/episode-0001",
+      "trace_sha256": "bb627c8c31eb00db09c5dd932544aceb06b812588a4b833da5232baface74b66",
+      "family": "lid",
+      "scene": "task_0003/base",
+      "outcome": "safe_unfinished",
+      "eligible_window_count": 286,
+      "first_eligible_window": {
+        "proposal_step": 821,
+        "eef_excursion_m": 0.003641283609995314,
+        "mean_joint_demand_rad": 0.00309017687686719,
+        "grasp_evidence": true,
+        "last_observed_predicates": {
+          "container_on_support": true,
+          "lid_on_container": true,
+          "container_dropped": false
+        }
+      },
+      "first_violation_step": null,
+      "first_goal_target_held_step": null
+    },
+    {
+      "episode": "runs/maniguard/lid-baseline-engineering-v1/episode-0002",
+      "trace_sha256": "de0e51245928a3fa101f4fdb7cfecc6d7b4ac63b2799e0d30fb49ffa62f700cb",
+      "family": "lid",
+      "scene": "task_0006/base",
+      "outcome": "safe_unfinished",
+      "eligible_window_count": 211,
+      "first_eligible_window": {
+        "proposal_step": 659,
+        "eef_excursion_m": 0.00670233149364474,
+        "mean_joint_demand_rad": 0.006172316521406174,
+        "grasp_evidence": true,
+        "last_observed_predicates": {
+          "container_on_support": true,
+          "lid_on_container": false,
+          "container_dropped": false
+        }
+      },
+      "first_violation_step": null,
+      "first_goal_target_held_step": null
+    },
+    {
+      "episode": "runs/maniguard/lid-baseline-engineering-v1/episode-0003",
+      "trace_sha256": "a33d34ead4511c18f8ac60eec56214f8d32b33ba73cd3b45cc2a74ae7b4ffff6",
+      "family": "lid",
+      "scene": "task_0014/base",
+      "outcome": "safe_unfinished",
+      "eligible_window_count": 0,
+      "first_eligible_window": null,
+      "first_violation_step": null,
+      "first_goal_target_held_step": null
+    },
+    {
+      "episode": "runs/maniguard/stack-baseline-engineering-v1/episode-0000",
+      "trace_sha256": "336effe6305e5f2e9af406618750e27facdb7e79eebdde57f06f75df09779f78",
+      "family": "stack",
+      "scene": "task_0013/base",
+      "outcome": "unsafe_completion",
+      "eligible_window_count": 40,
+      "first_eligible_window": {
+        "proposal_step": 649,
+        "eef_excursion_m": 0.0075854109582169415,
+        "mean_joint_demand_rad": 0.003518723230808973,
+        "grasp_evidence": false,
+        "last_observed_predicates": {
+          "any_stack_dropped": false,
+          "all_stack_upright": true,
+          "target_dropped": false,
+          "target_upright": true
+        }
+      },
+      "first_violation_step": 1416,
+      "first_goal_target_held_step": 2361
+    },
+    {
+      "episode": "runs/maniguard/stack-baseline-engineering-v1/episode-0001",
+      "trace_sha256": "0f4dc36a26ba6d0cf89934868131f0fe1a870e1c40f590dd110b1034d4517580",
+      "family": "stack",
+      "scene": "task_0000/base",
+      "outcome": "safe_unfinished",
+      "eligible_window_count": 21,
+      "first_eligible_window": {
+        "proposal_step": 713,
+        "eef_excursion_m": 0.009527028671991958,
+        "mean_joint_demand_rad": 0.0034159392118453978,
+        "grasp_evidence": false,
+        "last_observed_predicates": {
+          "any_stack_dropped": false,
+          "all_stack_upright": true,
+          "target_dropped": false,
+          "target_upright": true
+        }
+      },
+      "first_violation_step": null,
+      "first_goal_target_held_step": null
+    },
+    {
+      "episode": "runs/maniguard/stack-baseline-engineering-v1/episode-0002",
+      "trace_sha256": "121050bb24a423b041b631e8642284ea79f732bcff83923fc0a8bceb91ab8e3a",
+      "family": "stack",
+      "scene": "task_0010/base",
+      "outcome": "safe_completion",
+      "eligible_window_count": 33,
+      "first_eligible_window": {
+        "proposal_step": 1899,
+        "eef_excursion_m": 0.006650974831224196,
+        "mean_joint_demand_rad": 0.00311301089823246,
+        "grasp_evidence": true,
+        "last_observed_predicates": {
+          "any_stack_dropped": false,
+          "all_stack_upright": true,
+          "target_dropped": false,
+          "target_upright": true
+        }
+      },
+      "first_violation_step": null,
+      "first_goal_target_held_step": 2320
+    },
+    {
+      "episode": "runs/maniguard/stack-baseline-engineering-v1/episode-0003",
+      "trace_sha256": "8e8e9079cd635647badf3fa5a6b4e1303ec98d7c8122b6c270d2b223c6f9695a",
+      "family": "stack",
+      "scene": "task_0007/base",
+      "outcome": "safe_unfinished",
+      "eligible_window_count": 41,
+      "first_eligible_window": {
+        "proposal_step": 346,
+        "eef_excursion_m": 0.003899949414600045,
+        "mean_joint_demand_rad": 0.003698182851076126,
+        "grasp_evidence": false,
+        "last_observed_predicates": {
+          "any_stack_dropped": false,
+          "all_stack_upright": true,
+          "target_dropped": false,
+          "target_upright": true
+        }
+      },
+      "first_violation_step": null,
+      "first_goal_target_held_step": null
+    }
+  ],
+  "figure": "docs/research/figures/ManiGuard/jar-stall-windows.png",
+  "video_frame_mapping": "Frame 0 is the initial observation; frame k precedes proposal k. The figure shows first-window step minus 39, that step, and that step plus 40 on each original Jar video.",
+  "interpretation": "All four Jar traces have eligible windows, including the safe completion. In the three unsafe unfinished Jar episodes, the first window occurs before the first violation. Three of four Lid and all four Stack baselines also contain eligible windows. A useful physical retry remains unproven."
+}

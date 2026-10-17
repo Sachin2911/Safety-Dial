@@ -638,3 +638,39 @@ pass on the new Stack server before the repeated screen starts. The live simulat
 and their order were not changed. Saved queue source and plan hashes are retained in
 the screen-progress record. This remains a fixed-rule development comparison, not an
 evolutionary search or reserved test.
+
+## Retry detector coverage before physical evaluation
+
+The unchanged baseline traces now have a recorded offline check of the proposed retry
+window: 40 robot observations, less than 1 cm EEF excursion from the window start, and
+at least 0.003 rad mean maximum joint-target error. All four Jar traces meet those
+conditions. The first eligible steps are 445, 393, 377 and 387 for task_0013, task_0017,
+task_0002 and task_0008 respectively. The first is a later safe completion; the other
+three are later unsafe unfinished episodes. In those three, eligibility precedes the
+first violation. Three of four Lid traces and all four Stack traces also qualify,
+including Stack's safe completion.
+
+This is coverage of two detector conditions, not a physical retry experiment. The
+baseline traces do not contain Jacobians, so the additional nonzero Cartesian-demand
+condition cannot be evaluated. Window counts ignore cooldown, retry limits and all
+trajectory changes after intervention. They must not be reported as actual retry
+counts or proven failed grasps. [Selected original Jar video frames](../figures/ManiGuard/jar-stall-windows.png)
+show the first window and its nearby trajectory on both successful and unsuccessful
+cases; no corrected actions are shown. The physical Jar retry comparison remains
+necessary to determine whether retreat helps or disrupts useful manipulation.
+
+The machine-readable record retains trace hashes, criteria, eligible-window counts,
+first windows and observed safety/goal timing in `ManiGuard fruits retry trigger
+coverage.json`. This analysis consumed no new model queries or simulator interactions
+and did not change the declared physical trial settings.
+
+## All four shorter-horizon Stack trials complete
+
+All four fixed-horizon-4 Stack engineering trials finished safe but unfinished at the
+original 4,200-action horizon. Each used 1,050 model queries, twice the 525 required by
+a full horizon-8 episode. The original four horizon-8 baselines included one safe and
+one unsafe completion. This single-seed screen supplies no demonstrated completion
+benefit from uniformly doubling query frequency; it does not establish that the shorter
+horizon is universally worse or that an adaptive schedule cannot help. The remaining
+adaptive trials and contemporaneous controls are still part of the declared batch.
+Seventeen of 24 Stack screens have finished, and the later queues remain live.
