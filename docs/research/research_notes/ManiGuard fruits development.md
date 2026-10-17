@@ -1581,3 +1581,58 @@ trials for this scene/root remain pending. The success supplies a useful outcome
 without establishing an improvement over the unchanged policy or a benefit from a safety
 filter. Across the first six repeats there is one safe completion, three safe unfinished
 and two unsafe unfinished outcomes. The full comparison continues unchanged.
+
+
+## Eighth Jar repeat: mixed smoothing results and a hand-back completion
+
+Eight Jar repeats are validated: two safe completions, three safe unfinished and three
+unsafe unfinished. There is still no completed same-scene/root comparison to identity.
+The remaining physical batch continues under the declared plan.
+
+Smoothing on task_0002 at root zero remains unsafe unfinished after 2000 actions and
+250 queries, contrasting with its safe completion at root two. It first satisfies the
+closure predicate at observation 376. That predicate is true through 620, false at
+621 to 645, and true again from 646 onward. The first uprightness violation is at 643,
+while the closure predicate is false; this is not a failure before the first closure.
+The target never becomes held or leaves support. All 2000 arm commands change, execution
+and command bounds validate, and no measured step exceeds its active cap by more than
+1e-6 radians. This does not establish that motion magnitude caused or prevented tipping.
+
+The hand-back trial on task_0008 at root two completes safely in 906 actions and 275
+queries. It blocks 105 actions and has 184 post-guard holds, for 289 changed actions.
+Its blocks span proposals 188 to 617, all while the goal target is unheld. The jar first
+closes at observation 621, is first held at 814 and leaves support at 816. Completion
+can therefore follow the interventions, but direct interception of an unsafe held lift
+is not established. The same-scene/root unchanged-policy and plain-guard trials remain
+pending; the completed task_0008 identity at root one is not its paired control.
+
+Added inclusive intervals of observed closure to the progress evidence so that a first
+closure is not confused with continuous closure. The successful hand-back trial briefly
+has a false closure predicate at observation 878, after its prerequisite has already
+been discharged. Full monitor coverage still records no physical specification violation.
+All earlier source and execution audits remain in the eight-trial snapshot. These are
+descriptive findings on separate physical starts, not an established optimizer benefit.
+
+
+## Ten Jar repeats: first baseline pair and second hand-back completion
+
+Ten repeats are validated: three safe completions, four safe unfinished and three unsafe
+unfinished. The first complete identity comparison is task_0013 at root two. Identity
+first closes at observation 369, remains closed through the episode, never grasps or
+leaves support, and remains safe unfinished at 2000 actions with 250 queries. Its plain
+guard counterpart closes at 411, never grasps or leaves support, and tips at 1485 before
+ending unsafe unfinished at 2000 actions with 262 queries. This pair has no safe-completion
+gain or loss and one additional observed violation under the guard. Separate physical
+starts prevent treating this difference as a demonstrated causal effect of the guard.
+
+The hand-back trial on task_0013 at root zero completes safely in 1853 actions and 304
+queries. It blocks 47 actions at proposals 150 to 459 and adds 102 settling holds, for
+149 changed actions. Closure first occurs at observation 485, the target is first held
+at 1818, and it leaves support at 1825. Every block precedes a target grasp, and the jar
+stays closed from its first closure through completion. Its matching baseline and plain
+guard remain pending. This is the second safe hand-back completion in the repeat batch,
+alongside one prolonged hand-back stall; it does not yet establish a baseline advantage.
+
+The ten-trial evidence retains all partial pair coverage, physical/query ledgers, complete
+diagnoses, source/trace hashes and command audits. Earlier diagnostics reproduce exactly.
+The batch remains live with two workers and no changed condition, budget or runtime rule.
