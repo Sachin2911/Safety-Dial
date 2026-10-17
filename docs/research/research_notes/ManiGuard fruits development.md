@@ -627,3 +627,14 @@ policy queries including partial jobs. These are recorded costs at the snapshot,
 final totals or a completeness claim. The first native startup attempt lacks attached
 physics accounting, and the earlier websocket failure counts its query but omits that
 query's latency. Both omissions remain explicit in the accounting research record.
+
+The fifteenth completed Stack screen, motion capping on task_0000/base, was safe
+unfinished at the full horizon after changing 368 commands. It supplies no demonstrated
+completion gain. The declared 24-episode repeated motion-limit plan is now queued under
+supervisor (`maniguard_motion_queue`, PID 73857). It waits for the existing Stack, Jar and
+Lid sequence to finish successfully and validates every declared result before changing
+the idle policy service. A fresh 32-action reference and strict interleaved replay must
+pass on the new Stack server before the repeated screen starts. The live simulations
+and their order were not changed. Saved queue source and plan hashes are retained in
+the screen-progress record. This remains a fixed-rule development comparison, not an
+evolutionary search or reserved test.
