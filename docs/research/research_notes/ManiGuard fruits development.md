@@ -1538,3 +1538,26 @@ counts agree with ledgers, and saved study/runtime source hashes validate. Goal 
 is aligned to the pre-action observation, with no unknown values at blocked actions.
 These three outcomes supply no completed candidate/control pair. The batch is live and
 unchanged, with the first smoothing trial and identity control running at this snapshot.
+
+
+## First smoothing repeat closes but does not grasp
+
+Five Jar repeats are now complete: three safe unfinished and two unsafe unfinished.
+The first smoothing repeat, task_0017 at root one, remains safe unfinished after 2000
+actions and 250 queries. It first closes at observation 503 but never holds the goal
+target or leaves support. All 2000 arm proposals change; gripper commands pass through
+unchanged. Eight smoothed targets exceed the active displacement cap before clipping,
+from proposals 1551 through 1895. Unlike the earlier successful task_0017 smoothing trial,
+this trial therefore combines smoothing with occasional active caps.
+
+The existing motion audit validates execution, state alignment and command bounds. The
+largest commanded displacement is 0.11999989 radians; the largest measured joint step is
+0.07544339 radians. This is an active adapter that has not completed the task, rather than
+an inactive trigger. Its identity and guard comparisons remain pending.
+
+The first unchanged-policy repeat, task_0008 at root one, also remains safe unfinished for
+2000 actions and 250 queries. It is a different scene from the smoothing result, so these
+are not a comparison pair. Updated the immutable five-trial snapshot and current progress
+record with full diagnoses, costs and motion audits. There are still no completed
+candidate/control pairs. The remaining 43 Jar trials and subsequent 16 Lid trials remain
+part of the declared follow-up round; no runtime or experiment plan was changed.
