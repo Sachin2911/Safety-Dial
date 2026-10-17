@@ -2085,3 +2085,51 @@ at roots zero and one. The full comparison and wall-time report will wait for th
 runs and normal queue completion. The Lid audit script is prepared to preserve placement,
 holding and support chronology, complete executed-action checks, unknown initial holding,
 saved source hashes and partial control coverage; its pre-start check writes no artifact.
+
+## Complete Jar repeats and a controller-limit prediction mismatch
+
+All 48 planned trials finished normally. Final outcomes are twelve safe completions,
+two unsafe completions, twenty-three safe unfinished and eleven unsafe unfinished.
+Identity completes safely in 2/12 with four violating episodes; the plain guard in 4/12
+with two violations; smoothing in 3/12 with five violations; and hand-back in 3/12 with
+two violations. Hand-back loses two plain-guard successes and gains one, with equal total
+violations and 10,452 versus 2,746 queries. The final full report includes every outcome,
+paired comparison, source/configuration audit and a visually inspected outcome/cost plot.
+
+The 48-trial batch consumes 83,072 policy actions, 502,560 physics ticks and 18,345 queries.
+Batch wall time is 6605.961894875858 seconds, distinct from 12,802.203647797462 summed
+ledger seconds and 12,967.825320451055 summed process seconds. The queue's longer total
+includes waiting and policy/reference setup and is not experiment wall time. Full source,
+policy and runtime metadata agree across all 48 saved episodes. Initial physical inputs
+need not match, and the twelve cases do not establish reserved generalization.
+
+The final task_0008 root-zero hand-back trial is unsafe unfinished, not merely a long
+safe stall. It first holds at observation 1347, never closes, and leaves support at 1873.
+It makes 1412 queries, blocks 992 proposals and performs 665 settling holds. There are
+635 changed commands with the target held before action, including 497 guard blocks.
+The other final hand-back case, task_0008/root one, remains safe unfinished without
+closure or grasp after 1159 queries; this is the second loss against the plain guard.
+
+At the root-zero violation boundary, proposal 1872 requests joint 2 at -1.853714 radians,
+below the pinned longfinger asset limit of approximately -1.762800. The requested-target
+Jacobian estimate is -5.18155 mm, so the guard allows it. The actual controller clips its
+position output to joint limits, independently of raw input normalization. Reconstructing
+the feasible target yields +14.60432 mm; the actual joint displacement linearizes to
++13.86674 mm, and measured end-effector height rises +13.66818 mm. The jar loses support
+while still open and held. All boundary records and the controller/asset source hashes
+are retained in the new lift-prediction mismatch audit.
+
+This identifies a specific prediction-interface defect in the prototype guard. The
+existing trace labels the command submitted to the environment as executed; it does not
+record the controller's lower-level clipped actuator target. The clipping calculation is
+an offline reconstruction, not an already tested physical repair. Preserve all v1 results
+and the running Lid source snapshots. After the Lid batch finishes, implement and test a
+separately identified controller-limit-aware variant with matched physical controls before
+claiming a correction or starting optimizer comparisons. This required follow-up remains
+open; the study is not complete merely because the Jar batch finished.
+
+The Jar supervisor exited normally before the Lid supervisor switched the idle policy.
+Lid's fresh reference completed 32 actions and four queries; all six strict interleaved
+replay queries passed, including agreement with the reference's first proposal. Physical
+Lid batch PID 233183 started under policy PID 230565; two of sixteen outcomes had completed
+when its start record was saved. No optimizer, selection-validation or reserved trial has run.

@@ -29,21 +29,20 @@ Eight extra Lid baselines are also complete: one unsafe completion, two unsafe u
 and five safe unfinished. Three scenes now show lifting before lid placement; three other
 trials record lid placement but never hold the target container. This supplies clearer
 evidence of premature transport to test, not a demonstrated correction. A 16-episode Lid comparison
-of identity and the fixed guard is queued across all four engineering scenes and two seeds.
+of identity and the fixed guard is now running across all four engineering scenes and two seeds.
 See the [Lid follow-up evidence](docs/research/research_notes/ManiGuard%20fruits%20Lid%20followup.json).
 
 The [24 Stack motion-limit repeats](docs/research/reports/ManiGuard%20Stack%20motion%20repeats.md)
 are complete, as are the
 [12 Stack release-trigger comparisons](docs/research/reports/ManiGuard%20Stack%20release%20trigger%20comparison.md),
-which find no safe-completion gain. The 48 Jar repeats are running, comparing identity,
-guard, hand-back and smoothing across all four engineering scenes and three root seeds.
-Their [repeat progress record](docs/research/research_notes/ManiGuard%20fruits%20Jar%20repeat%20progress.json)
-retains completed diagnoses separately from pending control comparisons. At 46 validated
-trials, every identity, plain-guard and smoothing trial is complete; two settling/requery
-trials remain. The plain guard safely completes 4/12 trials versus identity's 2/12, with
-2/12 versus 4/12 episodes containing violations. Smoothing safely completes 3/12 but has
-5/12 episodes with violations. The guard is a useful engineering lead, not a demonstrated
-robust or evolutionary advantage.
+which find no safe-completion gain. The
+[48 Jar repeats](docs/research/reports/ManiGuard%20Jar%20guard%20and%20motion%20repeats.md)
+are also complete. The plain guard safely completes 4/12 trials versus identity's 2/12,
+with 2/12 versus 4/12 episodes containing violations. Smoothing safely completes 3/12
+but has 5/12 episodes with violations. Settling/requerying safely completes 3/12 with
+two violations, using 10,452 queries versus the plain guard's 2,746. Guarding remains
+a useful engineering lead. A newly diagnosed joint-limit prediction mismatch needs a
+corrected, separately tested guard before optimizer comparisons.
 These remain engineering experiments. No evolutionary search or reserved evaluation has
 run, and no evolutionary advantage has been demonstrated.
 
@@ -268,8 +267,18 @@ safe unfinished at 2000 actions without closing or grasping. An
 confirms matching declared settings and code, with differing initial images and policy
 proposals. None of the three task_0017 guard repeats safely completes, limiting the
 repeatability of that original case. Across the full guard repeat set, all 434 modified
-commands occur while the goal target is explicitly unheld. The pending Lid comparison
-will test the same prerequisite idea on observed container-lifting failures.
+commands occur while the goal target is explicitly unheld. The running Lid comparison
+is testing the same prerequisite idea on observed container-lifting failures.
+
+The completed Jar return comparison also exposes a concrete limitation in this guard's
+lift estimate. On task_0008/root zero, an action predicted to move downward instead lifts
+an open jar: its requested second-joint target lies beyond the lower joint limit. The
+controller clips the target internally, reversing the estimated vertical direction.
+The [boundary audit](docs/research/research_notes/ManiGuard%20fruits%20Jar%20guard%20lift%20prediction%20mismatch.json)
+finds a raw prediction of -5.18 mm, a limit-aware prediction of +14.60 mm, and measured
+motion of +13.67 mm. A corrected guard must account for the controller's feasible targets
+and be physically tested; this offline reconstruction does not establish a repair. The
+current Lid comparison retains the original guard so its declared results remain interpretable.
 
 ## 4. Preserve a useful grasp through premature release requests
 
@@ -351,29 +360,32 @@ loss of progress. Compare immediate hand-back with a fixed settling period and a
 policy query. Develop a richer controller only if these simple alternatives leave useful
 headroom. Corrective actions and additional queries count toward the budget.
 
-The ongoing repeats contain one same-scene/root contrast in which guard plus settling
+The completed repeats contain one same-scene/root contrast in which guard plus settling
 completes safely while identity tips during an unsafe completion: task_0008 at root two,
 906 actions and 275 queries versus 792 actions and 99 queries. All adapter changes finish
 before its target grasp, and initial images and policy proposals differ between the runs.
 The [timing and input evidence](docs/research/research_notes/ManiGuard%20fruits%20Jar%20repeat%20first%20handback%20inputs.json)
-does not establish direct interception of the baseline failure. At the 46-trial snapshot,
-ten completed hand-back/identity pairs contain three safe-completion gains and two losses,
-two fewer violations and 7881 versus 2127 queries.
+does not establish direct interception of the baseline failure. All twelve completed
+hand-back/identity pairs contain three safe-completion gains and two losses, two fewer
+violations and 10,452 versus 2,627 queries.
 
 The [comparison against the same plain guard](docs/research/research_notes/ManiGuard%20fruits%20Jar%20handback%20versus%20guard%20progress.json)
-now contains one safe-completion gain and one loss in ten completed pairs, one fewer
-violation and 7881 versus 2244 queries. The first direct gain is task_0017 at root one:
+contains one safe-completion gain and two losses in twelve completed pairs, the same
+number of violations, and 10,452 versus 2,746 queries. The first direct gain is task_0017 at root one:
 hand-back completes safely in 1343 actions and 372 queries while the plain guard remains
 safe unfinished at 2000 actions and 269 queries. Its
 [four-condition audit](docs/research/research_notes/ManiGuard%20fruits%20Jar%20repeat%20first%20handback%20plain%20guard%20gain.json)
 confirms the same guard settings, with all hand-back changes ending before target grasp.
-Initial images and proposals already differ before intervention. The loss is task_0002
+Initial images and proposals already differ before intervention. One loss is task_0002
 at root two: the plain guard completes safely in 946 actions and 136 queries, while
 hand-back never closes or grasps and remains unfinished after 2000 actions and 1285 queries.
 All three hand-back roots on task_0002 now end without closure or grasp, consuming
 3879 queries versus identity's 528. Identity safely completes two of those three trials.
-The added settling behavior therefore has no aggregate completion gain over the plain
-guard in these partial pairs. The remaining repeats are needed before assessing the rule.
+The other loss is task_0008/root one, where settling remains unfinished without closure
+or grasp while the plain guard succeeds. Settling also lifts an open jar in the root-zero
+case despite repeated guard activation; the joint-limit mismatch above explains a missed
+trigger at the violation boundary. The tested return rule has fewer safe completions than
+the plain guard, equal violations and substantially higher query cost.
 
 This most directly connects to the original task-continuation question. Its entry cost is
 higher because a functioning guard and useful corrective behaviours are prerequisites.
