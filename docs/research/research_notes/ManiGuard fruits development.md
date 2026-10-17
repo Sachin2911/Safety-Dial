@@ -1217,3 +1217,33 @@ contain six safe unfinished, four unsafe unfinished and one unsafe completion. T
 no safe completion or completed-pair safe-completion gain. The reports retain unfinished
 comparisons rather than ranking conditions from unequal partial coverage. The next two
 trial processes remain live, and all subsequent queues retain their declared dependencies.
+
+## Cracker control completes and cap activation precedes failures
+
+Thirteen of 24 Stack motion-repeat trials are validated: zero safe completions, one
+unsafe completion, seven safe unfinished and five unsafe unfinished. The task_0010
+root-two unchanged control stays safe unfinished for 4200 actions and 525 queries,
+without holding the target. Its tight-cap counterpart is unsafe unfinished; its wider-cap
+counterpart reaches the goal unsafely in 695 actions. Neither is a safe-completion gain.
+Together with the earlier bowl cases, five completed condition comparisons reuse three
+unchanged-policy trials. Their outcome contrasts must not be treated as five independent
+control episodes or used to duplicate whole-study costs.
+
+The wider cap has also finished task_0010 root zero: unsafe unfinished, first violating
+stack uprightness at observation 195 while the target remains upright, with 67 changed
+commands and no target grasp. All three wider-cap cracker trials now contain violations;
+the root-zero and root-one unchanged controls are still pending.
+
+Trace timing confirms activation before every first violation among the six completed
+unsafe capped trials. The wider-cap root-two and root-zero trials respectively change
+18 and 38 commands strictly before their first violations, starting at proposal indices
+two and five. The cap is therefore not merely activating after those failures. Timing
+does not establish that the cap caused the failure or that any particular unexecuted
+proposal would have been safer. The progress record now retains first-change indices,
+strictly-before counts and whether the violation-producing action was changed, with the
+proposal/observation indexing convention stated explicitly.
+
+Refreshed the current progress summary from validated records and removed older pending-
+control prose from its current-state fields; those historical snapshots remain in Git
+and this log. The repeated comparison remains incomplete, so no overall condition ranking
+or optimizer claim follows. Subsequent experiment queues remain unchanged.

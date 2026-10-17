@@ -4,9 +4,9 @@
     "split": "engineering",
     "planned": 24,
     "statuses": {
-      "completed": 11,
+      "completed": 13,
       "awaiting_process_record": 2,
-      "not_started": 11
+      "not_started": 9
     },
     "groups": [
       {
@@ -44,7 +44,8 @@
         "planned": 6,
         "statuses": {
           "completed": 4,
-          "not_started": 2
+          "awaiting_process_record": 1,
+          "not_started": 1
         },
         "outcomes": {
           "safe_completion": 0,
@@ -87,14 +88,14 @@
         },
         "planned": 6,
         "statuses": {
-          "completed": 2,
+          "completed": 3,
           "awaiting_process_record": 1,
-          "not_started": 3
+          "not_started": 2
         },
         "outcomes": {
           "safe_completion": 0,
           "unsafe_completion": 0,
-          "safe_unfinished": 2,
+          "safe_unfinished": 3,
           "unsafe_unfinished": 0
         }
       },
@@ -132,15 +133,14 @@
         },
         "planned": 6,
         "statuses": {
-          "completed": 3,
-          "awaiting_process_record": 1,
+          "completed": 4,
           "not_started": 2
         },
         "outcomes": {
           "safe_completion": 0,
           "unsafe_completion": 1,
           "safe_unfinished": 1,
-          "unsafe_unfinished": 1
+          "unsafe_unfinished": 2
         }
       },
       {
@@ -1088,20 +1088,78 @@
         "label": "cap_006_004",
         "output": "runs/maniguard/stack-motion-repeat-v1/episode-0011",
         "recorded_ledger": {
-          "physics_steps": 14198,
-          "physics_seconds": 118.3166728373617,
-          "env_step_attempts": 2362,
-          "env_steps_returned": 2362,
-          "policy_queries": 295,
-          "policy_query_seconds": 75.18432308826596,
-          "policy_control_steps": 2352,
+          "physics_steps": 25286,
+          "physics_seconds": 210.71667765639722,
+          "env_step_attempts": 4210,
+          "env_steps_returned": 4210,
+          "policy_queries": 525,
+          "policy_query_seconds": 135.3745996679645,
+          "policy_control_steps": 4200,
           "guard_steps": 0,
           "changed_steps": 67,
-          "phase": "policy",
+          "phase": "completed",
           "physics_accounting_attached": true,
-          "elapsed_seconds": 250.16698797303252
+          "elapsed_seconds": 421.25750986509956
         },
-        "status": "awaiting_process_record"
+        "status": "completed",
+        "result": {
+          "family": "stack",
+          "scene": "task_0010/base",
+          "seed": 0,
+          "adapter": {
+            "kind": "motion",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.06,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "engineering_override": null,
+          "safe_completion": false,
+          "unsafe_completion": false,
+          "safe_unfinished": false,
+          "unsafe_unfinished": true,
+          "violation": true,
+          "ever_contacted": true,
+          "ever_grasped": false,
+          "steps": 4200,
+          "ledger": {
+            "physics_steps": 25286,
+            "physics_seconds": 210.71667765639722,
+            "env_step_attempts": 4210,
+            "env_steps_returned": 4210,
+            "policy_queries": 525,
+            "policy_query_seconds": 135.3745996679645,
+            "policy_control_steps": 4200,
+            "guard_steps": 0,
+            "changed_steps": 67,
+            "phase": "completed",
+            "physics_accounting_attached": true,
+            "elapsed_seconds": 421.25750986509956
+          },
+          "output": "runs/maniguard/stack-motion-repeat-v1/episode-0011"
+        }
       },
       {
         "index": 12,
@@ -1111,20 +1169,78 @@
         "label": "identity",
         "output": "runs/maniguard/stack-motion-repeat-v1/episode-0012",
         "recorded_ledger": {
-          "physics_steps": 6614,
-          "physics_seconds": 55.11666954122484,
-          "env_step_attempts": 1098,
-          "env_steps_returned": 1098,
-          "policy_queries": 137,
-          "policy_query_seconds": 35.9623515130952,
-          "policy_control_steps": 1088,
+          "physics_steps": 25286,
+          "physics_seconds": 210.71667765639722,
+          "env_step_attempts": 4210,
+          "env_steps_returned": 4210,
+          "policy_queries": 525,
+          "policy_query_seconds": 131.21138032106683,
+          "policy_control_steps": 4200,
           "guard_steps": 0,
           "changed_steps": 0,
-          "phase": "policy",
+          "phase": "completed",
           "physics_accounting_attached": true,
-          "elapsed_seconds": 140.11317863198929
+          "elapsed_seconds": 420.99816146004014
         },
-        "status": "awaiting_process_record"
+        "status": "completed",
+        "result": {
+          "family": "stack",
+          "scene": "task_0010/base",
+          "seed": 2,
+          "adapter": {
+            "kind": "identity",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "engineering_override": null,
+          "safe_completion": false,
+          "unsafe_completion": false,
+          "safe_unfinished": true,
+          "unsafe_unfinished": false,
+          "violation": false,
+          "ever_contacted": true,
+          "ever_grasped": false,
+          "steps": 4200,
+          "ledger": {
+            "physics_steps": 25286,
+            "physics_seconds": 210.71667765639722,
+            "env_step_attempts": 4210,
+            "env_steps_returned": 4210,
+            "policy_queries": 525,
+            "policy_query_seconds": 131.21138032106683,
+            "policy_control_steps": 4200,
+            "guard_steps": 0,
+            "changed_steps": 0,
+            "phase": "completed",
+            "physics_accounting_attached": true,
+            "elapsed_seconds": 420.99816146004014
+          },
+          "output": "runs/maniguard/stack-motion-repeat-v1/episode-0012"
+        }
       },
       {
         "index": 13,
@@ -1133,7 +1249,21 @@
         "seed": 1,
         "label": "cap_001_001",
         "output": "runs/maniguard/stack-motion-repeat-v1/episode-0013",
-        "status": "not_started"
+        "recorded_ledger": {
+          "physics_steps": 15830,
+          "physics_seconds": 131.91667354665697,
+          "env_step_attempts": 2634,
+          "env_steps_returned": 2634,
+          "policy_queries": 329,
+          "policy_query_seconds": 78.89205625187606,
+          "policy_control_steps": 2624,
+          "guard_steps": 0,
+          "changed_steps": 781,
+          "phase": "policy",
+          "physics_accounting_attached": true,
+          "elapsed_seconds": 274.6759031228721
+        },
+        "status": "awaiting_process_record"
       },
       {
         "index": 14,
@@ -1142,7 +1272,21 @@
         "seed": 0,
         "label": "identity",
         "output": "runs/maniguard/stack-motion-repeat-v1/episode-0014",
-        "status": "not_started"
+        "recorded_ledger": {
+          "physics_steps": 8198,
+          "physics_seconds": 68.31667022965848,
+          "env_step_attempts": 1362,
+          "env_steps_returned": 1362,
+          "policy_queries": 170,
+          "policy_query_seconds": 45.50762874353677,
+          "policy_control_steps": 1352,
+          "guard_steps": 0,
+          "changed_steps": 0,
+          "phase": "policy",
+          "physics_accounting_attached": true,
+          "elapsed_seconds": 164.87766784708947
+        },
+        "status": "awaiting_process_record"
       },
       {
         "index": 15,
@@ -1227,19 +1371,19 @@
       }
     ],
     "recorded_cost_totals": {
-      "physics_steps": 277928,
-      "physics_seconds": 2316.0667874589562,
-      "env_step_attempts": 46265,
-      "env_steps_returned": 46265,
-      "policy_queries": 5769,
-      "policy_query_seconds": 1584.946599821793,
-      "policy_control_steps": 46135,
-      "elapsed_seconds": 4929.670027391752
+      "physics_steps": 331716,
+      "physics_seconds": 2764.3001441694796,
+      "env_step_attempts": 55221,
+      "env_steps_returned": 55221,
+      "policy_queries": 6886,
+      "policy_query_seconds": 1864.785590204876,
+      "policy_control_steps": 55071,
+      "elapsed_seconds": 5821.199103081832
     },
     "started_episodes_missing_cost_fields": {},
     "started_episodes_with_unverified_physics_attachment": 0,
     "finished_processes_missing_elapsed_seconds": 0,
-    "finished_process_elapsed_seconds_sum": 4578.097149982117,
+    "finished_process_elapsed_seconds_sum": 5427.686073424062,
     "accounting_scope": "Recorded episode costs include failed and incomplete work. Missing fields and unattached physics are explicit; totals may be partial. Elapsed seconds are sums across episodes, not batch wall time.",
     "interpretation": "Outcome counts cover only validated completed episodes; all other planned jobs remain in statuses. A missing process record does not prove a process is live. This report makes no causal or safety guarantee."
   },
@@ -1249,7 +1393,7 @@
       "candidate_label": "cap_001_001",
       "case_slots": 6,
       "planned_pairs": 6,
-      "completed_pairs": 2,
+      "completed_pairs": 3,
       "all_cases_complete": false,
       "cases": [
         {
@@ -1258,7 +1402,7 @@
           "seed": 0,
           "control": {
             "index": 14,
-            "status": "not_started",
+            "status": "awaiting_process_record",
             "output": "runs/maniguard/stack-motion-repeat-v1/episode-0014"
           },
           "candidate": {
@@ -1278,7 +1422,7 @@
           },
           "candidate": {
             "index": 13,
-            "status": "not_started",
+            "status": "awaiting_process_record",
             "output": "runs/maniguard/stack-motion-repeat-v1/episode-0013"
           }
         },
@@ -1288,8 +1432,14 @@
           "seed": 2,
           "control": {
             "index": 12,
-            "status": "awaiting_process_record",
-            "output": "runs/maniguard/stack-motion-repeat-v1/episode-0012"
+            "status": "completed",
+            "output": "runs/maniguard/stack-motion-repeat-v1/episode-0012",
+            "outcome": "safe_unfinished",
+            "costs": {
+              "policy_control_steps": 4200,
+              "physics_steps": 25286,
+              "policy_queries": 525
+            }
           },
           "candidate": {
             "index": 0,
@@ -1396,7 +1546,7 @@
           "safe_completion": 0,
           "unsafe_completion": 0,
           "safe_unfinished": 2,
-          "unsafe_unfinished": 0
+          "unsafe_unfinished": 1
         },
         "unsafe_unfinished": {
           "safe_completion": 0,
@@ -1409,29 +1559,29 @@
         "control": {
           "safe_completion": 0,
           "unsafe_completion": 0,
-          "safe_unfinished": 2,
+          "safe_unfinished": 3,
           "unsafe_unfinished": 0
         },
         "candidate": {
           "safe_completion": 0,
           "unsafe_completion": 0,
           "safe_unfinished": 2,
-          "unsafe_unfinished": 0
+          "unsafe_unfinished": 1
         }
       },
       "safe_completion_gains": 0,
       "safe_completion_losses": 0,
-      "violation_count_difference": 0,
+      "violation_count_difference": 1,
       "completed_pair_cost_totals": {
         "control": {
-          "policy_control_steps": 8400,
-          "physics_steps": 50572,
-          "policy_queries": 1050
+          "policy_control_steps": 12600,
+          "physics_steps": 75858,
+          "policy_queries": 1575
         },
         "candidate": {
-          "policy_control_steps": 8400,
-          "physics_steps": 50572,
-          "policy_queries": 1050
+          "policy_control_steps": 12600,
+          "physics_steps": 75858,
+          "policy_queries": 1575
         }
       }
     },
@@ -1440,7 +1590,7 @@
       "candidate_label": "cap_006_004",
       "case_slots": 6,
       "planned_pairs": 6,
-      "completed_pairs": 0,
+      "completed_pairs": 1,
       "all_cases_complete": false,
       "cases": [
         {
@@ -1449,13 +1599,19 @@
           "seed": 0,
           "control": {
             "index": 14,
-            "status": "not_started",
+            "status": "awaiting_process_record",
             "output": "runs/maniguard/stack-motion-repeat-v1/episode-0014"
           },
           "candidate": {
             "index": 11,
-            "status": "awaiting_process_record",
-            "output": "runs/maniguard/stack-motion-repeat-v1/episode-0011"
+            "status": "completed",
+            "output": "runs/maniguard/stack-motion-repeat-v1/episode-0011",
+            "outcome": "unsafe_unfinished",
+            "costs": {
+              "policy_control_steps": 4200,
+              "physics_steps": 25286,
+              "policy_queries": 525
+            }
           }
         },
         {
@@ -1485,8 +1641,14 @@
           "seed": 2,
           "control": {
             "index": 12,
-            "status": "awaiting_process_record",
-            "output": "runs/maniguard/stack-motion-repeat-v1/episode-0012"
+            "status": "completed",
+            "output": "runs/maniguard/stack-motion-repeat-v1/episode-0012",
+            "outcome": "safe_unfinished",
+            "costs": {
+              "policy_control_steps": 4200,
+              "physics_steps": 25286,
+              "policy_queries": 525
+            }
           },
           "candidate": {
             "index": 9,
@@ -1579,7 +1741,7 @@
         },
         "safe_unfinished": {
           "safe_completion": 0,
-          "unsafe_completion": 0,
+          "unsafe_completion": 1,
           "safe_unfinished": 0,
           "unsafe_unfinished": 0
         },
@@ -1594,20 +1756,31 @@
         "control": {
           "safe_completion": 0,
           "unsafe_completion": 0,
-          "safe_unfinished": 0,
+          "safe_unfinished": 1,
           "unsafe_unfinished": 0
         },
         "candidate": {
           "safe_completion": 0,
-          "unsafe_completion": 0,
+          "unsafe_completion": 1,
           "safe_unfinished": 0,
           "unsafe_unfinished": 0
         }
       },
       "safe_completion_gains": 0,
       "safe_completion_losses": 0,
-      "violation_count_difference": 0,
-      "completed_pair_cost_totals": null
+      "violation_count_difference": 1,
+      "completed_pair_cost_totals": {
+        "control": {
+          "policy_control_steps": 4200,
+          "physics_steps": 25286,
+          "policy_queries": 525
+        },
+        "candidate": {
+          "policy_control_steps": 695,
+          "physics_steps": 4256,
+          "policy_queries": 87
+        }
+      }
     },
     {
       "control_label": "identity",
@@ -1623,7 +1796,7 @@
           "seed": 0,
           "control": {
             "index": 14,
-            "status": "not_started",
+            "status": "awaiting_process_record",
             "output": "runs/maniguard/stack-motion-repeat-v1/episode-0014"
           },
           "candidate": {
@@ -1653,8 +1826,14 @@
           "seed": 2,
           "control": {
             "index": 12,
-            "status": "awaiting_process_record",
-            "output": "runs/maniguard/stack-motion-repeat-v1/episode-0012"
+            "status": "completed",
+            "output": "runs/maniguard/stack-motion-repeat-v1/episode-0012",
+            "outcome": "safe_unfinished",
+            "costs": {
+              "policy_control_steps": 4200,
+              "physics_steps": 25286,
+              "policy_queries": 525
+            }
           },
           "candidate": {
             "index": 21,
@@ -1792,12 +1971,12 @@
   "comparison_scope": "Outcome transitions use only cases where both episodes completed and validated. Every planned or unmatched case remains visible. Partial comparisons are not a balanced condition ranking.",
   "cost_scope": "Whole-batch recorded_cost_totals count each episode once, including failed and partial work. Pair totals cover only the completed pairs in that comparison, and are null if a required cost is missing. Controls can appear in several comparisons; never sum pair totals as whole-study costs.",
   "interpretation": "Shared scene/root seeds do not imply identical initial images or physical trajectories. These are descriptive outcome comparisons, not causal counterfactuals or an evolutionary-advantage claim.",
-  "recorded_at_utc": "2026-10-17T14:54:58Z",
+  "recorded_at_utc": "2026-10-17T15:02:27Z",
   "source_hashes": {
-    "experiments/scripts/maniguard_compare.py": "2b4fffda79ecfe655c32a63a58515e2ad90be5dc5c8b081192837daded3d9229",
     "experiments/helpers/maniguard_comparison.py": "962f6189d150f3fd705ade96fa7aef139266ec45975443e56309a1aa8aac365c",
     "experiments/helpers/maniguard_batch_report.py": "e89547102855aca4a9da7803bb4073a188e33a0c5f657856e5257abf13ff0f75",
     "experiments/helpers/maniguard_results.py": "549b3ad6bfe7793438db075bdc5988885a06b1963ce147160d76436ae7c761c0"
   },
-  "plan_sha256": "3ea5de0d4810d21465d58f666af4b57e4cb502b45cb0e0ca779711b75d4af0cf"
+  "plan_sha256": "3ea5de0d4810d21465d58f666af4b57e4cb502b45cb0e0ca779711b75d4af0cf",
+  "exporter_sha256": "3dedb5838eb8996f27e52d87bbaf2079baf2ae2446e8324eff768ccd1d43ee9a"
 }
