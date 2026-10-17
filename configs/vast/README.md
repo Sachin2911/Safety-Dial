@@ -1,122 +1,122 @@
-# evo safety filter
+# evo safety filter: ManiGuard base
 
-Private Vast.ai template for the platform selected on 15 October 2026. Select it from
-[My Templates](https://cloud.vast.ai/templates/) before renting. Updating the template
-changes the defaults for future rentals; it does not alter a running instance.
+The private Vast.ai template now targets ManiGuard preparation, selected on 17 October
+2026. Select **evo safety filter** from [My Templates](https://cloud.vast.ai/templates/).
+Template updates change future rental defaults. Existing instances keep their image.
 
-## Lightweight instance startup
+## Image and startup
 
-The dated base image provides Ubuntu 24.04, Python 3.12, CUDA toolkit 13.0.3 and Vast's
-standard tools, including `uv`. The template enables JupyterLab and SSH with direct
-connections and requests 200 GB of disk. Startup calls the image's normal entrypoint
-only. It does not embed an installer, create a research boot hook, or install PyTorch,
-Isaac Lab, Isaac Sim or the research requirements. The base image still needs to be
-pulled and its standard access services initialized.
+The dated `vastai/base-image:cuda-12.4.1-cudnn-devel-ubuntu22.04-py310-2026-09-07`
+provides Ubuntu 22.04, Python 3.10, CUDA toolkit 12.4.1, `uv`, JupyterLab and SSH.
+Its Docker Hub digest was verified on 17 October and is recorded in
+[evo-safety-filter.json](evo-safety-filter.json). The template uses the dated tag;
+the recorded digest is verification metadata, not an enforced digest pull.
 
-Offer filters request one GPU with at least 24 GB VRAM, 32 GB RAM, eight effective CPU
-cores, x86-64, CUDA 13.0 driver capability, driver 580.95.05 or newer, and 99% reliability.
-These filters do not establish Isaac Sim renderer compatibility. The selected 48 GB
-RTX PRO offer is a suitable capacity target when available. Disk and bandwidth charges
-depend on the offer. The template contains no credentials and retains the base image's
-authenticated access.
+Startup only runs `exec /opt/instance-tools/bin/entrypoint.sh`. Research dependencies,
+assets, checkpoints and experiments remain separate manual steps after connecting.
+`NVIDIA_DRIVER_CAPABILITIES=all` exposes graphics capabilities and
+`OMNIGIBSON_HEADLESS=1` selects headless operation. Neither proves camera compatibility.
+No credentials or custom research boot hook are embedded in the template.
 
-## Manual setup after connecting
+## GPU and host selection
 
-Clone the repository, then explicitly start the separate installation step:
+The template requests one GPU with at least 16 GB VRAM, 32 GB system RAM, eight effective
+CPU cores, x86-64, 99% reliability, 200 GB disk and two direct ports. Disk remains at
+200 GB to leave room for assets, environments, weights and outputs. ManiGuard documents
+80 GB free as a minimum; training datasets can require substantially more.
+
+CUDA driver capability is lowered from 13.0 to 12.4. The driver range is
+`550.54.15 <= version < 581.0.0`: the lower limit follows CUDA 12.4 Update 1's
+corresponding Linux driver, and the upper limit follows ManiGuard's observed startup
+problems on drivers newer than 580. NVIDIA permits some older drivers through CUDA
+minor-version compatibility; this template uses a more conservative lower limit.
+ManiGuard specifically verifies 580.x. Prefer that branch for the first smoke test;
+the wider range is a candidate range, not a claim that every driver was validated.
+
+The compute-capability selection `[750,860,890]` covers Turing, Ampere and Ada candidates
+for the default PyTorch cu124 environment. It excludes A100/H100 and Blackwell from this
+profile. Check the actual GPU model for RT cores and run a simulator/camera smoke test
+before a batch. Compute capability alone does not establish rendering support.
+
+This admits older-driver RTX 3090/4090 offers and 16 GB options such as RTX 4080,
+RTX A4000 and RTX 4060 Ti. ManiGuard reports testing 3090, 4080 and 4090. Its authors
+report that 16 GB fits their single-card evaluation pipeline, with pi0/pi0.5 peaking
+around 13 GB. This is an evaluation sizing claim, not a training-memory guarantee.
+Prefer a 24 GB 3090/4090 when prices are similar for additional headroom.
+
+The change broadens GPU models, but does not guarantee more offers at every moment.
+A read-only market check on 17 October found 59 offers under the old requirements
+restricted to the same three compute capabilities, 80 after lowering CUDA/VRAM without
+a driver ceiling, and 51 with the conservative ManiGuard driver ceiling. Inventory
+changes continuously. The old unrestricted template also listed incompatible compute
+GPUs and Blackwell cards, so its total was not a usable ManiGuard count.
+
+Blackwell RTX 50-series requires a different environment: ManiGuard prescribes PyTorch
+2.7.0 with cu128 instead of its default 2.6.0/cu124. Those GPUs can be revisited with a
+separate profile after validation. A100/H100 cannot supply the required RTX rendering.
+
+## Manual preparation after connecting
 
 ```bash
 cd /workspace
 git clone https://github.com/Sachin2911/Safety-Dial.git
 cd Safety-Dial
-bash scripts/vast/setup.sh --dry-run
-bash scripts/vast/setup.sh
-bash scripts/vast/setup.sh --check
+/venv/main/bin/python --version
+nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv
 ```
 
-For an existing clone, enter that directory and run the last command. Run it as root
-on the Vast instance. The script installs the required system libraries and uses `uv`
-with the saved `requirements-linux-py312.txt` and matching `uv-overrides.txt`. Package
-downloads and building Lab happen during this manual step, after instance access is ready.
+Follow [ManiGuard's installation guide](https://nu-ideas-lab.github.io/ManiGuard/docs/getting-started/installation/)
+for the required components. The simulator uses Python 3.10, OmniGibson's pinned Isaac
+Sim 4.5 and PyTorch 2.6.0/cu124. The inspected BEHAVIOR submodule revision is
+`88454bd04f75dc57c00ab1f1a00bcde1ff505950`. Policy training and serving use model-specific
+environments. Prepare Python package dependencies with `uv` targeting each environment
+explicitly; upstream's conda/pip commands need adaptation to this repository's uv policy.
+A complete ManiGuard installer or dependency lock has not been implemented here.
 
-The pinned installation target is PyTorch 2.11.0, torchvision 0.26.0 and torchaudio 2.11.0
-with CUDA 13.0 wheels, Isaac Sim 6.2.0.0 and Isaac Lab 3.0 source revision
-`6bfde876089661e116dc5a5d9c6805f18127fe32`. This is the 3.0 development release line.
-The public 3.0.0rc1 wheel inspected during initial setup still requests Sim 6.1, so the
-manual script builds Lab's aggregate package from the pinned source and uses its tested
-dependency overrides. The snapshot was resolved before the original template was created.
+The BEHAVIOR assets, ManiGuard benchmark and extended-finger Franka asset are separate
+required downloads. Check the extended-finger asset path before evaluation: upstream
+warns that a missing asset silently loads the stock hand and breaks learned grasps.
+After installation, validate headless rendering, camera observations and policy-server
+communication on the rented machine before running an experiment.
 
-The installer prepares the base image's existing `/venv/main` environment. It does not
-create another project environment, run the repository's older root setup, download
-research datasets or checkpoints, or launch experiments. The root Python pin is now 3.12, and `bash scripts/setup.sh` dispatches here on Vast.
-The platform snapshot and overrides are the dependency authority for this installation.
-The root `pyproject.toml` and `uv.lock` still describe the earlier research dependencies;
-do not run root `uv sync` or an automatically syncing `uv run` against this platform.
-Integrating research dependencies is a separate step. Use `/venv/main/bin/python` now.
+Do not run `bash scripts/vast/setup.sh` or `bash scripts/setup.sh` to install ManiGuard.
+Those scripts still own the completed UNISafe study's Python 3.12 / CUDA 13 stack.
+They reject `SAFETY_DIAL_PLATFORM=maniguard` before installing anything. The root
+`.python-version`, `pyproject.toml` and `uv.lock` also remain for earlier research;
+do not root-sync them into `/venv/main` or a ManiGuard environment.
 
-Inspect installation progress and the resulting versions on the rented instance:
+## Preserved UNISafe setup and template management
+
+[UNISAFE.md](UNISAFE.md) and [unisafe-platform.json](unisafe-platform.json) preserve the
+previous platform instructions and image. The existing installer, checker and Python
+3.12 dependency files retain that platform's pins.
+
+Inspect and update the current private template from the local development environment:
 
 ```bash
-tail -f /workspace/.evo-safety-filter/setup.log
-cat /workspace/.evo-safety-filter/versions.json
+uv run --no-sync python scripts/vast/create_template.py --update --dry-run
+uv run --no-sync python scripts/vast/create_template.py --update
 ```
 
-After successful manual setup, choose **Evo safety filter (Python 3.12)** in Jupyter;
-refresh the kernel list if needed. In SSH, use `/venv/main/bin/python` explicitly.
-The `ready` marker contains a fingerprint of the installer, checker and dependency files.
-Every rerun checks all pinned distributions, Isaac Lab's source revision, core PyTorch
-imports and a CUDA matrix multiplication before skipping package installation. Changed
-inputs, missing system libraries or package drift trigger reconciliation. Jupyter kernel
-registration is refreshed on every successful setup. A lock rejects concurrent installers.
-Failures during installation remove the marker; rerun the same command to retry. Cached
-package downloads are reused. Installation never retries automatically at instance boot.
+`created-template.json` records the template ID and current hash. To restore the UNISafe
+image for future rentals, use `--config configs/vast/unisafe-platform.json` with the same
+commands. Neither template operation installs packages or rents an instance.
 
-`--dry-run` checks Python, OS, architecture, tools and GPU driver, then prints the plan
-and free disk space. It does not resolve or download packages. `--check` verifies the
-installed snapshot and CUDA without installing or writing setup state. Neither flag
-establishes simulator or camera compatibility. The checker stops before installation when all visible GPUs are known to lack
-RT cores, including A100. An accepted GPU name is not proof of rendering compatibility;
-RTX-capable hardware still needs a simulator and camera smoke test.
-
-Secrets remain in the inherited environment. This installer does not source `.env`, log
-credentials, persist logins, or copy environment variables into `/etc/environment`. No
-GitHub or Hugging Face token is required for these public platform dependencies.
-Ubuntu libraries are installed only when missing; NVIDIA drivers are never installed.
-`uv pip install --python /venv/main/bin/python` retains unrelated base-image packages,
-including Jupyter. This is a pinned platform installation, not a hermetic container image.
-The requirements snapshot is version-pinned but does not contain artifact hashes.
-
-`versions.json` records the validated versions and scope of the checks. It marks simulator
-and camera validation as not run. The selected stack remains a development release.
-On 15 October 2026 the updated installer passed syntax checks, package-validator tests
-and host rejection checks here; the detected GPU was an A100 40 GB. No package installation or
-simulator execution was performed as part of that script-development check.
-
-The template retains `OMNI_KIT_ACCEPT_EULA=yes` for unattended Isaac Sim use after manual
-setup. Package resolution and template settings were checked, but installation and GPU
-execution have not yet been tested on a rented host. PhysX, RTX rendering, cameras and
-UNISafe require their own smoke tests; a successful CUDA tensor check does not verify them.
-
-## Maintaining the template
-
-Use `uv run --no-sync python scripts/vast/create_template.py --update` to update the
-recorded template. Add `--dry-run` to inspect settings without API calls. Omitting
-`--update` creates a template only when no private template with the name exists.
-`created-template.json` stores the ID and current hash returned by Vast.
-
-Sources:
-
-- [Isaac Lab 3.0 installation](https://isaac-sim.github.io/IsaacLab/release/3.0.0/source/setup/installation/index.html)
-- [Pinned source and dependency constraints](https://github.com/isaac-sim/IsaacLab/tree/6bfde876089661e116dc5a5d9c6805f18127fe32)
-- [Vast template settings](https://docs.vast.ai/guides/templates/template-settings)
-- [Vast base-image startup](https://github.com/vast-ai/base-image)
-
-Installer verification (no platform installation required):
+Local validation covers the template update helper and existing UNISafe checks:
 
 ```bash
 bash -n scripts/vast/setup.sh scripts/setup.sh
-/venv/main/bin/python -m unittest discover -s scripts/vast/tests -v
+uv run --no-sync python -m unittest discover -s scripts/vast/tests -v
 ```
 
-Environment targeting follows [uv's documented Python selection](https://docs.astral.sh/uv/pip/environments/).
-See [NVIDIA's GPU requirements](https://docs.isaacsim.omniverse.nvidia.com/latest/installation/requirements.html)
-for the distinction between CUDA-capable hardware and supported RTX rendering hardware.
+The image metadata and offer queries were checked, but this downgraded image and
+ManiGuard have not been executed on a rented GPU as part of this change.
+
+Sources:
+
+- [ManiGuard system requirements and driver observations](https://nu-ideas-lab.github.io/ManiGuard/docs/getting-started/installation/)
+- [Pinned BEHAVIOR installer](https://github.com/StanfordVL/BEHAVIOR-1K/blob/88454bd04f75dc57c00ab1f1a00bcde1ff505950/setup.sh)
+- [CUDA 12.4 Update 1 driver versions](https://docs.nvidia.com/cuda/archive/12.4.1/cuda-toolkit-release-notes/index.html)
+- [Vast base images and Python versions](https://github.com/vast-ai/base-image)
+- [Published image tag](https://hub.docker.com/r/vastai/base-image/tags?name=cuda-12.4.1-cudnn-devel-ubuntu22.04-py310-2026-09-07)
+- [Vast template settings](https://docs.vast.ai/guides/templates/template-settings)

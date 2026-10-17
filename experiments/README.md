@@ -14,8 +14,9 @@ working directory and shared environment remain consistent.
 
 ## UNISafe engineering checks
 
-Use the current Vast environment, `/venv/main/bin/python`. First prepare the platform
-with `bash scripts/vast/setup.sh` if it is not already installed. Then:
+Use the preserved [UNISafe platform](../configs/vast/UNISAFE.md), with Python 3.12 in
+`/venv/main`. First prepare it with `bash scripts/vast/setup.sh` if needed. These commands
+do not target the current ManiGuard Python 3.10 template. Then:
 
 ```bash
 # Requires access to the private checkpoint mirror via HF_TOKEN or a saved HF login.

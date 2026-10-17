@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# SafetyDial setup: current RTX platform on Vast; legacy research environment elsewhere.
+# SafetyDial setup: preserved UNISafe platform on Vast; legacy environment elsewhere.
+# ManiGuard preparation uses configs/vast/README.md instead of this installer.
 #
 # In a clone:
 #   bash scripts/setup.sh
@@ -26,7 +27,8 @@ is_vast() {
     || [[ -n "${VAST_CONTAINERLABEL:-}" ]]
 }
 
-# The current Vast platform has its own pinned specification and uses /venv/main.
+# The UNISafe platform has its own pinned specification and uses /venv/main.
+# Its installer refuses the ManiGuard template before installing anything.
 # Dispatch before legacy dotenv, credential persistence or project sync helpers run.
 if is_vast; then
   setup_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"

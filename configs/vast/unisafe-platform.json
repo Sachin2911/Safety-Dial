@@ -1,0 +1,33 @@
+{
+  "name": "evo safety filter",
+  "image": "vastai/base-image",
+  "image_tag": "cuda-13.0.3-cudnn-devel-ubuntu24.04-py312-2026-09-07",
+  "image_digest_verified": "sha256:c1d2b5326fae806b04d2c2d97a2b3948d0ccb0026dd3085e9a2ad55e304193f8",
+  "description": "Ubuntu 24.04, Python 3.12 and CUDA 13.0.3 base with Jupyter and SSH. Research packages are installed manually using the repository's uv setup script after connecting.",
+  "private": true,
+  "disk_space_gb": 200,
+  "ssh": true,
+  "jupyter": true,
+  "direct": true,
+  "jupyter_lab": true,
+  "jupyter_dir": "/workspace",
+  "search_params": "num_gpus=1 gpu_ram>=24 cpu_ram>=32 cpu_cores_effective>=8 cpu_arch=amd64 cuda_max_good>=13.0 driver_version>=580.95.05 reliability>=0.99 disk_space>=200 direct_port_count>=2",
+  "env": {
+    "NVIDIA_DRIVER_CAPABILITIES": "all",
+    "OMNI_KIT_ACCEPT_EULA": "yes",
+    "OMNI_KIT_ALLOW_ROOT": "1",
+    "PYTHONUNBUFFERED": "1",
+    "UV_HTTP_TIMEOUT": "300",
+    "UV_LINK_MODE": "copy"
+  },
+  "onstart_cmd": "exec /opt/instance-tools/bin/entrypoint.sh",
+  "readme_file": "configs/vast/UNISAFE.md",
+  "setup_script": "scripts/vast/setup.sh",
+  "requirements_file": "configs/vast/requirements-linux-py312.txt",
+  "overrides_file": "configs/vast/uv-overrides.txt",
+  "isaaclab_revision": "6bfde876089661e116dc5a5d9c6805f18127fe32",
+  "isaacsim_version": "6.2.0.0",
+  "torch_version": "2.11.0",
+  "torchvision_version": "0.26.0",
+  "torch_backend": "cu130"
+}

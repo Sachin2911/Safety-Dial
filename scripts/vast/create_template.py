@@ -12,15 +12,22 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--update", action="store_true", help="Update the recorded template")
     parser.add_argument("--dry-run", action="store_true", help="Print settings without API calls")
+    parser.add_argument(
+        "--config",
+        type=Path,
+        default=Path("configs/vast/evo-safety-filter.json"),
+        help="Template settings, relative to the repository root unless absolute",
+    )
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
-    config_path = root / "configs/vast/evo-safety-filter.json"
-    record_path = config_path.with_name("created-template.json")
+    config_path = root / args.config
+    record_path = root / "configs/vast/created-template.json"
     config = json.loads(config_path.read_text())
     onstart = config["onstart_cmd"]
     subprocess.run(["bash", "-n"], input=onstart, text=True, check=True)
     if config["private"] is not True:
         raise SystemExit("This tool only manages private templates.")
+    readme = (root / config.get("readme_file", "configs/vast/README.md")).read_text()
 
     record = json.loads(record_path.read_text()) if args.update else {}
     if args.dry_run:
@@ -67,7 +74,7 @@ def main() -> None:
         "--onstart-cmd",
         onstart,
         "--readme",
-        (root / "configs/vast/README.md").read_text(),
+        readme,
     ]
     for key, flag in (
         ("ssh", "--ssh"),

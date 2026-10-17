@@ -24,6 +24,12 @@ case "${1:-}" in
 esac
 if (($# > 1)); then usage >&2; exit 2; fi
 
+if [[ "${SAFETY_DIAL_PLATFORM:-}" == maniguard ]]; then
+    printf '%s\n' 'This installer targets UNISafe with Python 3.12 and CUDA 13.' >&2
+    printf '%s\n' 'For the ManiGuard base, see configs/vast/README.md for manual preparation.' >&2
+    exit 2
+fi
+
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 repo_root="$(cd -- "$script_dir/../.." && pwd)"
 state_dir=/workspace/.evo-safety-filter

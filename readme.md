@@ -38,13 +38,18 @@ plans and scheduled-job configurations describe their original studies.
 
 ## Setup
 
-Clone the repository and install the platform dependencies:
+The current [Vast template](configs/vast/README.md) is a lightweight ManiGuard preparation
+base with Python 3.10 and CUDA 12.4.1. Clone the repository after connecting:
 
 ```bash
 git clone https://github.com/Sachin2911/Safety-Dial.git
 cd Safety-Dial
-bash scripts/vast/setup.sh
 ```
+
+ManiGuard simulation, assets and model-serving environments are separate manual preparation
+steps described in the template notes. The template does not install or validate them.
+For the completed UNISafe study, use the preserved
+[Python 3.12 / CUDA 13 platform](configs/vast/UNISAFE.md) and its installer instead.
 
 ## Pretrained UNISafe checkpoints
 

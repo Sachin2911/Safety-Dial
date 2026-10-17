@@ -74,13 +74,19 @@ and study-specific interpretation rules when reusing old work, not as a current 
 
 ## Environment and engineering
 
-- Current Vast platform: Python 3.12 in `/venv/main`, managed with `uv` and
-  `configs/vast/requirements-linux-py312.txt` plus `uv-overrides.txt`.
-- Setup: `bash scripts/vast/setup.sh`; `--dry-run` preflights, `--check` validates.
-  Root `scripts/setup.sh` dispatches to this installer on Vast before legacy helpers.
+- Current Vast template: ManiGuard preparation base with Ubuntu 22.04, Python 3.10
+  in `/venv/main` and CUDA 12.4.1. See `configs/vast/README.md`. Startup installs no
+  research packages. ManiGuard simulation and policy environments require separate
+  manual preparation; the template is not an installed or validated ManiGuard stack.
+- The preserved UNISafe platform uses Python 3.12, CUDA 13 and
+  `configs/vast/requirements-linux-py312.txt` plus `uv-overrides.txt`; see
+  `configs/vast/UNISAFE.md` and `unisafe-platform.json` in that directory.
+  `bash scripts/vast/setup.sh` installs that platform; `--dry-run` preflights and
+  `--check` validates. Root `scripts/setup.sh` dispatches there on Vast. The installer
+  refuses `SAFETY_DIAL_PLATFORM=maniguard` before installation.
 - `.python-version` is 3.12. Root `pyproject.toml`/`uv.lock` still specify earlier research
-  dependencies and do not own the current platform. Do not root-sync them into `/venv/main`.
-  Use `/venv/main/bin/python` for platform commands until research dependency integration.
+  dependencies and do not own either Vast platform. Do not root-sync them into `/venv/main`
+  or a ManiGuard environment. Use the intended environment's explicit Python executable.
   The legacy reproduction commands below apply to an explicitly prepared legacy environment.
 - Use `uv run python ...`, `uv run python -m pytest`, and `uv run ruff check .`.
   Using `python -m pytest` keeps tests in the project interpreter.
