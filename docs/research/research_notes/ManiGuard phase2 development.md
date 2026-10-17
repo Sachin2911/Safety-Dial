@@ -275,3 +275,40 @@ The queue switches the pinned policy service, holds the shared execution lease, 
 no automatic retry or new allocation. Its [launch record](../../../runs/maniguard/phase2/setup/preparation-full-rest-v1/launch-check.json)
 records the exact remaining job IDs. No optimization or reserved evaluation is authorized
 by this preparation launch.
+
+
+## Readiness review and durable evaluation checkpoint
+
+The current runtime and identity review is staged at
+[its findings record](../../../runs/maniguard/phase2/setup/runtime-identity-review-v1/findings.json).
+It binds 44 copied source/test/evidence files and records 142 passing tests. Independent
+re-audits on Jar, Stack and Clutter preserve exact same-frame identity transformations,
+eight-action query cadence and unchanged monitoring. Recorded initial images differ
+between each original/identity pair, so no identical-start trajectory equivalence is
+claimed. The findings hash is
+`0f9f4baac93a57ac9fea82e4dd3e34b88d3e6cb3841ef97df5fc1151863b8262`.
+
+The separate [completion source review](../../../runs/maniguard/phase2/setup/completion-review-v1/review.json)
+checks all six written sequence checklists against pinned task/evaluator source, with 60
+source copies and 49 focused synthetic tests. Source/dataflow inspection preserves native
+monitoring and keeps completion labels out of actor/critic inputs. It retains the limitation
+that native success persistence is preserved rather than independently reconstructed by
+the outcome reader. Its content hash is
+`c092f9949ee06b486f687a46ee85b7e0d20f582fb4469a641cbbf5858e4a8953`.
+Neither staged review authorizes a freeze: both must be rebound to the completed immutable
+full-preparation report and rechecked source pins after the remaining reference jobs.
+
+New evaluation tooling includes durable synthetic main dispatch, an AAC runtime/source
+hook exercised against the actual generated loop with fake dependencies, paid-cost pilot
+histories and PNG/PDF figure generation. The main planner now distinguishes unchanged
+benchmark execution from the CLIP-bearing identity adapter. Review caught and fixed a
+terminal-write failure that previously let in-memory dispatch accounting appear settled
+while the disk claim remained unresolved. The fixed dispatcher rejects further work and
+preserves available failure evidence; independent reproduction confirmed this behavior.
+
+The combined focused checkpoint passes 175 dispatcher/AAC/history tests plus 151 main
+planner/analysis/pilot-report tests, for 326 tests across those two groups. Ruff passes.
+Synthetic figure previews were visually checked. These are implementation checks, not
+learned performance, a physical AAC result or a live main-study authorization. The existing
+Jar/Stack preparation queue continues on its archived unchanged sources. The preceding
+checkpoint `65ac3c1` is verified pushed to the authorized research branch.

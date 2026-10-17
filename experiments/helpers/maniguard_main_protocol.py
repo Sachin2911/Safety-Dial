@@ -102,10 +102,12 @@ def controller_resource_contract(profile, *, choices=None):
 
     Image/text counts refer to the supplementary frozen CLIP encoder. The VLA's
     internal encoder/denoising work is paid through every policy RPC and its timing.
-    AAC is a pure-core planning option until its live integration is reviewed.
+    The benchmark_original comparator retains native eight-action execution without
+    supplementary CLIP or adapter decisions. Planning profiles do not authorize
+    their live execution; each backend needs its own reviewed integration.
     """
     profiles = {'phase2_learned', 'phase2_identity', 'phase2_fixed', 'phase2_contextual',
-                'aac_joint20', 'aac_fixed8_joint20'}
+                'aac_joint20', 'aac_fixed8_joint20', 'benchmark_original'}
     if profile not in profiles:
         raise ValueError('Unsupported controller resource profile')
     if profile == 'phase2_fixed':
@@ -117,16 +119,18 @@ def controller_resource_contract(profile, *, choices=None):
         if choices is not None:
             raise ValueError('Only phase2_fixed declares choices in its resource profile')
         interval = {'phase2_learned': 4, 'phase2_identity': 8, 'phase2_contextual': 4,
-                    'aac_joint20': 2, 'aac_fixed8_joint20': 8}[profile]
+                    'aac_joint20': 2, 'aac_fixed8_joint20': 8, 'benchmark_original': 8}[profile]
     phase2 = profile.startswith('phase2_')
+    aac = profile.startswith('aac_')
     return {'schema': 'maniguard-controller-resources-v1', 'profile': profile,
             'normal_minimum_actions_between_query_groups': interval,
             'normal_bound_requires_native_chunk_actions_at_least': interval,
             'exhaustion_minimum_actions_between_query_groups': 1,
-            'short_chunk_exhaustion': True, 'accessible_action_prefix': 16,
-            'policy_proposals_per_query_group': 1 if phase2 else 20,
+            'short_chunk_exhaustion': True,
+            'accessible_action_prefix': 8 if profile == 'benchmark_original' else 16,
+            'policy_proposals_per_query_group': 20 if aac else 1,
             'policy_rpcs_per_proposal': 1,
-            'proposal_rng': 'single_policy_stream' if phase2 else 'independent_per_episode_streams',
+            'proposal_rng': 'independent_per_episode_streams' if aac else 'single_policy_stream',
             'encoder_execution': 'clip_two_views_every_four_actions' if phase2 else 'none',
             'encoder_action_interval': 4 if phase2 else None,
             'encoder_image_calls_per_execution': 1 if phase2 else 0,
@@ -146,7 +150,10 @@ def _validate_resources(declared, profile, *, choices=None):
 
 def _comparator_resources(controller, root):
     kind = controller.get('kind')
-    if kind in ('identity', 'fixed'):
+    if kind == 'benchmark_original':
+        expected_keys = {'kind', 'deterministic', 'resource_contract', 'sha256'}
+        profile, contract_choices = 'benchmark_original', None
+    elif kind in ('identity', 'fixed'):
         expected_keys = {'kind', 'choices', 'deterministic', 'resource_contract', 'sha256'}
         choices = controller.get('choices')
         if kind == 'identity' and record_hash(choices) != record_hash([0, 0, 0, 0]):

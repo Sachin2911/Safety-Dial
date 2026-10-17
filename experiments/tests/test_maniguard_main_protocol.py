@@ -311,7 +311,7 @@ def test_aac_twenty_proposals_and_fixed8_control_get_distinct_normal_query_envel
 
 @pytest.mark.parametrize('profile,normal_interval,proposals', [
     ('phase2_learned', 4, 1), ('phase2_identity', 8, 1),
-    ('aac_joint20', 2, 20), ('aac_fixed8_joint20', 8, 20)])
+    ('aac_joint20', 2, 20), ('aac_fixed8_joint20', 8, 20), ('benchmark_original', 8, 1)])
 def test_singleton_exhaustion_and_encoder_boundaries_are_conservative(profile, normal_interval, proposals):
     contract = controller_resource_contract(profile)
     assert contract['normal_bound_requires_native_chunk_actions_at_least'] == normal_interval
@@ -397,4 +397,49 @@ def test_identity_choice_indices_reject_boolean_substitution(planned):
     write(path, _signed(record))
     comparator['controller'] = source_reference(path, root=planned['root'])
     with pytest.raises(ValueError, match='Identity comparator'):
+        build(planned)
+
+
+def test_unchanged_policy_is_distinct_from_identity_adapter_and_has_no_clip_cost(planned):
+    path = planned['root'] / 'original.json'
+    write(path, _signed({'kind': 'benchmark_original', 'deterministic': True,
+                        'resource_contract': controller_resource_contract('benchmark_original')}))
+    planned['spec']['comparators'].append({'method': 'original',
+        'controller': source_reference(path, root=planned['root'])})
+    jobs = compile_jobs(build(planned))
+    original = [job for job in jobs if job['method'] == 'original']
+    identity = [job for job in jobs if job['method'] == 'identity']
+    assert len(original) == len(identity) == len(planned['spec']['cases'])
+    for job in original:
+        assert job['actor_sha256'] is None and job['run_kind'] == 'fixed'
+        contract = job['resource_contract']
+        assert contract['accessible_action_prefix'] == 8
+        assert contract['proposal_rng'] == 'single_policy_stream'
+        assert contract['policy_proposals_per_query_group'] == 1
+        costs = job['resource_envelope']['successful_work']
+        assert costs['policy_queries'] == job['action_horizon']
+        assert costs['adapter_decisions'] == 0
+        assert all(costs[name] == 0 for name in WORK_COUNTS if name.startswith('encoder_'))
+    assert all(job['resource_envelope']['successful_work']['encoder_load_attempts'] == 1
+               for job in identity)
+    _, _, frozen = freeze_fixture(planned)
+    job = next(job for job in compile_jobs(frozen) if job['method'] == 'original')
+    assert authorize_job(frozen, job, root=planned['root'], config_dir=planned['config'])['authorized']
+
+
+@pytest.mark.parametrize('change', ['choices', 'cadence', 'encoder'])
+def test_unchanged_policy_cannot_silently_become_an_adapter(planned, change):
+    path = planned['root'] / 'original.json'
+    value = {'kind': 'benchmark_original', 'deterministic': True,
+             'resource_contract': controller_resource_contract('benchmark_original')}
+    if change == 'choices':
+        value['choices'] = [0, 1, 0, 0]
+    elif change == 'cadence':
+        value['resource_contract']['normal_minimum_actions_between_query_groups'] = 16
+    else:
+        value['resource_contract']['encoder_load_attempts_per_episode'] = 1
+    write(path, _signed(value))
+    planned['spec']['comparators'].append({'method': 'original',
+        'controller': source_reference(path, root=planned['root'])})
+    with pytest.raises(ValueError, match='Unsupported comparator fields|resource declaration'):
         build(planned)

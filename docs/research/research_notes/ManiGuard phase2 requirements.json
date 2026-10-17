@@ -30,9 +30,12 @@
         "experiments/helpers/maniguard_phase2_aac.py",
         "experiments/tests/test_maniguard_phase2_aac.py",
         "experiments/helpers/maniguard_aac_sampling.py",
-        "experiments/tests/test_maniguard_aac_sampling.py"
+        "experiments/tests/test_maniguard_aac_sampling.py",
+        "experiments/helpers/maniguard_aac_runtime.py",
+        "experiments/helpers/maniguard_aac_source.py",
+        "experiments/tests/test_maniguard_aac_runtime.py"
       ],
-      "progress_note": "AAC-joint selector and sequential proposal sampler are implemented and tested. The selector now matches benchmark gripper dead-zone semantics. Live integration, frozen settings and physical comparison remain outstanding."
+      "progress_note": "AAC selector, sampler and execution hook pass synthetic actual-loop tests, with durable per-RPC receipts, proposal archives and independent selection replay. Live authorization, full outcome/process/physics audit and physical comparison remain outstanding."
     },
     {
       "id": "filter_scope",
@@ -125,9 +128,10 @@
       "status": "partial",
       "evidence": [
         "experiments/tests/test_maniguard_phase2_runtime.py",
-        "runs/maniguard/phase2/preparation-v1/audits/short-jar-identity-comparison-v2.json"
+        "runs/maniguard/phase2/preparation-v1/audits/short-jar-identity-comparison-v2.json",
+        "runs/maniguard/phase2/setup/runtime-identity-review-v1/findings.json"
       ],
-      "progress_note": "Jar queries occur at 0/8/16/24 and proposals equal adapted actions in each executor. Initial state hashes match but both image hashes differ, so identical-start cross-run trajectory equivalence is not established."
+      "progress_note": "All three short original/identity pairs preserve same-frame transformations, query steps 0/8/16/24 and monitor definitions. Recorded initial images differ in Jar, Stack and Clutter; no identical-start trajectory equivalence is established. Review is staged, not freeze authorization."
     },
     {
       "id": "evolution",
@@ -185,9 +189,10 @@
         "configs/maniguard/phase2/completion.json",
         "experiments/tests/test_maniguard_phase2_outcomes.py",
         "docs/research/research_notes/ManiGuard phase2 completion contract.md",
-        "runs/maniguard/phase2/preparation-v1/attempts/short-jar-identity.json"
+        "runs/maniguard/phase2/preparation-v1/attempts/short-jar-identity.json",
+        "runs/maniguard/phase2/setup/completion-review-v1/review.json"
       ],
-      "progress_note": "Corrected safety_evaluated interpretation: it is an engagement gate, not raw monitor validity. Raw ltl_violated defines V; missing monitoring remains invalid. Re-audit preserves raw artifacts and prior receipt verdicts."
+      "progress_note": "All six stricter checklists, native monitor preservation and exclusion of completion labels from actor/critic inputs passed pinned-source review. Native success persistence is preserved rather than independently reconstructed. Final preparation-report binding is pending."
     },
     {
       "id": "fitness",
@@ -227,9 +232,11 @@
         "runs/maniguard/phase2/reports/preparation-partial-v4/report.json",
         "runs/maniguard/phase2/setup/failed-clutter-identity-audit-v1/audit.json",
         "runs/maniguard/phase2/reports/preparation-integration-v1/report.json",
-        "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json"
+        "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json",
+        "experiments/helpers/maniguard_pilot_history.py",
+        "experiments/tests/test_maniguard_pilot_history.py"
       ],
-      "progress_note": "The Clutter-complete report reconciles 5,214 policy actions, 664 policy queries and 33,004 physics ticks across 20 paid preparation attempts. Continuous one-GPU reservation is 1.88806 hours at that snapshot. Pilot costing remains provisional until full Jar/Stack measurements exist."
+      "progress_note": "Preparation totals remain those of the cited immutable Clutter report; Jar/Stack queue is running. New pilot histories charge earlier interleaved work and all nominee validation, suppress unknown exact axes, and distinguish episode time from continuous GPU reservation. Full Jar/Stack rates are still needed before costing the pilot."
     },
     {
       "id": "preparation",
@@ -286,9 +293,11 @@
       "status": "partial",
       "evidence": [
         "experiments/helpers/maniguard_main_protocol.py",
-        "experiments/tests/test_maniguard_main_protocol.py"
+        "experiments/tests/test_maniguard_main_protocol.py",
+        "experiments/helpers/maniguard_main_dispatch.py",
+        "experiments/tests/test_maniguard_main_dispatch.py"
       ],
-      "progress_note": "A pure exact-case/actor/source/exposure planner with per-controller proposal, encoder and action-budget contracts is implemented. Runtime enforcement, development-based numerical choices and freeze evidence remain outstanding."
+      "progress_note": "Exact-case planner now distinguishes unchanged benchmark and identity-adapter costs. Durable synthetic dispatch binds canonical claims, all eleven counters and separate cost allowances; write failures poison the handle and block reopening. Live backend/audit integration, numerical design and freeze evidence remain outstanding."
     },
     {
       "id": "main_results",
@@ -364,9 +373,11 @@
         "docs/research/research_notes/ManiGuard phase2 development.md",
         "experiments/scripts/maniguard_phase2_preparation_report.py",
         "runs/maniguard/phase2/reports/preparation-partial-v2/report.json",
-        "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json"
+        "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json",
+        "experiments/scripts/maniguard_pilot_figures.py",
+        "docs/research/research_notes/ManiGuard phase2 evaluation tooling.md"
       ],
-      "progress_note": "Development log, evaluation-tooling note, pilot reporting/export CLI and immutable preparation report are updated. Final results, figures and full requirements audit remain outstanding."
+      "progress_note": "Pilot history/figure CLI and tooling docs are implemented; synthetic PNG/PDF previews were visually checked. Readiness reviews are staged. No real pilot figures, final results or full completion audit exist yet."
     },
     {
       "id": "publication",
@@ -377,7 +388,7 @@
       "evidence": [
         "runs/maniguard/phase2/reports/preparation-integration-v1/report.json"
       ],
-      "progress_note": "Implementation checkpoints through a1f3215 are pushed to the authorized research/maniguard-fruits branch; the next evaluation-tooling/preparation checkpoint is being prepared."
+      "progress_note": "Implementation checkpoints through 65ac3c1 are verified pushed to research/maniguard-fruits; the next reviewed tooling/readiness checkpoint is being prepared."
     }
   ],
   "evidence_checkpoint": {
@@ -485,6 +496,16 @@
       "progress": "runs/maniguard/phase2/setup/reserved-assets-v1/progress.json",
       "progress_file_sha256": "8f348990b30190a59d26eaeeae847b14a01b50437a4ac825ee0629dc675544c5",
       "behavioral_evaluation": false
+    },
+    "tooling_review": {
+      "updated_utc": "2026-10-17T23:55:13.766351+00:00",
+      "focused_tests": 326,
+      "test_scope": "175 dispatcher/AAC/history plus 151 main planner/analysis/pilot report",
+      "ruff_passed": true,
+      "runtime_identity_review": "runs/maniguard/phase2/setup/runtime-identity-review-v1/findings.json",
+      "completion_review": "runs/maniguard/phase2/setup/completion-review-v1/review.json",
+      "freeze_authorized": false,
+      "actual_optimizer_results": false
     }
   }
 }
