@@ -202,6 +202,14 @@ controls before a capped action. The results retain motion adaptation as a lead 
 adverse outcomes elsewhere; they do not establish a repeatable repair or general safety
 improvement.
 
+The earlier Jar smoothing success on task_0017 has not repeated in the completed root-zero
+and root-one follow-ups: both close but never hold the target. An
+[input and configuration audit](docs/research/research_notes/ManiGuard%20fruits%20Jar%20smoothing%20repeat%20variability.json)
+confirms the root-zero repeat uses the same adapter, checkpoint, study code and evaluation
+settings as the original 804-action success, but starts with different images and first
+policy proposals. Its safe-unfinished outcome at 2000 actions limits the repeatability
+claim; the remaining comparisons are still running.
+
 ## 3. Prevent premature transitions between task stages
 
 > Can a compact evolved controller prevent unsafe stage transitions while still enabling
@@ -315,8 +323,12 @@ The [timing and input evidence](docs/research/research_notes/ManiGuard%20fruits%
 does not establish direct interception of the baseline failure. In the first completed
 [comparison against the same plain guard](docs/research/research_notes/ManiGuard%20fruits%20Jar%20handback%20versus%20guard%20progress.json),
 on task_0013 at root one, both trials remain unfinished; settling tips while the plain
-guard stays safe, using 387 versus 261 queries. The remaining repeats are needed before
-claiming an advantage from the return rule.
+guard stays safe, using 387 versus 261 queries. Three completed hand-back/identity pairs
+now contain one safe-completion gain and one loss: on task_0002 at root two, identity
+completes safely in 1371 actions and 172 queries while hand-back remains unfinished after
+2000 actions and 1285 queries. These three pairs have equal safe-completion counts and
+one fewer observed violation under hand-back. The remaining repeats are needed before
+assessing the return rule.
 
 This most directly connects to the original task-continuation question. Its entry cost is
 higher because a functioning guard and useful corrective behaviours are prerequisites.

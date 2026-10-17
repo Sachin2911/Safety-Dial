@@ -1678,3 +1678,52 @@ Also checked the pinned Jar checkpoint metadata and seed contract. Each scene/ro
 to the same policy sampling seed across conditions; the server keeps episode-specific
 streams for interleaved clients. Those controls do not eliminate the observed physical
 and image differences. No runtime configuration or experiment plan was changed.
+
+
+## Nineteen Jar repeats: hand-back gain offset by a loss, and smoothing success not repeated
+
+Nineteen trials are validated: four safe completions, one unsafe completion, nine safe
+unfinished and five unsafe unfinished. Against identity, hand-back has three completed
+pairs with one safe-completion gain and one loss, and one fewer observed violation.
+The plain guard has three completed pairs with no safe-completion gain or loss and no
+net difference in violations. Smoothing has two completed pairs with no safe-completion
+gain or loss and no difference in violations. These are partial, overlapping comparisons;
+shared controls are not additional physical episodes.
+
+Identity on task_0002 at root two completes safely in 1371 actions and 172 queries. It
+first closes at observation 312, holds at 928 and leaves support at 933. Smoothing had
+completed this case safely in 931 actions and 117 queries: fewer actions and queries in
+this pair, but no safe-completion gain. Hand-back had remained safe unfinished for 2000
+actions and 1285 queries without closing or grasping. This establishes a safe-completion
+loss in that completed pair and offsets its gain on task_0008 at root two. Different
+physical starts remain a limitation for attributing either contrast to the intervention.
+
+Identity on task_0013 at root one remains unsafe unfinished for 2000 actions and 250
+queries. It first closes at observation 337 and first tips at 570, without ever holding
+the target or leaving support. Its plain-guard counterpart remains safe unfinished, while
+hand-back also remains unsafe unfinished. This adds a favorable safety contrast for the
+plain guard, offsetting its adverse contrast at root two, without establishing completion
+or direct prevention of an unsafe lift.
+
+The plain guard on task_0002 at root one blocks 34 actions at proposals 307 to 713, first
+closes at observation 743 and remains safe unfinished after 2000 actions and 271 queries.
+Neither its identity nor smoothing counterpart closes; both also remain safe unfinished
+at 2000 actions and 250 queries. Closure is useful intermediate progress, but this guard
+trial never grasps or leaves support and has not improved safe completion.
+
+The root-zero smoothing repeat on task_0017 remains safe unfinished after 2000 actions
+and 250 queries, first closing at 401 but never holding or leaving support. Twelve
+smoothed targets exceed their active cap before clipping, at proposals 1790, 1791,
+1796 to 1799 and 1802 to 1807. The earlier trial on this same scene and root completed
+safely in 804 actions and 101 queries. A separate saved audit validates equal adapter,
+checkpoint, study-source hashes, instrumented runtime and policy metadata. Evaluation
+configurations differ only in output directory. Initial joint state is equal, but overview
+and wrist pixels differ by up to 111 and 6, and first original policy proposals differ
+by up to 0.00042045. The original success has therefore not repeated under the same
+declared settings; the root-one repeat also remains unfinished. This does not establish
+the cause of variability or general ineffectiveness of smoothing.
+
+Updated both the identity and plain-guard comparison snapshots against the same completed
+coverage, retaining the variability audit and prior gain/timing evidence. Earlier full
+result diagnoses remain unchanged. The declared physical batch continues without changes
+and the Lid comparison is still queued afterward.
