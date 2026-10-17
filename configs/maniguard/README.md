@@ -143,3 +143,16 @@ not verify live handles or physical outcomes. Recorded costs can still omit hist
 work: see `ManiGuard fruits accounting.json` in the research notes for the first native
 startup failure and the earlier failed query whose latency was not recorded. Elapsed
 time sums are not total study wall time.
+
+A completed batch can be exported as an audited four-outcome/query-cost figure:
+
+```bash
+data/maniguard/envs/sim/bin/python experiments/scripts/maniguard_outcome_plot.py \
+  --batch runs/maniguard/stack-fixed-screens-v1 \
+  --figure runs/maniguard/reports/stack-outcomes.png \
+  --report runs/maniguard/reports/stack-complete.json
+```
+
+The plot requires every planned episode to pass validation. It reports counts and
+realized query totals, including early completions; it does not establish equal query
+budgets or an adapter effect. Choose new output paths to preserve previous artifacts.

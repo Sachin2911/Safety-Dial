@@ -717,3 +717,48 @@ An offline application of the broad rule to the latest unchanged trace first del
 proposal 1,391, long after the violation at 173. Those flags are not counterfactual
 physical outcomes and cannot erase the earlier violation. This finding motivates testing
 the detector's coverage, not asserting a safety repair.
+
+## Initial Stack screen complete
+
+All 24 planned full-horizon episodes completed and passed physical-result validation.
+The same four engineering scenes and root seed 0 were used for six randomized
+conditions. This batch screens Candidates 1, 2 and 4, with repeated identity controls;
+Candidates 3, 5 and 6 remain in the subsequent all-six-candidate Jar batch.
+
+| Condition | Safe complete | Unsafe complete | Safe unfinished | Unsafe unfinished | Policy queries |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Repeated identity, horizon 8 | 0 | 1 | 3 | 0 | 1893 |
+| Adaptive replanning | 0 | 1 | 3 | 0 | 1910 |
+| Fixed horizon 4 | 0 | 0 | 4 | 0 | 4200 |
+| Fixed target-step caps | 0 | 1 | 3 | 0 | 1716 |
+| Smoothing plus default caps | 0 | 1 | 2 | 1 | 1860 |
+| Aperture-gated release delay | 0 | 0 | 3 | 1 | 2100 |
+
+The [outcome and query figure](../figures/ManiGuard/stack-fixed-screen-outcomes.png) and
+`ManiGuard fruits Stack screen.json` retain the complete comparison. No condition
+established a safe-completion gain. The earlier original-policy Stack baseline included
+one safe completion and one unsafe completion; the contemporaneous controls here
+contained one unsafe completion and three safe unfinished episodes. Four scenes with
+one root seed per condition are not a generalization estimate, and the observed
+variation prevents attributing a single changed outcome to an adapter.
+
+The screen consumed 91,936 policy control steps, 553,680 simulator physics ticks and
+13,679 model queries. These are costs of this batch only. Initialization is included
+in physics counts; other baselines, failed attempts and standalone references/replays
+remain separate raw records in the whole-study accounting. Query totals reflect early
+completion and different schedules, so they are not matched query budgets. Smoothing
+was combined with caps, and three release trials never changed an action. Neither
+condition supports a clean claim about its named mechanism in isolation.
+
+The Stack pipeline exited normally. The managed follow-on queue switched the idle
+server to Jar and began its fresh 32-action physical reference, followed by a strict
+same-server interleaved replay. The new policy process is PID 83834. The scheduled
+40-episode Jar screen, extra Lid baselines, motion repeats and release-trigger comparison
+remain active work; no optimizer selection or reserved evaluation has taken place.
+
+Jar's fresh reference completed its 32 actions and four queries, and the six-query
+interleaved replay passed all corresponding-query comparisons plus the exact first
+physical-reference comparison. The 40-episode Jar screen has now started with two
+workers under the same server process. These reference/replay checks verify inference
+isolation; they do not add task-performance evidence or establish deterministic physics.
+Their full costs are retained in the screen-progress record and raw ledgers.
