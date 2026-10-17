@@ -1,6 +1,7 @@
 """Serve a pinned frozen policy locally with repeatable per-episode sampling."""
 
 import argparse
+import hashlib
 import json
 import logging
 import os
@@ -13,6 +14,7 @@ sys.path.insert(0, str(ROOT / "third_party/ManiGuard"))
 os.environ.setdefault("MANIGUARD_SKIP_OMNIGIBSON_PATCH", "1")
 os.environ.setdefault("XLA_PYTHON_CLIENT_PREALLOCATE", "false")
 
+from helpers.maniguard_parallel_policy import IsolatedEpisodePolicy
 from helpers.maniguard_policy import EpisodeSeededPolicy
 
 
@@ -20,6 +22,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--family", choices=("jar", "lid", "stack"), required=True)
     parser.add_argument("--port", type=int, default=18000)
+    parser.add_argument("--parallel-clients", action="store_true")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO)
     import jax
@@ -40,11 +43,17 @@ def main():
     policy = policy_config.create_trained_policy(
         train_config.get_config(spec["config"]), checkpoint,
     )
+    wrapper = IsolatedEpisodePolicy if args.parallel_clients else EpisodeSeededPolicy
+    sources = [Path(__file__), ROOT / 'experiments/helpers/maniguard_policy.py',
+               ROOT / 'experiments/helpers/maniguard_parallel_policy.py']
     metadata = {"serve_config": spec["config"], "checkpoint": str(checkpoint),
-                "checkpoint_revision": spec["revision"], "episode_seed_reset": "study_episode_id"}
+                "checkpoint_revision": spec["revision"], "episode_seed_reset": "study_episode_id",
+                "rng_isolation": "per_episode" if args.parallel_clients else "active_episode",
+                "server_source_hashes": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
+                                         for p in sources}}
     logging.getLogger(__name__).info("Serving %s on localhost:%s", args.family, args.port)
     websocket_policy_server.WebsocketPolicyServer(
-        EpisodeSeededPolicy(policy, jax.random.key), host="127.0.0.1",
+        wrapper(policy, jax.random.key), host="127.0.0.1",
         port=args.port, metadata=metadata,
     ).serve_forever()
 

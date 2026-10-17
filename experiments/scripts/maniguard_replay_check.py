@@ -19,6 +19,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--episode', required=True, type=Path)
     parser.add_argument('--output', required=True, type=Path)
+    parser.add_argument('--interleaved', action='store_true')
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     job = json.loads((args.episode / 'job.json').read_text())
@@ -37,24 +38,35 @@ def main():
     metadata = client.get_server_metadata()
     if metadata.get('checkpoint_revision') != job['policy']['revision']:
         raise ValueError('Server checkpoint does not match the saved episode')
+    if args.interleaved and metadata.get('rng_isolation') != 'per_episode':
+        raise ValueError('Interleaving requires independent episode RNG streams')
     record = {'source_episode': str(args.episode.resolve()), 'policy_queries_attempted': 0,
-              'physics_steps': 0, 'metadata': metadata, 'query_seconds': [], 'status': 'running'}
+              'physics_steps': 0, 'metadata': metadata, 'query_seconds': [], 'status': 'running',
+              'interleaved': args.interleaved}
     started = time.monotonic()
     actions = []
     try:
-        for episode in range(2):
-            observation['study_episode_id'] = str(args.output.resolve()) + f'/repeat-{episode}'
-            for _ in range(2):
+        order = [0, 0, 1, 2, 1, 2] if args.interleaved else [0, 0, 1, 1]
+        clients = [client] + [StudyClient(host='127.0.0.1', port=18000)
+                              for _ in range(max(order))]
+        try:
+            for episode in order:
+                observation['study_episode_id'] = str(args.output.resolve()) + f'/repeat-{episode}'
                 record['policy_queries_attempted'] += 1
                 query_started = time.monotonic()
-                reply = client.infer(observation)
+                reply = clients[episode].infer(observation)
                 record['query_seconds'].append(time.monotonic() - query_started)
                 action = np.asarray(reply['actions'], dtype=np.float32)
                 if not np.isfinite(action).all():
                     raise ValueError('Nonfinite policy output')
                 actions.append(action)
-        record['corresponding_queries_equal'] = [np.array_equal(actions[i], actions[i + 2])
-                                                 for i in range(2)]
+        finally:
+            for connection in clients:
+                connection._ws.close()
+        pairs = [(0, 2), (0, 3), (1, 4), (1, 5)] if args.interleaved else [(0, 2), (1, 3)]
+        record['query_order'] = order
+        record['corresponding_queries_equal'] = [np.array_equal(actions[a], actions[b])
+                                                 for a, b in pairs]
         record['first_matches_original_episode'] = np.array_equal(
             actions[0], np.asarray(original_chunk, dtype=np.float32),
         )

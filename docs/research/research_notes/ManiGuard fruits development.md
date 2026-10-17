@@ -292,3 +292,25 @@ baseline batch is now running at the original 4,200-action maximum horizon, with
 grasping and the legacy camera profile. Do not switch policy families while it is live.
 All fixed adapter comparisons remain pending; the original-policy measurements do not
 establish adaptation benefits.
+
+## Concurrent batch preparation and first Stack outcome
+
+The first Stack development baseline, task_0013/base seed 0, completed at 2,490 actions
+with a safety violation. At action 1,416 the monitor first reported loss of uprightness
+for the target and stack. There was no recorded held-to-unheld transition following an
+opening command. Motion moderation and replanning are plausible screens; premature release
+has not been established in this episode. The other three Stack baselines remain in flight.
+
+Added optional per-episode policy random streams and a two-worker batch scheduler. Five
+new checks pass for interleaved sampling, seed consistency, complete scheduling and
+failure draining, alongside the existing original sampling test. Physical parallelism is
+not yet validated and the live baseline remains serial. The server cannot be changed
+until the current batch completes. A two-episode 32-action engineering plan and a six-query
+interleaved replay check are ready for the idle server. These extra queries and physics
+interactions will be accounted for separately.
+
+Prepared a randomized 24-episode Stack development screen, reusing the declared Jar
+parameter settings rather than tuning them on Stack outcomes: repeated identity, horizon
+4, adaptive replanning, joint caps, smoothing and release delay. It uses the full original
+4,200-action horizon. No adapter comparison has run yet and no optimizer protocol budget
+has been selected. The Jar 40-episode screen still covers all six implementations.

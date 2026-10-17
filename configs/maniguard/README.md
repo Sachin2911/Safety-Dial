@@ -93,3 +93,15 @@ separate validation before reserved testing. Optimizer states, source hashes, pr
 candidates, all episode costs and failures are saved. A failed stage stops the search;
 its partial interactions must still enter the study accounting. No search budget has yet
 been selected or executed for ManiGuard.
+
+The optional `--parallel-clients` policy-server flag keeps a separate sampling stream
+for each episode identifier. Batch `--workers 2` requires that server metadata explicitly
+advertise this isolation; the default remains one worker. A failed job stops new launches
+while already running jobs finish and retain their process records and evidence. Batch
+source hashes and concurrency are saved. CPU tests cover interleaved sampling and failure
+draining. Physical concurrency is still awaiting the two-episode engineering smoke test;
+do not interpret this implementation as evidence that concurrent simulation is validated.
+
+The idle-server replay checker accepts `--interleaved` to compare two interleaved clients
+with a sequential reference on an identical saved observation. Every extra model query
+is recorded. This verifies sampling isolation, not deterministic physical rendering.
