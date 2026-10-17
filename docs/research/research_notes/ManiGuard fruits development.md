@@ -2188,3 +2188,24 @@ Lid comparison finishes normally and its outcomes/costs are audited, then requir
 32-action corrected-guard reference with live limits and a strict six-query replay.
 Physical correction testing remains outstanding; the local isolated commit has not yet
 been activated or pushed as runtime code on the research branch.
+
+
+## Completed Lid guard comparison
+
+All sixteen declared trials and eight pairs completed normally under unchanged runtime
+code. Identity has zero safe completions, one unsafe completion and seven safe unfinished;
+guard has zero safe completions, seven safe unfinished and one unsafe unfinished. Both
+violations are task_0003/root two. Queries total 1728 for identity and 2887 for guarding.
+No safe-completion gain or reduction in violations is established.
+
+Only the two unsafe trials ever hold the goal container. Of 1200 guard changes, 1198
+occur with the target held in the unsafe trial and two occur unheld on task_0014/root
+one. Six guard trials are inactive. The separate tolerance-boundary artifact preserves
+the allowed sub-millimetre movement at the violation; controller-limit clipping does
+not change its prediction. The Jar correction retains the same trigger for attribution.
+
+Saved the complete source/command/cost audit, eight paired comparisons, all sixteen
+diagnostics, and the rendered outcome/query figure. Batch costs are 28,989 actions,
+175,310 physics ticks and 4615 queries, with 1809.14 seconds batch wall time. The
+reference and replay costs remain separate. The original supervisor exited normally.
+The Lid result is ready to preserve before activating the isolated correction.

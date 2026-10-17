@@ -28,8 +28,9 @@ without improving completion.
 Eight extra Lid baselines are also complete: one unsafe completion, two unsafe unfinished
 and five safe unfinished. Three scenes now show lifting before lid placement; three other
 trials record lid placement but never hold the target container. This supplies clearer
-evidence of premature transport to test, not a demonstrated correction. A 16-episode Lid comparison
-of identity and the fixed guard is now running across all four engineering scenes and two seeds.
+evidence of premature transport to test, not a demonstrated correction. The [16-episode Lid comparison](docs/research/reports/ManiGuard%20Lid%20prerequisite%20guard%20comparison.md)
+is complete: neither condition safely completes any trial, each violates once, and the
+guard uses 2887 queries versus identity's 1728. It does not demonstrate a useful repair.
 See the [Lid follow-up evidence](docs/research/research_notes/ManiGuard%20fruits%20Lid%20followup.json).
 
 The [24 Stack motion-limit repeats](docs/research/reports/ManiGuard%20Stack%20motion%20repeats.md)
@@ -267,9 +268,9 @@ safe unfinished at 2000 actions without closing or grasping. An
 confirms matching declared settings and code, with differing initial images and policy
 proposals. None of the three task_0017 guard repeats safely completes, limiting the
 repeatability of that original case. Across the full guard repeat set, all 434 modified
-commands occur while the goal target is explicitly unheld. The running Lid comparison
-is testing the same prerequisite idea on observed container-lifting failures. Its first
-six audited trials contain no safe completion; the first unsafe matched case violates
+commands occur while the goal target is explicitly unheld. The completed Lid comparison
+tests the same prerequisite idea on observed container-lifting failures. All sixteen
+trials contain no safe completion; the sole unsafe matched case violates
 before lid placement under both identity and the guard. At that guard boundary, a
 0.676 mm predicted rise is below the unchanged 1 mm trigger, and measured rise is
 0.670 mm. Joint-limit clipping does not change that prediction, so this is a separate
@@ -285,7 +286,7 @@ motion of +13.67 mm. A controller-limit-aware variant is implemented in an isola
 90 focused tests plus exact compatibility replay of 41,913 old guard/hand-back actions.
 Its declared twelve-trial original/corrected comparison remains pending after the Lid
 batch. These software checks do not establish a physical repair. The
-current Lid comparison retains the original guard so its declared results remain interpretable.
+completed Lid comparison retained the original guard throughout.
 
 ## 4. Preserve a useful grasp through premature release requests
 

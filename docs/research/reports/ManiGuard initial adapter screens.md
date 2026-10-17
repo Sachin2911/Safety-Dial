@@ -176,8 +176,9 @@ is 46,813 actions and 5,852 queries. The [48 Jar repeats](ManiGuard%20Jar%20guar
 the plain guard improves safe completion from 2/12 to 4/12 and reduces violating episodes
 from four to two, while smoothing adds a completion/safety tradeoff and settling performs
 worse than the plain guard. A controller joint-limit mismatch in the lift estimate needs
-correction and testing. The sixteen-trial Lid guard comparison is now running after its
-own policy-switch reference and replay checks. Fixed rules remain the first comparison.
+correction and testing. The [sixteen-trial Lid guard comparison](ManiGuard%20Lid%20prerequisite%20guard%20comparison.md)
+is complete: zero safe completions under either condition, one violation each, and more
+queries under guarding. Its 28,989 actions and 4,615 queries are separate follow-up costs. Fixed rules remain the first comparison.
 Matched evolution, random search and categorical policy-gradient code exists but has not
 consumed ManiGuard training episodes. Further optimization and final selection remain
 conditional on useful repeatable correction headroom; no optimizer advantage is claimed.
