@@ -235,6 +235,8 @@ def select_joint_prefix(samples, current_joints, config=None):
 
     Only the first min(T,16) proposals are inspected. No averaging, clipping,
     smoothing, padding, four-step quantization, or gripper rewriting occurs.
+    Entropy and movement use ManiGuard's executed open state: command > .01.
+    Its enabled gripper_binarize closes zero and every command <= .01.
     Proposal generation, independent RNG streams and query accounting belong
     to a future integration, not this pure core.
     """
@@ -253,7 +255,7 @@ def select_joint_prefix(samples, current_joints, config=None):
         with np.errstate(over="raise", invalid="raise", divide="raise"):
             relative = (proposals[:, :, :7].astype(np.float64) - joints)
             relative /= config.joint_scale_radians
-            binary = (proposals[:, :, 7] >= 0).astype(np.int64)
+            binary = (proposals[:, :, 7] > 0.01).astype(np.int64)
             movement = np.linalg.norm(relative[0], axis=1)
             toggled = np.r_[False, np.maximum.accumulate(np.diff(binary[0]) != 0)]
             movement += config.gripper_movement_weight * toggled

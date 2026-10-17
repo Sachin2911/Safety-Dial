@@ -19,9 +19,9 @@ valid 32-action checks across Jar, Stack and Clutter and one retained invalid in
 Clutter's encoder repair passed identity and stochastic checks; recovery consumed an
 unspent slot without increasing the budget. The omitted Clutter composition check is
 explicitly recorded. These checks establish bounded integration evidence, not a learning
-or performance result. Full training-only preparation references have started in Clutter;
-no comparative pilot or reserved evaluation has run, and the pilot protocol and measured
-compute budget still need to be frozen. See the
+or performance result. All eight full training-only Clutter preparation references now
+have valid audits; sixteen Jar/Stack references remain. No comparative pilot or reserved evaluation has run,
+and the pilot protocol and measured compute budget still need to be frozen. See the
 [phase-two development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
 for the evidence and remaining work. The sections below preserve the earlier motivation,
 decisions and research trail; this update governs the new phase.

@@ -169,13 +169,53 @@ def test_joint_floor_uses_endpoint_delta_from_actual_joints_not_absolute_sum():
     assert shifted.horizon == moved.horizon
 
 
-def test_gripper_sign_toggle_enters_floor_without_rewriting_zero_open_command():
+def test_gripper_toggle_uses_benchmark_open_state_without_rewriting_zero_command():
     samples = np.zeros((20, 4, 8))
     samples[:, :, 7] = [-1, -1, 0, 1]
     selected = select_joint_prefix(samples, np.zeros(7), AACConfig(movement_threshold=.1))
-    np.testing.assert_array_equal(selected.movement_magnitudes, [0, 0, .2, .2])
-    assert selected.horizon == 3
-    np.testing.assert_array_equal(selected.prefix[:, 7], [-1, -1, 0])
+    np.testing.assert_array_equal(selected.movement_magnitudes, [0, 0, 0, .2])
+    assert selected.movement_horizon == selected.horizon == 4
+    np.testing.assert_array_equal(selected.prefix[:, 7], [-1, -1, 0, 1])
+
+
+@pytest.mark.parametrize("dtype", [np.float32, np.float64])
+def test_joint_gripper_threshold_matches_benchmark_and_preserves_raw_boundary_commands(dtype):
+    threshold = dtype(.01)
+    below = np.nextafter(threshold, dtype(-np.inf))
+    above = np.nextafter(threshold, dtype(np.inf))
+    commands = np.array([-1, -.01, -0.0, 0.0, .005, below, threshold, above], dtype=dtype)
+    # Pinned ManiGuard benchmark.py: sign only when abs(command) > .01;
+    # otherwise close. This oracle is the execution conversion, not AAC's rule.
+    executed = np.array([np.sign(value) if abs(value) > .01 else -1 for value in commands])
+    np.testing.assert_array_equal(executed, [-1, -1, -1, -1, -1, -1, -1, 1])
+    samples = np.zeros((20, len(commands), 8), dtype=dtype)
+    samples[:, :, 7] = commands
+    original = samples.copy()
+    selected = select_joint_prefix(samples, np.zeros(7), AACConfig(movement_threshold=.1))
+    toggled = np.r_[False, np.maximum.accumulate(np.diff(executed) != 0)]
+    np.testing.assert_array_equal(selected.movement_magnitudes, .2 * toggled)
+    assert selected.movement_horizon == selected.horizon == len(commands)
+    assert selected.prefix.dtype == samples.dtype
+    assert selected.prefix.tobytes() == original[0].tobytes()
+    assert samples.tobytes() == original.tobytes()
+    assert not np.shares_memory(selected.prefix, samples)
+
+
+@pytest.mark.parametrize("dtype", [np.float32, np.float64])
+def test_joint_gripper_entropy_uses_executed_state_including_deadband(dtype):
+    threshold = dtype(.01)
+    above = np.nextafter(threshold, dtype(np.inf))
+    commands = np.array([-1, -.01, -0.0, 0.0, .005, threshold, above, 1], dtype=dtype)
+    samples = np.zeros((20, len(commands), 8), dtype=dtype)
+    samples[:10, :, 7] = -1
+    samples[10:, :, 7] = commands
+    selected = select_joint_prefix(samples, np.zeros(7), AACConfig(movement_threshold=None))
+    # All twenty executed commands close in the first six columns. Only the
+    # final two have a 50/50 open/close split. Small raw positives add no entropy.
+    assert np.all(selected.entropy.gripper[:6] < 1e-6)
+    np.testing.assert_allclose(selected.entropy.gripper[6:], np.log(2), rtol=0, atol=1e-15)
+    np.testing.assert_array_equal(selected.movement_magnitudes, np.zeros(len(commands)))
+    assert selected.prefix.tobytes() == samples[0, :selected.horizon].tobytes()
 
 
 @pytest.mark.parametrize("kwargs", [

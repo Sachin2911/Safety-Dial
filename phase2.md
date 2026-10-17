@@ -9,9 +9,10 @@ runtime are implemented. The amended short integration allocation is complete: e
 valid checks across Jar, Stack and Clutter, plus one retained invalid Clutter encoder
 initialization. Its recovery used an unspent slot and added no budget; the independent
 Clutter fixed-composition check was omitted, with that coverage retained on Jar/Stack.
-The repaired encoder passed both Clutter identity and stochastic checks. Full training-only
-preparation references have now started in Clutter. No comparative pilot, learning result
-or reserved evaluation has run. The [development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
+The repaired encoder passed both Clutter identity and stochastic checks. All eight full
+training-only Clutter preparation references now have valid audits; sixteen Jar/Stack
+references remain. No comparative pilot, learning result or reserved
+evaluation has run. The [development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
 and [requirements ledger](docs/research/research_notes/ManiGuard%20phase2%20requirements.json)
 record the current evidence and limitations. Preparation assignments and their explicit
 recovery amendment are frozen; the pilot still requires full reference measurements and
@@ -118,9 +119,9 @@ checks cover Jar, Stack and Clutter; metadata preparation alone is not behaviora
 | Jar transport | 26 | 2,000 | Assets/policy; four valid phase-two short checks | Development and pilot |
 | Stack retrieve | 28 | 4,200 | Assets/policy; four valid phase-two short checks | Development and pilot |
 | Lid transport | 30 | 1,900 | Phase-one assets/policy and evaluated runner; no phase-two run | Existing development evidence; later cross-family check |
-| Clutter pickup | 55 | 1,100 | Original, identity and stochastic short checks valid; full preparation started | Add to pilot for a different task structure |
-| Cabinet pickup | 35 | 5,700 | Metadata and policy pin recorded; local assets not prepared | Reserve for transfer |
-| Dusty transfer | 26 | 5,100 | Metadata and policy pin recorded; local assets not prepared | Reserve for transfer |
+| Clutter pickup | 55 | 1,100 | Original, identity and stochastic short checks valid; eight full references audited | Add to pilot for a different task structure |
+| Cabinet pickup | 35 | 5,700 | Pinned assets/policy verified; no behavioral evaluation | Reserve for transfer |
+| Dusty transfer | 26 | 5,100 | Pinned assets/policy verified; no behavioral evaluation | Reserve for transfer |
 
 Use Jar, Stack and Clutter for the first joint pilot. Lid has already informed the design;
 excluding it from pilot training does not make it an untouched research family. Its
@@ -165,7 +166,9 @@ present information is available. Environment input is distinct from a lower-lev
 command; current traces log the former.
 
 A common frozen visual/text encoder is the proposed context source. Select and pin it
-during the interface audit; the current adapter does not expose these features. Do not
+during the interface audit. The implementation now exposes 40 robot/action/history
+features plus eight projected features each for the overview image, wrist image and task
+text, using frozen CLIP ViT-B/32 and fixed projections. Do not
 combine unaligned hidden vectors from different VLA checkpoints. Use a fixed, documented
 feature projection and account for encoding latency. Task text is allowed; family IDs,
 scene names, checkpoint IDs and hand-coded family detectors are not inputs. Simulator
@@ -180,8 +183,8 @@ visual/task-conditioned method.
 
 The recommended first representation is a fixed-topology recurrent network with eight
 hidden units and small categorical output heads. Target fewer than 2,000 trainable
-parameters after projection; freeze the exact count before optimization. Evolve its
-weights, not the VLA or encoder. This allows an ordinary policy-gradient learner to use
+parameters after projection; the implemented controller has exactly 692 parameters.
+Evolve its weights, not the VLA or encoder. This allows an ordinary policy-gradient learner to use
 the same observation-conditioned policy class. A finite-state program is an alternative
 if necessary, but switching representation creates a new protocol.
 
@@ -239,7 +242,8 @@ Required comparisons:
 
 The existing categorical REINFORCE samples static parameters for an episode group. It is
 not the proposed observation-conditioned learner. Retain it only as a labelled
-parameter-search baseline if useful. Implementing the recurrent learner is new work.
+parameter-search baseline if useful. The recurrent PPO learner is now implemented and
+tested, but physical training has not run.
 Do not discretize neural weights into the old Cartesian optimizer; its finalist enumeration
 will not scale.
 

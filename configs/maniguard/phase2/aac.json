@@ -26,10 +26,10 @@
   },
   "selection_contract": {
     "entropy": "Gaussian entropy with sample covariance plus epsilon*I for all seven normalized joint coordinates, plus Bernoulli gripper entropy.",
-    "binary_gripper": "proposal[7] >= 0 means open; signs only affect entropy, original commands are executed unchanged.",
+    "binary_gripper": "proposal[7] > 0.01 means open, matching ManiGuard gripper_binarize; zero and commands <= 0.01 mean close. This binary state affects entropy and movement only; original commands are returned unchanged.",
     "normalization": "(absolute_joint_target - current_measured_joint) / joint_scale_radians; one fixed scale shared by all joints and families.",
     "entropy_horizon": "max(2, first_argmax(diff(cumulative_mean_entropy)) + 1), matching the pinned author indexing.",
-    "movement": "L2 normalized sample-zero endpoint displacement from measured joints, plus gripper_movement_weight if sample-zero gripper sign changed within the prefix.",
+    "movement": "L2 normalized sample-zero endpoint displacement from measured joints, plus gripper_movement_weight if sample-zero executed gripper state (open iff command > 0.01) changed within the prefix.",
     "movement_floor": "First prefix k>=2 whose movement strictly exceeds the threshold; if none, use the available prefix length. Null threshold disables this floor for diagnostics.",
     "horizon": "max(entropy_horizon, movement_horizon), with singleton input returning one; no padding or grid quantization.",
     "execution": "Exact copy of sample zero up to selected horizon, preserving input dtype and values.",

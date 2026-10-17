@@ -220,3 +220,58 @@ The full regression checkpoint passes **419 tests**, with Ruff and whitespace ch
 Clutter identity recovery completed valid in 62.73 seconds, followed by the valid stochastic check in 62.31 seconds. Both used 32 policy actions. The [integration report](../../../runs/maniguard/phase2/reports/preparation-integration-v1/report.json) records all twelve paid attempts, eleven valid and the unchanged failed initialization. Integration coverage passes under the explicit amendment, with the omitted Clutter composition check retained in the limitations. Known totals including failed initialization are 352 policy actions, 52 queries and 3,144 physics ticks. The one-GPU reservation is 1.48357 hours at that report timestamp. No task-performance or optimizer conclusion follows from these bounded checks.
 
 The eight original full Clutter preparation assignments have now been started as a supervised serial queue, with the current sources and command archived before launch. They compare identity, smoothing0.75, target-displacement cap0.06 and the fixed contextual requery rule on two frozen training cases. Full preparation must also include the eight Jar and eight Stack cases before reference selection and measured pilot costing. No pilot training, validation or reserved evaluation has started. The recovery implementation checkpoint was pushed as `45463f1`.
+
+
+## Clutter full preparation complete; evaluation tooling checkpoint
+
+All eight original full Clutter reference attempts completed with valid process, source,
+feature, outcome and cost audits. Identity, smoothing0.75 and the fixed contextual rule
+completed both training cases safely. The 0.06 displacement cap completed the first case
+safely, but reached the 1,100-action horizon on the second without completing and with a
+physical violation. These two-case counts are descriptive preparation evidence. They do
+not establish an improvement or identical-start causal comparison, and the violating
+episode is not a safe timeout. No reference is selected before the remaining sixteen
+Jar/Stack preparation cases complete.
+
+The [Clutter-complete report](../../../runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json)
+preserves all twenty paid attempts: eleven valid short checks, one invalid initialization
+with separately reconciled costs, and eight valid full references. Its content hash is
+`cf3493f4c60b8f30252277ffd415a0c1ad04e8deddd8b799f7a205571cad8140`.
+Reconciled totals are 5,214 policy actions, 664 queries and 33,004 physics ticks. Including
+setup, it records 1,287 image-encoder calls, 2,574 encoded images and 17 text calls. Continuous
+one-GPU reservation is 1.88806 hours at the snapshot. Training readiness remains false;
+Jar/Stack throughput still has only startup-heavy short measurements, so the current
+pilot cost extrapolation is provisional and does not authorize launching the pilot.
+
+At the confirmed simulator-idle boundary, the unused AAC-joint selector was corrected
+to match the pinned benchmark gripper conversion: a command opens only above 0.01. Zero
+and small positive commands close. Entropy and movement detection now use that executed
+state; the returned sample-zero action values and native Cartesian goldens are unchanged.
+No physical AAC comparison preceded the correction. The separate supervised Cabinet/Dusty
+asset download was then launched from archived public-source plans, without policy or
+simulator initialization and without behavioral outcomes.
+
+The [evaluation-tooling note](ManiGuard%20phase2%20evaluation%20tooling.md) documents the new
+AAC proposal sampler, pilot selection report/model export, main protocol planner and main
+analysis. The planner binds controller-specific proposal and encoder resources; the
+protocol-aware analyzer checks the complete declared case/run grid and recorded costs.
+The pilot CLI exports all six selected run artifacts from a completed coordinator state.
+These modules have synthetic validation only: main live authorization and AAC execution
+remain unwired, and no pilot actors or optimizer results exist. The combined focused
+checkpoint passes 213 tests; Ruff passes for all new and corrected Python files.
+
+Cabinet and Dusty asset preparation subsequently completed with supervisor exit code 0.
+Independent verification checked all 669 files (12,693,624,682 bytes) against archived
+plans, upstream digests and complete receipts. No inference or task outcomes were used.
+The [download completion receipt](../../../runs/maniguard/phase2/setup/reserved-assets-v1/progress.json)
+has file hash `8f348990b30190a59d26eaeeae847b14a01b50437a4ac825ee0629dc675544c5`.
+The 133.38-second download remains part of the continuous reservation, not an additional
+overlapping GPU charge.
+
+The original sixteen Jar/Stack full preparation assignments have now been launched as
+a supervised serial queue after download verification and an idle-process check. Forty-seven
+source/config files and both operational files were archived and verified before launch.
+The queue switches the pinned policy service, holds the shared execution lease, and has
+no automatic retry or new allocation. Its [launch record](../../../runs/maniguard/phase2/setup/preparation-full-rest-v1/launch-check.json)
+records the exact remaining job IDs. No optimization or reserved evaluation is authorized
+by this preparation launch.
