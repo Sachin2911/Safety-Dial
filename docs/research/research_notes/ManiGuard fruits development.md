@@ -62,3 +62,26 @@ proposals, adapter outputs and final executed actions. Use new output directorie
   select and record its visual/controller configuration; exact historical reproduction
   is not established by installing the latest source.
 - Current status: environment and asset preparation. No ManiGuard episodes executed.
+
+## Initial implementation milestone
+
+All six adapters now have pure controller implementations and initial JSON configurations.
+Twenty-one behavior tests pass, including identity action preservation, finite release
+and retry limits, prerequisite scope, hand-back timing and same-seed episode isolation.
+Ruff passes on the new Python files. These are engineering checks, not physical results.
+
+The separate simulator and OpenPI environments installed successfully. CUDA tensor execution,
+native Spot formula construction, Isaac Sim import and OmniGibson import passed on this
+machine. Benchmark assets finished downloading and have local SHA-256 provenance. The large
+simulator asset archive and policy checkpoints are still being prepared.
+
+Scene groups were assigned deterministically before inspecting baseline trajectories:
+Jar has 4 engineering, 6 training, 4 validation and 12 test tasks; Lid has 4/10/4/12;
+Stack has 4/8/4/12. Every condition of a task retains the same assignment. Seeds and
+physical search budgets remain to be selected after baseline throughput measurement.
+
+A local policy wrapper resets sampling on each distinct episode, including consecutive
+same-seed episodes. The upstream wrapper only resets when the seed changes, which would
+otherwise confound consecutive matched-method comparisons. The evaluator instrumentation
+preserves upstream goal and monitor checks and logs original/adapted/executed actions.
+Physical accounting includes initialization steps through a PhysX subscription.

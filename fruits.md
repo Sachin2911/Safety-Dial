@@ -6,6 +6,20 @@ candidate to record, followed by five further candidates from the same discussio
 These are possibilities to investigate, not commitments to an architecture, optimizer or
 experiment budget. No ManiGuard improvement has been demonstrated locally.
 
+## Candidate overview
+
+Each row is a hypothesis to screen, not an established failure mechanism or improvement.
+The detailed sections below describe what evolution could tune and the evidence needed.
+
+| Candidate | Potential headroom | First simple comparison |
+| --- | --- | --- |
+| Adaptive replanning | Continuing stale actions after contact or a state change | Original policy vs fixed execution horizons |
+| Motion moderation | Abrupt movements destabilizing otherwise useful manipulation | Original motion vs fixed joint-target limits and smoothing |
+| Prerequisite guarding | Lifting or transporting before closure or lid placement | Original policy vs a fixed prerequisite guard, including timeouts |
+| Grasp persistence | Opening prematurely and losing a useful grasp | Original release commands vs a short bounded release delay |
+| Bounded retries | Repeating an ineffective approach without recovering progress | Continued execution vs one scripted physical retreat and retry |
+| Return after intervention | Repeating blocked proposals or switching disruptively | Immediate return vs a settling period and fresh policy query |
+
 ## Where to look for headroom
 
 Prioritize cases where the policy already performs much of the task correctly, but an
