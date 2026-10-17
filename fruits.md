@@ -8,8 +8,10 @@ experiment budget. No ManiGuard improvement has been demonstrated locally.
 
 Implementation and experiment records are maintained in the
 [ManiGuard study log](docs/research/research_notes/ManiGuard%20fruits%20development.md).
-All six initial adapters have been implemented. Engineering checks and original-policy
-baselines are underway; adapter improvements and evolutionary advantages remain unproven.
+All six initial adapters have been implemented, and twelve original-policy engineering
+baselines are complete. Physical adapter screens are running. The first release-delay
+trial stayed safe but unfinished; no adapter improvement or evolutionary advantage has
+yet been demonstrated.
 
 ## Candidate overview
 

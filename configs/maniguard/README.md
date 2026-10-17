@@ -1,7 +1,7 @@
 # ManiGuard fruit experiments
 
 This study implements the six hypotheses in [fruits.md](../../fruits.md). Physical
-validation and optimizer comparisons are pending. Passing controller tests does not
+mechanism screens are running; optimizer comparisons and reserved evaluation remain pending. Passing controller tests does not
 establish improved task completion or safety.
 
 `sources.json` pins upstream code, benchmark assets and family-specific policy checkpoints.
