@@ -69,7 +69,7 @@ def test_guard_blocks_lift_only_for_engaged_unclosed_target():
     actual, event = adapter.act(lift, frame(prerequisite=True, engaged=True))
     np.testing.assert_array_equal(actual, lift)
     actual, event = adapter.act(lift, frame(prerequisite=False, engaged=True))
-    assert not event["guard_blocked"]  # weak-until prerequisite was discharged
+    assert not event["guard_blocked"]  # until prerequisite was discharged
 
 
 def test_guard_does_not_block_free_arm_or_downward_motion():

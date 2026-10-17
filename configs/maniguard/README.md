@@ -49,8 +49,20 @@ prerequisite and hand-back prototypes require explicitly labelled privileged obj
 predicates and contact association. Other adapters use robot observations and history.
 The monitor still measures physical violations without changing their definitions.
 
-Traces retain model chunks, controller proposals, adapted actions, clipped executed
-commands and observations. The ledger counts physical ticks, environment steps, policy
+`prerequisite-joint-limits.json` and `handback-joint-limits.json` select the corrected
+`guard_joint_limits=true` prediction. The frame records live robot controller position
+bounds and their has-limit mask. Only the target used for the lift estimate is clipped;
+unblocked policy actions still follow the original environment/controller path. The
+original configs omit this flag and retain `false`, preserving earlier results. Compare
+the variants explicitly; a missing limit record fails the corrected guard before action.
+The event records both requested-target and controller-limit-aware lift estimates.
+This corrects a diagnosed interface mismatch, not all tracking error or nonlinear motion,
+and is not a safety certificate or a demonstrated physical recovery. Keep this prediction
+choice fixed across optimizer comparisons. Historical episode files remain unchanged.
+
+Traces retain model chunks, controller proposals, adapted actions, environment input
+actions after action-space clipping, and observations. The recorded `executed` action is
+the environment input, not a direct log of lower-level controller output clipping. The ledger counts physical ticks, environment steps, policy
 queries and time, including initialization. Upstream result files preserve completion,
 violations and errors. A failed or incomplete monitor must not be scored as safe.
 

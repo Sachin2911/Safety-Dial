@@ -23,6 +23,19 @@ def json_value(value):
     raise TypeError(type(value).__name__)
 
 
+def arm_position_limits(robot, indices):
+    """Read the same position limits and mask supplied to the robot's controllers."""
+    limits = robot.control_limits
+
+    def select(value):
+        if hasattr(value, "detach"):
+            value = value.detach().cpu().numpy()
+        return np.asarray(value)[indices].copy()
+
+    lower, upper = limits["position"]
+    return select(lower), select(upper), select(limits["has_limit"])
+
+
 class Study:
     def __init__(self):
         self.job = json.loads(Path(os.environ["SAFETY_DIAL_MANIGUARD_JOB"]).read_text())
@@ -155,8 +168,12 @@ class Study:
             engaged = bool(robot_holds_target(env, target) or (
                 target.states[ContactBodies].get_value() & set(robot.links.values())
             ))
+        limits = arm_position_limits(robot, indices) if self.config.guard_joint_limits else (
+            None, None, None,
+        )
         return Frame(joints[indices].copy(), joints[fingers].copy(),
-                     robot.get_eef_position().cpu().numpy().copy(), jac, prerequisite, engaged)
+                     robot.get_eef_position().cpu().numpy().copy(), jac, prerequisite, engaged,
+                     *limits)
 
     def start(self, scene, obs):
         self.scene = scene
@@ -192,7 +209,8 @@ class Study:
     def applied(self, step, executed):
         self.adapter.applied(executed)
         self.counts["policy_control_steps"] += 1
-        self.write("executed", step=step, action=executed)
+        self.write("executed", step=step, action=executed,
+                   action_scope="environment_input_before_controller_output_clipping")
 
     def should_replan(self, step, frame):
         reason = self.adapter.replan_reason(frame)

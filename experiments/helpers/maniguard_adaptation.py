@@ -32,6 +32,7 @@ class AdapterConfig:
     lift_margin: float = 0.001
     closure_confirm_steps: int = 1
     guard_requery_steps: int = 1
+    guard_joint_limits: bool = False  # Preserve the original requested-target estimator.
     handback_hold_steps: int = 0
     handback_requery: bool = True
     stall_window: int = 20
@@ -70,6 +71,10 @@ class AdapterConfig:
             raise ValueError("lift_margin must be finite and nonnegative")
         if self.kind in ("prerequisite", "handback") and not self.privileged:
             raise ValueError("The initial prerequisite guard requires explicit privileged=True")
+        if type(self.guard_joint_limits) is not bool:
+            raise ValueError("guard_joint_limits must be boolean")
+        if self.guard_joint_limits and self.kind not in ("prerequisite", "handback"):
+            raise ValueError("Controller-limit prediction applies only to prerequisite guards")
 
 
 @dataclass(frozen=True)
@@ -80,6 +85,9 @@ class Frame:
     jacobian: np.ndarray | None = None  # world-frame translational Jacobian, shape (3, 7)
     prerequisite: bool | None = None
     target_engaged: bool | None = None
+    joint_lower_limits: np.ndarray | None = None
+    joint_upper_limits: np.ndarray | None = None
+    joint_has_limits: np.ndarray | None = None
 
     def validate(self):
         for name, shape in (("joints", (7,)), ("fingers", (2,)), ("eef_position", (3,))):
@@ -90,6 +98,15 @@ class Frame:
             self.jacobian.shape != (3, 7) or not np.isfinite(self.jacobian).all()
         ):
             raise ValueError("Invalid translational Jacobian")
+        limits = (self.joint_lower_limits, self.joint_upper_limits, self.joint_has_limits)
+        if any(value is not None for value in limits):
+            if any(value is None for value in limits):
+                raise ValueError("Position limits require lower, upper and has-limit arrays")
+            lower, upper, bounded = map(np.asarray, limits)
+            if (lower.shape != (7,) or upper.shape != (7,) or bounded.shape != (7,)
+                    or bounded.dtype != np.dtype(bool) or not np.isfinite(lower).all()
+                    or not np.isfinite(upper).all() or np.any(lower[bounded] >= upper[bounded])):
+                raise ValueError("Invalid arm position limits")
 
 
 class ExecutionAdapter:
@@ -181,9 +198,24 @@ class ExecutionAdapter:
             if frame.prerequisite is None or frame.target_engaged is None or frame.jacobian is None:
                 raise ValueError("Prerequisite guard requires declared object state and kinematics")
             self.closure_run = self.closure_run + 1 if frame.prerequisite else 0
-            # Weak-until prerequisite: once confirmed it remains discharged.
+            # Once confirmed, the prerequisite part of until remains discharged.
             self.prerequisite_seen |= self.closure_run >= cfg.closure_confirm_steps
-            upward = float(frame.jacobian[2] @ (proposal[:7] - frame.joints))
+            prediction_target = proposal[:7]
+            if cfg.guard_joint_limits:
+                if frame.joint_lower_limits is None:
+                    raise ValueError("Controller-limit guard requires live arm position limits")
+                prediction_target = np.where(
+                    frame.joint_has_limits,
+                    np.clip(proposal[:7], frame.joint_lower_limits, frame.joint_upper_limits),
+                    proposal[:7],
+                )
+                event.update(
+                    guard_prediction_mode="controller_joint_limits",
+                    predicted_lift_requested=float(
+                        frame.jacobian[2] @ (proposal[:7] - frame.joints)),
+                    guard_prediction_joint_target=prediction_target.copy(),
+                )
+            upward = float(frame.jacobian[2] @ (prediction_target - frame.joints))
             blocked = bool(frame.target_engaged and not self.prerequisite_seen
                            and upward > cfg.lift_margin)
             event.update(guard_blocked=blocked, predicted_lift_linearized=upward,
@@ -254,7 +286,7 @@ class ExecutionAdapter:
         return action, event
 
     def applied(self, executed):
-        """Use the final action AFTER environment clipping, not the proposal."""
+        """Track the environment input action; downstream controller clipping can differ."""
         self.last_executed = np.asarray(executed).copy()
         self.since_query += 1
 

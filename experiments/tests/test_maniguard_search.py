@@ -48,6 +48,7 @@ def test_handback_search_keeps_guard_trigger_fixed():
 
 @pytest.mark.parametrize('domain', [
     {'privileged': [False, True]}, {'horizon': [0, 8]}, {'release_delay': []},
+    {'guard_joint_limits': [False, True]},
 ])
 def test_invalid_or_information_changing_domains_rejected(domain):
     changed = deepcopy(PROTOCOL)

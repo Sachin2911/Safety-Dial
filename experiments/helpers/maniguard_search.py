@@ -24,8 +24,8 @@ def validate_protocol(protocol, splits):
     domain = protocol['domain']
     if not domain or any(not isinstance(values, list) or not values for values in domain.values()):
         raise ValueError('Declare a finite nonempty parameter domain')
-    if set(domain) & {'kind', 'privileged'}:
-        raise ValueError('Controller family and information access must remain fixed')
+    if set(domain) & {'kind', 'privileged', 'guard_joint_limits'}:
+        raise ValueError('Controller family, information access and guard prediction must remain fixed')
     if base['kind'] == 'handback' and not set(domain) <= {
         'handback_hold_steps', 'handback_requery',
     }:

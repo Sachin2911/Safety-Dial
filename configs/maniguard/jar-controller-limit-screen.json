@@ -1,0 +1,169 @@
+{
+  "split": "engineering",
+  "ordering_seed": 20261025,
+  "ordering_algorithm": "Python random.Random.shuffle",
+  "description": "Twelve full-horizon paired trials of requested-target and controller-limit-aware prerequisite/handback guards on the diagnosed Jar scene, at roots zero, one and two.",
+  "rationale": "Episode 45 of jar-guard-repeat-v2 lifted an open held jar at observation 1873. The guard predicted downward motion from a second-joint target beyond its lower limit; reconstructing controller output clipping changes the estimate upward and agrees in sign with measured motion. Offline regression shows the corrected estimate blocks that recorded proposal, not that a physical rollout is repaired.",
+  "scope": "One engineering scene chosen after diagnosis. Compare correction enabled versus disabled within each guard kind; do not claim broad generalization or a gain over unguarded identity. Repeated original guards are contemporaneous controls because earlier same-seed physical starts can differ. No optimizer or reserved scenes.",
+  "controls": "Same frozen checkpoint, horizon, privileged prerequisite/contact/holding information, guard trigger margin and confirmations, query schedule, and handback settings within each pair. Only guard_joint_limits changes. Bounds are robot controller configuration, not additional object state. All four physical outcomes and query costs remain required.",
+  "activation": "After unchanged Lid v1 finishes normally and all 16 results/costs validate, activate the isolated tested code and switch the idle policy to Jar. Require a fresh 32-action corrected-guard reference with live limits and a six-query strict interleaved replay before these full trials.",
+  "accounting": "Count all 12 complete or failed attempts and any reference/replay work separately. Full original 2000-action horizons; no rollback or shortened outcome scoring. A missed reproduction or lack of safe completion remains a reported result.",
+  "jobs": [
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 1,
+      "label": "prerequisite_guard_joint_limits",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true,
+        "guard_joint_limits": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 2,
+      "label": "handback_requested_target",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "guard_joint_limits": false,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 1,
+      "label": "prerequisite_guard_requested_target",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true,
+        "guard_joint_limits": false
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "label": "prerequisite_guard_joint_limits",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true,
+        "guard_joint_limits": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "label": "handback_requested_target",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "guard_joint_limits": false,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 2,
+      "label": "prerequisite_guard_requested_target",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true,
+        "guard_joint_limits": false
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "label": "prerequisite_guard_requested_target",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true,
+        "guard_joint_limits": false
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 1,
+      "label": "handback_joint_limits",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "guard_joint_limits": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 2,
+      "label": "prerequisite_guard_joint_limits",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true,
+        "guard_joint_limits": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "label": "handback_joint_limits",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "guard_joint_limits": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 2,
+      "label": "handback_joint_limits",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "guard_joint_limits": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 1,
+      "label": "handback_requested_target",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "guard_joint_limits": false,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    }
+  ]
+}
