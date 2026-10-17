@@ -173,3 +173,23 @@ The exporter validates full-episode outcomes, checks block/hold counts against t
 recorded ledger and diagnosis, and preserves trace/script hashes. Same-scene starts are
 not deterministic counterfactuals. Timeline associations alone do not prove that a guard
 caused or prevented a later failure. Choose new output paths for each export.
+
+The follow-up `lid-guard-screen.json` compares unchanged control with the fixed privileged
+prerequisite guard across all four engineering Lid scenes and root seeds one and two.
+It was declared after an extra baseline first grasped the container and lifted it before
+lid placement. The sixteen full-horizon trials retain all scenes, including those without
+an observed premature transition. It is a fixed-rule screen, not an optimizer comparison.
+The live queue waits for the existing Jar repeats; process handles and immutable snapshots
+are recorded in `ManiGuard fruits screen progress.json` under the research notes.
+
+After the pinned Lid server and its fresh reference/interleaved replay are validated, the
+batch command is:
+
+```bash
+data/maniguard/envs/sim/bin/python experiments/scripts/maniguard_batch.py \
+  --plan configs/maniguard/lid-guard-screen.json \
+  --output runs/maniguard/lid-guard-screen-v1 --workers 2
+```
+
+The active managed queue owns this output path. A separate reproduction needs a new path
+and an idle matching policy server; do not launch a duplicate alongside the live queues.

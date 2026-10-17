@@ -21,9 +21,16 @@ is established. The Stack screen also found no safe-completion gain. The release
 rarely activates, bounded retries execute the intended retreat without a demonstrated
 recovery, and the tested settling/requery rule increases cost without improving completion.
 
-Eight extra Lid baselines are in progress. Follow-up queues contain 24 Stack motion-limit
-trials, 12 Stack release-trigger comparisons, and 48 Jar repeats comparing identity,
-guard, hand-back and smoothing across all four engineering scenes and three root seeds.
+Eight extra Lid baselines are also complete: one unsafe completion, two unsafe unfinished
+and five safe unfinished. Three scenes now show lifting before lid placement; three other
+trials record lid placement but never hold the target container. This supplies clearer
+evidence of premature transport to test, not a demonstrated correction. A 16-episode Lid comparison
+of identity and the fixed guard is queued across all four engineering scenes and two seeds.
+See the [Lid follow-up evidence](docs/research/research_notes/ManiGuard%20fruits%20Lid%20followup.json).
+
+The 24 Stack motion-limit repeats are running. Follow-up queues also contain 12 Stack
+release-trigger comparisons and 48 Jar repeats comparing identity, guard, hand-back
+and smoothing across all four engineering scenes and three root seeds.
 These remain engineering experiments. No evolutionary search or reserved evaluation has
 run, and no evolutionary advantage has been demonstrated.
 

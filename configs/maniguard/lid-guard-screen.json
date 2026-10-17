@@ -1,0 +1,180 @@
+{
+  "split": "engineering",
+  "ordering_seed": 20261024,
+  "ordering_algorithm": "Python random.Random.shuffle",
+  "description": "Fixed prerequisite guard versus contemporaneous unchanged Lid policy across all four frozen engineering scenes and root seeds one and two, with full 1900-action horizons.",
+  "rationale": "The extra baseline on task_0003/base at root seed two first holds the container at observation 498, leaves support before lid placement at 501, and remains unsafe unfinished at 1900. No lid-on-container observation occurs. This is a mechanism case rather than a demonstrated repair; the original four root-zero baselines never held their target.",
+  "scope": "Declared after observing the task_0003 root-two failure. All four engineering scenes and both follow-up seeds are included to measure interference as well as candidate benefit. Neither training nor validation nor reserved test scenes are used. The guard uses simulator prerequisite/contact/holding signals and a linearized end-effector lift estimate; no sensor-based safety or certification claim is made.",
+  "comparison": "Keep the frozen checkpoint, original horizon, safety formula and action interface unchanged. Compare all four physical outcome categories, guard activation, closure, target holding, actions, queries and elapsed time. Shared scene and root seed do not guarantee identical starting images or trajectories.",
+  "queue": "After the already declared Jar 48-episode repeated comparison completes and validates, switch the idle Jar policy to Lid, then require a fresh 32-action reference and six-query interleaved replay before launching this batch.",
+  "jobs": [
+    {
+      "family": "lid",
+      "scene": "task_0006/base",
+      "seed": 1,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0008/base",
+      "seed": 2,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0014/base",
+      "seed": 1,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0003/base",
+      "seed": 2,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0014/base",
+      "seed": 1,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0003/base",
+      "seed": 2,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0014/base",
+      "seed": 2,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0014/base",
+      "seed": 2,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0006/base",
+      "seed": 1,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0008/base",
+      "seed": 2,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0008/base",
+      "seed": 1,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0006/base",
+      "seed": 2,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0003/base",
+      "seed": 1,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0008/base",
+      "seed": 1,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0006/base",
+      "seed": 2,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "lid",
+      "scene": "task_0003/base",
+      "seed": 1,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    }
+  ]
+}
