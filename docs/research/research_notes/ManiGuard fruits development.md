@@ -238,3 +238,30 @@ reject reserved scenes, information-access changes and hand-back changes to the 
 guard. The ordinary-learning comparator is episodic categorical REINFORCE over the same
 adapter parameters, not VLA fine-tuning. Physical search budgets and runs remain pending
 mechanism screens; these engineering tests are not optimizer-performance evidence.
+
+## Mechanism diagnostics and checkpoint fidelity
+
+All three unsafe Jar baselines reported contact and target displacement but no target
+grasp through the goal checker. Visual frames around task_0002's violation show the arm
+moving against the jar before it tips. This supports testing motion/replanning, not a
+claim that premature release caused these failures. The first successful baseline had
+no observed held-to-unheld transition after an opening command either.
+
+Measured post-execution tracking error separately from commanded motion size. A 0.03-rad
+error threshold never fired in the successful baseline. It first fired at step 533 before
+task_0002's violation at 548, and at 555 before task_0008's violation at 579. On task_0017
+it first fired at 1495, after the violation at 1384. Thus this candidate signal has early
+observations in two failures and misses one; those correlations do not show that another
+policy query would repair them. Full statistics are in
+[tracking diagnostics](ManiGuard%20fruits%20tracking%20diagnostics.json).
+
+The first two Lid baselines completed their 1,900-action horizons safely but unfinished,
+with contact and no reported container grasp. The first scene's overview and wrist images
+were visually inspected and contain the expected lid, container, contents and robot.
+These episodes do not yet establish premature transport or a filter-induced stall.
+
+Optimizer checkpoint records now include logits, Adam moments, parent/archive state and
+random state. Three additional tests verify that restored evolution, random search and
+policy-gradient optimizers produce identical subsequent draws and updates. There are 48
+passing applicable engineering checks in total (33 adapter/result checks plus 15 optimizer
+and protocol checks). No ManiGuard optimizer has yet consumed physical training episodes.

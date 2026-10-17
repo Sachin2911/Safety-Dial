@@ -7,7 +7,13 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from helpers.maniguard_search import terminal_utility, validate_protocol
+from helpers.maniguard_search import (
+    restore_search,
+    search_state,
+    terminal_utility,
+    validate_protocol,
+)
+from helpers.unisafe_search import AdapterSearch
 
 SPLITS = {'families': {'jar': {'train': ['task_0019'], 'test': ['task_0023']}}}
 PROTOCOL = {'family': 'jar', 'base_adapter': {'kind': 'release', 'horizon': 8},
@@ -60,3 +66,16 @@ def test_terminal_utility_preserves_unsafe_outcomes(success, violation, expected
     assert terminal_utility({'safe_completion': success and not violation,
                              'unsafe_completion': success and violation,
                              'violation': violation}) == expected
+
+
+@pytest.mark.parametrize('method', ['evolution', 'random', 'policy_gradient'])
+def test_saved_optimizer_resumes_identical_draws_and_updates(method):
+    optimizer = AdapterSearch(method, {'release_delay': [0, 2, 4], 'min_closing_steps': [1, 3]}, 4, 71)
+    genes = optimizer.ask()
+    optimizer.tell(genes, [0, 1, -1, 0])
+    restored = restore_search(search_state(optimizer))
+    next_genes = optimizer.ask()
+    assert next_genes == restored.ask()
+    optimizer.tell(next_genes, [1, 0, -2, 0])
+    restored.tell(next_genes, [1, 0, -2, 0])
+    assert search_state(optimizer) == search_state(restored)

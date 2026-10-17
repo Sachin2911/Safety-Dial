@@ -13,7 +13,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'experiments'))
 
-from helpers.maniguard_search import terminal_utility, validate_protocol
+from helpers.maniguard_search import search_state, terminal_utility, validate_protocol
 from helpers.unisafe_search import AdapterSearch
 
 
@@ -87,7 +87,7 @@ def main():
                         raise ValueError('Every candidate needs the same number of training episodes')
                     fitness.append(float(np.mean([terminal_utility(row) for row in matched])))
                 optimizer.tell(genes, fitness)
-                write(output / (directory.name + '.optimizer.json'), optimizer.state())
+                write(output / (directory.name + '.optimizer.json'), search_state(optimizer))
                 totals = {key: sum(row['ledger'][key] for row in evidence) for key in
                           ('physics_steps', 'physics_seconds', 'env_step_attempts', 'env_steps_returned',
                            'policy_queries', 'policy_query_seconds', 'policy_control_steps')}
@@ -102,7 +102,7 @@ def main():
                 'family': protocol['family'], 'scope': 'Training finalists; validation and reserved testing remain.',
                 'method': method, 'search_seed': seed,
                 'adapters': [protocol['base_adapter'] | params for params in optimizer.finalists()],
-                'optimizer': optimizer.state(),
+                'optimizer': search_state(optimizer),
             })
     write(output / 'complete.json', {'stages': progress, 'elapsed_seconds': time.monotonic() - started,
           'pretrained_weight_updates': 0,

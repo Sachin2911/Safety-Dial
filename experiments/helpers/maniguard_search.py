@@ -1,8 +1,12 @@
 """Protocol checks and shared objective for matched compact-controller search."""
 
 import itertools
+from copy import deepcopy
+
+import numpy as np
 
 from helpers.maniguard_adaptation import AdapterConfig
+from helpers.unisafe_search import AdapterSearch
 
 METHODS = ('evolution', 'random', 'policy_gradient')
 
@@ -52,3 +56,23 @@ def terminal_utility(evidence):
     """
     completion = evidence['safe_completion'] or evidence['unsafe_completion']
     return float(completion) - 2 * float(evidence['violation'])
+
+
+def search_state(optimizer):
+    """Include Adam moments and logits so saved learning state is resumable."""
+    return deepcopy(optimizer.state() | {
+        'logits': [x.tolist() for x in optimizer.logits],
+        'first_moment': [x.tolist() for x in optimizer.first_moment],
+        'second_moment': [x.tolist() for x in optimizer.second_moment],
+    })
+
+
+def restore_search(state):
+    optimizer = AdapterSearch(state['method'], state['domain'], state['population'], seed=0)
+    optimizer.rng.bit_generator.state = deepcopy(state['rng_state'])
+    optimizer.parents = deepcopy(state['parents'])
+    optimizer.archive = deepcopy(state['archive'])
+    optimizer.updates = state['updates']
+    for field in ('logits', 'first_moment', 'second_moment'):
+        setattr(optimizer, field, [np.array(x, dtype=float) for x in state[field]])
+    return optimizer
