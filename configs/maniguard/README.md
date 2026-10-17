@@ -99,8 +99,9 @@ for each episode identifier. Batch `--workers 2` requires that server metadata e
 advertise this isolation; the default remains one worker. A failed job stops new launches
 while already running jobs finish and retain their process records and evidence. Batch
 source hashes and concurrency are saved. CPU tests cover interleaved sampling and failure
-draining. Physical concurrency is still awaiting the two-episode engineering smoke test;
-do not interpret this implementation as evidence that concurrent simulation is validated.
+draining. Both engineering smoke episodes have passed, and two full Stack episodes were observed
+advancing concurrently. Initialization overhead can be substantial; no matched throughput
+improvement has yet been established. See the study log and concurrency evidence.
 
 The idle-server replay checker accepts `--interleaved` to compare two interleaved clients
 with a sequential reference on an identical saved observation. Every extra model query

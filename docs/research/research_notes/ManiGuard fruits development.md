@@ -429,3 +429,28 @@ the `motion_smoothing` configuration retains the adapter's default 0.12/0.04-rad
 caps. It is a combined smoothing-and-cap condition and cannot isolate smoothing alone.
 No candidate settings or randomized ordering changed. A later attribution study would
 need a matched cap-only control if this combined condition shows useful headroom.
+
+## First physical adapter screen launched
+
+Both short Stack jobs passed with 32 actions, 278 physics ticks, 42 environment steps and
+four model queries each. One took 57.8 seconds and the other 313.3 seconds, mostly in
+startup; therefore those short jobs did not establish overlapping physical execution or
+a throughput benefit. A shared simulator-cache warning was logged, but its causal role
+in the delay is unproven. A userspace stack diagnostic was unavailable because this
+container lacks ptrace capability; no kernel or container privileges were changed.
+
+The declared 24-episode Stack screen is now running with two workers. Its first jobs are
+release delay on task_0013 and repeated identity on task_0007. Both were directly observed
+in their policy phases and both advanced between recorded samples, using approximately
+15.4 GB GPU memory. The release adapter has physically altered commands. Outcomes remain
+pending until normal episode completion; current absence of a violation is not success.
+The reference, same-server replay and two smoke episodes add 834 physics ticks and 18
+model queries, separately from the earlier 18 inference-only diagnostics. Evidence is in
+`ManiGuard fruits concurrency.json`.
+
+A managed follow-on queue waits for all 24 Stack results to validate before switching the
+idle policy to Jar. It then creates a fresh within-server reference, requires exact
+interleaved replay, and runs the declared 40-episode Jar screen covering all six hypotheses.
+After all Jar results validate, it switches to Lid, repeats the reference/replay check and
+runs the eight additional Lid baseline seeds. A failed prerequisite stops the queue and
+retains all partial work. The live Stack episodes are not interrupted by this scheduling.
