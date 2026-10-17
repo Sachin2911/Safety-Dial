@@ -1,0 +1,142 @@
+{
+  "scope": "Extra inference diagnostics only; no simulator interactions or task outcome evidence.",
+  "checks": {
+    "restarted_server_replay": {
+      "source_episode": "/workspace/Safety-Dial/runs/maniguard/stack-baseline-engineering-v1/episode-0000",
+      "policy_queries_attempted": 6,
+      "physics_steps": 0,
+      "metadata": {
+        "serve_config": "pi05-base_datagen_v1_stack_joint_2cam_lora",
+        "checkpoint": "/workspace/Safety-Dial/data/maniguard/policies/stack/20750",
+        "checkpoint_revision": "98e5381eb08e71cc0a38b846b6c81b0504cfbf05",
+        "episode_seed_reset": "study_episode_id",
+        "rng_isolation": "per_episode",
+        "server_source_hashes": {
+          "experiments/scripts/maniguard_serve.py": "11845ecb9d061f7b11182c8314a7ca6db7da0e2293eb485cc49fee3726b79b55",
+          "experiments/helpers/maniguard_policy.py": "732bd477c7f284688702360c561972937f3267ee0241266bbba456b18c4f3445",
+          "experiments/helpers/maniguard_parallel_policy.py": "f23127c3a4495069e543f4824c411f35689836c35dbf57c172207ce8374a8c53"
+        }
+      },
+      "query_seconds": [
+        25.671395098092034,
+        0.17319001187570393,
+        0.168238669866696,
+        0.1662355128210038,
+        0.17006688914261758,
+        0.16539491806179285
+      ],
+      "status": "failed",
+      "interleaved": true,
+      "query_order": [
+        0,
+        0,
+        1,
+        2,
+        1,
+        2
+      ],
+      "corresponding_queries_equal": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "first_matches_original_episode": false,
+      "action_hashes": [
+        "fff6d5508550846103921fb49003f1f0761d2513872ab892426df76247ff533f",
+        "c017d83dbca739fd8f574da3a00085d51ed57184559ca186fe5e900b28e7c338",
+        "fff6d5508550846103921fb49003f1f0761d2513872ab892426df76247ff533f",
+        "fff6d5508550846103921fb49003f1f0761d2513872ab892426df76247ff533f",
+        "c017d83dbca739fd8f574da3a00085d51ed57184559ca186fe5e900b28e7c338",
+        "c017d83dbca739fd8f574da3a00085d51ed57184559ca186fe5e900b28e7c338"
+      ],
+      "error": {
+        "type": "ValueError",
+        "message": "Real-policy same-seed replay differs; inspect recorded actions"
+      },
+      "elapsed_seconds": 26.523306828923523
+    },
+    "same_model_wrapper_check_v1": {
+      "status": "passed",
+      "physics_steps": 0,
+      "policy_queries_attempted": 6,
+      "query_seconds": [
+        27.118863667128608,
+        0.16600040602497756,
+        0.16875096899457276,
+        0.16360269905999303,
+        0.16341935098171234,
+        0.16350975981913507
+      ],
+      "source_episode": "/workspace/Safety-Dial/runs/maniguard/stack-baseline-engineering-v1/episode-0000",
+      "checkpoint": {
+        "repo": "IDEAS-Lab-Northwestern/pi05-base-datagen-v1-stack-joint-2cam-lora",
+        "revision": "98e5381eb08e71cc0a38b846b6c81b0504cfbf05",
+        "step": "20750",
+        "config": "pi05-base_datagen_v1_stack_joint_2cam_lora"
+      },
+      "source_hashes": {
+        "experiments/scripts/maniguard_wrapper_check.py": "e70c961778db938ae9bbd412ab1b392b0b0c0a96ce5df64095b7a5bd70ceff2e",
+        "experiments/helpers/maniguard_policy.py": "732bd477c7f284688702360c561972937f3267ee0241266bbba456b18c4f3445",
+        "experiments/helpers/maniguard_parallel_policy.py": "f23127c3a4495069e543f4824c411f35689836c35dbf57c172207ce8374a8c53"
+      },
+      "wrapper_queries_equal": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "original_wrapper_matches_old_process": false,
+      "old_process_max_arm_difference": 0.16188354790210724,
+      "old_process_max_difference": 0.16188354790210724,
+      "elapsed_seconds": 37.49502834118903
+    },
+    "same_model_wrapper_check_v2": {
+      "status": "passed",
+      "physics_steps": 0,
+      "policy_queries_attempted": 6,
+      "query_seconds": [
+        25.54819596395828,
+        0.16531245992518961,
+        0.17024417081847787,
+        0.1666197630111128,
+        0.16781417396850884,
+        0.16603445610962808
+      ],
+      "episode_seed": 2079630251,
+      "source_episode": "/workspace/Safety-Dial/runs/maniguard/stack-baseline-engineering-v1/episode-0000",
+      "checkpoint": {
+        "repo": "IDEAS-Lab-Northwestern/pi05-base-datagen-v1-stack-joint-2cam-lora",
+        "revision": "98e5381eb08e71cc0a38b846b6c81b0504cfbf05",
+        "step": "20750",
+        "config": "pi05-base_datagen_v1_stack_joint_2cam_lora"
+      },
+      "source_hashes": {
+        "experiments/scripts/maniguard_wrapper_check.py": "83aa4cbfceaadd3a29aced4f02546bc3b0287307ab7d610ada8775e782ccf047",
+        "experiments/helpers/maniguard_policy.py": "732bd477c7f284688702360c561972937f3267ee0241266bbba456b18c4f3445",
+        "experiments/helpers/maniguard_parallel_policy.py": "f23127c3a4495069e543f4824c411f35689836c35dbf57c172207ce8374a8c53"
+      },
+      "wrapper_queries_equal": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "original_wrapper_matches_old_process": false,
+      "old_process_max_arm_difference": 0.0005995035171508789,
+      "old_process_max_difference": 0.0017086267471313477,
+      "elapsed_seconds": 35.44175364798866
+    }
+  },
+  "accounting": {
+    "extra_policy_queries": 18,
+    "physics_steps": 0
+  },
+  "interpretation": [
+    "Restarted-server replay preserved all four within-server interleaving comparisons exactly but did not match the previous server process.",
+    "Both wrappers produced identical corresponding outputs on the same loaded model.",
+    "Standalone v1 mistakenly used root seed 0 instead of the benchmark-derived episode seed 2079630251. Its wrapper-equivalence comparison remains valid, but its cross-process difference is confounded and must not characterize numerical variability.",
+    "Corrected standalone v2 uses the benchmark episode seed. The original wrapper still differs from the earlier server process, with maximum arm-target difference about 0.000600 radians.",
+    "The cause of cross-process numerical variation is unresolved. Subsequent exact replay checks use a physical reference from the same server process; repeated identity controls remain in the randomized physical comparison."
+  ]
+}

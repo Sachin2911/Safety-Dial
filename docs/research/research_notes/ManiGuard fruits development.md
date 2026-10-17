@@ -385,3 +385,29 @@ The queue verified all four Stack baseline artifacts before replacing the idle p
 service with its independent-episode-stream wrapper. The old baseline process exited
 normally and was not interrupted. Real-policy replay and concurrency validation now gate
 the declared full-horizon physical screens.
+
+## Server-process variation and wrapper equivalence
+
+Pipeline v2 stopped before concurrent physics: all four interleaved-versus-sequential
+query comparisons were bitwise equal, but the first output did not exactly match the
+saved physical baseline from the prior server process. Saved input image hashes and
+robot state matched that physical query. The maximum arm-target discrepancy was about
+0.000448 radians. No failed replay was silently accepted as exact reproducibility.
+
+A standalone controlled check loaded one frozen model and compared the original wrapper
+against two interleaved independent streams. All four corresponding comparisons matched
+exactly. Its first version incorrectly used root seed 0 for comparison with the saved
+physical baseline, whose derived episode seed is 2079630251. That cross-process difference
+is confounded and is not a numerical-variability estimate. The corrected second check uses
+the derived seed and again finds exact wrapper equivalence, while the original wrapper's
+output differs from the earlier process by up to about 0.000600 radians in arm targets.
+The cause of this cross-process variation remains unresolved; no change to the frozen
+weights or physical monitor was made. All 18 extra diagnostic queries count, including
+the first standalone check; none consumed physics interactions.
+
+The resumed pipeline v3 first creates a fresh 32-action physical reference on the current
+server. The unchanged strict interleaved replay check must match that reference exactly
+before two concurrent smoke episodes and the randomized full-horizon comparisons can
+run. Earlier baselines remain mechanism evidence; the screen includes new identity
+controls in the same server process as the adapters. Structured diagnostics and costs
+are in `ManiGuard fruits sampling variability.json`.
