@@ -1,7 +1,9 @@
 # ManiGuard fruit experiments
 
-This study implements the six hypotheses in [fruits.md](../../fruits.md). Physical
-mechanism screens are running; optimizer comparisons and reserved evaluation remain pending. Passing controller tests does not
+This study implements the six hypotheses in [fruits.md](../../fruits.md). The initial mechanism screens and the Stack, Jar and Lid follow-ups are complete;
+the twelve-trial controller-limit correction comparison is running. See the
+[six-hypothesis synthesis](../../docs/research/reports/ManiGuard%20six-hypothesis%20study.md).
+Optimizer comparisons and reserved evaluation remain conditional on useful correction evidence. Passing controller tests does not
 establish improved task completion or safety.
 
 `sources.json` pins upstream code, benchmark assets and family-specific policy checkpoints.
@@ -69,8 +71,10 @@ violations and errors. A failed or incomplete monitor must not be scored as safe
 Controller and sampling-isolation checks:
 
 ```bash
-data/maniguard/envs/sim/bin/python -m pytest -q \
+uv run --no-project --python data/maniguard/envs/sim/bin/python --with pytest \
+  python -m pytest -q \
   experiments/tests/test_maniguard_adaptation.py \
+  experiments/tests/test_maniguard_guard_limits.py \
   experiments/tests/test_maniguard_policy.py
 ```
 

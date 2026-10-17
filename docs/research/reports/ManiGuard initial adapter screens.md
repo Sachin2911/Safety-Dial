@@ -99,6 +99,12 @@ without an observed unsafe transition to measure interference as well as potenti
 The plan was declared after observing the first extra-baseline failure, and uses the same
 explicitly privileged guard as the Jar prototype.
 
+The subsequent [completion-semantics audit](../research_notes/ManiGuard%20fruits%20completion%20semantics.json)
+finds that the initial guard's task_0008/root-zero safe-completion label occurs without
+observed closure. The target remains supported and satisfies the spatial held-intersection
+goal while the monitor is nonaccepting but not doomed. The table retains the benchmark
+label; this case is not evidence of completing the requested close-then-carry sequence.
+
 ## What each hypothesis currently supports
 
 1. **Adaptive replanning:** no consistent completion benefit. Jar horizon four and the

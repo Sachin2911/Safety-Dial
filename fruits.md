@@ -6,7 +6,8 @@ candidate to record, followed by five further candidates from the same discussio
 These are possibilities to investigate, not commitments to an architecture, optimizer or
 experiment budget. No general ManiGuard improvement has been demonstrated locally.
 
-Implementation and experiment records are maintained in the
+The [six-hypothesis synthesis](docs/research/reports/ManiGuard%20six-hypothesis%20study.md)
+compares the findings and remaining work. Implementation and experiment records are maintained in the
 [ManiGuard study log](docs/research/research_notes/ManiGuard%20fruits%20development.md).
 All six initial adapters have been implemented. Twelve original-policy baselines,
 24 Stack screen episodes and 40 Jar screen episodes are complete and validated.
@@ -45,7 +46,12 @@ two violations, using 10,452 queries versus the plain guard's 2,746. Guarding re
 a useful engineering lead. A newly diagnosed joint-limit prediction mismatch needs a
 corrected, separately tested guard before optimizer comparisons.
 These remain engineering experiments. No evolutionary search or reserved evaluation has
-run, and no evolutionary advantage has been demonstrated.
+run, and no evolutionary advantage has been demonstrated. A
+[completion-semantics audit](docs/research/research_notes/ManiGuard%20fruits%20completion%20semantics.json)
+also finds two Jar runs labelled safe completion without observed closure: the initial
+plain guard on task_0008/root zero and a new original hand-back control on task_0008/root
+two. Both satisfy the spatial held-intersection goal while remaining supported. Preserve
+those benchmark labels while distinguishing them from a completed close-then-carry sequence.
 
 ## Candidate overview
 

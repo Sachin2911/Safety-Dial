@@ -2232,3 +2232,48 @@ and active trials, use the frozen engineering partition. All four scene partitio
 disjoint within each family; no training, selection-validation or reserved scene was used.
 The audit maps all six implementations to their physical mechanism evidence and retains
 unfinished correction, accounting, synthesis and preservation requirements explicitly.
+
+
+## First correction results and a completion-label qualification
+
+The first two correction-batch episodes validate under the same saved source/configuration
+and policy metadata. Corrected plain guard task_0008/root one is safe unfinished at 2000
+actions and 280 queries, without closure or holding. Its 1185 outside-limit requested
+targets produce five changes in the lift-threshold comparison and one change in an
+eligible guard decision. Proposal 1165 changes from -3.496 mm requested lift to +1.092 mm
+feasible-target lift and is blocked; the target is unheld. All 47 adapted commands are
+unheld-target changes. The audit reconstructs every prediction and blocking decision.
+
+Original hand-back root two receives the benchmark safe-completion label at 1223 actions
+and 470 queries, first holding at 1214. It never closes or loses support. Its final
+held-intersection goal is true while the monitor is nonaccepting and not doomed. Of
+549 changed commands, nine occur while the target is held and 540 while unheld. The
+paired corrected hand-back and original plain guard controls are not yet complete.
+
+Audited completion semantics across all 186 validated full episodes available at this
+snapshot. Two of 28 Jar safe-labelled completions have no observed closure: this new
+control and initial-screen prerequisite guard episode 31 (task_0008/root zero, 496
+actions). The evaluator ends on spatial goal success; the monitor latches doomed states
+as violations but does not require final acceptance. These cases do not demonstrate the
+full close-then-carry sequence. Original benchmark outcome labels are retained, with
+separate prerequisite-attainment evidence. All four safe completions in the twelve-trial
+Jar repeat plain-guard condition did observe closure. No safety definition was changed.
+
+Added a six-hypothesis synthesis with the completed physical findings, limitations,
+remaining correction work and optimizer gates. The 184 completed pre-correction episodes
+total 446,508 actions, 2,694,872 physics ticks and 69,823 queries. These subset totals
+exclude references, diagnostics, failed setup and the ongoing correction batch; the final
+whole-study inventory remains required. Forty-three local links were checked before the
+additional completion-semantics links were added.
+
+
+The third completed correction trial is corrected plain guard task_0008/root zero:
+unsafe completion at 692 actions, first holding at observation 683 and losing support
+at 684 without closure. Proposal 683 predicts +0.829564 mm under both the requested
+and limit-aware estimators, below the fixed 1 mm trigger. Measured EEF rise is +1.264304
+mm; linearizing the measured joint displacement gives +0.683928 mm. The target is
+within joint limits and is allowed. The next proposals are blocked after the violation.
+A separate boundary artifact retains proposals, environment inputs, adjacent observations
+and goal records, and source/trace hashes. The correction repairs one estimator-interface
+error but cannot remove this remaining tolerance/prediction limitation. The declared
+comparison keeps its original margin; paired controls remain outstanding at this snapshot.
