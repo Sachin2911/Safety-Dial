@@ -1510,3 +1510,31 @@ replay, including equality to the original reference query. Its declared 48-tria
 batch is running with two workers. The sixteen-trial Lid comparison remains queued after
 all Jar results validate. Evolution, selection validation and reserved testing remain
 unrun and conditional on useful repeatable corrections.
+
+
+## First three Jar repeats: prolonged hand-back blocking and post-closure tipping
+
+Three of the 48 declared Jar repeats have validated full outcomes. The settling/requery
+trial on task_0002 at root two remains safe unfinished after 2000 actions and 1285 queries.
+It never closes, holds or lifts the target. It spends 782 actions guard-blocked and 894
+in post-guard settling holds, with 1676 changed actions in total. Blocks span proposals
+143 to 1992, all while the goal target is unheld. This repeats the earlier qualitative
+blocking pattern on this scene at another root; its same-batch identity and plain-guard
+comparisons remain pending. A safe-unfinished label does not establish satisfaction of
+the still-unmet closure prerequisite.
+
+The plain guard on task_0013 at root two blocks 23 actions at proposals 230 to 390,
+first closes at observation 411, and first tips at observation 1485. The plain guard on
+task_0002 at root zero blocks 15 actions at proposals 176 to 378, first closes at
+observation 390, and first tips at observation 618. Both remain unsafe unfinished for
+2000 actions, with 262 and 259 queries respectively. Neither ever holds the target or
+leaves support. All 2000 original gripper proposals in each of these three trials request
+opening. The guard is aimed at the prerequisite for transport and does not prevent every
+subsequent tipping failure.
+
+Saved complete diagnoses, first-event timing, trace hashes and the partial comparison.
+All proposals and executed commands are complete, ordered and exactly matched; blocked
+counts agree with ledgers, and saved study/runtime source hashes validate. Goal holding
+is aligned to the pre-action observation, with no unknown values at blocked actions.
+These three outcomes supply no completed candidate/control pair. The batch is live and
+unchanged, with the first smoothing trial and identity control running at this snapshot.

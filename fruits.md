@@ -37,6 +37,8 @@ are complete, as are the
 [12 Stack release-trigger comparisons](docs/research/reports/ManiGuard%20Stack%20release%20trigger%20comparison.md),
 which find no safe-completion gain. The 48 Jar repeats are running, comparing identity,
 guard, hand-back and smoothing across all four engineering scenes and three root seeds.
+Their [repeat progress record](docs/research/research_notes/ManiGuard%20fruits%20Jar%20repeat%20progress.json)
+retains completed diagnoses separately from pending control comparisons.
 These remain engineering experiments. No evolutionary search or reserved evaluation has
 run, and no evolutionary advantage has been demonstrated.
 
