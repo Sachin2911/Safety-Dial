@@ -20,7 +20,8 @@ from helpers.maniguard_policy import EpisodeSeededPolicy
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--family", choices=("jar", "lid", "stack"), required=True)
+    parser.add_argument("--family", choices=("jar", "lid", "stack", "clutter", "cabinet", "dusty"), required=True)
+    parser.add_argument("--phase2", action="store_true")
     parser.add_argument("--port", type=int, default=18000)
     parser.add_argument("--parallel-clients", action="store_true")
     args = parser.parse_args()
@@ -31,9 +32,9 @@ def main():
     from openpi.serving import websocket_policy_server
     from openpi.training import config as train_config
 
-    spec = json.loads((ROOT / "configs/maniguard/sources.json").read_text())["policies"][
-        args.family
-    ]
+    source_path = ROOT / ("configs/maniguard/phase2/sources.json" if args.phase2
+                          else "configs/maniguard/sources.json")
+    spec = json.loads(source_path.read_text())["policies"][args.family]
     folder = ROOT / "data/maniguard/policies" / args.family
     provenance = json.loads((folder / "download-provenance.json").read_text())
     if provenance["revision"] != spec["revision"] or provenance["repo"] != spec["repo"]:

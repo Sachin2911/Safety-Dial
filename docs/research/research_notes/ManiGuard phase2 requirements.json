@@ -9,8 +9,11 @@
       "plan_sections": "1,2",
       "requirement": "One shared adapter with frozen family policies and encoder",
       "acceptance": "Shared artifact hash across family evaluation; original study remains immutable",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "phase2.md",
+        "experiments/helpers/maniguard_phase2_model.py"
+      ]
     },
     {
       "id": "prior_work",
@@ -33,72 +36,100 @@
       "plan_sections": "5",
       "requirement": "All six families, pinned policies, horizons, grasp/camera contracts",
       "acceptance": "Registry validation, downloads and six-family initialization evidence",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "configs/maniguard/phase2/families.json",
+        "configs/maniguard/phase2/sources.json",
+        "experiments/tests/test_maniguard_phase2_families.py"
+      ]
     },
     {
       "id": "splits",
       "plan_sections": "5",
       "requirement": "Preserve original scene splits; group all variants; reserve Cabinet/Dusty",
       "acceptance": "Immutable manifest hashes and no reserved-outcome exposure before freeze",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "configs/maniguard/phase2/splits.json",
+        "experiments/tests/test_maniguard_phase2_families.py"
+      ]
     },
     {
       "id": "features",
       "plan_sections": "6",
       "requirement": "Common observable state/history plus frozen visual/text context",
       "acceptance": "Timestamped feature traces, encoder hashes and privileged/future-leakage tests",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "experiments/helpers/maniguard_phase2_features.py",
+        "experiments/tests/test_maniguard_phase2_features.py",
+        "runs/maniguard/phase2/setup/encoder-smoke.json"
+      ]
     },
     {
       "id": "recurrent",
       "plan_sections": "6",
       "requirement": "Eight-hidden-unit recurrent shared actor under2000 parameters",
       "acceptance": "Identity/recurrent reset/serialization tests and measured activation",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "experiments/helpers/maniguard_phase2_model.py",
+        "experiments/tests/test_maniguard_phase2_model.py"
+      ]
     },
     {
       "id": "composition",
       "plan_sections": "6",
       "requirement": "Bounded requery, caps, smoothing and release-delay interface",
       "acceptance": "Physical action traces and temporal/composition tests",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "experiments/helpers/maniguard_phase2_adapter.py",
+        "experiments/tests/test_maniguard_phase2_adapter.py"
+      ]
     },
     {
       "id": "identity",
       "plan_sections": "7",
       "requirement": "Explicit exact-identity genotype and matched initialization",
       "acceptance": "Proposal/environment-input parity and saved initial populations",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "experiments/tests/test_maniguard_phase2_runtime.py"
+      ]
     },
     {
       "id": "evolution",
       "plan_sections": "7",
       "requirement": "Layer-scaled Gaussian mutation and measured selection",
       "acceptance": "Resumable search state; live complete candidate evaluations",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "experiments/helpers/maniguard_phase2_optim.py",
+        "experiments/tests/test_maniguard_phase2_optim.py"
+      ]
     },
     {
       "id": "random",
       "plan_sections": "7",
       "requirement": "Matched random search and common initial panel",
       "acceptance": "Same representation/panels/cost allocation and validated random-search results",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "experiments/helpers/maniguard_phase2_optim.py",
+        "experiments/tests/test_maniguard_phase2_optim.py"
+      ]
     },
     {
       "id": "ppo",
       "plan_sections": "7",
       "requirement": "Genuine recurrent PPO with undiscounted family-balanced objective",
       "acceptance": "Gradient/weighting/logprob tests and actual training updates",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "experiments/helpers/maniguard_phase2_optim.py",
+        "experiments/tests/test_maniguard_phase2_optim.py"
+      ]
     },
     {
       "id": "references",
@@ -113,8 +144,11 @@
       "plan_sections": "8",
       "requirement": "Pinned task-sequence completion checklists and unchanged monitor labels",
       "acceptance": "Family checklist audit; trace-derived benchmark and stricter outcomes",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "configs/maniguard/phase2/completion.json",
+        "experiments/tests/test_maniguard_phase2_outcomes.py"
+      ]
     },
     {
       "id": "fitness",
@@ -145,8 +179,10 @@
       "plan_sections": "9",
       "requirement": "At most24 full preparation episodes and12 short<=32action checks",
       "acceptance": "Predeclared plans and complete process/cost records",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "configs/maniguard/phase2/preparation.json"
+      ]
     },
     {
       "id": "pilot",

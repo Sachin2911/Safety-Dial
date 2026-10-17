@@ -37,11 +37,11 @@ def arm_position_limits(robot, indices):
 
 
 class Study:
-    def __init__(self):
+    def __init__(self, adapter=None, config=None):
         self.job = json.loads(Path(os.environ["SAFETY_DIAL_MANIGUARD_JOB"]).read_text())
         self.output = Path(self.job["output"])
-        self.config = AdapterConfig(**self.job["adapter"])
-        self.adapter = ExecutionAdapter(self.config)
+        self.config = AdapterConfig(**self.job["adapter"]) if config is None else config
+        self.adapter = ExecutionAdapter(self.config) if adapter is None else adapter
         self.trace = (self.output / "trace.jsonl").open("x", buffering=1)
         self.started = time.monotonic()
         self.query_started = None
@@ -234,4 +234,11 @@ class Study:
         self.ledger()
 
 
-STUDY = Study() if os.environ.get("SAFETY_DIAL_MANIGUARD_JOB") else None
+def _legacy_study():
+    path = os.environ.get("SAFETY_DIAL_MANIGUARD_JOB")
+    if not path or json.loads(Path(path).read_text()).get("phase") == "phase2":
+        return None
+    return Study()
+
+
+STUDY = _legacy_study()

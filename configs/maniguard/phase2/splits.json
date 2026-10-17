@@ -1,0 +1,293 @@
+{
+  "schema_version": 2,
+  "seed": "safety-dial-maniguard-phase2-20261017-v1",
+  "unit": "task directory; every condition stays in its task split",
+  "training_overlap": "These splits do not establish exclusion from released VLA training data.",
+  "phase1": {
+    "path": "configs/maniguard/splits.json",
+    "sha256": "1680e28cc32b98543439c7514201417286de737d3654fd88bb8690e0939a8223",
+    "preserved_families": [
+      "jar",
+      "lid",
+      "stack"
+    ]
+  },
+  "new_family_procedure": {
+    "ordering": "ascending SHA256 of UTF-8 seed + colon + family alias + colon + base task ID; ties by base task ID",
+    "allocation_order": [
+      "engineering",
+      "train",
+      "validation",
+      "test"
+    ],
+    "counts": {
+      "engineering": 4,
+      "validation": 4,
+      "test": 12,
+      "train": "all remaining base tasks"
+    },
+    "transfer_rule": "Cabinet and Dusty partitions are bookkeeping only: every partition remains excluded from development/training/validation outcomes until a frozen transfer evaluation."
+  },
+  "families": {
+    "jar": {
+      "engineering": [
+        "task_0013",
+        "task_0017",
+        "task_0002",
+        "task_0008"
+      ],
+      "train": [
+        "task_0019",
+        "task_0009",
+        "task_0014",
+        "task_0020",
+        "task_0015",
+        "task_0024"
+      ],
+      "validation": [
+        "task_0016",
+        "task_0012",
+        "task_0011",
+        "task_0003"
+      ],
+      "test": [
+        "task_0023",
+        "task_0022",
+        "task_0010",
+        "task_0005",
+        "task_0006",
+        "task_0001",
+        "task_0004",
+        "task_0000",
+        "task_0021",
+        "task_0007",
+        "task_0025",
+        "task_0018"
+      ]
+    },
+    "lid": {
+      "engineering": [
+        "task_0008",
+        "task_0003",
+        "task_0006",
+        "task_0014"
+      ],
+      "train": [
+        "task_0025",
+        "task_0018",
+        "task_0001",
+        "task_0027",
+        "task_0009",
+        "task_0010",
+        "task_0021",
+        "task_0015",
+        "task_0017",
+        "task_0007"
+      ],
+      "validation": [
+        "task_0011",
+        "task_0013",
+        "task_0012",
+        "task_0000"
+      ],
+      "test": [
+        "task_0005",
+        "task_0019",
+        "task_0029",
+        "task_0002",
+        "task_0022",
+        "task_0023",
+        "task_0004",
+        "task_0024",
+        "task_0016",
+        "task_0026",
+        "task_0020",
+        "task_0028"
+      ]
+    },
+    "stack": {
+      "engineering": [
+        "task_0013",
+        "task_0000",
+        "task_0010",
+        "task_0007"
+      ],
+      "train": [
+        "task_0003",
+        "task_0001",
+        "task_0026",
+        "task_0009",
+        "task_0014",
+        "task_0008",
+        "task_0011",
+        "task_0002"
+      ],
+      "validation": [
+        "task_0006",
+        "task_0015",
+        "task_0004",
+        "task_0024"
+      ],
+      "test": [
+        "task_0018",
+        "task_0023",
+        "task_0027",
+        "task_0025",
+        "task_0012",
+        "task_0016",
+        "task_0020",
+        "task_0022",
+        "task_0017",
+        "task_0019",
+        "task_0005",
+        "task_0021"
+      ]
+    },
+    "clutter": {
+      "engineering": [
+        "task_0040",
+        "task_0037",
+        "task_0013",
+        "task_0008"
+      ],
+      "train": [
+        "task_0034",
+        "task_0002",
+        "task_0039",
+        "task_0010",
+        "task_0046",
+        "task_0006",
+        "task_0023",
+        "task_0031",
+        "task_0036",
+        "task_0004",
+        "task_0017",
+        "task_0014",
+        "task_0009",
+        "task_0000",
+        "task_0005",
+        "task_0025",
+        "task_0016",
+        "task_0027",
+        "task_0012",
+        "task_0015",
+        "task_0049",
+        "task_0026",
+        "task_0035",
+        "task_0024",
+        "task_0020",
+        "task_0033",
+        "task_0042",
+        "task_0011",
+        "task_0022",
+        "task_0007",
+        "task_0021",
+        "task_0052",
+        "task_0018",
+        "task_0038",
+        "task_0051"
+      ],
+      "validation": [
+        "task_0029",
+        "task_0032",
+        "task_0048",
+        "task_0050"
+      ],
+      "test": [
+        "task_0019",
+        "task_0041",
+        "task_0030",
+        "task_0054",
+        "task_0043",
+        "task_0044",
+        "task_0003",
+        "task_0001",
+        "task_0047",
+        "task_0053",
+        "task_0028",
+        "task_0045"
+      ]
+    },
+    "cabinet": {
+      "engineering": [
+        "task_0029",
+        "task_0032",
+        "task_0027",
+        "task_0011"
+      ],
+      "train": [
+        "task_0003",
+        "task_0030",
+        "task_0022",
+        "task_0018",
+        "task_0002",
+        "task_0010",
+        "task_0017",
+        "task_0034",
+        "task_0019",
+        "task_0004",
+        "task_0024",
+        "task_0033",
+        "task_0014",
+        "task_0009",
+        "task_0012"
+      ],
+      "validation": [
+        "task_0008",
+        "task_0015",
+        "task_0006",
+        "task_0025"
+      ],
+      "test": [
+        "task_0013",
+        "task_0000",
+        "task_0016",
+        "task_0020",
+        "task_0005",
+        "task_0028",
+        "task_0031",
+        "task_0001",
+        "task_0023",
+        "task_0026",
+        "task_0021",
+        "task_0007"
+      ]
+    },
+    "dusty": {
+      "engineering": [
+        "task_0022",
+        "task_0008",
+        "task_0009",
+        "task_0024"
+      ],
+      "train": [
+        "task_0001",
+        "task_0015",
+        "task_0019",
+        "task_0005",
+        "task_0023",
+        "task_0013"
+      ],
+      "validation": [
+        "task_0010",
+        "task_0007",
+        "task_0018",
+        "task_0014"
+      ],
+      "test": [
+        "task_0012",
+        "task_0016",
+        "task_0025",
+        "task_0002",
+        "task_0017",
+        "task_0021",
+        "task_0003",
+        "task_0006",
+        "task_0020",
+        "task_0011",
+        "task_0000",
+        "task_0004"
+      ]
+    }
+  }
+}

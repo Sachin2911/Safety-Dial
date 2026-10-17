@@ -1,0 +1,391 @@
+{
+  "schema": "maniguard-phase2-pilot-v1",
+  "status": "freeze_incomplete",
+  "purpose": "Bounded comparative feasibility pilot; no reserved/transfer outcomes.",
+  "families": [
+    "jar",
+    "stack",
+    "clutter"
+  ],
+  "methods": [
+    "evolution",
+    "random",
+    "ppo"
+  ],
+  "optimizer_seeds": [
+    17,
+    29
+  ],
+  "training_panels": [
+    {
+      "panel_id": "panel-0",
+      "index": 0,
+      "cases": [
+        {
+          "family": "jar",
+          "scene": "task_0019/base",
+          "policy_seed": 0,
+          "max_steps": 2000
+        },
+        {
+          "family": "stack",
+          "scene": "task_0003/base",
+          "policy_seed": 0,
+          "max_steps": 4200
+        },
+        {
+          "family": "clutter",
+          "scene": "task_0034/base",
+          "policy_seed": 0,
+          "max_steps": 1100
+        }
+      ]
+    },
+    {
+      "panel_id": "panel-1",
+      "index": 1,
+      "cases": [
+        {
+          "family": "jar",
+          "scene": "task_0009/base",
+          "policy_seed": 1,
+          "max_steps": 2000
+        },
+        {
+          "family": "stack",
+          "scene": "task_0001/base",
+          "policy_seed": 1,
+          "max_steps": 4200
+        },
+        {
+          "family": "clutter",
+          "scene": "task_0002/base",
+          "policy_seed": 1,
+          "max_steps": 1100
+        }
+      ]
+    },
+    {
+      "panel_id": "panel-2",
+      "index": 2,
+      "cases": [
+        {
+          "family": "jar",
+          "scene": "task_0014/base",
+          "policy_seed": 2,
+          "max_steps": 2000
+        },
+        {
+          "family": "stack",
+          "scene": "task_0026/base",
+          "policy_seed": 2,
+          "max_steps": 4200
+        },
+        {
+          "family": "clutter",
+          "scene": "task_0039/base",
+          "policy_seed": 2,
+          "max_steps": 1100
+        }
+      ]
+    }
+  ],
+  "panel_rule": "First three frozen training base tasks in manifest order; panel index is the shared VLA policy seed.",
+  "validation_cases": [
+    {
+      "family": "jar",
+      "scene": "task_0016/base",
+      "policy_seed": 10,
+      "max_steps": 2000
+    },
+    {
+      "family": "jar",
+      "scene": "task_0012/base",
+      "policy_seed": 10,
+      "max_steps": 2000
+    },
+    {
+      "family": "stack",
+      "scene": "task_0006/base",
+      "policy_seed": 10,
+      "max_steps": 4200
+    },
+    {
+      "family": "stack",
+      "scene": "task_0015/base",
+      "policy_seed": 10,
+      "max_steps": 4200
+    },
+    {
+      "family": "clutter",
+      "scene": "task_0029/base",
+      "policy_seed": 10,
+      "max_steps": 1100
+    },
+    {
+      "family": "clutter",
+      "scene": "task_0032/base",
+      "policy_seed": 10,
+      "max_steps": 1100
+    }
+  ],
+  "validation_rule": "First two validation base tasks per development family, policy seed 10.",
+  "model": {
+    "schema": "maniguard_phase2_model/v1",
+    "spec": {
+      "input_dim": 64,
+      "hidden_dim": 8,
+      "num_heads": 4,
+      "num_choices": 3
+    },
+    "parameter_count": 692,
+    "runtime_decoding": "argmax-first-index",
+    "ppo_training_decoding": "independent categorical heads, joint log probability"
+  },
+  "search_config": {
+    "version": "maniguard-phase2-optim-v2",
+    "initializer_version": "maniguard_phase2_model/v1",
+    "mutation_version": "fanin-gaussian-v1",
+    "population": 8,
+    "rounds": 3,
+    "identity_seed": 20261017,
+    "identity_bias": 0.25,
+    "mutation_sigma": 0.1,
+    "parent_count": 2
+  },
+  "ppo_config": {
+    "version": "maniguard-phase2-optim-v2",
+    "families": [
+      "jar",
+      "stack",
+      "clutter"
+    ],
+    "epochs": 4,
+    "learning_rate": 0.0003,
+    "critic_learning_rate": 0.001,
+    "clip_ratio": 0.2,
+    "entropy_coefficient": 0.0,
+    "max_grad_norm": 0.5,
+    "log_prob_tolerance": 1e-06,
+    "gamma": 1.0,
+    "checkpoint_episodes": [
+      48,
+      72
+    ]
+  },
+  "initialization": {
+    "identity": "Model identity_genome(seed=20261017,bias=0.25); exact deterministic identity.",
+    "ppo": "Same identity-biased actor with finite logits and stochastic collection.",
+    "shared_first_panel_sha256": {
+      "17": [
+        "6f29381057930f82e5f4031a87be80f775976430ecd0bb707ff063fc4a60af84",
+        "8c5533224c8f46a4930448f1d7a771941a787ee1befea9558779d97699d9856f",
+        "237dbc6e6cd9fe4872bf14fde1c9ea3a90387366288e2cc0262994ba784e293c",
+        "d6aadc9d324f08c32ea94706a16ad0ed43725ec408bf11d267578ae6760d8fbe",
+        "a299f87a912b26e332a6f2be91103812d62cd13c53809ea8759a0d45ffc9d91a",
+        "0ab7ad89d99fd42bb7ccf1f5d8e56d15e0f9cd716fa35a5da2ee7b88396444a9",
+        "e603bdcb076106d41087dc024cc3d98a95e483f1e1f919a8edc2cf98be1aa321",
+        "288bf2a8e333d0b8be3c16d6be2f6fd238b906d5a3a0446da4abf7c233584922"
+      ],
+      "29": [
+        "6f29381057930f82e5f4031a87be80f775976430ecd0bb707ff063fc4a60af84",
+        "2fc77ca69e4a2adb8106c74455ed779fea1219db04ed0c3c8b344a3272b6a405",
+        "8c5213ad5b5013f9ab00272de60dc2535ff865ca1e6c670c525d2ab8690c9c2d",
+        "2b1ce982d047c729b34fce1f30302613f70fb06d790e32f9afbf915bb3a80a54",
+        "5d0271db1eb852669cbcff4b651f9de9ee8adecdd2f95fe2dbb46e45669d65fc",
+        "a4ba6aac10143ff63e0377a8a02280ec5c3e7c7f27fdf3417945c5650c6577ae",
+        "2ce4eec608c2500c11eed1ef525adb98416f983dc13c845d33acfd3c79005645",
+        "79fbeffbd0a6435f3d865aa0a528cd358caf6c9828250a51b9d742f2fc9bce58"
+      ]
+    }
+  },
+  "search_schedule": {
+    "round0": "Identity plus seven random initializations, common to both methods.",
+    "round1": "Previous within-panel winner reevaluated plus seven new candidates.",
+    "round2": "Round-zero winner and round-one winner reevaluated plus six new candidates.",
+    "duplicates": "Both retained slots are paid even for identical winners; rank duplicate genomes by their mean final-panel utility.",
+    "nomination": "Two distinct genomes ranked on the final common panel only."
+  },
+  "ppo_schedule": {
+    "episodes_per_panel": 24,
+    "episodes_per_family_per_panel": 8,
+    "episodes_per_run": 72,
+    "balanced_batch_episodes": 3,
+    "family_order": [
+      "jar",
+      "stack",
+      "clutter"
+    ],
+    "checkpoints": [
+      48,
+      72
+    ],
+    "return": "Undiscounted terminal utility at every decision; fixed collection-critic Monte Carlo advantages; sum decision scores inside each episode, then mean episodes within family and mean families."
+  },
+  "objective": {
+    "name": "required_safe_completion_minus_two_violations_v1",
+    "formula": "S_req - 2 * V",
+    "safe_complete": 1,
+    "safe_unfinished": 0,
+    "violating": -2,
+    "aggregation": "equal-family macro mean",
+    "guarantee": false,
+    "completion_checklists": "pending_preparation_audit"
+  },
+  "references": [
+    {
+      "name": "identity",
+      "choices": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "selection": "defined comparator"
+    },
+    {
+      "name": "fixed",
+      "proposed_choices": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "selection": "pending training-only preparation; proposed smoothing alpha 0.75"
+    },
+    {
+      "name": "contextual",
+      "proposed_rule": {
+        "feature_slice": [
+          12,
+          19
+        ],
+        "comparison": "max(abs(slice)) > 0.5",
+        "true_choices": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "false_choices": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "meaning": "Normalized tracking error exceeds 0.5, equivalent to 0.1 rad."
+      },
+      "selection": "pending training-only preparation; freeze selected rule before validation"
+    }
+  ],
+  "selection": {
+    "finalists_per_run": 2,
+    "criterion": "validation family-macro utility",
+    "ties": [
+      "lower violation rate",
+      "lower query cost",
+      "earlier nominated index"
+    ],
+    "ppo_checkpoints": [
+      48,
+      72
+    ],
+    "selection_episodes": 72,
+    "reference_episodes": 18,
+    "statistical_claim": "screening only"
+  },
+  "execution_order": {
+    "seed": 20261017,
+    "rule": "Coordinator randomizes method/candidate order within valid round dependencies. Preserve consecutive PPO family triplets and audit the actual schedule; no future panel feedback."
+  },
+  "preparation": {
+    "full_episode_ceiling": 24,
+    "short_check_ceiling": 12,
+    "max_short_policy_actions": 32,
+    "allowed_families": [
+      "jar",
+      "stack",
+      "clutter"
+    ],
+    "assignment_status": "pending explicit preparation plan",
+    "selection_partition": "train",
+    "integration_partition": "engineering"
+  },
+  "freeze_checks": {
+    "preparation_plan": {
+      "passed": false,
+      "evidence_path": null,
+      "sha256": null
+    },
+    "measured_costing": {
+      "passed": false,
+      "evidence_path": null,
+      "sha256": null
+    },
+    "feature_contract": {
+      "passed": false,
+      "evidence_path": null,
+      "sha256": null
+    },
+    "identity_equivalence": {
+      "passed": false,
+      "evidence_path": null,
+      "sha256": null
+    },
+    "completion_semantics": {
+      "passed": false,
+      "evidence_path": null,
+      "sha256": null
+    },
+    "reference_selection": {
+      "passed": false,
+      "evidence_path": null,
+      "sha256": null
+    },
+    "runtime_execution_audit": {
+      "passed": false,
+      "evidence_path": null,
+      "sha256": null
+    }
+  },
+  "input_files": {
+    "configs/maniguard/phase2/families.json": "e38b55a14ae96314bda9c83178fe0dd68a030ef45f9ec1d571e5e21df18a0958",
+    "configs/maniguard/phase2/splits.json": "78df5ce80dfd501eae33850fee6bc5cf84c87080c49121c0bfb692f70707c862",
+    "configs/maniguard/phase2/sources.json": "fd76ca78a84796731f5366eea8b254dde18f28267f2871910ead2bb52c1b9478",
+    "configs/maniguard/phase2/encoder.json": "d37868e9a0e5f01af317b866c2b77dbf7e2fdaa708e277944877dc2a26324d47"
+  },
+  "implementation_files": {
+    "experiments/helpers/maniguard_phase2_model.py": "d1580bbcbfe11489cadc02c08a1aa906c2c63dd381d3b5a41caddf8b30db4338",
+    "experiments/helpers/maniguard_phase2_optim.py": "72e2437267f7e52f44d1e5ba33b385525ffd1f86509ed576cd2e361b510f911f",
+    "experiments/helpers/maniguard_phase2_features.py": "de711c8c15091acd0c7205d4a7b0b104cb38847381467121102ac520a7c0fc15",
+    "experiments/helpers/maniguard_phase2_protocol.py": "4aa0510e499ac234131133fb7bb88ce8daf10a5867d5c6173e0a9e2ff10d432c"
+  },
+  "schedule_sha256": "2d2cb254c1ab8b4dd0b51d73f4e31511aeb8f4052dd7422ceedd8f8dfd5ca152",
+  "resource_envelope": {
+    "scheduled_full_episodes": 522,
+    "scheduled_policy_actions_max": 1270200,
+    "preparation_full_episodes_max": 24,
+    "preparation_policy_actions_max": 100800,
+    "short_checks_max": 12,
+    "short_check_actions_max_each": 32,
+    "short_policy_actions_max": 384,
+    "all_full_episodes_max": 546,
+    "policy_actions_max": 1371384,
+    "control_hz": 20,
+    "physics_hz": 120,
+    "control_physics_ticks_max": 8228304,
+    "normal_interval_successful_queries_max": 342846,
+    "exhaustion_safe_successful_queries_max": 1371384,
+    "queries_note": "Normal minimum interval four actions; short-chunk exhaustion can query earlier. At most one successful query per policy action; reject empty chunks. Failed/inference-only queries are separately counted.",
+    "excluded_from_action_bounds": [
+      "initialization steps and physics ticks",
+      "failed or inference-only policy queries"
+    ],
+    "gpu_hours_ceiling": 72,
+    "gpu_hour_definition": "Sum of allocated GPU-hours across devices; not the sum of overlapping process durations.",
+    "gpu_hours_status": "provisional_until_preparation_costing",
+    "measured_wall_hours_estimate": null,
+    "failure_rule": "Count every attempted interaction and stop affected work on infrastructure failure. No unbudgeted replacement episodes or free retries."
+  },
+  "sha256": "c8a9eb882b4981dd6766cfa4807bf9a7e2c55883c03fc92cbc68f5909a9517a0"
+}
