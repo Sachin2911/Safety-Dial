@@ -1013,3 +1013,37 @@ safely in 1152 actions. Its unchanged control already completed safely in 685 ac
 Neither result demonstrates a completion repair. The remaining original screen trials
 and all declared repeat queues continue; no evolutionary search or reserved testing
 has run.
+
+## Initial Jar screen complete and follow-up Lid baselines started
+
+All 40 planned Jar screen episodes have completed normally and passed saved-plan,
+process, monitor and ledger validation. The audit checks all forty source snapshots,
+instrumented evaluator hashes, shared checkpoint metadata and fixed evaluation settings.
+Jar uses assisted grasping, unlike the sticky mode in the Lid and Stack configurations.
+The completed Jar screen consumes 61,980 policy actions, 375,320 physics ticks and
+10,610 policy queries; its two-worker process takes 4566.12 seconds. No failed or partial
+trial is counted as a completed outcome.
+
+The full screen retains the two task_0017 leads, prerequisite guarding and smoothing,
+without an aggregate safe-completion gain. Identity and guard each complete three of
+four scenes safely, smoothing completes two, and settling/requery completes two while
+using 2877 queries versus the plain guard's 692. Release delay changes no Jar commands.
+Five physical retry retreats across three episodes travel 14.56 to 14.90 mm for a 15 mm
+request, but none of those episodes completes safely. One retreat begins after the first
+violation. Fixed horizon 16 retains the single-scene query-efficiency lead, with failures
+elsewhere. These results do not establish an evolutionary advantage or a causal repair.
+
+The [initial-screen report](../reports/ManiGuard%20initial%20adapter%20screens.md) combines
+all six hypotheses and full Jar/Stack counts. Its 76-episode subtotal includes the twelve
+original baselines, 24 Stack and 40 Jar screen episodes: 181,876 policy actions,
+1,097,792 physics ticks and 27,787 queries. References, diagnostics, setup failures and
+follow-up work remain additional costs. The completed Jar outcome figure was rendered
+and visually inspected; the structured provenance and retry reports retain trace hashes.
+
+After validating all Jar trials, the managed pipeline switched the idle server to the
+pinned Lid checkpoint. A fresh 32-action physical reference and strict six-query
+interleaved replay passed, including exact agreement with the reference's first query.
+The eight additional full-horizon Lid baselines are now running. The declared Stack
+motion, Stack release and 48-episode Jar comparison queues retain their exact predecessor
+dependencies. No runtime adapter was changed, and no optimizer or reserved evaluation
+has run. The separate Hugging Face credential/destination request remains pending.

@@ -4,24 +4,28 @@
 alongside [ideation.md](ideation.md). Sachin endorsed adaptive replanning as the first
 candidate to record, followed by five further candidates from the same discussion.
 These are possibilities to investigate, not commitments to an architecture, optimizer or
-experiment budget. No ManiGuard improvement has been demonstrated locally.
+experiment budget. No general ManiGuard improvement has been demonstrated locally.
 
 Implementation and experiment records are maintained in the
 [ManiGuard study log](docs/research/research_notes/ManiGuard%20fruits%20development.md).
-All six initial adapters have been implemented, and twelve original-policy engineering
-baselines are complete. The 24-episode Stack screen found no safe-completion gain.
-Four shorter-horizon trials remained unfinished, and faster motion/adaptive trials
-still violated safety. Repeated controls show outcome variation. A grasp-heuristic
-limitation under the benchmark's sticky grasping mode motivates a separate fixed
-release-rule comparison. Jar's 40-episode screen covering all six candidates is running.
-Its unchanged policy transported an open jar in one scene; separate prerequisite-guard
-and smoothing trials completed that scene safely. These are promising single-trial
-contrasts, with repeated controls needed before claiming a repair. Across the four initial
-Jar scenes, the guard and unchanged policy each complete three safely; hand-back completes
-two and uses substantially more queries. A 48-episode comparison of identity, guard,
-hand-back and smoothing is queued across all four engineering Jar scenes and three root seeds. Bounded retries execute the intended physical retreat but
-have not improved completion. See the [Jar progress record](docs/research/research_notes/ManiGuard%20fruits%20Jar%20screen%20progress.json).
-No evolutionary advantage has been demonstrated.
+All six initial adapters have been implemented. Twelve original-policy baselines,
+24 Stack screen episodes and 40 Jar screen episodes are complete and validated.
+The [initial-screen report](docs/research/reports/ManiGuard%20initial%20adapter%20screens.md)
+records all outcomes, costs and remaining limitations.
+
+Prerequisite guarding and motion smoothing are the strongest early leads: each safely
+completed one Jar scene where the contemporaneous unchanged policy transported an open
+jar. These are single-trial contrasts. Across four Jar scenes, the guard and unchanged
+policy each complete three safely, smoothing completes two, and no overall improvement
+is established. The Stack screen also found no safe-completion gain. The release rule
+rarely activates, bounded retries execute the intended retreat without a demonstrated
+recovery, and the tested settling/requery rule increases cost without improving completion.
+
+Eight extra Lid baselines are in progress. Follow-up queues contain 24 Stack motion-limit
+trials, 12 Stack release-trigger comparisons, and 48 Jar repeats comparing identity,
+guard, hand-back and smoothing across all four engineering scenes and three root seeds.
+These remain engineering experiments. No evolutionary search or reserved evaluation has
+run, and no evolutionary advantage has been demonstrated.
 
 ## Candidate overview
 
