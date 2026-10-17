@@ -2277,3 +2277,14 @@ A separate boundary artifact retains proposals, environment inputs, adjacent obs
 and goal records, and source/trace hashes. The correction repairs one estimator-interface
 error but cannot remove this remaining tolerance/prediction limitation. The declared
 comparison keeps its original margin; paired controls remain outstanding at this snapshot.
+
+
+Four correction outcomes now validate, including the first original/corrected plain-guard
+pair at root one. Both are safe unfinished at 2000 actions; original uses 268 queries and
+corrected uses 280. Original closes at observation 319 but never holds, while corrected
+never closes or holds. This closure contrast precedes the corrected trajectory's sole
+clipping-induced blocking decision at proposal 1165. It is not causal evidence that the
+added block prevented closure. Across the completed corrected root-zero trial, no arm
+target is outside joint limits and the correction changes no prediction decision on the
+recorded trajectory. Its unsafe outcome exposes the original guard's residual limitation,
+not an observed harmful intervention caused by clipping. Eight planned trials remain.

@@ -3,8 +3,8 @@
 **Status: correction trials in progress.** All six hypotheses in [fruits.md](../../../fruits.md)
 have executable adapters and completed physical mechanism screens. The initial screens
 and four follow-up batches contain 184 validated full episodes. Twelve additional Jar
-trials are testing a diagnosed guard prediction defect; three have completed and their
-paired controls remain pending. This report remains provisional
+trials are testing a diagnosed guard prediction defect; four have completed, including
+one original/corrected plain-guard pair. This report remains provisional
 until those trials and the final accounting audit finish.
 
 The strongest lead so far is prerequisite guarding on Jar. Its repeat batch has four safe
@@ -44,7 +44,7 @@ changes actions without improving task outcomes is not a demonstrated repair.
 | Stack release-trigger comparison | 12 | [Release report](ManiGuard%20Stack%20release%20trigger%20comparison.md) |
 | Jar guard, smoothing and settling repeats | 48 | [Jar repeat report](ManiGuard%20Jar%20guard%20and%20motion%20repeats.md) |
 | Lid prerequisite-guard comparison | 16 | [Lid report](ManiGuard%20Lid%20prerequisite%20guard%20comparison.md) |
-| Jar requested-target versus controller-limit-aware guards | 3/12 complete at this snapshot | [Declared correction plan](../../../configs/maniguard/jar-controller-limit-screen.json) |
+| Jar requested-target versus controller-limit-aware guards | 4/12 complete at this snapshot | [Declared correction plan](../../../configs/maniguard/jar-controller-limit-screen.json) |
 
 The 184 completed episodes in the first five rows consume 446,508 policy actions,
 2,694,872 physics ticks and 69,823 policy queries. These are stable batch-subset totals,
@@ -125,14 +125,18 @@ This confirms a decision effect without demonstrating a useful task repair.
 The original hand-back control at root two receives the safe-completion label after
 1223 actions and 470 queries. It first holds at observation 1214, never closes or leaves
 support, and satisfies held-intersection for ten observations. This is one of the
-completion-semantics cases above. Neither of these first two trials yet has a completed
-counterpart, so there is no completed original/corrected pair to interpret.
+completion-semantics cases above. The hand-back counterpart remains pending. The original plain guard at root one now
+also finishes safe unfinished: 2000 actions and 268 queries, versus the corrected guard's
+280 queries. It closes at observation 319 but never grasps; the corrected run never
+closes. That closure contrast precedes the corrected run's sole decision changed by
+clipping at proposal 1165, so it is not evidence of closure being obstructed by that
+intervention. The first completed pair has no completion or violation-count difference.
 
 A third trial, corrected plain guard at root zero, completes unsafely after 692 actions.
 It first holds at observation 683 and loses support at 684 without closure. At proposal
 683 both predictions are +0.830 mm, below the unchanged 1 mm trigger; measured rise is
-+1.264 mm. The requested target is already within joint limits, so clipping cannot
-change this decision. Subsequent blocking cannot erase the violation. The
++1.264 mm. No requested arm target exceeds a joint limit anywhere in this 692-action trial, so
+the correction changes no prediction or blocking decision on its recorded trajectory. Subsequent blocking cannot erase the violation. The
 [recorded boundary](../research_notes/ManiGuard%20fruits%20corrected%20guard%20tolerance%20boundary.json)
 shows residual trigger tolerance and prediction error after correcting the separate
 joint-limit mismatch. It does not demonstrate a useful physical repair.
