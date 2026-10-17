@@ -540,3 +540,12 @@ The measured failure is loss of uprightness, not the benchmark's floor-drop pred
 The faster completion does not establish safer or better task continuation, and a single
 trial does not isolate why its trajectory differed. Seven of 24 Stack screens are complete;
 the repeated task_0013 identity control and the next release trial continue.
+
+## Contemporaneous control matches the first release outcome
+
+The repeated identity control on task_0013/base seed 0 was safe unfinished at 4,200
+actions, with no registered grasp of the final goal object. It matches the release-delay
+trial's outcome category. The earlier identity episode's unsafe completion therefore
+cannot be used to attribute either a safety gain or a completion loss to the release rule.
+No causal benefit or tradeoff from that rule is established. Eight screen episodes have
+finished; the remaining declared conditions continue under the same server process.
