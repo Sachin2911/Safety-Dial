@@ -801,3 +801,52 @@ It is not evidence that the release rule repaired the original unsafe unfinished
 baseline. Its contemporaneous identity control is still pending (job 11). This
 untriggered success further reinforces the need to inspect actual interventions and
 replicate outcomes before attributing a changed result to an adapter.
+
+## Jar comparison reaches twelve completed episodes
+
+The repeated identity control on task_0008 safely completed at 685 actions and 86
+queries, matching the inactive release trial's safe-completion category. There is no
+release benefit established. The first bounded-retry trial on the same scene completed
+unsafely at 494 actions with zero retries; it supplies no physical retreat/recovery
+evidence. Its uprightness violation occurred at 336 while the jar was open and on
+its support. The adapter did collect its kinematic inputs without an integration error.
+
+On task_0013, adaptive replanning was unsafe unfinished after making no early replan
+and using the ordinary 250-query schedule. On task_0017 it stayed safe unfinished
+with 311 queries and 94 shortened chunks. Neither case establishes useful completion
+headroom for this scheduler. The hand-back trial on task_0017 completed unsafely at
+1,390 actions, after 170 guard blocks and 367 additional holds, using 455 queries.
+It still violated uprightness at 833 while the jar was open on its support. A
+closure-before-lift guard is not a complete uprightness filter. The prerequisite
+guard on task_0002 similarly remained unsafe unfinished, violating uprightness at
+605 after closure while the jar was still on its support.
+
+The combined smoothing/default-cap trial on task_0002 safely completed in 841 actions
+and 106 queries, with every arm command changed. Unlike the inactive successes above,
+this is an intervening condition worth following. Reconstructing its adapter outputs
+from the recorded executed history gives exact agreement and zero binding caps; the
+recorded changes came from smoothing. The same combined setting on task_0008 had 212
+cap-binding actions and failed. These observations concern different trajectories and
+do not isolate a causal smoothing gain. The original task_0002 baseline was unsafe
+unfinished, but the contemporaneous repeated identity control (job 14) is still pending.
+No optimizer or validation selection follows from this single trial. Derived policy
+seeds were checked directly: repeated task_0002 and task_0008 jobs retain 383744954
+and 927226076 respectively. The outcome variation is not a changed declared seed.
+
+## Local numerical-evidence backup prepared
+
+Prepared and hash-verified a 65,471,154-byte result archive with 509 files: 50 validated
+completed physical episodes (including short references), two failed engineering
+attempts, and seven inference diagnostics, as captured at that snapshot. It contains
+result metadata, numerical traces and array outputs, not implementation source,
+credentials, pretrained weights or videos. Current active episode traces were excluded.
+Every archived member was read back and matched against its recorded SHA-256 digest.
+The archive manifest and digest are recorded in `ManiGuard fruits backup.json`.
+
+The workspace was reconfirmed to lack a persistent host volume. The backup is still
+local: automatic approval review rejected Hugging Face account authentication because
+it did not recognize authorization to use the saved token with that external
+destination. A specific approval request is pending for authentication at huggingface.co
+and upload to a private `safety-dial-maniguard-fruits-results` dataset in the user account.
+No upload or alternate authentication route was attempted after the rejection. GitHub
+branch publication remains separately pending. Physical experiments continue.
