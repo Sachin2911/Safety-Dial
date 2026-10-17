@@ -1727,3 +1727,57 @@ Updated both the identity and plain-guard comparison snapshots against the same 
 coverage, retaining the variability audit and prior gain/timing evidence. Earlier full
 result diagnoses remain unchanged. The declared physical batch continues without changes
 and the Lid comparison is still queued afterward.
+
+
+## Halfway through the Jar repeats: a second hand-back gain with substantial query cost
+
+Twenty-four of the 48 declared trials are validated: five safe completions, one unsafe
+completion, eleven safe unfinished and seven unsafe unfinished. Coverage is still uneven:
+eight identity, four plain-guard, six hand-back and six smoothing trials have completed.
+Pooled outcome counts therefore do not compare balanced conditions. The completed pairs
+against identity are:
+
+| Candidate | Completed pairs | Safe-completion gains | Safe-completion losses | Violation count difference | Candidate / control queries |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Hand-back with settling/requery | 4 | 2 | 1 | -1 | 2319 / 771 |
+| Plain prerequisite guard | 3 | 0 | 0 | 0 | 794 / 750 |
+| Motion smoothing | 4 | 0 | 0 | -1 | 867 / 922 |
+
+A negative violation difference means fewer observed violations under the candidate.
+These rows reuse some controls and must not be summed as unique whole-batch costs.
+Query totals include early goal termination; this is not an equal-query-budget study.
+The direct hand-back/plain-guard comparison still has one completed pair, with no
+safe-completion gain and one additional violation under hand-back.
+
+The second hand-back gain is task_0017 at root one. It completes safely in 1343 actions
+and 372 queries, while identity remains safe unfinished after 2000 actions and 250
+queries. Identity closes at observation 342 but never holds or leaves support. Hand-back
+closes at 767, first holds at 1271 and leaves support at 1274. It blocks 129 actions and
+has 292 settling holds. Its changed commands span proposals 131 to 759, all before the
+first target grasp. This adds a completion contrast, not direct interception of an unsafe
+held lift or an established benefit over the same plain guard, whose matching trial is
+still pending.
+
+All three completed safe hand-back trials change actions only before their first target
+grasp: final changed proposals are 621, 463 and 759, versus first-held observations 814,
+1818 and 1271 respectively. Added pre-action holding counts for changed commands to the
+progress evidence, preserving unknown initial holding rather than treating it as false.
+This identifies where the actual interventions occur without assigning a causal mechanism.
+
+Hand-back on task_0017 at root two remains safe unfinished for 2000 actions and 486 queries.
+It blocks 158 actions, adds 310 holds and closes at observation 746, but never grasps or
+leaves support. Smoothing on task_0008 at root zero remains unsafe unfinished for 2000
+actions and 250 queries. It never closes, grasps or leaves support and first tips at
+observation 695. Its caps bind on 215 smoothed targets, from proposal 324 to 1999; complete
+command and state audits still validate.
+
+The newly completed task_0017 root-zero identity trial remains unsafe unfinished for
+2000 actions and 250 queries, first tipping at observation 751 without ever closing,
+holding or leaving support. Its smoothing counterpart closes and remains safe unfinished.
+This supplies a favorable safety contrast without a safe-completion gain; the earlier
+successful smoothing outcome still has not repeated in this follow-up.
+
+Both control-comparison reports use the same completed coverage. All earlier full result
+diagnoses reproduce exactly, and new timing counts reconcile with the physical ledgers.
+The batch and queued Lid study continue unchanged. The small, incomplete comparisons do
+not establish a reliable aggregate gain or an evolutionary advantage.

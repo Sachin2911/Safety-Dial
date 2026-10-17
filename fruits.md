@@ -208,7 +208,10 @@ and root-one follow-ups: both close but never hold the target. An
 confirms the root-zero repeat uses the same adapter, checkpoint, study code and evaluation
 settings as the original 804-action success, but starts with different images and first
 policy proposals. Its safe-unfinished outcome at 2000 actions limits the repeatability
-claim; the remaining comparisons are still running.
+claim. Its current identity counterpart tips without closing, while the smoothed repeat
+stays safe unfinished. Across four completed smoothing/identity pairs there is no
+safe-completion gain or loss and one fewer observed violation. The remaining comparisons
+are still running.
 
 ## 3. Prevent premature transitions between task stages
 
@@ -323,12 +326,14 @@ The [timing and input evidence](docs/research/research_notes/ManiGuard%20fruits%
 does not establish direct interception of the baseline failure. In the first completed
 [comparison against the same plain guard](docs/research/research_notes/ManiGuard%20fruits%20Jar%20handback%20versus%20guard%20progress.json),
 on task_0013 at root one, both trials remain unfinished; settling tips while the plain
-guard stays safe, using 387 versus 261 queries. Three completed hand-back/identity pairs
-now contain one safe-completion gain and one loss: on task_0002 at root two, identity
-completes safely in 1371 actions and 172 queries while hand-back remains unfinished after
-2000 actions and 1285 queries. These three pairs have equal safe-completion counts and
-one fewer observed violation under hand-back. The remaining repeats are needed before
-assessing the return rule.
+guard stays safe, using 387 versus 261 queries. Four completed hand-back/identity pairs
+now contain two safe-completion gains and one loss. The second gain is task_0017 at root
+one, where hand-back completes safely and identity remains safe unfinished. The loss is
+task_0002 at root two: identity completes safely in 1371 actions and 172 queries while
+hand-back remains unfinished after 2000 actions and 1285 queries. Across these four pairs,
+hand-back has one additional safe completion and one fewer observed violation, using
+2319 queries versus 771. These partial results do not establish an advantage over the
+same plain guard; the remaining repeats are needed before assessing the return rule.
 
 This most directly connects to the original task-continuation question. Its entry cost is
 higher because a functioning guard and useful corrective behaviours are prerequisites.
