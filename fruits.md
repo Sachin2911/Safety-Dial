@@ -242,6 +242,13 @@ spatial goal checker requires the target to remain held while intersecting the g
 Release decisions must follow the actual stage and goal, such as releasing a seated lid.
 [Success checking](https://nu-ideas-lab.github.io/ManiGuard/docs/evaluation/#success-checking-evalgoal_checkerpy).
 
+The first five completed trials of the broader-trigger follow-up contain 122 delayed
+opening commands, all issued while the goal target is unheld. The
+[release diagnostics](docs/research/research_notes/ManiGuard%20fruits%20Stack%20release%20progress.json)
+verify that the changes reach execution and respect the delay bound. They do not establish
+preservation of the target grasp; holds on other objects are outside this diagnostic.
+Identity comparisons are pending in that snapshot.
+
 This is a cheap screening candidate. If a fixed rule works across cases, retain it as the
 repair and baseline. Evolution earns further attention only if context-dependent release
 decisions improve on that rule and matched ordinary learning.

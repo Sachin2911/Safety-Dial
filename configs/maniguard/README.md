@@ -233,3 +233,18 @@ data/maniguard/envs/sim/bin/python experiments/scripts/maniguard_motion_tracking
 
 Use a new output path for each audit. This command reads completed traces and makes no
 simulator actions or policy queries.
+
+
+For a completed release trial, the diagnosis command also audits the executed delay:
+
+```bash
+data/maniguard/envs/sim/bin/python experiments/scripts/maniguard_diagnose.py \
+  runs/maniguard/stack-release-trigger-v1/episode-0000
+```
+
+The release audit checks exact adapted/executed action agreement, unchanged arm targets,
+and at most the declared number of delayed actions at the start of each uninterrupted
+run of opening requests. It counts target holding from the goal observation **before**
+each delayed action; a missing observation remains unknown. This measures coverage on
+the goal-checker target only. Holds on other objects and causal grasp preservation are
+not established by those counts. Diagnosis makes no simulator actions or policy queries.

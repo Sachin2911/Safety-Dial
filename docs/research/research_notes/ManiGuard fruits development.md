@@ -1400,3 +1400,39 @@ four-action delay limit and horizon eight. Their same-batch identity controls ar
 pending, so these outcomes establish activation rather than comparative benefit.
 Saved the initial complete-result diagnostics, trace hashes and planned comparison
 coverage in the release progress record. The queue continues without a policy restart.
+
+## Release activation occurs before a target grasp in the first five trials
+
+Five of twelve release-trigger trials are validated: zero safe completions, one unsafe
+completion, two safe unfinished and two unsafe unfinished. All identity controls remain
+pending, so no same-batch baseline comparison is complete. The narrow rule on the cracker
+scene at root one delays 21 actions and stays unsafe unfinished, first violating stack
+uprightness at observation 1269. The narrow bowl root-zero trial delays four actions and
+stays safe unfinished. The narrow cracker root-zero trial delays 22 actions and stays
+unsafe unfinished, first violating target uprightness at observation 2602 while the
+other stack objects remain upright. None of these three narrow-rule trials holds the target.
+
+The five completed trials contain 122 delayed opening commands. Every delay occurs while
+the goal target is unheld, with no missing pre-action hold observation at a delayed step.
+The broad cracker root-one trial's final delayed proposal is at index 1980, before its
+first target hold at observation 2261. Thirty of its 37 delays are strictly before the
+first violation at observation 1341; the action producing that violation is not delayed.
+This establishes activation, not preservation of the target grasp. Intermediate-object
+holds are not captured by the goal-checker trace and remain outside this conclusion.
+
+Added a reusable release audit to the existing diagnosis command. It rejects changed arm
+targets, mismatched execution, inconsistent event/ledger counts, overlong delays and delays
+that begin after an opening request is already underway. Holding is aligned to the
+pre-action observation, with missing values reported as unknown. The per-request bound
+is respected: delayed commands form a prefix of at most four actions in each uninterrupted
+run of opening proposals. All five actual traces pass these checks.
+
+Nine new tests cover timing alignment, unknown holding, separate opening runs, command
+integrity, bounds and diagnosis/ledger integration. Together with the existing diagnosis
+tests, all eleven pass; Ruff passes. The audit also passes on the eight earlier Jar/Stack
+release traces: only the original bowl release trial changes actions (40), all while
+the goal target is unheld. The other seven earlier release trials have no delayed action. These are
+offline checks on already counted physical episodes, not new simulator work. Previous
+fields of the first two follow-up diagnostics remain exactly unchanged. Updated snapshots
+retain source/trace hashes, planned coverage and the scope limitation. The physical queue
+continues with its existing policy and plan.

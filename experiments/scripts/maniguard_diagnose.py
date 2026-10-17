@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'experiments'))
 
+from helpers.maniguard_release_audit import audit_release_trace
 from helpers.maniguard_results import read_episode
 
 
@@ -87,7 +88,7 @@ def diagnose(output):
                     and first_violation is None):
                 first_violation = monitor['observation']
                 release_before_violation = last_release_request
-    return {**verdict, 'proposal_count': proposals, 'events': dict(counts),
+    result = {**verdict, 'proposal_count': proposals, 'events': dict(counts),
             'first_violation_observation': first_violation,
             'goal_target': goal_target,
             'last_release_request_before_first_violation': release_before_violation,
@@ -97,6 +98,13 @@ def diagnose(output):
             'handback_counting': ('Hold actions inferred from the post-action countdown, including '
                                   'the final zero-countdown hold and excluding guard-blocked frames.'),
             'interpretation': 'Temporal associations only; causal repairs require matched episodes.'}
+    if verdict['adapter']['kind'] == 'release':
+        audit = audit_release_trace(rows, verdict['adapter'], verdict['steps'],
+                                    first_violation['step'] if first_violation else None)
+        if audit['delayed_actions'] != verdict['ledger']['changed_steps']:
+            raise ValueError('Release-delay count differs from the physical ledger')
+        result['release_audit'] = audit
+    return result
 
 
 def main():
