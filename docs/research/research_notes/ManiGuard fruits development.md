@@ -1265,3 +1265,20 @@ reuse four unique controls: none changes safe completion, and three have an addi
 violation relative to their completed control. Coverage remains incomplete and differs
 between caps, so these partial comparisons are not a condition ranking. The next two
 physical episodes remain live and all later queues retain their existing dependencies.
+
+## Sixteen Stack repeats and all cracker controls
+
+Sixteen of 24 motion-repeat trials are validated: zero safe completions, one unsafe
+completion, eight safe unfinished and seven unsafe unfinished. The task_0010 root-one
+identity trial remains safe unfinished after 4200 actions and 525 queries, without
+holding the target. Its tight-cap and wider-cap counterparts both remain unsafe
+unfinished. All three cracker-scene identity controls have now completed: roots one
+and two stay safe unfinished, while root zero is unsafe unfinished.
+
+Eight completed condition comparisons reuse five unique identity controls. None changes
+safe completion; five have a violation where the corresponding control does not.
+These remain descriptive comparisons with different physical starts and incomplete
+coverage, not eight independent baseline trials or a causal estimate. The reports retain
+all planned comparisons and unique episode costs. Motion repeats remain live, followed
+by the previously declared release, Jar and Lid comparisons. No optimizer or reserved
+evaluation has run.
