@@ -860,3 +860,8 @@ claim. The two new single trials do not establish a benefit or a general harm fr
 smoothing. The intervening caps-only trial was unsafe unfinished, as was the inactive
 release trial, further showing why individual outcomes need careful interpretation.
 Fifteen Jar screen episodes have finished; the remaining declared comparisons continue.
+
+The contemporaneous task_0013 identity control also completed safely, in 868 actions
+and 109 queries. The guard and hand-back completions on that scene therefore remain
+integration evidence rather than demonstrated improvements over the unchanged policy.
+Sixteen Jar screen episodes are now complete.
