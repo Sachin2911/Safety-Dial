@@ -3042,7 +3042,7 @@
     "plan_sha256": "62cd89d512da8892de7737ed30dd8551460ed441e75edf87864fbc39dd8e3f87",
     "planned_episodes": 12,
     "workers": 2,
-    "status_at_recording": "Five of twelve release-trigger trials validated. Two physical episodes are live; identity comparisons remain pending. The Stack server is unchanged.",
+    "status_at_recording": "All 12 trials validated; queue exited normally. Neither rule improves safe completion.",
     "prerequisite": "Motion-repeat queue exits normally and all 24 results validate; reuse its existing validated Stack policy server.",
     "physical_batch": "runs/maniguard/stack-release-trigger-v1",
     "batch_pid_at_recording": 166400,
@@ -3052,11 +3052,14 @@
       "note": "Policy service is reused after the validated motion screen; it is not restarted."
     },
     "batch_statuses_at_recording": {
-      "completed": 5,
-      "awaiting_process_record": 2,
-      "not_started": 5
+      "completed": 12
     },
-    "progress_record": "docs/research/research_notes/ManiGuard fruits Stack release progress.json"
+    "progress_record": "docs/research/research_notes/ManiGuard fruits Stack release progress.json",
+    "control_timing_audit": "docs/research/research_notes/ManiGuard fruits Stack release control timing.json",
+    "batch_elapsed_seconds": 2576.415911087999,
+    "complete_report": "docs/research/research_notes/ManiGuard fruits Stack release complete.json",
+    "condition_comparison": "docs/research/research_notes/ManiGuard fruits Stack release comparison.json",
+    "study_report": "docs/research/reports/ManiGuard Stack release trigger comparison.md"
   },
   "complete_batch_report": "docs/research/research_notes/ManiGuard fruits Stack screen.json",
   "complete_batch_figure": "docs/research/figures/ManiGuard/stack-fixed-screen-outcomes.png",
@@ -3422,7 +3425,7 @@
     "condition_comparison": "docs/research/research_notes/ManiGuard fruits Jar condition comparison.json"
   },
   "jar_guard_repeat_queue": {
-    "status": "Queued after the declared Stack release-trigger screen; no physical repeat episodes started.",
+    "status": "Physical 48-trial Jar batch started after the completed release screen; fresh reference and interleaved replay passed.",
     "service": "maniguard_jar_guard_queue",
     "pid": 116135,
     "predecessor_service": "maniguard_release_queue",
@@ -3447,9 +3450,126 @@
       2
     ],
     "policy_switch": "Switch idle Stack server to Jar only after predecessor normal completion and all 12 release trials validate; then require fresh 32-action reference and strict six-query interleaved replay.",
-    "superseded_waiting_plan": "runs/maniguard/jar-guard-repeat-pipeline-v1/superseded.json"
+    "superseded_waiting_plan": "runs/maniguard/jar-guard-repeat-pipeline-v1/superseded.json",
+    "recorded_at_utc": "2026-10-17T16:22:38Z",
+    "reference": {
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8,
+        "min_query_interval": 1,
+        "tracking_threshold": 0.1,
+        "replan_on_gripper_change": true,
+        "free_step_limit": 0.12,
+        "grasp_step_limit": 0.04,
+        "smoothing": 1.0,
+        "settle_steps": 0,
+        "release_delay": 4,
+        "min_closing_steps": 3,
+        "min_aperture": 0.003,
+        "max_aperture": 0.035,
+        "aperture_stability": 0.002,
+        "privileged": false,
+        "lift_margin": 0.001,
+        "closure_confirm_steps": 1,
+        "guard_requery_steps": 1,
+        "handback_hold_steps": 0,
+        "handback_requery": true,
+        "stall_window": 20,
+        "stall_distance": 0.003,
+        "demand_threshold": 0.03,
+        "retry_distance": 0.015,
+        "retry_steps": 5,
+        "retry_limit": 2,
+        "retry_cooldown": 40
+      },
+      "engineering_override": 32,
+      "safe_completion": false,
+      "unsafe_completion": false,
+      "safe_unfinished": true,
+      "unsafe_unfinished": false,
+      "violation": false,
+      "ever_contacted": false,
+      "ever_grasped": false,
+      "steps": 32,
+      "ledger": {
+        "physics_steps": 278,
+        "physics_seconds": 2.3166667874902487,
+        "env_step_attempts": 42,
+        "env_steps_returned": 42,
+        "policy_queries": 4,
+        "policy_query_seconds": 27.557724798098207,
+        "policy_control_steps": 32,
+        "guard_steps": 0,
+        "changed_steps": 0,
+        "phase": "completed",
+        "physics_accounting_attached": true,
+        "elapsed_seconds": 72.48878383007832
+      },
+      "output": "/workspace/Safety-Dial/runs/maniguard/jar-guard-repeat-pipeline-v2/reference"
+    },
+    "replay_check": {
+      "source_episode": "/workspace/Safety-Dial/runs/maniguard/jar-guard-repeat-pipeline-v2/reference",
+      "policy_queries_attempted": 6,
+      "physics_steps": 0,
+      "metadata": {
+        "serve_config": "pi05-base_datagen_v1_jar_joint_2cam_lora",
+        "checkpoint": "/workspace/Safety-Dial/data/maniguard/policies/jar/7400",
+        "checkpoint_revision": "1d84eda070313a202a595e449fcf41a1a1e8a546",
+        "episode_seed_reset": "study_episode_id",
+        "rng_isolation": "per_episode",
+        "server_source_hashes": {
+          "experiments/scripts/maniguard_serve.py": "11845ecb9d061f7b11182c8314a7ca6db7da0e2293eb485cc49fee3726b79b55",
+          "experiments/helpers/maniguard_policy.py": "732bd477c7f284688702360c561972937f3267ee0241266bbba456b18c4f3445",
+          "experiments/helpers/maniguard_parallel_policy.py": "f23127c3a4495069e543f4824c411f35689836c35dbf57c172207ce8374a8c53"
+        }
+      },
+      "query_seconds": [
+        0.17871586722321808,
+        0.17252928903326392,
+        0.1739780909847468,
+        0.1725089291576296,
+        0.17213932098820806,
+        0.1745179791469127
+      ],
+      "status": "passed",
+      "interleaved": true,
+      "query_order": [
+        0,
+        0,
+        1,
+        2,
+        1,
+        2
+      ],
+      "corresponding_queries_equal": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "first_matches_original_episode": true,
+      "action_hashes": [
+        "cbb111647804cb607829d37e8f363046d177b8284becf2684327533f74029467",
+        "ccbb91b15b77eaab7fde999ae5c21d2cf92b71f84bbc8430f792ff25360432d6",
+        "cbb111647804cb607829d37e8f363046d177b8284becf2684327533f74029467",
+        "cbb111647804cb607829d37e8f363046d177b8284becf2684327533f74029467",
+        "ccbb91b15b77eaab7fde999ae5c21d2cf92b71f84bbc8430f792ff25360432d6",
+        "ccbb91b15b77eaab7fde999ae5c21d2cf92b71f84bbc8430f792ff25360432d6"
+      ],
+      "elapsed_seconds": 1.0535685101058334
+    },
+    "replay_check_sha256": "39f82043b1b66d80d34b67deb609f71876426feba3e001fcf86fd9e1f712582e",
+    "batch_pid_at_recording": 181935,
+    "policy_pid_at_recording": 179918,
+    "batch_statuses_at_recording": {
+      "awaiting_process_record": 2,
+      "not_started": 46
+    }
   },
-  "snapshot_at_utc": "2026-10-17T15:56:16Z",
+  "snapshot_at_utc": "2026-10-17T16:22:38Z",
   "completed_episodes_scope": "The top-level completed_episodes array retains the 24 initial Stack episodes. Complete Jar outcomes and costs are linked under jar_screen; follow-up Lid status is separate.",
   "initial_screen_report": "docs/research/reports/ManiGuard initial adapter screens.md",
   "lid_extra_baselines": {

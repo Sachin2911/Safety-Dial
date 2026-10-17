@@ -33,9 +33,10 @@ of identity and the fixed guard is queued across all four engineering scenes and
 See the [Lid follow-up evidence](docs/research/research_notes/ManiGuard%20fruits%20Lid%20followup.json).
 
 The [24 Stack motion-limit repeats](docs/research/reports/ManiGuard%20Stack%20motion%20repeats.md)
-are complete. The 12 Stack release-trigger comparisons are running, followed by 48 Jar
-repeats comparing identity, guard, hand-back and smoothing across all four engineering
-scenes and three root seeds.
+are complete, as are the
+[12 Stack release-trigger comparisons](docs/research/reports/ManiGuard%20Stack%20release%20trigger%20comparison.md),
+which find no safe-completion gain. The 48 Jar repeats are running, comparing identity,
+guard, hand-back and smoothing across all four engineering scenes and three root seeds.
 These remain engineering experiments. No evolutionary search or reserved evaluation has
 run, and no evolutionary advantage has been demonstrated.
 
@@ -242,12 +243,17 @@ spatial goal checker requires the target to remain held while intersecting the g
 Release decisions must follow the actual stage and goal, such as releasing a seated lid.
 [Success checking](https://nu-ideas-lab.github.io/ManiGuard/docs/evaluation/#success-checking-evalgoal_checkerpy).
 
-The first five completed trials of the broader-trigger follow-up contain 122 delayed
-opening commands, all issued while the goal target is unheld. The
-[release diagnostics](docs/research/research_notes/ManiGuard%20fruits%20Stack%20release%20progress.json)
-verify that the changes reach execution and respect the delay bound. They do not establish
-preservation of the target grasp; holds on other objects are outside this diagnostic.
-Identity comparisons are pending in that snapshot.
+The completed twelve-trial follow-up has eight condition/control comparisons and no
+safe-completion gain. All 179 delayed openings occur while the goal target is unheld.
+The [release diagnostics](docs/research/research_notes/ManiGuard%20fruits%20Stack%20release%20progress.json)
+verify executed commands and delay bounds, but do not establish target-grasp preservation;
+holds on other objects are outside this diagnostic. A
+[control timing audit](docs/research/research_notes/ManiGuard%20fruits%20Stack%20release%20control%20timing.json)
+finds one failure after 414 consecutive closing commands, and another safety contrast
+that appears before the adapter first changes an action. These are not demonstrated
+repairs of premature release. The broad rule has one fewer violation than identity,
+but that difference occurs in the pair whose safety trajectories diverge before intervention.
+See the [complete release report](docs/research/reports/ManiGuard%20Stack%20release%20trigger%20comparison.md).
 
 This is a cheap screening candidate. If a fixed rule works across cases, retain it as the
 repair and baseline. Evolution earns further attention only if context-dependent release

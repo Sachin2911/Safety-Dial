@@ -117,11 +117,12 @@ explicitly privileged guard as the Jar prototype.
    and violates the prerequisite. All 27 blocks precede the held grasp, so direct interception
    of the identity lift has not been demonstrated. Across four scenes, guard and identity
    each have three safe completions and one episode with a violation; the failed scene changes.
-4. **Grasp persistence:** the initial trigger needs a more informative test. The Jar release
+4. **Grasp persistence:** broader activation has not produced a safe-completion gain. The Jar release
    rule changes zero actions in all four trials. The Stack rule activates in only one of
    four trials, and its finger-aperture heuristic misses held targets in inspected sticky-grasp
-   traces. A broader fixed trigger is now being tested. Neither the successful inactive Jar trial nor
-   a zero-change failure measures the effect of delaying a release.
+   traces. The completed twelve-trial follow-up activates both rules but finds no safe-completion
+   gain; all 179 delayed openings occur while the goal target is unheld. Neither the successful
+   inactive Jar trial nor a zero-change failure measures the effect of delaying a release.
 5. **Bounded retries:** the physical primitive works, but a useful recovery has not been
    shown. Three Jar trials execute five retreats, measuring 14.56 to 14.90 mm against a
    15 mm request, with close directional agreement. None completes safely. One retreat
@@ -169,10 +170,11 @@ cap first changes an action. These are promising individual contrasts with adver
 outcomes elsewhere, not repeatable causal repairs. The complete report retains all
 outcomes, execution audits and the separate batch cost of 90,794 actions and 11,350 queries.
 
-The twelve-trial Stack release-trigger comparison is now running on the same validated
-policy server. It is followed by 48 Jar repeats of identity, guard, hand-back and smoothing
-across all four engineering scenes and root seeds zero, one and two. The sixteen-trial
-Lid guard comparison follows the Jar repeats after its own policy-switch reference and
+The [twelve-trial Stack release-trigger comparison](ManiGuard%20Stack%20release%20trigger%20comparison.md)
+is complete with no safe completion under either rule or identity. Its separate batch cost
+is 46,813 actions and 5,852 queries. The 48 Jar repeats of identity, guard, hand-back and
+smoothing have started across all four engineering scenes and root seeds zero, one and two.
+The sixteen-trial Lid guard comparison follows the Jar repeats after its own policy-switch reference and
 replay checks. Fixed rules remain the first comparison.
 Matched evolution, random search and categorical policy-gradient code exists but has not
 consumed ManiGuard training episodes. Further optimization and final selection remain

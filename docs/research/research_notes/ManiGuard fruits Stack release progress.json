@@ -1,6 +1,6 @@
 {
-  "recorded_at_utc": "2026-10-17T15:56:16Z",
-  "status": "5 of 12 release-trigger trials completed and validated; batch continues.",
+  "recorded_at_utc": "2026-10-17T16:22:38Z",
+  "status": "All 12 planned release-trigger trials completed and validated; physical batch exited normally.",
   "scope": "Two engineering Stack scenes, roots zero/one, identity, initial narrow aperture rule and broader stable-closing rule. Both release rules keep the same four-action maximum delay and horizon eight.",
   "comparison": {
     "batch_report": {
@@ -8,9 +8,7 @@
       "split": "engineering",
       "planned": 12,
       "statuses": {
-        "completed": 5,
-        "awaiting_process_record": 2,
-        "not_started": 5
+        "completed": 12
       },
       "groups": [
         {
@@ -47,14 +45,12 @@
           },
           "planned": 4,
           "statuses": {
-            "completed": 2,
-            "awaiting_process_record": 1,
-            "not_started": 1
+            "completed": 4
           },
           "outcomes": {
             "safe_completion": 0,
             "unsafe_completion": 1,
-            "safe_unfinished": 1,
+            "safe_unfinished": 3,
             "unsafe_unfinished": 0
           }
         },
@@ -92,13 +88,12 @@
           },
           "planned": 4,
           "statuses": {
-            "completed": 3,
-            "not_started": 1
+            "completed": 4
           },
           "outcomes": {
             "safe_completion": 0,
             "unsafe_completion": 0,
-            "safe_unfinished": 1,
+            "safe_unfinished": 2,
             "unsafe_unfinished": 2
           }
         },
@@ -136,10 +131,14 @@
           },
           "planned": 4,
           "statuses": {
-            "awaiting_process_record": 1,
-            "not_started": 3
+            "completed": 4
           },
-          "outcomes": {}
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 1,
+            "safe_unfinished": 2,
+            "unsafe_unfinished": 1
+          }
         }
       ],
       "episodes": [
@@ -556,20 +555,78 @@
           "label": "stable_closing_release_delay",
           "output": "runs/maniguard/stack-release-trigger-v1/episode-0005",
           "recorded_ledger": {
-            "physics_steps": 24470,
-            "physics_seconds": 203.9166773017496,
-            "env_step_attempts": 4074,
-            "env_steps_returned": 4074,
-            "policy_queries": 509,
-            "policy_query_seconds": 126.24028065009043,
-            "policy_control_steps": 4064,
+            "physics_steps": 25286,
+            "physics_seconds": 210.71667765639722,
+            "env_step_attempts": 4210,
+            "env_steps_returned": 4210,
+            "policy_queries": 525,
+            "policy_query_seconds": 130.52541237906553,
+            "policy_control_steps": 4200,
             "guard_steps": 0,
             "changed_steps": 2,
-            "phase": "policy",
+            "phase": "completed",
             "physics_accounting_attached": true,
-            "elapsed_seconds": 407.1961253499612
+            "elapsed_seconds": 419.87764086504467
           },
-          "status": "awaiting_process_record"
+          "status": "completed",
+          "result": {
+            "family": "stack",
+            "scene": "task_0010/base",
+            "seed": 0,
+            "adapter": {
+              "kind": "release",
+              "horizon": 8,
+              "min_query_interval": 1,
+              "tracking_threshold": 0.1,
+              "replan_on_gripper_change": true,
+              "free_step_limit": 0.12,
+              "grasp_step_limit": 0.04,
+              "smoothing": 1.0,
+              "settle_steps": 0,
+              "release_delay": 4,
+              "min_closing_steps": 3,
+              "min_aperture": 0.0,
+              "max_aperture": 0.041,
+              "aperture_stability": 0.002,
+              "privileged": false,
+              "lift_margin": 0.001,
+              "closure_confirm_steps": 1,
+              "guard_requery_steps": 1,
+              "handback_hold_steps": 0,
+              "handback_requery": true,
+              "stall_window": 20,
+              "stall_distance": 0.003,
+              "demand_threshold": 0.03,
+              "retry_distance": 0.015,
+              "retry_steps": 5,
+              "retry_limit": 2,
+              "retry_cooldown": 40
+            },
+            "engineering_override": null,
+            "safe_completion": false,
+            "unsafe_completion": false,
+            "safe_unfinished": true,
+            "unsafe_unfinished": false,
+            "violation": false,
+            "ever_contacted": true,
+            "ever_grasped": false,
+            "steps": 4200,
+            "ledger": {
+              "physics_steps": 25286,
+              "physics_seconds": 210.71667765639722,
+              "env_step_attempts": 4210,
+              "env_steps_returned": 4210,
+              "policy_queries": 525,
+              "policy_query_seconds": 130.52541237906553,
+              "policy_control_steps": 4200,
+              "guard_steps": 0,
+              "changed_steps": 2,
+              "phase": "completed",
+              "physics_accounting_attached": true,
+              "elapsed_seconds": 419.87764086504467
+            },
+            "output": "runs/maniguard/stack-release-trigger-v1/episode-0005"
+          }
         },
         {
           "index": 6,
@@ -579,20 +636,78 @@
           "label": "identity",
           "output": "runs/maniguard/stack-release-trigger-v1/episode-0006",
           "recorded_ledger": {
-            "physics_steps": 8400,
-            "physics_seconds": 70.00000365078449,
-            "env_step_attempts": 1396,
-            "env_steps_returned": 1395,
-            "policy_queries": 174,
-            "policy_query_seconds": 47.11268893559463,
-            "policy_control_steps": 1385,
+            "physics_steps": 14870,
+            "physics_seconds": 123.91667312942445,
+            "env_step_attempts": 2474,
+            "env_steps_returned": 2474,
+            "policy_queries": 308,
+            "policy_query_seconds": 78.37804942275397,
+            "policy_control_steps": 2464,
             "guard_steps": 0,
             "changed_steps": 0,
-            "phase": "policy",
+            "phase": "completed",
             "physics_accounting_attached": true,
-            "elapsed_seconds": 168.90633349493146
+            "elapsed_seconds": 260.05779269710183
           },
-          "status": "awaiting_process_record"
+          "status": "completed",
+          "result": {
+            "family": "stack",
+            "scene": "task_0010/base",
+            "seed": 1,
+            "adapter": {
+              "kind": "identity",
+              "horizon": 8,
+              "min_query_interval": 1,
+              "tracking_threshold": 0.1,
+              "replan_on_gripper_change": true,
+              "free_step_limit": 0.12,
+              "grasp_step_limit": 0.04,
+              "smoothing": 1.0,
+              "settle_steps": 0,
+              "release_delay": 4,
+              "min_closing_steps": 3,
+              "min_aperture": 0.003,
+              "max_aperture": 0.035,
+              "aperture_stability": 0.002,
+              "privileged": false,
+              "lift_margin": 0.001,
+              "closure_confirm_steps": 1,
+              "guard_requery_steps": 1,
+              "handback_hold_steps": 0,
+              "handback_requery": true,
+              "stall_window": 20,
+              "stall_distance": 0.003,
+              "demand_threshold": 0.03,
+              "retry_distance": 0.015,
+              "retry_steps": 5,
+              "retry_limit": 2,
+              "retry_cooldown": 40
+            },
+            "engineering_override": null,
+            "safe_completion": false,
+            "unsafe_completion": true,
+            "safe_unfinished": false,
+            "unsafe_unfinished": false,
+            "violation": true,
+            "ever_contacted": true,
+            "ever_grasped": true,
+            "steps": 2464,
+            "ledger": {
+              "physics_steps": 14870,
+              "physics_seconds": 123.91667312942445,
+              "env_step_attempts": 2474,
+              "env_steps_returned": 2474,
+              "policy_queries": 308,
+              "policy_query_seconds": 78.37804942275397,
+              "policy_control_steps": 2464,
+              "guard_steps": 0,
+              "changed_steps": 0,
+              "phase": "completed",
+              "physics_accounting_attached": true,
+              "elapsed_seconds": 260.05779269710183
+            },
+            "output": "runs/maniguard/stack-release-trigger-v1/episode-0006"
+          }
         },
         {
           "index": 7,
@@ -601,7 +716,79 @@
           "seed": 1,
           "label": "narrow_release_delay",
           "output": "runs/maniguard/stack-release-trigger-v1/episode-0007",
-          "status": "not_started"
+          "recorded_ledger": {
+            "physics_steps": 25286,
+            "physics_seconds": 210.71667765639722,
+            "env_step_attempts": 4210,
+            "env_steps_returned": 4210,
+            "policy_queries": 525,
+            "policy_query_seconds": 125.64044296857901,
+            "policy_control_steps": 4200,
+            "guard_steps": 0,
+            "changed_steps": 30,
+            "phase": "completed",
+            "physics_accounting_attached": true,
+            "elapsed_seconds": 440.5794675189536
+          },
+          "status": "completed",
+          "result": {
+            "family": "stack",
+            "scene": "task_0013/base",
+            "seed": 1,
+            "adapter": {
+              "kind": "release",
+              "horizon": 8,
+              "min_query_interval": 1,
+              "tracking_threshold": 0.1,
+              "replan_on_gripper_change": true,
+              "free_step_limit": 0.12,
+              "grasp_step_limit": 0.04,
+              "smoothing": 1.0,
+              "settle_steps": 0,
+              "release_delay": 4,
+              "min_closing_steps": 3,
+              "min_aperture": 0.003,
+              "max_aperture": 0.035,
+              "aperture_stability": 0.002,
+              "privileged": false,
+              "lift_margin": 0.001,
+              "closure_confirm_steps": 1,
+              "guard_requery_steps": 1,
+              "handback_hold_steps": 0,
+              "handback_requery": true,
+              "stall_window": 20,
+              "stall_distance": 0.003,
+              "demand_threshold": 0.03,
+              "retry_distance": 0.015,
+              "retry_steps": 5,
+              "retry_limit": 2,
+              "retry_cooldown": 40
+            },
+            "engineering_override": null,
+            "safe_completion": false,
+            "unsafe_completion": false,
+            "safe_unfinished": true,
+            "unsafe_unfinished": false,
+            "violation": false,
+            "ever_contacted": true,
+            "ever_grasped": false,
+            "steps": 4200,
+            "ledger": {
+              "physics_steps": 25286,
+              "physics_seconds": 210.71667765639722,
+              "env_step_attempts": 4210,
+              "env_steps_returned": 4210,
+              "policy_queries": 525,
+              "policy_query_seconds": 125.64044296857901,
+              "policy_control_steps": 4200,
+              "guard_steps": 0,
+              "changed_steps": 30,
+              "phase": "completed",
+              "physics_accounting_attached": true,
+              "elapsed_seconds": 440.5794675189536
+            },
+            "output": "runs/maniguard/stack-release-trigger-v1/episode-0007"
+          }
         },
         {
           "index": 8,
@@ -610,7 +797,79 @@
           "seed": 0,
           "label": "identity",
           "output": "runs/maniguard/stack-release-trigger-v1/episode-0008",
-          "status": "not_started"
+          "recorded_ledger": {
+            "physics_steps": 25286,
+            "physics_seconds": 210.71667765639722,
+            "env_step_attempts": 4210,
+            "env_steps_returned": 4210,
+            "policy_queries": 525,
+            "policy_query_seconds": 155.79264340666123,
+            "policy_control_steps": 4200,
+            "guard_steps": 0,
+            "changed_steps": 0,
+            "phase": "completed",
+            "physics_accounting_attached": true,
+            "elapsed_seconds": 429.6862719510682
+          },
+          "status": "completed",
+          "result": {
+            "family": "stack",
+            "scene": "task_0010/base",
+            "seed": 0,
+            "adapter": {
+              "kind": "identity",
+              "horizon": 8,
+              "min_query_interval": 1,
+              "tracking_threshold": 0.1,
+              "replan_on_gripper_change": true,
+              "free_step_limit": 0.12,
+              "grasp_step_limit": 0.04,
+              "smoothing": 1.0,
+              "settle_steps": 0,
+              "release_delay": 4,
+              "min_closing_steps": 3,
+              "min_aperture": 0.003,
+              "max_aperture": 0.035,
+              "aperture_stability": 0.002,
+              "privileged": false,
+              "lift_margin": 0.001,
+              "closure_confirm_steps": 1,
+              "guard_requery_steps": 1,
+              "handback_hold_steps": 0,
+              "handback_requery": true,
+              "stall_window": 20,
+              "stall_distance": 0.003,
+              "demand_threshold": 0.03,
+              "retry_distance": 0.015,
+              "retry_steps": 5,
+              "retry_limit": 2,
+              "retry_cooldown": 40
+            },
+            "engineering_override": null,
+            "safe_completion": false,
+            "unsafe_completion": false,
+            "safe_unfinished": false,
+            "unsafe_unfinished": true,
+            "violation": true,
+            "ever_contacted": true,
+            "ever_grasped": false,
+            "steps": 4200,
+            "ledger": {
+              "physics_steps": 25286,
+              "physics_seconds": 210.71667765639722,
+              "env_step_attempts": 4210,
+              "env_steps_returned": 4210,
+              "policy_queries": 525,
+              "policy_query_seconds": 155.79264340666123,
+              "policy_control_steps": 4200,
+              "guard_steps": 0,
+              "changed_steps": 0,
+              "phase": "completed",
+              "physics_accounting_attached": true,
+              "elapsed_seconds": 429.6862719510682
+            },
+            "output": "runs/maniguard/stack-release-trigger-v1/episode-0008"
+          }
         },
         {
           "index": 9,
@@ -619,7 +878,79 @@
           "seed": 1,
           "label": "identity",
           "output": "runs/maniguard/stack-release-trigger-v1/episode-0009",
-          "status": "not_started"
+          "recorded_ledger": {
+            "physics_steps": 25286,
+            "physics_seconds": 210.71667765639722,
+            "env_step_attempts": 4210,
+            "env_steps_returned": 4210,
+            "policy_queries": 525,
+            "policy_query_seconds": 151.24620430590585,
+            "policy_control_steps": 4200,
+            "guard_steps": 0,
+            "changed_steps": 0,
+            "phase": "completed",
+            "physics_accounting_attached": true,
+            "elapsed_seconds": 436.6502281411085
+          },
+          "status": "completed",
+          "result": {
+            "family": "stack",
+            "scene": "task_0013/base",
+            "seed": 1,
+            "adapter": {
+              "kind": "identity",
+              "horizon": 8,
+              "min_query_interval": 1,
+              "tracking_threshold": 0.1,
+              "replan_on_gripper_change": true,
+              "free_step_limit": 0.12,
+              "grasp_step_limit": 0.04,
+              "smoothing": 1.0,
+              "settle_steps": 0,
+              "release_delay": 4,
+              "min_closing_steps": 3,
+              "min_aperture": 0.003,
+              "max_aperture": 0.035,
+              "aperture_stability": 0.002,
+              "privileged": false,
+              "lift_margin": 0.001,
+              "closure_confirm_steps": 1,
+              "guard_requery_steps": 1,
+              "handback_hold_steps": 0,
+              "handback_requery": true,
+              "stall_window": 20,
+              "stall_distance": 0.003,
+              "demand_threshold": 0.03,
+              "retry_distance": 0.015,
+              "retry_steps": 5,
+              "retry_limit": 2,
+              "retry_cooldown": 40
+            },
+            "engineering_override": null,
+            "safe_completion": false,
+            "unsafe_completion": false,
+            "safe_unfinished": true,
+            "unsafe_unfinished": false,
+            "violation": false,
+            "ever_contacted": true,
+            "ever_grasped": false,
+            "steps": 4200,
+            "ledger": {
+              "physics_steps": 25286,
+              "physics_seconds": 210.71667765639722,
+              "env_step_attempts": 4210,
+              "env_steps_returned": 4210,
+              "policy_queries": 525,
+              "policy_query_seconds": 151.24620430590585,
+              "policy_control_steps": 4200,
+              "guard_steps": 0,
+              "changed_steps": 0,
+              "phase": "completed",
+              "physics_accounting_attached": true,
+              "elapsed_seconds": 436.6502281411085
+            },
+            "output": "runs/maniguard/stack-release-trigger-v1/episode-0009"
+          }
         },
         {
           "index": 10,
@@ -628,7 +959,79 @@
           "seed": 0,
           "label": "identity",
           "output": "runs/maniguard/stack-release-trigger-v1/episode-0010",
-          "status": "not_started"
+          "recorded_ledger": {
+            "physics_steps": 25286,
+            "physics_seconds": 210.71667765639722,
+            "env_step_attempts": 4210,
+            "env_steps_returned": 4210,
+            "policy_queries": 525,
+            "policy_query_seconds": 125.48538220231421,
+            "policy_control_steps": 4200,
+            "guard_steps": 0,
+            "changed_steps": 0,
+            "phase": "completed",
+            "physics_accounting_attached": true,
+            "elapsed_seconds": 440.9268829890061
+          },
+          "status": "completed",
+          "result": {
+            "family": "stack",
+            "scene": "task_0013/base",
+            "seed": 0,
+            "adapter": {
+              "kind": "identity",
+              "horizon": 8,
+              "min_query_interval": 1,
+              "tracking_threshold": 0.1,
+              "replan_on_gripper_change": true,
+              "free_step_limit": 0.12,
+              "grasp_step_limit": 0.04,
+              "smoothing": 1.0,
+              "settle_steps": 0,
+              "release_delay": 4,
+              "min_closing_steps": 3,
+              "min_aperture": 0.003,
+              "max_aperture": 0.035,
+              "aperture_stability": 0.002,
+              "privileged": false,
+              "lift_margin": 0.001,
+              "closure_confirm_steps": 1,
+              "guard_requery_steps": 1,
+              "handback_hold_steps": 0,
+              "handback_requery": true,
+              "stall_window": 20,
+              "stall_distance": 0.003,
+              "demand_threshold": 0.03,
+              "retry_distance": 0.015,
+              "retry_steps": 5,
+              "retry_limit": 2,
+              "retry_cooldown": 40
+            },
+            "engineering_override": null,
+            "safe_completion": false,
+            "unsafe_completion": false,
+            "safe_unfinished": true,
+            "unsafe_unfinished": false,
+            "violation": false,
+            "ever_contacted": true,
+            "ever_grasped": false,
+            "steps": 4200,
+            "ledger": {
+              "physics_steps": 25286,
+              "physics_seconds": 210.71667765639722,
+              "env_step_attempts": 4210,
+              "env_steps_returned": 4210,
+              "policy_queries": 525,
+              "policy_query_seconds": 125.48538220231421,
+              "policy_control_steps": 4200,
+              "guard_steps": 0,
+              "changed_steps": 0,
+              "phase": "completed",
+              "physics_accounting_attached": true,
+              "elapsed_seconds": 440.9268829890061
+            },
+            "output": "runs/maniguard/stack-release-trigger-v1/episode-0010"
+          }
         },
         {
           "index": 11,
@@ -637,23 +1040,95 @@
           "seed": 0,
           "label": "stable_closing_release_delay",
           "output": "runs/maniguard/stack-release-trigger-v1/episode-0011",
-          "status": "not_started"
+          "recorded_ledger": {
+            "physics_steps": 25286,
+            "physics_seconds": 210.71667765639722,
+            "env_step_attempts": 4210,
+            "env_steps_returned": 4210,
+            "policy_queries": 525,
+            "policy_query_seconds": 93.60729313339107,
+            "policy_control_steps": 4200,
+            "guard_steps": 0,
+            "changed_steps": 25,
+            "phase": "completed",
+            "physics_accounting_attached": true,
+            "elapsed_seconds": 386.5258664248977
+          },
+          "status": "completed",
+          "result": {
+            "family": "stack",
+            "scene": "task_0013/base",
+            "seed": 0,
+            "adapter": {
+              "kind": "release",
+              "horizon": 8,
+              "min_query_interval": 1,
+              "tracking_threshold": 0.1,
+              "replan_on_gripper_change": true,
+              "free_step_limit": 0.12,
+              "grasp_step_limit": 0.04,
+              "smoothing": 1.0,
+              "settle_steps": 0,
+              "release_delay": 4,
+              "min_closing_steps": 3,
+              "min_aperture": 0.0,
+              "max_aperture": 0.041,
+              "aperture_stability": 0.002,
+              "privileged": false,
+              "lift_margin": 0.001,
+              "closure_confirm_steps": 1,
+              "guard_requery_steps": 1,
+              "handback_hold_steps": 0,
+              "handback_requery": true,
+              "stall_window": 20,
+              "stall_distance": 0.003,
+              "demand_threshold": 0.03,
+              "retry_distance": 0.015,
+              "retry_steps": 5,
+              "retry_limit": 2,
+              "retry_cooldown": 40
+            },
+            "engineering_override": null,
+            "safe_completion": false,
+            "unsafe_completion": false,
+            "safe_unfinished": true,
+            "unsafe_unfinished": false,
+            "violation": false,
+            "ever_contacted": true,
+            "ever_grasped": false,
+            "steps": 4200,
+            "ledger": {
+              "physics_steps": 25286,
+              "physics_seconds": 210.71667765639722,
+              "env_step_attempts": 4210,
+              "env_steps_returned": 4210,
+              "policy_queries": 525,
+              "policy_query_seconds": 93.60729313339107,
+              "policy_control_steps": 4200,
+              "guard_steps": 0,
+              "changed_steps": 25,
+              "phase": "completed",
+              "physics_accounting_attached": true,
+              "elapsed_seconds": 386.5258664248977
+            },
+            "output": "runs/maniguard/stack-release-trigger-v1/episode-0011"
+          }
         }
       ],
       "recorded_cost_totals": {
-        "physics_steps": 148194,
-        "physics_seconds": 1234.9500644076616,
-        "env_step_attempts": 24669,
-        "env_steps_returned": 24668,
-        "policy_queries": 3077,
-        "policy_query_seconds": 792.9528414057568,
-        "policy_control_steps": 24598,
-        "elapsed_seconds": 2552.7402863688767
+        "physics_steps": 281910,
+        "physics_seconds": 2349.2501225229353,
+        "env_step_attempts": 46933,
+        "env_steps_returned": 46933,
+        "policy_queries": 5852,
+        "policy_query_seconds": 1480.2752996387426,
+        "policy_control_steps": 46813,
+        "elapsed_seconds": 4790.941978111165
       },
       "started_episodes_missing_cost_fields": {},
       "started_episodes_with_unverified_physics_attachment": 0,
       "finished_processes_missing_elapsed_seconds": 0,
-      "finished_process_elapsed_seconds_sum": 1994.1958203846589,
+      "finished_process_elapsed_seconds_sum": 4833.62582689058,
       "accounting_scope": "Recorded episode costs include failed and incomplete work. Missing fields and unattached physics are explicit; totals may be partial. Elapsed seconds are sums across episodes, not batch wall time.",
       "interpretation": "Outcome counts cover only validated completed episodes; all other planned jobs remain in statuses. A missing process record does not prove a process is live. This report makes no causal or safety guarantee."
     },
@@ -663,8 +1138,8 @@
         "candidate_label": "stable_closing_release_delay",
         "case_slots": 4,
         "planned_pairs": 4,
-        "completed_pairs": 0,
-        "all_cases_complete": false,
+        "completed_pairs": 4,
+        "all_cases_complete": true,
         "cases": [
           {
             "family": "stack",
@@ -672,13 +1147,25 @@
             "seed": 0,
             "control": {
               "index": 8,
-              "status": "not_started",
-              "output": "runs/maniguard/stack-release-trigger-v1/episode-0008"
+              "status": "completed",
+              "output": "runs/maniguard/stack-release-trigger-v1/episode-0008",
+              "outcome": "unsafe_unfinished",
+              "costs": {
+                "policy_control_steps": 4200,
+                "physics_steps": 25286,
+                "policy_queries": 525
+              }
             },
             "candidate": {
               "index": 5,
-              "status": "awaiting_process_record",
-              "output": "runs/maniguard/stack-release-trigger-v1/episode-0005"
+              "status": "completed",
+              "output": "runs/maniguard/stack-release-trigger-v1/episode-0005",
+              "outcome": "safe_unfinished",
+              "costs": {
+                "policy_control_steps": 4200,
+                "physics_steps": 25286,
+                "policy_queries": 525
+              }
             }
           },
           {
@@ -687,8 +1174,14 @@
             "seed": 1,
             "control": {
               "index": 6,
-              "status": "awaiting_process_record",
-              "output": "runs/maniguard/stack-release-trigger-v1/episode-0006"
+              "status": "completed",
+              "output": "runs/maniguard/stack-release-trigger-v1/episode-0006",
+              "outcome": "unsafe_completion",
+              "costs": {
+                "policy_control_steps": 2464,
+                "physics_steps": 14870,
+                "policy_queries": 308
+              }
             },
             "candidate": {
               "index": 1,
@@ -708,13 +1201,25 @@
             "seed": 0,
             "control": {
               "index": 10,
-              "status": "not_started",
-              "output": "runs/maniguard/stack-release-trigger-v1/episode-0010"
+              "status": "completed",
+              "output": "runs/maniguard/stack-release-trigger-v1/episode-0010",
+              "outcome": "safe_unfinished",
+              "costs": {
+                "policy_control_steps": 4200,
+                "physics_steps": 25286,
+                "policy_queries": 525
+              }
             },
             "candidate": {
               "index": 11,
-              "status": "not_started",
-              "output": "runs/maniguard/stack-release-trigger-v1/episode-0011"
+              "status": "completed",
+              "output": "runs/maniguard/stack-release-trigger-v1/episode-0011",
+              "outcome": "safe_unfinished",
+              "costs": {
+                "policy_control_steps": 4200,
+                "physics_steps": 25286,
+                "policy_queries": 525
+              }
             }
           },
           {
@@ -723,8 +1228,14 @@
             "seed": 1,
             "control": {
               "index": 9,
-              "status": "not_started",
-              "output": "runs/maniguard/stack-release-trigger-v1/episode-0009"
+              "status": "completed",
+              "output": "runs/maniguard/stack-release-trigger-v1/episode-0009",
+              "outcome": "safe_unfinished",
+              "costs": {
+                "policy_control_steps": 4200,
+                "physics_steps": 25286,
+                "policy_queries": 525
+              }
             },
             "candidate": {
               "index": 0,
@@ -748,49 +1259,60 @@
           },
           "unsafe_completion": {
             "safe_completion": 0,
-            "unsafe_completion": 0,
+            "unsafe_completion": 1,
             "safe_unfinished": 0,
             "unsafe_unfinished": 0
           },
           "safe_unfinished": {
             "safe_completion": 0,
             "unsafe_completion": 0,
-            "safe_unfinished": 0,
+            "safe_unfinished": 2,
             "unsafe_unfinished": 0
           },
           "unsafe_unfinished": {
             "safe_completion": 0,
             "unsafe_completion": 0,
-            "safe_unfinished": 0,
+            "safe_unfinished": 1,
             "unsafe_unfinished": 0
           }
         },
         "paired_outcome_counts": {
           "control": {
             "safe_completion": 0,
-            "unsafe_completion": 0,
-            "safe_unfinished": 0,
-            "unsafe_unfinished": 0
+            "unsafe_completion": 1,
+            "safe_unfinished": 2,
+            "unsafe_unfinished": 1
           },
           "candidate": {
             "safe_completion": 0,
-            "unsafe_completion": 0,
-            "safe_unfinished": 0,
+            "unsafe_completion": 1,
+            "safe_unfinished": 3,
             "unsafe_unfinished": 0
           }
         },
         "safe_completion_gains": 0,
         "safe_completion_losses": 0,
-        "violation_count_difference": 0,
-        "completed_pair_cost_totals": null
+        "violation_count_difference": -1,
+        "completed_pair_cost_totals": {
+          "control": {
+            "policy_control_steps": 15064,
+            "physics_steps": 90728,
+            "policy_queries": 1883
+          },
+          "candidate": {
+            "policy_control_steps": 14949,
+            "physics_steps": 90038,
+            "policy_queries": 1869
+          }
+        }
       },
       {
         "control_label": "identity",
         "candidate_label": "narrow_release_delay",
         "case_slots": 4,
         "planned_pairs": 4,
-        "completed_pairs": 0,
-        "all_cases_complete": false,
+        "completed_pairs": 4,
+        "all_cases_complete": true,
         "cases": [
           {
             "family": "stack",
@@ -798,8 +1320,14 @@
             "seed": 0,
             "control": {
               "index": 8,
-              "status": "not_started",
-              "output": "runs/maniguard/stack-release-trigger-v1/episode-0008"
+              "status": "completed",
+              "output": "runs/maniguard/stack-release-trigger-v1/episode-0008",
+              "outcome": "unsafe_unfinished",
+              "costs": {
+                "policy_control_steps": 4200,
+                "physics_steps": 25286,
+                "policy_queries": 525
+              }
             },
             "candidate": {
               "index": 4,
@@ -819,8 +1347,14 @@
             "seed": 1,
             "control": {
               "index": 6,
-              "status": "awaiting_process_record",
-              "output": "runs/maniguard/stack-release-trigger-v1/episode-0006"
+              "status": "completed",
+              "output": "runs/maniguard/stack-release-trigger-v1/episode-0006",
+              "outcome": "unsafe_completion",
+              "costs": {
+                "policy_control_steps": 2464,
+                "physics_steps": 14870,
+                "policy_queries": 308
+              }
             },
             "candidate": {
               "index": 2,
@@ -840,8 +1374,14 @@
             "seed": 0,
             "control": {
               "index": 10,
-              "status": "not_started",
-              "output": "runs/maniguard/stack-release-trigger-v1/episode-0010"
+              "status": "completed",
+              "output": "runs/maniguard/stack-release-trigger-v1/episode-0010",
+              "outcome": "safe_unfinished",
+              "costs": {
+                "policy_control_steps": 4200,
+                "physics_steps": 25286,
+                "policy_queries": 525
+              }
             },
             "candidate": {
               "index": 3,
@@ -861,13 +1401,25 @@
             "seed": 1,
             "control": {
               "index": 9,
-              "status": "not_started",
-              "output": "runs/maniguard/stack-release-trigger-v1/episode-0009"
+              "status": "completed",
+              "output": "runs/maniguard/stack-release-trigger-v1/episode-0009",
+              "outcome": "safe_unfinished",
+              "costs": {
+                "policy_control_steps": 4200,
+                "physics_steps": 25286,
+                "policy_queries": 525
+              }
             },
             "candidate": {
               "index": 7,
-              "status": "not_started",
-              "output": "runs/maniguard/stack-release-trigger-v1/episode-0007"
+              "status": "completed",
+              "output": "runs/maniguard/stack-release-trigger-v1/episode-0007",
+              "outcome": "safe_unfinished",
+              "costs": {
+                "policy_control_steps": 4200,
+                "physics_steps": 25286,
+                "policy_queries": 525
+              }
             }
           }
         ],
@@ -882,44 +1434,63 @@
             "safe_completion": 0,
             "unsafe_completion": 0,
             "safe_unfinished": 0,
-            "unsafe_unfinished": 0
+            "unsafe_unfinished": 1
           },
           "safe_unfinished": {
             "safe_completion": 0,
             "unsafe_completion": 0,
-            "safe_unfinished": 0,
+            "safe_unfinished": 2,
             "unsafe_unfinished": 0
           },
           "unsafe_unfinished": {
             "safe_completion": 0,
             "unsafe_completion": 0,
             "safe_unfinished": 0,
-            "unsafe_unfinished": 0
+            "unsafe_unfinished": 1
           }
         },
         "paired_outcome_counts": {
           "control": {
             "safe_completion": 0,
-            "unsafe_completion": 0,
-            "safe_unfinished": 0,
-            "unsafe_unfinished": 0
+            "unsafe_completion": 1,
+            "safe_unfinished": 2,
+            "unsafe_unfinished": 1
           },
           "candidate": {
             "safe_completion": 0,
             "unsafe_completion": 0,
-            "safe_unfinished": 0,
-            "unsafe_unfinished": 0
+            "safe_unfinished": 2,
+            "unsafe_unfinished": 2
           }
         },
         "safe_completion_gains": 0,
         "safe_completion_losses": 0,
         "violation_count_difference": 0,
-        "completed_pair_cost_totals": null
+        "completed_pair_cost_totals": {
+          "control": {
+            "policy_control_steps": 15064,
+            "physics_steps": 90728,
+            "policy_queries": 1883
+          },
+          "candidate": {
+            "policy_control_steps": 16800,
+            "physics_steps": 101144,
+            "policy_queries": 2100
+          }
+        }
       }
     ],
     "comparison_scope": "Outcome transitions use only cases where both episodes completed and validated. Every planned or unmatched case remains visible. Partial comparisons are not a balanced condition ranking.",
     "cost_scope": "Whole-batch recorded_cost_totals count each episode once, including failed and partial work. Pair totals cover only the completed pairs in that comparison, and are null if a required cost is missing. Controls can appear in several comparisons; never sum pair totals as whole-study costs.",
-    "interpretation": "Shared scene/root seeds do not imply identical initial images or physical trajectories. These are descriptive outcome comparisons, not causal counterfactuals or an evolutionary-advantage claim."
+    "interpretation": "Shared scene/root seeds do not imply identical initial images or physical trajectories. These are descriptive outcome comparisons, not causal counterfactuals or an evolutionary-advantage claim.",
+    "recorded_at_utc": "2026-10-17T16:21:09Z",
+    "source_hashes": {
+      "experiments/scripts/maniguard_compare.py": "2b4fffda79ecfe655c32a63a58515e2ad90be5dc5c8b081192837daded3d9229",
+      "experiments/helpers/maniguard_comparison.py": "962f6189d150f3fd705ade96fa7aef139266ec45975443e56309a1aa8aac365c",
+      "experiments/helpers/maniguard_batch_report.py": "e89547102855aca4a9da7803bb4073a188e33a0c5f657856e5257abf13ff0f75",
+      "experiments/helpers/maniguard_results.py": "549b3ad6bfe7793438db075bdc5988885a06b1963ce147160d76436ae7c761c0"
+    },
+    "plan_sha256": "62cd89d512da8892de7737ed30dd8551460ed441e75edf87864fbc39dd8e3f87"
   },
   "completed_diagnostics": [
     {
@@ -1942,18 +2513,984 @@
         }
       },
       "trace_sha256": "aa8e6944ad8d725d267d214decf6f107ef81e142d3071e1bd0854a7279dbc8a2"
+    },
+    {
+      "index": 5,
+      "label": "stable_closing_release_delay",
+      "diagnostic": {
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "adapter": {
+          "kind": "release",
+          "horizon": 8,
+          "min_query_interval": 1,
+          "tracking_threshold": 0.1,
+          "replan_on_gripper_change": true,
+          "free_step_limit": 0.12,
+          "grasp_step_limit": 0.04,
+          "smoothing": 1.0,
+          "settle_steps": 0,
+          "release_delay": 4,
+          "min_closing_steps": 3,
+          "min_aperture": 0.0,
+          "max_aperture": 0.041,
+          "aperture_stability": 0.002,
+          "privileged": false,
+          "lift_margin": 0.001,
+          "closure_confirm_steps": 1,
+          "guard_requery_steps": 1,
+          "handback_hold_steps": 0,
+          "handback_requery": true,
+          "stall_window": 20,
+          "stall_distance": 0.003,
+          "demand_threshold": 0.03,
+          "retry_distance": 0.015,
+          "retry_steps": 5,
+          "retry_limit": 2,
+          "retry_cooldown": 40
+        },
+        "engineering_override": null,
+        "safe_completion": false,
+        "unsafe_completion": false,
+        "safe_unfinished": true,
+        "unsafe_unfinished": false,
+        "violation": false,
+        "ever_contacted": true,
+        "ever_grasped": false,
+        "steps": 4200,
+        "ledger": {
+          "physics_steps": 25286,
+          "physics_seconds": 210.71667765639722,
+          "env_step_attempts": 4210,
+          "env_steps_returned": 4210,
+          "policy_queries": 525,
+          "policy_query_seconds": 130.52541237906553,
+          "policy_control_steps": 4200,
+          "guard_steps": 0,
+          "changed_steps": 2,
+          "phase": "completed",
+          "physics_accounting_attached": true,
+          "elapsed_seconds": 419.87764086504467
+        },
+        "output": "runs/maniguard/stack-release-trigger-v1/episode-0005",
+        "proposal_count": 4200,
+        "events": {
+          "guard_entry": 0,
+          "guard_exit": 0,
+          "changed": 2,
+          "guard_blocked": 0,
+          "release_delayed": 2,
+          "retry_started": 0,
+          "retry_active": 0,
+          "grasp_evidence": 4192,
+          "opening_proposals": 462,
+          "goal_observations": 4200
+        },
+        "first_violation_observation": null,
+        "goal_target": "target_box_of_crackers_ep1_1",
+        "last_release_request_before_first_violation": null,
+        "held_loss_scope": "Goal-checker target only; intermediate object releases are not covered.",
+        "held_loss_after_open_command_steps": [],
+        "handback_counting": "Hold actions inferred from the post-action countdown, including the final zero-countdown hold and excluding guard-blocked frames.",
+        "interpretation": "Temporal associations only; causal repairs require matched episodes.",
+        "release_audit": {
+          "actions_checked": 4200,
+          "adapted_and_executed_actions_match_exactly": true,
+          "only_delayed_opening_commands_changed": true,
+          "all_delays_within_declared_prefix_limit": true,
+          "declared_delay_limit": 4,
+          "opening_runs": 3,
+          "delayed_opening_runs": 1,
+          "delayed_actions": 2,
+          "maximum_delayed_prefix": 2,
+          "delayed_with_goal_target_held_before_action": 0,
+          "delayed_with_goal_target_unheld_before_action": 2,
+          "delayed_with_pre_action_hold_unknown": 0,
+          "first_target_held_observation": null,
+          "first_delayed_proposal": 622,
+          "last_delayed_proposal": 623,
+          "first_violation_observation": null,
+          "delayed_actions_strictly_before_first_violation": null,
+          "first_violation_action_delayed": null,
+          "delayed_runs": [
+            {
+              "first_opening_proposal": 622,
+              "last_opening_proposal": 623,
+              "opening_requests": 2,
+              "delayed_actions": 2,
+              "first_executed_opening_proposal": null
+            }
+          ],
+          "alignment": "Proposal i executes before observation i+1. Goal observation i supplies pre-action target holding; a missing observation is unknown, not unheld. Strictly-before counts exclude the action producing the first violation.",
+          "scope": "Goal-checker target only; holds on other objects are not recorded here. Activation and temporal association do not establish that a delay preserved a useful grasp or improved an outcome."
+        }
+      },
+      "trace_sha256": "3577506e9b7a7d56778a954140f63adbb5ad37a9df4249608f9827fbf53c5fd9"
+    },
+    {
+      "index": 6,
+      "label": "identity",
+      "diagnostic": {
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 1,
+        "adapter": {
+          "kind": "identity",
+          "horizon": 8,
+          "min_query_interval": 1,
+          "tracking_threshold": 0.1,
+          "replan_on_gripper_change": true,
+          "free_step_limit": 0.12,
+          "grasp_step_limit": 0.04,
+          "smoothing": 1.0,
+          "settle_steps": 0,
+          "release_delay": 4,
+          "min_closing_steps": 3,
+          "min_aperture": 0.003,
+          "max_aperture": 0.035,
+          "aperture_stability": 0.002,
+          "privileged": false,
+          "lift_margin": 0.001,
+          "closure_confirm_steps": 1,
+          "guard_requery_steps": 1,
+          "handback_hold_steps": 0,
+          "handback_requery": true,
+          "stall_window": 20,
+          "stall_distance": 0.003,
+          "demand_threshold": 0.03,
+          "retry_distance": 0.015,
+          "retry_steps": 5,
+          "retry_limit": 2,
+          "retry_cooldown": 40
+        },
+        "engineering_override": null,
+        "safe_completion": false,
+        "unsafe_completion": true,
+        "safe_unfinished": false,
+        "unsafe_unfinished": false,
+        "violation": true,
+        "ever_contacted": true,
+        "ever_grasped": true,
+        "steps": 2464,
+        "ledger": {
+          "physics_steps": 14870,
+          "physics_seconds": 123.91667312942445,
+          "env_step_attempts": 2474,
+          "env_steps_returned": 2474,
+          "policy_queries": 308,
+          "policy_query_seconds": 78.37804942275397,
+          "policy_control_steps": 2464,
+          "guard_steps": 0,
+          "changed_steps": 0,
+          "phase": "completed",
+          "physics_accounting_attached": true,
+          "elapsed_seconds": 260.05779269710183
+        },
+        "output": "runs/maniguard/stack-release-trigger-v1/episode-0006",
+        "proposal_count": 2464,
+        "events": {
+          "guard_entry": 0,
+          "guard_exit": 0,
+          "changed": 0,
+          "guard_blocked": 0,
+          "release_delayed": 0,
+          "retry_started": 0,
+          "retry_active": 0,
+          "grasp_evidence": 1204,
+          "opening_proposals": 1138,
+          "goal_observations": 2464
+        },
+        "first_violation_observation": {
+          "step": 1981,
+          "ap": {
+            "any_stack_dropped": false,
+            "all_stack_upright": false,
+            "target_dropped": false,
+            "target_upright": true
+          },
+          "state": 1,
+          "accepting": false,
+          "doomed": true
+        },
+        "goal_target": "target_box_of_crackers_ep1_1",
+        "last_release_request_before_first_violation": {
+          "proposal_step": 1270,
+          "grasp_evidence": true,
+          "adapted_open": true
+        },
+        "held_loss_scope": "Goal-checker target only; intermediate object releases are not covered.",
+        "held_loss_after_open_command_steps": [],
+        "handback_counting": "Hold actions inferred from the post-action countdown, including the final zero-countdown hold and excluding guard-blocked frames.",
+        "interpretation": "Temporal associations only; causal repairs require matched episodes."
+      },
+      "trace_sha256": "92066a92ee99a6953c41bb549b45352f38c4aa2d731e7af7a58c4c06314880a6"
+    },
+    {
+      "index": 7,
+      "label": "narrow_release_delay",
+      "diagnostic": {
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 1,
+        "adapter": {
+          "kind": "release",
+          "horizon": 8,
+          "min_query_interval": 1,
+          "tracking_threshold": 0.1,
+          "replan_on_gripper_change": true,
+          "free_step_limit": 0.12,
+          "grasp_step_limit": 0.04,
+          "smoothing": 1.0,
+          "settle_steps": 0,
+          "release_delay": 4,
+          "min_closing_steps": 3,
+          "min_aperture": 0.003,
+          "max_aperture": 0.035,
+          "aperture_stability": 0.002,
+          "privileged": false,
+          "lift_margin": 0.001,
+          "closure_confirm_steps": 1,
+          "guard_requery_steps": 1,
+          "handback_hold_steps": 0,
+          "handback_requery": true,
+          "stall_window": 20,
+          "stall_distance": 0.003,
+          "demand_threshold": 0.03,
+          "retry_distance": 0.015,
+          "retry_steps": 5,
+          "retry_limit": 2,
+          "retry_cooldown": 40
+        },
+        "engineering_override": null,
+        "safe_completion": false,
+        "unsafe_completion": false,
+        "safe_unfinished": true,
+        "unsafe_unfinished": false,
+        "violation": false,
+        "ever_contacted": true,
+        "ever_grasped": false,
+        "steps": 4200,
+        "ledger": {
+          "physics_steps": 25286,
+          "physics_seconds": 210.71667765639722,
+          "env_step_attempts": 4210,
+          "env_steps_returned": 4210,
+          "policy_queries": 525,
+          "policy_query_seconds": 125.64044296857901,
+          "policy_control_steps": 4200,
+          "guard_steps": 0,
+          "changed_steps": 30,
+          "phase": "completed",
+          "physics_accounting_attached": true,
+          "elapsed_seconds": 440.5794675189536
+        },
+        "output": "runs/maniguard/stack-release-trigger-v1/episode-0007",
+        "proposal_count": 4200,
+        "events": {
+          "guard_entry": 0,
+          "guard_exit": 0,
+          "changed": 30,
+          "guard_blocked": 0,
+          "release_delayed": 30,
+          "retry_started": 0,
+          "retry_active": 0,
+          "grasp_evidence": 1917,
+          "opening_proposals": 508,
+          "goal_observations": 4200
+        },
+        "first_violation_observation": null,
+        "goal_target": "bowl_45",
+        "last_release_request_before_first_violation": null,
+        "held_loss_scope": "Goal-checker target only; intermediate object releases are not covered.",
+        "held_loss_after_open_command_steps": [],
+        "handback_counting": "Hold actions inferred from the post-action countdown, including the final zero-countdown hold and excluding guard-blocked frames.",
+        "interpretation": "Temporal associations only; causal repairs require matched episodes.",
+        "release_audit": {
+          "actions_checked": 4200,
+          "adapted_and_executed_actions_match_exactly": true,
+          "only_delayed_opening_commands_changed": true,
+          "all_delays_within_declared_prefix_limit": true,
+          "declared_delay_limit": 4,
+          "opening_runs": 21,
+          "delayed_opening_runs": 20,
+          "delayed_actions": 30,
+          "maximum_delayed_prefix": 4,
+          "delayed_with_goal_target_held_before_action": 0,
+          "delayed_with_goal_target_unheld_before_action": 30,
+          "delayed_with_pre_action_hold_unknown": 0,
+          "first_target_held_observation": null,
+          "first_delayed_proposal": 911,
+          "last_delayed_proposal": 2125,
+          "first_violation_observation": null,
+          "delayed_actions_strictly_before_first_violation": null,
+          "first_violation_action_delayed": null,
+          "delayed_runs": [
+            {
+              "first_opening_proposal": 911,
+              "last_opening_proposal": 911,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 942,
+              "last_opening_proposal": 943,
+              "opening_requests": 2,
+              "delayed_actions": 2,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 959,
+              "last_opening_proposal": 959,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 1015,
+              "last_opening_proposal": 1015,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 1311,
+              "last_opening_proposal": 1311,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 1487,
+              "last_opening_proposal": 1487,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 1599,
+              "last_opening_proposal": 1599,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 1639,
+              "last_opening_proposal": 1639,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 1695,
+              "last_opening_proposal": 1695,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 1759,
+              "last_opening_proposal": 1759,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 1895,
+              "last_opening_proposal": 1895,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 1958,
+              "last_opening_proposal": 1958,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2047,
+              "last_opening_proposal": 2047,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2052,
+              "last_opening_proposal": 2055,
+              "opening_requests": 4,
+              "delayed_actions": 4,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2071,
+              "last_opening_proposal": 2071,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2087,
+              "last_opening_proposal": 2087,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2095,
+              "last_opening_proposal": 2095,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2101,
+              "last_opening_proposal": 2103,
+              "opening_requests": 3,
+              "delayed_actions": 3,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2110,
+              "last_opening_proposal": 2111,
+              "opening_requests": 2,
+              "delayed_actions": 2,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2122,
+              "last_opening_proposal": 2397,
+              "opening_requests": 276,
+              "delayed_actions": 4,
+              "first_executed_opening_proposal": 2126
+            }
+          ],
+          "alignment": "Proposal i executes before observation i+1. Goal observation i supplies pre-action target holding; a missing observation is unknown, not unheld. Strictly-before counts exclude the action producing the first violation.",
+          "scope": "Goal-checker target only; holds on other objects are not recorded here. Activation and temporal association do not establish that a delay preserved a useful grasp or improved an outcome."
+        }
+      },
+      "trace_sha256": "a5c4cf2ad46f5e5b53eb4d90859a20616d1033e7182c015a043a517e050bcc18"
+    },
+    {
+      "index": 8,
+      "label": "identity",
+      "diagnostic": {
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "adapter": {
+          "kind": "identity",
+          "horizon": 8,
+          "min_query_interval": 1,
+          "tracking_threshold": 0.1,
+          "replan_on_gripper_change": true,
+          "free_step_limit": 0.12,
+          "grasp_step_limit": 0.04,
+          "smoothing": 1.0,
+          "settle_steps": 0,
+          "release_delay": 4,
+          "min_closing_steps": 3,
+          "min_aperture": 0.003,
+          "max_aperture": 0.035,
+          "aperture_stability": 0.002,
+          "privileged": false,
+          "lift_margin": 0.001,
+          "closure_confirm_steps": 1,
+          "guard_requery_steps": 1,
+          "handback_hold_steps": 0,
+          "handback_requery": true,
+          "stall_window": 20,
+          "stall_distance": 0.003,
+          "demand_threshold": 0.03,
+          "retry_distance": 0.015,
+          "retry_steps": 5,
+          "retry_limit": 2,
+          "retry_cooldown": 40
+        },
+        "engineering_override": null,
+        "safe_completion": false,
+        "unsafe_completion": false,
+        "safe_unfinished": false,
+        "unsafe_unfinished": true,
+        "violation": true,
+        "ever_contacted": true,
+        "ever_grasped": false,
+        "steps": 4200,
+        "ledger": {
+          "physics_steps": 25286,
+          "physics_seconds": 210.71667765639722,
+          "env_step_attempts": 4210,
+          "env_steps_returned": 4210,
+          "policy_queries": 525,
+          "policy_query_seconds": 155.79264340666123,
+          "policy_control_steps": 4200,
+          "guard_steps": 0,
+          "changed_steps": 0,
+          "phase": "completed",
+          "physics_accounting_attached": true,
+          "elapsed_seconds": 429.6862719510682
+        },
+        "output": "runs/maniguard/stack-release-trigger-v1/episode-0008",
+        "proposal_count": 4200,
+        "events": {
+          "guard_entry": 0,
+          "guard_exit": 0,
+          "changed": 0,
+          "guard_blocked": 0,
+          "release_delayed": 0,
+          "retry_started": 0,
+          "retry_active": 0,
+          "grasp_evidence": 344,
+          "opening_proposals": 974,
+          "goal_observations": 4200
+        },
+        "first_violation_observation": {
+          "step": 193,
+          "ap": {
+            "any_stack_dropped": false,
+            "all_stack_upright": false,
+            "target_dropped": false,
+            "target_upright": true
+          },
+          "state": 1,
+          "accepting": false,
+          "doomed": true
+        },
+        "goal_target": "target_box_of_crackers_ep1_1",
+        "last_release_request_before_first_violation": null,
+        "held_loss_scope": "Goal-checker target only; intermediate object releases are not covered.",
+        "held_loss_after_open_command_steps": [],
+        "handback_counting": "Hold actions inferred from the post-action countdown, including the final zero-countdown hold and excluding guard-blocked frames.",
+        "interpretation": "Temporal associations only; causal repairs require matched episodes."
+      },
+      "trace_sha256": "95b850b5bf562c9caceb60098e373f856540ec67d0922b7ea87023851484f7df"
+    },
+    {
+      "index": 9,
+      "label": "identity",
+      "diagnostic": {
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 1,
+        "adapter": {
+          "kind": "identity",
+          "horizon": 8,
+          "min_query_interval": 1,
+          "tracking_threshold": 0.1,
+          "replan_on_gripper_change": true,
+          "free_step_limit": 0.12,
+          "grasp_step_limit": 0.04,
+          "smoothing": 1.0,
+          "settle_steps": 0,
+          "release_delay": 4,
+          "min_closing_steps": 3,
+          "min_aperture": 0.003,
+          "max_aperture": 0.035,
+          "aperture_stability": 0.002,
+          "privileged": false,
+          "lift_margin": 0.001,
+          "closure_confirm_steps": 1,
+          "guard_requery_steps": 1,
+          "handback_hold_steps": 0,
+          "handback_requery": true,
+          "stall_window": 20,
+          "stall_distance": 0.003,
+          "demand_threshold": 0.03,
+          "retry_distance": 0.015,
+          "retry_steps": 5,
+          "retry_limit": 2,
+          "retry_cooldown": 40
+        },
+        "engineering_override": null,
+        "safe_completion": false,
+        "unsafe_completion": false,
+        "safe_unfinished": true,
+        "unsafe_unfinished": false,
+        "violation": false,
+        "ever_contacted": true,
+        "ever_grasped": false,
+        "steps": 4200,
+        "ledger": {
+          "physics_steps": 25286,
+          "physics_seconds": 210.71667765639722,
+          "env_step_attempts": 4210,
+          "env_steps_returned": 4210,
+          "policy_queries": 525,
+          "policy_query_seconds": 151.24620430590585,
+          "policy_control_steps": 4200,
+          "guard_steps": 0,
+          "changed_steps": 0,
+          "phase": "completed",
+          "physics_accounting_attached": true,
+          "elapsed_seconds": 436.6502281411085
+        },
+        "output": "runs/maniguard/stack-release-trigger-v1/episode-0009",
+        "proposal_count": 4200,
+        "events": {
+          "guard_entry": 0,
+          "guard_exit": 0,
+          "changed": 0,
+          "guard_blocked": 0,
+          "release_delayed": 0,
+          "retry_started": 0,
+          "retry_active": 0,
+          "grasp_evidence": 589,
+          "opening_proposals": 1132,
+          "goal_observations": 4200
+        },
+        "first_violation_observation": null,
+        "goal_target": "bowl_45",
+        "last_release_request_before_first_violation": null,
+        "held_loss_scope": "Goal-checker target only; intermediate object releases are not covered.",
+        "held_loss_after_open_command_steps": [],
+        "handback_counting": "Hold actions inferred from the post-action countdown, including the final zero-countdown hold and excluding guard-blocked frames.",
+        "interpretation": "Temporal associations only; causal repairs require matched episodes."
+      },
+      "trace_sha256": "59ad652211c378171213bf75f72367b7144fcb694966c7fbc682c14736fcdffa"
+    },
+    {
+      "index": 10,
+      "label": "identity",
+      "diagnostic": {
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "adapter": {
+          "kind": "identity",
+          "horizon": 8,
+          "min_query_interval": 1,
+          "tracking_threshold": 0.1,
+          "replan_on_gripper_change": true,
+          "free_step_limit": 0.12,
+          "grasp_step_limit": 0.04,
+          "smoothing": 1.0,
+          "settle_steps": 0,
+          "release_delay": 4,
+          "min_closing_steps": 3,
+          "min_aperture": 0.003,
+          "max_aperture": 0.035,
+          "aperture_stability": 0.002,
+          "privileged": false,
+          "lift_margin": 0.001,
+          "closure_confirm_steps": 1,
+          "guard_requery_steps": 1,
+          "handback_hold_steps": 0,
+          "handback_requery": true,
+          "stall_window": 20,
+          "stall_distance": 0.003,
+          "demand_threshold": 0.03,
+          "retry_distance": 0.015,
+          "retry_steps": 5,
+          "retry_limit": 2,
+          "retry_cooldown": 40
+        },
+        "engineering_override": null,
+        "safe_completion": false,
+        "unsafe_completion": false,
+        "safe_unfinished": true,
+        "unsafe_unfinished": false,
+        "violation": false,
+        "ever_contacted": true,
+        "ever_grasped": false,
+        "steps": 4200,
+        "ledger": {
+          "physics_steps": 25286,
+          "physics_seconds": 210.71667765639722,
+          "env_step_attempts": 4210,
+          "env_steps_returned": 4210,
+          "policy_queries": 525,
+          "policy_query_seconds": 125.48538220231421,
+          "policy_control_steps": 4200,
+          "guard_steps": 0,
+          "changed_steps": 0,
+          "phase": "completed",
+          "physics_accounting_attached": true,
+          "elapsed_seconds": 440.9268829890061
+        },
+        "output": "runs/maniguard/stack-release-trigger-v1/episode-0010",
+        "proposal_count": 4200,
+        "events": {
+          "guard_entry": 0,
+          "guard_exit": 0,
+          "changed": 0,
+          "guard_blocked": 0,
+          "release_delayed": 0,
+          "retry_started": 0,
+          "retry_active": 0,
+          "grasp_evidence": 565,
+          "opening_proposals": 543,
+          "goal_observations": 4200
+        },
+        "first_violation_observation": null,
+        "goal_target": "bowl_45",
+        "last_release_request_before_first_violation": null,
+        "held_loss_scope": "Goal-checker target only; intermediate object releases are not covered.",
+        "held_loss_after_open_command_steps": [],
+        "handback_counting": "Hold actions inferred from the post-action countdown, including the final zero-countdown hold and excluding guard-blocked frames.",
+        "interpretation": "Temporal associations only; causal repairs require matched episodes."
+      },
+      "trace_sha256": "5027718281c5b48bc00359a28543bda482cf5de3a63481a97ce0b2289829626e"
+    },
+    {
+      "index": 11,
+      "label": "stable_closing_release_delay",
+      "diagnostic": {
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "adapter": {
+          "kind": "release",
+          "horizon": 8,
+          "min_query_interval": 1,
+          "tracking_threshold": 0.1,
+          "replan_on_gripper_change": true,
+          "free_step_limit": 0.12,
+          "grasp_step_limit": 0.04,
+          "smoothing": 1.0,
+          "settle_steps": 0,
+          "release_delay": 4,
+          "min_closing_steps": 3,
+          "min_aperture": 0.0,
+          "max_aperture": 0.041,
+          "aperture_stability": 0.002,
+          "privileged": false,
+          "lift_margin": 0.001,
+          "closure_confirm_steps": 1,
+          "guard_requery_steps": 1,
+          "handback_hold_steps": 0,
+          "handback_requery": true,
+          "stall_window": 20,
+          "stall_distance": 0.003,
+          "demand_threshold": 0.03,
+          "retry_distance": 0.015,
+          "retry_steps": 5,
+          "retry_limit": 2,
+          "retry_cooldown": 40
+        },
+        "engineering_override": null,
+        "safe_completion": false,
+        "unsafe_completion": false,
+        "safe_unfinished": true,
+        "unsafe_unfinished": false,
+        "violation": false,
+        "ever_contacted": true,
+        "ever_grasped": false,
+        "steps": 4200,
+        "ledger": {
+          "physics_steps": 25286,
+          "physics_seconds": 210.71667765639722,
+          "env_step_attempts": 4210,
+          "env_steps_returned": 4210,
+          "policy_queries": 525,
+          "policy_query_seconds": 93.60729313339107,
+          "policy_control_steps": 4200,
+          "guard_steps": 0,
+          "changed_steps": 25,
+          "phase": "completed",
+          "physics_accounting_attached": true,
+          "elapsed_seconds": 386.5258664248977
+        },
+        "output": "runs/maniguard/stack-release-trigger-v1/episode-0011",
+        "proposal_count": 4200,
+        "events": {
+          "guard_entry": 0,
+          "guard_exit": 0,
+          "changed": 25,
+          "guard_blocked": 0,
+          "release_delayed": 25,
+          "retry_started": 0,
+          "retry_active": 0,
+          "grasp_evidence": 4189,
+          "opening_proposals": 541,
+          "goal_observations": 4200
+        },
+        "first_violation_observation": null,
+        "goal_target": "bowl_45",
+        "last_release_request_before_first_violation": null,
+        "held_loss_scope": "Goal-checker target only; intermediate object releases are not covered.",
+        "held_loss_after_open_command_steps": [],
+        "handback_counting": "Hold actions inferred from the post-action countdown, including the final zero-countdown hold and excluding guard-blocked frames.",
+        "interpretation": "Temporal associations only; causal repairs require matched episodes.",
+        "release_audit": {
+          "actions_checked": 4200,
+          "adapted_and_executed_actions_match_exactly": true,
+          "only_delayed_opening_commands_changed": true,
+          "all_delays_within_declared_prefix_limit": true,
+          "declared_delay_limit": 4,
+          "opening_runs": 22,
+          "delayed_opening_runs": 20,
+          "delayed_actions": 25,
+          "maximum_delayed_prefix": 2,
+          "delayed_with_goal_target_held_before_action": 0,
+          "delayed_with_goal_target_unheld_before_action": 25,
+          "delayed_with_pre_action_hold_unknown": 0,
+          "first_target_held_observation": null,
+          "first_delayed_proposal": 727,
+          "last_delayed_proposal": 3085,
+          "first_violation_observation": null,
+          "delayed_actions_strictly_before_first_violation": null,
+          "first_violation_action_delayed": null,
+          "delayed_runs": [
+            {
+              "first_opening_proposal": 727,
+              "last_opening_proposal": 727,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 815,
+              "last_opening_proposal": 815,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 863,
+              "last_opening_proposal": 863,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 870,
+              "last_opening_proposal": 871,
+              "opening_requests": 2,
+              "delayed_actions": 2,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 1191,
+              "last_opening_proposal": 1191,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 1423,
+              "last_opening_proposal": 1423,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 1839,
+              "last_opening_proposal": 1839,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2175,
+              "last_opening_proposal": 2175,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2319,
+              "last_opening_proposal": 2319,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2399,
+              "last_opening_proposal": 2399,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2679,
+              "last_opening_proposal": 2679,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2759,
+              "last_opening_proposal": 2759,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2766,
+              "last_opening_proposal": 2767,
+              "opening_requests": 2,
+              "delayed_actions": 2,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2790,
+              "last_opening_proposal": 2791,
+              "opening_requests": 2,
+              "delayed_actions": 2,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2831,
+              "last_opening_proposal": 2831,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2862,
+              "last_opening_proposal": 2863,
+              "opening_requests": 2,
+              "delayed_actions": 2,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2935,
+              "last_opening_proposal": 2935,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 2951,
+              "last_opening_proposal": 2951,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 3046,
+              "last_opening_proposal": 3047,
+              "opening_requests": 2,
+              "delayed_actions": 2,
+              "first_executed_opening_proposal": null
+            },
+            {
+              "first_opening_proposal": 3085,
+              "last_opening_proposal": 3085,
+              "opening_requests": 1,
+              "delayed_actions": 1,
+              "first_executed_opening_proposal": null
+            }
+          ],
+          "alignment": "Proposal i executes before observation i+1. Goal observation i supplies pre-action target holding; a missing observation is unknown, not unheld. Strictly-before counts exclude the action producing the first violation.",
+          "scope": "Goal-checker target only; holds on other objects are not recorded here. Activation and temporal association do not establish that a delay preserved a useful grasp or improved an outcome."
+        }
+      },
+      "trace_sha256": "65d7d6cf58635478699c9d8121a1724b99687ef407ed2e071062e797de2ea0dd"
     }
   ],
   "completed_outcomes": {
     "safe_completion": 0,
-    "unsafe_completion": 1,
-    "safe_unfinished": 2,
-    "unsafe_unfinished": 2
+    "unsafe_completion": 2,
+    "safe_unfinished": 7,
+    "unsafe_unfinished": 3
   },
   "release_coverage": {
-    "delayed_actions": 122,
+    "delayed_actions": 179,
     "delayed_with_goal_target_held_before_action": 0,
-    "delayed_with_goal_target_unheld_before_action": 122,
+    "delayed_with_goal_target_unheld_before_action": 179,
     "delayed_with_pre_action_hold_unknown": 0
   },
   "analysis_source_hashes": {
@@ -2041,5 +3578,9 @@
     ],
     "scope": "Additional offline checks on previously counted physical episodes, not new simulator work."
   },
-  "interpretation": "All 122 delayed opening commands in the five completed trials occur while the goal target is unheld. Actions match execution and each delay is a prefix of at most four consecutive opening requests. Holds on other objects are outside this diagnostic. No completed identity comparisons or safe completions exist in this partial snapshot; no benefit or condition ranking is established."
+  "control_timing_audit": {
+    "path": "docs/research/research_notes/ManiGuard fruits Stack release control timing.json",
+    "sha256": "09f8f1ad36f7a76cd289cc5429b025dddc8047787d5a160567eae412a4ad7000"
+  },
+  "interpretation": "Neither rule improves safe completion in four scene/seed comparisons each. All delayed opening commands occur while the goal target is unheld; intermediate-object holds are outside this audit. The broad rule has one fewer violation than identity, but the root-zero cracker safety trajectories differ before any delayed command. This is not established grasp preservation or a causal repair. No optimizer or reserved evaluation has run."
 }

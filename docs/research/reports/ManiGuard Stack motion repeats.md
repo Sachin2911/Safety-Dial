@@ -97,10 +97,11 @@ times sum to 9540.53 seconds and must not be presented as wall time. These total
 the separate 32-action policy-switch reference, six-query replay, earlier screens,
 failed engineering attempts and later batches.
 
-The queue exited normally and the twelve-trial Stack release-trigger comparison started
-on the same validated policy server. The declared forty-eight Jar guard/hand-back/smoothing
-repeats and sixteen Lid guard trials remain queued afterward. The motion result motivates
-retaining cap adaptation as a lead with a measured safety tradeoff. It does not establish
+The queue exited normally and the
+[twelve-trial Stack release-trigger comparison](ManiGuard%20Stack%20release%20trigger%20comparison.md)
+has since completed with no safe-completion gain. The declared forty-eight Jar
+guard/hand-back/smoothing repeats are running, with sixteen Lid guard trials queued afterward.
+The motion result motivates retaining cap adaptation as a lead with a measured safety tradeoff. It does not establish
 the useful repeatable correction required before a larger matched optimizer study.
 
 ## Evidence and reproduction

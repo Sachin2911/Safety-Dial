@@ -1436,3 +1436,77 @@ offline checks on already counted physical episodes, not new simulator work. Pre
 fields of the first two follow-up diagnostics remain exactly unchanged. Updated snapshots
 retain source/trace hashes, planned coverage and the scope limitation. The physical queue
 continues with its existing policy and plan.
+
+## First completed release comparisons and failure timing
+
+Nine of twelve release-trigger trials are validated: zero safe completions, two unsafe
+completions, four safe unfinished and three unsafe unfinished. All four narrow-rule
+trials are complete, with two safe unfinished and two unsafe unfinished outcomes.
+The narrow bowl root-one trial adds 30 delayed openings but never holds the target.
+The broad cracker root-zero trial changes only two commands, at proposal indices 622
+and 623, and remains safe unfinished without a target grasp.
+
+Both cracker identity controls have completed. Root one finishes unsafely in 2464 actions;
+its broad-rule counterpart also finishes unsafely, while its narrow-rule counterpart
+remains unsafe unfinished. Root zero remains unsafe unfinished, matching the narrow
+rule's outcome. The broad root-zero run instead remains safe unfinished. Four completed
+condition/control comparisons now reuse two identity trials, with no safe-completion
+gain or loss. The broad rule has one fewer observed violation in those partial pairs,
+but that contrast needs the timing qualification below.
+
+In the root-zero pair, identity first violates stack uprightness at observation 193,
+while the broad rule first changes a command at proposal 622. Its monitor is still safe
+at observation 193 and no earlier proposal was changed. The two starts have identical
+joint state but different initial camera images and first policy proposals. This early
+safety divergence precedes any delayed action, so the pair does not establish that a
+release delay prevented the control's early failure. Later effects on the candidate's
+trajectory remain unresolved.
+
+The root-one identity control first violates stack uprightness at observation 1981 while
+the goal target remains upright and unheld. Its last opening proposal was 1566, followed
+by 414 consecutive closing proposals through the violation-producing action at 1980.
+The goal target is first held at observation 2349. Thus there is no opening request at
+the violation boundary for the release rule to block. Inspected synchronized overview
+and wrist frames at observations 1269, 1273, 1900, 1975, 1981 and 2000; a neighbouring
+stack block is visible beside the gripper at observation 2000. These views do not establish the
+contact cause or grasp attachment on other objects. Saved the frame figure and a timing
+record with trace/video/source hashes and the verified frame-to-observation mapping.
+
+All 154 delayed actions in the seven completed adapter trials occur while the goal target
+is unheld, with no missing pre-action hold observations at those actions. Command and
+bound audits pass, and the first five diagnoses remain exactly unchanged. The two bowl
+controls are live and the final broad-rule bowl trial remains queued. No physical plan
+or runtime controller was changed by these offline diagnostics.
+
+
+## Release-trigger comparison complete; Jar repeat batch started
+
+All twelve declared release trials are complete and validated: zero safe completions,
+two unsafe completions, seven safe unfinished and three unsafe unfinished. Identity has
+one unsafe completion, two safe unfinished and one unsafe unfinished; the narrow rule has
+two safe unfinished and two unsafe unfinished; the broad rule has one unsafe completion
+and three safe unfinished. Eight comparisons reuse four identity controls, with no
+safe-completion gain or loss. The apparent broad-rule safety advantage retains the
+pre-intervention divergence qualification described above.
+
+The final broad bowl root-zero trial adds 25 delayed commands, remains safe unfinished
+for 4200 actions and never holds the target. Across eight adapter trials, all 179 delayed
+openings occur while the goal target is unheld, with no missing pre-action holding at those
+steps. All command and four-action prefix-bound checks pass. Earlier nine-trial diagnoses
+reproduce exactly. Intermediate-object holds remain outside this audit.
+
+Saved source snapshots, runtime evaluator hashes, policy metadata and shared configuration
+validate across all twelve trials. Evaluation configuration differs only in scene, seed
+and output path. The batch consumes 46,813 actions, 281,910 physics ticks and 5,852 queries,
+with 2576.42 seconds of two-worker wall time. Summed process time is 4833.63 seconds and
+summed episode-ledger time is 4790.94 seconds. These are release-batch costs only.
+Published the complete comparison, mechanism/setup audits, outcome figure and standalone
+report. Viewed the outcome figure and retained the control-frame timing evidence with
+wording limited to what the images show. No controller or physical experiment plan changed.
+
+The release queue exited normally. The Jar queue switched the idle server to its pinned
+Jar checkpoint, completed a fresh 32-action reference and passed six-query interleaved
+replay, including equality to the original reference query. Its declared 48-trial physical
+batch is running with two workers. The sixteen-trial Lid comparison remains queued after
+all Jar results validate. Evolution, selection validation and reserved testing remain
+unrun and conditional on useful repeatable corrections.
