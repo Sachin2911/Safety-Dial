@@ -1282,3 +1282,39 @@ coverage, not eight independent baseline trials or a causal estimate. The report
 all planned comparisons and unique episode costs. Motion repeats remain live, followed
 by the previously declared release, Jar and Lid comparisons. No optimizer or reserved
 evaluation has run.
+
+## First safe-completion contrast in the motion repeats
+
+Nineteen of 24 trials are complete and validated: one safe completion, one unsafe
+completion, nine safe unfinished and eight unsafe unfinished. The tight 0.01/0.01 cap
+on task_0010 root zero completes safely in 1392 actions and 174 policy queries. It changes
+634 commands, beginning at proposal one. The goal target is first held at observation
+1290 and remains held through the successful held-intersection goal at observation 1392.
+All gripper proposals pass through unchanged. The same-scene/root identity control remains
+unsafe unfinished after 4200 actions, first violating stack uprightness at observation 975.
+Physical starts need not match, so this is an observed contrast rather than a causal repair.
+
+All three cracker roots are now complete for the tight cap and identity. The cap has one
+safe completion and two unsafe unfinished episodes; identity has two safe unfinished and
+one unsafe unfinished. Thus the promising completion coexists with more observed violations
+in this small subset. The remaining bowl control and other cap comparisons are still
+running. Eleven completed condition comparisons reuse five unique controls; only the tight
+cap has a safe-completion gain so far. This does not justify an overall condition ranking
+or an evolutionary claim.
+
+Two other newly validated outcomes remain unfinished: the middle cap on task_0010 root
+zero violates stack uprightness at observation 194 after 235 changed commands in total;
+the wider cap on task_0013 root one remains safe unfinished after 45 changes, matching its
+control's outcome. Neither trial ever holds the target.
+
+Moved the temporary motion-tracking diagnostic into a reusable helper and CLI with source,
+plan and trace hashes, incomplete-coverage reporting and exclusive output paths. The audit
+rejects misaligned observations, mismatched execution, incorrect active caps and commands
+outside their limits. It keeps measured physical motion separate from the command bound
+and handles a first-action violation without inventing pre-violation observations.
+Nine focused tests and Ruff pass. The new implementation reproduces every field of the
+previous six-episode audit exactly and passes on all nineteen completed physical traces.
+The successful trial's maximum commanded step is 0.01000011 rad; its maximum measured
+step is 0.01532289 rad. Command compliance therefore remains distinct from a physical
+velocity guarantee. Reproduction instructions and current findings are updated; runtime
+controllers and queued physical plans are unchanged.

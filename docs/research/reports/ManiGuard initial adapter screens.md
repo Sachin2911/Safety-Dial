@@ -166,6 +166,15 @@ and interleaved replay passed. It then runs 12 Stack release-trigger comparisons
 scenes and root seeds zero, one and two. The new sixteen-trial Lid guard comparison follows
 the Jar repeats after its own policy-switch reference and replay checks. Fixed rules
 remain the first comparison.
+The motion follow-up has produced its first safe-completion contrast: the 0.01/0.01-radian
+cap on the cracker scene at root zero finishes safely in 1392 actions, whereas its identity
+control stays unsafe unfinished after 4200. All three cracker roots are complete for this
+cap and identity: the cap has one safe completion and two unsafe unfinished episodes;
+identity has two safe unfinished and one unsafe unfinished. This is an isolated gain with
+adverse outcomes elsewhere, not a repeatable repair. The other motion comparisons remain
+in progress. See the [current comparisons](../research_notes/ManiGuard%20fruits%20Stack%20motion%20comparison.json)
+and [command/state audit](../research_notes/ManiGuard%20fruits%20motion%20tracking.json).
+
 Matched evolution, random search and categorical policy-gradient code exists but has not
 consumed ManiGuard training episodes. Further optimization and final selection remain
 conditional on useful repeatable correction headroom; no optimizer advantage is claimed.

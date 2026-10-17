@@ -216,3 +216,20 @@ scene and seed do not guarantee identical physical starts, and incomplete compar
 cannot rank conditions fairly. Whole-batch costs count every recorded episode once;
 comparison totals reuse controls and must not be summed as study costs. Missing pair
 costs remain null rather than becoming zero.
+
+
+`maniguard_motion_tracking.py` checks all validated completed identity/motion episodes in
+a batch. It verifies action/observation ordering, adjacent measured states, exact agreement
+between adapted and executed arm targets, the configured active cap, and commanded target
+displacements. Measured joint motion is reported separately and may exceed a command cap.
+The output retains incomplete batch coverage, source/plan/trace hashes and the timing of
+measured excursions relative to the first violation. It does not infer a failure cause.
+
+```bash
+data/maniguard/envs/sim/bin/python experiments/scripts/maniguard_motion_tracking.py \
+  --batch runs/maniguard/stack-motion-repeat-v1 \
+  --output runs/maniguard/reports/stack-motion-tracking.json
+```
+
+Use a new output path for each audit. This command reads completed traces and makes no
+simulator actions or policy queries.

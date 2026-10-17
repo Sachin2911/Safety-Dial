@@ -13,13 +13,16 @@ All six initial adapters have been implemented. Twelve original-policy baselines
 The [initial-screen report](docs/research/reports/ManiGuard%20initial%20adapter%20screens.md)
 records all outcomes, costs and remaining limitations.
 
-Prerequisite guarding and motion smoothing are the strongest early leads: each safely
-completed one Jar scene where the contemporaneous unchanged policy transported an open
-jar. These are single-trial contrasts. Across four Jar scenes, the guard and unchanged
-policy each complete three safely, smoothing completes two, and no overall improvement
-is established. The Stack screen also found no safe-completion gain. The release rule
-rarely activates, bounded retries execute the intended retreat without a demonstrated
-recovery, and the tested settling/requery rule increases cost without improving completion.
+Prerequisite guarding and motion smoothing each safely completed one Jar scene where
+the contemporaneous unchanged policy transported an open jar. Across four Jar scenes,
+the guard and unchanged policy each complete three safely, smoothing completes two,
+and no overall improvement is established. The initial Stack screen found no safe-completion
+gain; its motion follow-up now has one promising tight-cap contrast on the cracker scene,
+but the other two cracker seeds remain unsafe unfinished. These are small engineering
+comparisons with differing physical starts, not demonstrated repeatable repairs.
+The release rule rarely activates, bounded retries execute the intended retreat without
+a demonstrated recovery, and the tested settling/requery rule increases cost without
+improving completion.
 
 Eight extra Lid baselines are also complete: one unsafe completion, two unsafe unfinished
 and five safe unfinished. Three scenes now show lifting before lid placement; three other
@@ -179,14 +182,20 @@ interesting if a single cautious setting is inadequate and different situations 
 different settings. Slowing an incorrect path may not help, and motion limits alone do
 not guarantee safety.
 
-The first two completed repeated Stack comparisons, on the bowl scene at roots zero
-and one, leave both the unchanged policy and the tight cap safely unfinished, without
-a target grasp. The tight cap's third bowl trial tips the target and remains unfinished;
-its unchanged-policy control is still pending.
-A [trace audit](docs/research/research_notes/ManiGuard%20fruits%20motion%20tracking.json)
-confirms that the limits reach the executed joint targets. Actual joint motion can still
-exceed the commanded target displacement, so this adapter is not a hard velocity limit.
-The remaining repeated comparisons are in progress.
+The tight 0.01/0.01-radian cap now safely completes the cracker scene at root zero in
+1392 actions, with 634 changed commands. Its unchanged-policy control remains unsafe
+unfinished after 4200 actions. Across the three cracker roots, this cap has one safe
+completion and two unsafe unfinished episodes; identity has two safe unfinished and one
+unsafe unfinished. This exposes a possible correction and adverse outcomes in the same
+small comparison, not a repeatable overall safety improvement.
+
+On the bowl scene, roots zero and one leave both identity and the tight cap safely
+unfinished without a target grasp. The cap's third bowl trial tips the target; its control
+is still pending. A reproducible
+[trace audit](docs/research/research_notes/ManiGuard%20fruits%20motion%20tracking.json)
+confirms that the limits reach the executed joint targets, including the successful
+cracker trial. Actual joint motion can exceed the commanded target displacement, so this
+adapter is not a hard velocity limit. The remaining comparisons are in progress.
 
 ## 3. Prevent premature transitions between task stages
 
