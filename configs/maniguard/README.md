@@ -76,3 +76,20 @@ It checks each task against the declared scene split. Complete evidence retains 
 safe/unsafe and completed/unfinished categories; it does not silently drop inactive or
 failed episodes. The initial Jar plan uses full benchmark horizons on four engineering
 scenes and seed 0. It is a mechanism/throughput diagnostic, not a final performance estimate.
+
+`experiments/scripts/maniguard_search.py` runs matched evolution, uniform random search
+and episodic categorical REINFORCE from an explicitly supplied protocol. It reuses the
+repository's tested `AdapterSearch` implementation without inheriting UNISafe budgets.
+The protocol declares a finite domain, fixed adapter family and information access,
+training scenes/seeds, population, generations and search seeds. All methods receive the
+same initial population and candidate episode allocations. Search only accepts the frozen
+training split. Hand-back searches cannot change the guard's trigger or policy horizon.
+
+The shared terminal training objective is task completion minus twice the physical
+violation indicator. All four physical outcome categories remain separately recorded.
+This is a training preference, not a safety guarantee. REINFORCE learns a distribution
+over the same adapter parameters; pretrained VLA weights remain frozen. Finalists require
+separate validation before reserved testing. Optimizer states, source hashes, proposed
+candidates, all episode costs and failures are saved. A failed stage stops the search;
+its partial interactions must still enter the study accounting. No search budget has yet
+been selected or executed for ManiGuard.

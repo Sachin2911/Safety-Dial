@@ -215,3 +215,26 @@ unexecuted. Closure-before-lift and post-intervention hypotheses require actual 
 guard events; Jar tipping alone does not establish their headroom. All six physical
 hypothesis evaluations, optimizer comparisons where justified, and reserved evaluation
 remain outstanding.
+
+## Jar baseline completion and matched-search implementation
+
+All four original-policy Jar development episodes finished. Outcomes: one safe completion,
+zero unsafe completions, zero safe unfinished episodes, and three unsafe unfinished
+episodes. The final scene (`task_0008/base`) also reached its 2,000-action horizon with a
+physical violation. This is four development scenes with one policy seed, not a final
+estimate. The baseline progress JSON now contains the complete four-scene evidence.
+
+The pinned Lid pi0 checkpoint loaded successfully and its four-scene baseline batch is
+running. Original Lid configuration uses sticky grasping, explicitly overriding the
+saved scene's assisted mode to match the policy configuration. This setup choice is logged.
+The repaired client tolerated the first inference compilation without a heartbeat failure.
+
+Implemented the matched optimizer runner using the already tested categorical AdapterSearch
+from the previous study, with new ManiGuard protocol checks and physical evaluator. It
+interleaves method order by generation, uses common starting populations and candidate
+episode allocations, preserves all reevaluations, and stores optimizer states and costs.
+Ten new protocol/objective checks plus two reused optimizer tests pass. Search protocols
+reject reserved scenes, information-access changes and hand-back changes to the fixed
+guard. The ordinary-learning comparator is episodic categorical REINFORCE over the same
+adapter parameters, not VLA fine-tuning. Physical search budgets and runs remain pending
+mechanism screens; these engineering tests are not optimizer-performance evidence.
