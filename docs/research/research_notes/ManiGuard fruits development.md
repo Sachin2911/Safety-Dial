@@ -569,3 +569,13 @@ This trial exercised the adaptive scheduler without establishing a completion ga
 The actual query counts remain the cost measure; raw trigger counts are not additional
 queries. Ten screen episodes are complete. The declared motion-cap, release, smoothing,
 fixed-horizon and adaptive comparisons continue before any optimizer selection.
+
+Prepared a bounded follow-up for motion sensitivity after the initial screens: identity
+and three fixed free/grasp caps (0.01/0.01, 0.03/0.02 and 0.06/0.04 radians), on the two
+engineering scenes with observed original-policy completion, with root seeds 0, 1 and 2.
+The 24 jobs are randomized and retain horizon 8, the unchanged full task horizon and
+unprivileged inputs. Smoothing and settling remain disabled to isolate cap settings.
+This follows the hypothesis's requirement to check a few simple motion limits before
+choosing a search representation. The faster unsafe cap result is motivation for this
+sensitivity check, not an improvement claim. The plan is recorded but not launched; the
+initial Stack, all-six-hypothesis Jar, and additional Lid sequence remains unchanged.

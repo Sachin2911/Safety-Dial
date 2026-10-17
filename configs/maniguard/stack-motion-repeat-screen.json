@@ -1,0 +1,285 @@
+{
+  "split": "engineering",
+  "ordering_seed": 20261020,
+  "description": "Repeated fixed joint-cap screen on the two engineering scenes with observed original-policy completion. Identity and three cap settings share scenes and root seeds, original horizon, frozen checkpoint, and unprivileged observations.",
+  "rationale": "The initial 0.03/0.02 cap completed task_0010 faster but unsafely. This is motivation to test sensitivity to a few fixed limits, not evidence of safe improvement. Both scenes show baseline variability. No smoothing, settling, or other adapter is enabled; all non-cap parameters remain fixed.",
+  "scope": "Development mechanism test, not candidate optimizer training or reserved evaluation. Run after the initial declared screens; not started when this plan was recorded.",
+  "jobs": [
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 2,
+      "label": "cap_001_001",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.01,
+        "grasp_step_limit": 0.01
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 1,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 2,
+      "label": "cap_006_004",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.06,
+        "grasp_step_limit": 0.04
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "label": "cap_001_001",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.01,
+        "grasp_step_limit": 0.01
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 1,
+      "label": "cap_006_004",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.06,
+        "grasp_step_limit": 0.04
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 1,
+      "label": "cap_001_001",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.01,
+        "grasp_step_limit": 0.01
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 2,
+      "label": "cap_001_001",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.01,
+        "grasp_step_limit": 0.01
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 2,
+      "label": "cap_003_002",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.03,
+        "grasp_step_limit": 0.02
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 2,
+      "label": "cap_006_004",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.06,
+        "grasp_step_limit": 0.04
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 1,
+      "label": "cap_003_002",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.03,
+        "grasp_step_limit": 0.02
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 0,
+      "label": "cap_006_004",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.06,
+        "grasp_step_limit": 0.04
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 2,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 1,
+      "label": "cap_001_001",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.01,
+        "grasp_step_limit": 0.01
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 0,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 1,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 0,
+      "label": "cap_003_002",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.03,
+        "grasp_step_limit": 0.02
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 1,
+      "label": "cap_006_004",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.06,
+        "grasp_step_limit": 0.04
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 0,
+      "label": "cap_001_001",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.01,
+        "grasp_step_limit": 0.01
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "label": "cap_006_004",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.06,
+        "grasp_step_limit": 0.04
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 1,
+      "label": "cap_003_002",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.03,
+        "grasp_step_limit": 0.02
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 2,
+      "label": "cap_003_002",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.03,
+        "grasp_step_limit": 0.02
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 2,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "label": "cap_003_002",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.03,
+        "grasp_step_limit": 0.02
+      }
+    }
+  ]
+}
