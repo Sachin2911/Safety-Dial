@@ -6,6 +6,11 @@ candidate to record, followed by five further candidates from the same discussio
 These are possibilities to investigate, not commitments to an architecture, optimizer or
 experiment budget. No ManiGuard improvement has been demonstrated locally.
 
+Implementation and experiment records are maintained in the
+[ManiGuard study log](docs/research/research_notes/ManiGuard%20fruits%20development.md).
+All six initial adapters have been implemented. Engineering checks and original-policy
+baselines are underway; adapter improvements and evolutionary advantages remain unproven.
+
 ## Candidate overview
 
 Each row is a hypothesis to screen, not an established failure mechanism or improvement.

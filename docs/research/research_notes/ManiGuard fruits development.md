@@ -265,3 +265,30 @@ random state. Three additional tests verify that restored evolution, random sear
 policy-gradient optimizers produce identical subsequent draws and updates. There are 48
 passing applicable engineering checks in total (33 adapter/result checks plus 15 optimizer
 and protocol checks). No ManiGuard optimizer has yet consumed physical training episodes.
+
+## Lid baseline completion and Stack launch
+
+All four Lid engineering baselines are safe unfinished episodes at the unchanged
+1,900-action horizon. All made contact; none reported a container grasp. The lid-on-container
+predicate held for 1,203 observations on task_0003 and 372 on task_0006, but never on
+task_0008 or task_0014. Completing the prerequisite sometimes occurs without later task
+completion. These four episodes supply no observed premature-transport violation, so
+closure-guard headroom remains unestablished in this small development sample.
+
+The Lid pi0 fixed-observation replay check passed: corresponding queries were bitwise
+identical across distinct same-seed episode IDs, and the first chunk matched its physical
+baseline. Four extra model queries are recorded in `runs/maniguard/engineering/lid-replay-v1`.
+The engineering JSON now includes that check. The baseline progress JSON contains all eight
+completed Jar and Lid episodes, preserving their separate outcomes and costs.
+
+Checked the authors' public dataset listing and the pinned benchmark file listing for
+released policy-evaluation traces. None were found in those sources. The separate
+[grasp-annotation dataset](https://huggingface.co/datasets/IDEAS-Lab-Northwestern/maniguard-grasp-annotations)
+is a demonstration-generation pose database, not policy outcome evidence. Only its
+metadata and README were read; reserved-scene outcomes were not inspected.
+
+The pinned Stack checkpoint loaded and its handshake was verified. The four-scene Stack
+baseline batch is now running at the original 4,200-action maximum horizon, with sticky
+grasping and the legacy camera profile. Do not switch policy families while it is live.
+All fixed adapter comparisons remain pending; the original-policy measurements do not
+establish adaptation benefits.
