@@ -14,15 +14,14 @@ gate before a bounded optimization pilot.
 
 The core phase-two claim is safe execution adaptation. Continuation under a learned safety
 filter requires the separately specified filter extension; ManiGuard's existing monitor
-does not intervene. Eight short phase-two engineering checks have now validated on Jar
-and Stack under the frozen preparation assignments, with 32 policy actions per check.
-They establish bounded integration evidence, not a learning or performance result. No
-full preparation episode, comparative pilot or reserved evaluation has run at this
-checkpoint; the pilot protocol and measured compute budget still need to be frozen.
-Clutter's policy-startup schema mismatch is repaired and its original-executor check is
-valid. Its shared identity attempt failed at encoder-version validation before any policy
-action; that invalid attempt and its initialization costs are preserved. The remaining
-preparation allocation is paused for a documented recovery. See the
+does not intervene. The amended short integration allocation is complete, with eleven
+valid 32-action checks across Jar, Stack and Clutter and one retained invalid initialization.
+Clutter's encoder repair passed identity and stochastic checks; recovery consumed an
+unspent slot without increasing the budget. The omitted Clutter composition check is
+explicitly recorded. These checks establish bounded integration evidence, not a learning
+or performance result. Full training-only preparation references have started in Clutter;
+no comparative pilot or reserved evaluation has run, and the pilot protocol and measured
+compute budget still need to be frozen. See the
 [phase-two development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
 for the evidence and remaining work. The sections below preserve the earlier motivation,
 decisions and research trail; this update governs the new phase.

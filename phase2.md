@@ -5,16 +5,17 @@ ManiGuard repairs to a shared method with evidence across tasks. This document p
 that direction and the proposed implementation and evaluation programme.
 
 **Implementation checkpoint, 17 October 2026:** the shared controller and supporting
-runtime are implemented. Ten short engineering attempts have been consumed: eight valid
-Jar/Stack checks, one valid Clutter original-executor check and one failed Clutter identity
-initialization. The failure occurred before policy actions and remains invalid with its
-costs retained. No full preparation episode, comparative pilot, learning result or reserved
-evaluation has run. Clutter's policy startup is repaired; encoder-version provenance and
-a bounded recovery within the preparation allocation are being resolved. The [development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
+runtime are implemented. The amended short integration allocation is complete: eleven
+valid checks across Jar, Stack and Clutter, plus one retained invalid Clutter encoder
+initialization. Its recovery used an unspent slot and added no budget; the independent
+Clutter fixed-composition check was omitted, with that coverage retained on Jar/Stack.
+The repaired encoder passed both Clutter identity and stochastic checks. Full training-only
+preparation references have now started in Clutter. No comparative pilot, learning result
+or reserved evaluation has run. The [development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
 and [requirements ledger](docs/research/research_notes/ManiGuard%20phase2%20requirements.json)
-record the current evidence and limitations. Preparation assignments are separately
-frozen; the pilot and main-study numerical budgets below remain planning defaults to
-cost and freeze before those evaluations.
+record the current evidence and limitations. Preparation assignments and their explicit
+recovery amendment are frozen; the pilot still requires full reference measurements and
+an evidence-based resource estimate before its protocol can be frozen.
 
 ## 1. Research objective and intended contribution
 
@@ -109,15 +110,15 @@ unchanged physical risk.
 The six families and full horizons are verified against the pinned upstream pipeline
 inventory and joint-evaluation configs, referenced by
 [the phase-two source manifest](configs/maniguard/phase2/sources.json). Assets and
-checkpoints are local for Jar, Stack, Lid and Clutter. Phase-two physical engineering
-checks currently cover Jar and Stack only; metadata preparation is not behavioral validation.
+checkpoints are local for Jar, Stack, Lid and Clutter. Phase-two short physical engineering
+checks cover Jar, Stack and Clutter; metadata preparation alone is not behavioral validation.
 
 | Family | Base tasks | Full action horizon | Current local state | Proposed role |
 | --- | ---: | ---: | --- | --- |
 | Jar transport | 26 | 2,000 | Assets/policy; four valid phase-two short checks | Development and pilot |
 | Stack retrieve | 28 | 4,200 | Assets/policy; four valid phase-two short checks | Development and pilot |
 | Lid transport | 30 | 1,900 | Phase-one assets/policy and evaluated runner; no phase-two run | Existing development evidence; later cross-family check |
-| Clutter pickup | 55 | 1,100 | Policy verified; original executor checked; encoder initialization repair | Add to pilot for a different task structure |
+| Clutter pickup | 55 | 1,100 | Original, identity and stochastic short checks valid; full preparation started | Add to pilot for a different task structure |
 | Cabinet pickup | 35 | 5,700 | Metadata and policy pin recorded; local assets not prepared | Reserve for transfer |
 | Dusty transfer | 26 | 5,100 | Metadata and policy pin recorded; local assets not prepared | Reserve for transfer |
 

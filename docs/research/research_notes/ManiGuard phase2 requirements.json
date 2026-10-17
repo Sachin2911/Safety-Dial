@@ -1,7 +1,7 @@
 {
   "schema": "maniguard-phase2-requirements-v1",
   "objective": "Implement phase2.md fully and push regularly",
-  "plan_sha256": "cc9344afcca49dc4dfe80f60c11472a737bc71aa9ff6cda093ca17fbc132a1f0",
+  "plan_sha256": "20608236751620280d488a86d4e9ecbfdddfea134dd2ccc6444476ff05337de5",
   "status": "active",
   "requirements": [
     {
@@ -54,9 +54,10 @@
         "configs/maniguard/phase2/sources.json",
         "experiments/tests/test_maniguard_phase2_families.py",
         "runs/maniguard/phase2/setup/service-clutter-v1/service.json",
-        "runs/maniguard/phase2/setup/service-clutter-v2/service.json"
+        "runs/maniguard/phase2/setup/service-clutter-v2/service.json",
+        "runs/maniguard/phase2/reports/preparation-integration-v1/report.json"
       ],
-      "progress_note": "All six families are registered. Jar/Stack short checks validate routing. Clutter policy startup is repaired and its original executor check is valid; encoder recovery is pending. Six-family initialization remains incomplete."
+      "progress_note": "All six families are registered. Short physical integration is valid on Jar, Stack and Clutter. Clutter identity recovery and stochastic execution pass; Lid, Cabinet and Dusty phase-two integration remains outstanding."
     },
     {
       "id": "splits",
@@ -80,9 +81,10 @@
         "experiments/tests/test_maniguard_phase2_features.py",
         "runs/maniguard/phase2/setup/encoder-smoke.json",
         "runs/maniguard/phase2/reports/preparation-partial-v2/report.json",
-        "experiments/tests/test_maniguard_phase2_results.py"
+        "experiments/tests/test_maniguard_phase2_results.py",
+        "runs/maniguard/phase2/reports/preparation-integration-v1/report.json"
       ],
-      "progress_note": "Timestamped features were audited in six shared-runtime Jar/Stack short checks; no reserved-family features or outcomes were used."
+      "progress_note": "Timestamped shared features are audited on Jar, Stack and Clutter. Loaded-module provenance resolves metadata shadowing without relaxing version pins. No reserved-family features or outcomes were used."
     },
     {
       "id": "recurrent",
@@ -214,9 +216,10 @@
         "runs/maniguard/phase2/setup/encoder-loader-failure-v1.json",
         "runs/maniguard/phase2/setup/service-clutter-v1/service.json",
         "runs/maniguard/phase2/reports/preparation-partial-v4/report.json",
-        "runs/maniguard/phase2/setup/failed-clutter-identity-audit-v1/audit.json"
+        "runs/maniguard/phase2/setup/failed-clutter-identity-audit-v1/audit.json",
+        "runs/maniguard/phase2/reports/preparation-integration-v1/report.json"
       ],
-      "progress_note": "Ten short attempts are counted once: nine valid and one invalid. The immutable terminal-cost audit reconciles the failed initialization counters while preserving its invalid outcome. Continuous one-GPU reservation includes setup and idle time. Full preparation and measured pilot costing remain incomplete."
+      "progress_note": "Integration totals are 352 policy actions, 52 queries and 3,144 physics ticks, including the paid failure. Setup encoder calls are separate; continuous reservation was 1.48357 GPU-hours at the integration report. Full preparation and measured pilot costing remain incomplete."
     },
     {
       "id": "preparation",
@@ -228,9 +231,10 @@
         "configs/maniguard/phase2/preparation.json",
         "runs/maniguard/phase2/reports/preparation-partial-v2/report.json",
         "runs/maniguard/phase2/reports/preparation-partial-v4/report.json",
-        "configs/maniguard/phase2/preparation_amendment.json"
+        "configs/maniguard/phase2/preparation_amendment.json",
+        "runs/maniguard/phase2/reports/preparation-integration-v1/report.json"
       ],
-      "progress_note": "10/12 short attempts are consumed, with 9 valid and 1 invalid; 0/24 full preparation episodes have run. The prospective amendment replaces the unclaimed Clutter composition slot with identity recovery and keeps the final stochastic check. Ceilings and original receipts remain unchanged."
+      "progress_note": "All 12 short slots are consumed: 11 valid checks and one retained invalid initialization with source-reconciled costs. Identity recovery used the unspent Clutter composition slot; its omitted physical check is disclosed. The first full Clutter reference batch is running; the full24 preparation allocation is incomplete."
     },
     {
       "id": "pilot",
@@ -342,8 +346,10 @@
       "requirement": "Regular GitHub pushes and verified finalpublication",
       "acceptance": "Remote branch hashes match committed study milestones",
       "status": "partial",
-      "evidence": [],
-      "progress_note": "Implementation checkpoints through commit 8efc39a have been pushed to the authorized research/maniguard-fruits branch. The final study and publication audit remain outstanding."
+      "evidence": [
+        "runs/maniguard/phase2/reports/preparation-integration-v1/report.json"
+      ],
+      "progress_note": "Implementation checkpoints through 45463f1 have been pushed to the authorized research/maniguard-fruits branch. Final results and final publication audit remain outstanding."
     }
   ],
   "evidence_checkpoint": {
@@ -398,21 +404,23 @@
   },
   "original_plan_sha256": "29155a2b03c660feea760f64d0283d243bd3ef3f4127f1eb525ebba2f918da13",
   "latest_checkpoint": {
-    "report": "runs/maniguard/phase2/reports/preparation-partial-v4/report.json",
-    "short_attempts": 10,
-    "valid_short_attempts": 9,
+    "report": "runs/maniguard/phase2/reports/preparation-integration-v1/report.json",
+    "short_attempts": 12,
+    "valid_short_attempts": 11,
     "failed_short_attempts": 1,
-    "full_preparation_attempts": 0,
+    "full_preparation_attempts": 1,
     "pilot_attempts": 0,
-    "state": "recovery_ready_before_remaining_short_checks",
+    "state": "short_integration_complete_full_clutter_preparation_started",
     "amendment": "configs/maniguard/phase2/preparation_amendment.json",
-    "report_sha256": "4747412b635a7a74ed2ffdb769bcf3ed5e4a854a3ff69ff466c99a707c553c2e",
+    "report_sha256": "dcc7c661787b3eac6ba557dca4ab9fd265361ef9044c05982870f5026fea250e",
     "reservation_snapshot": {
-      "timestamp": 1792277998.556704,
+      "timestamp": 1792278208.8638854,
       "reservation_started_at": 1792272868,
       "reserved_gpus": 1,
-      "wall_seconds": 5130.556704044342,
-      "allocated_gpu_seconds": 5130.556704044342
-    }
+      "wall_seconds": 5340.863885402679,
+      "allocated_gpu_seconds": 5340.863885402679
+    },
+    "valid_full_preparation_attempts": 0,
+    "running_full_preparation_attempts": 1
   }
 }
