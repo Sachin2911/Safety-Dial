@@ -1851,3 +1851,67 @@ like the original smoothing success, has not repeated in this follow-up trial.
 Saved the new case and variability audits, retaining every earlier diagnosis and all
 partial comparison coverage. The original 48-trial plan remains active, with the Lid
 comparison still queued afterward. No optimizer or reserved evaluation has run.
+
+
+## Thirty-five Jar trials: first hand-back gain over the same plain guard
+
+The new snapshot validates 35 completed trials: nine safe completions, one unsafe
+completion, sixteen safe unfinished and nine unsafe unfinished. Two episodes were
+active and eleven had not started when the comparison was captured. Every previous
+diagnosis is retained unchanged, with complete action records and saved source hashes
+checked for the newly completed trials too.
+
+| Candidate versus identity | Completed pairs | Safe-completion gains | Losses | Violation difference | Candidate/control queries |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Guard with settling/requery | 6 | 2 | 1 | -1 | 3743 / 1271 |
+| Plain guard | 7 | 1 | 0 | -1 | 1658 / 1672 |
+| Motion smoothing | 7 | 1 | 0 | 0 | 1503 / 1672 |
+
+The first completed direct hand-back gain is task_0017 at root one:
+
+| Condition | Outcome | Actions | Queries | First closed | First target held |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Identity | Safe unfinished | 2000 | 250 | 342 | Never |
+| Smoothing | Safe unfinished | 2000 | 250 | 503 | Never |
+| Plain guard | Safe unfinished | 2000 | 269 | 398 | Never |
+| Guard with settling/requery | Safe complete | 1343 | 372 | 767 | 1271 |
+
+The plain guard blocks 36 proposals from 136 through 382. Hand-back blocks 129 and
+performs 292 settling holds; its last changed proposal is 759, before closure and target
+grasp. Neither guard variant changes a command while the goal target is held. The successful
+hand-back first leaves support at observation 1274. This contrasts eventual task completion
+with three failures to obtain a target grasp, rather than repairing an observed transport
+violation in these counterparts.
+
+The saved four-condition audit validates shared policy, study sources, runtime and
+evaluation settings except output directory. The two guard adapters differ only in kind
+and four versus zero settling steps; all shared prerequisite settings match. Initial joint
+state matches but overview/wrist images differ by up to 77 and 7 pixel values, and the
+first original policy proposals differ by up to 0.00031197 before either adapter changes
+an action. The outcome contrast is not an identical-input causal repair.
+
+Across six completed comparisons with the plain guard, hand-back has one safe-completion
+gain and one loss, one fewer observed violation, and 4570 versus 1331 queries. The loss
+remains task_0002 at root two, where the plain guard completes safely and hand-back never
+closes or grasps. These alternate-control costs reuse the same physical episodes and
+must not be added again to the batch total.
+
+The plain guard also supplies the first repeat-batch gain against identity on task_0008
+at root one: safe completion at 1133 actions and 194 queries versus identity safe unfinished
+at 2000 actions and 250 queries. Its 74 blocked proposals end at 438, before closure at
+463, target holding at 1001 and departure from support at 1007. The matching smoothing
+run tips at observation 830 without closing or grasping, and remains unfinished.
+
+Smoothing on task_0017 at root two closes at observation 367, tips at 1219 while closed,
+and never holds the target. Together with the safe-unfinished root-zero and root-one runs,
+none of the three repeats reproduces the original successful smoothing case on that scene.
+The two newly completed smoothing failures are against safe-unfinished identity controls;
+they remove the earlier partial violation advantage. This illustrates why unfinished
+control coverage cannot support an aggregate safety claim.
+
+Hand-back on task_0013 at root two remains safe unfinished at 2000 actions and 938 queries.
+It blocks 522 proposals and changes 1110 actions in total, all before holding; it closes
+at 1534 but never grasps. The plain guard tips and identity remains safe unfinished in
+this case. The saved progress and direct-gain audit retain timelines, exact action checks,
+configuration checks, raw hashes and the immutable 35-trial snapshot. The remaining Jar
+trials and queued Lid comparison continue; no optimizer or reserved evaluation has run.
