@@ -2368,3 +2368,29 @@ gate. This is not a claim that all parameterizations or broader research directi
 No trained VLA checkpoint requires storage. Code, numerical findings and figures are
 published through the authorized GitHub branch; the separate raw-data Hugging Face copy
 remains an optional extension pending the previously requested token/destination approval.
+
+
+## Final publication and evidence preservation
+
+Published all final implementation/result deliverables in commit `60ddb9868af787621749f276a6baac148c26d7e1` and
+verified exact remote equality on `research/maniguard-fruits`, unchanged deliverable
+hashes and a clean worktree. The final requirements audit verifies all six mechanisms,
+196 full episodes, 208 engineering-only job records, fixed family checkpoints/horizons,
+complete action/source records, conditional optimizer decisions and required publication.
+No required implementation, physical-screen or results-publication work remains.
+
+The local numerical archive is 296,542,441 bytes with 2088 result files plus its manifest;
+every archived member was read back and SHA-256 checked. Archive SHA-256 is
+`0f529240f3af6b5c25c0c173728e2a9fbc0dd5ef0659c5e0bd406ebd4c24535a`.
+Preserved 31 distinct audit programs as byte-identical text artifacts, with a manifest
+mapping all 52 original analysis-source paths to repository copies. Source snapshots
+retain their original instance paths and exclusive-output safeguards; generic commands
+remain the interface for new experiments. All 107 checked local documentation links
+resolve, all study JSON parses, and the executed controller sources match the commit
+that passed the 90 focused tests.
+
+Code and structured results are off-instance on GitHub. The separate optional raw-data
+copy to Hugging Face is not performed because its prior token/destination approval is
+still pending. No new pretrained-policy checkpoint was trained or requires storage.
+The bounded implementation/testing objective is complete; the broader evolutionary
+research question remains open and has no claimed optimizer advantage.
