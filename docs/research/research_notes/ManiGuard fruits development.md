@@ -327,3 +327,8 @@ explicit startup of the autostart-disabled policy service, before any model quer
 Optimizer protocols now accept one shared worker count for all three methods. Four checks
 reject invalid concurrency settings; the 17 search protocol/state tests pass. These checks
 do not constitute physical optimizer evaluation. No candidate training has started.
+
+Protocol validation also rejects episode entries that try to override the task family,
+adapter or action horizon. Batch execution refuses shortened horizons outside the engineering
+split. Three additional protocol checks pass (20 search tests total). This closes a possible
+configuration loophole before any candidate optimization or reserved evaluation runs.

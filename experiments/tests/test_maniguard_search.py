@@ -87,3 +87,11 @@ def test_unsupported_search_concurrency_rejected(workers):
     changed['workers'] = workers
     with pytest.raises(ValueError, match='workers'):
         validate_protocol(changed, SPLITS)
+
+
+@pytest.mark.parametrize('extra', [{'max_steps': 32}, {'family': 'lid'}, {'adapter': {}}])
+def test_training_episode_cannot_override_task_or_horizon(extra):
+    changed = deepcopy(PROTOCOL)
+    changed['training_episodes'][0].update(extra)
+    with pytest.raises(ValueError, match='only scene and seed'):
+        validate_protocol(changed, SPLITS)

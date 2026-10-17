@@ -42,6 +42,8 @@ def validate_protocol(protocol, splits):
     if not episodes or len({(e['scene'], e['seed']) for e in episodes}) != len(episodes):
         raise ValueError('Declare a nonempty common set of distinct training episodes')
     for episode in episodes:
+        if set(episode) != {'scene', 'seed'}:
+            raise ValueError('Training episode entries contain only scene and seed')
         if episode['scene'].split('/')[0] not in splits['families'][family]['train']:
             raise ValueError('Candidate search may only use the frozen training split')
         if type(episode['seed']) is not int:

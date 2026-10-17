@@ -35,6 +35,8 @@ def main():
     if split not in ('engineering', 'train', 'validation', 'test'):
         raise ValueError('Declare the scene split for this batch')
     for job in jobs:
+        if job.get('max_steps') is not None and split != 'engineering':
+            raise ValueError('Shortened horizons are restricted to engineering diagnostics')
         AdapterConfig(**job['adapter'])
         if job['scene'].split('/')[0] not in splits[job['family']][split]:
             raise ValueError(f"Scene {job['scene']} is outside the declared {split} split")
