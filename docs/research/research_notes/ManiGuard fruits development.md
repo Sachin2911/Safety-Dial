@@ -850,3 +850,13 @@ destination. A specific approval request is pending for authentication at huggin
 and upload to a private `safety-dial-maniguard-fruits-results` dataset in the user account.
 No upload or alternate authentication route was attempted after the rejection. GitHub
 branch publication remains separately pending. Physical experiments continue.
+
+## Contemporaneous control matches the Jar smoothing outcome
+
+The repeated identity control on task_0002 safely completed in 757 actions and 95
+queries. The earlier smoothing trial completed safely in 841 actions and 106 queries.
+The original unsafe unfinished baseline therefore cannot support a smoothing-repair
+claim. The two new single trials do not establish a benefit or a general harm from
+smoothing. The intervening caps-only trial was unsafe unfinished, as was the inactive
+release trial, further showing why individual outcomes need careful interpretation.
+Fifteen Jar screen episodes have finished; the remaining declared comparisons continue.
