@@ -477,3 +477,20 @@ at 4,200 actions, matching its earlier outcome category. Both completed episodes
 release and 433.2 seconds for identity; model-query latency includes waiting for the shared
 server. The next two jobs, combined motion smoothing on task_0007 and repeated identity
 on task_0010, are running. No local ManiGuard improvement has yet been demonstrated.
+
+## Repeated baseline changed its safety outcome
+
+The repeated identity control on Stack task_0010/base seed 0 completed unsafely at 2,541
+actions; its original baseline safely completed at 2,472. In the repeated run, the first
+upright violation occurred at monitor step 1,978, shortly after an opening proposal at
+1,974 with stable-aperture grasp evidence. Here `all_stack_upright` became false while
+`target_upright` remained true, unlike task_0013's broad target predicate. The per-scene
+monitor definition must be retained when interpreting which object violated safety.
+
+This supplies a second observed placement/release-associated violation and direct evidence
+that the same scene and root seed can yield a different outcome across runs. It does not
+attribute the change to any one source of variation: rendered inputs, server-process
+numerics and concurrent execution differed. Initial screens identify mechanisms and leads;
+a single changed outcome is insufficient to claim a causal adapter benefit. Promising
+settings require repeated comparisons with contemporaneous identity controls before
+validation, selection or reserved testing. The randomized screen continues unchanged.

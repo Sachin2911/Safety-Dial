@@ -1,5 +1,5 @@
 {
-  "status": "First two of 24 Stack screens complete; batch continues. Jar and additional Lid stages are queued.",
+  "status": "First three of 24 Stack screens complete; batch continues.",
   "scope": "Engineering scenes only. Full horizon; no optimizer, selected winner, or held-out claims.",
   "completed_episodes": [
     {
@@ -119,6 +119,65 @@
       },
       "output": "/workspace/Safety-Dial/runs/maniguard/stack-fixed-screens-v1/episode-0000",
       "label": "release_delay"
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8,
+        "min_query_interval": 1,
+        "tracking_threshold": 0.1,
+        "replan_on_gripper_change": true,
+        "free_step_limit": 0.12,
+        "grasp_step_limit": 0.04,
+        "smoothing": 1.0,
+        "settle_steps": 0,
+        "release_delay": 4,
+        "min_closing_steps": 3,
+        "min_aperture": 0.003,
+        "max_aperture": 0.035,
+        "aperture_stability": 0.002,
+        "privileged": false,
+        "lift_margin": 0.001,
+        "closure_confirm_steps": 1,
+        "guard_requery_steps": 1,
+        "handback_hold_steps": 0,
+        "handback_requery": true,
+        "stall_window": 20,
+        "stall_distance": 0.003,
+        "demand_threshold": 0.03,
+        "retry_distance": 0.015,
+        "retry_steps": 5,
+        "retry_limit": 2,
+        "retry_cooldown": 40
+      },
+      "engineering_override": null,
+      "safe_completion": false,
+      "unsafe_completion": true,
+      "safe_unfinished": false,
+      "unsafe_unfinished": false,
+      "violation": true,
+      "ever_contacted": true,
+      "ever_grasped": true,
+      "steps": 2541,
+      "ledger": {
+        "physics_steps": 15332,
+        "physics_seconds": 127.7666733302176,
+        "env_step_attempts": 2551,
+        "env_steps_returned": 2551,
+        "policy_queries": 318,
+        "policy_query_seconds": 90.36875024391338,
+        "policy_control_steps": 2541,
+        "guard_steps": 0,
+        "changed_steps": 0,
+        "phase": "completed",
+        "physics_accounting_attached": true,
+        "elapsed_seconds": 274.7316928289365
+      },
+      "output": "/workspace/Safety-Dial/runs/maniguard/stack-fixed-screens-v1/episode-0003",
+      "label": "baseline_repeat"
     }
   ],
   "release_trial_diagnostic": {
@@ -205,5 +264,96 @@
       4199
     ],
     "observation": "An intermediate bowl is moved aside, but three bowls remain stacked later. The robot does not complete extraction of the final goal object."
-  }
+  },
+  "repeated_baseline_diagnostic": {
+    "family": "stack",
+    "scene": "task_0010/base",
+    "seed": 0,
+    "adapter": {
+      "kind": "identity",
+      "horizon": 8,
+      "min_query_interval": 1,
+      "tracking_threshold": 0.1,
+      "replan_on_gripper_change": true,
+      "free_step_limit": 0.12,
+      "grasp_step_limit": 0.04,
+      "smoothing": 1.0,
+      "settle_steps": 0,
+      "release_delay": 4,
+      "min_closing_steps": 3,
+      "min_aperture": 0.003,
+      "max_aperture": 0.035,
+      "aperture_stability": 0.002,
+      "privileged": false,
+      "lift_margin": 0.001,
+      "closure_confirm_steps": 1,
+      "guard_requery_steps": 1,
+      "handback_hold_steps": 0,
+      "handback_requery": true,
+      "stall_window": 20,
+      "stall_distance": 0.003,
+      "demand_threshold": 0.03,
+      "retry_distance": 0.015,
+      "retry_steps": 5,
+      "retry_limit": 2,
+      "retry_cooldown": 40
+    },
+    "engineering_override": null,
+    "safe_completion": false,
+    "unsafe_completion": true,
+    "safe_unfinished": false,
+    "unsafe_unfinished": false,
+    "violation": true,
+    "ever_contacted": true,
+    "ever_grasped": true,
+    "steps": 2541,
+    "ledger": {
+      "physics_steps": 15332,
+      "physics_seconds": 127.7666733302176,
+      "env_step_attempts": 2551,
+      "env_steps_returned": 2551,
+      "policy_queries": 318,
+      "policy_query_seconds": 90.36875024391338,
+      "policy_control_steps": 2541,
+      "guard_steps": 0,
+      "changed_steps": 0,
+      "phase": "completed",
+      "physics_accounting_attached": true,
+      "elapsed_seconds": 274.7316928289365
+    },
+    "output": "runs/maniguard/stack-fixed-screens-v1/episode-0003",
+    "proposal_count": 2541,
+    "events": {
+      "changed": 0,
+      "guard_blocked": 0,
+      "release_delayed": 0,
+      "retry_started": 0,
+      "retry_active": 0,
+      "grasp_evidence": 1148,
+      "opening_proposals": 1054,
+      "goal_observations": 2541
+    },
+    "first_violation_observation": {
+      "step": 1978,
+      "ap": {
+        "any_stack_dropped": false,
+        "all_stack_upright": false,
+        "target_dropped": false,
+        "target_upright": true
+      },
+      "state": 1,
+      "accepting": false,
+      "doomed": true
+    },
+    "goal_target": "target_box_of_crackers_ep1_1",
+    "last_release_request_before_first_violation": {
+      "proposal_step": 1974,
+      "grasp_evidence": true,
+      "adapted_open": true
+    },
+    "held_loss_scope": "Goal-checker target only; intermediate object releases are not covered.",
+    "held_loss_after_open_command_steps": [],
+    "interpretation": "Temporal associations only; causal repairs require matched episodes."
+  },
+  "repeat_variability": "The original task_0010 seed-0 baseline safely completed at 2472 steps; its repeated identity control completed unsafely at 2541. Same root seed does not guarantee the same physical outcome. Candidate screening must be followed by repeated comparisons before attributing improvements."
 }
