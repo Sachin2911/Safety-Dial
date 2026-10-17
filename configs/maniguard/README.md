@@ -156,3 +156,20 @@ data/maniguard/envs/sim/bin/python experiments/scripts/maniguard_outcome_plot.py
 The plot requires every planned episode to pass validation. It reports counts and
 realized query totals, including early completions; it does not establish equal query
 budgets or an adapter effect. Choose new output paths to preserve previous artifacts.
+
+For completed Jar identity/guard/hand-back episodes from one scene and root seed, export
+prerequisite, held-target and intervention timelines:
+
+```bash
+data/maniguard/envs/sim/bin/python experiments/scripts/maniguard_guard_timeline.py \
+  --episode runs/maniguard/jar-fixed-screens-v1/episode-0014 \
+  --episode runs/maniguard/jar-fixed-screens-v1/episode-0008 \
+  --episode runs/maniguard/jar-fixed-screens-v1/episode-0029 \
+  --figure runs/maniguard/reports/jar-guard-timeline.png \
+  --report runs/maniguard/reports/jar-guard-timeline.json
+```
+
+The exporter validates full-episode outcomes, checks block/hold counts against the
+recorded ledger and diagnosis, and preserves trace/script hashes. Same-scene starts are
+not deterministic counterfactuals. Timeline associations alone do not prove that a guard
+caused or prevented a later failure. Choose new output paths for each export.

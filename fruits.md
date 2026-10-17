@@ -16,9 +16,10 @@ limitation under the benchmark's sticky grasping mode motivates a separate fixed
 release-rule comparison. Jar's 40-episode screen covering all six candidates is running.
 Its unchanged policy transported an open jar in one scene; separate prerequisite-guard
 and smoothing trials completed that scene safely. These are promising single-trial
-contrasts, with repeated controls needed before claiming a repair. A 48-episode comparison
-of identity, guard, hand-back and smoothing is queued across all four engineering Jar
-scenes and three root seeds. Bounded retries execute the intended physical retreat but
+contrasts, with repeated controls needed before claiming a repair. Across the four initial
+Jar scenes, the guard and unchanged policy each complete three safely; hand-back completes
+two and uses substantially more queries. A 48-episode comparison of identity, guard,
+hand-back and smoothing is queued across all four engineering Jar scenes and three root seeds. Bounded retries execute the intended physical retreat but
 have not improved completion. See the [Jar progress record](docs/research/research_notes/ManiGuard%20fruits%20Jar%20screen%20progress.json).
 No evolutionary advantage has been demonstrated.
 
