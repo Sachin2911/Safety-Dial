@@ -1199,3 +1199,21 @@ unfinished and one unsafe completion. No trial completes safely. These results d
 prove that other settings cannot help. The progress and comparison reports retain every
 planned status and recorded cost. The next two physical processes are live; no controller,
 hypothesis definition or queued plan was changed.
+
+## Middle-cap comparisons add an adverse safety contrast
+
+Eleven of 24 Stack motion-repeat trials have completed and validated. On task_0013 root
+two, the middle 0.03/0.02 cap changes 663 commands and remains safe unfinished. All three
+cap settings have now finished that scene/root: the tight cap is unsafe unfinished,
+while middle and wider caps are safe unfinished. None ever holds the target or completes;
+the unchanged control remains pending.
+
+The middle cap on task_0013 root one changes 254 commands and remains unsafe unfinished,
+first violating both stack and target uprightness at observation 3237. Its contemporaneous
+unchanged control is safe unfinished. Neither holds the target. This adds one observed
+safety loss to the two unchanged-outcome tight-cap scene/seed comparisons; differing
+initial images and trajectories prevent causal attribution. The eleven completed trials
+contain six safe unfinished, four unsafe unfinished and one unsafe completion. There is
+no safe completion or completed-pair safe-completion gain. The reports retain unfinished
+comparisons rather than ranking conditions from unequal partial coverage. The next two
+trial processes remain live, and all subsequent queues retain their declared dependencies.
