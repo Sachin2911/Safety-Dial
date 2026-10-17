@@ -1174,3 +1174,28 @@ The strictly pre-violation maximum is 0.01383 at observation 386. This chronolog
 not support blaming the later peak for the first violation, nor identify the physical
 cause of the earlier deviations. No runtime change or new search budget follows from
 this diagnostic alone. All repeat queues continue under their existing plans.
+
+## Second completed Stack comparison and all tight-cap bowl seeds
+
+Nine of 24 motion trials have now completed and validated. The task_0013 root-one
+0.01/0.01 cap changes 1191 commands but remains safe unfinished without a held target,
+matching the contemporaneous identity outcome. Together with root zero, two complete
+scene/seed comparisons now show no change in safe completion or violation count; every
+member runs 4200 actions and 525 queries. Four other planned comparisons for this cap
+remain incomplete, so the partial paired totals are not a full condition ranking.
+
+The tight-cap bowl condition has now run all three root seeds. Root two changes 1378
+commands and remains unsafe unfinished, with its first violation at observation 1834:
+both the target and stack upright predicates are false, neither drop predicate is true,
+and the target was never held. Its unchanged-policy control has not completed.
+
+The 0.06/0.04 cap on task_0010 root two also finishes during this update, reaching the
+goal at 695 actions but violating stack uprightness at observation 148 while the target
+is still upright. It changes 44 commands. Its zero aperture-based grasp-evidence events
+do not mean the target is never held: the goal is eventually reached with a grasp.
+This is an unsafe completion, not a safe-completion improvement. Its unchanged-policy
+control is pending. The nine finished trials contain five safe unfinished, three unsafe
+unfinished and one unsafe completion. No trial completes safely. These results do not
+prove that other settings cannot help. The progress and comparison reports retain every
+planned status and recorded cost. The next two physical processes are live; no controller,
+hypothesis definition or queued plan was changed.

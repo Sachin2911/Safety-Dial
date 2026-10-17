@@ -179,8 +179,10 @@ interesting if a single cautious setting is inadequate and different situations 
 different settings. Slowing an incorrect path may not help, and motion limits alone do
 not guarantee safety.
 
-The first completed repeated Stack comparison on the same scene and root seed leaves
-both the unchanged policy and the tight cap safely unfinished, without a target grasp.
+The first two completed repeated Stack comparisons, on the bowl scene at roots zero
+and one, leave both the unchanged policy and the tight cap safely unfinished, without
+a target grasp. The tight cap's third bowl trial tips the target and remains unfinished;
+its unchanged-policy control is still pending.
 A [trace audit](docs/research/research_notes/ManiGuard%20fruits%20motion%20tracking.json)
 confirms that the limits reach the executed joint targets. Actual joint motion can still
 exceed the commanded target displacement, so this adapter is not a hard velocity limit.
