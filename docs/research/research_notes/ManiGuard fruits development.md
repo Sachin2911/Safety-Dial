@@ -332,3 +332,26 @@ Protocol validation also rejects episode entries that try to override the task f
 adapter or action horizon. Batch execution refuses shortened horizons outside the engineering
 split. Three additional protocol checks pass (20 search tests total). This closes a possible
 configuration loophole before any candidate optimization or reserved evaluation runs.
+
+## Stack placement and release diagnostic correction
+
+The third Stack baseline, task_0010/base, safely completed at 2,472 actions. Inspection
+of task_0013's video frames 1360, 1392, 1416 and 1440 shows placement of an intermediate
+bowl onto another bowl. The first opening proposal was at index 1412, following closing
+with stable finger aperture; the monitor first became doomed at observation step 1416.
+This gives release timing a concrete mechanism to investigate, alongside motion.
+It does not show that delaying opening would help; the policy may be placing the bowl
+incorrectly, and retaining the grasp could also interfere with withdrawal.
+
+The earlier absence of recorded held-to-unheld events has a narrower scope than all grasps:
+the goal checker tracks the final goal object bowl_45, so it does not capture intermediate
+bowl releases. Also, the released scene's `all_stack_upright` and `target_upright` predicates
+both quantify over `bowl_*`. Their simultaneous failure establishes at least one monitored
+bowl lost uprightness, not independent identification of the final target as the tilted bowl.
+The original benchmark predicates are preserved. Jar and Lid metadata targets were checked
+against their goal targets and agree for the inspected scenes; the Stack metadata differs.
+
+The diagnostic script now records the goal-target scope and latest closing-to-opening
+proposal before the first violation. Structured evidence for the first three episodes is
+in `ManiGuard fruits Stack diagnostics.json`. The already declared release-delay screen
+will test the timing hypothesis without changing the safety specification.

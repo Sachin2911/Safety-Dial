@@ -20,14 +20,26 @@ def diagnose(output):
     last_command_open = None
     releases_before_loss = []
     proposals = 0
+    previous_open_request = None
+    last_release_request = None
+    release_before_violation = None
+    goal_target = None
     for line in (Path(output) / 'trace.jsonl').read_text().splitlines():
         row = json.loads(line)
-        if row['type'] == 'proposal':
+        if row['type'] == 'initial':
+            goal_target = row['scene'].get('goal_region', {}).get('target_name')
+        elif row['type'] == 'proposal':
             proposals += 1
             event = row['event']
             for key in ('changed', 'guard_blocked', 'release_delayed', 'retry_started',
                         'retry_active', 'grasp_evidence'):
                 counts[key] += int(event[key])
+            opening = row['original'][-1] >= 0
+            if opening and previous_open_request is False:
+                last_release_request = {'proposal_step': row['step'],
+                                        'grasp_evidence': bool(event['grasp_evidence']),
+                                        'adapted_open': bool(row['adapted'][-1] >= 0)}
+            previous_open_request = opening
             last_command_open = row['adapted'][-1] >= 0
             counts['opening_proposals'] += int(row['original'][-1] >= 0)
         elif row['type'] == 'executed':
@@ -47,8 +59,12 @@ def diagnose(output):
             if (monitor and monitor['valid'] and monitor['observation']['doomed']
                     and first_violation is None):
                 first_violation = monitor['observation']
+                release_before_violation = last_release_request
     return {**verdict, 'proposal_count': proposals, 'events': dict(counts),
             'first_violation_observation': first_violation,
+            'goal_target': goal_target,
+            'last_release_request_before_first_violation': release_before_violation,
+            'held_loss_scope': 'Goal-checker target only; intermediate object releases are not covered.',
             'held_loss_after_open_command_steps': (releases_before_loss
                 if counts['goal_observations'] else None),
             'interpretation': 'Temporal associations only; causal repairs require matched episodes.'}
