@@ -143,3 +143,24 @@ Additional offline diagnosis records already-computed goal-check output, adapter
 counts and first observed safety violations. These records are not adapter inputs. A
 separate real-policy replay check is prepared for an idle server after a completed smoke
 episode; its extra queries will have their own accounting.
+
+## Successful physical integration and real-policy replay
+
+Attempt 3 completed the requested 32-step engineering rollout normally. The original
+identity adapter changed no commands; all 33 safety observations (initial plus 32
+post-action states) are present. The task was unfinished with no observed violation in
+this deliberately truncated episode. This validates integration, not task performance.
+The ledger records 278 physics steps, 42 returned environment steps (10 warmup plus 32
+policy), four policy queries, about 0.699 seconds in queries and 45.03 seconds elapsed.
+
+A separate idle-server replay used the saved physical observation and the same episode
+seed. Both corresponding queries were bitwise equal across two different episode IDs;
+the first action chunk also exactly matched the original rollout. These four additional
+queries are recorded separately and consumed no physics interactions. The overview and
+wrist images were visually inspected; both show the task and robot rather than blank
+fallback images. Machine-readable evidence is in
+[the engineering record](ManiGuard%20fruits%20engineering.json).
+
+The managed `maniguard_baseline` job has started the predeclared four-scene Jar development
+plan at the full upstream horizon. Physical adapter comparisons and optimization remain
+outstanding; the engineering evidence does not establish any of the six hypotheses.

@@ -1,0 +1,148 @@
+{
+  "scope": "Engineering integration only; no hypothesis-effect estimate.",
+  "smoke": {
+    "family": "jar",
+    "scene": "task_0013/base",
+    "seed": 0,
+    "adapter": {
+      "kind": "identity",
+      "horizon": 8,
+      "min_query_interval": 1,
+      "tracking_threshold": 0.1,
+      "replan_on_gripper_change": true,
+      "free_step_limit": 0.12,
+      "grasp_step_limit": 0.04,
+      "smoothing": 1.0,
+      "settle_steps": 0,
+      "release_delay": 4,
+      "min_closing_steps": 3,
+      "min_aperture": 0.003,
+      "max_aperture": 0.035,
+      "aperture_stability": 0.002,
+      "privileged": false,
+      "lift_margin": 0.001,
+      "closure_confirm_steps": 1,
+      "guard_requery_steps": 1,
+      "handback_hold_steps": 0,
+      "handback_requery": true,
+      "stall_window": 20,
+      "stall_distance": 0.003,
+      "demand_threshold": 0.03,
+      "retry_distance": 0.015,
+      "retry_steps": 5,
+      "retry_limit": 2,
+      "retry_cooldown": 40
+    },
+    "engineering_override": 32,
+    "safe_completion": false,
+    "unsafe_completion": false,
+    "safe_unfinished": true,
+    "unsafe_unfinished": false,
+    "violation": false,
+    "ever_contacted": false,
+    "ever_grasped": false,
+    "steps": 32,
+    "ledger": {
+      "physics_steps": 278,
+      "physics_seconds": 2.3166667874902487,
+      "env_step_attempts": 42,
+      "env_steps_returned": 42,
+      "policy_queries": 4,
+      "policy_query_seconds": 0.6987251848913729,
+      "policy_control_steps": 32,
+      "guard_steps": 0,
+      "changed_steps": 0,
+      "phase": "completed",
+      "physics_accounting_attached": true,
+      "elapsed_seconds": 45.02661043801345
+    },
+    "output": "runs/maniguard/engineering/jar-0013-smoke-v3",
+    "proposal_count": 32,
+    "events": {
+      "changed": 0,
+      "guard_blocked": 0,
+      "release_delayed": 0,
+      "retry_started": 0,
+      "retry_active": 0,
+      "grasp_evidence": 0,
+      "opening_proposals": 32,
+      "goal_observations": 32
+    },
+    "first_violation_observation": null,
+    "held_loss_after_open_command_steps": [],
+    "interpretation": "Temporal associations only; causal repairs require matched episodes."
+  },
+  "sampling_replay": {
+    "source_episode": "/workspace/Safety-Dial/runs/maniguard/engineering/jar-0013-smoke-v3",
+    "policy_queries_attempted": 4,
+    "physics_steps": 0,
+    "metadata": {
+      "serve_config": "pi05-base_datagen_v1_jar_joint_2cam_lora",
+      "checkpoint": "/workspace/Safety-Dial/data/maniguard/policies/jar/7400",
+      "checkpoint_revision": "1d84eda070313a202a595e449fcf41a1a1e8a546",
+      "episode_seed_reset": "study_episode_id"
+    },
+    "query_seconds": [
+      0.2158875740133226,
+      0.17141841701231897,
+      0.17041866295039654,
+      0.16631505289115012
+    ],
+    "status": "passed",
+    "corresponding_queries_equal": [
+      true,
+      true
+    ],
+    "first_matches_original_episode": true,
+    "action_hashes": [
+      "987ba62cbb59ddf3486f9f8fa0e8b32835746e611484dbae42353857b4315292",
+      "23b9d4f186c47c628584d8a3d715eec1853873ef10cccd66ab86a8afa5f14b58",
+      "987ba62cbb59ddf3486f9f8fa0e8b32835746e611484dbae42353857b4315292",
+      "23b9d4f186c47c628584d8a3d715eec1853873ef10cccd66ab86a8afa5f14b58"
+    ],
+    "elapsed_seconds": 0.7262603759299964
+  },
+  "failed_attempts": [
+    {
+      "terminal_status": "SIGSEGV",
+      "source": "/var/log/supervisor/supervisord.log",
+      "pid": 21919,
+      "exited_at": "2026-10-17 09:57:19 UTC",
+      "observed_phase": "Isaac SimulationApp startup; environment constructor not returned",
+      "missing_libraries": [
+        "libGLU.so.1",
+        "libXt.so.6"
+      ],
+      "policy_queries": 0,
+      "env_steps_returned": 0,
+      "physics_accounting_attached": false,
+      "interpretation": "Engineering failure, not a task outcome or safety result."
+    },
+    {
+      "output": "runs/maniguard/engineering/jar-0013-smoke-v2",
+      "status": "crashed",
+      "cause_observed": "Client keepalive timeout during first policy query",
+      "ledger": {
+        "physics_steps": 86,
+        "physics_seconds": 0.716666704043746,
+        "env_step_attempts": 10,
+        "env_steps_returned": 10,
+        "policy_queries": 1,
+        "policy_query_seconds": 0.0,
+        "policy_control_steps": 0,
+        "guard_steps": 0,
+        "changed_steps": 0,
+        "phase": "crashed",
+        "physics_accounting_attached": true,
+        "elapsed_seconds": 370.40165631705895
+      },
+      "accounting_note": "This earlier ledger omitted failed-query latency; subsequent code records it."
+    }
+  ],
+  "accounting": {
+    "known_physics_steps": 364,
+    "returned_env_steps": 52,
+    "policy_queries_attempted_including_replay": 9,
+    "caveat": "Attempt 1 crashed before physics subscription attached; no task environment or policy query completed."
+  }
+}
