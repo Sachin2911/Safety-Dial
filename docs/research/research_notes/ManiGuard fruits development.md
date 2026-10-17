@@ -1144,3 +1144,33 @@ The earlier tight-cap task_0010 trial remains unsafe unfinished and the task_001
 identity trial remains safe unfinished. No condition ranking is supported by this partial
 snapshot. The live batch continues; runtime controllers and planned physical jobs are
 unchanged, and no optimizer or reserved evaluation has run.
+
+## First completed Stack comparison and physical motion audit
+
+Six of 24 motion-repeat trials are now complete. The first same-scene/root comparison,
+task_0013 root zero, leaves both identity and the 0.01/0.01 cap safe unfinished after
+4200 actions and 525 queries. Neither ever holds the goal target. The cap changes 1321
+commands but does not improve completion. Its recorded 95th-percentile maximum joint
+increment is 0.00995 radians per action, versus 0.02641 for the unchanged trajectory;
+these are different physical starts, so this descriptive difference is not a causal
+speed estimate. The [comparison report](ManiGuard%20fruits%20Stack%20motion%20comparison.json)
+keeps the other pending scene/root pairs visible.
+
+The additional task_0010 root-one 0.06/0.04 cap trial is unsafe unfinished after 4200
+actions, with 148 changed commands and no goal-target grasp. Its first violation is
+`all_stack_upright` at observation 1943 while `target_upright` remains true. Its matching
+control has not completed. The six finished trials contain four safe unfinished and two
+unsafe unfinished outcomes; none completes. The next two processes are live.
+
+A [motion trace audit](ManiGuard%20fruits%20motion%20tracking.json) checks all six completed
+trajectories without new simulation or inference. Adapted and executed arm targets match
+exactly; each post-action arm state matches the next proposal's measured state. Every
+capped target stays within its active limit plus 1e-6 radians of float32 tolerance.
+The limits therefore reached execution, but bound target displacement rather than actual
+joint motion. In the task_0010 root-two 0.01-cap run, measured increments exceed 0.010001
+radians on 144 actions and peak at 0.02903. That peak is at observation 3724, after the
+first violation at 997; the measured increment on the violation action is only 0.00993.
+The strictly pre-violation maximum is 0.01383 at observation 386. This chronology does
+not support blaming the later peak for the first violation, nor identify the physical
+cause of the earlier deviations. No runtime change or new search budget follows from
+this diagnostic alone. All repeat queues continue under their existing plans.

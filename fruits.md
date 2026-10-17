@@ -179,6 +179,13 @@ interesting if a single cautious setting is inadequate and different situations 
 different settings. Slowing an incorrect path may not help, and motion limits alone do
 not guarantee safety.
 
+The first completed repeated Stack comparison on the same scene and root seed leaves
+both the unchanged policy and the tight cap safely unfinished, without a target grasp.
+A [trace audit](docs/research/research_notes/ManiGuard%20fruits%20motion%20tracking.json)
+confirms that the limits reach the executed joint targets. Actual joint motion can still
+exceed the commanded target displacement, so this adapter is not a hard velocity limit.
+The remaining repeated comparisons are in progress.
+
 ## 3. Prevent premature transitions between task stages
 
 > Can a compact evolved controller prevent unsafe stage transitions while still enabling
