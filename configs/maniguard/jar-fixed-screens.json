@@ -1,0 +1,452 @@
+{
+  "description": "Initial fixed-control mechanism screens for all six hypotheses, plus fixed replanning horizons and repeated identity controls. Development evidence only; no optimizer or final-test claims.",
+  "split": "engineering",
+  "ordering_seed": 20261017,
+  "setting_rationale": "The first successful baseline had 95th-percentile proposed joint displacement 0.035 rad and maximum 0.119 rad. A 0.03-rad cap tests actual moderation; smoothing is tested separately. Other settings are the initial declared prototypes. The initial retry detector had no candidate windows in either of the first two baseline traces. The screen therefore uses a 40-step, 1 cm excursion window with a 0.003-rad mean demand threshold. This identifies windows in both the successful and unsuccessful baseline; it is deliberately not assumed to distinguish recoverable failure from useful waiting.",
+  "jobs": [
+    {
+      "label": "motion_smoothing",
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "label": "motion_cap",
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.03,
+        "grasp_step_limit": 0.02
+      }
+    },
+    {
+      "label": "handback_settle_requery",
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4
+      }
+    },
+    {
+      "label": "prerequisite_guard",
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "label": "adaptive_replan",
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "replan",
+        "horizon": 8,
+        "tracking_threshold": 0.03
+      }
+    },
+    {
+      "label": "release_delay",
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "release",
+        "horizon": 8,
+        "release_delay": 4
+      }
+    },
+    {
+      "label": "adaptive_replan",
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "replan",
+        "horizon": 8,
+        "tracking_threshold": 0.03
+      }
+    },
+    {
+      "label": "motion_smoothing",
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "label": "prerequisite_guard",
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "label": "bounded_retry",
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "retry",
+        "horizon": 8,
+        "stall_window": 40,
+        "stall_distance": 0.01,
+        "demand_threshold": 0.003
+      }
+    },
+    {
+      "label": "handback_settle_requery",
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4
+      }
+    },
+    {
+      "label": "baseline_repeat",
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "label": "release_delay",
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "release",
+        "horizon": 8,
+        "release_delay": 4
+      }
+    },
+    {
+      "label": "motion_cap",
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.03,
+        "grasp_step_limit": 0.02
+      }
+    },
+    {
+      "label": "baseline_repeat",
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "label": "baseline_repeat",
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "label": "motion_cap",
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.03,
+        "grasp_step_limit": 0.02
+      }
+    },
+    {
+      "label": "motion_cap",
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "free_step_limit": 0.03,
+        "grasp_step_limit": 0.02
+      }
+    },
+    {
+      "label": "baseline_repeat",
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "label": "bounded_retry",
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "retry",
+        "horizon": 8,
+        "stall_window": 40,
+        "stall_distance": 0.01,
+        "demand_threshold": 0.003
+      }
+    },
+    {
+      "label": "fixed_horizon_16",
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "identity",
+        "horizon": 16
+      }
+    },
+    {
+      "label": "adaptive_replan",
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "replan",
+        "horizon": 8,
+        "tracking_threshold": 0.03
+      }
+    },
+    {
+      "label": "fixed_horizon_16",
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "identity",
+        "horizon": 16
+      }
+    },
+    {
+      "label": "motion_smoothing",
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "label": "fixed_horizon_16",
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "identity",
+        "horizon": 16
+      }
+    },
+    {
+      "label": "bounded_retry",
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "retry",
+        "horizon": 8,
+        "stall_window": 40,
+        "stall_distance": 0.01,
+        "demand_threshold": 0.003
+      }
+    },
+    {
+      "label": "handback_settle_requery",
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4
+      }
+    },
+    {
+      "label": "fixed_horizon_16",
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "identity",
+        "horizon": 16
+      }
+    },
+    {
+      "label": "prerequisite_guard",
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "label": "handback_settle_requery",
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4
+      }
+    },
+    {
+      "label": "motion_smoothing",
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "label": "prerequisite_guard",
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "label": "fixed_horizon_4",
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "identity",
+        "horizon": 4
+      }
+    },
+    {
+      "label": "adaptive_replan",
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "replan",
+        "horizon": 8,
+        "tracking_threshold": 0.03
+      }
+    },
+    {
+      "label": "fixed_horizon_4",
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "identity",
+        "horizon": 4
+      }
+    },
+    {
+      "label": "release_delay",
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "release",
+        "horizon": 8,
+        "release_delay": 4
+      }
+    },
+    {
+      "label": "fixed_horizon_4",
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "identity",
+        "horizon": 4
+      }
+    },
+    {
+      "label": "bounded_retry",
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "retry",
+        "horizon": 8,
+        "stall_window": 40,
+        "stall_distance": 0.01,
+        "demand_threshold": 0.003
+      }
+    },
+    {
+      "label": "fixed_horizon_4",
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "identity",
+        "horizon": 4
+      }
+    },
+    {
+      "label": "release_delay",
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 0,
+      "adapter": {
+        "kind": "release",
+        "horizon": 8,
+        "release_delay": 4
+      }
+    }
+  ]
+}

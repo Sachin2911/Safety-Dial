@@ -69,6 +69,7 @@ def main():
         if process['returncode'] != 0:
             raise RuntimeError(f'Infrastructure failure; preserved {job_output}. See process record.')
         row = read_episode(job_output)
+        row['label'] = job.get('label', job['adapter']['kind'])
         with evidence.open('a') as stream:
             stream.write(json.dumps(row) + '\n')
         print(f"Finished: safe_completion={row['safe_completion']}, "

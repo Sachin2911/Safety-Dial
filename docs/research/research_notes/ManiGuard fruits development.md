@@ -175,3 +175,28 @@ policy replay remains exact; physical replay is not byte-identical across proces
 Preserve this distinction, randomize comparison order and use repeated episodes rather
 than attributing a single paired outcome difference entirely to an adapter. Detailed
 measurements are in [the variability record](ManiGuard%20fruits%20initialization%20variability.json).
+
+## First full-horizon baseline outcomes and screen settings
+
+The first completed Jar baseline, `task_0013/base` seed 0, safely completed after 998
+actions. It used 125 policy queries and 124.70 seconds including initialization. There
+were no observed held-to-unheld transitions following an opening command. The second,
+`task_0017/base` seed 0, remained unfinished at 2,000 actions and violated the upright
+constraint at step 1,384 while the jar was open and still on its support. It used 250
+queries and 201.47 seconds. These two development episodes motivate investigation but
+are not performance estimates. The remaining two baseline scenes are still running.
+
+Prepared a randomized 40-episode development screen: four engineering scenes, seed 0,
+and ten controls (repeated identity, fixed horizons 4/16, adaptive replanning, joint-step
+caps, smoothing, prerequisite guarding, release delay, bounded retry and hand-back).
+The screen is not yet running. Expected cost from current throughput is roughly two
+hours if most episodes use their full horizon; all actual costs will be retained.
+
+The first successful baseline's 95th-percentile proposed joint displacement is about
+0.035 rad, so the motion-cap screen uses 0.03 rad instead of the initial 0.12-rad limit
+that would barely affect it. Smoothing is a separate control. Offline checks of the two
+completed baseline traces found no windows satisfying the initial retry trigger. The
+screen uses a 40-step window, 1 cm EEF excursion and 0.003-rad mean demand threshold.
+This flags windows in both successful and unsuccessful traces, so it is not a validated
+failure detector. The physical comparison must show whether intervening actually helps
+or disrupts useful task behavior. All such choices use development data only.
