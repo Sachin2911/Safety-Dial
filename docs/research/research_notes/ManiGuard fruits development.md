@@ -674,3 +674,46 @@ benefit from uniformly doubling query frequency; it does not establish that the 
 horizon is universally worse or that an adaptive schedule cannot help. The remaining
 adaptive trials and contemporaneous controls are still part of the declared batch.
 Seventeen of 24 Stack screens have finished, and the later queues remain live.
+
+## Twenty-one screens and a grasp-proxy limitation
+
+The remaining fixed motion cap on task_0013 stayed safe unfinished after changing 203
+commands. On task_0010, combined smoothing/default caps completed unsafely at 2,273
+actions, first violating uprightness at step 1,835. Adaptive replanning also completed
+that scene unsafely, at 1,999 actions with 257 queries and its first uprightness violation
+at 1,300. Thirteen conditions shortened chunks (seven gripper and six tracking events);
+two others fell on normal chunk boundaries. These faster completions do not establish a
+safe-completion improvement. Twenty-one of the 24 initial Stack screens are complete.
+
+The release-delay trial on task_0010 was unsafe unfinished, first violating uprightness
+at step 173. It changed zero commands. Three of the four Stack release trials therefore
+never exercised a delay. The latest trial nevertheless registered a target hold from
+step 322 through 1,391, followed by an opening proposal at 1,391 and held loss at 1,392.
+The initial aperture heuristic was off throughout those 1,070 aligned held observations.
+One finger remained near 0.040 m, outside the rule's 0.035 m upper bound.
+
+This mismatch also appears in the two task_0010 identity observations: the initial safe
+completion held the target with one finger near 0.03516 m, just above the upper bound;
+the repeated unsafe completion held it with nearly zero finger gaps, below the 0.003 m
+lower bound. The heuristic was off for all 152 and 103 aligned goal-held samples
+respectively. Saved logs confirm the benchmark's intended sticky grasping mode. Its
+`robot_holds_target` helper calls `robot.is_grasping`; in non-physical modes OmniGibson
+uses its attached-object and release-counter state rather than a positive finger gap.
+This is a limitation of the adapter's heuristic, not evidence that the benchmark result
+is invalid. It also limits interpreting motion-cap modes as actual free versus held motion.
+
+Recorded `ManiGuard fruits grasp proxy coverage.json` with trace hashes, finger ranges,
+benchmark source paths and timing. A separate fixed-rule comparison now tests the same
+four-action delay with stable closing history and a broad 0 to 0.041 m finger range.
+The rule can delay empty-gripper opening and is not a grasp certificate. It receives no
+privileged held flag. Identity, the original narrow rule and this broad rule share two
+engineering scenes and root seeds 0/1 in a randomized 12-job plan. This small comparison
+will establish whether better trigger coverage helps or disrupts completion before any
+evolutionary claim. It is queued after the existing motion repeats, reusing that validated
+Stack policy server without restarting it. Supervisor service `maniguard_release_queue`
+(PID 81886) is currently waiting; original screens and their settings were not changed.
+
+An offline application of the broad rule to the latest unchanged trace first delays
+proposal 1,391, long after the violation at 173. Those flags are not counterfactual
+physical outcomes and cannot erase the earlier violation. This finding motivates testing
+the detector's coverage, not asserting a safety repair.

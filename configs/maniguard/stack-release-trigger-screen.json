@@ -1,0 +1,145 @@
+{
+  "split": "engineering",
+  "ordering_seed": 20261021,
+  "description": "Fixed release-trigger comparison under the pinned sticky-grasp benchmark: identity, the initial aperture rule, and stable closing history with a broad aperture range. Same four-action maximum delay and horizon eight.",
+  "rationale": "The narrow aperture heuristic stayed off during goal-target holds in three inspected cracker-box trajectories. This motivates testing trigger coverage, not a claim that delayed opening repairs any earlier safety violation. The broad rule may delay opening with an empty gripper.",
+  "scope": "Two previously inspected engineering scenes, two root seeds, three controls. No privileged labels are supplied to either release rule. Run after existing declared screens and motion repeats. No optimizer training or reserved testing.",
+  "jobs": [
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 1,
+      "label": "stable_closing_release_delay",
+      "adapter": {
+        "kind": "release",
+        "horizon": 8,
+        "release_delay": 4,
+        "min_aperture": 0.0,
+        "max_aperture": 0.041
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 1,
+      "label": "stable_closing_release_delay",
+      "adapter": {
+        "kind": "release",
+        "horizon": 8,
+        "release_delay": 4,
+        "min_aperture": 0.0,
+        "max_aperture": 0.041
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 1,
+      "label": "narrow_release_delay",
+      "adapter": {
+        "kind": "release",
+        "horizon": 8,
+        "release_delay": 4
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "label": "narrow_release_delay",
+      "adapter": {
+        "kind": "release",
+        "horizon": 8,
+        "release_delay": 4
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 0,
+      "label": "narrow_release_delay",
+      "adapter": {
+        "kind": "release",
+        "horizon": 8,
+        "release_delay": 4
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 0,
+      "label": "stable_closing_release_delay",
+      "adapter": {
+        "kind": "release",
+        "horizon": 8,
+        "release_delay": 4,
+        "min_aperture": 0.0,
+        "max_aperture": 0.041
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 1,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 1,
+      "label": "narrow_release_delay",
+      "adapter": {
+        "kind": "release",
+        "horizon": 8,
+        "release_delay": 4
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0010/base",
+      "seed": 0,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 1,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "stack",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "label": "stable_closing_release_delay",
+      "adapter": {
+        "kind": "release",
+        "horizon": 8,
+        "release_delay": 4,
+        "min_aperture": 0.0,
+        "max_aperture": 0.041
+      }
+    }
+  ]
+}
