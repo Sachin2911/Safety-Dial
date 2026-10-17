@@ -422,4 +422,3 @@ choices remain proposed until milestones A/B resolve them:
 The next deliverable is the shared-controller protocol and implemented interface, followed
 by the bounded comparative pilot. A local repair, transfer across tasks and an evolutionary
 advantage remain separate empirical outcomes throughout.
-
