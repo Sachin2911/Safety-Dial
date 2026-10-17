@@ -9,9 +9,11 @@ experiment budget. No ManiGuard improvement has been demonstrated locally.
 Implementation and experiment records are maintained in the
 [ManiGuard study log](docs/research/research_notes/ManiGuard%20fruits%20development.md).
 All six initial adapters have been implemented, and twelve original-policy engineering
-baselines are complete. Physical adapter screens are running. The first release-delay
-trial stayed safe but unfinished; no adapter improvement or evolutionary advantage has
-yet been demonstrated.
+baselines are complete. Thirteen of 24 initial Stack screening episodes have finished;
+the all-six-candidate Jar screen is queued. Motion capping produced a faster but unsafe
+completion in one case; release delay and more frequent replanning have not established
+a safe-completion gain. Repeated controls show outcome variation. No adapter improvement
+or evolutionary advantage has yet been demonstrated.
 
 ## Candidate overview
 

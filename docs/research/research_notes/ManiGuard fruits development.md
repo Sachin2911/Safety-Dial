@@ -579,3 +579,28 @@ This follows the hypothesis's requirement to check a few simple motion limits be
 choosing a search representation. The faster unsafe cap result is motivation for this
 sensitivity check, not an improvement claim. The plan is recorded but not launched; the
 initial Stack, all-six-hypothesis Jar, and additional Lid sequence remains unchanged.
+
+## Thirteen Stack screens: shorter horizon has not preserved completion
+
+Fixed horizon 4 on task_0010/base seed 0 stayed safe but unfinished at 4,200 actions
+with 1,050 policy queries. Both horizon-8 identity observations completed this scene,
+once safely and once unsafely. This shorter-horizon trial therefore does not demonstrate
+a useful safety repair: completion was not preserved. The observations are different
+physical trajectories, so they do not isolate a causal cost of more frequent replanning.
+
+Adaptive replanning on task_0007/base was also safe unfinished at 4,200 actions. It used
+533 queries, compared with 525 for the horizon-8 controls. Eleven conditions actually
+shortened chunks (two tracking-error and nine gripper-change events); one further gripper
+condition fell at a normal chunk boundary. No final-target contact or grasp was recorded.
+The fixed motion cap on that scene changed 185 commands and remained safe unfinished
+with 525 queries. Neither provides a demonstrated correction on this scene.
+
+Thirteen of the 24 declared Stack screens have completed and passed result validation.
+Within this partial batch there are two unsafe completions and eleven safe unfinished
+episodes, including the repeated controls. Those counts are not a balanced treatment
+comparison because conditions finish in different orders. The immutable local snapshot
+`runs/maniguard/reports/progress-0002.json` audits all twelve original baselines and this
+partial batch, retaining live-job costs separately from completed outcomes. The structured
+screen record retains the new diagnostics. All six adapters are implemented, but the
+prerequisite, retry and hand-back physical screens remain in the queued Jar batch. No
+optimizer has been trained, no winner selected and no reserved evaluation performed.
