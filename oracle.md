@@ -1,6 +1,24 @@
 # Oracle: task continuation under safety filtering
 
-**Central reference for the research rethink. Updated 16 October 2026.**
+**Central reference for the research rethink. Updated 17 October 2026.**
+
+## Current phase-two direction
+
+On 17 October, after the completed ManiGuard mechanism screens, Sachin endorsed a shared
+adaptation method with evidence across task families. [phase2.md](phase2.md) records the
+new plan: one history-dependent execution controller around frozen family policies,
+joint optimization, matched evolutionary/random-search/ordinary-learning comparisons,
+and reserved scene and family transfer evaluation. Jar remains a diagnostic case rather
+than the central contribution. A useful hand-written repair is no longer a mandatory
+gate before a bounded optimization pilot.
+
+The core phase-two claim is safe execution adaptation. Continuation under a learned safety
+filter requires the separately specified filter extension; ManiGuard's existing monitor
+does not intervene. The controller design and budgets in the plan are proposals to freeze
+before execution, and no phase-two experiments have run. The sections below preserve the
+earlier motivation, decisions and research trail; this update governs the new phase.
+
+## Earlier research focus
 
 We have chosen to focus on helping a robotic manipulation agent complete its task when
 a learned safety filter intervenes. This choice remains conditional on finding meaningful,

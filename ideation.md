@@ -1,5 +1,9 @@
 # Research ideation: evolutionary adaptation for safe manipulation
 
+The next phase is now planned in [phase2.md](phase2.md): a shared execution controller,
+cross-task optimization and reserved transfer evaluation. The candidate discussion below
+is retained as its research background; the phase-two plan records the revised scope.
+
 **Updated 17 October 2026.** Sachin selected two ManiGuard ideas for initial exploration:
 an execution adapter around a frozen vision-language-action policy (VLA), and a compact
 controller that coordinates task stages and recovery. These discussion notes develop the
