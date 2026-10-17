@@ -209,9 +209,13 @@ confirms the root-zero repeat uses the same adapter, checkpoint, study code and 
 settings as the original 804-action success, but starts with different images and first
 policy proposals. Its safe-unfinished outcome at 2000 actions limits the repeatability
 claim. Its current identity counterpart tips without closing, while the smoothed repeat
-stays safe unfinished. Across four completed smoothing/identity pairs there is no
-safe-completion gain or loss and one fewer observed violation. The remaining comparisons
-are still running.
+stays safe unfinished. At the thirty-trial snapshot, five completed smoothing/identity
+pairs contain one safe-completion gain, no loss and two fewer observed violations, with
+1003 versus 1172 queries. The gain is task_0013 at root one: smoothing completes safely
+in 1082 actions while identity tips and remains unfinished. Caps never activate in that
+successful run. The [four-condition case audit](docs/research/research_notes/ManiGuard%20fruits%20Jar%20repeat%20first%20smoothing%20gain.json)
+retains its execution checks and differing initial inputs. Controls for other failed
+smoothing trials remain pending, so the balance can still change.
 
 ## 3. Prevent premature transitions between task stages
 
@@ -237,6 +241,14 @@ interpretation. With joint-target actions, a lift check may need kinematics and 
 association. Simulator state can support a clearly labelled privileged diagnostic, shared
 across comparisons. A later sensor-based controller needs its own validation. A guard
 cannot supply a missing lid-closing skill, so useful retries must be demonstrated.
+
+The current repeats contain two safe guard completions, but the five completed identity
+comparisons have no safe-completion gain or loss and one fewer observed violation.
+The original task_0017 root-zero guard success has not repeated: the new trial remains
+safe unfinished at 2000 actions without closing or grasping. An
+[audit of the original success and repeat](docs/research/research_notes/ManiGuard%20fruits%20Jar%20guard%20repeat%20variability.json)
+confirms matching declared settings and code, with differing initial images and policy
+proposals. This limits the repeatability claim; the remaining trials are still running.
 
 ## 4. Preserve a useful grasp through premature release requests
 
@@ -326,14 +338,15 @@ The [timing and input evidence](docs/research/research_notes/ManiGuard%20fruits%
 does not establish direct interception of the baseline failure. In the first completed
 [comparison against the same plain guard](docs/research/research_notes/ManiGuard%20fruits%20Jar%20handback%20versus%20guard%20progress.json),
 on task_0013 at root one, both trials remain unfinished; settling tips while the plain
-guard stays safe, using 387 versus 261 queries. Four completed hand-back/identity pairs
+guard stays safe, using 387 versus 261 queries. Five completed hand-back/identity pairs
 now contain two safe-completion gains and one loss. The second gain is task_0017 at root
 one, where hand-back completes safely and identity remains safe unfinished. The loss is
 task_0002 at root two: identity completes safely in 1371 actions and 172 queries while
-hand-back remains unfinished after 2000 actions and 1285 queries. Across these four pairs,
+hand-back remains unfinished after 2000 actions and 1285 queries. Across these five pairs,
 hand-back has one additional safe completion and one fewer observed violation, using
-2319 queries versus 771. These partial results do not establish an advantage over the
-same plain guard; the remaining repeats are needed before assessing the return rule.
+2805 queries versus 1021. Across four completed comparisons against the same plain guard,
+hand-back has no safe-completion gain and one loss, the same number of violations, and
+3260 versus 800 queries. The remaining repeats are needed before assessing the return rule.
 
 This most directly connects to the original task-continuation question. Its entry cost is
 higher because a functioning guard and useful corrective behaviours are prerequisites.

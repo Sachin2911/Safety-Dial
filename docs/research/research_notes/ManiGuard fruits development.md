@@ -1781,3 +1781,73 @@ Both control-comparison reports use the same completed coverage. All earlier ful
 diagnoses reproduce exactly, and new timing counts reconcile with the physical ledgers.
 The batch and queued Lid study continue unchanged. The small, incomplete comparisons do
 not establish a reliable aggregate gain or an evolutionary advantage.
+
+
+## Thirty completed Jar trials: first smoothing gain and no hand-back gain over the plain guard
+
+Thirty trials are validated: eight safe completions, one unsafe completion, fourteen safe
+unfinished and seven unsafe unfinished.
+Every candidate now has five completed comparisons against identity. Hand-back has two
+safe-completion gains and one loss, with one fewer violation and 2805 versus 1021 queries.
+The plain guard has no safe-completion gain or loss, one fewer violation and 1195 versus
+1172 queries. Smoothing has one safe-completion gain, no loss, two fewer violations and
+1003 versus 1172 queries. Pending controls include failed smoothing trials, so these
+incomplete comparisons can still change substantially.
+
+The first paired smoothing gain is task_0013 at root one. All four conditions in this
+case have now completed:
+
+| Condition | Outcome | Actions | Queries | First target-held observation |
+| --- | --- | ---: | ---: | ---: |
+| Identity | Unsafe unfinished | 2000 | 250 | Never |
+| Plain guard | Safe unfinished | 2000 | 261 | Never |
+| Guard with settling/requery | Unsafe unfinished | 2000 | 387 | Never |
+| Motion smoothing | Safe complete | 1082 | 136 | 983 |
+
+Smoothing first closes at observation 379 and leaves support at 989. It changes all
+1082 arm commands, including 99 with the target held in the pre-action observation.
+One initial pre-action holding value is unknown; the remaining 982 changed actions have
+an explicitly unheld target. No cap activates and gripper commands are unchanged, so
+these command changes come from smoothing. Maximum commanded and measured joint steps
+are 0.04880670 and 0.04825547 radians. This result involves obtaining a grasp as well as
+avoiding a violation; it does not isolate abrupt motion as the cause of the other failures.
+
+The saved four-condition audit validates shared checkpoint, source hashes, runtime and
+evaluation settings except output directory. Smoothing and identity have equal initial
+joint state but different overview/wrist images, with maximum pixel differences 46 and 6.
+Their first original policy proposals already differ by up to 0.00031537. These are
+separate physical starts, not a deterministic repair comparison. The guard variants use
+privileged simulator information, whereas smoothing does not.
+
+The plain guard on task_0002 at root two completes safely in 946 actions and 136 queries.
+It blocks 30 actions before closure at 375, first holds at 867 and leaves support at 869.
+Identity and smoothing also complete this case safely, while hand-back remains unfinished
+without closing or grasping. The plain guard on task_0013 at root zero completes safely
+in 990 actions and 144 queries, with 32 blocks before closure at 440, first holding at 909
+and leaving support at 915. Its hand-back counterpart also completes safely but takes
+1853 actions and 304 queries; the matching identity trial remains pending.
+
+Across four completed hand-back/plain-guard comparisons, hand-back now has no safe-completion
+gain and one loss, with the same total number of violations. Its paired query total is
+3260 versus 800 for the plain guard. These costs reuse the same physical episodes already
+counted in the main batch and are not additional simulator work. Gains over identity
+therefore still do not establish a benefit from adding settling to the same guard.
+
+Hand-back on task_0002 at root zero repeats the prolonged stall: 2000 actions, 1284 queries,
+787 guard blocks and 860 settling holds, without closure, grasp or lift. Its final replan
+request has no following query at the exhausted episode horizon; it is not counted as a
+policy query. Identity on task_0017 at root two also remains safe unfinished for 2000
+actions and 250 queries without closure or grasp, matching the hand-back outcome category
+while using fewer queries.
+
+The task_0017 root-zero plain guard repeat remains safe unfinished for 2000 actions and
+265 queries without closure or grasp, despite the original same-root safe completion at
+993 actions and 142 queries. A separate audit validates identical adapter, checkpoint,
+code, runtime and policy metadata, with evaluation configuration differing only in output
+directory. Initial joint state matches, but overview/wrist pixels differ by up to 95 and 5,
+and the first policy proposal differs by up to 0.00048161. The original guard success,
+like the original smoothing success, has not repeated in this follow-up trial.
+
+Saved the new case and variability audits, retaining every earlier diagnosis and all
+partial comparison coverage. The original 48-trial plan remains active, with the Lid
+comparison still queued afterward. No optimizer or reserved evaluation has run.
