@@ -38,10 +38,11 @@ are complete, as are the
 which find no safe-completion gain. The 48 Jar repeats are running, comparing identity,
 guard, hand-back and smoothing across all four engineering scenes and three root seeds.
 Their [repeat progress record](docs/research/research_notes/ManiGuard%20fruits%20Jar%20repeat%20progress.json)
-retains completed diagnoses separately from pending control comparisons. At 38 validated
-trials, the plain guard has two safe-completion gains and no losses in eight completed
-identity pairs. Settling/requery has three gains and one loss in seven identity pairs;
-one newly resolved gain is shared with the plain guard. These remain partial comparisons.
+retains completed diagnoses separately from pending control comparisons. At 40 validated
+trials, the plain guard has two safe-completion gains and one loss in nine completed
+identity pairs. Settling/requery has three gains and two losses in nine identity pairs.
+Smoothing has one gain and one loss in ten pairs, with one additional violation. The
+latest successful identity control adds a loss for every adapter; comparisons remain partial.
 These remain engineering experiments. No evolutionary search or reserved evaluation has
 run, and no evolutionary advantage has been demonstrated.
 
@@ -211,15 +212,17 @@ at observation 1219 and remains unfinished. None holds the target. An
 [input and configuration audit](docs/research/research_notes/ManiGuard%20fruits%20Jar%20smoothing%20repeat%20variability.json)
 confirms the root-zero repeat uses the same adapter, checkpoint, study code and evaluation
 settings as the original 804-action success, but starts with different images and first
-policy proposals. At the 35-trial snapshot, seven completed smoothing/identity pairs
-contain one safe-completion gain, no loss and the same number of observed violations,
-with 1503 versus 1672 queries. The gain is task_0013 at root one: smoothing completes
+policy proposals. At the 40-trial snapshot, ten completed smoothing/identity pairs
+contain one safe-completion gain and one loss, with one additional observed violation
+and 2253 versus 2278 queries. The gain is task_0013 at root one: smoothing completes
 safely in 1082 actions while identity tips and remains unfinished. Caps never activate
 in that successful run. The
 [four-condition case audit](docs/research/research_notes/ManiGuard%20fruits%20Jar%20repeat%20first%20smoothing%20gain.json)
 retains its execution checks and differing initial inputs. Two new smoothing failures
 occur against safe-unfinished controls, eliminating the earlier partial violation advantage.
-Other controls remain pending, so the balance can still change.
+The newly completed task_0002 root-zero identity trial finishes safely while smoothing
+remains unsafe unfinished, adding a completion loss and an extra violation. Other
+controls remain pending, so the balance can still change.
 
 ## 3. Prevent premature transitions between task stages
 
@@ -246,10 +249,12 @@ association. Simulator state can support a clearly labelled privileged diagnosti
 across comparisons. A later sensor-based controller needs its own validation. A guard
 cannot supply a missing lid-closing skill, so useful retries must be demonstrated.
 
-At the 35-trial snapshot, three guard runs complete safely. Seven completed identity
-comparisons contain one safe-completion gain, no loss and one fewer observed violation,
-using 1658 versus 1672 queries. The gain is task_0008 at root one: guard completes safely
-in 1133 actions while identity never closes or grasps and remains safe unfinished.
+At the 40-trial snapshot, three guard runs complete safely. Nine completed identity
+comparisons contain two safe-completion gains and one loss, with the same number of
+observed violations and 2061 versus 2028 queries. The gains are task_0008 at root one
+and task_0013 at root zero. In both, identity remains safe unfinished without holding
+the target. The loss is task_0002 at root zero: identity completes safely while guard
+tips and remains unfinished.
 The original task_0017 root-zero guard success has not repeated: the new trial remains
 safe unfinished at 2000 actions without closing or grasping. An
 [audit of the original success and repeat](docs/research/research_notes/ManiGuard%20fruits%20Jar%20guard%20repeat%20variability.json)
@@ -341,13 +346,13 @@ completes safely while identity tips during an unsafe completion: task_0008 at r
 906 actions and 275 queries versus 792 actions and 99 queries. All adapter changes finish
 before its target grasp, and initial images and policy proposals differ between the runs.
 The [timing and input evidence](docs/research/research_notes/ManiGuard%20fruits%20Jar%20repeat%20first%20handback%20inputs.json)
-does not establish direct interception of the baseline failure. At the 35-trial snapshot,
-six completed hand-back/identity pairs contain two safe-completion gains and one loss,
-one fewer violation and 3743 versus 1271 queries.
+does not establish direct interception of the baseline failure. At the 40-trial snapshot,
+nine completed hand-back/identity pairs contain three safe-completion gains and two losses,
+one fewer violation and 6641 versus 1877 queries.
 
 The [comparison against the same plain guard](docs/research/research_notes/ManiGuard%20fruits%20Jar%20handback%20versus%20guard%20progress.json)
-now contains one safe-completion gain and one loss in six completed pairs, one fewer
-violation and 4570 versus 1331 queries. The first direct gain is task_0017 at root one:
+now contains one safe-completion gain and one loss in seven completed pairs, one fewer
+violation and 5880 versus 1602 queries. The first direct gain is task_0017 at root one:
 hand-back completes safely in 1343 actions and 372 queries while the plain guard remains
 safe unfinished at 2000 actions and 269 queries. Its
 [four-condition audit](docs/research/research_notes/ManiGuard%20fruits%20Jar%20repeat%20first%20handback%20plain%20guard%20gain.json)
@@ -355,8 +360,10 @@ confirms the same guard settings, with all hand-back changes ending before targe
 Initial images and proposals already differ before intervention. The loss is task_0002
 at root two: the plain guard completes safely in 946 actions and 136 queries, while
 hand-back never closes or grasps and remains unfinished after 2000 actions and 1285 queries.
-The added settling behavior therefore has no aggregate completion gain in these partial
-pairs. The remaining repeats are needed before assessing the return rule.
+All three hand-back roots on task_0002 now end without closure or grasp, consuming
+3879 queries versus identity's 528. Identity safely completes two of those three trials.
+The added settling behavior therefore has no aggregate completion gain over the plain
+guard in these partial pairs. The remaining repeats are needed before assessing the rule.
 
 This most directly connects to the original task-continuation question. Its entry cost is
 higher because a functioning guard and useful corrective behaviours are prerequisites.

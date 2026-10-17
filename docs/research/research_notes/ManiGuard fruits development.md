@@ -1950,3 +1950,46 @@ release-trigger batch was still active. A final Jar audit is prepared to require
 shared source/configuration checks and separately recorded batch wall time before
 publishing complete results. Its readiness check correctly reports the current batch as
 incomplete and writes no completion artifact. The physical queue continues unchanged.
+
+
+## Forty Jar trials: a successful pending control adds losses for all three adapters
+
+Forty full outcomes validate: ten safe completions, one unsafe completion, nineteen safe
+unfinished and ten unsafe unfinished. Identity on task_0002 at root zero completes safely
+at 847 actions and 106 queries, closing at observation 408, holding at 770 and leaving
+support at 774. The matched plain guard and smoothing trials are unsafe unfinished;
+hand-back is safe unfinished. This one new control adds a safe-completion loss for every
+candidate and removes the plain guard's earlier partial violation advantage.
+
+| Candidate versus identity | Completed pairs | Safe-completion gains | Losses | Violation difference | Candidate/control queries |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Guard with settling/requery | 9 | 3 | 2 | -1 | 6641 / 1877 |
+| Plain guard | 9 | 2 | 1 | 0 | 2061 / 2028 |
+| Motion smoothing | 10 | 1 | 1 | +1 | 2253 / 2278 |
+
+All twelve conditions on task_0002 are now complete. Each cell gives the full outcome
+and actual policy-query count; no root is omitted.
+
+| Root | Identity | Plain guard | Guard with settling/requery | Smoothing |
+| --- | --- | --- | --- | --- |
+| 0 | Safe complete; 106 | Unsafe unfinished; 259 | Safe unfinished; 1284 | Unsafe unfinished; 250 |
+| 1 | Safe unfinished; 250 | Safe unfinished; 271 | Safe unfinished; 1310 | Safe unfinished; 250 |
+| 2 | Safe complete; 172 | Safe complete; 136 | Safe unfinished; 1285 | Safe complete; 117 |
+
+All three hand-back trials end after 2000 actions without closure, grasp or lift. Together
+they use 3879 queries and change 4869 actions: 2408 guard blocks and 2461 settling holds.
+Every changed command has an explicitly unheld goal target immediately before execution.
+The unchanged controls use 528 queries in total and complete two of the three trials
+safely. This repeats an expensive unfinished pattern under the tested return rule; it
+does not prove that other return rules cannot recover, or that separate physical starts
+are identical-input counterfactuals.
+
+The newest hand-back root-one trial blocks 839 proposals and performs 707 settling holds,
+with its first changed proposal at 183 and last at 1999. Its final replan request has no
+following query because the episode horizon is exhausted. The diagnostic distinguishes
+that request from the 1310 policy queries actually made.
+
+Seven completed comparisons against the same plain guard still contain one hand-back
+gain and one loss, one fewer violation, and 5880 versus 1602 queries. The remaining
+physical jobs continue under the unchanged 48-trial plan. No optimizer or reserved
+selection has been run, and these incomplete comparisons establish no robust winner.
