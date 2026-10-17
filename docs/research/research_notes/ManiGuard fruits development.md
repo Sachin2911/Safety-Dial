@@ -164,3 +164,14 @@ fallback images. Machine-readable evidence is in
 The managed `maniguard_baseline` job has started the predeclared four-scene Jar development
 plan at the full upstream horizon. Physical adapter comparisons and optimization remain
 outstanding; the engineering evidence does not establish any of the six hypotheses.
+
+## Fresh-process variation
+
+Comparing the smoke episode with the first full baseline at the same scene and seed gives
+identical initial joint state but slightly different rendered images. Mean absolute channel
+differences are 0.467/255 in the overview and 0.285/255 at the wrist. The largest absolute
+arm-target difference in the first 32 actions is about 0.00564 radians. Fixed-observation
+policy replay remains exact; physical replay is not byte-identical across processes.
+Preserve this distinction, randomize comparison order and use repeated episodes rather
+than attributing a single paired outcome difference entirely to an adapter. Detailed
+measurements are in [the variability record](ManiGuard%20fruits%20initialization%20variability.json).
