@@ -198,3 +198,21 @@ data/maniguard/envs/sim/bin/python experiments/scripts/maniguard_batch.py \
 
 The active managed queue owns this output path. A separate reproduction needs a new path
 and an idle matching policy server; do not launch a duplicate alongside the live queues.
+
+`maniguard_compare.py` compares every condition with a declared control within the same
+scene and root seed. It preserves unplanned, unfinished and failed counterparts, and uses
+only validated complete pairs for outcome transitions. Equal safe-completion totals can
+contain both gains and losses across scenes; all four outcome categories remain explicit.
+The default control label is `identity`; the initial Jar screen uses `baseline_repeat`:
+
+```bash
+data/maniguard/envs/sim/bin/python experiments/scripts/maniguard_compare.py \
+  --batch runs/maniguard/jar-fixed-screens-v1 --control baseline_repeat \
+  --output runs/maniguard/reports/jar-condition-comparison.json
+```
+
+Use a new output path for each snapshot. The report records source/plan hashes. Shared
+scene and seed do not guarantee identical physical starts, and incomplete comparisons
+cannot rank conditions fairly. Whole-batch costs count every recorded episode once;
+comparison totals reuse controls and must not be summed as study costs. Missing pair
+costs remain null rather than becoming zero.

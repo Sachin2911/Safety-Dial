@@ -1118,3 +1118,29 @@ within-scene/root comparisons are pending, so this partial snapshot cannot rank 
 The [motion progress record](ManiGuard%20fruits%20Stack%20motion%20progress.json) preserves
 all 24 planned statuses, actual recorded costs including partial work, completed diagnostics
 and trace hashes. The batch process and next two episode processes remain live.
+
+## Compare repeat outcomes within scene and seed
+
+Added an audited comparison exporter for the ongoing repeated-condition batches. It
+retains every planned or unmatched scene/seed case, limits outcome transitions to validated
+complete counterparts, and records gains and losses in safe completion separately. Failed
+and partial work remains in the batch's unique interaction totals. Controls reused across
+comparisons are explicitly excluded from any additive whole-study cost interpretation;
+missing pair costs stay null. Source and plan hashes are retained with each snapshot.
+
+Seven added tests cover offsetting safe-completion gains/losses, incomplete counterparts,
+unplanned controls, reused-control accounting, duplicate condition/case rejection, missing
+query costs and an absent requested control. The focused comparison/result/batch suite
+passes 27 tests, and all three new Python files pass Ruff. Running the exporter on the
+complete physical Jar screen confirms one gain and one loss for guarding, and one gain
+and two losses for smoothing, across all four scene/root cases. These describe outcomes
+from separate starts and do not establish causal corrections. The [Jar comparison](ManiGuard%20fruits%20Jar%20condition%20comparison.json)
+keeps all nine candidate conditions and the 10,610-query unique whole-batch total.
+
+Four Stack motion trials have now completed. On task_0013, the 0.06/0.04 cap at root two
+changes 82 commands and the 0.01/0.01 cap at root zero changes 1321; both remain safely
+unfinished after 4200 actions. Their matching unchanged-policy controls are still pending.
+The earlier tight-cap task_0010 trial remains unsafe unfinished and the task_0013 root-one
+identity trial remains safe unfinished. No condition ranking is supported by this partial
+snapshot. The live batch continues; runtime controllers and planned physical jobs are
+unchanged, and no optimizer or reserved evaluation has run.

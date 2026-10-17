@@ -177,6 +177,7 @@ credential/destination request is pending. No checkpoint was fine-tuned during t
 ## Evidence and reproduction
 
 - [Additional Lid baselines and prerequisite chronology](../research_notes/ManiGuard%20fruits%20Lid%20followup.json).
+- [Jar comparisons by scene and seed](../research_notes/ManiGuard%20fruits%20Jar%20condition%20comparison.json).
 - [Complete Jar audit and mechanism counts](../research_notes/ManiGuard%20fruits%20Jar%20screen%20complete.json).
 - [Full planned Jar outcome/cost audit](../research_notes/ManiGuard%20fruits%20Jar%20screen.json)
   and [Stack audit](../research_notes/ManiGuard%20fruits%20Stack%20screen.json).
