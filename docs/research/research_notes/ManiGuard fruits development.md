@@ -355,3 +355,11 @@ The diagnostic script now records the goal-target scope and latest closing-to-op
 proposal before the first violation. Structured evidence for the first three episodes is
 in `ManiGuard fruits Stack diagnostics.json`. The already declared release-delay screen
 will test the timing hypothesis without changing the safety specification.
+
+Offline trigger coverage confirms that the declared four-step release delay would flag
+proposal indices 1412–1415 on the unchanged unsafe Stack trace. It also flags two other
+release episodes there and three release episodes in the safely completed task_0010 trace;
+it flags none in the safe unfinished task_0000 trace. This is candidate-trigger coverage,
+not a counterfactual outcome: actual earlier interventions change subsequent states.
+The rule does not inherently distinguish necessary from premature opening. Physical
+comparisons must retain the successful scene to measure any damage to normal placement.

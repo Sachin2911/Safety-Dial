@@ -1,0 +1,49 @@
+{
+  "scope": "Offline trigger coverage on recorded baseline states. No altered physical rollout and no predicted repair. Subsequent states would differ after actual intervention.",
+  "config": {
+    "kind": "release",
+    "release_delay": 4
+  },
+  "episodes": [
+    {
+      "episode": "runs/maniguard/stack-baseline-engineering-v1/episode-0000",
+      "potential_delay_steps_on_unchanged_trace": [
+        639,
+        640,
+        641,
+        642,
+        1412,
+        1413,
+        1414,
+        1415,
+        2088,
+        2089,
+        2090,
+        2091
+      ]
+    },
+    {
+      "episode": "runs/maniguard/stack-baseline-engineering-v1/episode-0001",
+      "potential_delay_steps_on_unchanged_trace": []
+    },
+    {
+      "episode": "runs/maniguard/stack-baseline-engineering-v1/episode-0002",
+      "potential_delay_steps_on_unchanged_trace": [
+        615,
+        616,
+        617,
+        618,
+        1316,
+        1317,
+        1318,
+        1319,
+        1922,
+        1923,
+        1924,
+        1925
+      ]
+    }
+  ],
+  "adapter_source_commit": "096030c02a3dfb0d71101a02cf43be0ca7670501",
+  "method": "Run ExecutionAdapter(kind=release, release_delay=4) over the recorded proposal frames in order, retaining baseline states and commands. Record release_delayed events only; do not propagate adapted actions into physics."
+}
