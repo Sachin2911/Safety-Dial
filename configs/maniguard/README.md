@@ -9,6 +9,8 @@ The simulator uses Python 3.10 with native conda-forge Spot; the policy uses the
 OpenPI lockfile in a separate environment. Do not sync the root Python environment into
 these environments. `scripts/maniguard/setup_sim.sh` installs simulator dependencies.
 Clone the pinned upstream repositories first, including ManiGuard's BEHAVIOR submodule.
+Isaac rendering also requires the system packages `libglu1-mesa` and `libxt6`;
+GPU driver availability alone does not establish that these userspace libraries exist.
 
 Download assets with `scripts/maniguard/download.py` using an interpreter with
 `huggingface_hub` installed. Kinds are `benchmark`, `assets`, `robot`, `jar`, `lid`, `stack`.

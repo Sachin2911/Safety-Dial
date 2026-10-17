@@ -85,3 +85,31 @@ same-seed episodes. The upstream wrapper only resets when the seed changes, whic
 otherwise confound consecutive matched-method comparisons. The evaluator instrumentation
 preserves upstream goal and monitor checks and logs original/adapted/executed actions.
 Physical accounting includes initialization steps through a PhysX subscription.
+
+## Physical integration attempt 1
+
+All three policy checkpoints, benchmark scenes, simulator assets and the long-finger robot
+are now downloaded with pinned provenance. The Jar policy is served locally under
+supervisor. Its handshake reports the expected training configuration and checkpoint
+revision, and the evaluator now requires both plus the episode-reset protocol.
+
+The first 32-step engineering request used Jar `task_0013/base`, seed 0, identity adapter,
+legacy rendering and the checkpoint's original controller settings. Isaac crashed with
+SIGSEGV during app startup before the environment constructor returned or any policy
+query was issued. Logs identify missing `libGLU.so.1` and `libXt.so.6`. Installed system
+packages `libglu1-mesa` and `libxt6`; no NVIDIA driver changes. The failed output and
+supervisor evidence remain in `runs/maniguard/engineering/jar-0013-smoke-v1` and the setup
+logs. The physics subscription had not attached, which is recorded explicitly rather than
+claiming complete physical accounting from an uninitialized counter. Attempt 2 uses a new
+output directory after the dependency repair.
+
+Each new episode preserves its study source files and hashes. Trace records now name
+replanning triggers, and graceful exits without a result receive an incomplete marker.
+Fatal native crashes still require the process/supervisor record. No physical hypothesis
+has yet been evaluated successfully.
+
+The implementation milestone is local commit `b1d28ac` on `research/maniguard-fruits`.
+Automatic approval review rejected publication to both main and a new study branch,
+requiring explicit authorization for the destination. A specific approval question for
+`Sachin2911/Safety-Dial`, branch `research/maniguard-fruits`, is pending. Local experiments
+and commits continue meanwhile.

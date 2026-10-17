@@ -259,18 +259,24 @@ class ExecutionAdapter:
         self.since_query += 1
 
     def should_replan(self, frame):
+        return self.replan_reason(frame) is not None
+
+    def replan_reason(self, frame):
         frame.validate()
         if self.since_query < self.config.min_query_interval:
-            return False
+            return None
         if self.force_replan:
-            return True
+            return "intervention_requery"
         if self.config.kind != "replan":
-            return False
+            return None
         error = 0.0 if self.last_executed is None else np.max(
             np.abs(self.last_executed[:7] - frame.joints)
         )
         changed = self.query_gripper is not None and np.max(
             np.abs(frame.fingers - self.query_gripper)
         ) >= self.config.aperture_stability
-        return bool(error >= self.config.tracking_threshold
-                    or (self.config.replan_on_gripper_change and changed))
+        if error >= self.config.tracking_threshold:
+            return "joint_tracking_error"
+        if self.config.replan_on_gripper_change and changed:
+            return "gripper_state_change"
+        return None

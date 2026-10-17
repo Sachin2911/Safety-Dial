@@ -1,5 +1,6 @@
 """Instrumented ManiGuard integration; original monitor and goals remain unchanged."""
 
+import atexit
 import hashlib
 import json
 import os
@@ -36,7 +37,20 @@ class Study:
                        "env_steps_returned": 0, "policy_queries": 0, "policy_query_seconds": 0.0,
                        "policy_control_steps": 0, "guard_steps": 0, "changed_steps": 0}
         self.physics_subscription = None
+        self.physics_accounting_attached = False
+        self.finished = False
         self.write("job", job=self.job)
+        self.ledger()
+        atexit.register(self.close)
+
+    def close(self):
+        if self.trace.closed:
+            return
+        if not self.finished:
+            self.write("incomplete", last_phase=self.phase)
+            self.phase = "process_exited_without_result"
+        self.ledger()
+        self.trace.close()
 
     def write(self, kind, **values):
         self.trace.write(json.dumps({"type": kind, **values}, default=json_value,
@@ -44,10 +58,27 @@ class Study:
 
     def ledger(self):
         record = {**self.counts, "phase": self.phase,
+                  "physics_accounting_attached": self.physics_accounting_attached,
                   "elapsed_seconds": time.monotonic() - self.started}
         temp = self.output / "ledger.tmp"
         temp.write_text(json.dumps(record, indent=2) + "\n")
         temp.replace(self.output / "ledger.json")
+
+    def validate_policy(self, policy, client_type):
+        if self.job["random_policy"]:
+            if client_type != "random":
+                raise ValueError("Expected the explicitly requested engineering random policy")
+            return
+        if client_type != "openpi":
+            raise ValueError("Study requires the pinned OpenPI policy server")
+        metadata = policy.get_server_metadata()
+        spec = self.job["policy"]
+        expected = {"serve_config": spec["config"], "checkpoint_revision": spec["revision"],
+                    "episode_seed_reset": "study_episode_id"}
+        for key, value in expected.items():
+            if metadata.get(key) != value:
+                raise ValueError(f"Policy handshake mismatch for {key}: {metadata.get(key)!r}")
+        self.write("policy_metadata", metadata=metadata)
 
     def install_accounting(self, og):
         from omnigibson import simulator
@@ -55,6 +86,8 @@ class Study:
         original_launch = simulator._launch_app
 
         def launch(*args, **kwargs):
+            self.phase = "app_startup"
+            self.ledger()
             app = original_launch(*args, **kwargs)
             from omni.physx import get_physx_interface
 
@@ -67,6 +100,9 @@ class Study:
             self.physics_subscription = get_physx_interface().subscribe_physics_step_events(
                 physics_step,
             )
+            self.physics_accounting_attached = True
+            self.phase = "scene_initialization"
+            self.ledger()
             return app
 
         simulator._launch_app = launch
@@ -149,11 +185,18 @@ class Study:
         self.counts["policy_control_steps"] += 1
         self.write("executed", step=step, action=executed)
 
+    def should_replan(self, step, frame):
+        reason = self.adapter.replan_reason(frame)
+        if reason is not None:
+            self.write("replan", step=step, reason=reason, executed_prefix=self.adapter.since_query)
+        return reason is not None
+
     def observed(self, step, obs, monitor):
         state = monitor.recording_state(step) if monitor is not None else None
         self.write("observed", step=step, state=obs["states"], monitor=state)
 
     def finish(self, result):
+        self.finished = True
         self.phase = result["status"]
         self.write("result", result=result)
         self.ledger()

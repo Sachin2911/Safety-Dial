@@ -1,5 +1,10 @@
 """Check random-state isolation between matched physical comparison episodes."""
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from helpers.maniguard_policy import EpisodeSeededPolicy
 
 
