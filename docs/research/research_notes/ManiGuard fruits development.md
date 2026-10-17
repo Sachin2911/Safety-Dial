@@ -555,3 +555,17 @@ with zero changed commands. It is the second untriggered release case and suppli
 evidence for or against a useful release correction. Nine of 24 Stack screens are now
 complete. The adaptive-replanning trial on task_0000 and the next declared condition are
 live; the Jar and Lid follow-on queue remains active.
+
+## First adaptive-replanning outcome
+
+Adaptive replanning on Stack task_0000/base seed 0 finished safe unfinished at 4,200
+actions. It used 572 model queries, compared with 525 for a full horizon-8 episode,
+about 9% more. The recorded conditions fired 88 times, but only 79 shortened an action
+chunk: 62 tracking-error triggers and 17 gripper-change triggers. The other nine occurred
+at a normal chunk boundary. The diagnostic now reports these categories separately and
+also distinguishes a condition at episode end that has no subsequent query.
+
+This trial exercised the adaptive scheduler without establishing a completion gain.
+The actual query counts remain the cost measure; raw trigger counts are not additional
+queries. Ten screen episodes are complete. The declared motion-cap, release, smoothing,
+fixed-horizon and adaptive comparisons continue before any optimizer selection.

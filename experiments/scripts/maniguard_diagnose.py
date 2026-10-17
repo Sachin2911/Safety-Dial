@@ -24,10 +24,14 @@ def diagnose(output):
     last_release_request = None
     release_before_violation = None
     goal_target = None
-    for line in (Path(output) / 'trace.jsonl').read_text().splitlines():
-        row = json.loads(line)
+    rows = [json.loads(line) for line in (Path(output) / 'trace.jsonl').read_text().splitlines()]
+    query_steps = {row['step'] for row in rows if row['type'] == 'query'}
+    chunk_limit = None
+    for row in rows:
         if row['type'] == 'initial':
             goal_target = row['scene'].get('goal_region', {}).get('target_name')
+        elif row['type'] == 'chunk':
+            chunk_limit = min(verdict['adapter']['horizon'], len(row['actions']))
         elif row['type'] == 'proposal':
             proposals += 1
             event = row['event']
@@ -46,6 +50,14 @@ def diagnose(output):
             last_command_open = row['action'][-1] >= 0
         elif row['type'] == 'replan':
             counts['replan:' + row['reason']] += 1
+            if chunk_limit is None:
+                raise ValueError('Replan event has no preceding model chunk')
+            if row['step'] not in query_steps:
+                counts['replan_without_following_query:' + row['reason']] += 1
+            elif row['executed_prefix'] < chunk_limit:
+                counts['early_replan:' + row['reason']] += 1
+            else:
+                counts['boundary_replan:' + row['reason']] += 1
         elif row['type'] == 'goal':
             counts['goal_observations'] += 1
             held = row['detail'].get('held')
