@@ -1636,3 +1636,45 @@ alongside one prolonged hand-back stall; it does not yet establish a baseline ad
 The ten-trial evidence retains all partial pair coverage, physical/query ledgers, complete
 diagnoses, source/trace hashes and command audits. Earlier diagnostics reproduce exactly.
 The batch remains live with two workers and no changed condition, budget or runtime rule.
+
+
+## Fifteen Jar repeats: first hand-back gain against identity, with an adverse plain-guard comparison
+
+Fifteen trials are validated: three safe completions, one unsafe completion, seven safe
+unfinished and four unsafe unfinished. The first completed hand-back/identity comparison
+is task_0008 at root two. Identity closes at observation 370, first holds at 722, leaves
+support at 729 and first violates uprightness at 780, before an unsafe completion at
+792 actions and 99 queries. Hand-back closes at 621, first holds at 814 and leaves support
+at 816, then completes safely at 906 actions and 275 queries. The comparison has one
+safe-completion gain and one fewer violation, with 176 additional queries.
+
+This is not direct prevention of an open-jar lift: identity had already closed before
+lifting, and the adapter changes no command during its own held transport. Its first and
+last changed proposals are 188 and 621, before first holding at 814. Gripper commands
+pass through unchanged. Saved initial joint states match exactly, but overview and wrist
+images differ, with maximum pixel differences of 130 and 63. First original policy
+proposals already differ by up to 0.00048321 before intervention. A timeline figure and
+input audit retain these limitations alongside the positive outcome. Viewed the figure;
+its held, closed, guard and settling lanes agree with the completed traces.
+
+The first direct comparison of hand-back against the same plain guard is task_0013 at
+root one. The plain guard closes at observation 484, never holds or leaves support,
+and remains safe unfinished after 2000 actions and 261 queries. It blocks 20 actions at
+proposals 286 to 461. Hand-back closes at 576, never holds or leaves support, then tips
+at 719 and remains unsafe unfinished after 2000 actions and 387 queries. It blocks 91
+actions and adds 185 settling holds. This pair has no safe-completion gain or loss and
+one additional observed violation under hand-back, with 126 additional queries. Separate
+physical starts prevent a deterministic causal interpretation. Exported this alternate
+control comparison explicitly; it reuses the same trials and adds no simulator cost.
+
+Smoothing on task_0002 at root one remains safe unfinished for 2000 actions and 250
+queries, matching its completed identity control. Neither closes, holds or leaves support.
+The smoothing adapter changes every arm command but no cap binds and gripper commands
+remain unchanged. Against identity, the completed partial comparisons therefore comprise
+one hand-back gain, one adverse plain-guard safety contrast and one unchanged smoothing
+outcome. Most planned pairs remain incomplete, so aggregate benefit remains unresolved.
+
+Also checked the pinned Jar checkpoint metadata and seed contract. Each scene/root maps
+to the same policy sampling seed across conditions; the server keeps episode-specific
+streams for interleaved clients. Those controls do not eliminate the observed physical
+and image differences. No runtime configuration or experiment plan was changed.

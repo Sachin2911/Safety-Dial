@@ -22,8 +22,8 @@ one safe completion in six trials versus zero for identity, but each has three e
 with violations versus identity's two. These are small engineering comparisons with
 differing physical starts, not demonstrated repeatable repairs.
 The initial release rule rarely activates, bounded retries execute the intended retreat without
-a demonstrated recovery, and the tested settling/requery rule increases cost without
-improving completion.
+a demonstrated recovery, and the initial settling/requery comparison uses more queries
+without improving completion.
 
 Eight extra Lid baselines are also complete: one unsafe completion, two unsafe unfinished
 and five safe unfinished. Three scenes now show lifting before lid placement; three other
@@ -291,9 +291,10 @@ fixed retry is insufficient. Failed finite retry search does not prove irrecover
 > when a safety guard hands control back to the task policy?
 
 After a guard intervenes, the policy might immediately repeat the blocked proposal or
-alternate rapidly between task execution and correction. This is a proposed problem to
-test after adding a guard, not an observed ManiGuard result. The standard monitor reports
-violations after execution and supplies no predictive action filter.
+alternate rapidly between task execution and correction. The implemented privileged guard
+and settling rule now show repeated blocking and unfinished episodes; whether a better
+return rule can reliably recover that progress remains unresolved. The standard monitor
+reports violations after execution and supplies no predictive action filter.
 [Monitor documentation](https://nu-ideas-lab.github.io/ManiGuard/docs/foundations/ltl_safety/).
 
 Evolution could search correction duration, fresh-plan requests and conditions for
@@ -305,6 +306,17 @@ what happens after intervention.
 loss of progress. Compare immediate hand-back with a fixed settling period and a fresh
 policy query. Develop a richer controller only if these simple alternatives leave useful
 headroom. Corrective actions and additional queries count toward the budget.
+
+The ongoing repeats contain one same-scene/root contrast in which guard plus settling
+completes safely while identity tips during an unsafe completion: task_0008 at root two,
+906 actions and 275 queries versus 792 actions and 99 queries. All adapter changes finish
+before its target grasp, and initial images and policy proposals differ between the runs.
+The [timing and input evidence](docs/research/research_notes/ManiGuard%20fruits%20Jar%20repeat%20first%20handback%20inputs.json)
+does not establish direct interception of the baseline failure. In the first completed
+[comparison against the same plain guard](docs/research/research_notes/ManiGuard%20fruits%20Jar%20handback%20versus%20guard%20progress.json),
+on task_0013 at root one, both trials remain unfinished; settling tips while the plain
+guard stays safe, using 387 versus 261 queries. The remaining repeats are needed before
+claiming an advantage from the return rule.
 
 This most directly connects to the original task-continuation question. Its entry cost is
 higher because a functioning guard and useful corrective behaviours are prerequisites.
