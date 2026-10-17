@@ -79,3 +79,11 @@ def test_saved_optimizer_resumes_identical_draws_and_updates(method):
     optimizer.tell(next_genes, [1, 0, -2, 0])
     restored.tell(next_genes, [1, 0, -2, 0])
     assert search_state(optimizer) == search_state(restored)
+
+
+@pytest.mark.parametrize('workers', [0, 3, True, 1.5])
+def test_unsupported_search_concurrency_rejected(workers):
+    changed = deepcopy(PROTOCOL)
+    changed['workers'] = workers
+    with pytest.raises(ValueError, match='workers'):
+        validate_protocol(changed, SPLITS)

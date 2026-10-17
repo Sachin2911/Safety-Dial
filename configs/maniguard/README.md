@@ -105,3 +105,8 @@ do not interpret this implementation as evidence that concurrent simulation is v
 The idle-server replay checker accepts `--interleaved` to compare two interleaved clients
 with a sequential reference on an identical saved observation. Every extra model query
 is recorded. This verifies sampling isolation, not deterministic physical rendering.
+
+Search protocols may declare `workers: 2` after concurrency validation. The same worker
+count applies to every optimizer, and each batch verifies server isolation before starting
+physics. Omitting the field retains serial evaluation. Realized model latency may include
+queueing behind another client and must be reported as measured.

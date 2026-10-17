@@ -12,6 +12,8 @@ METHODS = ('evolution', 'random', 'policy_gradient')
 
 
 def validate_protocol(protocol, splits):
+    if type(protocol.get('workers', 1)) is not int or protocol.get('workers', 1) not in (1, 2):
+        raise ValueError('Search workers must be one or two, shared by all methods')
     family = protocol['family']
     base = protocol['base_adapter']
     if family == 'stack' and base['kind'] in ('prerequisite', 'handback'):

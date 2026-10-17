@@ -37,7 +37,8 @@ def main():
     for relative in ('experiments/scripts/maniguard_search.py',
                      'experiments/helpers/maniguard_search.py',
                      'experiments/helpers/unisafe_search.py',
-                     'experiments/scripts/maniguard_batch.py'):
+                     'experiments/scripts/maniguard_batch.py',
+                     'experiments/helpers/maniguard_jobs.py'):
         raw = (ROOT / relative).read_bytes()
         (implementation / Path(relative).name).write_bytes(raw)
         hashes[relative] = hashlib.sha256(raw).hexdigest()
@@ -70,6 +71,7 @@ def main():
                     result = subprocess.run([
                         sys.executable, '-u', str(ROOT / 'experiments/scripts/maniguard_batch.py'),
                         '--plan', str(plan_path), '--output', str(directory),
+                        '--workers', str(protocol.get('workers', 1)),
                     ], cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=False)
                 if result.returncode:
                     write(output / 'failure.json', {'stage': directory.name,

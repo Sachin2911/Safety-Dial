@@ -314,3 +314,16 @@ parameter settings rather than tuning them on Stack outcomes: repeated identity,
 4, adaptive replanning, joint caps, smoothing and release delay. It uses the full original
 4,200-action horizon. No adapter comparison has run yet and no optimizer protocol budget
 has been selected. The Jar 40-episode screen still covers all six implementations.
+
+The second Stack baseline, task_0000/base, was safe unfinished at 4,200 actions, with
+contact but no reported target grasp or adapter grasp-evidence frames. The remaining two
+original-policy episodes continue under the unchanged serial server. The managed
+`maniguard_screen_queue` service waits for that exact live baseline process to exit and
+then requires four valid completed results before changing the policy service. Pipeline
+v2 records the subsequent replay, short concurrent simulation, and 24-screen sequence;
+it stops on any failed prerequisite. An initial waiting-only queue was cancelled to correct
+explicit startup of the autostart-disabled policy service, before any model query or physics.
+
+Optimizer protocols now accept one shared worker count for all three methods. Four checks
+reject invalid concurrency settings; the 17 search protocol/state tests pass. These checks
+do not constitute physical optimizer evaluation. No candidate training has started.
