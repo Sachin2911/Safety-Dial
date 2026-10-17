@@ -423,3 +423,9 @@ transport violations or container grasps. This extension is intended to diagnose
 prerequisite failures before selecting further guard comparisons, not to infer headroom
 from an untriggered guard. The additional Lid plan is not running yet and accesses no
 reserved scenes. Jar's declared 40-episode screen remains the initial test of all six adapters.
+
+Before any fixed-screen episode started, clarified the plan's smoothing interpretation:
+the `motion_smoothing` configuration retains the adapter's default 0.12/0.04-radian joint
+caps. It is a combined smoothing-and-cap condition and cannot isolate smoothing alone.
+No candidate settings or randomized ordering changed. A later attribution study would
+need a matched cap-only control if this combined condition shows useful headroom.
