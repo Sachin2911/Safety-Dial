@@ -36,7 +36,7 @@ def prepare_runtime(output):
     replace('    import omnigibson as og\n',
             '    import omnigibson as og\n    STUDY.install_accounting(og)\n')
     replace('    policy, client_type = connect_policy(cfg)\n',
-            '    policy, client_type = connect_policy(cfg)\n'
+            '    policy, client_type = STUDY.connect_policy(cfg, connect_policy)\n'
             '    STUDY.validate_policy(policy, client_type)\n')
     replace('            step_idx = 0\n',
             '            STUDY.start(scene_info, obs)\n            step_idx = 0\n')
@@ -57,6 +57,10 @@ def prepare_runtime(output):
     replace('                    if goal_checker is not None:\n',
             '                    STUDY.observed(step_idx, obs, monitor)\n'
             '                    if goal_checker is not None:\n')
+    replace('                        if inst_success:\n',
+            '                        STUDY.write("goal", step=step_idx, success=inst_success,\n'
+            '                                    detail=goal_detail)\n'
+            '                        if inst_success:\n')
     replace('                if step_idx % 50 == 0 or step_idx == 1:',
             '                    if STUDY.should_replan(step_idx, STUDY.frame(\n'
             '                        env, robot, monitor, step_idx, _eef_jacobian_arm)):\n'

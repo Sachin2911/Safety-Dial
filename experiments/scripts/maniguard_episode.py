@@ -47,6 +47,7 @@ def main():
                     ROOT / 'experiments/helpers/maniguard_runtime.py',
                     ROOT / 'experiments/helpers/maniguard_source.py',
                     ROOT / 'experiments/helpers/maniguard_policy.py',
+                    ROOT / 'experiments/helpers/maniguard_client.py',
                     ROOT / 'configs/maniguard/sources.json', ROOT / 'configs/maniguard/splits.json']
     snapshot = output / 'study_source'
     snapshot.mkdir()

@@ -64,6 +64,14 @@ class Study:
         temp.write_text(json.dumps(record, indent=2) + "\n")
         temp.replace(self.output / "ledger.json")
 
+    def connect_policy(self, cfg, upstream_connect):
+        if cfg.random_policy:
+            return upstream_connect(cfg)
+        if not cfg.use_openpi_client:
+            raise ValueError("Study requires the OpenPI client")
+        from helpers.maniguard_client import StudyClient
+        return StudyClient(host=cfg.host, port=cfg.port), "openpi"
+
     def validate_policy(self, policy, client_type):
         if self.job["random_policy"]:
             if client_type != "random":
@@ -171,6 +179,7 @@ class Study:
         elapsed = time.monotonic() - self.query_started
         self.counts["policy_query_seconds"] += elapsed
         self.write("chunk", step=step, actions=chunk, elapsed_seconds=elapsed)
+        self.query_started = None
 
     def action(self, step, ci, original, frame):
         adapted, event = self.adapter.act(original, frame)
@@ -196,6 +205,11 @@ class Study:
         self.write("observed", step=step, state=obs["states"], monitor=state)
 
     def finish(self, result):
+        if self.query_started is not None:
+            elapsed = time.monotonic() - self.query_started
+            self.counts["policy_query_seconds"] += elapsed
+            self.write("query_failed", elapsed_seconds=elapsed)
+            self.query_started = None
         self.finished = True
         self.phase = result["status"]
         self.write("result", result=result)

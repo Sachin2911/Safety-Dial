@@ -121,3 +121,25 @@ The reader rejects missing verdicts, incomplete or out-of-order monitor traces a
 inconsistent action accounting. Twelve outcome-integrity tests bring the engineering
 suite to 33 passing tests. The declared full-horizon Jar baseline plan covers the four
 engineering scenes with seed 0; it has not yet started.
+
+## Physical integration attempt 2 and query repair
+
+Attempt 2 loaded the scene, produced nonblank 256x256 overview and wrist images, initialized
+all four Jar safety propositions, and completed ten warmup environment steps. Its ledger
+records 86 physics steps (about 0.717 simulated seconds). The first policy query failed
+before any policy action executed: the synchronous websocket client reported a keepalive
+ping timeout while the policy server was occupied by first-query inference compilation.
+The result is `crashed`, with task success and safety verdicts unavailable, not a safe
+unfinished episode. Source and logs are preserved in `jar-0013-smoke-v2`.
+
+A study-local OpenPI client disables its heartbeat during these blocking inferences while
+retaining a bounded connection timeout and the batch's process timeout. The policy,
+observations, action convention and benchmark are unchanged. New ledgers also include
+latency spent in failed queries. Attempt 3 starts from a new directory with the repaired
+client. The renderer and policy caches remain available; no live process was restarted
+because of an observation timeout.
+
+Additional offline diagnosis records already-computed goal-check output, adapter trigger
+counts and first observed safety violations. These records are not adapter inputs. A
+separate real-policy replay check is prepared for an idle server after a completed smoke
+episode; its extra queries will have their own accounting.
