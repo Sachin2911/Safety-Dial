@@ -1,0 +1,551 @@
+{
+  "split": "engineering",
+  "ordering_seed": 20261023,
+  "description": "Repeated unchanged-policy, fixed prerequisite-guard, fixed hand-back and smoothing comparison across all four engineering Jar scenes and root seeds 0, 1 and 2. Full original horizons; no learned adapter selection.",
+  "rationale": "The initial task_0017 guard trial completed safely whereas its contemporaneous identity control transported an open jar. All 27 guard blocks occurred before a held grasp, so this is a promising outcome contrast rather than a demonstrated direct interception of unsafe transport. Other guard and hand-back trials have not improved completion; repeated controls and initially differing camera images require replication. The initial task_0017 smoothing trial also completed safely at 804 actions; it is included as another candidate correction with shared contemporaneous controls. This condition includes the same default joint caps as the initial smoothing screen.",
+  "scope": "Development comparison declared after initial-screen results, including the successful task_0017 guard trial. Includes all engineering scenes to measure interference as well as candidate benefit. Reserved scenes remain untouched. The guard uses labelled privileged simulator closure/contact/holding signals; hand-back changes only hold/requery behavior around the same guard. The identity policy receives its original observations. Smoothing is unprivileged and does not change the prerequisite guard. Revision 2 adds this condition before any repeat episode or policy switch; the earlier waiting plan is preserved under runs/maniguard/jar-guard-repeat-pipeline-v1.",
+  "accounting": "Count every episode including failures, all initialization/physics actions, policy queries and elapsed time. Shared scene and root seed do not guarantee deterministic physical trajectories; group outcomes by scene and report all four benchmark categories.",
+  "jobs": [
+    {
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 2,
+      "label": "handback_settle_requery",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 2,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 0,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 1,
+      "label": "motion_smoothing",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 1,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 2,
+      "label": "motion_smoothing",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 0,
+      "label": "motion_smoothing",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 2,
+      "label": "handback_settle_requery",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 2,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "label": "handback_settle_requery",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 1,
+      "label": "handback_settle_requery",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 1,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 2,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 1,
+      "label": "motion_smoothing",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 1,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 1,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 0,
+      "label": "motion_smoothing",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 1,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 2,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 1,
+      "label": "handback_settle_requery",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 1,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 2,
+      "label": "handback_settle_requery",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "label": "motion_smoothing",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 0,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 0,
+      "label": "handback_settle_requery",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 2,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 1,
+      "label": "motion_smoothing",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 0,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 2,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 2,
+      "label": "handback_settle_requery",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 2,
+      "label": "motion_smoothing",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 1,
+      "label": "motion_smoothing",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 1,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 1,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 1,
+      "label": "handback_settle_requery",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 0,
+      "label": "motion_smoothing",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0002/base",
+      "seed": 0,
+      "label": "identity",
+      "adapter": {
+        "kind": "identity",
+        "horizon": 8
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 2,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 0,
+      "label": "handback_settle_requery",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 2,
+      "label": "motion_smoothing",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 2,
+      "label": "motion_smoothing",
+      "adapter": {
+        "kind": "motion",
+        "horizon": 8,
+        "smoothing": 0.5
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 0,
+      "label": "handback_settle_requery",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 2,
+      "label": "prerequisite_guard",
+      "adapter": {
+        "kind": "prerequisite",
+        "horizon": 8,
+        "privileged": true
+      }
+    },
+    {
+      "family": "jar",
+      "scene": "task_0008/base",
+      "seed": 1,
+      "label": "handback_settle_requery",
+      "adapter": {
+        "kind": "handback",
+        "horizon": 8,
+        "privileged": true,
+        "handback_hold_steps": 4,
+        "handback_requery": true
+      }
+    }
+  ],
+  "protocol_revision": 2
+}

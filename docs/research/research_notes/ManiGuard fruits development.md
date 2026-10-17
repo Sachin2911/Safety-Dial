@@ -901,3 +901,63 @@ trace hashes, monitor states, measured retreat vectors, figure provenance and ou
 checks. The [Jar progress record](ManiGuard%20fruits%20Jar%20screen%20progress.json) now
 includes all 25 completed episodes at this snapshot. No simulator runtime or adapter
 behavior was changed while the batch was active.
+
+## First promising Jar guard comparison and contact scope
+
+The plain prerequisite guard on task_0017 completes safely at 993 actions and 142
+queries. Its contemporaneous unchanged control completes unsafely at 1261 actions and
+158 queries, leaving support without ever closing. In the guard trial closure first
+occurs at observation 508, the first held grasp at 944, and support loss at 947. All
+27 blocked proposals occur before closure, between steps 191 and 494. This is a
+promising outcome contrast, not evidence that the guard directly intercepted the
+baseline's lift or that the difference repeats across starts.
+
+Aligned guard and goal-checker records distinguish contact from held grasp. All blocks
+in jobs 2, 3, 8, 26 and 28 occur while the Jar target is not held; the engagement signal
+therefore comes from contact. Job 10 has 84 blocks while held and 86 while not held.
+The guard predicts end-effector vertical displacement, not actual jar displacement.
+Contact-based blocking may interfere with lid manipulation, but these observational
+counts do not show that any unexecuted proposal would have been safe. The target names,
+step alignment and preserved gripper commands were checked directly. Full counts and
+trace hashes are in [guard engagement](ManiGuard%20fruits%20guard%20engagement.json).
+
+The hand-back trial on task_0008 safely completes in 1294 actions and 515 queries,
+compared with 685 actions and 86 queries for its unchanged control. It records 228
+guard blocks, 176 guard entries/exits and 421 post-guard holds. This demonstrates
+continuation with substantial intervention and query cost, not an improved return to
+execution. Its 228 guard blocks all precede the held grasp.
+
+## A smoothing lead and repeated comparison declared
+
+Smoothing on task_0017 also completes safely, at 804 actions. Exact float32 reconstruction
+shows its default joint caps never bind, so smoothing accounts for the recorded action
+changes in this trial. This does not isolate their causal task effect. Smoothing on
+task_0013 remains safely unfinished, while its unchanged control completes safely;
+thus the successful task_0017 trial does not establish a general benefit.
+
+Four pairs of current-session inactive adapters and identity controls have exactly
+matching initial joint-state vectors, but different initial camera arrays and first
+predicted chunks before any adapter action. The [initial-input comparison](ManiGuard%20fruits%20Jar%20initial-input%20variability.json)
+records the array/trace hashes and numerical differences. The inactive conditions have
+no changed actions or early replans. This extends the fresh-start variability evidence
+to the current server session without new inference or simulation, and rules out
+identical initial policy inputs as an assumption for these paired scene/root seeds.
+
+Declared a randomized 48-episode repeat plan: all four frozen Jar engineering scenes,
+root seeds 0, 1 and 2, and identity, plain guard, fixed hand-back and smoothing. Each
+condition receives all 12 scene/seed combinations, with full original horizons and
+unchanged safety definitions. The guard and hand-back share the same privileged trigger;
+smoothing uses proprioception/history and includes its original default caps. This is
+still mechanism evaluation, not optimizer training or reserved testing.
+
+The managed queue waits for the existing release-trigger queue's exact process to
+finish normally, validates its 12 completed trials against the saved plan, then switches
+the idle Stack policy to Jar. A fresh 32-action reference and strict six-query interleaved
+replay must pass before the 48 trials start. The earlier 36-episode waiting plan was
+stopped before any physical work or policy switch and preserved with an explicit
+supersession record when the new smoothing result arrived. The final plan and source
+are copied under `runs/maniguard/jar-guard-repeat-pipeline-v2`; process IDs and hashes
+are recorded in the screen-progress JSON. Existing physical batches were not interrupted.
+
+At the saved 30/40 Jar snapshot, no optimizer has consumed training episodes and no
+reserved evaluation has run. The study is not complete.

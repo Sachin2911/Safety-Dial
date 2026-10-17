@@ -3270,5 +3270,33 @@
     },
     "replay_check_sha256": "afc6022f6d32409d998600849769b60c6fb15e6fce303d249c0c81888beeeaab",
     "progress_record": "docs/research/research_notes/ManiGuard fruits Jar screen progress.json"
+  },
+  "jar_guard_repeat_queue": {
+    "status": "Queued after the declared Stack release-trigger screen; no physical repeat episodes started.",
+    "service": "maniguard_jar_guard_queue",
+    "pid": 116135,
+    "predecessor_service": "maniguard_release_queue",
+    "predecessor_pid": 81886,
+    "plan": "configs/maniguard/jar-guard-repeat-screen.json",
+    "plan_sha256": "b0a08fa0cbe2009885fb2e636d6f923b469823b9345e14619e44e2db8eae1f71",
+    "queue_source_snapshot": "runs/maniguard/jar-guard-repeat-pipeline-v2/queue_source.py",
+    "queue_source_sha256": "df7aca8ca50a3cde3afbee944b895919aac0510dfeb7f3bdd19786151da33c8f",
+    "output": "runs/maniguard/jar-guard-repeat-pipeline-v2",
+    "physical_batch_output": "runs/maniguard/jar-guard-repeat-v2",
+    "episodes": 48,
+    "controls": [
+      "identity",
+      "prerequisite_guard",
+      "handback_settle_requery",
+      "motion_smoothing"
+    ],
+    "scenes": "All four frozen Jar engineering scenes",
+    "root_seeds": [
+      0,
+      1,
+      2
+    ],
+    "policy_switch": "Switch idle Stack server to Jar only after predecessor normal completion and all 12 release trials validate; then require fresh 32-action reference and strict six-query interleaved replay.",
+    "superseded_waiting_plan": "runs/maniguard/jar-guard-repeat-pipeline-v1/superseded.json"
   }
 }
