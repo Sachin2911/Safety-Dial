@@ -1915,3 +1915,38 @@ at 1534 but never grasps. The plain guard tips and identity remains safe unfinis
 this case. The saved progress and direct-gain audit retain timelines, exact action checks,
 configuration checks, raw hashes and the immutable 35-trial snapshot. The remaining Jar
 trials and queued Lid comparison continue; no optimizer or reserved evaluation has run.
+
+
+## Thirty-eight Jar trials: new controls add a shared guard gain
+
+The snapshot now contains nine safe completions, one unsafe completion, eighteen safe
+unfinished and ten unsafe unfinished. Completed indices include episode 38 while episode
+37 is still active; the completed count is not an index-prefix assumption.
+
+Identity on task_0013 at root zero closes at observation 353 but never holds or lifts the
+target, remaining safe unfinished after 2000 actions and 250 queries. This resolves the
+controls for both previously completed safe guard runs: plain guard at 990 actions and
+144 queries, hand-back at 1853 actions and 304 queries. The corresponding smoothing trial
+also remains safe unfinished at 2000 actions and 250 queries, without closure or grasp.
+This new gain over identity is shared by both guard variants and supplies no extra
+completion benefit from settling.
+
+Identity on task_0008 at root zero closes at observation 458 but never holds the target
+and remains unsafe unfinished at 2000 actions and 250 queries. Its smoothing counterpart
+is also unsafe unfinished. Both failures remain counted; adding this previously pending
+control does not change the paired violation difference.
+
+| Candidate versus identity | Completed pairs | Safe-completion gains | Losses | Violation difference | Candidate/control queries |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Guard with settling/requery | 7 | 3 | 1 | -1 | 4047 / 1521 |
+| Plain guard | 8 | 2 | 0 | -1 | 1802 / 1922 |
+| Motion smoothing | 9 | 1 | 0 | 0 | 2003 / 2172 |
+
+The same six hand-back/plain-guard pairs retain one gain and one loss, with 4570 versus
+1331 queries. All earlier diagnoses and raw trace hashes were checked against the new
+snapshot. Corrected the overall progress record's stale statement that the completed
+release-trigger batch was still active. A final Jar audit is prepared to require all
+48 validated outcomes, normal pipeline completion, full same-case comparison coverage,
+shared source/configuration checks and separately recorded batch wall time before
+publishing complete results. Its readiness check correctly reports the current batch as
+incomplete and writes no completion artifact. The physical queue continues unchanged.

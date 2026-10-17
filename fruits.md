@@ -38,7 +38,10 @@ are complete, as are the
 which find no safe-completion gain. The 48 Jar repeats are running, comparing identity,
 guard, hand-back and smoothing across all four engineering scenes and three root seeds.
 Their [repeat progress record](docs/research/research_notes/ManiGuard%20fruits%20Jar%20repeat%20progress.json)
-retains completed diagnoses separately from pending control comparisons.
+retains completed diagnoses separately from pending control comparisons. At 38 validated
+trials, the plain guard has two safe-completion gains and no losses in eight completed
+identity pairs. Settling/requery has three gains and one loss in seven identity pairs;
+one newly resolved gain is shared with the plain guard. These remain partial comparisons.
 These remain engineering experiments. No evolutionary search or reserved evaluation has
 run, and no evolutionary advantage has been demonstrated.
 
