@@ -1318,3 +1318,34 @@ The successful trial's maximum commanded step is 0.01000011 rad; its maximum mea
 step is 0.01532289 rad. Command compliance therefore remains distinct from a physical
 velocity guarantee. Reproduction instructions and current findings are updated; runtime
 controllers and queued physical plans are unchanged.
+
+## Wider-cap repeats finish without a safe completion
+
+Twenty-one of 24 motion-repeat trials are validated: one safe completion, two unsafe
+completions, nine safe unfinished and nine unsafe unfinished. The middle cap on
+task_0010 root one reaches the goal in 2372 actions and 297 queries, after a stack-uprightness
+violation at observation 1310 while the target itself remains upright. It changes 418
+commands. Its identity counterpart is safe unfinished, so reaching the goal does not make
+this a safe-completion gain.
+
+The wider cap on task_0013 root zero remains unsafe unfinished after first violating both
+stack and target uprightness at observation 2493. It changes 68 commands and never holds
+the target; its identity counterpart remains safe unfinished. All six wider-cap trials
+are now complete: zero safe completions, one unsafe completion, two safe unfinished and
+three unsafe unfinished. The final bowl identity control is still running. Thirteen
+completed condition comparisons reuse five unique controls; the tight-cap cracker
+root-zero result remains the only safe-completion gain in those completed comparisons.
+
+Audited the twenty-one completed episodes' saved study sources and instrumented benchmark
+against their recorded hashes. Their source hashes, runtime provenance and policy metadata
+match across conditions, and the policy matches the pinned Stack checkpoint. Evaluation
+configs differ only in scenes, seed and output directory: all use joint_position_raw,
+20 Hz actions/rendering, 120 Hz physics, sticky grasping, the long-finger robot, the left
+256-pixel external camera, execution horizon eight and the original 4200-action maximum.
+The benchmark path is the pinned local Stack installation. This excludes an observed
+configuration mismatch; it does not make physical starts identical.
+
+The reproducible command/state audit now passes on all twenty-one completed trials and
+preserves the earlier nineteen rows exactly. Two motion trials are live and one remains
+queued. Downstream queues retain their dependencies; no controller, physical plan or
+selection split was changed.
