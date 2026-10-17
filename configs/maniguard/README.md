@@ -61,3 +61,18 @@ data/maniguard/envs/sim/bin/python -m pytest -q \
   experiments/tests/test_maniguard_adaptation.py \
   experiments/tests/test_maniguard_policy.py
 ```
+
+A predeclared sequential batch uses the same simulator interpreter:
+
+```bash
+data/maniguard/envs/sim/bin/python experiments/scripts/maniguard_batch.py \
+  --plan configs/maniguard/jar-baseline-engineering.json \
+  --output runs/maniguard/jar-baseline-engineering-v1
+```
+
+Run persistent batches through supervisor. The batch creates a fresh process per episode,
+records exit codes and elapsed time, and stops on infrastructure or monitoring failures.
+It checks each task against the declared scene split. Complete evidence retains all four
+safe/unsafe and completed/unfinished categories; it does not silently drop inactive or
+failed episodes. The initial Jar plan uses full benchmark horizons on four engineering
+scenes and seed 0. It is a mechanism/throughput diagnostic, not a final performance estimate.

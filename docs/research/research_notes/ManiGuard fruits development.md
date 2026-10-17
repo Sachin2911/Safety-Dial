@@ -113,3 +113,11 @@ Automatic approval review rejected publication to both main and a new study bran
 requiring explicit authorization for the destination. A specific approval question for
 `Sachin2911/Safety-Dial`, branch `research/maniguard-fruits`, is pending. Local experiments
 and commits continue meanwhile.
+
+Attempt 2 passed the missing-library crash point and remains live in renderer shader
+compilation. No restart was issued while compilation was active. A sequential batch
+runner and strict result reader are ready for baseline evaluation after this smoke test.
+The reader rejects missing verdicts, incomplete or out-of-order monitor traces and
+inconsistent action accounting. Twelve outcome-integrity tests bring the engineering
+suite to 33 passing tests. The declared full-horizon Jar baseline plan covers the four
+engineering scenes with seed 0; it has not yet started.

@@ -6,6 +6,11 @@ SIM_ENV="${ROOT}/data/maniguard/envs/sim"
 UPSTREAM="${ROOT}/third_party/ManiGuard"
 CONSTRAINTS="${ROOT}/configs/maniguard/sim-constraints.txt"
 cd "${ROOT}"
+# These userspace rendering libraries are not supplied by the NVIDIA driver.
+if ! ldconfig -p | grep 'libGLU.so.1' >/dev/null || ! ldconfig -p | grep 'libXt.so.6' >/dev/null; then
+    apt-get update -qq
+    apt-get install -y --no-install-recommends libglu1-mesa libxt6
+fi
 if [[ ! -x "${SIM_ENV}/bin/python" ]]; then
     conda create --prefix "${SIM_ENV}" --override-channels -c conda-forge python=3.10 spot -y
 fi
