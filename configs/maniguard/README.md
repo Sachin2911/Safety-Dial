@@ -1,9 +1,10 @@
 # ManiGuard fruit experiments
 
 This study implements the six hypotheses in [fruits.md](../../fruits.md). The initial mechanism screens and the Stack, Jar and Lid follow-ups are complete;
-the twelve-trial controller-limit correction comparison is running. See the
+the twelve-trial controller-limit correction comparison is also complete. All 196 declared full episodes validate. See the
 [six-hypothesis synthesis](../../docs/research/reports/ManiGuard%20six-hypothesis%20study.md).
-Optimizer comparisons and reserved evaluation remain conditional on useful correction evidence. Passing controller tests does not
+The tested settings did not establish a repeatable useful correction, so optimizer
+comparisons and reserved evaluation were not launched. Passing controller tests does not
 establish improved task completion or safety.
 
 `sources.json` pins upstream code, benchmark assets and family-specific policy checkpoints.

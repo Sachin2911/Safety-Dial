@@ -1,0 +1,61 @@
+import hashlib
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+import numpy as np
+
+root = Path('/workspace/Safety-Dial')
+candidate = root / 'runs/maniguard/jar-guard-repeat-v2/episode-0007'
+control = root / 'runs/maniguard/jar-guard-repeat-v2/episode-0012'
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def load(path):
+    return json.loads(path.read_text())
+
+def trace(path):
+    return [json.loads(line) for line in (path / 'trace.jsonl').read_text().splitlines()]
+
+cj, bj = load(candidate / 'job.json'), load(control / 'job.json')
+assert (cj['family'], cj['scene'], cj['seed']) == (bj['family'], bj['scene'], bj['seed'])
+assert cj['policy'] == bj['policy']
+ct, bt = trace(candidate), trace(control)
+assert next(r['metadata'] for r in ct if r['type'] == 'policy_metadata') == next(
+    r['metadata'] for r in bt if r['type'] == 'policy_metadata')
+cp = [r for r in ct if r['type'] == 'proposal']
+bp = [r for r in bt if r['type'] == 'proposal']
+changes = [r['step'] for r in cp if r['event']['changed']]
+held = [r['step'] for r in ct if r['type'] == 'goal' and r['detail'].get('held')]
+arrays = []
+with np.load(candidate / 'initial_observation.npz') as ca, np.load(control / 'initial_observation.npz') as ba:
+    assert ca.files == ba.files
+    for key in ca.files:
+        x,y = ca[key],ba[key]
+        assert x.shape == y.shape and x.dtype == y.dtype
+        arrays.append({'key':key, 'shape':list(x.shape), 'dtype':str(x.dtype),
+            'exactly_equal':bool(np.array_equal(x,y)),
+            'max_absolute_difference':float(np.max(np.abs(x.astype(float)-y.astype(float)))),
+            'candidate_sha256':hashlib.sha256(x.tobytes()).hexdigest(),
+            'control_sha256':hashlib.sha256(y.tobytes()).hexdigest()})
+initial_c,initial_b = np.asarray(cp[0]['original']),np.asarray(bp[0]['original'])
+source = root / 'runs/maniguard/reports/jar-repeat-first-handback-input-audit.py'
+assert not source.exists()
+source.write_bytes(Path(__file__).read_bytes())
+result={'recorded_at_utc':datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+    'candidate_episode':str(candidate.relative_to(root)), 'control_episode':str(control.relative_to(root)),
+    'scene':cj['scene'], 'root_seed':cj['seed'], 'policy':cj['policy'],
+    'initial_arrays':arrays,
+    'first_original_proposal_equal':bool(np.array_equal(initial_c,initial_b)),
+    'first_original_proposal_max_absolute_difference':float(np.max(np.abs(initial_c-initial_b))),
+    'first_candidate_changed_proposal':changes[0], 'last_candidate_changed_proposal':changes[-1],
+    'candidate_first_target_held_observation':min(held),
+    'candidate_changed_actions_at_or_after_first_target_hold':sum(i>=min(held) for i in changes),
+    'gripper_commands_unchanged':all(p['original'][-1]==p['adapted'][-1] for p in cp),
+    'evidence_hashes':{str((path/name).relative_to(root)):sha(path/name) for path in (candidate,control)
+        for name in ('job.json','trace.jsonl','initial_observation.npz')},
+    'analysis_source':{'path':str(source.relative_to(root)),'sha256':sha(source)},
+    'interpretation':'The guard-plus-handback trial completes safely while identity completes with a tipping violation. Initial images and first policy proposals differ before the first intervention. All candidate action changes finish before its target grasp. This is an outcome contrast, not a demonstrated direct interception of the baseline transport violation or a deterministic causal repair. The matching plain-guard trial remains pending.'}
+output=root/'docs/research/research_notes/ManiGuard fruits Jar repeat first handback inputs.json'
+with output.open('x') as stream: stream.write(json.dumps(result,indent=2)+'\n')
+print(json.dumps({k:result[k] for k in ['initial_arrays','first_original_proposal_equal','first_original_proposal_max_absolute_difference','first_candidate_changed_proposal','last_candidate_changed_proposal','candidate_first_target_held_observation','candidate_changed_actions_at_or_after_first_target_hold','gripper_commands_unchanged']},indent=2))

@@ -1,0 +1,44 @@
+"""Record all correction-study violation boundaries without inventing actuator observations."""
+import hashlib,json,sys
+from pathlib import Path
+from datetime import datetime,timezone
+import numpy as np
+root=Path('/workspace/Safety-Dial');sys.path[:0]=[str(root/'experiments'),str(root/'experiments/scripts')]
+from helpers.maniguard_batch_report import summarize_batch
+from maniguard_diagnose import diagnose
+notes=root/'docs/research/research_notes';batch=root/'runs/maniguard/jar-controller-limit-screen-v1'
+report=summarize_batch(batch);assert report['statuses']=={'completed':12}
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+limits=np.asarray(json.loads((notes/'ManiGuard fruits Jar guard lift prediction mismatch.json').read_text())['joint_limits_radians_from_longfinger_usda'])
+records=[]
+for ep in report['episodes']:
+ if not ep['result']['violation']:continue
+ p=Path(ep['output']);d=diagnose(p);v=d['first_violation_observation'];step=v['step']
+ rows=[json.loads(line) for line in (p/'trace.jsonl').read_text().splitlines()]
+ types={k:{r['step']:r for r in rows if r['type']==k} for k in ['proposal','executed','observed','goal']}
+ r=types['proposal'].get(step-1);following=types['proposal'].get(step)
+ record={'index':ep['index'],'label':ep['label'],'seed':ep['seed'],
+  'first_violation':v,'trace_sha256':sha(p/'trace.jsonl'),'job_sha256':sha(p/'job.json'),
+  'proposal_before_violation':r,'environment_input_before_violation':types['executed'].get(step-1),
+  'observation_before_violation':types['observed'].get(step-1),
+  'goal_before_violation':types['goal'].get(step-1),'goal_at_violation':types['goal'].get(step)}
+ if r is not None:
+  f=r['frame'];j=np.asarray(f['jacobian']);q=np.asarray(f['joints']);target=np.asarray(r['original'][:7])
+  live=f.get('joint_lower_limits') is not None
+  lower,upper=(np.asarray(f['joint_lower_limits']),np.asarray(f['joint_upper_limits'])) if live else (limits[:,0],limits[:,1])
+  feasible=np.clip(target,lower,upper)
+  record.update(requested_target_outside_limits=bool(not np.array_equal(target,feasible)),
+   requested_lift_reconstructed=float(j[2]@(target-q)),
+   feasible_target_lift_reconstructed=float(j[2]@(feasible-q)),
+   limits_source='live recorded controller limits' if live else 'pinned asset limits reconstructed offline',
+   measured_eef_vertical_displacement=None if following is None else following['frame']['eef_position'][2]-f['eef_position'][2],
+   measured_joint_delta_linearized_displacement=None if following is None else float(j[2]@(np.asarray(following['frame']['joints'])-q)),
+   following_frame=None if following is None else following['frame'])
+ records.append(record)
+assert len(records)==sum(ep['result']['violation'] for ep in report['episodes'])
+source=root/'runs/maniguard/reports/controller-limit-violation-boundaries-source.py';out=notes/'ManiGuard fruits controller-limit violation boundaries.json'
+assert not source.exists() and not out.exists();source.write_bytes(Path(__file__).read_bytes())
+result={'recorded_at_utc':datetime.now(timezone.utc).isoformat(),'violating_episodes':len(records),'records':records,
+ 'analysis_source':{'path':str(source.relative_to(root)),'sha256':sha(source)},
+ 'interpretation':'Boundary observations identify which physical proposition failed. End-effector displacement is not jar-support displacement. A violation after a permitted command does not by itself identify why contact/support changed. Original-condition feasible targets are offline reconstructions, not motor telemetry. Earlier violations remain attached to all later task completion.'}
+out.write_text(json.dumps(result,indent=2)+'\n');print('Preserved',len(records),'violation boundaries.')

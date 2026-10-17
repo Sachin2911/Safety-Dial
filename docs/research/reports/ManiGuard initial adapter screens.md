@@ -1,6 +1,6 @@
 # ManiGuard initial adapter screens
 
-**Initial screens completed 17 October 2026. Follow-up experiments remain in progress.**
+**Initial screens and declared follow-ups completed 17 October 2026.**
 
 All six adapters in [fruits.md](../../../fruits.md) have executable implementations and
 physical engineering-screen evidence. The initial screens do not establish a general
@@ -13,7 +13,7 @@ unchanged-policy control. No evolutionary search or reserved evaluation has run.
 This report covers twelve original-policy baselines, forty Jar screen episodes and
 twenty-four Stack screen episodes, followed by eight additional Lid baselines. Each initial
 screen condition uses all four frozen engineering scenes for that task, at root seed zero. Scenes were split before examining outcomes;
-related variants stay together. The upcoming repeated comparisons remain engineering
+related variants stay together. The completed repeated comparisons remain engineering
 work. These splits do not establish absence of overlap with VLA pretraining.
 
 The released family-specific checkpoints remain frozen. Full original action horizons
@@ -93,13 +93,13 @@ execution and premature transport on different trajectories. They do not establi
 a guard can combine both stages successfully. The original four root-zero Lid baselines
 also remained safely unfinished without a target grasp.
 
-This evidence motivates the queued sixteen-trial unchanged-policy versus fixed-guard
+This evidence motivated the subsequently completed sixteen-trial unchanged-policy versus fixed-guard
 comparison across all four engineering scenes and roots one and two. It retains scenes
 without an observed unsafe transition to measure interference as well as potential repair.
 The plan was declared after observing the first extra-baseline failure, and uses the same
 explicitly privileged guard as the Jar prototype.
 
-The subsequent [completion-semantics audit](../research_notes/ManiGuard%20fruits%20completion%20semantics.json)
+The subsequent [completion-semantics audit](../research_notes/ManiGuard%20fruits%20completion%20semantics%20final.json)
 finds that the initial guard's task_0008/root-zero safe-completion label occurs without
 observed closure. The target remains supported and satisfies the spatial held-intersection
 goal while the monitor is nonaccepting but not doomed. The table retains the benchmark
@@ -181,8 +181,9 @@ is complete with no safe completion under either rule or identity. Its separate 
 is 46,813 actions and 5,852 queries. The [48 Jar repeats](ManiGuard%20Jar%20guard%20and%20motion%20repeats.md) are also complete:
 the plain guard improves safe completion from 2/12 to 4/12 and reduces violating episodes
 from four to two, while smoothing adds a completion/safety tradeoff and settling performs
-worse than the plain guard. A controller joint-limit mismatch in the lift estimate needs
-correction and testing. The [sixteen-trial Lid guard comparison](ManiGuard%20Lid%20prerequisite%20guard%20comparison.md)
+worse than the plain guard. The [controller-limit correction study](ManiGuard%20controller-limit%20guard%20comparison.md)
+is complete with no safe completion under either corrected variant. Its twelve trials
+consume 19,983 actions and 7133 queries; prediction correctness does not establish recovery. The [sixteen-trial Lid guard comparison](ManiGuard%20Lid%20prerequisite%20guard%20comparison.md)
 is complete: zero safe completions under either condition, one violation each, and more
 queries under guarding. Its 28,989 actions and 4,615 queries are separate follow-up costs. Fixed rules remain the first comparison.
 Matched evolution, random search and categorical policy-gradient code exists but has not

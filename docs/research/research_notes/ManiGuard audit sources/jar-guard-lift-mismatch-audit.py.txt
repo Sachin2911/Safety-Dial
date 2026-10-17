@@ -1,0 +1,65 @@
+import hashlib
+import json
+import re
+from datetime import datetime, timezone
+from pathlib import Path
+import numpy as np
+
+root = Path('/workspace/Safety-Dial')
+path = root / 'runs/maniguard/jar-guard-repeat-v2/episode-0045'
+asset = root / 'data/maniguard/datasets/omnigibson-robot-assets/models/franka/franka_panda_longfinger/usd/franka_panda_longfinger.usda'
+controller = root / 'third_party/ManiGuard/behavior-1k/OmniGibson/omnigibson/controllers/controller_base.py'
+preset = root / 'third_party/ManiGuard/maniguard/envs/frozen_task_runtime.py'
+rows = [json.loads(line) for line in (path / 'trace.jsonl').read_text().splitlines()]
+proposals = {r['step']: r for r in rows if r['type'] == 'proposal'}
+observed = {r['step']: r for r in rows if r['type'] == 'observed'}
+goals = {r['step']: r for r in rows if r['type'] == 'goal'}
+text = asset.read_text()
+limits = []
+for i in range(1, 8):
+    match = re.search(r'def PhysicsRevoluteJoint "panda_joint' + str(i) + r'".*?float physics:lowerLimit = ([^\n]+).*?float physics:upperLimit = ([^\n]+)', text, re.S)
+    assert match
+    limits.append(np.deg2rad([float(match[1]), float(match[2])]).tolist())
+limits = np.asarray(limits)
+a, b = proposals[1872], proposals[1873]
+q = np.asarray(a['frame']['joints'])
+target = np.asarray(a['adapted'][:7])
+feasible_target = np.clip(target, limits[:, 0], limits[:, 1])
+jz = np.asarray(a['frame']['jacobian'])[2]
+raw_prediction = float(jz @ (target - q))
+feasible_prediction = float(jz @ (feasible_target - q))
+actual_joint_prediction = float(jz @ (np.asarray(b['frame']['joints']) - q))
+actual_eef_delta = float(b['frame']['eef_position'][2] - a['frame']['eef_position'][2])
+assert np.isclose(raw_prediction, a['event']['predicted_lift_linearized'])
+assert a['frame']['target_engaged'] and not a['frame']['prerequisite']
+assert not a['event']['prerequisite_seen'] and not a['event']['guard_blocked']
+assert not a['event']['changed'] and a['original'] == a['adapted']
+assert raw_prediction < 0 and feasible_prediction > 0.001 and actual_eef_delta > 0.01
+assert np.flatnonzero(target != feasible_target).tolist() == [1]
+assert observed[1872]['monitor']['observation']['ap']['jar_on_support']
+assert not observed[1873]['monitor']['observation']['ap']['jar_on_support']
+assert not observed[1873]['monitor']['observation']['ap']['jar_closed']
+assert goals[1872]['detail']['held'] and goals[1873]['detail']['held']
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+source = root / 'runs/maniguard/reports/jar-guard-lift-mismatch-audit.py'
+assert not source.exists()
+source.write_bytes(Path(__file__).read_bytes())
+result = {
+    'recorded_at_utc': datetime.now(timezone.utc).isoformat(),
+    'episode': str(path.relative_to(root)), 'proposal_step': 1872, 'violation_observation': 1873,
+    'joint_limits_radians_from_longfinger_usda': limits.tolist(),
+    'raw_target_prediction_m': raw_prediction,
+    'joint_limit_clipped_target_prediction_m': feasible_prediction,
+    'actual_joint_delta_linearization_m': actual_joint_prediction,
+    'measured_eef_vertical_delta_m': actual_eef_delta,
+    'second_joint': {'measured_before': float(q[1]), 'requested_target': float(target[1]),
+                     'asset_lower_limit': float(limits[1, 0]),
+                     'measured_after': float(b['frame']['joints'][1])},
+    'boundary_records': [r for r in rows if r.get('step') in [1872, 1873] and r['type'] in ['proposal', 'executed', 'observed', 'goal']],
+    'source_hashes': {str(p.relative_to(root)): sha(p) for p in [asset, controller, preset, path / 'trace.jsonl', path / 'job.json', path / 'episode/eval_config.json']},
+    'analysis_source': {'path': str(source.relative_to(root)), 'sha256': sha(source)},
+    'interpretation': 'The guard predicts downward motion from a requested joint target beyond the second-joint lower limit. The installed position controller clips its output to joint limits even when command normalization is disabled. Reconstructing a target clipped to the pinned robot asset limits flips the linearized estimate upward, above the guard threshold. Measured joint and end-effector displacement also point upward, and the open jar leaves support. The trace logs the submitted environment action, not the lower-level clipped actuator target; reconstructed clipping is not an observed actuator log. This isolates a concrete prediction-interface mismatch to correct and test, not a physically demonstrated repair. Existing completed evidence and the running Lid v1 comparison remain unchanged.'}
+output = root / 'docs/research/research_notes/ManiGuard fruits Jar guard lift prediction mismatch.json'
+with output.open('x') as f:
+    f.write(json.dumps(result, indent=2) + '\n')
+print(json.dumps({k: result[k] for k in ['raw_target_prediction_m', 'joint_limit_clipped_target_prediction_m', 'actual_joint_delta_linearization_m', 'measured_eef_vertical_delta_m', 'second_joint']}, indent=2))

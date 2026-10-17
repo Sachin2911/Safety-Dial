@@ -2322,3 +2322,49 @@ previously recorded native initialization and failed-query accounting gaps; all 
 replay queries remain counted. An EXITED supervisor status returns CLI code 3, so the
 final accounting gate was corrected to inspect the actual state text instead of treating
 that code as a command failure. No runtime or physical-plan code changed.
+
+
+## Complete correction study and final physical-evidence audits
+
+All twelve declared correction trials completed normally. Plain guard original/corrected
+outcomes are respectively (0 SC, 1 UC, 1 SU, 1 UU) and (0 SC, 1 UC, 2 SU, 0 UU), with
+641 and 705 queries. Hand-back original/corrected outcomes are respectively (1 SC, 0 UC,
+1 SU, 1 UU) and (0 SC, 1 UC, 2 SU, 0 UU), with 3183 and 2604 queries. No pair gains safe
+completion; corrected hand-back loses one benchmark safe completion. The sole safe-labelled
+control never closes the jar. Original hand-back/root one, the final trial, remains safe
+unfinished at 2000 actions and 1334 queries without closure or grasp.
+
+Across six corrected trajectories, 3408 requested targets are outside joint limits and
+fourteen lift-threshold comparisons change. Only two eligible blocking decisions change,
+both with the goal target unheld. None changes in the corrected hand-back trials. The
+final root-two corrected hand-back run holds an open jar for 943 observations, loses
+support at 1376 and finishes unsafely at 1387 actions and 871 queries. It has no
+outside-limit target; at its failure the EEF moves downward. All five violating
+correction-trial boundaries have targets inside joint limits. The exact earlier clipping
+defect is regression-tested, but useful physical recovery is not demonstrated.
+
+Saved the full comparison, all twelve reconstructed prediction/command audits, all six
+initial-input comparisons, all five violation boundaries and the rendered figure. The
+batch consumes 19,983 actions, 120,930 physics ticks and 7133 queries, with 2094.72 seconds
+batch wall time. Reference/replay work remains separate. The supervisor exits normally.
+
+The final execution-integrity audit passes for all 196 full episodes: 466,491 ordered
+finite action pairs, 76,956 policy queries, complete valid observation/goal records and
+1568 saved source files. Adapted commands match environment inputs exactly, and recorded
+query/intervention counts match ledgers. The final prerequisite-attainment audit confirms
+exactly two of 28 Jar safe-labelled completions without closure; benchmark labels are
+retained alongside this limitation. All physical outcomes remain engineering evidence.
+
+The whole-study cost inventory contains 208 physical records (196 full trials, ten
+32-action references and two failed setup attempts) and twelve inference diagnostics.
+Recorded totals are 466,811 actions, 2,818,668 physics ticks and 77,065 policy queries.
+Elapsed durations sum to 59,638.68 seconds, not study wall time. Historical startup work
+before physics attachment and one counted failed query's missing latency remain explicit.
+No newer accounting gaps are found.
+
+The final synthesis closes the six mechanism screens without launching optimization: no
+tested candidate establishes a repeatable useful simple correction under the fruits.md
+gate. This is not a claim that all parameterizations or broader research directions fail.
+No trained VLA checkpoint requires storage. Code, numerical findings and figures are
+published through the authorized GitHub branch; the separate raw-data Hugging Face copy
+remains an optional extension pending the previously requested token/destination approval.

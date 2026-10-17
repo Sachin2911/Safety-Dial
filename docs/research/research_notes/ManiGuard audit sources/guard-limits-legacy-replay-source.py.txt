@@ -1,0 +1,70 @@
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+import numpy as np
+
+root = Path('/workspace/Safety-Dial')
+worktree = Path('/workspace/Safety-Dial-guard-limits')
+sys.path[:0] = [str(worktree / 'experiments')]
+from helpers.maniguard_adaptation import AdapterConfig, ExecutionAdapter, Frame
+from helpers.maniguard_comparison import compare_batch
+
+batch = root / 'runs/maniguard/jar-guard-repeat-v2'
+comparison = compare_batch(batch)
+assert comparison['batch_report']['statuses'] == {'completed': 48}
+records = []
+for episode in comparison['batch_report']['episodes']:
+    path = Path(episode['output'])
+    config = episode['result']['adapter']
+    if config['kind'] not in ['prerequisite', 'handback']:
+        continue
+    assert 'guard_joint_limits' not in config
+    adapter = ExecutionAdapter(AdapterConfig(**config))
+    assert not adapter.config.guard_joint_limits
+    trace = [json.loads(line) for line in (path / 'trace.jsonl').read_text().splitlines()]
+    proposals = {r['step']: r for r in trace if r['type'] == 'proposal'}
+
+    def frame(step):
+        values = dict(proposals[step]['frame'])
+        for key in ['joints', 'fingers', 'eef_position']:
+            values[key] = np.asarray(values[key], dtype=np.float32)
+        if values['jacobian'] is not None:
+            values['jacobian'] = np.asarray(values['jacobian'], dtype=np.float64)
+        return Frame(**values)
+
+    queries = actions = 0
+    for row in trace:
+        if row['type'] == 'query':
+            adapter.on_query(frame(row['step']))
+            queries += 1
+        elif row['type'] == 'proposal':
+            actual, event = adapter.act(np.asarray(row['original'], dtype=np.float32), frame(row['step']))
+            np.testing.assert_array_equal(actual, np.asarray(row['adapted'], dtype=np.float32))
+            for key in ['guard_blocked', 'handback_remaining', 'changed', 'prerequisite_seen']:
+                assert event[key] == row['event'][key], (episode['index'], row['step'], key)
+            actions += 1
+        elif row['type'] == 'executed':
+            adapter.applied(np.asarray(row['action'], dtype=np.float32))
+    assert actions == episode['result']['steps']
+    assert queries == episode['result']['ledger']['policy_queries']
+    records.append({'index': episode['index'], 'kind': config['kind'], 'actions_replayed': actions,
+                    'queries_replayed': queries, 'trace_sha256': hashlib.sha256((path / 'trace.jsonl').read_bytes()).hexdigest()})
+assert len(records) == 24
+source = root / 'runs/maniguard/reports/guard-limits-legacy-replay-source.py'
+assert not source.exists()
+source.write_bytes(Path(__file__).read_bytes())
+result = {'recorded_at_utc': datetime.now(timezone.utc).isoformat(),
+    'status': 'passed', 'episodes': records,
+    'actions_replayed': sum(r['actions_replayed'] for r in records),
+    'queries_replayed': sum(r['queries_replayed'] for r in records),
+    'source_hashes': {name: hashlib.sha256((worktree / name).read_bytes()).hexdigest()
+                      for name in ['experiments/helpers/maniguard_adaptation.py', 'experiments/helpers/maniguard_runtime.py']},
+    'analysis_source': {'path': str(source.relative_to(root)), 'sha256': hashlib.sha256(source.read_bytes()).hexdigest()},
+    'scope': 'Offline replay of all 24 completed Jar guard/handback traces with correction disabled. All submitted adapted actions and decision/countdown events match. Old 48-trial records still validate under the new schema default. No simulator interaction or new policy query is performed; this establishes compatibility, not physical efficacy of the correction.'}
+output = root / 'runs/maniguard/reports/guard-limits-legacy-replay.json'
+with output.open('x') as f:
+    f.write(json.dumps(result, indent=2) + '\n')
+print(result['status'], len(records), 'episodes;', result['actions_replayed'], 'actions;', result['queries_replayed'], 'recorded query boundaries replayed.')

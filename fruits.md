@@ -9,8 +9,9 @@ experiment budget. No general ManiGuard improvement has been demonstrated locall
 The [six-hypothesis synthesis](docs/research/reports/ManiGuard%20six-hypothesis%20study.md)
 compares the findings and remaining work. Implementation and experiment records are maintained in the
 [ManiGuard study log](docs/research/research_notes/ManiGuard%20fruits%20development.md).
-All six initial adapters have been implemented. Twelve original-policy baselines,
-24 Stack screen episodes and 40 Jar screen episodes are complete and validated.
+All six adapters and the declared follow-ups have been implemented and physically tested:
+196 full episodes are complete and validated. Twelve original-policy baselines,
+24 Stack screen episodes and 40 Jar screen episodes form the initial screen.
 The [initial-screen report](docs/research/reports/ManiGuard%20initial%20adapter%20screens.md)
 records all outcomes, costs and remaining limitations.
 
@@ -42,12 +43,16 @@ which find no safe-completion gain. The
 are also complete. The plain guard safely completes 4/12 trials versus identity's 2/12,
 with 2/12 versus 4/12 episodes containing violations. Smoothing safely completes 3/12
 but has 5/12 episodes with violations. Settling/requerying safely completes 3/12 with
-two violations, using 10,452 queries versus the plain guard's 2,746. Guarding remains
-a useful engineering lead. A newly diagnosed joint-limit prediction mismatch needs a
-corrected, separately tested guard before optimizer comparisons.
+two violations, using 10,452 queries versus the plain guard's 2,746. Guarding was the
+strongest engineering lead. Its [twelve-trial controller-limit correction study](docs/research/reports/ManiGuard%20controller-limit%20guard%20comparison.md)
+is now complete: neither corrected condition has a safe completion. Clipping changes
+only two eligible blocking decisions, both while the target is unheld, and none in the
+corrected hand-back trials. The prediction-interface correction is tested, but useful
+physical recovery is not established. The simple-correction gate for optimization has
+not been met by the tested settings.
 These remain engineering experiments. No evolutionary search or reserved evaluation has
 run, and no evolutionary advantage has been demonstrated. A
-[completion-semantics audit](docs/research/research_notes/ManiGuard%20fruits%20completion%20semantics.json)
+[completion-semantics audit](docs/research/research_notes/ManiGuard%20fruits%20completion%20semantics%20final.json)
 also finds two Jar runs labelled safe completion without observed closure: the initial
 plain guard on task_0008/root zero and a new original hand-back control on task_0008/root
 two. Both satisfy the spatial held-intersection goal while remaining supported. Preserve
@@ -290,10 +295,13 @@ The [boundary audit](docs/research/research_notes/ManiGuard%20fruits%20Jar%20gua
 finds a raw prediction of -5.18 mm, a limit-aware prediction of +14.60 mm, and measured
 motion of +13.67 mm. A controller-limit-aware variant is now active and passes
 90 focused tests plus exact compatibility replay of 41,913 old guard/hand-back actions.
-Its declared twelve-trial original/corrected comparison is now running after completion
-of the Lid batch, a 32-action live-limit integration check and a strict six-query replay.
-These checks do not yet establish a physical repair. The
-completed Lid comparison retained the original guard throughout.
+Its declared twelve-trial original/corrected comparison is complete after a 32-action
+live-limit integration check and strict six-query replay. Neither corrected condition
+safely completes a trial. The plain-guard comparison has one fewer violation without a
+completion gain; the hand-back comparison has one safe-completion loss and equal
+violations. Remaining boundaries expose trigger tolerance, tipping and loss of support
+despite downward end-effector movement. These results do not establish a physical repair.
+The completed Lid comparison retained the original guard throughout.
 
 ## 4. Preserve a useful grasp through premature release requests
 
@@ -401,6 +409,12 @@ or grasp while the plain guard succeeds. Settling also lifts an open jar in the 
 case despite repeated guard activation; the joint-limit mismatch above explains a missed
 trigger at the violation boundary. The tested return rule has fewer safe completions than
 the plain guard, equal violations and substantially higher query cost.
+
+The final controller-limit follow-up also finds no useful return-control repair. Original
+hand-back has one benchmark safe completion, one safe unfinished and one unsafe
+unfinished trial; corrected hand-back has one unsafe completion and two safe unfinished.
+None of the corrected hand-back trajectories changes an eligible guard decision because
+of clipping. The single original safe-completion label occurs without closure.
 
 This most directly connects to the original task-continuation question. Its entry cost is
 higher because a functioning guard and useful corrective behaviours are prerequisites.

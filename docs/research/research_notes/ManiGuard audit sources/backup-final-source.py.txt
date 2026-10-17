@@ -1,0 +1,69 @@
+"""Create and read-back verify a result-only local archive after the final cost audit."""
+import hashlib,json,subprocess,tarfile
+from datetime import datetime,timezone
+from pathlib import Path
+root=Path('/workspace/Safety-Dial');runs=root/'runs/maniguard';notes=root/'docs/research/research_notes'
+final=notes/'ManiGuard fruits final accounting.json'
+assert final.is_file(),'Final accounting is required before archiving stable raw records'
+audit=json.loads(final.read_text());assert audit['validated_full_episodes']==196
+state=subprocess.run(['supervisorctl','status','maniguard_controller_limit_queue'],capture_output=True,text=True,check=False).stdout
+assert state.split()[1]=='EXITED' and (runs/'controller-limit-pipeline-v1/complete.json').is_file()
+selected=set()
+for record in audit['records']:
+ p=runs/record['path'];assert hashlib.sha256(p.read_bytes()).hexdigest()==record['sha256']
+ if record['kind']=='physical_episode':
+  directory=p.parent
+  for name in ['job.json','ledger.json','trace.jsonl','runtime-provenance.json','initial_observation.npz']:
+   f=directory/name
+   if f.is_file():selected.add(f)
+  e=directory/'episode'
+  if e.exists():
+   for f in e.rglob('*'):
+    if f.is_file() and (f.name in ['eval_config.json','results.jsonl','summary.json'] or f.name.endswith('_ltl.json')):selected.add(f)
+ else:
+  selected.add(p)
+  if (p.parent/'actions.npz').is_file():selected.add(p.parent/'actions.npz')
+ for parent in p.parents:
+  if parent==runs:break
+  for name in ['plan.json','batch.json','processes.jsonl','complete.json','failure.json','controller-limit-reference-audit.json']:
+   f=parent/name
+   if f.is_file():selected.add(f)
+selected.update(notes.glob('ManiGuard fruits *.json'))
+selected.discard(notes/'ManiGuard fruits requirements audit.json')
+selected.discard(notes/'ManiGuard fruits final backup.json')
+selected.update((runs/'reports').glob('*.json'))
+assert all(p.resolve().is_relative_to(root) and not p.is_symlink() for p in selected)
+# Explicitly exclude source, logs, model weights, simulator assets, credentials and videos.
+assert all(p.suffix in ['.json','.jsonl','.npz'] for p in selected)
+files=[{'path':str(p.relative_to(root)),'size':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(selected)]
+manifest={'created_at_utc':datetime.now(timezone.utc).isoformat(),
+ 'repository_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True,cwd=root).strip(),
+ 'scope':'Stable numerical results after all 196 full trials; includes short references, failed setup and inference diagnostics, plus declared plans, process records and numerical audits.',
+ 'excluded':'Implementation source, logs, credentials, datasets, pretrained weights, videos, mutable requirements status and the archive summary.',
+ 'final_accounting_sha256':hashlib.sha256(final.read_bytes()).hexdigest(),'record_types':audit['record_types'],'files':files}
+base=runs/'backups/maniguard-completed-evidence-final'
+archive=base.with_suffix('.tar.gz');mpath=base.with_suffix('.manifest.json');summary_path=base.with_suffix('.summary.json')
+assert not any(p.exists() for p in [archive,mpath,summary_path])
+mpath.write_text(json.dumps(manifest,indent=2)+'\n')
+with tarfile.open(archive,'x:gz',compresslevel=3) as tar:
+ for item in files:tar.add(root/item['path'],arcname=item['path'],recursive=False)
+ tar.add(mpath,arcname=str(mpath.relative_to(root)),recursive=False)
+expected={f['path']:f['sha256'] for f in files};expected[str(mpath.relative_to(root))]=hashlib.sha256(mpath.read_bytes()).hexdigest()
+with tarfile.open(archive,'r:gz') as tar:
+ seen=set()
+ for member in tar:
+  assert member.isfile() and member.name in expected and member.name not in seen
+  seen.add(member.name);stream=tar.extractfile(member);h=hashlib.sha256()
+  for block in iter(lambda:stream.read(1024*1024),b''):h.update(block)
+  assert h.hexdigest()==expected[member.name]
+ assert seen==set(expected)
+h=hashlib.sha256()
+with archive.open('rb') as stream:
+ for block in iter(lambda:stream.read(1024*1024),b''):h.update(block)
+summary={'archive':str(archive.relative_to(root)),'size_bytes':archive.stat().st_size,'sha256':h.hexdigest(),
+ 'manifest':str(mpath.relative_to(root)),'manifest_sha256':expected[str(mpath.relative_to(root))],
+ 'files':len(files),'all_archive_members_hash_verified':True,'status':'Local archive verified. No external upload attempted; separate Hugging Face approval remains pending.',
+ 'record_types':audit['record_types'],'validated_full_episodes':196}
+summary_path.write_text(json.dumps(summary,indent=2)+'\n')
+(notes/'ManiGuard fruits final backup.json').write_text(json.dumps(summary,indent=2)+'\n')
+print(json.dumps(summary,indent=2))

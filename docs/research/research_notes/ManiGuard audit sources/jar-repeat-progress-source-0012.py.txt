@@ -1,0 +1,130 @@
+import hashlib
+import json
+import sys
+from collections import Counter
+from datetime import datetime, timezone
+from pathlib import Path
+
+root = Path('/workspace/Safety-Dial')
+sys.path[:0] = [str(root / 'experiments'), str(root / 'experiments/scripts')]
+from helpers.maniguard_comparison import compare_batch
+from helpers.maniguard_motion_tracking import audit_episode
+import numpy as np
+from maniguard_diagnose import diagnose
+
+notes = root / 'docs/research/research_notes'
+batch = 'runs/maniguard/jar-guard-repeat-v2'
+prior_path = notes / 'ManiGuard fruits Jar repeat progress.json'
+previous_indices = {r['index'] for r in json.loads(prior_path.read_text())['completed_diagnostics']} if prior_path.exists() else set()
+comparison = compare_batch(root / batch)
+report = comparison['batch_report']
+now = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def write(path, value):
+    path.write_text(json.dumps(value, indent=2) + '\n')
+
+completed = []
+outcomes = Counter()
+for episode in report['episodes']:
+    if episode['status'] != 'completed':
+        continue
+    path = root / episode['output']
+    diagnostic = diagnose(path)
+    rows = [json.loads(line) for line in (path / 'trace.jsonl').read_text().splitlines()]
+    observations = {r['step']: r['monitor']['observation']['ap'] for r in rows
+                    if r['type'] == 'observed' and r['monitor'] and r['monitor']['valid']}
+    held = {r['step']: r['detail'].get('held') for r in rows if r['type'] == 'goal'}
+    proposals = [r for r in rows if r['type'] == 'proposal']
+    executed = [r for r in rows if r['type'] == 'executed']
+    assert [r['step'] for r in proposals] == list(range(diagnostic['steps']))
+    assert [r['step'] for r in executed] == list(range(diagnostic['steps']))
+    assert all(p['adapted'] == e['action'] for p,e in zip(proposals,executed))
+    blocks = [p['step'] for p in proposals if p['event']['guard_blocked']]
+    assert len(blocks) == diagnostic['ledger']['guard_steps']
+    for key in ('safe_completion','unsafe_completion','safe_unfinished','unsafe_unfinished'):
+        outcomes[key] += diagnostic[key]
+    job = json.loads((path / 'job.json').read_text())
+    for name, expected in job['code_hashes'].items():
+        assert sha(path / 'study_source' / name) == expected
+    provenance = json.loads((path / 'runtime-provenance.json').read_text())
+    assert sha(path / 'benchmark_instrumented.py') == provenance['runtime_sha256']
+    closed_intervals = []
+    for step, ap in observations.items():
+        if not ap['jar_closed']:
+            continue
+        if not closed_intervals or step > closed_intervals[-1][1] + 1:
+            closed_intervals.append([step, step])
+        else:
+            closed_intervals[-1][1] = step
+    completed.append({'index':episode['index'], 'label':episode['label'],
+        'diagnostic':diagnostic,
+        'trace_sha256':sha(path / 'trace.jsonl'),
+        'job_sha256':sha(path / 'job.json'),
+        'runtime_provenance':provenance,
+        'timeline': {
+            'jar_closed_observation_intervals_inclusive':closed_intervals,
+            'first_jar_closed_observation':next((i for i,ap in observations.items() if ap['jar_closed']),None),
+            'first_off_support_observation':next((i for i,ap in observations.items() if not ap['jar_on_support']),None),
+            'first_target_held_observation':next((i for i,h in held.items() if h is True),None),
+            'first_guard_blocked_proposal':blocks[0] if blocks else None,
+            'last_guard_blocked_proposal':blocks[-1] if blocks else None,
+            'guard_blocked_with_goal_target_held_before_action':sum(held.get(i) is True for i in blocks),
+            'guard_blocked_with_goal_target_unheld_before_action':sum(held.get(i) is False for i in blocks),
+            'guard_blocked_with_pre_action_hold_unknown':sum(held.get(i) is None for i in blocks)},
+        'command_audit': {'ordered_proposals_and_execution_complete':True,
+                          'adapted_and_executed_actions_match_exactly':True,
+                          'guard_count_matches_ledger':True,
+                          'saved_study_sources_and_runtime_hashes_match':True}})
+    if diagnostic['adapter']['kind'] in ('identity', 'motion'):
+        completed[-1]['motion_tracking_audit'] = audit_episode(path)
+    if diagnostic['adapter']['kind'] == 'motion':
+        previous = None
+        binding = []
+        for proposal in proposals:
+            joints = np.asarray(proposal['frame']['joints'])
+            reference = joints if previous is None else previous
+            desired = reference + diagnostic['adapter']['smoothing'] * (
+                np.asarray(proposal['original'][:7]) - reference)
+            if np.max(np.abs(desired - joints)) > proposal['event']['step_limit'] + 1e-6:
+                binding.append(proposal['step'])
+            previous = np.asarray(proposal['adapted'][:7])
+        completed[-1]['smoothed_target_cap_activation'] = {
+            'actions': len(binding), 'proposal_indices': binding, 'tolerance_rad': 1e-6,
+            'meaning': 'Smoothed target before clipping exceeds the active joint-target displacement limit.'}
+        completed[-1]['gripper_commands_unchanged'] = all(
+            p['original'][-1] == p['adapted'][-1] for p in proposals)
+count=len(completed)
+assert count >= 3
+snapshot_dir=root/'runs/maniguard/reports'
+source_path=snapshot_dir/f'jar-repeat-progress-source-{count:04d}.py'
+assert not source_path.exists()
+source_path.write_bytes(Path(__file__).read_bytes())
+progress={'recorded_at_utc':now, 'status':f'{count} of 48 Jar repeat trials completed and validated; batch continues.',
+    'scope':'All four engineering Jar scenes and roots zero, one, two. Identity, prerequisite guard, handback and smoothing. No reserved or optimizer episodes.',
+    'comparison':comparison, 'completed_outcomes':dict(outcomes), 'completed_diagnostics':completed,
+    'analysis_source_hashes':{name:sha(root/name) for name in [
+        'experiments/scripts/maniguard_diagnose.py', 'experiments/helpers/maniguard_results.py',
+        'experiments/helpers/maniguard_comparison.py', 'experiments/helpers/maniguard_batch_report.py',
+        'experiments/helpers/maniguard_motion_tracking.py']},
+    'snapshot_script':{'path':str(source_path.relative_to(root)),'sha256':sha(source_path)},
+    'timeline_alignment':'Proposal i precedes observation i+1. Goal observation i supplies pre-action holding; absent holding is unknown. Guard engagement also includes contact and is not equivalent to a held target.',
+    'interpretation':'Partial engineering outcomes. Compare candidates only with completed same-scene/root controls and retain failures alongside successes. Separate physical starts preclude deterministic counterfactual claims. The guard and handback use labelled privileged information. Safe unfinished means no observed violation, not completion of a prerequisite. Aggregate improvement and an evolutionary advantage remain unestablished.'}
+output=notes/'ManiGuard fruits Jar repeat progress.json'
+write(output,progress)
+snapshot=snapshot_dir/f'jar-repeat-progress-{count:04d}.json'
+with snapshot.open('x') as stream:
+    stream.write(json.dumps(progress,indent=2)+'\n')
+status_path=notes/'ManiGuard fruits screen progress.json'
+status=json.loads(status_path.read_text())
+queue=status['jar_guard_repeat_queue']
+queue.update(status=progress['status'],recorded_at_utc=now,
+    batch_statuses_at_recording=report['statuses'],progress_record=str(output.relative_to(root)))
+status['snapshot_at_utc']=now
+write(status_path,status)
+print('snapshot',count,report['statuses'],dict(outcomes))
+for row in completed:
+ if row['index'] not in previous_indices:
+  print(row['index'],row['label'],row['timeline'])

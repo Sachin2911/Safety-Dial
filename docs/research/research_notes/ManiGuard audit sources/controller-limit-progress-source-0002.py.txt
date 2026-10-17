@@ -1,0 +1,191 @@
+"""Save validated controller-limit progress without interpreting pending trials as failures."""
+import hashlib
+import json
+import sys
+import numpy as np
+from collections import Counter
+from datetime import datetime, timezone
+from pathlib import Path
+
+root = Path('/workspace/Safety-Dial')
+sys.path[:0] = [str(root / 'experiments'), str(root / 'experiments/scripts')]
+from helpers.maniguard_comparison import compare_batch
+from maniguard_diagnose import diagnose
+
+batch = root / 'runs/maniguard/jar-controller-limit-screen-v1'
+notes = root / 'docs/research/research_notes'
+output = notes / 'ManiGuard fruits controller-limit guard progress.json'
+if not (batch / 'plan.json').exists():
+    print('controller-limit physical batch has not started; no progress artifact written.')
+    sys.exit(0)
+comparison = compare_batch(batch, control_label='prerequisite_guard_requested_target')
+handback_comparison = compare_batch(batch, control_label='handback_requested_target')
+report = comparison['batch_report']
+count = report['statuses'].get('completed', 0)
+if count == 0:
+    print('No validated controller-limit outcomes yet; no progress artifact written.')
+    sys.exit(0)
+source = root / f'runs/maniguard/reports/controller-limit-progress-source-{count:04d}.py'
+snapshot = root / f'runs/maniguard/reports/controller-limit-progress-{count:04d}.json'
+assert not source.exists() and not snapshot.exists(), 'This completed-count snapshot already exists.'
+asset_limits = np.asarray(json.loads((notes / 'ManiGuard fruits Jar guard lift prediction mismatch.json').read_text())['joint_limits_radians_from_longfinger_usda'])
+old = json.loads(output.read_text()) if output.exists() else None
+old_rows = {r['index']: r for r in old['completed_diagnostics']} if old else {}
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+completed = []
+outcomes = Counter()
+common_job = common_runtime = common_config = common_metadata = None
+for episode in report['episodes']:
+    if episode['status'] != 'completed':
+        continue
+    path = Path(episode['output'])
+    diagnostic = diagnose(path)
+    rows = [json.loads(line) for line in (path / 'trace.jsonl').read_text().splitlines()]
+    observed = [r for r in rows if r['type'] == 'observed']
+    assert len(observed) == diagnostic['steps'] and all(r['monitor']['valid'] for r in observed)
+    ap = {r['step']: r['monitor']['observation']['ap'] for r in observed}
+    goals = {r['step']: r['detail'] for r in rows if r['type'] == 'goal'}
+    assert len(goals) == diagnostic['steps']
+    proposals = [r for r in rows if r['type'] == 'proposal']
+    executed = [r for r in rows if r['type'] == 'executed']
+    assert [r['step'] for r in proposals] == list(range(diagnostic['steps']))
+    assert [r['step'] for r in executed] == list(range(diagnostic['steps']))
+    assert all(p['adapted'] == e['action'] for p, e in zip(proposals, executed))
+    assert all(p['original'][-1] == p['adapted'][-1] for p in proposals)
+    changed = [r['step'] for r in proposals if r['event']['changed']]
+    blocked = [r['step'] for r in proposals if r['event']['guard_blocked']]
+    assert len(changed) == diagnostic['ledger']['changed_steps']
+    assert len(blocked) == diagnostic['ledger']['guard_steps']
+    prediction_counts = Counter()
+    corrected = diagnostic['adapter']['guard_joint_limits']
+    margin = diagnostic['adapter']['lift_margin']
+    assert margin == .001
+    decision_changes = []
+    for proposal, execution in zip(proposals, executed):
+        assert execution['action_scope'] == 'environment_input_before_controller_output_clipping'
+        frame, event = proposal['frame'], proposal['event']
+        target = np.asarray(proposal['original'][:7])
+        joints = np.asarray(frame['joints'])
+        jacobian = np.asarray(frame['jacobian'])
+        requested_lift = float(jacobian[2] @ (target - joints))
+        if corrected:
+            lower, upper = np.asarray(frame['joint_lower_limits']), np.asarray(frame['joint_upper_limits'])
+            mask = np.asarray(frame['joint_has_limits'])
+            assert lower.shape == upper.shape == mask.shape == (7,) and mask.dtype == bool
+            assert mask.all()
+            assert np.allclose(lower, asset_limits[:, 0], atol=1e-5, rtol=0)
+            assert np.allclose(upper, asset_limits[:, 1], atol=1e-5, rtol=0)
+            feasible = np.where(mask, np.clip(target, lower, upper), target)
+            assert event['guard_prediction_mode'] == 'controller_joint_limits'
+            assert np.array_equal(feasible, event['guard_prediction_joint_target'])
+            assert np.isclose(requested_lift, event['predicted_lift_requested'], atol=1e-7, rtol=0)
+            prediction_counts['requested_target_outside_limits'] += int(not np.array_equal(target, feasible))
+            expected = float(jacobian[2] @ (feasible - joints))
+            prediction_counts['lift_trigger_changed_by_clipping'] += int((expected > margin) != (requested_lift > margin))
+        else:
+            assert 'guard_prediction_mode' not in event
+            expected = requested_lift
+        assert np.isclose(expected, event['predicted_lift_linearized'], atol=1e-7, rtol=0)
+        eligible = bool(frame['target_engaged'] and not event['prerequisite_seen'])
+        expected_block = eligible and expected > margin
+        assert event['guard_blocked'] == expected_block
+        requested_block = eligible and requested_lift > margin
+        if corrected and expected_block != requested_block:
+            held_before = goals.get(proposal['step'], {}).get('held')
+            prediction_counts['blocks_added_by_limit_estimate' if expected_block else 'blocks_removed_by_limit_estimate'] += 1
+            prediction_counts['decisions_changed_with_target_held' if held_before is True else 'decisions_changed_with_target_unheld' if held_before is False else 'decisions_changed_with_target_hold_unknown'] += 1
+            decision_changes.append({'proposal_step': proposal['step'], 'target_held_before_action': held_before,
+                'requested_prediction': requested_lift, 'controller_limit_prediction': expected,
+                'actual_blocked': expected_block})
+        prediction_counts['predictions_validated'] += 1
+    placement = [step for step, state in ap.items() if state['jar_closed']]
+    off = [step for step, state in ap.items() if not state['jar_on_support']]
+    held = [step for step, goal in goals.items() if goal.get('held') is True]
+    intervals = []
+    for step in placement:
+        if not intervals or step > intervals[-1][1] + 1:
+            intervals.append([step, step])
+        else:
+            intervals[-1][1] = step
+    timeline = {
+        'jar_closed_intervals_inclusive': intervals,
+        'first_jar_closed_observation': min(placement) if placement else None,
+        'first_off_support_observation': min(off) if off else None,
+        'first_target_held_observation': min(held) if held else None,
+        'last_target_held_observation': max(held) if held else None,
+        'target_held_observations': len(held),
+        'jar_dropped_observations': sum(state['jar_dropped'] for state in ap.values()),
+        'first_changed_proposal': min(changed) if changed else None,
+        'last_changed_proposal': max(changed) if changed else None,
+        'first_guard_blocked_proposal': min(blocked) if blocked else None,
+        'last_guard_blocked_proposal': max(blocked) if blocked else None,
+        'changed_with_goal_target_held_before_action': sum(goals.get(i, {}).get('held') is True for i in changed),
+        'changed_with_goal_target_unheld_before_action': sum(goals.get(i, {}).get('held') is False for i in changed),
+        'changed_with_pre_action_hold_unknown': sum(goals.get(i, {}).get('held') is None for i in changed)}
+    failure = diagnostic['first_violation_observation']
+    timeline['goal_at_first_violation'] = goals.get(failure['step']) if failure else None
+    job = json.loads((path / 'job.json').read_text())
+    runtime = json.loads((path / 'runtime-provenance.json').read_text())
+    config = json.loads((path / 'episode/eval_config.json').read_text())
+    assert config['scenes'] == [episode['scene']] and config['seed'] == episode['seed']
+    config = {k: v for k, v in config.items() if k not in ('scenes', 'seed', 'output_dir')}
+    metadata = next(r['metadata'] for r in rows if r['type'] == 'policy_metadata')
+    if common_job is None:
+        common_job, common_runtime, common_config, common_metadata = job, runtime, config, metadata
+    assert job['code_hashes'] == common_job['code_hashes'] and job['policy'] == common_job['policy']
+    assert runtime == common_runtime and config == common_config and metadata == common_metadata
+    assert metadata['checkpoint_revision'] == job['policy']['revision']
+    assert metadata['serve_config'] == job['policy']['config']
+    for name, expected in job['code_hashes'].items():
+        assert sha(path / 'study_source' / name) == expected
+    assert sha(path / 'benchmark_instrumented.py') == runtime['runtime_sha256']
+    item = {'index': episode['index'], 'label': episode['label'], 'diagnostic': diagnostic,
+            'timeline': timeline, 'prediction_audit': dict(prediction_counts), 'same_frame_decision_changes': decision_changes, 'trace_sha256': sha(path / 'trace.jsonl'),
+            'job_sha256': sha(path / 'job.json'),
+            'command_audit': {'ordered_proposals_and_execution_complete': True,
+                'adapted_and_executed_actions_match_exactly': True,
+                'gripper_commands_unchanged': True,
+                'intervention_counts_match_ledger': True,
+                'saved_source_and_runtime_hashes_match': True}}
+    if episode['index'] in old_rows:
+        assert old_rows[episode['index']] == item
+    completed.append(item)
+    for name in ['safe_completion', 'unsafe_completion', 'safe_unfinished', 'unsafe_unfinished']:
+        outcomes[name] += diagnostic[name]
+assert len(completed) == count
+assert common_config['max_steps'] == 2000 and common_config['execute_horizon'] == 8
+assert common_config['grasping_mode'] == 'assisted'
+assert common_config['controller_preset'] == 'joint_position_raw'
+assert (common_config['action_frequency'], common_config['physics_frequency']) == (20, 120)
+source.write_bytes(Path(__file__).read_bytes())
+now = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+result = {'recorded_at_utc': now, 'status': f'{count} of 12 controller-limit guard trials completed and validated.',
+    'scope': 'Original versus controller-limit-aware prerequisite and hand-back guards on Jar task_0008, roots zero, one and two. Only the guard prediction mode changes within each pair. Full original horizon; no optimizer or reserved evaluation.',
+    'comparison': comparison, 'handback_comparison': handback_comparison, 'completed_outcomes': dict(outcomes), 'completed_diagnostics': completed,
+    'timeline_alignment': 'Proposal i precedes observation i+1. Goal observation i supplies pre-action holding; an absent goal observation is unknown, not unheld.',
+    'provenance_checks': {'common_code_hashes': common_job['code_hashes'],
+        'common_policy': common_job['policy'], 'common_runtime': common_runtime,
+        'common_evaluation_config': common_config, 'common_policy_metadata': common_metadata,
+        'variable_evaluation_fields': ['scenes', 'seed', 'output_dir']},
+    'analysis_source': {'path': str(source.relative_to(root)), 'sha256': sha(source)},
+    'interpretation': 'Guard activation, fewer violations or an unfinished episode alone do not establish useful correction. Compare only completed same-case pairs; report all four outcomes and actual costs. Separate physical starts are not identical-input counterfactuals. Same-frame requested/clipped decision differences isolate estimator decisions at recorded states, not what an alternative physical rollout would have done.'}
+with snapshot.open('x') as stream:
+    stream.write(json.dumps(result, indent=2) + '\n')
+output.write_text(json.dumps(result, indent=2) + '\n')
+status_path = notes / 'ManiGuard fruits screen progress.json'
+status = json.loads(status_path.read_text())
+status.setdefault('controller_limit_queue', {}).update(status=result['status'], recorded_at_utc=now,
+    batch_statuses_at_recording=report['statuses'], progress_record=str(output.relative_to(root)))
+status['status'] = ('Initial screens, Stack follow-ups, all 48 Jar repeats and all 16 Lid trials completed; '
+                    f'{count} of 12 controller-limit guard trials validated at this snapshot.')
+status['snapshot_at_utc'] = now
+status_path.write_text(json.dumps(status, indent=2) + '\n')
+print('controller-limit snapshot', count, report['statuses'], dict(outcomes))
+for row in completed:
+    if row['index'] not in old_rows:
+        print(row['index'], row['label'], row['timeline'])

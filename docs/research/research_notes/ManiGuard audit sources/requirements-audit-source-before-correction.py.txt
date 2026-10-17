@@ -1,0 +1,107 @@
+"""Audit declared physical coverage and scene use; retain unfinished requirements."""
+import hashlib
+import json
+import sys
+from collections import Counter
+from datetime import datetime, timezone
+from pathlib import Path
+root=Path('/workspace/Safety-Dial')
+sys.path.insert(0,str(root/'experiments'))
+from helpers.maniguard_adaptation import AdapterConfig
+from helpers.maniguard_batch_report import summarize_batch
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+read=lambda p:json.loads(p.read_text())
+notes=root/'docs/research/research_notes'
+runs=root/'runs/maniguard'
+plans={
+ 'jar-baseline-engineering-v1':4,'lid-baseline-engineering-v1':4,'stack-baseline-engineering-v1':4,
+ 'jar-fixed-screens-v1':40,'stack-fixed-screens-v1':24,'lid-extra-baselines-engineering-v1':8,
+ 'stack-motion-repeat-v1':24,'stack-release-trigger-v1':12,'jar-guard-repeat-v2':48,
+ 'lid-guard-screen-v1':16,'jar-controller-limit-screen-v1':12}
+reports={}
+for name,count in plans.items():
+ directory=runs/name
+ if not (directory/'plan.json').exists():
+  reports[name]={'planned':count,'statuses':{'not_started':count}}
+  continue
+ report=summarize_batch(directory)
+ assert report['planned']==count
+ for episode in report['episodes']:
+  if episode['status']=='completed':
+   assert episode['result']['engineering_override'] is None
+ reports[name]={k:report[k] for k in ['planned','statuses','groups','recorded_cost_totals',
+  'started_episodes_missing_cost_fields','started_episodes_with_unverified_physics_attachment',
+  'finished_processes_missing_elapsed_seconds']}
+ reports[name]['plan_sha256']=sha(directory/'plan.json')
+ reports[name]['complete_marker_present']=(directory/'complete.json').exists()
+splits=read(root/'configs/maniguard/splits.json')['families']
+for family,groups in splits.items():
+ seen=set()
+ for split in ['engineering','train','validation','test']:
+  assert not seen.intersection(groups[split])
+  seen.update(groups[split])
+usage=Counter()
+jobs=[]
+for path in sorted(runs.rglob('job.json')):
+ job=read(path)
+ family,task=job['family'],job['scene'].split('/')[0]
+ memberships=[s for s in ['engineering','train','validation','test'] if task in splits[family][s]]
+ assert len(memberships)==1
+ split=memberships[0]
+ usage[(family,split)]+=1
+ jobs.append({'path':str(path.relative_to(root)),'sha256':sha(path),
+  'family':family,'scene':job['scene'],'seed':job['seed'],'split':split,
+  'max_steps_override':job['max_steps_override']})
+assert all(split=='engineering' for family,split in usage)
+initial=reports['jar-fixed-screens-v1']
+assert initial['statuses']=={'completed':40}
+kinds=['replan','motion','prerequisite','release','retry','handback']
+claims=[
+ 'Fixed and adaptive replanning have no consistent safe-completion gain in the initial screens. The longer-horizon efficiency contrast is scene-specific.',
+ 'Motion moderation has individual gains and adverse safety outcomes. Stack repeats and Jar smoothing repeats do not establish a broadly useful repair.',
+ 'Plain guarding is the strongest Jar engineering lead, but Lid shows no useful correction. The separately tested controller-limit prediction defect requires the new physical comparison before a final judgement.',
+ 'Release-delay rules activate in the follow-up, but every delayed opening is before the goal target is held. No useful target-grasp preservation has been established.',
+ 'Bounded physical retreats execute close to the requested displacement, but no safe-completion recovery was demonstrated. This does not prove irrecoverability.',
+ 'Settling/requerying has fewer safe completions than the plain guard and equal violations over twelve repeat pairs, with substantially higher query cost.']
+evidence=[
+ ['ManiGuard fruits Jar condition comparison.json'],
+ ['ManiGuard fruits Stack motion progress.json','ManiGuard fruits Jar repeat complete.json'],
+ ['ManiGuard fruits Jar repeat complete.json','ManiGuard fruits Lid guard complete.json','ManiGuard fruits Jar guard lift prediction mismatch.json'],
+ ['ManiGuard fruits Stack release progress.json','ManiGuard fruits Stack release control timing.json'],
+ ['ManiGuard fruits Jar retry comparison.json'],
+ ['ManiGuard fruits Jar repeat handback versus guard complete.json']]
+hypotheses=[]
+for i,(kind,claim,files) in enumerate(zip(kinds,claims,evidence),1):
+ config=root/f'configs/maniguard/{kind}.json'
+ assert AdapterConfig(**read(config)).kind==kind
+ groups=[g for g in initial['groups'] if g['adapter']['kind']==kind]
+ assert groups and all(g['statuses']=={'completed':g['planned']} for g in groups)
+ artifacts=[]
+ for name in files:
+  path=notes/name
+  assert path.is_file(),path
+  artifacts.append({'path':str(path.relative_to(root)),'sha256':sha(path)})
+ hypotheses.append({'number':i,'adapter_kind':kind,'config':str(config.relative_to(root)),
+  'config_sha256':sha(config),'initial_jar_physical_groups':groups,
+  'mechanism_screen_result':claim,'evidence':artifacts,
+  'optimizer_gate':'Not established by the current mechanism screens; reassess prerequisite/hand-back correction after the declared twelve-trial comparison.' if kind in ['prerequisite','handback'] else 'No demonstrated useful simple correction requiring optimizer comparison in the tested screen.'})
+complete=sum(v['statuses'].get('completed',0) for v in reports.values())
+now=datetime.now(timezone.utc).isoformat()
+result={'recorded_at_utc':now,'status':'Incomplete: correction study and final accounting/report audit remain.',
+ 'objective':'Implement and empirically test all six fruits.md hypotheses; preserve results and push study updates.',
+ 'completed_declared_full_episodes':complete,'declared_full_episodes':sum(plans.values()),
+ 'hypotheses':hypotheses,'batch_coverage':reports,
+ 'scene_split_audit':{'split_file_sha256':sha(root/'configs/maniguard/splits.json'),
+  'all_four_partitions_disjoint_within_family':True,'all_recorded_jobs_in_engineering':True,
+  'job_counts':[{'family':f,'split':s,'count':n} for (f,s),n in sorted(usage.items())],
+  'jobs':jobs,'qualification':'Includes initialization failures, short references and active jobs. These are exposure counts, not validated full-episode outcomes. Released VLA pretraining overlap remains unknown.'},
+ 'remaining_requirements':[
+  'Complete and audit all twelve controller-limit comparison trials; interpret all outcomes, activation and costs.',
+  'Refresh whole-study raw interaction/query/time inventory, retaining known failed-start and missing-latency qualifications.',
+  'Reassess optimization gates against actual correction evidence; no optimizer or reserved evaluation has run.',
+  'Write final six-hypothesis synthesis and verify all report/reproduction links.',
+  'Push remaining results and verify remote branch; refresh off-instance evidence preservation within authorized storage access.'],
+ 'interpretation':'This audit does not mark the goal complete. Engineering tests and negative mechanism screens are evidence; they do not establish an evolutionary advantage or physical safety guarantee.'}
+output=notes/'ManiGuard fruits requirements audit.json'
+output.write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps({'completed_full_episodes':complete,'declared_full_episodes':sum(plans.values()),'recorded_jobs':len(jobs),'all_jobs_engineering':True}))

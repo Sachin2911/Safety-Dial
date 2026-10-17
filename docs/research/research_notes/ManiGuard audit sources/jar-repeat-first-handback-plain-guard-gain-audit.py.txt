@@ -1,0 +1,107 @@
+import hashlib
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+
+import numpy as np
+
+root = Path('/workspace/Safety-Dial')
+snapshot = root / 'runs/maniguard/reports/jar-repeat-progress-0035.json'
+data = json.loads(snapshot.read_text())
+indices = [20, 3, 33, 19]
+records = [next(r for r in data['completed_diagnostics'] if r['index'] == i) for i in indices]
+paths = [Path(r['diagnostic']['output']) for r in records]
+
+
+def read(path):
+    return json.loads(path.read_text())
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+jobs = [read(p / 'job.json') for p in paths]
+configs = [read(p / 'episode/eval_config.json') for p in paths]
+runtimes = [read(p / 'runtime-provenance.json') for p in paths]
+for job in jobs[1:]:
+    for key in ['family', 'scene', 'seed', 'policy', 'code_hashes']:
+        assert job[key] == jobs[0][key]
+for config in configs[1:]:
+    assert {k: v for k, v in config.items() if k != 'output_dir'} == {
+        k: v for k, v in configs[0].items() if k != 'output_dir'}
+assert all(r == runtimes[0] for r in runtimes)
+for path, job, record in zip(paths, jobs, records):
+    for name, expected in job['code_hashes'].items():
+        assert sha(path / 'study_source' / name) == expected
+    assert sha(path / 'benchmark_instrumented.py') == runtimes[0]['runtime_sha256']
+    assert sha(path / 'trace.jsonl') == record['trace_sha256']
+plain, handback = records[-2:]
+plain_adapter = plain['diagnostic']['adapter']
+handback_adapter = handback['diagnostic']['adapter']
+differences = {k: {'plain_guard': plain_adapter[k], 'handback': handback_adapter[k]}
+               for k in plain_adapter if plain_adapter[k] != handback_adapter[k]}
+assert set(differences) == {'kind', 'handback_hold_steps'}
+assert plain_adapter['privileged'] and handback_adapter['privileged']
+assert plain_adapter['handback_hold_steps'] == 0
+assert handback_adapter['handback_hold_steps'] == 4
+assert handback['diagnostic']['safe_completion']
+assert all(r['diagnostic']['safe_unfinished'] for r in records[:-1])
+assert all(r['timeline']['first_target_held_observation'] is None for r in records[:-1])
+assert handback['timeline']['last_changed_proposal'] < handback['timeline']['first_target_held_observation']
+assert handback['timeline']['changed_with_goal_target_held_before_action'] == 0
+assert handback['timeline']['changed_with_pre_action_hold_unknown'] == 0
+control, candidate = paths[-2:]
+arrays = []
+with np.load(candidate / 'initial_observation.npz') as ca, np.load(control / 'initial_observation.npz') as co:
+    assert ca.files == co.files
+    for name in ca.files:
+        a, b = ca[name], co[name]
+        assert a.shape == b.shape and a.dtype == b.dtype
+        arrays.append({'key': name, 'shape': list(a.shape), 'dtype': str(a.dtype),
+                       'exactly_equal': bool(np.array_equal(a, b)),
+                       'max_absolute_difference': float(np.max(np.abs(a.astype(float) - b.astype(float)))),
+                       'candidate_sha256': hashlib.sha256(a.tobytes()).hexdigest(),
+                       'control_sha256': hashlib.sha256(b.tobytes()).hexdigest()})
+first = []
+metadata = []
+for path in [candidate, control]:
+    for line in (path / 'trace.jsonl').open():
+        row = json.loads(line)
+        if row['type'] == 'policy_metadata':
+            metadata.append(row['metadata'])
+        if row['type'] == 'proposal':
+            first.append(np.asarray(row['original']))
+            assert not row['event']['changed']
+            break
+assert len(first) == 2 and len(metadata) == 2
+assert metadata[0] == metadata[1]
+source = root / 'runs/maniguard/reports/jar-repeat-first-handback-plain-guard-gain-audit.py'
+assert not source.exists()
+source.write_bytes(Path(__file__).read_bytes())
+result = {
+    'recorded_at_utc': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+    'scope': 'All four conditions on Jar task_0017, root one, within the unfinished 48-trial engineering comparison. Separate physical starts, not deterministic counterfactuals.',
+    'case_conditions': records,
+    'shared_policy': jobs[0]['policy'],
+    'shared_code_hashes': jobs[0]['code_hashes'],
+    'shared_runtime_provenance': runtimes[0],
+    'different_evaluation_fields': ['output_dir'],
+    'adapter_differences_handback_vs_plain_guard': differences,
+    'handback_plain_guard_input_comparison': {
+        'candidate_episode': str(candidate.relative_to(root)),
+        'control_episode': str(control.relative_to(root)),
+        'initial_arrays': arrays,
+        'first_original_proposal_equal': bool(np.array_equal(first[0], first[1])),
+        'first_original_proposal_max_absolute_difference': float(np.max(np.abs(first[0] - first[1]))),
+        'first_proposal_unchanged_by_both_adapters': True},
+    'evidence_hashes': {str((path / name).relative_to(root)): sha(path / name) for path in paths
+                        for name in ['job.json', 'trace.jsonl', 'initial_observation.npz', 'episode/eval_config.json']},
+    'source_progress_snapshot': {'path': str(snapshot.relative_to(root)), 'sha256': sha(snapshot)},
+    'analysis_source': {'path': str(source.relative_to(root)), 'sha256': sha(source)},
+    'interpretation': 'Handback completes safely in 1343 actions and 372 queries; the plain guard remains safe unfinished at 2000 actions and 269 queries. Identity and smoothing also remain safe unfinished. The same privileged guard settings are used, with four settling steps and fresh querying added by handback. All handback changes occur before target holding. Initial images and first original proposals differ before the first adapter change, so the contrast does not isolate a causal recovery. At this snapshot, six completed handback/plain-guard pairs contain one safe-completion gain and one loss, one fewer violation, and 4570 versus 1331 queries. No aggregate completion gain or evolutionary advantage is established.'}
+output = root / 'docs/research/research_notes/ManiGuard fruits Jar repeat first handback plain guard gain.json'
+with output.open('x') as stream:
+    stream.write(json.dumps(result, indent=2) + '\n')
+print(json.dumps(result['handback_plain_guard_input_comparison'], indent=2))
+print('Four-condition provenance, guard settings, execution and input timing validated.')

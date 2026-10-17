@@ -1,0 +1,55 @@
+"""Compare saved initial inputs for original/corrected pairs without assuming identical starts."""
+import hashlib,json,sys
+from datetime import datetime,timezone
+from pathlib import Path
+from dataclasses import asdict
+import numpy as np
+root=Path('/workspace/Safety-Dial');sys.path.insert(0,str(root/'experiments'))
+from helpers.maniguard_batch_report import summarize_batch
+from helpers.maniguard_adaptation import AdapterConfig
+batch=root/'runs/maniguard/jar-controller-limit-screen-v1'
+r=summarize_batch(batch);rows=r['episodes'];pairs=[]
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+def first_proposal(p):
+ with (p/'trace.jsonl').open() as f:
+  for line in f:
+   v=json.loads(line)
+   if v['type']=='proposal':return v
+ raise AssertionError('No first proposal')
+def difference(a,b):
+ assert a.shape==b.shape and a.dtype==b.dtype
+ d=np.abs(a.astype(np.float64)-b.astype(np.float64))
+ return {'shape':list(a.shape),'dtype':str(a.dtype),'exactly_equal':bool(np.array_equal(a,b)),
+  'max_absolute_difference':float(d.max()),'mean_absolute_difference':float(d.mean()),'different_elements':int(np.count_nonzero(d))}
+for kind in ['prerequisite_guard','handback']:
+ for seed in [0,1,2]:
+  original=next(x for x in rows if x['label']==kind+'_requested_target' and x['seed']==seed)
+  corrected=next(x for x in rows if x['label']==kind+'_joint_limits' and x['seed']==seed)
+  if any(x['status']!='completed' for x in [original,corrected]):continue
+  a,b=Path(original['output']),Path(corrected['output'])
+  ja,jb=[json.loads((p/'job.json').read_text()) for p in [a,b]]
+  ca,cb=[asdict(AdapterConfig(**j['adapter'])) for j in [ja,jb]]
+  assert [k for k in ca if ca[k]!=cb[k]]==['guard_joint_limits']
+  assert ja['code_hashes']==jb['code_hashes'] and ja['policy']==jb['policy']
+  ia,ib=a/'initial_observation.npz',b/'initial_observation.npz'
+  with np.load(ia,allow_pickle=False) as za,np.load(ib,allow_pickle=False) as zb:
+   assert za.files==zb.files
+   differences={k:difference(za[k],zb[k]) for k in za.files}
+  pa,pb=first_proposal(a),first_proposal(b)
+  assert pa['step']==pb['step']==0
+  pairs.append({'kind':kind,'seed':seed,'original_index':original['index'],'corrected_index':corrected['index'],
+   'only_configuration_difference':'guard_joint_limits','shared_code_and_policy':True,
+   'original_observation_sha256':sha(ia),'corrected_observation_sha256':sha(ib),
+   'input_differences':differences,
+   'first_original_proposal_difference':difference(np.asarray(pa['original']),np.asarray(pb['original'])),
+   'first_adapted_proposal_difference':difference(np.asarray(pa['adapted']),np.asarray(pb['adapted']))})
+if '--check' in sys.argv:
+ print(json.dumps({'completed_pairs':len(pairs),'pairs':pairs},indent=2));sys.exit(0)
+assert r['statuses']=={'completed':12} and len(pairs)==6
+source=root/'runs/maniguard/reports/controller-limit-input-pairing-source.py';out=root/'docs/research/research_notes/ManiGuard fruits controller-limit initial inputs.json'
+assert not source.exists() and not out.exists();source.write_bytes(Path(__file__).read_bytes())
+result={'recorded_at_utc':datetime.now(timezone.utc).isoformat(),'pairs':pairs,
+ 'analysis_source':{'path':str(source.relative_to(root)),'sha256':sha(source)},
+ 'interpretation':'Controls and corrected variants differ only in the declared prediction mode, but separate starts can have different robot states, images and first policy proposals. These are physical engineering comparisons, not replayed identical-state counterfactuals. Differences at the first observation precede adapter action.'}
+out.write_text(json.dumps(result,indent=2)+'\n')
+print('All six initial-input pairs audited and preserved.')

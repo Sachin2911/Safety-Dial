@@ -1,0 +1,61 @@
+"""Verify full-study recorded commands, observations, query counts and saved source files."""
+import hashlib,json,math,sys
+from pathlib import Path
+from datetime import datetime,timezone
+from collections import Counter
+root=Path('/workspace/Safety-Dial');sys.path.insert(0,str(root/'experiments'))
+from helpers.maniguard_batch_report import summarize_batch
+notes=root/'docs/research/research_notes';runs=root/'runs/maniguard'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+coverage=json.loads((notes/'ManiGuard fruits requirements audit.json').read_text())['batch_coverage']
+reports=[summarize_batch(runs/name) for name in coverage]
+assert all(r['statuses']=={'completed':r['planned']} for r in reports)
+assert sum(r['planned'] for r in reports)==196
+assert (runs/'controller-limit-pipeline-v1/complete.json').is_file()
+records=[];totals=Counter()
+for report in reports:
+ for episode in report['episodes']:
+  path=Path(episode['output']);result=episode['result'];steps=result['steps'];ledger=result['ledger']
+  job=json.loads((path/'job.json').read_text());runtime=json.loads((path/'runtime-provenance.json').read_text())
+  for name,digest in job['code_hashes'].items():assert sha(path/'study_source'/name)==digest,(path,name)
+  assert sha(path/'benchmark_instrumented.py')==runtime['runtime_sha256']
+  counts=Counter();changed=blocked=0;pending=None;differences=[];metadata=[]
+  with (path/'trace.jsonl').open() as stream:
+   for line in stream:
+    row=json.loads(line);kind=row['type']
+    if kind=='policy_metadata':metadata.append(row['metadata'])
+    if kind=='proposal':
+     assert row['step']==counts[kind] and pending is None
+     assert len(row['original'])==len(row['adapted'])==8
+     assert all(math.isfinite(v) for v in row['original']+row['adapted'])
+     pending=row
+     changed+=int(row['event']['changed']);blocked+=int(row['event']['guard_blocked'])
+    elif kind=='executed':
+     assert row['step']==counts[kind] and pending is not None and row['step']==pending['step']
+     assert len(row['action'])==8 and all(math.isfinite(v) for v in row['action'])
+     if row['action']!=pending['adapted']:differences.append(row['step'])
+     pending=None
+    elif kind=='observed':
+     assert row['step']==counts[kind]+1 and row['monitor']['valid']
+     assert row['monitor']['observation']['step']==row['step']
+    elif kind=='goal':assert row['step']==counts[kind]+1
+    counts[kind]+=1
+  assert pending is None
+  assert all(counts[k]==steps for k in ['proposal','executed','observed','goal'])
+  assert counts['query']==counts['chunk']==ledger['policy_queries']
+  assert changed==ledger['changed_steps'] and blocked==ledger['guard_steps']
+  assert len(metadata)==1 and metadata[0]['checkpoint_revision']==job['policy']['revision']
+  assert metadata[0]['serve_config']==job['policy']['config']
+  record={'batch':Path(report['batch']).name,'index':episode['index'],'trace_path':str((path/'trace.jsonl').relative_to(root)),
+   'trace_sha256':sha(path/'trace.jsonl'),'job_sha256':sha(path/'job.json'),
+   'steps':steps,'queries':counts['query'],'saved_source_files_verified':len(job['code_hashes']),
+   'changed_steps':changed,'guard_steps':blocked,'adapted_vs_environment_input_difference_steps':differences,
+   'status':'passed'}
+  records.append(record);totals.update({'actions':steps,'queries':counts['query'],'source_files':len(job['code_hashes']),'action_difference_steps':len(differences)})
+assert not totals['action_difference_steps'],'Inspect recorded action-space clipping before claiming exact command equality'
+source=runs/'reports/execution-integrity-final-source.py';output=notes/'ManiGuard fruits final execution integrity.json'
+assert not source.exists() and not output.exists();source.write_bytes(Path(__file__).read_bytes())
+result={'recorded_at_utc':datetime.now(timezone.utc).isoformat(),'status':'passed','full_episodes':196,
+ 'totals':dict(totals),'records':records,'analysis_source':{'path':str(source.relative_to(root)),'sha256':sha(source)},
+ 'scope':'All 196 full episodes: ordered finite proposal/environment-input records, complete valid observations and goal records, query/chunk and intervention counts, pinned policy metadata and saved source/runtime hashes. This does not expose internal actuator commands or prove physical safety.'}
+output.write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({'episodes':196,'totals':dict(totals),'status':'passed'}))

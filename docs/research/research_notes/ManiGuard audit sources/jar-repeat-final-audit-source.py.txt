@@ -1,0 +1,150 @@
+"""Finalize complete Jar repeat evidence; never infer completion from partial files."""
+import hashlib
+import json
+import sys
+from collections import Counter
+from datetime import datetime, timezone
+from pathlib import Path
+
+root = Path('/workspace/Safety-Dial')
+sys.path.insert(0, str(root / 'experiments'))
+from helpers.maniguard_comparison import compare_batch
+from helpers.maniguard_results import read_episode
+
+batch = root / 'runs/maniguard/jar-guard-repeat-v2'
+pipeline = root / 'runs/maniguard/jar-guard-repeat-pipeline-v2'
+notes = root / 'docs/research/research_notes'
+
+
+def read(path):
+    return json.loads(path.read_text())
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def write(path, value, exclusive=False):
+    with path.open('x' if exclusive else 'w') as stream:
+        stream.write(json.dumps(value, indent=2) + '\n')
+
+
+comparison = compare_batch(batch)
+report = comparison['batch_report']
+if report['statuses'] != {'completed': 48} or not (pipeline / 'complete.json').exists():
+    print(json.dumps({'status': 'waiting_for_complete_batch', 'episodes': report['statuses'],
+                      'pipeline_completion_marker': (pipeline / 'complete.json').exists()}))
+    sys.exit(0)
+if '--check' in sys.argv:
+    print('All 48 results validated and pipeline completion recorded; final audit can proceed.')
+    sys.exit(0)
+assert report['planned'] == 48
+assert read(batch / 'complete.json')['episodes'] == 48
+assert read(batch / 'plan.json') == read(pipeline / 'plan.json')
+assert read(batch / 'plan.json') == read(root / 'configs/maniguard/jar-guard-repeat-screen.json')
+assert not report['started_episodes_missing_cost_fields']
+assert not report['started_episodes_with_unverified_physics_attachment']
+assert not report['finished_processes_missing_elapsed_seconds']
+processes = [json.loads(line) for line in (pipeline / 'processes.jsonl').read_text().splitlines()]
+process = [p for p in processes if p['name'] == 'jar-guard-repeat-screen']
+assert len(process) == 1 and process[0]['returncode'] == 0
+process = process[0]
+reference = read_episode(pipeline / 'reference')
+assert reference['steps'] == 32 and reference['ledger']['policy_queries'] == 4
+replay = read(pipeline / 'replay/check.json')
+assert replay['status'] == 'passed' and replay['interleaved']
+assert replay['first_matches_original_episode'] and all(replay['corresponding_queries_equal'])
+assert replay['policy_queries_attempted'] == 6
+snapshot = root / 'runs/maniguard/reports/jar-repeat-progress-0048.json'
+progress = read(snapshot)
+assert progress['comparison'] == comparison
+assert len(progress['completed_diagnostics']) == 48
+alternate = compare_batch(batch, 'prerequisite_guard')
+assert alternate['batch_report'] == report
+for c in comparison['comparisons'] + alternate['comparisons']:
+    assert c['all_cases_complete'] and c['completed_pairs'] == 12
+reference_job = reference_runtime = reference_eval = reference_metadata = None
+snapshots = []
+for row in report['episodes']:
+    path = Path(row['output'])
+    job = read(path / 'job.json')
+    runtime = read(path / 'runtime-provenance.json')
+    evaluation = read(path / 'episode/eval_config.json')
+    for key in ['scenes', 'seed', 'output_dir']:
+        del evaluation[key]
+    if reference_job is None:
+        reference_job, reference_runtime, reference_eval = job, runtime, evaluation
+    assert job['code_hashes'] == reference_job['code_hashes']
+    assert job['policy'] == reference_job['policy']
+    assert runtime == reference_runtime and evaluation == reference_eval
+    for name, expected in job['code_hashes'].items():
+        assert sha(path / 'study_source' / name) == expected
+    assert sha(path / 'benchmark_instrumented.py') == runtime['runtime_sha256']
+    diagnostic = next(r for r in progress['completed_diagnostics'] if r['index'] == row['index'])
+    assert sha(path / 'trace.jsonl') == diagnostic['trace_sha256']
+    metadata = None
+    for line in (path / 'trace.jsonl').open():
+        record = json.loads(line)
+        if record['type'] == 'policy_metadata':
+            metadata = record['metadata']
+            break
+    assert metadata is not None
+    if reference_metadata is None:
+        reference_metadata = metadata
+    assert metadata == reference_metadata
+    assert metadata['checkpoint_revision'] == job['policy']['revision']
+    assert metadata['serve_config'] == job['policy']['config']
+    snapshots.append({'index': row['index'], 'job_sha256': sha(path / 'job.json'),
+                      'eval_config_sha256': sha(path / 'episode/eval_config.json'),
+                      'trace_sha256': diagnostic['trace_sha256']})
+assert reference_eval['max_steps'] == 2000
+assert reference_eval['execute_horizon'] == 8
+assert reference_eval['controller_preset'] == 'joint_position_raw'
+assert reference_eval['grasping_mode'] == 'assisted'
+assert (reference_eval['action_frequency'], reference_eval['physics_frequency']) == (20, 120)
+source = root / 'runs/maniguard/reports/jar-repeat-final-audit-source.py'
+assert not source.exists()
+outputs = [notes / ('ManiGuard fruits Jar repeat ' + suffix + '.json')
+           for suffix in ['complete', 'comparison', 'handback versus guard complete']]
+assert all(not p.exists() for p in outputs)
+now = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+source.write_bytes(Path(__file__).read_bytes())
+complete = dict(report, recorded_at_utc=now, batch_process=process,
+    batch_elapsed_seconds=process['elapsed_seconds'], plan_sha256=sha(batch / 'plan.json'),
+    setup_audit={'episodes': 48, 'policy': reference_job['policy'],
+        'shared_code_hashes': reference_job['code_hashes'],
+        'shared_runtime_provenance': reference_runtime,
+        'shared_policy_metadata': reference_metadata,
+        'variable_evaluation_fields': ['scenes', 'seed', 'output_dir'],
+        'common_evaluation_config': reference_eval, 'episode_snapshot_hashes': snapshots,
+        'scope': 'Shared settings and source do not imply identical physical starts.'},
+    prerequisite_reference_and_replay={'reference': reference, 'replay': replay,
+        'replay_sha256': sha(pipeline / 'replay/check.json'),
+        'scope': 'Separate prerequisite costs; not included in the 48-episode batch totals.'},
+    full_diagnostic_snapshot={'path': str(snapshot.relative_to(root)), 'sha256': sha(snapshot)},
+    analysis_source={'path': str(source.relative_to(root)), 'sha256': sha(source)},
+    scope='Forty-eight complete engineering trials; excludes other batches, references, inference diagnostics and failed setup attempts. No optimizer or reserved evaluation.')
+write(outputs[0], complete, True)
+write(outputs[1], comparison, True)
+write(outputs[2], alternate, True)
+progress.update(recorded_at_utc=now,
+    status='All 48 planned Jar repeat trials completed and validated; physical batch exited normally.',
+    complete_report={'path': str(outputs[0].relative_to(root)), 'sha256': sha(outputs[0])})
+write(notes / 'ManiGuard fruits Jar repeat progress.json', progress)
+status_path = notes / 'ManiGuard fruits screen progress.json'
+status = read(status_path)
+status['jar_guard_repeat_queue'].update(status=progress['status'], recorded_at_utc=now,
+    batch_statuses_at_recording={'completed': 48}, batch_elapsed_seconds=process['elapsed_seconds'],
+    complete_report=str(outputs[0].relative_to(root)))
+status['status'] = ('Initial screens and extra Lid baselines, 24 Stack motion repeats, '
+    '12 release comparisons and all 48 Jar repeats completed and validated. '
+    'The separately queued 16-trial Lid comparison remains to be reported.')
+status['snapshot_at_utc'] = now
+write(status_path, status)
+for g in report['groups']:
+    print(g['label'], g['outcomes'])
+for c in comparison['comparisons']:
+    print(c['candidate_label'], 'gains', c['safe_completion_gains'], 'losses',
+          c['safe_completion_losses'], 'violation difference', c['violation_count_difference'])
+print('Batch costs', report['recorded_cost_totals'])
+print('Batch wall seconds', process['elapsed_seconds'])

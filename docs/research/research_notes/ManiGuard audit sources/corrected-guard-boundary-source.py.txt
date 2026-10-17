@@ -1,0 +1,34 @@
+"""Preserve the first violation in a completed controller-limit-aware Jar trial."""
+import hashlib,json
+from pathlib import Path
+import numpy as np
+root=Path('/workspace/Safety-Dial');p=root/'runs/maniguard/jar-controller-limit-screen-v1/episode-0003'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+rows=[json.loads(l) for l in (p/'trace.jsonl').read_text().splitlines()]
+by={kind:{r['step']:r for r in rows if r['type']==kind} for kind in ['proposal','executed','observed','goal']}
+records=[]
+for i in [682,683,684]:
+ r=by['proposal'][i];f=r['frame'];n=by['proposal'][i+1]['frame'];e=r['event']
+ target=np.asarray(r['original'][:7]);q=np.asarray(f['joints']);j=np.asarray(f['jacobian'])
+ feasible=np.clip(target,f['joint_lower_limits'],f['joint_upper_limits'])
+ assert np.array_equal(feasible,e['guard_prediction_joint_target'])
+ assert np.isclose(float(j[2]@(feasible-q)),e['predicted_lift_linearized'],atol=1e-7,rtol=0)
+ records.append({'proposal_step':i,'proposal':r,'executed':by['executed'][i],
+  'observation_before':by['observed'][i],'observation_after':by['observed'][i+1],
+  'goal_before':by['goal'][i],'goal_after':by['goal'][i+1],
+  'next_frame':n,'requested_target_within_joint_limits':bool(np.array_equal(target,feasible)),
+  'measured_eef_vertical_displacement':n['eef_position'][2]-f['eef_position'][2],
+  'measured_joint_delta_linearized_vertical_displacement':float(j[2]@(np.asarray(n['joints'])-q))})
+b=records[1]
+assert not b['proposal']['event']['guard_blocked'] and b['requested_target_within_joint_limits']
+assert b['goal_before']['detail']['held'] and b['observation_before']['monitor']['observation']['ap']['jar_on_support']
+assert not b['observation_after']['monitor']['observation']['ap']['jar_on_support']
+result={'scope':'Completed corrected plain guard on engineering Jar task_0008/root zero; first violation boundary. An additional observed limitation, not a revision of the fixed twelve-trial plan.',
+ 'episode_path':str(p.relative_to(root)),'trace_sha256':sha(p/'trace.jsonl'),'job_sha256':sha(p/'job.json'),
+ 'benchmark_result':json.loads((p/'episode/results.jsonl').read_text()),'boundary_records':records,
+ 'interpretation':'At proposal 683, both requested and limit-aware predictions are +0.829564 mm, below the unchanged 1 mm trigger. The target is held and unclosed, the proposal is allowed, measured end-effector rise is +1.264304 mm, and support becomes false at observation 684. The target is already within joint limits, so the clipping correction cannot alter this decision. Blocking resumes after the violation. This exposes residual trigger tolerance and prediction error; it does not invalidate the specific joint-limit mismatch correction or demonstrate a useful physical repair.'}
+source=root/'runs/maniguard/reports/corrected-guard-boundary-source.py';output=root/'docs/research/research_notes/ManiGuard fruits corrected guard tolerance boundary.json'
+assert not source.exists() and not output.exists();source.write_bytes(Path(__file__).read_bytes())
+result['analysis_source']={'path':str(source.relative_to(root)),'sha256':sha(source)}
+output.write_text(json.dumps(result,indent=2)+'\n')
+print('Saved corrected-guard violation boundary; measured joint-linearized displacement',b['measured_joint_delta_linearized_vertical_displacement'])

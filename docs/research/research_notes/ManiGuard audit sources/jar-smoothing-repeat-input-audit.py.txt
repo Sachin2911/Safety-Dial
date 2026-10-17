@@ -1,0 +1,72 @@
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+import numpy as np
+
+root=Path('/workspace/Safety-Dial')
+sys.path.insert(0,str(root/'experiments'))
+from helpers.maniguard_results import read_episode
+paths=[root/'runs/maniguard/jar-fixed-screens-v1/episode-0030',
+       root/'runs/maniguard/jar-guard-repeat-v2/episode-0016']
+
+def read(path): return json.loads(path.read_text())
+def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+
+jobs=[read(p/'job.json') for p in paths]
+verdicts=[read_episode(p) for p in paths]
+assert verdicts[0]['safe_completion'] and verdicts[1]['safe_unfinished']
+for field in ['family','scene','seed','adapter','policy','code_hashes']:
+    assert jobs[0][field]==jobs[1][field],field
+configs=[read(p/'episode/eval_config.json') for p in paths]
+differences=[key for key in sorted(set(configs[0])|set(configs[1])) if configs[0].get(key)!=configs[1].get(key)]
+assert differences==['output_dir']
+provenance=[read(p/'runtime-provenance.json') for p in paths]
+assert provenance[0]==provenance[1]
+for path,job in zip(paths,jobs):
+    for name,expected in job['code_hashes'].items():
+        assert sha(path/'study_source'/name)==expected
+    assert sha(path/'benchmark_instrumented.py')==provenance[0]['runtime_sha256']
+arrays=[]
+with np.load(paths[0]/'initial_observation.npz') as original,np.load(paths[1]/'initial_observation.npz') as repeat:
+    assert original.files==repeat.files
+    for name in original.files:
+        a,b=original[name],repeat[name]
+        assert a.shape==b.shape and a.dtype==b.dtype
+        arrays.append({'key':name,'shape':list(a.shape),'dtype':str(a.dtype),
+            'exactly_equal':bool(np.array_equal(a,b)),
+            'max_absolute_difference':float(np.max(np.abs(a.astype(float)-b.astype(float)))),
+            'original_sha256':hashlib.sha256(a.tobytes()).hexdigest(),
+            'repeat_sha256':hashlib.sha256(b.tobytes()).hexdigest()})
+first=[]
+metadata=[]
+for path in paths:
+    for line in (path/'trace.jsonl').open():
+        row=json.loads(line)
+        if row['type']=='policy_metadata':metadata.append(row['metadata'])
+        if row['type']=='proposal':
+            first.append(np.asarray(row['original']))
+            break
+assert metadata[0]==metadata[1]
+source=root/'runs/maniguard/reports/jar-smoothing-repeat-input-audit.py'
+assert not source.exists()
+source.write_bytes(Path(__file__).read_bytes())
+result={'recorded_at_utc':datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+    'scope':'Original successful Jar smoothing trial and its root-zero repeat. Descriptive reproducibility check, not a candidate/control intervention comparison.',
+    'original_episode':str(paths[0].relative_to(root)), 'repeat_episode':str(paths[1].relative_to(root)),
+    'scene':jobs[0]['scene'],'root_seed':jobs[0]['seed'],
+    'original_result':verdicts[0],'repeat_result':verdicts[1],
+    'shared_adapter':jobs[0]['adapter'],'shared_policy':jobs[0]['policy'],
+    'shared_code_hashes':jobs[0]['code_hashes'],'shared_runtime_provenance':provenance[0],
+    'shared_policy_metadata':metadata[0],'different_evaluation_fields':differences,
+    'initial_arrays':arrays,
+    'first_original_proposal_equal':bool(np.array_equal(first[0],first[1])),
+    'first_original_proposal_max_absolute_difference':float(np.max(np.abs(first[0]-first[1]))),
+    'evidence_hashes':{str((path/name).relative_to(root)):sha(path/name) for path in paths
+        for name in ['job.json','trace.jsonl','initial_observation.npz','episode/eval_config.json']},
+    'analysis_source':{'path':str(source.relative_to(root)),'sha256':sha(source)},
+    'interpretation':'The same declared scene, seed, adapter, checkpoint, study code and evaluation settings yield a safe completion and a safe unfinished repeat. Saved initial joint state agrees, but initial images and first policy proposals differ. The earlier successful outcome has not repeated in this trial; this does not identify the source of physical/input variability or establish that smoothing is ineffective generally.'}
+output=root/'docs/research/research_notes/ManiGuard fruits Jar smoothing repeat variability.json'
+with output.open('x') as stream:stream.write(json.dumps(result,indent=2)+'\n')
+print('Validated equal configuration and differing initial inputs for original success and root-zero repeat.')

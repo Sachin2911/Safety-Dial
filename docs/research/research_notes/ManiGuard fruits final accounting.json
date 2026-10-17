@@ -1,0 +1,3824 @@
+{
+  "recorded_at_utc": "2026-10-17T19:21:26.555329+00:00",
+  "scope": "Final inventory after all eleven declared batches and their managed queues completed. Includes recorded failed setup, short references and inference diagnostics. Historical omissions remain explicit.",
+  "record_types": {
+    "physical_episode": 208,
+    "inference_diagnostic": 12
+  },
+  "recorded_cost_totals": {
+    "physics_steps": 2818668,
+    "physics_seconds": 23488.901225041598,
+    "env_step_attempts": 468881,
+    "env_steps_returned": 468881,
+    "policy_queries": 77065,
+    "policy_query_seconds": 20972.435287245782,
+    "policy_control_steps": 466811,
+    "elapsed_seconds": 59638.6830171647
+  },
+  "validated_full_episodes": 196,
+  "validated_full_episode_cost_totals": {
+    "physics_steps": 2815802,
+    "physics_seconds": 23465.017890462652,
+    "env_step_attempts": 468451,
+    "env_steps_returned": 468451,
+    "policy_queries": 76956,
+    "policy_query_seconds": 20688.168100276496,
+    "policy_control_steps": 466491,
+    "elapsed_seconds": 58246.033571312204
+  },
+  "other_recorded_costs": {
+    "physics_steps": 2866,
+    "physics_seconds": 23.883334578946233,
+    "env_step_attempts": 430,
+    "env_steps_returned": 430,
+    "policy_queries": 109,
+    "policy_query_seconds": 284.26718696928583,
+    "policy_control_steps": 320,
+    "elapsed_seconds": 1392.6494458524976
+  },
+  "records_with_issues": [
+    {
+      "path": "engineering/jar-0013-smoke-v1/ledger.json",
+      "sha256": "fb43d9a8eb8290c0c7972a594e5cd7ffecc9166f9435b3ed3e67f0bc6e092882",
+      "kind": "physical_episode",
+      "recorded_status": "initialization",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0.0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 0,
+        "policy_query_seconds": 0.0,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 5.865003913640976e-05
+      },
+      "issues": [
+        "Physics accounting attachment unverified; zero is not proof of no work"
+      ]
+    }
+  ],
+  "known_historical_omissions": [
+    {
+      "record": "engineering/jar-0013-smoke-v1/ledger.json",
+      "issue": "Native startup failure before physics attachment. The zero counters and tiny initial elapsed value cannot measure all startup work or wall time; no task environment or policy query completed."
+    },
+    {
+      "record": "engineering/jar-0013-smoke-v2/ledger.json",
+      "issue": "The failed first query is counted, but the old runtime omitted its latency. The recorded zero policy_query_seconds is incomplete. Subsequent runtimes preserve failed-query latency."
+    }
+  ],
+  "raw_inventory": {
+    "path": "runs/maniguard/reports/accounting-final.json",
+    "sha256": "f9842f260c444acc3611ab52501403ad2e2d7566c7d006fbe3f6521a2f8bd126"
+  },
+  "analysis_source": {
+    "path": "runs/maniguard/reports/accounting-final-source.py",
+    "sha256": "5ad2e05e06006a6490d62a2adef5272bd4b29897669e2cecad98a0941432d5d9"
+  },
+  "records": [
+    {
+      "path": "controller-limit-pipeline-v1/reference/ledger.json",
+      "sha256": "f22e5d1819b407de6d3d610a6783154be707eeda71354495bd455dbb4669dbce",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 278,
+        "physics_seconds": 2.3166667874902487,
+        "env_step_attempts": 42,
+        "env_steps_returned": 42,
+        "policy_queries": 4,
+        "policy_query_seconds": 24.876826933817938,
+        "policy_control_steps": 32,
+        "elapsed_seconds": 68.11953759402968
+      },
+      "issues": []
+    },
+    {
+      "path": "controller-limit-pipeline-v1/replay/check.json",
+      "sha256": "db77761c92d55171e1aa3ae45238f5b5088ce93e6b5ac7589d90b84c399f4ea2",
+      "kind": "inference_diagnostic",
+      "recorded_status": "passed",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 6,
+        "policy_query_seconds": 1.0401163559872657,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 1.0495392428711057
+      },
+      "issues": []
+    },
+    {
+      "path": "engineering/jar-0013-smoke-v1/ledger.json",
+      "sha256": "fb43d9a8eb8290c0c7972a594e5cd7ffecc9166f9435b3ed3e67f0bc6e092882",
+      "kind": "physical_episode",
+      "recorded_status": "initialization",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0.0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 0,
+        "policy_query_seconds": 0.0,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 5.865003913640976e-05
+      },
+      "issues": [
+        "Physics accounting attachment unverified; zero is not proof of no work"
+      ]
+    },
+    {
+      "path": "engineering/jar-0013-smoke-v2/ledger.json",
+      "sha256": "0fbbe0e19445cf885c021357b42fcb346ceddcd91582310e8ebe62b979306737",
+      "kind": "physical_episode",
+      "recorded_status": "crashed",
+      "costs": {
+        "physics_steps": 86,
+        "physics_seconds": 0.716666704043746,
+        "env_step_attempts": 10,
+        "env_steps_returned": 10,
+        "policy_queries": 1,
+        "policy_query_seconds": 0.0,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 370.40165631705895
+      },
+      "issues": []
+    },
+    {
+      "path": "engineering/jar-0013-smoke-v3/ledger.json",
+      "sha256": "17225704a753cea101d769f0c272a474f4979ad895b38a1e76d75934dc6a6082",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 278,
+        "physics_seconds": 2.3166667874902487,
+        "env_step_attempts": 42,
+        "env_steps_returned": 42,
+        "policy_queries": 4,
+        "policy_query_seconds": 0.6987251848913729,
+        "policy_control_steps": 32,
+        "elapsed_seconds": 45.02661043801345
+      },
+      "issues": []
+    },
+    {
+      "path": "engineering/jar-replay-v1/check.json",
+      "sha256": "acfa6c4bee3c2313caffd5c3ceff6ec09967001d99b7bc23f1e182990293b0a7",
+      "kind": "inference_diagnostic",
+      "recorded_status": "passed",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 4,
+        "policy_query_seconds": 0.7240397068671882,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 0.7262603759299964
+      },
+      "issues": []
+    },
+    {
+      "path": "engineering/lid-replay-v1/check.json",
+      "sha256": "c0d215e5b01de43103b2e6eff56c6864fa86bf9cfac3844b1d83695fce94d4ec",
+      "kind": "inference_diagnostic",
+      "recorded_status": "passed",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 4,
+        "policy_query_seconds": 0.6581924110651016,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 0.6607405440881848
+      },
+      "issues": []
+    },
+    {
+      "path": "engineering/stack-wrapper-check-v1/check.json",
+      "sha256": "4cdb21b310510bcc2f9557c09a74c00b9caa93e627c8ca9b1326cc63e13d5433",
+      "kind": "inference_diagnostic",
+      "recorded_status": "passed",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 6,
+        "policy_query_seconds": 27.944146852009,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 37.49502834118903
+      },
+      "issues": []
+    },
+    {
+      "path": "engineering/stack-wrapper-check-v2/check.json",
+      "sha256": "a92dc89bec6bcde6ff85a2b549ef823e76be1b08879dda86e4e1958189f23059",
+      "kind": "inference_diagnostic",
+      "recorded_status": "passed",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 6,
+        "policy_query_seconds": 26.384220987791196,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 35.44175364798866
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-baseline-engineering-v1/episode-0000/ledger.json",
+      "sha256": "6c47afc1fd2193556e7646ab759dc1d8915701948956afd331de7831bd9b7a0b",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 6074,
+        "physics_seconds": 50.61666930653155,
+        "env_step_attempts": 1008,
+        "env_steps_returned": 1008,
+        "policy_queries": 125,
+        "policy_query_seconds": 21.777502881363034,
+        "policy_control_steps": 998,
+        "elapsed_seconds": 124.70271639502607
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-baseline-engineering-v1/episode-0001/ledger.json",
+      "sha256": "1da800ab35422574b5e101a96f806a6f668d937acb865b27f48641af9e5bda6f",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 43.38035457278602,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 201.47476534801535
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-baseline-engineering-v1/episode-0002/ledger.json",
+      "sha256": "74282c7da306aa1dd88f4abda9dcca1b61c4a9376ec0802d23c7f9f8768a9b2a",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 43.1808928581886,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 196.70058533200063
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-baseline-engineering-v1/episode-0003/ledger.json",
+      "sha256": "fce419f5d89cfef8d6b70cefb7c0ad5631790588cf6035d8b86d7e4a05da25ce",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 43.25517324800603,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 199.90884993388318
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-controller-limit-screen-v1/episode-0000/ledger.json",
+      "sha256": "dc310a851926eb0c424af4a036b46cf2c611c28b319bfea53724662491776f06",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 280,
+        "policy_query_seconds": 88.00718130217865,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 267.559667133959
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-controller-limit-screen-v1/episode-0001/ledger.json",
+      "sha256": "21d938d84366d185ec9e002ca5cc1ff39729b42f9a6e5d9cc1bfecdc20e97bba",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 7424,
+        "physics_seconds": 61.86666989326477,
+        "env_step_attempts": 1233,
+        "env_steps_returned": 1233,
+        "policy_queries": 470,
+        "policy_query_seconds": 143.07648243336007,
+        "policy_control_steps": 1223,
+        "elapsed_seconds": 279.69683228014037
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-controller-limit-screen-v1/episode-0002/ledger.json",
+      "sha256": "ca09975ca2fb9150348be0b631a50997bf6086d6e5a2cf6059b24370ba4843af",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 268,
+        "policy_query_seconds": 72.23145239939913,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 250.88783986121416
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-controller-limit-screen-v1/episode-0003/ledger.json",
+      "sha256": "b57b214aeffb19203d947abf83c9aef8326694f0e3b8f76d7230cb3651b2b129",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 4238,
+        "physics_seconds": 35.31666850857437,
+        "env_step_attempts": 702,
+        "env_steps_returned": 702,
+        "policy_queries": 117,
+        "policy_query_seconds": 34.637650405522436,
+        "policy_control_steps": 692,
+        "elapsed_seconds": 127.81016293913126
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-controller-limit-screen-v1/episode-0004/ledger.json",
+      "sha256": "1bae1f5004be0534ccb56f27e984303ddfaca99560b6751db9a39088a999ab65",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 1379,
+        "policy_query_seconds": 381.2485714012291,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 572.1002130149864
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-controller-limit-screen-v1/episode-0005/ledger.json",
+      "sha256": "6b10e2489ceb626b3143181fa924d485544e210e982dd1fb91c1ea011ea4d77b",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 4172,
+        "physics_seconds": 34.76666847988963,
+        "env_step_attempts": 691,
+        "env_steps_returned": 691,
+        "policy_queries": 99,
+        "policy_query_seconds": 30.018650642130524,
+        "policy_control_steps": 681,
+        "elapsed_seconds": 119.5276827418711
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-controller-limit-screen-v1/episode-0006/ledger.json",
+      "sha256": "823bc2655704def06586dac0b412fa9b6300814a666b50dc23c8d351113e0b84",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 274,
+        "policy_query_seconds": 87.09610206075013,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 254.28412735206075
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-controller-limit-screen-v1/episode-0007/ledger.json",
+      "sha256": "3fb840097c98a9a0fd8da0f1870902c1f42f830ed6b581393d6f895a052ad433",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 1340,
+        "policy_query_seconds": 388.9618413730059,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 577.3741005579941
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-controller-limit-screen-v1/episode-0008/ledger.json",
+      "sha256": "762e4e423f421ae855139eaa6d02d7553714860acfdf2acb1c837a34d2db1ea5",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 308,
+        "policy_query_seconds": 102.07376337889582,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 276.6325445899274
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-controller-limit-screen-v1/episode-0009/ledger.json",
+      "sha256": "ca498b1d1ed47acb3fc5c1d7e4bd9edcd7443e9b93c01f89bae8a963238a52a9",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 393,
+        "policy_query_seconds": 117.47038029856049,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 292.9682672661729
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-controller-limit-screen-v1/episode-0010/ledger.json",
+      "sha256": "bee4b8f3abd5fd538725d043a74159c82b206c584f20cad9ee738afe91ad5d7a",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 8408,
+        "physics_seconds": 70.0666703209281,
+        "env_step_attempts": 1397,
+        "env_steps_returned": 1397,
+        "policy_queries": 871,
+        "policy_query_seconds": 281.88438029633835,
+        "policy_control_steps": 1387,
+        "elapsed_seconds": 422.4525334320497
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-controller-limit-screen-v1/episode-0011/ledger.json",
+      "sha256": "89e587389211f2cdb81bc656824f73dc261cb693bec5e4e6236b07a3c77df654",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 1334,
+        "policy_query_seconds": 342.6445429045707,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 524.7726359399967
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0000/ledger.json",
+      "sha256": "cbd7daa8d8e6aef073e8b9e2415e015768c0e202dd90531087cc327b08cd134b",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 70.16836032946594,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 260.5536506148055
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0001/ledger.json",
+      "sha256": "f6a8b3d615efe8cb00840934890cd3255a734370956336160e05329199b0cf5a",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 70.00880028237589,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 256.40725331101567
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0002/ledger.json",
+      "sha256": "1e63b0d26095a728e79b38496b930117a20c853d8590e10db92218c34da10140",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 9068,
+        "physics_seconds": 75.56667060777545,
+        "env_step_attempts": 1507,
+        "env_steps_returned": 1507,
+        "policy_queries": 274,
+        "policy_query_seconds": 87.1617493845988,
+        "policy_control_steps": 1497,
+        "elapsed_seconds": 245.80281733698212
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0003/ledger.json",
+      "sha256": "dbad64fe3d00f1bfdbebeb852a6d89151fe786edd0eadee600463f9e8291d9d0",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 9248,
+        "physics_seconds": 77.06667068600655,
+        "env_step_attempts": 1537,
+        "env_steps_returned": 1537,
+        "policy_queries": 201,
+        "policy_query_seconds": 71.44265245157294,
+        "policy_control_steps": 1527,
+        "elapsed_seconds": 223.09833415411413
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0004/ledger.json",
+      "sha256": "778013586408ac1cfa871fc0decc6da5861abf92731f7f5cb44663c7d7f3eeeb",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 311,
+        "policy_query_seconds": 81.34810725762509,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 271.6113872958813
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0005/ledger.json",
+      "sha256": "55305e897388e8a19041e88e571bc7119e84ea8c815bb39716dc4d81176d4597",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 4346,
+        "physics_seconds": 36.216668555513024,
+        "env_step_attempts": 720,
+        "env_steps_returned": 720,
+        "policy_queries": 89,
+        "policy_query_seconds": 25.042484207544476,
+        "policy_control_steps": 710,
+        "elapsed_seconds": 119.93958525802009
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0006/ledger.json",
+      "sha256": "6760e693f4abb22b26f2654a41ee01cb591dfa23e1ae6a5b05fbd7ffbe5894b7",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 69.94219322293065,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 244.94203971582465
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0007/ledger.json",
+      "sha256": "432480e4c52d4b5269351b35d157a5708a6ccee126cac06f24dea8ec2ab72a4f",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 5132,
+        "physics_seconds": 42.766668897122145,
+        "env_step_attempts": 851,
+        "env_steps_returned": 851,
+        "policy_queries": 106,
+        "policy_query_seconds": 27.160682850982994,
+        "policy_control_steps": 841,
+        "elapsed_seconds": 129.11196227907203
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0008/ledger.json",
+      "sha256": "af791dfcee2f8b78755ba10f1fa501fa9ef9c85dad48e5af4f86a3642b82b8ac",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 257,
+        "policy_query_seconds": 70.8684373665601,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 261.1290344200097
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0009/ledger.json",
+      "sha256": "937c21a54720654ab2f6a5ace56e0892bdf4c90c9caba864d4d1b2235015e51d",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 3050,
+        "physics_seconds": 25.41666799224913,
+        "env_step_attempts": 504,
+        "env_steps_returned": 504,
+        "policy_queries": 62,
+        "policy_query_seconds": 21.04638507612981,
+        "policy_control_steps": 494,
+        "elapsed_seconds": 103.09753683512099
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0010/ledger.json",
+      "sha256": "5f83fd40035b753d422568df5fd5043cf8057b0f1a2599ee910e1efc3af88235",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 8426,
+        "physics_seconds": 70.2166703287512,
+        "env_step_attempts": 1400,
+        "env_steps_returned": 1400,
+        "policy_queries": 455,
+        "policy_query_seconds": 123.45268363505602,
+        "policy_control_steps": 1390,
+        "elapsed_seconds": 271.6195434499532
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0011/ledger.json",
+      "sha256": "3cbfd961b94fb86484715ec8d2c289c3eb7802070e1168132ecf6929514c026f",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 4196,
+        "physics_seconds": 34.966668490320444,
+        "env_step_attempts": 695,
+        "env_steps_returned": 695,
+        "policy_queries": 86,
+        "policy_query_seconds": 28.768030438339338,
+        "policy_control_steps": 685,
+        "elapsed_seconds": 116.33459388511255
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0012/ledger.json",
+      "sha256": "61ff468cd8baae8d4162b6154c4080502a243566e5f8205466e76caf4c52d798",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 70.45511640352197,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 240.5177796781063
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0013/ledger.json",
+      "sha256": "2d2023dc2463eef1f2f9e5a90fb03ebd8289ba7862a8d64d2f7db33ab5702e1b",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 65.69848081865348,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 241.104031563038
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0014/ledger.json",
+      "sha256": "bffd37e5530c950bedac91a6368ad62fd41012d2b000691d7426e38c1f7a7f4a",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 4628,
+        "physics_seconds": 38.566668678075075,
+        "env_step_attempts": 767,
+        "env_steps_returned": 767,
+        "policy_queries": 95,
+        "policy_query_seconds": 24.387227070285007,
+        "policy_control_steps": 757,
+        "elapsed_seconds": 117.39226678898558
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0015/ledger.json",
+      "sha256": "27a6ae37a97be531cc32a941c9267dd19c09159e868b1230f590ce61aa6f1d78",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 5294,
+        "physics_seconds": 44.11666896753013,
+        "env_step_attempts": 878,
+        "env_steps_returned": 878,
+        "policy_queries": 109,
+        "policy_query_seconds": 26.443029870977625,
+        "policy_control_steps": 868,
+        "elapsed_seconds": 130.41244796989486
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0016/ledger.json",
+      "sha256": "b0be239c6b4b8ad5afefb03cef24d2943b93cc338c122bd7c6cfeb9bb0f33629",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 68.22267936728895,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 247.71607470489107
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0017/ledger.json",
+      "sha256": "fdad5364532de4a36be58baa35e348ebb9b2fa343c2f8700f3eda97766ee233d",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 68.83187646442093,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 243.3336296370253
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0018/ledger.json",
+      "sha256": "13703a562a2ed7f3c0ff1b6720c0bf7668d45da7bb5eb23d0397ddc4945af799",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 7652,
+        "physics_seconds": 63.76666999235749,
+        "env_step_attempts": 1271,
+        "env_steps_returned": 1271,
+        "policy_queries": 158,
+        "policy_query_seconds": 40.586836363887414,
+        "policy_control_steps": 1261,
+        "elapsed_seconds": 168.6972713621799
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0019/ledger.json",
+      "sha256": "91fcd19581c79832d3a52c131af0142574d897355fb87f4bc5dc13b80e2ea5cb",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 251,
+        "policy_query_seconds": 63.25022112228908,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 234.5514147039503
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0020/ledger.json",
+      "sha256": "a8c2d94ffde4cf8d44d01f13cd1e46ca3c80abe59ced682ae756c1d4d7f02419",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 125,
+        "policy_query_seconds": 37.72835377464071,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 212.92415792192332
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0021/ledger.json",
+      "sha256": "60350c5f35c6ea348ddf298ac7625993f8c920dc6d3fc21b3616c1a30d0b6505",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 370,
+        "policy_query_seconds": 92.98326627002098,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 256.69847977603786
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0022/ledger.json",
+      "sha256": "3ec8e7eaa00b27eeb9399ae85cdd64b677448d0a16f0002da259033463ac89fa",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 4616,
+        "physics_seconds": 38.46666867285967,
+        "env_step_attempts": 765,
+        "env_steps_returned": 765,
+        "policy_queries": 48,
+        "policy_query_seconds": 16.30076646176167,
+        "policy_control_steps": 755,
+        "elapsed_seconds": 110.36875257897191
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0023/ledger.json",
+      "sha256": "c5a69dfda2f1f06fdd71d1163a9613ba447340363983bf24a141f3534bc4a434",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 63.23838871764019,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 232.57352643692866
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0024/ledger.json",
+      "sha256": "47a677422200618f0425a92e9c4c7f822e9727c63ce52cc111949afd99192752",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 9248,
+        "physics_seconds": 77.06667068600655,
+        "env_step_attempts": 1537,
+        "env_steps_returned": 1537,
+        "policy_queries": 96,
+        "policy_query_seconds": 33.24649328761734,
+        "policy_control_steps": 1527,
+        "elapsed_seconds": 182.99497807701118
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0025/ledger.json",
+      "sha256": "5c6bba423d62cdca4d3107902f9628607476275e0103e88f58c201809671131a",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 252,
+        "policy_query_seconds": 76.47786577092484,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 244.4851590481121
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0026/ledger.json",
+      "sha256": "6a0aa45d04ba06c10ffab9523f5da8398aaef8dd122c04d9025a3289052822cf",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 7850,
+        "physics_seconds": 65.4166700784117,
+        "env_step_attempts": 1304,
+        "env_steps_returned": 1304,
+        "policy_queries": 515,
+        "policy_query_seconds": 144.31625494081527,
+        "policy_control_steps": 1294,
+        "elapsed_seconds": 279.61730115907267
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0027/ledger.json",
+      "sha256": "dbf4f4d78e95c3a64085275e0b37b2c51ebcd91ecf766846de15348203fc2e4f",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 125,
+        "policy_query_seconds": 33.70571484626271,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 210.7710069611203
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0028/ledger.json",
+      "sha256": "dde1213858a6a606f9625c7b89b7ab771cb788c02f32e0de79e9df00676155ee",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 6044,
+        "physics_seconds": 50.36666929349303,
+        "env_step_attempts": 1003,
+        "env_steps_returned": 1003,
+        "policy_queries": 142,
+        "policy_query_seconds": 41.14613417489454,
+        "policy_control_steps": 993,
+        "elapsed_seconds": 149.57543854089454
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0029/ledger.json",
+      "sha256": "128e8ba144de1a0e09509d37cdc8b597d4229b112324a0cd667d4b5703372e75",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 1633,
+        "policy_query_seconds": 502.2191943738144,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 688.7750509749167
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0030/ledger.json",
+      "sha256": "121e4724170c18009ce255b6e82bc312cc52164938581421f26aef02d0f55215",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 4910,
+        "physics_seconds": 40.916668800637126,
+        "env_step_attempts": 814,
+        "env_steps_returned": 814,
+        "policy_queries": 101,
+        "policy_query_seconds": 32.022176834754646,
+        "policy_control_steps": 804,
+        "elapsed_seconds": 129.4675051230006
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0031/ledger.json",
+      "sha256": "30c92138061cf7afd3ee298cc1fa65baac4ed391192171b5f92a617bcc8182c2",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 3062,
+        "physics_seconds": 25.516667997464538,
+        "env_step_attempts": 506,
+        "env_steps_returned": 506,
+        "policy_queries": 92,
+        "policy_query_seconds": 27.90737639204599,
+        "policy_control_steps": 496,
+        "elapsed_seconds": 104.87346341903321
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0032/ledger.json",
+      "sha256": "d9e2aaf88fb71b62cc3984a93fb7bb6e0c517f53d1736d2d5d4a8cd80dc6c5ee",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 500,
+        "policy_query_seconds": 134.08195059094578,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 291.90379857691005
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0033/ledger.json",
+      "sha256": "039e7949deeb9d1b295c953230ed0cfd62c69a1553e1184fe9d57da0bbabdcd8",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 5660,
+        "physics_seconds": 47.16666912660003,
+        "env_step_attempts": 939,
+        "env_steps_returned": 939,
+        "policy_queries": 118,
+        "policy_query_seconds": 38.771411365130916,
+        "policy_control_steps": 929,
+        "elapsed_seconds": 140.0783661850728
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0034/ledger.json",
+      "sha256": "136e335078326fa2a9ffbdeb5abe8b1527c4adaa267432d07a0d94065a9a846e",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 6998,
+        "physics_seconds": 58.31666970811784,
+        "env_step_attempts": 1162,
+        "env_steps_returned": 1162,
+        "policy_queries": 288,
+        "policy_query_seconds": 88.11449560360052,
+        "policy_control_steps": 1152,
+        "elapsed_seconds": 206.3107964231167
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0035/ledger.json",
+      "sha256": "9d91d25cdbdd4e4c3b39b35e64c0497c6337a6508ce344980fe701fa532963d9",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 70.77337627881207,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 243.62250454491004
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0036/ledger.json",
+      "sha256": "14bf566f48bc0e7ca0e03dbf4d110179b91b25f06bf45ac7d2ce3c2e76873ad8",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 500,
+        "policy_query_seconds": 141.28948219446465,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 311.612507520942
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0037/ledger.json",
+      "sha256": "b80141ba4742d41f75c59ed2018b9c216a3468fa3e91011d7a1c2679a1c70ae7",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 251,
+        "policy_query_seconds": 83.22135073901154,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 261.63868740107864
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0038/ledger.json",
+      "sha256": "2fc7cf2fb7419bdb0f1add909dfcdea4a3470dadedf794b2891bad8ad4490f74",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 500,
+        "policy_query_seconds": 141.41356971510686,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 306.6154529589694
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-fixed-screens-v1/episode-0039/ledger.json",
+      "sha256": "275647f87add43939a90cd787618823d4f16c859da63cd3961d4f224890dd0aa",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 87.02853670576587,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 259.0018627489917
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-pipeline-v2/reference/ledger.json",
+      "sha256": "9728667bb07a9f5ba520a965df9dcc3b88e8692fdb86cece6e6755ad53c9af32",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 278,
+        "physics_seconds": 2.3166667874902487,
+        "env_step_attempts": 42,
+        "env_steps_returned": 42,
+        "policy_queries": 4,
+        "policy_query_seconds": 27.557724798098207,
+        "policy_control_steps": 32,
+        "elapsed_seconds": 72.48878383007832
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-pipeline-v2/replay/check.json",
+      "sha256": "39f82043b1b66d80d34b67deb609f71876426feba3e001fcf86fd9e1f712582e",
+      "kind": "inference_diagnostic",
+      "recorded_status": "passed",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 6,
+        "policy_query_seconds": 1.0443894765339792,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 1.0535685101058334
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0000/ledger.json",
+      "sha256": "7f8b20f489d054331728c8e7a5d5a287726e6d7ccd227f9c009b03450c2325e4",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 1285,
+        "policy_query_seconds": 371.07837908901274,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 565.0690467678942
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0001/ledger.json",
+      "sha256": "c2ca5e7a404528e9eb614e4e6788ae18d81cd5697c6de148696feda2cc465225",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 262,
+        "policy_query_seconds": 88.11059999815188,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 263.386416784022
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0002/ledger.json",
+      "sha256": "8d00c17dc1b30cfd2bf5db58dca2a7977356cf874debb4530daae92a2839d479",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 259,
+        "policy_query_seconds": 82.79220903315581,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 254.49102626298554
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0003/ledger.json",
+      "sha256": "a99331723b9eb3eafa1d16cb2e54838263b9d12d587a10c2a9dab61af93afc4f",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 64.7487159918528,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 244.9237043200992
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0004/ledger.json",
+      "sha256": "95206800be4820e93facac504c69b5d8fd9941b12adbe33dffbfa3f7739b289d",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 65.54534421139397,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 242.8176964900922
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0005/ledger.json",
+      "sha256": "8a63ca4414b34c7dbb15f59fa50d3c44466dbe8340b389eed11318d8223d5586",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 5672,
+        "physics_seconds": 47.26666913181543,
+        "env_step_attempts": 941,
+        "env_steps_returned": 941,
+        "policy_queries": 117,
+        "policy_query_seconds": 27.430121552664787,
+        "policy_control_steps": 931,
+        "elapsed_seconds": 134.38965816702694
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0006/ledger.json",
+      "sha256": "709501f853596ea4a8572462f6aacee5a99860a8b7861aab7e843c502991c968",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 68.80019339872524,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 251.34398866910487
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0007/ledger.json",
+      "sha256": "8ed989f49f8f4fbe48a0ef9f105864937743a8a206178f226381f93055b32ec5",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 5522,
+        "physics_seconds": 46.01666906662285,
+        "env_step_attempts": 916,
+        "env_steps_returned": 916,
+        "policy_queries": 275,
+        "policy_query_seconds": 78.80547674791887,
+        "policy_control_steps": 906,
+        "elapsed_seconds": 185.6588053938467
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0008/ledger.json",
+      "sha256": "fba8321b4f725dd623bbbd6de47c03713064091eef7353d0d7aa625d913b5052",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 71.05541120353155,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 247.59025024296716
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0009/ledger.json",
+      "sha256": "5f126617abc20b581a6a87b14581907e51525882316829285e211d1e0db6d672",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11204,
+        "physics_seconds": 93.36667153611779,
+        "env_step_attempts": 1863,
+        "env_steps_returned": 1863,
+        "policy_queries": 304,
+        "policy_query_seconds": 82.83455606759526,
+        "policy_control_steps": 1853,
+        "elapsed_seconds": 254.80036739003845
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0010/ledger.json",
+      "sha256": "156728050c34a6475ff021428e1ed480743d5d758311eb1004b47286144828dc",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 387,
+        "policy_query_seconds": 100.04843283980154,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 285.01614931202494
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0011/ledger.json",
+      "sha256": "d9ef39c56f0aadf6a818ca9184f2e78cc3d03517a3393606eab455c777174a0c",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 72.84253601334058,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 250.98253188095987
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0012/ledger.json",
+      "sha256": "48df523bd5d30715ef96c9ae710301d7e0739360b2b53149869bb799379a642f",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 4838,
+        "physics_seconds": 40.31666876934469,
+        "env_step_attempts": 802,
+        "env_steps_returned": 802,
+        "policy_queries": 99,
+        "policy_query_seconds": 28.02033300558105,
+        "policy_control_steps": 792,
+        "elapsed_seconds": 124.16527737514116
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0013/ledger.json",
+      "sha256": "ce0648d524d92b288040e3826397aa5cff64322cb5c092c44a11d9154e784942",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 62.60852510435507,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 238.49238803517073
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0014/ledger.json",
+      "sha256": "2f651f1f6b7964436bb738b567118238aaad6fe8de2e3b4b3b13a26d947eaeb1",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 261,
+        "policy_query_seconds": 71.12845707591623,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 263.1266187999863
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0015/ledger.json",
+      "sha256": "98d9231f97e05b3cb42998e345d037bebb4468591304315572e6bf2b1d6d93e4",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 271,
+        "policy_query_seconds": 69.96271279873326,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 243.13301369501278
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0016/ledger.json",
+      "sha256": "1a2e995d7d5095f0f372aace59d863408487ddac1743325f6502156ae6cbf445",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 65.72575037949719,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 256.2171649991069
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0017/ledger.json",
+      "sha256": "8c1286a7de22e16984566068c9658cdb5f41c43725949584dac7082d14701ab7",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 64.03069478063844,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 242.73375705606304
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0018/ledger.json",
+      "sha256": "a5141cb1f05664d82748d6e83f7a19effa378a65698077d0b12456a97e4cfcfd",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 8312,
+        "physics_seconds": 69.26667027920485,
+        "env_step_attempts": 1381,
+        "env_steps_returned": 1381,
+        "policy_queries": 172,
+        "policy_query_seconds": 44.877551599405706,
+        "policy_control_steps": 1371,
+        "elapsed_seconds": 178.52394231501967
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0019/ledger.json",
+      "sha256": "fbef4bf855a3b7f537be37fb113bd36817601e3f119a7caf05a1449c5abc1d93",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 8144,
+        "physics_seconds": 67.86667020618916,
+        "env_step_attempts": 1353,
+        "env_steps_returned": 1353,
+        "policy_queries": 372,
+        "policy_query_seconds": 93.76225222228095,
+        "policy_control_steps": 1343,
+        "elapsed_seconds": 232.0767589889001
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0020/ledger.json",
+      "sha256": "1963cdfb8f5d7f8aa6d9e3f2aa0a4a7deacfcc5fb2d8c603ad46d2df3d02f552",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 68.63046501507051,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 240.6873724597972
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0021/ledger.json",
+      "sha256": "3f1d5f5047f7157c3f7f4aad7a2275303c140561c90bf40ae2e54c9039c846b6",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 486,
+        "policy_query_seconds": 127.50021761097014,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 316.1995308259502
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0022/ledger.json",
+      "sha256": "49dd0c06fae8130a54aa159ae0ff013f56c102742425b5c31cb51b4e7949cdf1",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 67.69631936191581,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 241.2420614650473
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0023/ledger.json",
+      "sha256": "6e4d8640a11e4a07421eb59de6470409628d635b95f25fa5b16a3ea260bf967c",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 75.7529443288222,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 249.11849470017478
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0024/ledger.json",
+      "sha256": "335c116ee4547e864b3c892b3d78815c180b17bf71ca93c620439dccd91fce97",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 1284,
+        "policy_query_seconds": 353.8695147745311,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 542.1810411938932
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0025/ledger.json",
+      "sha256": "cf52d62eabc332470aecf9ad60d79e27bcd7500639b5eb74a999aa566da05fe8",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 85.60500806756318,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 250.52200995013118
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0026/ledger.json",
+      "sha256": "5f63538969081b6e3441cf2b1dad30684bf62e221d26f0dd678ebb58c3dff2d0",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 6578,
+        "physics_seconds": 54.81666952557862,
+        "env_step_attempts": 1092,
+        "env_steps_returned": 1092,
+        "policy_queries": 136,
+        "policy_query_seconds": 32.62829024111852,
+        "policy_control_steps": 1082,
+        "elapsed_seconds": 148.46183810709044
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0027/ledger.json",
+      "sha256": "003897d6dba33b2f3394f4da73fe9a755c839bc858a0c8b995e450c920e30c3c",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 265,
+        "policy_query_seconds": 65.03688929718919,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 245.91482265596278
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0028/ledger.json",
+      "sha256": "61a53d3bf2ddd7dd2a20ef0333dae1eeece1a52b7c0b7d6201ea64ea2221cb1c",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 5762,
+        "physics_seconds": 48.01666917093098,
+        "env_step_attempts": 956,
+        "env_steps_returned": 956,
+        "policy_queries": 136,
+        "policy_query_seconds": 38.107944794464856,
+        "policy_control_steps": 946,
+        "elapsed_seconds": 147.185475545004
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0029/ledger.json",
+      "sha256": "20003a4cb4e27032eacb17d99fd2652941f5c7f41fca67d698c0878a58a7ee5d",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 6026,
+        "physics_seconds": 50.21666928566992,
+        "env_step_attempts": 1000,
+        "env_steps_returned": 1000,
+        "policy_queries": 144,
+        "policy_query_seconds": 42.603836396476254,
+        "policy_control_steps": 990,
+        "elapsed_seconds": 150.70713596697897
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0030/ledger.json",
+      "sha256": "7296bd75acd6f456f8a1b491b8b23a8aa9ab79e3931cd7be0bee9dd15c1f4729",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 938,
+        "policy_query_seconds": 263.3097145995125,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 444.6640186479781
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0031/ledger.json",
+      "sha256": "4ddf6f770967276a482c632f3a5beb67bc765fade34aaa20bd18fecaf3d1d4af",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 84.53893347061239,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 249.6198794071097
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0032/ledger.json",
+      "sha256": "61ef4146526414987b5ab63f6da7a6c410d94e52555bbe3deae86a026dcda616",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 63.30404715240002,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 237.42699703900144
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0033/ledger.json",
+      "sha256": "d0350645843453848afb4f6112f54a7885921b0e11ee7730e0627ed0ee534f5c",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 269,
+        "policy_query_seconds": 69.83554299571551,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 250.4160308239516
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0034/ledger.json",
+      "sha256": "36d3ba1d02b71552210d2e8dfa992ed378ef3c44aa711a0690f830521bb62e72",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 6884,
+        "physics_seconds": 57.36666965857148,
+        "env_step_attempts": 1143,
+        "env_steps_returned": 1143,
+        "policy_queries": 194,
+        "policy_query_seconds": 44.89532388630323,
+        "policy_control_steps": 1133,
+        "elapsed_seconds": 168.83708865498193
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0035/ledger.json",
+      "sha256": "16aa5bf01a26b4a9f0851556136a6d9e4051aad3182dcfc9e16dc26fe5db33e4",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 63.6321514705196,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 243.69169818307273
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0036/ledger.json",
+      "sha256": "800471c9126af88a01bc451af05a9407a8f98cdd5e6997790fef7892e83289bd",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 66.87704003485851,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 248.38860378810205
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0037/ledger.json",
+      "sha256": "32bcdad9884807508b8b2e57a2cc173f8e892977c6c2cae2cf4ba0c93352acbe",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 1310,
+        "policy_query_seconds": 350.0412368236575,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 540.7404377148487
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0038/ledger.json",
+      "sha256": "973d28003a2edfb6a1c146f8466584d427f8059479afd0e9b77e25821ab44dad",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 250,
+        "policy_query_seconds": 84.77600959013216,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 255.630599305965
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0039/ledger.json",
+      "sha256": "9f3900cc316263d8a0c5aabb9e5e0a965958af392128f8a7b306c3a6fdb58422",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 5168,
+        "physics_seconds": 43.066668912768364,
+        "env_step_attempts": 857,
+        "env_steps_returned": 857,
+        "policy_queries": 106,
+        "policy_query_seconds": 34.93607258889824,
+        "policy_control_steps": 847,
+        "elapsed_seconds": 131.163489500992
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0040/ledger.json",
+      "sha256": "3b1bfbc0a111bed31d4e1cdfcd7104220d6580adb94066c7ace4dda14084ac7f",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 4538,
+        "physics_seconds": 37.81666863895953,
+        "env_step_attempts": 752,
+        "env_steps_returned": 752,
+        "policy_queries": 108,
+        "policy_query_seconds": 24.094691779930145,
+        "policy_control_steps": 742,
+        "elapsed_seconds": 120.14622415206395
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0041/ledger.json",
+      "sha256": "1809aab511072fcd0b467131e00f6550666e8a80efbcc030e1936afaa20f856c",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 1240,
+        "policy_query_seconds": 341.09869303926826,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 524.1484670520294
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0042/ledger.json",
+      "sha256": "6255f1707e1a8649a2f050a7c2424ddb5bcbdc51dda81a26f6156e28d7a96547",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 308,
+        "policy_query_seconds": 104.33155999239534,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 279.0734018019866
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0043/ledger.json",
+      "sha256": "df1e434b439d461cb0cffe66a215a67cd41a6efc0190635c9f0bcee683906be6",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 5126,
+        "physics_seconds": 42.71666889451444,
+        "env_step_attempts": 850,
+        "env_steps_returned": 850,
+        "policy_queries": 105,
+        "policy_query_seconds": 35.01960451900959,
+        "policy_control_steps": 840,
+        "elapsed_seconds": 132.55666493694298
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0044/ledger.json",
+      "sha256": "5af25fca5d8557bc0f1e6cbce634d89ef5fef1c8ce83bffb28de544aa2031540",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 7862,
+        "physics_seconds": 65.5166700836271,
+        "env_step_attempts": 1306,
+        "env_steps_returned": 1306,
+        "policy_queries": 162,
+        "policy_query_seconds": 49.47668291348964,
+        "policy_control_steps": 1296,
+        "elapsed_seconds": 174.86062661604956
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0045/ledger.json",
+      "sha256": "6e0af2b74a4139c67553f60a33db0fee52a7bcb9ee5c4ae86a8a730c2c406be2",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 1412,
+        "policy_query_seconds": 406.6496844526846,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 608.8051205119118
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0046/ledger.json",
+      "sha256": "5826b1e2fc04e8c7fc6c87cf39c15bd4d1804e2d2a684673087bc1b85d8633d4",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 269,
+        "policy_query_seconds": 87.56933387275785,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 269.685376862064
+      },
+      "issues": []
+    },
+    {
+      "path": "jar-guard-repeat-v2/episode-0047/ledger.json",
+      "sha256": "ac30db45fc50a6ff62ca1f2c477a70ad035dc5c25eed90459b9514262a325f28",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12086,
+        "physics_seconds": 100.71667191945016,
+        "env_step_attempts": 2010,
+        "env_steps_returned": 2010,
+        "policy_queries": 1159,
+        "policy_query_seconds": 250.08890480175614,
+        "policy_control_steps": 2000,
+        "elapsed_seconds": 431.19057698291726
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-baseline-engineering-v1/episode-0000/ledger.json",
+      "sha256": "acb1884c7613e8112d8043eeb74b7a6f64b0376374c4d42e513716624d9f5e27",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 72.88255432993174,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 212.54931488097645
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-baseline-engineering-v1/episode-0001/ledger.json",
+      "sha256": "ebacd2d2ef0dd2890627e708ead756e575f2672b03ce7e1fe7f6a259f156bc0e",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 38.81065834197216,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 191.10251771309413
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-baseline-engineering-v1/episode-0002/ledger.json",
+      "sha256": "d9601ebf20a4bada8ca576f86ef9939b6a468d9d979cc936247e0df907904fda",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 38.838380521396175,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 182.83924668398686
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-baseline-engineering-v1/episode-0003/ledger.json",
+      "sha256": "131988ed02f04d7d4b03b84b391fe1ffda3146c37240c5beedb20615cb189f92",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 38.75340935494751,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 182.0117239211686
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-extra-baselines-engineering-v1/episode-0000/ledger.json",
+      "sha256": "ab9fa92e67735bfa927b971c728d47c4a75be3c8924dcfbbd8eacc67741facae",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 64.72540002386086,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 217.20538401510566
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-extra-baselines-engineering-v1/episode-0001/ledger.json",
+      "sha256": "90469a363b32f6f6931e927efcde66f45fb9c34500faf3b3593b367ecb7b670d",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 56.85677834227681,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 221.7975893940311
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-extra-baselines-engineering-v1/episode-0002/ledger.json",
+      "sha256": "611cd9b7de50810efe4a467ae675d971af7c29f1003575dd88dd9efe4324f9d0",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 60.945225863717496,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 213.71887818304822
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-extra-baselines-engineering-v1/episode-0003/ledger.json",
+      "sha256": "4160aea49a1e4d7731911c8dad7820639b23c5df027a4d0a048e680653145f2c",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 59.05011258088052,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 215.5789501881227
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-extra-baselines-engineering-v1/episode-0004/ledger.json",
+      "sha256": "9cf25001a154bafb52c8c02f734b3191e75e57981a2c708663501650f1ea28a9",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 56.72864698152989,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 210.83544513909146
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-extra-baselines-engineering-v1/episode-0005/ledger.json",
+      "sha256": "826018e6d4823fc290ae71c28d66d100316b7fd7956d31a724ceb11b4b854ad8",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 61.047562876017764,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 211.91633752803318
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-extra-baselines-engineering-v1/episode-0006/ledger.json",
+      "sha256": "fdf368fd145848d3e914a2ecb87c8918799b91bd21d024e4c6c2bc6f744922af",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 10070,
+        "physics_seconds": 83.91667104326189,
+        "env_step_attempts": 1674,
+        "env_steps_returned": 1674,
+        "policy_queries": 208,
+        "policy_query_seconds": 49.564940963173285,
+        "policy_control_steps": 1664,
+        "elapsed_seconds": 187.7617792019155
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-extra-baselines-engineering-v1/episode-0007/ledger.json",
+      "sha256": "78084c14c22f6993756d6500464a5c2aff96ce58abd852200b4447b5943a777c",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 54.41326657938771,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 206.95363460993394
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-pipeline-v1/reference/ledger.json",
+      "sha256": "553ebed666addeee83836ed44152ef46c0e1da541cf55d9b98d73b01eb673eb9",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 278,
+        "physics_seconds": 2.3166667874902487,
+        "env_step_attempts": 42,
+        "env_steps_returned": 42,
+        "policy_queries": 4,
+        "policy_query_seconds": 28.221471804194152,
+        "policy_control_steps": 32,
+        "elapsed_seconds": 68.80399423115887
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-pipeline-v1/replay/check.json",
+      "sha256": "81d0c2f3e0b82407eacd83dea5e271d9e0348e5bd47afad5039a25b4e0b17838",
+      "kind": "inference_diagnostic",
+      "recorded_status": "passed",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 6,
+        "policy_query_seconds": 1.0174770767334849,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 1.0274542369879782
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0000/ledger.json",
+      "sha256": "fa5a264b296647b6b62ffe3b0366913ed9a2e505278376dafc5c6f81b675f060",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 57.72337772930041,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 216.7774561161641
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0001/ledger.json",
+      "sha256": "41a7c1dff8ccc865fa44431709f67d067e53bb003ca173e9e57892d90e5759db",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 58.42911466420628,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 213.22658193297684
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0002/ledger.json",
+      "sha256": "c47d9e02ac5d5d593c7dd2adeb46be66e39deac12c5bd8b3c055083b52aa6144",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 239,
+        "policy_query_seconds": 64.52901141368784,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 215.82734122592956
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0003/ledger.json",
+      "sha256": "d1c9672b2740dd95a2d5ffe4dce6c0df4ed920842e32121b9139542a9a42abe2",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 1220,
+        "policy_query_seconds": 312.7043830102775,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 476.6018339039292
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0004/ledger.json",
+      "sha256": "31b1a1905e59253e5357fe42bd4c4e34c3e3b459bead66ffe5f821c36b4c0841",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 70.30622536642477,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 218.4830015890766
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0005/ledger.json",
+      "sha256": "0e7700e6ca62816e631a1d30a6828e991c142792df3121e0f25b16faf71b918d",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 3020,
+        "physics_seconds": 25.166667979210615,
+        "env_step_attempts": 499,
+        "env_steps_returned": 499,
+        "policy_queries": 62,
+        "policy_query_seconds": 10.617845858447254,
+        "policy_control_steps": 489,
+        "elapsed_seconds": 82.0405467140954
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0006/ledger.json",
+      "sha256": "6f03630ff1c709368e60d410de0dde1afbdae19b7977869ea074fc2a66370b12",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 52.094890205189586,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 208.88190138083883
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0007/ledger.json",
+      "sha256": "cb46ea07abf5da6d172403c63d33ef177bd0ff459a7191fa2be8341a81f0e225",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 54.31709636258893,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 209.54002761095762
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0008/ledger.json",
+      "sha256": "101648844ffcf63d3b6b979b595291dbe16d1b1db3370d195e28b89f304896b1",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 51.955491865985096,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 211.05847119400278
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0009/ledger.json",
+      "sha256": "43b442d8cf1f5425620eb6163aa7544f2113ca0a5c442600f717864a97bc9800",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 57.81096605025232,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 211.3504717471078
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0010/ledger.json",
+      "sha256": "a612db72171531035364a7901150d7d3fb7a77935a3b7deea9bac2126d80a681",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 52.84379662806168,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 206.5692462460138
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0011/ledger.json",
+      "sha256": "088fdb2c6956a8c80eab63f9e95b8007567544d7d0743b0f0ff62d6c0162654e",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 52.94823950110003,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 206.3330204030499
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0012/ledger.json",
+      "sha256": "0b2474bf07dfbc967af0f1b24791e617f2c1d243db9e9230c5346b3b2aaf1306",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 52.88267998280935,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 209.6115388229955
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0013/ledger.json",
+      "sha256": "67a3ae883982b0f63ebdef5a4c05668e812c318dafc33fc8b9035f5675d7efe3",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 52.92413253430277,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 208.60962136881426
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0014/ledger.json",
+      "sha256": "d3f9b8856b2e8ef91d23fff56ad051256d0f2d75bc69f79a2072e9c5d7fc3a0f",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 53.89091738476418,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 208.51031247805804
+      },
+      "issues": []
+    },
+    {
+      "path": "lid-guard-screen-v1/episode-0015/ledger.json",
+      "sha256": "9462fc435a112095a287ef7abf36f07b69a3ff3629c1a2c1a3b94443c8acdeed",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 11486,
+        "physics_seconds": 95.71667165867984,
+        "env_step_attempts": 1910,
+        "env_steps_returned": 1910,
+        "policy_queries": 238,
+        "policy_query_seconds": 51.888799889944494,
+        "policy_control_steps": 1900,
+        "elapsed_seconds": 212.31773382704705
+      },
+      "issues": []
+    },
+    {
+      "path": "motion-repeat-pipeline-v1/reference/ledger.json",
+      "sha256": "489dd0e3eed1478cf43d4b5543cba09abaa3b6b3177ffc3a9b9cc1a632a075bb",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 278,
+        "physics_seconds": 2.3166667874902487,
+        "env_step_attempts": 42,
+        "env_steps_returned": 42,
+        "policy_queries": 4,
+        "policy_query_seconds": 25.789718501036987,
+        "policy_control_steps": 32,
+        "elapsed_seconds": 71.81588229397312
+      },
+      "issues": []
+    },
+    {
+      "path": "motion-repeat-pipeline-v1/replay/check.json",
+      "sha256": "80311fa0cd9c847d97c8a456ea156a6c3be04258e456546d24aca0ddf82b4707",
+      "kind": "inference_diagnostic",
+      "recorded_status": "passed",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 6,
+        "policy_query_seconds": 1.07076253159903,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 1.0799382091499865
+      },
+      "issues": []
+    },
+    {
+      "path": "remaining-fixed-screens-v1/jar-reference/ledger.json",
+      "sha256": "d8398ce5c4d59b94049ad61fa59f041db5e0fd68d70e1cf2133dac86b54540aa",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 278,
+        "physics_seconds": 2.3166667874902487,
+        "env_step_attempts": 42,
+        "env_steps_returned": 42,
+        "policy_queries": 4,
+        "policy_query_seconds": 30.213747409870848,
+        "policy_control_steps": 32,
+        "elapsed_seconds": 74.74811839405447
+      },
+      "issues": []
+    },
+    {
+      "path": "remaining-fixed-screens-v1/jar-replay/check.json",
+      "sha256": "afc6022f6d32409d998600849769b60c6fb15e6fce303d249c0c81888beeeaab",
+      "kind": "inference_diagnostic",
+      "recorded_status": "passed",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 6,
+        "policy_query_seconds": 1.0263386080041528,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 1.0361079908907413
+      },
+      "issues": []
+    },
+    {
+      "path": "remaining-fixed-screens-v1/lid-reference/ledger.json",
+      "sha256": "e894ce237935b5b7a46b1a79bedb3ef72baf79ba44ba3994200be2c682eba26c",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 278,
+        "physics_seconds": 2.3166667874902487,
+        "env_step_attempts": 42,
+        "env_steps_returned": 42,
+        "policy_queries": 4,
+        "policy_query_seconds": 29.61106748599559,
+        "policy_control_steps": 32,
+        "elapsed_seconds": 70.18365148687735
+      },
+      "issues": []
+    },
+    {
+      "path": "remaining-fixed-screens-v1/lid-replay/check.json",
+      "sha256": "e25d1fb394420b47faa58435a3f0bab9a6205f80b7bd7979d1f3865e2013a2a6",
+      "kind": "inference_diagnostic",
+      "recorded_status": "passed",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 6,
+        "policy_query_seconds": 1.015992424916476,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 1.0244834921322763
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-baseline-engineering-v1/episode-0000/ledger.json",
+      "sha256": "5a181d59125309456dd51c76c29997a0e0b21b97e29cc706427bd9848bf43800",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 15026,
+        "physics_seconds": 125.21667319722474,
+        "env_step_attempts": 2500,
+        "env_steps_returned": 2500,
+        "policy_queries": 312,
+        "policy_query_seconds": 78.54518736177124,
+        "policy_control_steps": 2490,
+        "elapsed_seconds": 262.2859692319762
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-baseline-engineering-v1/episode-0001/ledger.json",
+      "sha256": "b2e8565ced2d8e22084d0ac0983b674a7257263140fc9bca2839c8e5fb237401",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 91.88510809955187,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 360.1468452261761
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-baseline-engineering-v1/episode-0002/ledger.json",
+      "sha256": "7b3f47e04bd68cfa635b9579729e662bc32a8219a262ce668462701113ecfd70",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 14918,
+        "physics_seconds": 124.31667315028608,
+        "env_step_attempts": 2482,
+        "env_steps_returned": 2482,
+        "policy_queries": 309,
+        "policy_query_seconds": 54.09605749207549,
+        "policy_control_steps": 2472,
+        "elapsed_seconds": 220.69901824789122
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-baseline-engineering-v1/episode-0003/ledger.json",
+      "sha256": "be2f91d53e6d85b45ea2b91e00640278c4f501c30abb035d2e9d68b6955796cd",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 92.07652499945834,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 352.59311570902355
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0000/ledger.json",
+      "sha256": "cb0d47b1d4e698cf2681119c9df82b3b561b8b6a2dc13dcb874f66cca6869941",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 138.46886532567441,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 438.0050547719002
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0001/ledger.json",
+      "sha256": "d8646cf9dfdd6656806b323a65b249e1ef36a98b1f5c4432c732d26062a60c97",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 135.10275932447985,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 433.21283066202886
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0002/ledger.json",
+      "sha256": "88acba7eec6b8ac8646ef59a6eb5ad2ef9c36d66f91e308a4cbe0ab9a470a520",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 129.8172975834459,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 421.3258487400599
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0003/ledger.json",
+      "sha256": "a49f888287a3c0baf03c44b03693e8c6970ef563e8618f1e62fecb6de6696cac",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 15332,
+        "physics_seconds": 127.7666733302176,
+        "env_step_attempts": 2551,
+        "env_steps_returned": 2551,
+        "policy_queries": 318,
+        "policy_query_seconds": 90.36875024391338,
+        "policy_control_steps": 2541,
+        "elapsed_seconds": 274.7316928289365
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0004/ledger.json",
+      "sha256": "55e103892df50a9eb0793dafcab0cda65db9022e4e8e9684d087cd0ae7ffc1c0",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 1050,
+        "policy_query_seconds": 306.6383156364318,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 586.1393466868903
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0005/ledger.json",
+      "sha256": "8409bc13e38a635b5b1c78121591fe2c5d782516930da35b87f2654ed8cd06a4",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 153.14115201495588,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 444.3767091871705
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0006/ledger.json",
+      "sha256": "da55f3edb6dd83ac58603ef626f24edfd21782daa5d9dc3ab16cbe5ce6f9e2c2",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 6824,
+        "physics_seconds": 56.86666963249445,
+        "env_step_attempts": 1133,
+        "env_steps_returned": 1133,
+        "policy_queries": 141,
+        "policy_query_seconds": 38.925778419012204,
+        "policy_control_steps": 1123,
+        "elapsed_seconds": 146.4775309159886
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0007/ledger.json",
+      "sha256": "ae5e1b08847d6b6bad1c47205b214bed92776daedfcd91014a74bd1214e67bea",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 154.44183217198588,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 442.87278711097315
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0008/ledger.json",
+      "sha256": "5ae44ba6622f3c34f4025f41071c9eb46d8c145b39f9cec7b9296d46bd4766d7",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 126.04996683704667,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 447.37123745610006
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0009/ledger.json",
+      "sha256": "db861a5ca78a338f4dcb53e3ca5cc436edfb0c03ed49b108c4cb83324ce6f2a1",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 572,
+        "policy_query_seconds": 151.32242691679858,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 445.734489741968
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0010/ledger.json",
+      "sha256": "235c6e49956186ec428803cbf0f3f6c31ee53bceac07dbcbb6640d813a7eab6f",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 134.58898734557442,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 421.5958490089979
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0011/ledger.json",
+      "sha256": "d8d246abf02c422d3a95922917e18a001fba2e438d1cfa5b3eac219ce1524944",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 533,
+        "policy_query_seconds": 143.30146145634353,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 432.0616899719462
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0012/ledger.json",
+      "sha256": "d5928ee33bc2cc9bae9651fee2d1ccb4d0cf01ef7bdac1c7e858361995da8fbc",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 1050,
+        "policy_query_seconds": 289.93670669873245,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 567.6947129128966
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0013/ledger.json",
+      "sha256": "b13899160130ff786789e488041d51c1e67b8cdefd6af7e5cb86affd5b6c425f",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 154.119310349226,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 462.7414961610921
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0014/ledger.json",
+      "sha256": "36552baff8ba71b35f992705d8d7ba3f56fbb416c6fc02e9ff7b51235f911781",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 145.7600580668077,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 465.88317886320874
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0015/ledger.json",
+      "sha256": "c05a4cbfb3ff4b7bb6a8519a6d6ca73e53a9a46d7574b66ef58864d303b1a81f",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 1050,
+        "policy_query_seconds": 311.39249075227417,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 601.8727323471103
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0016/ledger.json",
+      "sha256": "af94029daf211cb08b1fd8f16ed7d59ad10f094b2be095ad9a2e355db80da503",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 1050,
+        "policy_query_seconds": 322.67760481964797,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 611.9579303900246
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0017/ledger.json",
+      "sha256": "3b3ffcd57d4eb052090ab7cb5a22f6e24a596991aedd1a4c7e8f19071d64e4a3",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 152.3662510891445,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 452.8699729980435
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0018/ledger.json",
+      "sha256": "386cf5f8ace7d63d81c1f720e594b353ae9fc39c71594ee5827fff4bb0b6b5b6",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 140.67876755725592,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 435.0060879329685
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0019/ledger.json",
+      "sha256": "fb5d0d446cf00971ab5fa3f753dd220ef50a125cd89a06bc73c71949f41fd0bd",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 13724,
+        "physics_seconds": 114.36667263135314,
+        "env_step_attempts": 2283,
+        "env_steps_returned": 2283,
+        "policy_queries": 285,
+        "policy_query_seconds": 84.26765227387659,
+        "policy_control_steps": 2273,
+        "elapsed_seconds": 260.74210119689815
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0020/ledger.json",
+      "sha256": "71a56e5d90c8a85c4bebe0d2ba2d5678c0897313bb73c0dd180d327192ee08f0",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 12080,
+        "physics_seconds": 100.66667191684246,
+        "env_step_attempts": 2009,
+        "env_steps_returned": 2009,
+        "policy_queries": 257,
+        "policy_query_seconds": 74.32810104591772,
+        "policy_control_steps": 1999,
+        "elapsed_seconds": 228.3973439000547
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0021/ledger.json",
+      "sha256": "cf3dd19f9b5b5a1d9881ae622e38df67734e408d3bf7d109a4d00f6351ee7690",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 548,
+        "policy_query_seconds": 160.0835013955366,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 458.7164060450159
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0022/ledger.json",
+      "sha256": "10ca67725a7fd8dba53e530c97d3c2530eee5056693c766a0df07d2d937eeff5",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 138.4697660249658,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 481.98220879700966
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-fixed-screens-v1/episode-0023/ledger.json",
+      "sha256": "a21bac86e52fb21d27c204865d851b2813be55b09fb444203ac0260a8e7c507b",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 130.042772681918,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 429.58506588405
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0000/ledger.json",
+      "sha256": "2c9ea9644d5bbbc85eb8109758812972609950ce28d656e3fc30105adcdbecca",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 163.80343823553994,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 444.20996858295985
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0001/ledger.json",
+      "sha256": "8b65cec83f2ad2f272c96a6ca68407c8a1deac4b67883f0924693ec4fb9f3042",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 129.78161857649684,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 448.43494020286016
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0002/ledger.json",
+      "sha256": "bd3748bbb84151707d03e76436165d03a23c5e17e1a4f1fb9a49abb60e071852",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 131.35726481094025,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 441.8203422499355
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0003/ledger.json",
+      "sha256": "fcfc5bc0d005316f96395cae957c15374c7c58d03c5ce6d1d4bedc695f734ec9",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 156.53427807497792,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 442.57519810297526
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0004/ledger.json",
+      "sha256": "57a2a38ddb7b8cf9b9b5f56dff8cb4167875f1868c71e4592fc136164d3bf13c",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 129.65203728200868,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 444.43163753906265
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0005/ledger.json",
+      "sha256": "572afa057098cc60dfdf45cc6a6b58c47b13a87c1a2eb0adb70f12a7ce630027",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 168.33843454974703,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 441.4645552150905
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0006/ledger.json",
+      "sha256": "ff83e7a7a7d7fe692b604f8ed39b36c2e10366debdbff89c2305b5a98a0b5d32",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 130.015351427719,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 445.59478340507485
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0007/ledger.json",
+      "sha256": "114885cced124054d39a4305a2ccc2abee8716b03e1c1e595e5c8be9709103b6",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 163.26162049896084,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 446.2144286700059
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0008/ledger.json",
+      "sha256": "82088670504f2baa93ee3cc3232eb4967f7f646c84c998f1de6029719eca1971",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 125.6258724713698,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 440.4016865498852
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0009/ledger.json",
+      "sha256": "6d5dfaab637aaa857d855c61c514f23990c7adb5ac00de404aea0d3c86056d2b",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 4256,
+        "physics_seconds": 35.466668516397476,
+        "env_step_attempts": 705,
+        "env_steps_returned": 705,
+        "policy_queries": 87,
+        "policy_query_seconds": 26.428792148362845,
+        "policy_control_steps": 695,
+        "elapsed_seconds": 104.48025089292787
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0010/ledger.json",
+      "sha256": "d7d128aa19b92b7cba29d09e180987736e20cff4e5602bb91dda173f14985511",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 149.0012171443086,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 439.7620693759527
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0011/ledger.json",
+      "sha256": "73599d5ac2e8479ad2680cafebf620c54e7c7b6416c4997a2dd3872db05f836d",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 135.3745996679645,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 421.25750986509956
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0012/ledger.json",
+      "sha256": "e029e5b5349c0d57a25bd62c4d5f67bc5ab54809220c87ea94d9cf4d78ca0b0f",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 131.21138032106683,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 420.99816146004014
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0013/ledger.json",
+      "sha256": "d361c04b072b37f151fdff3181eab8725504018f833c3e5ece9af0c15c486ac7",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 130.9966236592736,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 420.63626959593967
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0014/ledger.json",
+      "sha256": "84bbb27201d7777ec476f02d9d7cf240a0450a982fcef23185d27d459571eb06",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 130.47560080862604,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 419.44197867717594
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0015/ledger.json",
+      "sha256": "d439fe12cbb11e262f7292c93dc18ffc7ff57a35590f6db245363cdaa0db0617",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 130.16965802712366,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 420.72227745805867
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0016/ledger.json",
+      "sha256": "ed7256232d5839d51a6f5265fdcd0d2bd45ab0411e26e7831e157e7b1be1c475",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 133.60086695919745,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 421.9563777600415
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0017/ledger.json",
+      "sha256": "b5b6f3d912d6c26573de311099ca9c630a4e20930c415000799b0f1ab929b926",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 126.89589737332426,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 420.49802154605277
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0018/ledger.json",
+      "sha256": "b83cd62ec9485e018b7b63f2f80d0793100ac756fd3712d82f003ee9db01ce6e",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 8438,
+        "physics_seconds": 70.31667033396661,
+        "env_step_attempts": 1402,
+        "env_steps_returned": 1402,
+        "policy_queries": 174,
+        "policy_query_seconds": 47.64818923454732,
+        "policy_control_steps": 1392,
+        "elapsed_seconds": 168.24085107492283
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0019/ledger.json",
+      "sha256": "22aa8a6c857fe65520fbe471cf7c1886c6183fa66a885193bbd165e399ed4c5c",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 122.54979442781769,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 440.454555158969
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0020/ledger.json",
+      "sha256": "c862e67bc0e688203e4379861a95d25505127332b7e5dee155d2f3da6d9d7c1b",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 14318,
+        "physics_seconds": 119.31667288951576,
+        "env_step_attempts": 2382,
+        "env_steps_returned": 2382,
+        "policy_queries": 297,
+        "policy_query_seconds": 97.70200949301943,
+        "policy_control_steps": 2372,
+        "elapsed_seconds": 267.45698422100395
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0021/ledger.json",
+      "sha256": "9649f63fced2515f94b11f9fe316af97773d13eadcbc1fbff8183e5fc39c9d91",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 14096,
+        "physics_seconds": 117.46667279303074,
+        "env_step_attempts": 2345,
+        "env_steps_returned": 2345,
+        "policy_queries": 292,
+        "policy_query_seconds": 86.66613934701309,
+        "policy_control_steps": 2335,
+        "elapsed_seconds": 254.09789789794013
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0022/ledger.json",
+      "sha256": "a9a3b14f078c0a6bafb8037121fb3e0cdd48d46e44a6d3dc224ee6ef843c66cf",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 131.3192029928323,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 435.38670136011206
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-motion-repeat-v1/episode-0023/ledger.json",
+      "sha256": "0b8516daad0961840599c8617031113c4b0230189cb9a3d453f3ed792fc7070d",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 108.77352745085955,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 405.1263621360995
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-release-trigger-v1/episode-0000/ledger.json",
+      "sha256": "278e41c75823987c99ac72eca6153c510d628dd0cac978658cab750e647603e5",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 127.61412590462714,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 429.27309504686855
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-release-trigger-v1/episode-0001/ledger.json",
+      "sha256": "9ec07148733b9c526ebc7e2d7af6131bf2a2ec8a2b93a33cf6c3c17a9ac1943b",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 14180,
+        "physics_seconds": 118.16667282953858,
+        "env_step_attempts": 2359,
+        "env_steps_returned": 2359,
+        "policy_queries": 294,
+        "policy_query_seconds": 79.03573697526008,
+        "policy_control_steps": 2349,
+        "elapsed_seconds": 257.6812034850009
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-release-trigger-v1/episode-0002/ledger.json",
+      "sha256": "c565ce751d0328fdf758d214b21cdd0dbfce226c393b3234ee5a3f3b222b6987",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 145.28792285826057,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 423.3942494930234
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-release-trigger-v1/episode-0003/ledger.json",
+      "sha256": "3fa8fb5d143f114794f0d2c7ec017bb4f0ea84fa6214af25466b090537fae488",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 125.76913113566115,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 441.61687688389793
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-release-trigger-v1/episode-0004/ledger.json",
+      "sha256": "c0a68283a086f0b6ac075a61c7567f0e63ac96fb16898bb556bba36efaeb5541",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 141.89295494626276,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 424.6724026151933
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-release-trigger-v1/episode-0005/ledger.json",
+      "sha256": "004caca2d607fb7bd1dd00f7384a1c57fabebba62c5c916d7b9640947c8806d3",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 130.52541237906553,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 419.87764086504467
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-release-trigger-v1/episode-0006/ledger.json",
+      "sha256": "f373ad368b6ec0dda367acc0a0cb49157a06e71416d7d83ecf307e2f7f94263e",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 14870,
+        "physics_seconds": 123.91667312942445,
+        "env_step_attempts": 2474,
+        "env_steps_returned": 2474,
+        "policy_queries": 308,
+        "policy_query_seconds": 78.37804942275397,
+        "policy_control_steps": 2464,
+        "elapsed_seconds": 260.05779269710183
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-release-trigger-v1/episode-0007/ledger.json",
+      "sha256": "f268504d8fc4359268df1442af448e3f35e3022f69dcdcaff65719d9d047a2d8",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 125.64044296857901,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 440.5794675189536
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-release-trigger-v1/episode-0008/ledger.json",
+      "sha256": "3a9c68a9ababc28961117d4af039d64494779ceb29015e1e989539db6fcc8a26",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 155.79264340666123,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 429.6862719510682
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-release-trigger-v1/episode-0009/ledger.json",
+      "sha256": "270b5986fd8bdd5156423ba87fbd5517e2a925bde550c1a07b3f9d2672b7bb48",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 151.24620430590585,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 436.6502281411085
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-release-trigger-v1/episode-0010/ledger.json",
+      "sha256": "470fb9848b538a97e690c593a853824f05a38e369ef43257c3f4397f01ee1501",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 125.48538220231421,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 440.9268829890061
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-release-trigger-v1/episode-0011/ledger.json",
+      "sha256": "f5dcd809b725107bfed5d0927c1d8bfdbdbe0f2cec343a49a2527af1e230db47",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 25286,
+        "physics_seconds": 210.71667765639722,
+        "env_step_attempts": 4210,
+        "env_steps_returned": 4210,
+        "policy_queries": 525,
+        "policy_query_seconds": 93.60729313339107,
+        "policy_control_steps": 4200,
+        "elapsed_seconds": 386.5258664248977
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-screen-pipeline-v2/replay/check.json",
+      "sha256": "e328257f8c03cdace605b09d80613628e63b0ea8ae925926357470e4e6ff8641",
+      "kind": "inference_diagnostic",
+      "recorded_status": "failed",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 6,
+        "policy_query_seconds": 26.51452109985985,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 26.523306828923523
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-screen-pipeline-v3/reference/ledger.json",
+      "sha256": "1f26d30bdceffae7a21209c1bdac37c9ce9a47d3408ce72adaaeb1cb7c85f873",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 278,
+        "physics_seconds": 2.3166667874902487,
+        "env_step_attempts": 42,
+        "env_steps_returned": 42,
+        "policy_queries": 4,
+        "policy_query_seconds": 26.404232827946544,
+        "policy_control_steps": 32,
+        "elapsed_seconds": 71.79284050106071
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-screen-pipeline-v3/replay/check.json",
+      "sha256": "edf6219016339f1901ad78f5e9fb3b1bc3c91dd2581850d7dab49695b106a597",
+      "kind": "inference_diagnostic",
+      "recorded_status": "passed",
+      "costs": {
+        "physics_steps": 0,
+        "physics_seconds": 0,
+        "env_step_attempts": 0,
+        "env_steps_returned": 0,
+        "policy_queries": 6,
+        "policy_query_seconds": 1.035626484779641,
+        "policy_control_steps": 0,
+        "elapsed_seconds": 1.0430221108254045
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-screen-pipeline-v3/smoke/episode-0000/ledger.json",
+      "sha256": "29e68b158720ae75dbc36f1a81ba4170b08da5ee4aa5fe141bfcf81897a9aba0",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 278,
+        "physics_seconds": 2.3166667874902487,
+        "env_step_attempts": 42,
+        "env_steps_returned": 42,
+        "policy_queries": 4,
+        "policy_query_seconds": 0.6999696490820497,
+        "policy_control_steps": 32,
+        "elapsed_seconds": 313.30393543699756
+      },
+      "issues": []
+    },
+    {
+      "path": "stack-screen-pipeline-v3/smoke/episode-0001/ledger.json",
+      "sha256": "2a1656ce8d2541372c447534cfb6d76051e3cce586a4ad97d3664b52c0845272",
+      "kind": "physical_episode",
+      "recorded_status": "completed",
+      "costs": {
+        "physics_steps": 278,
+        "physics_seconds": 2.3166667874902487,
+        "env_step_attempts": 42,
+        "env_steps_returned": 42,
+        "policy_queries": 4,
+        "policy_query_seconds": 0.7178783582057804,
+        "policy_control_steps": 32,
+        "elapsed_seconds": 57.803173148073256
+      },
+      "issues": []
+    }
+  ],
+  "warnings": [],
+  "interpretation": "A snapshot of running jobs is not atomic. Status fields are recorded phases, not verified live handles or validated outcomes. Elapsed seconds sum episode/diagnostic durations, not study wall time; policy-query latency can include server queueing. Derived reports and queue durations are excluded to avoid double counting. No claim of exact whole-study wall time or complete historical startup/failed-query latency."
+}

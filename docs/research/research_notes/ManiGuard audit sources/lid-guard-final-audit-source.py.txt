@@ -1,0 +1,85 @@
+"""Finalize the unchanged Lid screen only after full outcome and source validation."""
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+root = Path('/workspace/Safety-Dial')
+sys.path.insert(0, str(root / 'experiments'))
+from helpers.maniguard_comparison import compare_batch
+from helpers.maniguard_results import read_episode
+
+notes = root / 'docs/research/research_notes'
+batch = root / 'runs/maniguard/lid-guard-screen-v1'
+pipeline = root / 'runs/maniguard/lid-guard-pipeline-v1'
+read = lambda p: json.loads(p.read_text())
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+comparison = compare_batch(batch)
+report = comparison['batch_report']
+if report['statuses'] != {'completed': 16} or not (pipeline / 'complete.json').exists():
+    print(json.dumps({'status': 'waiting_for_complete_Lid_batch', 'episodes': report['statuses'],
+                      'pipeline_completion_marker': (pipeline / 'complete.json').exists()}))
+    sys.exit(0)
+if '--check' in sys.argv:
+    print('All 16 Lid outcomes validate and pipeline completion is recorded.')
+    sys.exit(0)
+assert report['planned'] == 16 and read(batch / 'complete.json')['episodes'] == 16
+assert read(batch / 'plan.json') == read(pipeline / 'plan.json')
+assert read(batch / 'plan.json') == read(root / 'configs/maniguard/lid-guard-screen.json')
+assert not report['started_episodes_missing_cost_fields']
+assert not report['started_episodes_with_unverified_physics_attachment']
+assert not report['finished_processes_missing_elapsed_seconds']
+assert comparison['comparisons'][0]['all_cases_complete']
+assert comparison['comparisons'][0]['completed_pairs'] == 8
+processes = [json.loads(line) for line in (pipeline / 'processes.jsonl').read_text().splitlines()]
+process = [p for p in processes if p['name'] == 'lid-guard-screen']
+assert len(process) == 1 and process[0]['returncode'] == 0
+process = process[0]
+snapshot = root / 'runs/maniguard/reports/lid-guard-progress-0016.json'
+progress = read(snapshot)
+assert progress['comparison'] == comparison and len(progress['completed_diagnostics']) == 16
+for row in progress['completed_diagnostics']:
+    path = Path(row['diagnostic']['output'])
+    assert sha(path / 'trace.jsonl') == row['trace_sha256']
+    assert sha(path / 'job.json') == row['job_sha256']
+reference = read_episode(pipeline / 'reference')
+replay = read(pipeline / 'replay/check.json')
+assert reference['steps'] == 32 and reference['ledger']['policy_queries'] == 4
+assert replay['status'] == 'passed' and replay['interleaved']
+assert replay['first_matches_original_episode'] and all(replay['corresponding_queries_equal'])
+assert replay['policy_queries_attempted'] == 6
+now = datetime.now(timezone.utc).isoformat()
+source = root / 'runs/maniguard/reports/lid-guard-final-audit-source.py'
+complete_path = notes / 'ManiGuard fruits Lid guard complete.json'
+comparison_path = notes / 'ManiGuard fruits Lid guard comparison.json'
+assert not source.exists() and not complete_path.exists() and not comparison_path.exists()
+source.write_bytes(Path(__file__).read_bytes())
+complete = dict(report, recorded_at_utc=now, batch_process=process,
+    batch_elapsed_seconds=process['elapsed_seconds'], plan_sha256=sha(batch / 'plan.json'),
+    setup_audit=progress['provenance_checks'],
+    full_diagnostic_snapshot={'path': str(snapshot.relative_to(root)), 'sha256': sha(snapshot)},
+    analysis_source={'path': str(source.relative_to(root)), 'sha256': sha(source)},
+    prerequisite_reference_and_replay={'reference': reference, 'replay': replay,
+        'scope': 'Separate prerequisite costs; not included in the 16-episode batch totals.'},
+    scope='Sixteen complete engineering episodes; excludes prior baselines, references, inference diagnostics and other batches. Original requested-target guard, no controller-limit correction or optimizer.')
+for path, value in [(complete_path, complete), (comparison_path, comparison)]:
+    with path.open('x') as stream:
+        stream.write(json.dumps(value, indent=2) + '\n')
+progress.update(recorded_at_utc=now,
+    status='All 16 declared Lid guard trials completed and validated; physical batch exited normally.',
+    complete_report={'path': str(complete_path.relative_to(root)), 'sha256': sha(complete_path)})
+(notes / 'ManiGuard fruits Lid guard progress.json').write_text(json.dumps(progress, indent=2) + '\n')
+status_path = notes / 'ManiGuard fruits screen progress.json'
+status = read(status_path)
+status['lid_guard_queue'].update(status=progress['status'], recorded_at_utc=now,
+    batch_statuses_at_recording={'completed': 16}, complete_report=str(complete_path.relative_to(root)),
+    batch_elapsed_seconds=process['elapsed_seconds'])
+status['status'] = ('Initial screens, Stack follow-ups, all 48 Jar repeats and all 16 Lid guard '
+    'trials completed. Isolated controller-limit correction awaits activation and its declared physical comparison.')
+status['snapshot_at_utc'] = now
+status_path.write_text(json.dumps(status, indent=2) + '\n')
+for group in report['groups']:
+    print(group['label'], group['outcomes'])
+print('Batch costs', report['recorded_cost_totals'])
+print('Batch wall seconds', process['elapsed_seconds'])

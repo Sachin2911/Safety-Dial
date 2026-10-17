@@ -1,0 +1,47 @@
+"""Write final raw cost inventory only after all declared physical batches are terminal."""
+import json,hashlib,sys,subprocess
+from pathlib import Path
+from datetime import datetime,timezone
+root=Path('/workspace/Safety-Dial');sys.path.insert(0,str(root/'experiments'))
+from helpers.maniguard_accounting import inventory_costs
+from helpers.maniguard_batch_report import summarize_batch
+notes=root/'docs/research/research_notes';runs=root/'runs/maniguard'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+coverage=json.loads((notes/'ManiGuard fruits requirements audit.json').read_text())['batch_coverage']
+state=subprocess.run(['supervisorctl','status','maniguard_controller_limit_queue'],capture_output=True,text=True,check=False).stdout.strip()
+assert len(state.split()) >= 2 and state.split()[0] == 'maniguard_controller_limit_queue'
+if state.split()[1]!='EXITED' or not (runs/'controller-limit-pipeline-v1/complete.json').exists():
+ print('Waiting for verified normal correction-pipeline completion:',state);sys.exit(0)
+reports=[]
+for name,prior in coverage.items():
+ p=runs/name;r=summarize_batch(p)
+ assert r['planned']==prior['planned'] and r['statuses']=={'completed':r['planned']}
+ assert (p/'complete.json').is_file()
+ assert not any(r[k] for k in ['started_episodes_missing_cost_fields','started_episodes_with_unverified_physics_attachment','finished_processes_missing_elapsed_seconds'])
+ reports.append(r)
+assert sum(r['planned'] for r in reports)==196
+if '--check' in sys.argv:
+ print('All 196 full episodes validated; final raw cost inventory can be saved.');sys.exit(0)
+raw=inventory_costs(runs)
+assert not raw['warnings'],raw['warnings']
+known=json.loads((notes/'ManiGuard fruits accounting.json').read_text())['known_historical_omissions']
+issues=[r for r in raw['records'] if r['issues']]
+# Preserve all issues; new issues require explicit review, not silent acceptance.
+assert all(r['path']=='engineering/jar-0013-smoke-v1/ledger.json' for r in issues),issues
+assert all(r['recorded_status'] in ['completed','error','failed','initialization','crashed','passed'] for r in raw['records']),[(r['path'],r['recorded_status']) for r in raw['records'] if r['recorded_status'] not in ['completed','error','failed','initialization','crashed','passed']]
+path=runs/'reports/accounting-final.json';source=runs/'reports/accounting-final-source.py'
+output=notes/'ManiGuard fruits final accounting.json'
+assert not path.exists() and not source.exists() and not output.exists()
+path.write_text(json.dumps(raw,indent=2)+'\n');source.write_bytes(Path(__file__).read_bytes())
+full_costs={k:sum(r['recorded_cost_totals'][k] for r in reports) for k in raw['recorded_cost_totals']}
+result={'recorded_at_utc':datetime.now(timezone.utc).isoformat(),'scope':'Final inventory after all eleven declared batches and their managed queues completed. Includes recorded failed setup, short references and inference diagnostics. Historical omissions remain explicit.',
+ 'record_types':raw['record_types'],'recorded_cost_totals':raw['recorded_cost_totals'],
+ 'validated_full_episodes':196,'validated_full_episode_cost_totals':full_costs,
+ 'other_recorded_costs':{k:raw['recorded_cost_totals'][k]-full_costs[k] for k in full_costs},
+ 'records_with_issues':issues,'known_historical_omissions':known,
+ 'raw_inventory':{'path':str(path.relative_to(root)),'sha256':sha(path)},
+ 'analysis_source':{'path':str(source.relative_to(root)),'sha256':sha(source)},
+ 'records':raw['records'],'warnings':raw['warnings'],
+ 'interpretation':raw['interpretation']+' No claim of exact whole-study wall time or complete historical startup/failed-query latency.'}
+output.write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps({k:result[k] for k in ['record_types','validated_full_episodes','recorded_cost_totals','other_recorded_costs']},indent=2))

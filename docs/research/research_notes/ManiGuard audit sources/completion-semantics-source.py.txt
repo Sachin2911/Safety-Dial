@@ -1,0 +1,49 @@
+"""Keep benchmark labels while checking prerequisite attainment in successful episodes."""
+import hashlib,json,sys
+from collections import Counter
+from pathlib import Path
+from datetime import datetime,timezone
+root=Path('/workspace/Safety-Dial');sys.path.insert(0,str(root/'experiments'))
+from helpers.maniguard_batch_report import summarize_batch
+read=lambda p:json.loads(p.read_text())
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+coverage=read(root/'docs/research/research_notes/ManiGuard fruits requirements audit.json')['batch_coverage']
+records=[];summary=Counter();completed=0
+for name in coverage:
+ batch=root/'runs/maniguard'/name
+ if not (batch/'plan.json').exists():continue
+ report=summarize_batch(batch)
+ for episode in report['episodes']:
+  if episode['status']!='completed':continue
+  completed+=1
+  row=episode['result']
+  if not row['safe_completion'] and not row['unsafe_completion']:continue
+  p=Path(episode['output']);result=json.loads((p/'episode/results.jsonl').read_text())
+  monitor_path=p/'episode'/(result['scene_name']+'_ltl.json');m=read(monitor_path)
+  key={'jar':'jar_closed','lid':'lid_on_container'}.get(row['family'])
+  log=m['log'];first=next((r['step'] for r in log if key and r['ap'][key]),None)
+  record={'batch':name,'index':episode['index'],'label':episode['label'],
+   'family':row['family'],'scene':row['scene'],'seed':row['seed'],
+   'benchmark_safe_completion':row['safe_completion'],'benchmark_unsafe_completion':row['unsafe_completion'],
+   'steps':row['steps'],'prerequisite_predicate':key,'first_prerequisite_true':first,
+   'final_monitor':log[-1],'goal_detail':result['goal_detail'],
+   'result_path':str((p/'episode/results.jsonl').relative_to(root)),
+   'result_sha256':sha(p/'episode/results.jsonl'), 'monitor_path':str(monitor_path.relative_to(root)),
+   'monitor_sha256':sha(monitor_path)}
+  records.append(record)
+  outcome='safe' if row['safe_completion'] else 'unsafe'
+  summary[f'{row["family"]}_{outcome}_completion']+=1
+  if key and first is None:summary[f'{row["family"]}_{outcome}_completion_without_observed_prerequisite']+=1
+now=datetime.now(timezone.utc).isoformat()
+result={'recorded_at_utc':now,'completed_full_episodes_examined':completed,
+ 'scope':'All validated completed full episodes in the eleven declared batches at this snapshot, including available correction trials. This is not a final inventory of an ongoing batch.',
+ 'summary':dict(summary),'successful_episode_records':records,
+ 'interpretation':'Preserve original benchmark success and physical-violation labels. A success with no observed prerequisite and a nonaccepting, non-doomed final monitor state does not demonstrate closure/lid placement or satisfaction of strong-until on a completed finite trace. Goal held-intersection and absence of a detected violation are distinct from the complete natural-language task. This audit does not redefine benchmark outcomes.'}
+out=root/'docs/research/research_notes/ManiGuard fruits completion semantics.json'
+assert not out.exists();out.write_text(json.dumps(result,indent=2)+'\n')
+source=root/'runs/maniguard/reports/completion-semantics-source.py';assert not source.exists();source.write_bytes(Path(__file__).read_bytes())
+result['analysis_source']={'path':str(source.relative_to(root)),'sha256':sha(source)};out.write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps({'examined':completed,'summary':dict(summary)},indent=2))
+for r in records:
+ if r['benchmark_safe_completion'] and r['prerequisite_predicate'] and r['first_prerequisite_true'] is None:
+  print(r['batch'],r['index'],r['label'],r['scene'],r['seed'],'final',r['final_monitor'])
