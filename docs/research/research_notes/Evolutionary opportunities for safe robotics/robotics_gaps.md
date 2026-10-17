@@ -1,0 +1,96 @@
+# Practical evolutionary opportunities in safe manipulation
+
+Research checked against live primary papers, project repositories and model collections on 16 October 2026. These are proposed opportunities, not a new implementation decision. The completed UNISafe grasp study is useful evidence against assuming that filtering causes poor progress. The ranking below separates cheap premise checks from the eventual scientific value of a project.
+
+## Which failure regimes offer meaningful headroom before implementing a learner?
+
+### Takeaway
+
+The strongest broader opportunity is safe composition of contact-rich skills and temporal prerequisites. The cheapest local premise check is a controlled failure audit, followed by diverse valid scenario discovery. Recovery portfolios and active sensing should remain conditional on demonstrating complementary recovery behavior or an actual information bottleneck.
+
+### Cited Findings
+
+- **Temporal safety and composition:** ManiGuard, released 18 August 2026, contains 200 base tasks in six families and 1,000 locked ID/OOD scenarios. Fine-tuned policies achieve only 7.5-29.8% safe task completion overall; Cabinet and Dusty remain below 2% for every evaluated policy. Its safety specifications are independent of completion and use physics-grounded temporal monitors. Importantly, Clutter has no observed violations, despite variable completion. Low overall success therefore cannot uniformly be called a safety problem. [ManiGuard, sections 4-5](https://arxiv.org/html/2608.17386v1)
+- **Temporal headroom also appears in existing tasks:** SafeManip v3, dated 28 September 2026, evaluates 50 RoboCasa365 tasks and 40 LIBERO tasks. It monitors grasp/release stability, ordering, containment and contact, among other properties. On RoboCasa, per-trigger risk rises approximately from 0.03 on atomic tasks to 0.075 on long tasks. This is a descriptive task-group comparison, not an isolated horizon intervention. The authors explicitly warn that privileged predicates and simulator verdicts are not yet sensor-grounded hardware monitors. [SafeManip, sections 3 and 5-6](https://arxiv.org/html/2605.12386)
+- **Physical shifts still leave headroom, but are already part of UNISafe's scope:** Table 15 reports Dreamer+UNISafe safe success/failure/incompletion of 72/20/8% in Normal and 64/22/14% in Hard; Diffusion+UNISafe gives 57/15/28% and 38/31/31%, respectively. Hard changes size, weight and friction. Those percentages do not establish an isolated dynamics failure or its causal component, and I did not recover the exact evaluation denominator for this table. [UNISafe, appendix E.2](https://arxiv.org/html/2505.00779)
+- **Recovery has substantial headroom, but ordinary learning is a formidable comparator:** Recova, posted 1 October 2026, reports real-robot mean success rising from 23.8% to 77.5% through DAgger, then to 87.5% with recovery skills. It reports 78.8% versus the strongest baseline's 71.7% across six LIBERO-Pro settings, and 64.9% versus 38.0% across four MolmoSpaces categories. These are completion results, not established safety-rate improvements. [Recova abstract](https://arxiv.org/abs/2610.01178)
+- **Information acquisition has measured headroom:** ActiveArena's September 2026 benchmark uses 35 tasks and 50 episodes per task and setting. Its matched memory ablation reports 27.37% ID/6.12% OOD for no memory versus 62.97%/47.60% with chunk memory of size 12. The full policy still achieves only 31.60%/27.20% on interactive-information-acquisition tasks. These are task-success measures; an independent physical-safety objective is absent from the reported protocol. [ActiveArena, tables 2 and 5](https://arxiv.org/html/2609.24124)
+
+### Inferences
+
+1. **Highest scientific priority: safe skill composition.** Start with one short contact-rich sequence, for example opening an enclosure, moving an obstructing item, inserting an object and closing safely. The potential mechanism is failure to satisfy prerequisites or maintain a safety obligation across stage boundaries. A compact evolved state machine could select primitives, guard transitions and choose retries. Its purpose would be discrete, delayed-credit sequencing with several viable strategies. Merely evolving scalar intervention thresholds would be a weaker bet.
+
+   The simplest diagnostic is to compare the full task with each constituent skill started from valid hand-authored states, plus one scripted safe sequence. If individual skills work and their composition fails, there is a focused problem. If the individual skills fail, improve competence first. A deterministic prerequisite controller, automaton-based shielding, task-and-motion planning and ordinary policy learning with the same monitor are essential alternatives. **Falsifier:** a short scripted controller closes the gap broadly, or failures arise almost entirely within one primitive. That would remove the proposed evolutionary composition advantage.
+
+2. **Cheapest premise check: valid diverse failure discovery, then curriculum only if useful.** Define bounded geometry, contact-property or obstacle perturbations while preserving task meaning and safety constraints. Evolution would search for distinct repeatable failure mechanisms, rather than simply maximize difficulty. Useful archive descriptors might be the physical cause, affected task stage and recovery demand. They must be independently audited; a larger parameter-space archive is not automatically more failure diversity.
+
+   Begin with a small grid or stratified random design, the strong fixed-grasp controller, and scripted successful witnesses on selected failing scenes. Compare search with random sampling, space-filling sampling, CEM and Bayesian optimization. Only proceed to curriculum learning if diverse failures exist that simpler methods miss. **Falsifier:** random sampling finds the same mechanisms at equal total cost; failures are invalid scenes or simulator artifacts; or targeted retraining does not improve untouched safe completion. This is more defensible than making nominal UNISafe harder until an EA happens to win.
+
+3. **Conditional opportunity: recovery portfolios.** Test whether different recovery actions solve different valid failure states: reopen-and-regrasp, retreat-and-realign, change approach, or restore a displaced fixture. A QD archive could retain complementary safe recoveries indexed by state or physical dependency, then retrieve a suitable behavior. The potential value is reuse across failure modes, not an evolutionary replacement for a single known correction.
+
+   Before a learner, collect a small bank of naturally reached failed-but-safe states and apply a few scripted recoveries under identical time limits. A successful recovery is a feasibility witness. A failed finite search proves only failure of that search. Compare best single recovery, round-robin retries, a scripted dispatcher and ordinary supervised/RL recovery training. **Falsifier:** one recovery dominates, or the nominal policy learns recovery cheaply from the same additional trajectories. Recova makes generic claims that recovery learning is empty adjacent space untenable.
+
+4. **Conditional opportunity: safety-relevant information acquisition.** Distinguish two images that look similar but require different safe actions because of hidden support, contact, obstruction or fixture state. A short evolved sensing sequence might expose that variable before irreversible interaction. Its objective should be subsequent safe completion with sensing cost included, not lower ensemble disagreement alone.
+
+   The cheapest diagnostic is a counterfactual information ladder: ordinary observations; one extra fixed camera; a scripted reveal; and privileged relevant state as an oracle. If privileged state does not improve control, perception is unlikely to be the bottleneck. If a fixed camera solves it, active sensing is unnecessary. Compare a scripted scan, random sensing, next-best-view/information gain and learned active perception. **Falsifier:** no consistent benefit from extra information, or the unchanged encoder cannot use moved views. This direction has strong published motivation but higher embodiment and representation burden than it initially appears to have.
+
+### Gaps
+
+- None of these mechanisms has been established on our migrated stack. Published headroom supports investigation, not a promise that the same rates or causes reproduce locally.
+- ManiGuard's low Cabinet/Dusty safe success could combine weak skills, long sequences and safety mistakes. Their aggregate numbers do not identify an EA-solvable bottleneck.
+- ActiveArena's memory/viewpoint findings do not establish a safety failure. Safety would need an additional explicit, physically grounded contract and sensor-interface comparison.
+
+## What closest work prevents a weak evolutionary contribution?
+
+### Takeaway
+
+All four areas already have strong adjacent methods. A credible evolutionary contribution needs measured failure coverage, complementary recovery, or composition benefit under a total budget, rather than the substitution of an optimizer.
+
+### Cited Findings
+
+- Fontaine and Nikolaidis already use MAP-Elites to generate diverse environmental and human-action failure scenarios for shared-autonomy manipulation, including hindsight optimization and policy blending. Generic QD scenario generation for robots is therefore established prior work. [RSS 2021 paper](https://roboticsproceedings.org/rss17/p036.pdf)
+- Q-DIG, a 2026 VLA red-teaming paper, already applies QD to failure-inducing but task-relevant instructions. It reports archive coverage of 0.972 versus 0.325 for embodied red teaming on LIBERO, and 0.913 versus 0.325 in SimplerEnv. However, downstream superiority is inconsistent: on SimplerEnv, augmented-model success is 52.2% for Q-DIG, 54.3% for embodied red teaming and 60.5% for rephrasing, versus a 37.0% base model. Coverage metrics are not automatically deployment improvement. [Q-DIG, tables II-III and section VI](https://arxiv.org/html/2603.12510)
+- ACCEL already evolves regret-based curricula. Its project reports approximately three billion environment steps in its BipedalWalker training configuration. It is a relevant methodological precedent, not an affordable budget assumption for manipulation. [ACCEL, ICML 2022 project](https://accelagent.github.io/)
+- QD-Grasp already constructs diverse successful grasp trajectories and supports Panda, Baxter, Kuka and other arms. Its repository includes domain-randomization quality scoring, so generic diverse grasp discovery or robustness scoring is not a fresh contribution. [Official QD-Grasp code](https://github.com/Johann-Huber/qd_grasp)
+- RADIUM approaches end-to-end failure prediction and repair through Bayesian inference with differentiable simulation/rendering; its project reports solutions with up to ten times lower cost and up to twice fewer convergence iterations than gradient-free comparisons. These are the authors' results in their own systems, not a demonstrated baseline for Isaac manipulation. [RADIUM project and linked paper/code](https://mit-realm.github.io/radium/)
+
+### Inferences
+
+- **Failure discovery:** the strongest claim would be discovering *valid, physically distinct, policy-relevant* failures at lower interaction cost and improving an untouched deployment distribution after repair. Compare both a concentrated optimizer such as CEM and a diversity-oriented sampler, since defeating random search alone leaves an obvious alternative.
+- **Temporal composition:** the novelty opportunity is exploiting reusable successful primitives while handling interacting safety obligations and off-nominal stage transitions. Deterministic formal controllers are strong comparators precisely because many prerequisites are explicit. If the problem is completely solved by applying the known specification, evolution adds little.
+- **Recovery:** evaluate portfolio marginal value with an oracle selector before learning retrieval. An oracle portfolio that barely exceeds the best single behavior rules out a useful diversity story. This uses privileged information only as diagnosis, not as a deployable advantage.
+- **Active sensing:** avoid reconstructing already demonstrated active-perception architectures. A stronger narrow question is whether safety-aware sensing behavior discovered at low interaction cost beats simple inspection for a particular hidden failure mechanism. A moved camera or probing motion is a physical action with costs and risks.
+
+### Gaps
+
+- I did not find evidence that a generic evolutionary method dominates ordinary manipulation learning in these regimes. The completed local study and Q-DIG's downstream comparisons argue against assuming that result.
+- This search is not an exhaustive novelty review of every temporal-controller or robotics-falsification paper. A selected mechanism would require a focused review before contribution claims.
+
+## Which assets are genuinely accessible, and what should count toward feasibility?
+
+### Takeaway
+
+ManiGuard offers the strongest combination of independent safety definitions and released task-specific policies, while UNISafe offers the lowest local startup cost. ActiveArena provides a real perception benchmark and weights but no safety layer. SafeManip's published monitor ideas are useful, but its current repository needs a careful release audit.
+
+### Cited Findings
+
+- **UNISafe:** the local source audit finds Normal/Hard changes to geometry, mass, initial arm posture, outcome thresholds and rewards together. Hard's termination definitions, including timeout, are commented out and inspected derived configurations do not restore them. The regular reset hooks are not a complete mass/friction-randomization API. The completed study ran only Normal. [Local asset audit](../Safe%20manipulation%20progress%20and%20robustness/feasibility_and_evolutionary_scope.md); [pinned Hard source](https://github.com/CMU-IntentLab/UNISafe/blob/ab0fdf87f38edefa48b54a291ec5b7156c17b6e0/takeoff/hard_takeoff_env_cfg.py)
+- **ManiGuard:** live code releases the monitor/data/evaluation pipeline and links benchmark assets and evaluated family-specific checkpoints. It pins an OmniGibson/Isaac Sim 4.5 stack and recommends tested 5xx drivers, with 580 verified. This is not our Isaac 6.2 runtime. RL training is described as under development. [Official repository](https://github.com/NU-IDEAS-Lab/ManiGuard)
+- The evaluated-checkpoint collection actually lists 0.5B SmolVLA family models as well as GR00T and pi models. These are task-family checkpoints rather than merely general foundation weights. No inference fit or speed on our 3090 has been tested. [Official checkpoint collection](https://huggingface.co/collections/IDEAS-Lab-Northwestern/maniguard-evaluated-vla-checkpoints)
+- **SafeManip:** the live README warns that required modified policy and RoboCasa code moved into gitignored fork paths, and installation references remain stale. It documents Python 3.10 and a specific robosuite revision, plus model normalization paths. A published monitor and launch script are not sufficient proof of a self-contained release. [Official repository, installation warnings](https://github.com/chengyuehuang511/SafeManip)
+- **ActiveArena:** its live repository supplies fixed valid seed lists, 35 tasks, data-generation scripts and integration hooks. It requires a Python 3.10/SAPIEN/Vulkan stack and pinned compiled dependencies. [Official simulator repository](https://github.com/leeibo/ActiveArena). Three actual checkpoint bundles include frozen configs/statistics and approximately 4.97 GB of weights each. [Official model release](https://huggingface.co/leeibo/ActiveArena-VLA)
+- **Other inexpensive foundations:** ManiSkill's official 3.0.1 documentation provides demonstrations and standardized CPU/GPU evaluation, emphasizing matched simulation backends and resetting all scene configurations. This alone does not verify task-specific neural weights or independent safety constraints. [Official ManiSkill evaluation documentation](https://maniskill.readthedocs.io/en/latest/user_guide/learning_from_demos/setup.html). MetaWorld supplies scripted experts per task, useful as feasibility witnesses and demonstration generators, but these are not pretrained neural task policies or safety filters. [Official MetaWorld expert documentation](https://github.com/farama-foundation/metaworld/blob/main/docs/benchmark/expert_trajectories.md). Robomimic documents a model zoo and rollout loader, offering an alternative policy starting point that still needs simulator/version and safety-contract checks. [Official pretrained-policy tutorial](https://robomimic.github.io/docs/tutorials/using_pretrained_models.html)
+
+### Inferences
+
+- **Premise-check order:** first inspect one promising temporal task and its released checkpoint/monitor contract; separately run the inexpensive local controlled diagnostic if continuing UNISafe. Then test complementary recovery or information advantage before developing QD portfolios or sensing learners. Choosing an environment because it is already running and choosing one because it has a substantial documented bottleneck are separate considerations.
+- Treat asset availability, accepted simulator behavior, and reproduced baseline rates as three different checks. Use a separate compatible environment if necessary; do not overwrite the current migrated runtime or assume shared Isaac branding implies compatibility.
+- Count initialization attempts, invalid candidate checks, discarded candidates, witness-controller episodes, search repetitions, recovery retries, training trajectories and post-search evaluation. Count all physics/control steps, model queries, elapsed time and any policy/model training separately. A failed scene rejected after simulator interaction still consumed interactions.
+- Search-selected failure frequency estimates search yield, not deployment violation probability. Freeze the discovered curriculum/portfolio before evaluating a previously declared untouched distribution. Safety rates need counts and denominators; zero violations has an approximate 95% upper bound of 3/n only under the relevant independent-episode assumptions.
+- For temporal monitors, report physical violations, safe completion, unsuccessful safe episodes, engagement and duration together. If simulator state supplies outcome labels, do not silently give those privileged predicates to only one controller. A feasibility witness or oracle-selector diagnostic can use privileged information when its nondeployable role is explicit.
+
+### Gaps
+
+- None of the newly checked code or weights was installed, downloaded or run. Compatibility and runtime estimates therefore remain unverified.
+- Exact task-level counts and narrow failure causes for ManiGuard's hardest families still need extraction if one is selected. Prefer a short family with strong component skills over blindly starting with the lowest reported percentage.
+- A future implementation should pin paper versions, repository commits, asset revisions, action conventions and safety predicates before collecting measurements. Existing archived evidence and experiments remain unchanged.
