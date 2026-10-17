@@ -865,3 +865,39 @@ The contemporaneous task_0013 identity control also completed safely, in 868 act
 and 109 queries. The guard and hand-back completions on that scene therefore remain
 integration evidence rather than demonstrated improvements over the unchanged policy.
 Sixteen Jar screen episodes are now complete.
+
+## Jar prerequisite failure, physical retry and longer chunks
+
+At the 25/40 completed-episode snapshot, the unchanged task_0017 control reaches the
+goal at action 1261 but first violates safety at observation 1205: the jar leaves
+support while open. Closure is false in all 1261 post-action observations; uprightness
+is true throughout and no drop is observed. This isolates a close-before-lift failure
+from the tipping failures that dominated the original baselines. The monitor formula
+uses strong until, `(jar_on_support) U (jar_closed)`. Its same-scene plain prerequisite
+guard trial is still pending. The already completed hand-back trial on this scene was
+unsafe, with an earlier uprightness violation, so a closure guard alone is not a
+complete safety solution. The [recorded main/wrist views](../figures/ManiGuard/jar-premature-transport.png)
+show the open jar before support loss, at first violation and at unsafe goal completion.
+
+The task_0013 bounded-retry trial now provides actual physical integration evidence:
+it triggers at proposals 417 and 502, executes five retreat actions each, then issues
+fresh queries at 422 and 507. Recorded end-effector displacements are 14.90 and 14.82 mm
+against the requested 15 mm, with direction cosines 0.99988 and 0.99970. The episode
+remains safely unfinished at 2000 actions and 251 queries. Both unchanged controls
+completed this scene safely. Accurate retreat execution is therefore not a recovery
+gain, and these different trajectories do not establish that the retreat caused the
+timeout. The first retry trial on task_0008 never triggered and remains separate evidence.
+
+Longer chunks offer a limited efficiency lead: horizon 16 safely completes task_0002
+at 755 actions and 48 queries, versus 757 actions and 95 queries for the contemporaneous
+horizon-8 control. However, horizon 16 leaves task_0008 safely unfinished and completes
+task_0013 unsafely, lifting before closure at observation 1473. These three single trials
+do not establish a general efficiency or safety improvement. Adaptive replanning on
+task_0002 uses 370 queries and remains unsafe unfinished, despite 262 early replans.
+All comparisons remain engineering screens; no optimizer or reserved evaluation has run.
+
+[Jar mechanism evidence](ManiGuard%20fruits%20Jar%20mechanism%20evidence.json) records
+trace hashes, monitor states, measured retreat vectors, figure provenance and outcome
+checks. The [Jar progress record](ManiGuard%20fruits%20Jar%20screen%20progress.json) now
+includes all 25 completed episodes at this snapshot. No simulator runtime or adapter
+behavior was changed while the batch was active.

@@ -13,9 +13,13 @@ baselines are complete. The 24-episode Stack screen found no safe-completion gai
 Four shorter-horizon trials remained unfinished, and faster motion/adaptive trials
 still violated safety. Repeated controls show outcome variation. A grasp-heuristic
 limitation under the benchmark's sticky grasping mode motivates a separate fixed
-release-rule comparison. Jar reference/replay validation passed, and its
-40-episode screen covering all six candidates has started. Further fixed-rule comparisons are queued; no evolutionary
-advantage has been demonstrated.
+release-rule comparison. Jar's 40-episode screen covering all six candidates is running.
+It has now captured transport before closure with the unchanged policy, giving the
+prerequisite guard a concrete failure to target. Bounded retries execute the intended
+physical retreat but have not improved completion. Longer action chunks reduced queries
+in one successful case; another longer-chunk run completed unsafely. A general benefit
+remains unproven. See the [Jar mechanism evidence](docs/research/research_notes/ManiGuard%20fruits%20Jar%20mechanism%20evidence.json).
+Further fixed-rule comparisons are queued; no evolutionary advantage has been demonstrated.
 
 ## Candidate overview
 
