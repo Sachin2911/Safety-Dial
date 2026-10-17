@@ -111,3 +111,18 @@ Search protocols may declare `workers: 2` after concurrency validation. The same
 count applies to every optimizer, and each batch verifies server isolation before starting
 physics. Omitting the field retains serial evaluation. Realized model latency may include
 queueing behind another client and must be reported as measured.
+
+`experiments/scripts/maniguard_batch_report.py` audits explicitly supplied batch directories
+against their saved plans. It retains not-started jobs, missing process records, failures
+and invalid results; only validated completed episodes enter the four outcome counts.
+Recorded costs include incomplete and failed jobs, with missing fields and unverified
+physics attachment identified. Episode elapsed-time sums are not batch wall time. These
+batch reports exclude standalone reference episodes and inference-only diagnostics unless
+those costs are added separately. A missing process record is not evidence that a job is live.
+Output files are created exclusively to preserve earlier snapshots:
+
+```bash
+data/maniguard/envs/sim/bin/python experiments/scripts/maniguard_batch_report.py \
+  --batch runs/maniguard/stack-fixed-screens-v1 \
+  --output runs/maniguard/reports/stack-progress.json
+```

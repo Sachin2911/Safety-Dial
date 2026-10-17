@@ -500,3 +500,27 @@ safe unfinished at the full 4,200-action horizon, matching both identity runs on
 scene. It did not establish a useful motion repair. The screen continues with fixed
 execution horizon 4 and release delay on task_0007. Four of 24 Stack screen episodes
 have completed; no adapter performance gain is established.
+
+## Six completed screen episodes and reporting checks
+
+On task_0007/base, fixed horizon 4 was safe unfinished at 4,200 actions with 1,050 model
+queries, versus 525 for both horizon-8 identity controls. Its stable-aperture heuristic
+fired on 261 frames, but it never registered a grasp of the final target. This does not
+establish a completion benefit or prove the heuristic reflects a useful target grasp.
+The release-delay trial on that scene was also safe unfinished, with zero changed commands
+and no intervention replans. That untriggered trial cannot establish a release correction.
+[Endpoint frames](../figures/ManiGuard/flat-retrieval-screen-endpoints.png) retain the baseline,
+combined motion and shorter-horizon outcomes without inferring object possession from aperture.
+
+The engineering Stack scenes are heterogeneous: task_0013 is `stack_same`, with a bottom
+bowl goal; task_0000, task_0010 and task_0007 are `stack_flat`, with chopping-board,
+cracker-box and router goals respectively. The two placement-associated violations should
+not both be described as bowl violations. No scene subset or execution order was changed.
+
+Added an audited batch report with eight passing checks covering failed-work accounting,
+missing process records, mismatched results, false completion markers and invalid costs.
+It was applied to all twelve baselines and the partial screen. The snapshot retained six
+validated screen results, two jobs awaiting process records and sixteen not started.
+It makes no claim that a file alone proves a process is live; supervisor handles are checked
+separately. Costs from standalone references and replay diagnostics remain separate records.
+The next full physical pair is motion capping on task_0010 and repeated identity on task_0013.
