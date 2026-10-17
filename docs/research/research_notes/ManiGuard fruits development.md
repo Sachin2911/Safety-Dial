@@ -549,3 +549,9 @@ trial's outcome category. The earlier identity episode's unsafe completion there
 cannot be used to attribute either a safety gain or a completion loss to the release rule.
 No causal benefit or tradeoff from that rule is established. Eight screen episodes have
 finished; the remaining declared conditions continue under the same server process.
+
+The release-delay trial on task_0000/base also finished safe unfinished at 4,200 actions
+with zero changed commands. It is the second untriggered release case and supplies no
+evidence for or against a useful release correction. Nine of 24 Stack screens are now
+complete. The adaptive-replanning trial on task_0000 and the next declared condition are
+live; the Jar and Lid follow-on queue remains active.
