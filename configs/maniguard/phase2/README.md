@@ -21,6 +21,10 @@ goal and safety predicates are confined to evaluation.
   benchmark categories and raw violation flags are retained separately.
 - `preparation.json` freezes 12 short checks and 24 full training-only reference
   episodes. Short checks never supply optimizer fitness.
+- `preparation_amendment.json` binds one prospective recovery after Clutter identity
+  initialization failed. It retains that invalid paid attempt and replaces the unclaimed
+  Clutter composition slot with an identity recovery. The twelve-attempt, action and
+  GPU-hour ceilings stay unchanged; the omitted composition check is disclosed.
 - `pilot.json` describes 522 full training/selection episodes. Its initial status is
   `freeze_incomplete`; the coordinator refuses execution until the required evidence
   and measured resource ceiling are supplied.
@@ -53,7 +57,9 @@ Run `experiments/scripts/maniguard_phase2_prepare.py` under supervisor, selectin
 job IDs from `preparation.json`. Each attempt is claimed before launch, uses a fresh
 bounded child process, and stores its source snapshot, actor, trace, benchmark result,
 physics/encoder/query ledger and attempt receipt. The process stops on invalid evidence.
-An existing claim cannot be launched again automatically. Interrupted or timed-out
+An existing claim cannot be launched again automatically. If present, the separately
+hashed preparation amendment is applied before any new claim. The original manifest stays
+unchanged, retired jobs are refused, and the failed receipt remains immutable. Interrupted or timed-out
 children are terminated as a process group; a surviving descendant makes the attempt
 invalid even if its parent returned success.
 

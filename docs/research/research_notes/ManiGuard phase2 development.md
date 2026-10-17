@@ -178,3 +178,39 @@ regressions. Ruff and whitespace checks pass. The regenerated pilot remains
 `freeze_incomplete`, with 522 planned training/selection episodes and an exact total
 preparation-plus-pilot ceiling of 1,328,984 policy actions. Preparation recovery, full
 reference measurements and evidence-bound freeze reviews remain required before launch.
+
+## Prospective recovery within the original preparation budget
+
+[The preparation amendment](../../../configs/maniguard/phase2/preparation_amendment.json)
+was written before either remaining short slot was claimed. Its content hash is
+`b01acfd484e486c6a36b8a2295d4c81079a1ae12693c8fee47054db1efb13115`.
+It keeps the failed `short-clutter-identity` attempt invalid and paid, retires the unspent
+`short-clutter-composition` slot, and assigns that slot to
+`short-clutter-identity-recovery` with exactly the original identity settings. The final
+stochastic check is unchanged. This omits an independent fixed-composition check in
+Clutter; composition retains its Jar/Stack physical checks and shared-interface tests.
+No attempt, action or GPU-hour allowance is added, and all 24 full reference jobs stay
+unchanged. The original manifest and historical receipts are preserved byte-for-byte.
+
+The [terminal cost reconciliation](../../../runs/maniguard/phase2/setup/failed-clutter-identity-audit-v1/audit.json)
+binds copied failure evidence and source files. The archived single-scene control flow
+flushes the final ledger after the caught initialization failure, then performs passive
+cleanup/summary writes and exits without another simulation step or policy query. Under
+the study's instrumented-counter definition it supports 86 physics ticks, ten environment
+steps, one encoder-loading attempt, and zero policy/control/encoder-inference/adapter
+interactions. Historical imported-module/native descendant attestation is unavailable;
+these limits remain written in the audit. This accounting reconciliation supplies no
+valid task outcome and no optimizer fitness.
+
+The derived allocation validates the immutable amendment and evidence before accepting
+new receipts. Replacement claims record the amendment hash and a numeric start time after
+its creation. Full preparation still requires the remaining short checks to pass, and
+other invalid outcomes remain blocking. An attempt to change the failed receipt to valid,
+reuse the retired slot, increase a ceiling or apply an earlier claim is rejected. The
+recovery slots have not yet run at this checkpoint.
+
+The amended [fourth partial report](../../../runs/maniguard/phase2/reports/preparation-partial-v4/report.json) preserves all ten paid receipts and reconciles the failed initialization without changing its invalid outcome. Seven original lower-bound warnings remain visible in the raw accounting; the separate source audit resolves them for total-cost accounting. The known totals remain 288 policy actions, 44 policy queries and 2,588 physics ticks. Reservation time is 1.42515 GPU-hours at the report timestamp. Integration and training readiness remain false pending the remaining checks and full preparation.
+
+The launcher and reporter now require the original output directory and all historical receipt hashes, so a new directory cannot reset the allocation. Process cleanup allows a bounded natural-exit grace for transient Python helper processes, then marks persistent descendants invalid and cleans them up. Grace and cleanup time remain charged. Focused preparation/service checks pass 31 tests; protocol/report/audit checks pass 80 tests. The pilot draft includes the amendment and remains unfrozen.
+
+The full regression checkpoint passes **419 tests**, with Ruff and whitespace checks passing. The two remaining short checks were then launched as a supervised serial queue from an archived source/config snapshot; no full preparation or optimization episode had started at launch.

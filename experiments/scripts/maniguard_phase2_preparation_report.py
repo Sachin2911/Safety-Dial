@@ -17,10 +17,12 @@ def main():
                         default=ROOT / "runs/maniguard/phase2/preparation-v1")
     parser.add_argument("--setup", type=Path, default=ROOT / "runs/maniguard/phase2/setup")
     parser.add_argument("--pilot", type=Path, default=ROOT / "configs/maniguard/phase2/pilot.json")
+    parser.add_argument("--amendment", type=Path, help="Explicit prospective recovery amendment")
     parser.add_argument("--output", type=Path, required=True,
                         help="New report directory; existing output is never overwritten")
     args = parser.parse_args()
-    report = build_report(args.preparation, args.setup, args.output, pilot_path=args.pilot)
+    report = build_report(args.preparation, args.setup, args.output, pilot_path=args.pilot,
+                          amendment_path=args.amendment)
     print(json.dumps({"report": str(args.output.resolve() / "report.json"),
                       "preparation_complete": report["preparation_complete"],
                       "prior_accounting_ready": report["prior_accounting_ready"],

@@ -23,16 +23,25 @@
       "plan_sections": "3",
       "requirement": "Primary-source comparison and compatible literature baseline",
       "acceptance": "Report with implementation/info/cost distinctions and executed main-study comparison",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/research/research_notes/ManiGuard phase2 related work.md",
+        "experiments/helpers/maniguard_phase2_aac.py",
+        "experiments/tests/test_maniguard_phase2_aac.py"
+      ],
+      "progress_note": "Primary-source comparison and a tested Adaptive Action Chunking core are recorded. Runtime integration and an executed main-study comparison remain outstanding."
     },
     {
       "id": "filter_scope",
       "plan_sections": "4",
       "requirement": "Distinguish safe execution adaptation from learned filtering",
       "acceptance": "Claims audit; any optional filter extension separately evaluated",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "phase2.md",
+        "oracle.md"
+      ],
+      "progress_note": "The plan and oracle explicitly limit the core claim to safe execution; ManiGuard monitoring does not change actions. No learned-filter extension has been evaluated."
     },
     {
       "id": "family_registry",
@@ -44,9 +53,10 @@
         "configs/maniguard/phase2/families.json",
         "configs/maniguard/phase2/sources.json",
         "experiments/tests/test_maniguard_phase2_families.py",
-        "runs/maniguard/phase2/setup/service-clutter-v1/service.json"
+        "runs/maniguard/phase2/setup/service-clutter-v1/service.json",
+        "runs/maniguard/phase2/setup/service-clutter-v2/service.json"
       ],
-      "progress_note": "All six families are registered. Jar/Stack short checks validate routing; Clutter policy startup failed before physics and is under diagnosis. Six-family initialization is incomplete."
+      "progress_note": "All six families are registered. Jar/Stack short checks validate routing. Clutter policy startup is repaired and its original executor check is valid; encoder recovery is pending. Six-family initialization remains incomplete."
     },
     {
       "id": "splits",
@@ -202,9 +212,11 @@
         "experiments/helpers/maniguard_phase2_preparation_report.py",
         "runs/maniguard/phase2/reports/preparation-partial-v2/report.json",
         "runs/maniguard/phase2/setup/encoder-loader-failure-v1.json",
-        "runs/maniguard/phase2/setup/service-clutter-v1/service.json"
+        "runs/maniguard/phase2/setup/service-clutter-v1/service.json",
+        "runs/maniguard/phase2/reports/preparation-partial-v4/report.json",
+        "runs/maniguard/phase2/setup/failed-clutter-identity-audit-v1/audit.json"
       ],
-      "progress_note": "All eight physical attempts counted once despite re-audits. Setup inference is separate; one-GPU reservation includes idle/setup once. The partial report stops before the Clutter startup deadline completes. Full preparation and measured pilot costing remain incomplete."
+      "progress_note": "Ten short attempts are counted once: nine valid and one invalid. The immutable terminal-cost audit reconciles the failed initialization counters while preserving its invalid outcome. Continuous one-GPU reservation includes setup and idle time. Full preparation and measured pilot costing remain incomplete."
     },
     {
       "id": "preparation",
@@ -214,9 +226,11 @@
       "status": "partial",
       "evidence": [
         "configs/maniguard/phase2/preparation.json",
-        "runs/maniguard/phase2/reports/preparation-partial-v2/report.json"
+        "runs/maniguard/phase2/reports/preparation-partial-v2/report.json",
+        "runs/maniguard/phase2/reports/preparation-partial-v4/report.json",
+        "configs/maniguard/phase2/preparation_amendment.json"
       ],
-      "progress_note": "8/12 short checks are valid on Jar/Stack; 0/24 full preparation episodes have run. Clutter startup is being diagnosed before physics. No retry or full-performance claim is inferred."
+      "progress_note": "10/12 short attempts are consumed, with 9 valid and 1 invalid; 0/24 full preparation episodes have run. The prospective amendment replaces the unclaimed Clutter composition slot with identity recovery and keeps the final stochastic check. Ceilings and original receipts remain unchanged."
     },
     {
       "id": "pilot",
@@ -327,8 +341,9 @@
       "plan_sections": "user",
       "requirement": "Regular GitHub pushes and verified finalpublication",
       "acceptance": "Remote branch hashes match committed study milestones",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [],
+      "progress_note": "Implementation checkpoints through commit 8efc39a have been pushed to the authorized research/maniguard-fruits branch. The final study and publication audit remain outstanding."
     }
   ],
   "evidence_checkpoint": {
@@ -383,12 +398,21 @@
   },
   "original_plan_sha256": "29155a2b03c660feea760f64d0283d243bd3ef3f4127f1eb525ebba2f918da13",
   "latest_checkpoint": {
-    "report": "runs/maniguard/phase2/reports/preparation-partial-v3/report.json",
+    "report": "runs/maniguard/phase2/reports/preparation-partial-v4/report.json",
     "short_attempts": 10,
     "valid_short_attempts": 9,
     "failed_short_attempts": 1,
     "full_preparation_attempts": 0,
     "pilot_attempts": 0,
-    "state": "encoder_provenance_repair_and_bounded_preparation_recovery"
+    "state": "recovery_ready_before_remaining_short_checks",
+    "amendment": "configs/maniguard/phase2/preparation_amendment.json",
+    "report_sha256": "4747412b635a7a74ed2ffdb769bcf3ed5e4a854a3ff69ff466c99a707c553c2e",
+    "reservation_snapshot": {
+      "timestamp": 1792277998.556704,
+      "reservation_started_at": 1792272868,
+      "reserved_gpus": 1,
+      "wall_seconds": 5130.556704044342,
+      "allocated_gpu_seconds": 5130.556704044342
+    }
   }
 }

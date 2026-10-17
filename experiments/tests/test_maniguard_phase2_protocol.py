@@ -197,6 +197,7 @@ def completed_freeze_evidence(tmp_path, monkeypatch):
     root = tmp_path / 'repo'
     config = root / 'configs/maniguard/phase2'
     shutil.copytree(ROOT / 'configs/maniguard', root / 'configs/maniguard')
+    (config / 'preparation_amendment.json').unlink(missing_ok=True)
     for name in IMPLEMENTATION_FILES:
         target = root / name
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -360,12 +361,27 @@ def test_freeze_rejects_changed_captured_source_and_incomplete_work(completed_fr
 
 
 def test_freeze_does_not_raise_the_gpu_ceiling_to_fit_slow_measurements(completed_freeze_evidence):
+    import json
+
+    from helpers.maniguard_phase2_audit import audit_preparation
     from helpers.maniguard_phase2_preparation_report import throughput_estimate
+    from helpers.maniguard_phase2_protocol import _sha
 
     fixture = completed_freeze_evidence
     report = deepcopy(fixture['report'])
     for attempt in report['terminal_attempts']:
+        if attempt['short_check']:
+            continue
         attempt['elapsed_seconds'] *= 100
+        path = fixture['path'].parent / 'inputs/preparation/attempts' / (attempt['job_id'] + '.json')
+        receipt = json.loads(path.read_text())
+        receipt['elapsed_seconds'] = attempt['elapsed_seconds']
+        fixture['write'](path, receipt)
+        next(row for row in report['sources'] if row['path'] == str(path))['sha256'] = _sha(path)
+    report['accounting'] = audit_preparation(fixture['path'].parent / 'inputs/preparation',
+                                             receipt_ledgers_only=True,
+                                             allocation=report['effective_preparation'])
+    assert report['accounting']['valid']
     report['throughput'] = throughput_estimate(fixture['draft'], report['terminal_attempts'],
                                               report['reservation'])
     assert report['throughput']['ready_for_freeze_review']
@@ -419,5 +435,275 @@ def test_freeze_checks_exact_prior_schema_even_when_report_and_prior_agree(compl
         review = json.loads(path.read_text())
         review['preparation_report_sha256'] = report['sha256']
         fixture['write'](path, resign(review))
-    with pytest.raises(ValueError, match='every nonnegative attempted-work counter'):
+    with pytest.raises(ValueError, match='accounting does not reproduce: total_counts_known'):
+        freeze_fixture(fixture)
+
+
+@pytest.fixture
+def recovery_evidence(tmp_path):
+    import json
+
+    from helpers.maniguard_phase2_protocol import (
+        RECOVERY_FAILED,
+        RECOVERY_RETIRED,
+        ROOT,
+        _sha,
+        build_preparation_amendment,
+    )
+    from helpers.maniguard_phase2_services import PRIOR_COUNTS
+
+    root = tmp_path / 'recovery-root'
+    base = json.loads((ROOT / 'configs/maniguard/phase2/preparation.json').read_text())
+    jobs = {job['job_id']: job for job in base['short_jobs']}
+
+    def write(path, value):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(value) + '\n')
+        return {'path': str(path.resolve()), 'sha256': _sha(path)}
+
+    counts = dict.fromkeys(PRIOR_COUNTS, 0)
+    counts['physics_steps'] = 86
+    receipt = {'job': jobs[RECOVERY_FAILED], 'output': str(root / 'episodes' / RECOVERY_FAILED),
+               'protocol_sha256': base['sha256'], 'status': 'invalid', 'returncode': 1,
+               'ledger': {**counts, 'phase': 'failed'}, 'started_at': 1000.0,
+               'elapsed_seconds': 2.0, 'short_check': True}
+    partial_dir = root / 'partial'
+    sources = [write(partial_dir / 'inputs/preparation/preparation.json', base),
+               write(partial_dir / 'inputs/preparation/attempts' / (RECOVERY_FAILED + '.json'), receipt)]
+    used = [job_id for job_id in jobs if job_id not in (RECOVERY_RETIRED, 'short-clutter-stochastic')]
+    for job_id in used:
+        if job_id == RECOVERY_FAILED:
+            continue
+        prior_receipt = {**receipt, 'job': jobs[job_id], 'status': 'valid', 'returncode': 0,
+                         'output': str(root / 'episodes' / job_id)}
+        sources.append(write(partial_dir / 'inputs/preparation/attempts' / (job_id + '.json'),
+                             prior_receipt))
+    report = {'schema': 'maniguard-phase2-preparation-report-v1', 'timestamp': 1100.0,
+              'pending_receipts': [], 'pending_setup_lifecycle': [],
+              'terminal_attempts': [{'job_id': job_id, 'valid': job_id != RECOVERY_FAILED}
+                                    for job_id in used],
+              'absent_or_nonterminal_jobs': [RECOVERY_RETIRED, 'short-clutter-stochastic'] +
+                                            [job['job_id'] for job in base['full_jobs']],
+              'sources': sources}
+    report_path = partial_dir / 'report.json'
+    write(report_path, resign(report))
+    audit_dir = root / 'audit'
+    subject = write(audit_dir / 'receipt.json', receipt)
+    audit = {'schema': 'maniguard-phase2-terminal-cost-audit-v1',
+             'status': 'source_reconciled_terminal_counts', 'job_id': RECOVERY_FAILED,
+             'output': receipt['output'], 'created_at': 1102.0, 'source_audit': {'valid': True},
+             'subject': {'receipt': subject}, 'exact_counts': counts, 'sources': [subject]}
+    audit_path = audit_dir / 'audit.json'
+    write(audit_path, resign(audit))
+    amendment = build_preparation_amendment(base, report_path, audit_path, created_at=1110.0, root=root)
+    return {'root': root, 'base': base, 'amendment': amendment, 'failed_receipt': receipt,
+            'report': report, 'report_path': report_path, 'audit': audit, 'audit_path': audit_path,
+            'write': write}
+
+
+def test_effective_recovery_keeps_failure_paid_and_changes_only_unspent_slot(recovery_evidence):
+    from helpers.maniguard_phase2_protocol import (
+        effective_preparation,
+        validate_preparation_receipt,
+    )
+
+    fixture = recovery_evidence
+    base = deepcopy(fixture['base'])
+    allocation = effective_preparation(base, fixture['amendment'], root=fixture['root'])
+    assert base == fixture['base']
+    assert len(allocation['short_jobs']) == 12
+    assert sum(job['max_steps'] for job in allocation['short_jobs']) == 384
+    assert allocation['budget'] == base['budget']
+    assert allocation['full_jobs'] == base['full_jobs'] and len(allocation['full_jobs']) == 24
+    assert allocation['retired_job_ids'] == ['short-clutter-composition']
+    assert 'short-clutter-identity' in {job['job_id'] for job in allocation['short_jobs']}
+    failed = allocation['resolved_failures']['short-clutter-identity']
+    assert failed['replacement_job_id'] == 'short-clutter-identity-recovery'
+    assert failed['exact_counts']['physics_steps'] == 86
+    assert validate_preparation_receipt(fixture['failed_receipt'], allocation) is True
+    assert fixture['failed_receipt']['status'] == 'invalid'
+
+
+@pytest.mark.parametrize('mutation', ['budget', 'seed', 'already_claimed', 'wrong_failed_job'])
+def test_recovery_cannot_expand_or_reuse_allocations(recovery_evidence, mutation):
+    from helpers.maniguard_phase2_protocol import effective_preparation
+
+    fixture = recovery_evidence
+    amendment = deepcopy(fixture['amendment'])
+    if mutation == 'budget':
+        amendment['budget']['short_attempts'] = 13
+    elif mutation == 'seed':
+        amendment['replacement_job']['seed'] = 1
+    elif mutation == 'wrong_failed_job':
+        amendment['failed_job_id'] = 'short-jar-identity'
+    else:
+        report = deepcopy(fixture['report'])
+        report['terminal_attempts'].append({'job_id': 'short-clutter-composition', 'valid': True})
+        reference = fixture['write'](fixture['report_path'], resign(report))
+        amendment['pre_recovery_report'] = reference
+    with pytest.raises(ValueError, match='unused|unused replacement'):
+        effective_preparation(fixture['base'], resign(amendment), root=fixture['root'])
+
+
+@pytest.mark.parametrize('counter,value', [('policy_control_steps', 1), ('policy_queries', 1),
+                                          ('encoder_image_calls', 1), ('physics_steps', 87)])
+def test_recovery_requires_exact_initialization_only_costs(recovery_evidence, counter, value):
+    from helpers.maniguard_phase2_protocol import effective_preparation
+
+    fixture = recovery_evidence
+    audit = deepcopy(fixture['audit'])
+    audit['exact_counts'][counter] = value
+    reference = fixture['write'](fixture['audit_path'], resign(audit))
+    amendment = deepcopy(fixture['amendment'])
+    amendment['failure_accounting'] = reference
+    with pytest.raises(ValueError, match='initialization before|preserved terminal ledger'):
+        effective_preparation(fixture['base'], resign(amendment), root=fixture['root'])
+
+
+def test_replacement_claim_is_prospective_and_failed_row_cannot_become_valid(recovery_evidence):
+    from helpers.maniguard_phase2_protocol import (
+        effective_preparation,
+        validate_preparation_receipt,
+    )
+
+    fixture = recovery_evidence
+    allocation = effective_preparation(fixture['base'], fixture['amendment'], root=fixture['root'])
+    replacement = fixture['amendment']['replacement_job']
+    receipt = {'job': replacement, 'protocol_sha256': fixture['base']['sha256'],
+               'amendment_sha256': fixture['amendment']['sha256'], 'started_at': 1111.0}
+    assert validate_preparation_receipt(receipt, allocation)
+    receipt['started_at'] = 1109
+    with pytest.raises(ValueError, match='before amendment creation'):
+        validate_preparation_receipt(receipt, allocation)
+    receipt.pop('amendment_sha256')
+    with pytest.raises(ValueError, match='lacks its prospective amendment'):
+        validate_preparation_receipt(receipt, allocation)
+    wrong = deepcopy(fixture['failed_receipt'])
+    wrong['status'] = 'valid'
+    with pytest.raises(ValueError, match='original invalid paid attempt'):
+        validate_preparation_receipt(wrong, allocation)
+    retired = next(job for job in fixture['base']['short_jobs'] if job['job_id'] == 'short-clutter-composition')
+    with pytest.raises(ValueError, match='effective preparation assignment'):
+        validate_preparation_receipt({'job': retired, 'protocol_sha256': fixture['base']['sha256']}, allocation)
+
+
+@pytest.fixture
+def completed_recovery_freeze(tmp_path, monkeypatch):
+    import json
+
+    from test_maniguard_phase2_preparation_report import recovery_fixture, write
+
+    from helpers import maniguard_phase2_preparation_report as reporting
+    from helpers.maniguard_phase2_protocol import REVIEW_SCHEMA, _sha
+
+    fixture = recovery_fixture(tmp_path, monkeypatch)
+    root, draft = fixture['root'], json.loads(fixture['pilot'].read_text())
+    directory = root / 'completed-recovery-report'
+    report = reporting.build_report(fixture['preparation'], fixture['setup'], directory,
+                                    pilot_path=fixture['pilot'], amendment_path=fixture['amendment'],
+                                    timestamp=1200)
+    assert report['ready_for_freeze_review'], report['invalid_reasons']
+    findings = {
+        'identity_equivalence': {'same_frame_transformation_preserved': True,
+                                 'eight_action_query_cadence_preserved': True,
+                                 'trajectory_identity_claimed': False},
+        'completion_semantics': {'requested_sequence_checklists_reviewed':
+                                 ['cabinet', 'clutter', 'dusty', 'jar', 'lid', 'stack'],
+                                 'benchmark_monitor_unchanged': True,
+                                 'completion_signals_excluded_from_actor_critic': True},
+        'runtime_execution_audit': {'tests_passed': True,
+                                    'fresh_process_and_resume_audited': True,
+                                    'cost_and_invalid_result_paths_audited': True},
+    }
+    reviews = {}
+    for name, details in findings.items():
+        evidence = {'schema': REVIEW_SCHEMA, 'check': name, 'passed': True,
+                    'preparation_report_sha256': report['sha256'], 'input_files': draft['input_files'],
+                    'implementation_files': draft['implementation_files'], 'findings': details,
+                    'sources': [{'path': str(fixture['audit']), 'sha256': _sha(fixture['audit'])}]}
+        reviews[name] = root / 'reviews' / (name + '.json')
+        write(reviews[name], resign(evidence))
+    return {**fixture, 'draft': draft, 'report': report, 'path': directory / 'report.json',
+            'reviews': reviews, 'write': write}
+
+
+def test_completed_recovery_can_freeze_without_relabelling_or_refunding_failure(completed_recovery_freeze):
+    import json
+
+    fixture = completed_recovery_freeze
+    frozen = freeze_fixture(fixture)
+    assert frozen['status'] == 'frozen'
+    assert frozen['preparation']['amendment_sha256'] == json.loads(fixture['amendment'].read_text())['sha256']
+    assert frozen['resource_envelope']['policy_actions_max'] == 1328984
+    report = fixture['report']
+    assert sum(row['valid'] for row in report['terminal_attempts']) == 35
+    assert report['accounting']['attempt_count'] == 36
+    assert report['total_counts_known']['physics_steps'] == 34 * 200 + 1 + 86
+    assert report['integration_coverage']['omitted_checks']
+    failed = json.loads((fixture['path'].parent / 'audited_episodes/short-clutter-identity.json').read_text())
+    assert failed['valid'] is False and failed['process_audit']['valid'] is False
+    assert fixture['failed_receipt'].read_bytes() == fixture['failed_receipt_bytes']
+    assert len(report['effective_preparation']['pre_recovery_receipts']) == 35
+
+
+def _rewrite_report_source(fixture, path, value):
+    from helpers.maniguard_phase2_protocol import _sha
+
+    fixture['write'](path, value)
+    report = deepcopy(fixture['report'])
+    next(row for row in report['sources'] if row['path'] == str(path))['sha256'] = _sha(path)
+    fixture['write'](fixture['path'], resign(report))
+
+
+@pytest.mark.parametrize('mutation', ['raw_validity', 'process_summary', 'features'])
+def test_freeze_binds_short_summaries_and_features_to_captured_evidence(completed_freeze_evidence, mutation):
+    import json
+
+    fixture = completed_freeze_evidence
+    if mutation == 'features':
+        path = fixture['path'].parent / 'engineering-features.json'
+        value = json.loads(path.read_text())
+        value[0]['features'][0][0] += 0.1
+        expected = 'Engineering features differ'
+    else:
+        path = fixture['path'].parent / 'audited_episodes/short-jar-identity.json'
+        value = json.loads(path.read_text())
+        if mutation == 'raw_validity':
+            value['valid'] = False
+            expected = 'valid coverage'
+        else:
+            value['process_audit']['valid'] = False
+            expected = 'process audit does not reproduce'
+    _rewrite_report_source(fixture, path, value)
+    with pytest.raises(ValueError, match=expected):
+        freeze_fixture(fixture)
+
+
+@pytest.mark.parametrize('mutation', ['failed_valid', 'overlay', 'snapshot_inventory', 'historical_receipt'])
+def test_recovery_freeze_rejects_relabelled_failure_or_unbound_accounting(completed_recovery_freeze, mutation):
+    import json
+
+    fixture = completed_recovery_freeze
+    report = json.loads(json.dumps(fixture['report']))
+    if mutation in ('failed_valid', 'historical_receipt'):
+        if mutation == 'failed_valid':
+            path = fixture['path'].parent / 'audited_episodes/short-clutter-identity.json'
+            value = json.loads(path.read_text())
+            value['valid'] = True
+            expected = 'valid coverage'
+        else:
+            path = fixture['path'].parent / 'inputs/preparation/attempts/short-jar-original.json'
+            value = json.loads(path.read_text())
+            value['elapsed_seconds'] += 1
+            expected = 'Pre-recovery receipt was changed'
+        _rewrite_report_source(fixture, path, value)
+    else:
+        if mutation == 'overlay':
+            report['cost_reconciliations'][0]['exact_counts']['physics_steps'] = 0
+            expected = 'cost accounting does not reproduce'
+        else:
+            report['recovery_snapshots'].pop(str(fixture['audit']))
+            expected = 'Recovery snapshot inventory'
+        fixture['write'](fixture['path'], resign(report))
+    with pytest.raises(ValueError, match=expected):
         freeze_fixture(fixture)

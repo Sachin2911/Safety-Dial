@@ -250,11 +250,13 @@ def compare_identity(original, identity, *, root=ROOT, verify_upstream=True):
     return report
 
 
-def audit_preparation(directory, *, receipt_ledgers_only=False):
+def audit_preparation(directory, *, receipt_ledgers_only=False, allocation=None):
     """Account for every receipt, including failures, pending jobs and orphan outputs.
 
     With receipt_ledgers_only=True, use captured receipt ledgers without opening
-    episode ledgers that may still be changing.
+    episode ledgers that may still be changing. An optional validated effective
+    allocation binds a prospective amendment while retaining the original manifest
+    and failed receipts. It changes assignment validation, never raw cost evidence.
     Receipt elapsed time is launcher wall time; pending attempts reserve their full
     timeout. These process totals exclude policy startup, diagnostics and idle GPU
     reservation, which must be reported separately before claiming total GPU hours.
@@ -267,6 +269,20 @@ def audit_preparation(directory, *, receipt_ledgers_only=False):
     raw = {key: value for key, value in manifest.items() if key != "sha256"}
     if _digest(raw) != manifest.get("sha256"):
         issues.append("Preparation manifest checksum mismatch")
+    if allocation is not None:
+        if (allocation.get("base_preparation_sha256") != manifest.get("sha256")
+                or allocation.get("sha256") != _digest({key: value for key, value in allocation.items()
+                                                        if key != "sha256"})
+                or allocation.get("budget") != manifest["budget"]):
+            raise ValueError("Effective preparation allocation is unbound or changes the budget")
+        from helpers.maniguard_phase2_protocol import validate_preparation_receipt
+        for job_id, expected in allocation.get("pre_recovery_receipts", {}).items():
+            path = directory / "attempts" / (job_id + ".json")
+            try:
+                if _digest(_json(path)) != expected:
+                    issues.append("Original paid attempt inventory changed: " + job_id)
+            except (OSError, ValueError, TypeError):
+                issues.append("Original paid attempt inventory is missing or malformed: " + job_id)
     declared = {job["job_id"]: job for job in manifest["short_jobs"] + manifest["full_jobs"]}
     attempts, seen_outputs = [], set()
     for path in sorted((directory / "attempts").glob("*.json")):
@@ -274,7 +290,12 @@ def audit_preparation(directory, *, receipt_ledgers_only=False):
             receipt = _json(path)
             job = receipt["job"]
             output = Path(receipt["output"]).resolve()
-            if receipt.get("protocol_sha256") != manifest["sha256"] or declared.get(job["job_id"]) != job:
+            if allocation is not None:
+                try:
+                    validate_preparation_receipt(receipt, allocation)
+                except (ValueError, TypeError, KeyError) as error:
+                    issues.append("Receipt differs from effective assignment: " + path.name + ": " + str(error))
+            elif receipt.get("protocol_sha256") != manifest["sha256"] or declared.get(job["job_id"]) != job:
                 issues.append("Receipt differs from frozen assignment: " + path.name)
             short = job.get("max_steps") is not None
             if (type(receipt.get("short_check")) is not bool or receipt["short_check"] != short
@@ -351,6 +372,9 @@ def audit_preparation(directory, *, receipt_ledgers_only=False):
     if assigned_actions > action_ceiling or costs.get("policy_control_steps", 0) > action_ceiling:
         issues.append("Preparation policy-action ceiling exceeded")
     return {"valid": not issues, "invalid_reasons": issues, "attempts": attempts,
+            "base_preparation_sha256": manifest["sha256"],
+            "amendment_sha256": allocation.get("amendment_sha256") if allocation is not None else None,
+            "effective_allocation_sha256": allocation.get("sha256") if allocation is not None else None,
             "attempt_count": len(attempts), "ceilings": categories,
             "unclassified_attempts": sum(row["short_check"] is None for row in attempts),
             "assigned_action_exposure": assigned_actions, "policy_action_ceiling": action_ceiling,

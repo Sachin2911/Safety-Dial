@@ -274,9 +274,73 @@ def test_exited_leader_does_not_leave_descendants_running(tmp_path):
                                killpg=killpg, group_alive=lambda pid: alive[0],
                                wall=clock, monotonic=clock, sleep=clock.advance)
     assert record['returncode'] == 0 and record['orphaned_descendants'] is True
+    assert record['descendants_observed_after_leader_exit'] is True
+    assert record['transient_descendants'] is False
+    assert record['descendant_exit_grace_seconds'] == pytest.approx(5)
+    assert record['process_elapsed_seconds'] == pytest.approx(5)
     assert 'descendants remained' in record['error']
     assert record['process_group_remaining'] is False
     assert signals == [(5678, signal.SIGTERM)]
+
+
+def test_eof_cleanup_descendants_can_exit_naturally_without_invalidation(tmp_path):
+    clock, signals = Clock(), []
+    started = clock()
+    process = SimpleNamespace(pid=5678, poll=lambda: 0, wait=lambda timeout: 0)
+    record = run_fresh_episode(
+        ['fake'], tmp_path / 'natural.log', 20,
+        popen=lambda *args, **kwargs: process,
+        killpg=lambda pid, sig: signals.append((pid, sig)),
+        group_alive=lambda pid: clock() - started < .25,
+        wall=clock, monotonic=clock, sleep=clock.advance,
+    )
+    assert record['returncode'] == 0 and not record.get('error')
+    assert record['descendants_observed_after_leader_exit'] is True
+    assert record['transient_descendants'] is True and not record.get('orphaned_descendants')
+    assert record['process_group_remaining'] is False
+    assert .25 <= record['descendant_exit_grace_seconds'] <= .35
+    assert record['process_elapsed_seconds'] == record['descendant_exit_grace_seconds']
+    assert signals == []
+
+
+def test_persistent_orphan_reaches_kill_after_two_bounded_graces(tmp_path):
+    clock, signals, alive = Clock(), [], [True]
+    process = SimpleNamespace(pid=5678, poll=lambda: 0, wait=lambda timeout: 0)
+
+    def killpg(pid, sig):
+        signals.append((pid, sig))
+        if sig == signal.SIGKILL:
+            alive[0] = False
+
+    record = run_fresh_episode(
+        ['fake'], tmp_path / 'persistent.log', 20,
+        popen=lambda *args, **kwargs: process, killpg=killpg,
+        group_alive=lambda pid: alive[0], wall=clock, monotonic=clock, sleep=clock.advance,
+        termination_grace=2,
+    )
+    assert record['returncode'] == 0 and record['orphaned_descendants']
+    assert record['error'] and not record['transient_descendants']
+    assert record['descendant_exit_grace_seconds'] == pytest.approx(2)
+    assert record['process_elapsed_seconds'] == pytest.approx(4)
+    assert record['process_group_remaining'] is False
+    assert signals == [(5678, signal.SIGTERM), (5678, signal.SIGKILL)]
+
+
+def test_group_surviving_kill_still_invalid_after_natural_grace(tmp_path):
+    clock, signals = Clock(), []
+    process = SimpleNamespace(pid=5678, poll=lambda: 0, wait=lambda timeout: 0)
+    record = run_fresh_episode(
+        ['fake'], tmp_path / 'remaining.log', 20,
+        popen=lambda *args, **kwargs: process,
+        killpg=lambda pid, sig: signals.append((pid, sig)),
+        group_alive=lambda pid: True, wall=clock, monotonic=clock, sleep=clock.advance,
+        termination_grace=2,
+    )
+    assert record['returncode'] == 0 and record['orphaned_descendants']
+    assert record['process_group_remaining'] is True
+    assert 'did not exit after SIGKILL' in record['error']
+    assert record['process_elapsed_seconds'] == pytest.approx(6)
+    assert signals == [(5678, signal.SIGTERM), (5678, signal.SIGKILL)]
 
 
 def test_interrupt_still_cleans_group_and_returns_auditable_record(tmp_path):

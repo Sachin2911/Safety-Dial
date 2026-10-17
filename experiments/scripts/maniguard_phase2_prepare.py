@@ -17,6 +17,8 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments"))
 
 from helpers.maniguard_phase2_model import genome_hash, identity_genome, load_model
+from helpers.maniguard_phase2_optim import record_hash
+from helpers.maniguard_phase2_protocol import effective_preparation, validate_preparation_receipt
 from helpers.maniguard_phase2_services import (
     active_episode_processes,
     atomic_json,
@@ -94,6 +96,9 @@ def _main():
                         help="Reanalyse terminal saved attempts; preserve prior verdicts and do no physics")
     parser.add_argument("--protocol", type=Path,
                         default=ROOT / "configs/maniguard/phase2/preparation.json")
+    parser.add_argument("--amendment", type=Path,
+                        default=ROOT / "configs/maniguard/phase2/preparation_amendment.json",
+                        help="Optional prospective reassignment; original manifest remains unchanged")
     parser.add_argument("--output", type=Path,
                         default=ROOT / "runs/maniguard/phase2/preparation-v1")
     parser.add_argument("--reservation", type=Path,
@@ -102,7 +107,9 @@ def _main():
                         default=ROOT / "data/maniguard/phase2/models/identity.npz")
     args = parser.parse_args()
     protocol = load_preparation(args.protocol)
-    mapping = {row["job_id"]: row for row in protocol["short_jobs"] + protocol["full_jobs"]}
+    amendment = json.loads(args.amendment.read_text()) if args.amendment.exists() else None
+    allocation = effective_preparation(protocol, amendment)
+    mapping = {row["job_id"]: row for row in allocation["short_jobs"] + allocation["full_jobs"]}
     if len(args.jobs) != len(set(args.jobs)) or not set(args.jobs) <= set(mapping):
         raise ValueError("Select distinct, predeclared preparation jobs")
     jobs = [mapping[key] for key in args.jobs]
@@ -111,6 +118,14 @@ def _main():
     if genome_hash(load_model(args.model)[0]) != genome_hash(identity_genome()):
         raise ValueError("Preparation uses the explicitly declared identity weights")
     output = args.output.resolve()
+    if amendment is not None:
+        if output != Path(allocation["preparation_output"]).resolve():
+            raise ValueError("Amended preparation must use the original output and paid attempt inventory")
+        for job_id, digest in allocation["pre_recovery_receipts"].items():
+            original_receipt = output / "attempts" / (job_id + ".json")
+            if (not original_receipt.exists()
+                    or record_hash(json.loads(original_receipt.read_text())) != digest):
+                raise ValueError("The complete original paid attempt inventory must remain unchanged")
     output.mkdir(parents=True, exist_ok=True)
     receipts = output / "attempts"
     receipts.mkdir(exist_ok=True)
@@ -119,9 +134,19 @@ def _main():
         raise ValueError("Existing preparation records use a different protocol")
     if not snapshot.exists():
         atomic_json(snapshot, protocol)
+    amended_snapshot = output / "preparation_amendment.json"
+    if amended_snapshot.exists() and json.loads(amended_snapshot.read_text()) != amendment:
+        raise ValueError("Existing preparation records use a different amendment")
+    if amendment is not None and not amended_snapshot.exists():
+        atomic_json(amended_snapshot, amendment)
+    for retired in allocation["retired_job_ids"]:
+        if (receipts / (retired + ".json")).exists():
+            raise ValueError("Cannot retire a preparation slot that was already claimed")
     for job in jobs:
         receipt_path = receipts / (job["job_id"] + ".json")
         if args.reaudit:
+            if job["job_id"] in allocation["resolved_failures"]:
+                raise ValueError("Resolved failure remains immutable; use its separate cost audit")
             record = reaudit_attempt(receipt_path, job, protocol["sha256"])
             print(json.dumps({"job": job["job_id"], "status": record["status"],
                               "physics_rerun": False}), flush=True)
@@ -133,17 +158,25 @@ def _main():
                              + job["job_id"])
         short = job["max_steps"] is not None
         if not short:
-            required = [receipts / (row["job_id"] + ".json")
-                        for row in protocol["short_jobs"]]
-            if any(not path.exists() or json.loads(path.read_text()).get("status") != "valid"
-                   for path in required):
-                raise ValueError("Complete and audit assigned short integration checks first")
+            for assigned in allocation["short_jobs"]:
+                required = receipts / (assigned["job_id"] + ".json")
+                if not required.exists():
+                    raise ValueError("Complete and audit assigned short integration checks first")
+                prior_record = json.loads(required.read_text())
+                validate_preparation_receipt(prior_record, allocation)
+                if (assigned["job_id"] not in allocation["resolved_failures"]
+                        and prior_record.get("status") != "valid"):
+                    raise ValueError("Complete and audit assigned short integration checks first")
         timeout = protocol["budget"]["short_process_timeout_seconds" if short else
                                      "full_process_timeout_seconds"]
         hour_limit = protocol["budget"]["integration_gpu_hour_ceiling" if short else
                                         "full_preparation_gpu_hour_ceiling"]
         prior = [json.loads(path.read_text()) for path in receipts.glob("*.json")]
+        for prior_record in prior:
+            validate_preparation_receipt(prior_record, allocation)
         relevant = [row for row in prior if bool(row["short_check"]) == short]
+        if len(relevant) >= protocol["budget"]["short_attempts" if short else "full_attempts"]:
+            raise ValueError("Preparation attempt ceiling already consumed")
         if any(row.get("status") == "started" for row in prior):
             raise ValueError("An earlier attempt is unresolved; do not duplicate live work")
         spent = sum(row.get("elapsed_seconds", row["timeout_seconds"]) for row in relevant)
@@ -183,10 +216,14 @@ def _main():
         record = {"job": job, "short_check": short, "status": "started", "command": command,
                   "protocol_sha256": protocol["sha256"], "timeout_seconds": timeout,
                   "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                  "started_at": time.time(),
                   "coordinator_pid": os.getpid(), "output": str(episode),
                   "allocated_gpu_seconds_before_attempt": allocated_seconds,
                   "reservation_sha256": hashlib.sha256(args.reservation.read_bytes()).hexdigest(),
                   "launcher_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
+        if amendment is not None:
+            record["amendment_sha256"] = amendment["sha256"]
+        validate_preparation_receipt(record, allocation)
         # Exclusive claim is durable before spawning physics work.
         with receipt_path.open("x") as stream:
             stream.write(json.dumps(record, indent=2) + "\n")

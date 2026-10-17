@@ -65,8 +65,10 @@ def load_protocol(path=CONFIG / 'pilot.json'):
 
 def _read_inputs(config_dir):
     config_dir = Path(config_dir)
-    return {name: json.loads((config_dir / f'{name}.json').read_text())
-            for name in INPUT_NAMES}
+    names = [*INPUT_NAMES]
+    if (config_dir / 'preparation_amendment.json').is_file():
+        names.append('preparation_amendment')
+    return {name: json.loads((config_dir / f'{name}.json').read_text()) for name in names}
 
 
 def _panels(splits, registry):
@@ -181,6 +183,7 @@ def build_pilot(config_dir=CONFIG, root=ROOT):
     config_dir, root = Path(config_dir), Path(root)
     inputs = _read_inputs(config_dir)
     registry = inputs['families']['families']
+    allocation = effective_preparation(inputs['preparation'], inputs.get('preparation_amendment'), root=root)
     panels = _panels(inputs['splits'], registry)
     protocol = {
         'schema': SCHEMA, 'status': 'freeze_incomplete',
@@ -245,6 +248,8 @@ def build_pilot(config_dir=CONFIG, root=ROOT):
                         'max_short_policy_actions': 32, 'allowed_families': list(FAMILIES),
                         'assignment_status': inputs['preparation']['status'],
                         'manifest': 'configs/maniguard/phase2/preparation.json',
+                        'effective_allocation_sha256': allocation['sha256'],
+                        'amendment_sha256': allocation['amendment_sha256'],
                         'selection_partition': 'train', 'integration_partition': 'engineering'},
         'freeze_provenance': None,
         'freeze_checks': {name: {'passed': False, 'evidence_path': None, 'sha256': None}
@@ -333,10 +338,295 @@ def _validate_preparation(manifest, inputs):
         raise ValueError('Preparation action allocation differs from its declared cap')
 
 
+AMENDMENT_SCHEMA = 'maniguard-phase2-preparation-amendment-v1'
+EFFECTIVE_SCHEMA = 'maniguard-phase2-effective-preparation-v1'
+RECOVERY_FAILED = 'short-clutter-identity'
+RECOVERY_RETIRED = 'short-clutter-composition'
+RECOVERY_REPLACEMENT = 'short-clutter-identity-recovery'
+RECOVERY_OMISSION = 'Clutter composition engineering check; Jar and Stack composition coverage retained'
+
+
+def _bound_artifact(reference, root):
+    path = Path(reference['path'])
+    path = path.resolve() if path.is_absolute() else (Path(root) / path).resolve()
+    if _artifact(path, root)['sha256'] != reference['sha256']:
+        raise ValueError('Preparation amendment evidence file changed: ' + str(path))
+    return path, _read_hashed_json(path)
+
+
+def effective_preparation(base, amendment=None, *, root=ROOT):
+    """Validate one prospective paid recovery and return a separate derived allocation.
+
+    The original manifest and all its existing receipts retain their original hashes.
+    The failed initialization remains an invalid paid attempt; only its source-reconciled
+    counters can resolve accounting. Exactly one still-unclaimed composition slot may
+    become deterministic identity recovery, preserving all counts, caps and full jobs.
+    No amendment or artifact is written by this function.
+    """
+    from helpers.maniguard_phase2_services import PRIOR_COUNTS
+
+    if (base.get('schema') != 'maniguard-phase2-preparation-v1' or
+            base.get('sha256') != record_hash({key: value for key, value in base.items()
+                                               if key != 'sha256'})):
+        raise ValueError('Original preparation manifest schema/hash mismatch')
+    allocation = {'schema': EFFECTIVE_SCHEMA, 'base_preparation_sha256': base['sha256'],
+                  'amendment_sha256': None, 'amendment_created_at': None,
+                  'short_jobs': deepcopy(base['short_jobs']), 'full_jobs': deepcopy(base['full_jobs']),
+                  'budget': deepcopy(base['budget']), 'families': deepcopy(base['families']),
+                  'reference_selection': deepcopy(base['reference_selection']),
+                  'retired_job_ids': [], 'resolved_failures': {}, 'omitted_checks': [],
+                  'preparation_output': None, 'pre_recovery_receipts': {}}
+    if amendment is not None:
+        if (amendment.get('schema') != AMENDMENT_SCHEMA or
+                amendment.get('sha256') != record_hash({key: value for key, value in amendment.items()
+                                                        if key != 'sha256'}) or
+                amendment.get('base_preparation_sha256') != base['sha256']):
+            raise ValueError('Preparation amendment is not bound to the immutable original manifest')
+        expected_keys = {'schema', 'created_at', 'base_preparation_sha256', 'failed_job_id',
+                         'retired_unspent_job_id', 'replacement_job', 'budget', 'pre_recovery_report',
+                         'failure_accounting', 'omitted_check', 'sha256'}
+        if set(amendment) != expected_keys:
+            raise ValueError('Unexpected preparation amendment field/domain')
+        created = amendment['created_at']
+        if type(created) not in (int, float) or not math.isfinite(created) or created <= 0:
+            raise ValueError('Preparation amendment needs a finite prospective creation time')
+        jobs = {job['job_id']: job for job in base['short_jobs']}
+        replacement = {**jobs[RECOVERY_FAILED], 'job_id': RECOVERY_REPLACEMENT}
+        if (amendment['failed_job_id'] != RECOVERY_FAILED or
+                amendment['retired_unspent_job_id'] != RECOVERY_RETIRED or
+                amendment['replacement_job'] != replacement or amendment['budget'] != base['budget'] or
+                amendment['omitted_check'] != RECOVERY_OMISSION):
+            raise ValueError('Only the declared unused Clutter slot can become identical-setting recovery')
+        if (base['budget']['short_attempts'] != 12 or base['budget']['short_actions_per_attempt'] != 32 or
+                base['budget']['integration_gpu_hour_ceiling'] != 4 or len(base['full_jobs']) != 24):
+            raise ValueError('Recovery cannot increase the preparation allocation')
+        report_path, before = _bound_artifact(amendment['pre_recovery_report'], root)
+        if (before.get('schema') != 'maniguard-phase2-preparation-report-v1' or
+                before.get('pending_receipts') or before.get('pending_setup_lifecycle') or
+                created < before['timestamp']):
+            raise ValueError('Recovery must follow a terminal immutable preparation checkpoint')
+        prior_sources = _verify_sources(before['sources'], root, within=report_path.parent)
+        original_path = report_path.parent / 'inputs/preparation/preparation.json'
+        if str(original_path) not in prior_sources or json.loads(original_path.read_text()) != base:
+            raise ValueError('Pre-recovery report is not bound to the original preparation manifest')
+        prior_rows = {row['job_id']: row for row in before['terminal_attempts']}
+        if (len(prior_rows) != len(before['terminal_attempts']) or RECOVERY_FAILED not in prior_rows or
+                prior_rows[RECOVERY_FAILED]['valid'] is not False or
+                any(row['valid'] is not True for job_id, row in prior_rows.items()
+                    if job_id != RECOVERY_FAILED) or
+                RECOVERY_RETIRED in prior_rows or
+                RECOVERY_RETIRED not in before['absent_or_nonterminal_jobs']):
+            raise ValueError('Recovery checkpoint must retain the one failure and an unused replacement slot')
+        audit_path, audit = _bound_artifact(amendment['failure_accounting'], root)
+        if (audit.get('schema') != 'maniguard-phase2-terminal-cost-audit-v1' or
+                audit.get('status') != 'source_reconciled_terminal_counts' or
+                audit.get('job_id') != RECOVERY_FAILED or created < audit['created_at'] or
+                audit.get('source_audit', {}).get('valid') is not True):
+            raise ValueError('Recovery needs an exact source-backed terminal failure accounting audit')
+        audit_sources = _verify_sources(audit['sources'], root, within=audit_path.parent)
+        receipt_ref = audit['subject']['receipt']
+        receipt_path = Path(receipt_ref['path']).resolve()
+        if audit_sources.get(str(receipt_path)) != receipt_ref['sha256']:
+            raise ValueError('Failure accounting does not bind its immutable original receipt')
+        receipt = json.loads(receipt_path.read_text())
+        prior_receipt_path = report_path.parent / 'inputs/preparation/attempts' / (RECOVERY_FAILED + '.json')
+        if (str(prior_receipt_path) not in prior_sources or
+                record_hash(json.loads(prior_receipt_path.read_text())) != record_hash(receipt) or
+                receipt.get('status') != 'invalid' or receipt.get('job') != jobs[RECOVERY_FAILED] or
+                receipt.get('output') != audit['output'] or
+                receipt.get('protocol_sha256') != base['sha256']):
+            raise ValueError('Accounting must preserve the same invalid failed physical attempt')
+        counts = audit.get('exact_counts', {})
+        if set(counts) != set(PRIOR_COUNTS) or any(type(value) is not int or value < 0
+                                                  for value in counts.values()):
+            raise ValueError('Failure accounting requires every exact attempted-work counter')
+        if any(value != 0 for key, value in counts.items() if key != 'physics_steps'):
+            raise ValueError('Recovery exception is restricted to initialization before controller/inference work')
+        if counts['physics_steps'] != receipt.get('ledger', {}).get('physics_steps'):
+            raise ValueError('Audited failure physics must equal the preserved terminal ledger')
+        preparation_output = str(Path(audit['output']).resolve().parent)
+        all_jobs = {job['job_id']: job for job in base['short_jobs'] + base['full_jobs']}
+        prior_receipts = {}
+        for job_id in prior_rows:
+            path = report_path.parent / 'inputs/preparation/attempts' / (job_id + '.json')
+            if str(path) not in prior_sources:
+                raise ValueError('Recovery checkpoint lacks a bound historical receipt: ' + job_id)
+            historical = json.loads(path.read_text())
+            if (historical.get('job') != all_jobs.get(job_id) or
+                    historical.get('protocol_sha256') != base['sha256'] or
+                    str(Path(historical['output']).resolve().parent) != preparation_output or
+                    historical.get('status') not in ('valid', 'invalid')):
+                raise ValueError('Historical recovery receipt differs from its original assignment')
+            prior_receipts[job_id] = record_hash(historical)
+        allocation['short_jobs'] = [replacement if job['job_id'] == RECOVERY_RETIRED else job
+                                    for job in allocation['short_jobs']]
+        allocation.update(amendment_sha256=amendment['sha256'], amendment_created_at=created,
+                          retired_job_ids=[RECOVERY_RETIRED], omitted_checks=[RECOVERY_OMISSION],
+                          preparation_output=preparation_output, pre_recovery_receipts=prior_receipts,
+                          resolved_failures={RECOVERY_FAILED: {
+                              'replacement_job_id': RECOVERY_REPLACEMENT,
+                              'exact_counts': deepcopy(counts),
+                              'failure_accounting': deepcopy(amendment['failure_accounting']),
+                              'failed_output': audit['output'],
+                              'failed_receipt_content_sha256': record_hash(receipt)}})
+    allocation['sha256'] = record_hash(allocation)
+    return allocation
+
+
+def validate_preparation_receipt(receipt, allocation):
+    """Bind original and amended receipts without rewriting historical protocol hashes."""
+    jobs = {job['job_id']: job for job in allocation['short_jobs'] + allocation['full_jobs']}
+    job = receipt.get('job', {})
+    job_id = job.get('job_id')
+    if (receipt.get('protocol_sha256') != allocation['base_preparation_sha256'] or
+            jobs.get(job_id) != job):
+        raise ValueError('Receipt differs from its effective preparation assignment')
+    amendment = receipt.get('amendment_sha256')
+    if amendment is not None and amendment != allocation['amendment_sha256']:
+        raise ValueError('Receipt amendment hash differs from the effective allocation')
+    replacements = {value['replacement_job_id'] for value in allocation['resolved_failures'].values()}
+    if job_id in replacements and amendment != allocation['amendment_sha256']:
+        raise ValueError('Replacement receipt lacks its prospective amendment hash')
+    if amendment is not None:
+        started = receipt.get('started_at')
+        if (type(started) not in (int, float) or not math.isfinite(started) or
+                started < allocation['amendment_created_at']):
+            raise ValueError('Amended receipt was claimed before amendment creation')
+    if job_id in allocation['resolved_failures']:
+        failed = allocation['resolved_failures'][job_id]
+        if (receipt.get('status') != 'invalid' or receipt.get('output') != failed['failed_output'] or
+                record_hash(receipt) != failed['failed_receipt_content_sha256']):
+            raise ValueError('Resolved infrastructure failure must remain the original invalid paid attempt')
+    return True
+
+
+def build_preparation_amendment(base, pre_recovery_report, failure_accounting, *, created_at, root=ROOT):
+    """Return the narrowly scoped prospective amendment without writing or launching it."""
+    failed = next(job for job in base['short_jobs'] if job['job_id'] == RECOVERY_FAILED)
+    evidence = []
+    for path in (pre_recovery_report, failure_accounting):
+        reference = _artifact(path, root)
+        evidence.append({'path': str(Path(path).resolve()), 'sha256': reference['sha256']})
+    amendment = {'schema': AMENDMENT_SCHEMA, 'created_at': created_at,
+                 'base_preparation_sha256': base['sha256'], 'failed_job_id': RECOVERY_FAILED,
+                 'retired_unspent_job_id': RECOVERY_RETIRED,
+                 'replacement_job': {**failed, 'job_id': RECOVERY_REPLACEMENT},
+                 'budget': deepcopy(base['budget']), 'pre_recovery_report': evidence[0],
+                 'failure_accounting': evidence[1], 'omitted_check': RECOVERY_OMISSION}
+    amendment['sha256'] = record_hash(amendment)
+    effective_preparation(base, amendment, root=root)
+    return amendment
+
+
+def _recovery_snapshot_evidence(amendment_path, snapshots, sources, root):
+    """Bind report-local recovery copies to every retained immutable original."""
+    expected = {}
+
+    def visit(path, digest=None):
+        path = Path(path)
+        path = path.resolve() if path.is_absolute() else (Path(root) / path).resolve()
+        actual = _artifact(path, root)['sha256']
+        if digest is not None and actual != digest:
+            raise ValueError('Original recovery evidence changed: ' + str(path))
+        if str(path) in expected:
+            return
+        expected[str(path)] = actual
+        try:
+            value = json.loads(path.read_bytes())
+        except (ValueError, UnicodeDecodeError):
+            return
+        if isinstance(value, dict):
+            for reference in value.get('sources', []):
+                visit(reference['path'], reference['sha256'])
+            if value.get('schema') == AMENDMENT_SCHEMA:
+                for key in ('pre_recovery_report', 'failure_accounting'):
+                    visit(value[key]['path'], value[key]['sha256'])
+
+    if amendment_path is not None:
+        visit(amendment_path)
+    if set(snapshots) != set(expected):
+        raise ValueError('Recovery snapshot inventory differs from its immutable evidence chain')
+    for original, digest in expected.items():
+        copy = snapshots[original]
+        if copy.get('sha256') != digest or sources.get(copy.get('path')) != digest:
+            raise ValueError('Recovery snapshot differs from its preserved original: ' + original)
+
+
+def _preparation_counts(allocation, measured, receipts, jobs, captured):
+    """Reproduce raw costs and the single explicit failure overlay from saved rows."""
+    from helpers.maniguard_phase2_services import PRIOR_COUNTS
+
+    counts, coverage, unknown, reconciliations = Counter(), Counter(), [], []
+    count = lambda value: type(value) is int and value >= 0
+    for job_id in sorted(jobs, key=lambda name: name + '.json'):
+        job, row, receipt = jobs[job_id], measured[job_id], receipts[job_id]
+        baseline = job['baseline_executor']
+        complete = row.get('ledger', receipt.get('ledger', {})).get('phase') == 'completed'
+        for key in PRIOR_COUNTS:
+            value = row.get('costs', {}).get(key, 0 if key == 'actor_rpc_attempts' else None)
+            absent = baseline and key in ('encoder_image_calls', 'encoder_images',
+                                          'encoder_text_calls', 'adapter_decisions')
+            if absent:
+                value = 0
+            if count(value):
+                counts[key] += value
+                coverage[key] += 1
+                if not complete and key != 'actor_rpc_attempts' and not absent:
+                    unknown.append({'job_id': job_id, 'count': key,
+                                    'reason': 'incomplete ledger is a lower bound'})
+                if row.get('cost_provenance', {}).get(key) == 'trace_lower_bound':
+                    unknown.append({'job_id': job_id, 'count': key, 'reason': 'trace lower bound'})
+            else:
+                unknown.append({'job_id': job_id, 'count': key})
+        resolution = allocation['resolved_failures'].get(job_id)
+        if resolution is not None:
+            raw = {key: row.get('costs', {}).get(key, 0 if key == 'actor_rpc_attempts' else None)
+                   for key in PRIOR_COUNTS}
+            exact = resolution['exact_counts']
+            if row['valid'] is not False or any(value is not None and value != exact[key]
+                                               for key, value in raw.items()):
+                raise ValueError('Recovery costs disagree with the original invalid episode')
+            reconciliations.append({'job_id': job_id, 'output': receipt['output'],
+                                    'original_episode_valid': False, 'raw_costs': raw,
+                                    'exact_counts': exact,
+                                    'failure_accounting': resolution['failure_accounting']})
+    smoke = captured('inputs/setup/encoder-smoke.json')
+    failure = captured('inputs/setup/encoder-loader-failure-v1.json')
+    if smoke.get('finite') is not True or smoke.get('trainable_parameters') != 0:
+        raise ValueError('Encoder preparation smoke lacks finite/frozen evidence')
+    setup = Counter()
+    for key in PRIOR_COUNTS:
+        values = (smoke.get('costs', {}).get(key, 0), failure.get('counts', {}).get(key))
+        if not all(count(value) for value in values):
+            raise ValueError('Setup accounting lacks every exact attempted-work counter')
+        setup[key] = sum(values)
+    if {key: smoke.get('costs', {}).get(key) for key in (
+            'encoder_image_calls', 'encoder_images', 'encoder_text_calls')} != {
+                'encoder_image_calls': 5, 'encoder_images': 10, 'encoder_text_calls': 1}:
+        raise ValueError('Encoder smoke diagnostic interaction allocation changed')
+    reconciled, raw_unknown = counts.copy(), list(unknown)
+    for resolution in reconciliations:
+        for key, exact in resolution['exact_counts'].items():
+            raw = resolution['raw_costs'][key]
+            reconciled[key] += exact - (raw if count(raw) else 0)
+        unknown = [row for row in unknown if row['job_id'] != resolution['job_id']]
+    if unknown:
+        raise ValueError('Preparation has unresolved lower-bound or unknown costs')
+    return {'episode_counts_known': dict(counts), 'episode_count_coverage': dict(coverage),
+            'episode_counts_reconciled': dict(reconciled), 'setup_counts_known': dict(setup),
+            'raw_total_counts_known': {key: counts[key] + setup[key] for key in PRIOR_COUNTS},
+            'total_counts_known': {key: reconciled[key] + setup[key] for key in PRIOR_COUNTS},
+            'raw_unknown_counts': raw_unknown, 'unknown_counts': unknown,
+            'cost_reconciliations': reconciliations}
+
+
 def _preparation_evidence(report_path, draft, config_dir, root):
     # Local imports avoid the report -> protocol -> report cycle at module import time.
+    from helpers.maniguard_phase2_audit import audit_preparation
     from helpers.maniguard_phase2_preparation_report import (
         activation_diagnostic,
+        audit_process,
+        integration_coverage,
         select_references,
         throughput_estimate,
     )
@@ -367,6 +657,17 @@ def _preparation_evidence(report_path, draft, config_dir, root):
     _validate_preparation(manifest, inputs)
     if record_hash(manifest) != record_hash(inputs['preparation']):
         raise ValueError('Reported preparation assignments differ from current frozen assignments')
+    amendment = inputs.get('preparation_amendment')
+    amendment_path = None
+    if amendment is not None:
+        if captured('inputs/preparation/preparation_amendment.json') != amendment:
+            raise ValueError('Reported recovery amendment differs from its frozen input')
+        amendment_path = Path(config_dir) / 'preparation_amendment.json'
+    allocation = effective_preparation(manifest, amendment, root=root)
+    if (report.get('effective_preparation') != allocation or
+            draft['preparation']['effective_allocation_sha256'] != allocation['sha256']):
+        raise ValueError('Preparation report effective allocation differs from the frozen assignment')
+    _recovery_snapshot_evidence(amendment_path, report.get('recovery_snapshots', {}), sources, root)
     saved_pilot = captured('inputs/pilot.json')
     if saved_pilot.get('sha256') != record_hash({key: value for key, value in saved_pilot.items()
                                                if key != 'sha256'}):
@@ -385,14 +686,59 @@ def _preparation_evidence(report_path, draft, config_dir, root):
         path = directory / 'audit_source' / relative
         if sources.get(str(path)) != draft['implementation_files'][relative]:
             raise ValueError('Preparation/selection audit implementation changed: ' + relative)
-    required = {job['job_id']: job for job in manifest['short_jobs'] + manifest['full_jobs']}
+    required = {job['job_id']: job for job in allocation['short_jobs'] + allocation['full_jobs']}
     terminal = report['terminal_attempts']
-    if (len(terminal) != len(required) or {row['job_id'] for row in terminal} != set(required) or
-            not all(row.get('valid') is True for row in terminal) or
-            report['accounting'].get('valid') is not True or
-            report['accounting'].get('within_all_declared_ceilings') is not True):
+    if len(terminal) != len(required) or {row['job_id'] for row in terminal} != set(required):
         raise ValueError('Preparation report lacks a complete valid allocation/cost audit')
-    measured = {job_id: captured('audited_episodes/' + job_id + '.json') for job_id in required}
+    measured, receipts, reproduced_terminal, engineering = {}, {}, [], []
+    for job_id in sorted(required, key=lambda name: name + '.json'):
+        job = required[job_id]
+        row = captured('audited_episodes/' + job_id + '.json')
+        receipt = captured('inputs/preparation/attempts/' + job_id + '.json')
+        validate_preparation_receipt(receipt, allocation)
+        original = allocation['pre_recovery_receipts'].get(job_id)
+        if original is not None and record_hash(receipt) != original:
+            raise ValueError('Pre-recovery receipt was changed or replaced: ' + job_id)
+        recorded_job = captured('inputs/jobs/' + job_id + '.json')
+        binding = ('family', 'scene', 'purpose', 'seed', 'sampling_seed', 'mode',
+                   'fixed_choices', 'stochastic')
+        if (any(recorded_job.get(key) != job.get(key) for key in binding) or
+                recorded_job.get('max_steps_override') != job['max_steps'] or
+                (job['baseline_executor'] and recorded_job.get('phase') != 'phase2_baseline_check')):
+            raise ValueError('Captured episode job differs from its preparation assignment')
+        process = audit_process(receipt)
+        if row.get('process_audit') != process:
+            raise ValueError('Captured process audit does not reproduce from its receipt')
+        expected_valid = job_id not in allocation['resolved_failures']
+        if row.get('valid') is not expected_valid or (expected_valid and not process['valid']):
+            raise ValueError('Preparation requires valid coverage except the declared paid failure')
+        measured[job_id], receipts[job_id] = row, receipt
+        reproduced_terminal.append({
+            'job_id': job_id, 'family': job['family'], 'valid': row['valid'],
+            'receipt_status': receipt['status'], 'audit_history': receipt.get('audit_history', []),
+            'process_audit': process, 'short_check': receipt['short_check'],
+            'baseline_executor': job['baseline_executor'], 'steps': row.get('steps'),
+            'elapsed_seconds': receipt.get('elapsed_seconds'),
+            'invalid_reasons': row.get('invalid_reasons', [])})
+        if row['valid'] and job['purpose'] == 'engineering' and not job['baseline_executor']:
+            engineering.append({'job_id': job_id,
+                                'features': [decision['features'] for decision in row['decisions']]})
+    if terminal != reproduced_terminal:
+        raise ValueError('Preparation terminal summary differs from captured receipt/episode evidence')
+    accounting = audit_preparation(directory / 'inputs/preparation', receipt_ledgers_only=True,
+                                   allocation=allocation)
+    if (accounting != report['accounting'] or accounting.get('valid') is not True or
+            accounting.get('within_all_declared_ceilings') is not True):
+        raise ValueError('Preparation report lacks a complete valid allocation/cost audit')
+    counts = _preparation_counts(allocation, measured, receipts, required, captured)
+    for key, value in counts.items():
+        if report.get(key) != value:
+            raise ValueError('Preparation cost accounting does not reproduce: ' + key)
+    coverage = integration_coverage(allocation, measured, counts['cost_reconciliations'])
+    if coverage != report.get('integration_coverage') or not coverage['passed']:
+        raise ValueError('Preparation integration coverage does not reproduce')
+    if captured('engineering-features.json') != engineering:
+        raise ValueError('Engineering features differ from valid captured episode decisions')
     selection = select_references(manifest, measured)
     if not selection['ready'] or record_hash(selection) != record_hash(report['reference_selection']):
         raise ValueError('Reference selection does not reproduce from the captured training cases')

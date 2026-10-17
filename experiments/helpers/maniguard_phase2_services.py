@@ -379,7 +379,12 @@ def run_fresh_episode(command, log_path, timeout, *, env=None, popen=subprocess.
                       killpg=os.killpg, group_alive=process_group_alive, wall=time.time,
                       monotonic=time.monotonic, sleep=time.sleep, termination_grace=5,
                       on_started=None):
-    """Run one process group, reaping descendants even when their leader exits first."""
+    """Run one process group and verify descendant exit before returning.
+
+    An exited leader may leave EOF-driven cleanup helpers briefly alive. Give those
+    descendants one bounded natural-exit grace, counted in elapsed time, before
+    declaring an orphan failure and applying TERM/KILL cleanup.
+    """
     if not math.isfinite(timeout) or timeout <= 0:
         raise ValueError('Episode timeout must be finite and positive')
     if not math.isfinite(termination_grace) or termination_grace <= 0:
@@ -417,10 +422,19 @@ def run_fresh_episode(command, log_path, timeout, *, env=None, popen=subprocess.
         try:
             if process is not None:
                 leader_finished = process.poll() is not None
-                if group_alive(process.pid):
-                    if leader_finished:
+                if leader_finished and group_alive(process.pid):
+                    record['descendants_observed_after_leader_exit'] = True
+                    grace_started = monotonic()
+                    try:
+                        exited_naturally = wait_group_exit()
+                    finally:
+                        record['descendant_exit_grace_seconds'] = monotonic() - grace_started
+                    record['transient_descendants'] = exited_naturally
+                    if not exited_naturally:
                         record['orphaned_descendants'] = True
-                        record.setdefault('error', 'Episode leader exited while descendants remained')
+                        record.setdefault('error', 'Episode leader exited while descendants remained '
+                                          'after natural-exit grace')
+                if group_alive(process.pid):
                     for termination_signal in (signal.SIGTERM, signal.SIGKILL):
                         try:
                             killpg(process.pid, termination_signal)
@@ -428,11 +442,9 @@ def run_fresh_episode(command, log_path, timeout, *, env=None, popen=subprocess.
                             pass
                         if wait_group_exit():
                             break
-                    record['process_group_remaining'] = group_alive(process.pid)
-                    if record['process_group_remaining']:
-                        record['error'] = 'Episode process group did not exit after SIGKILL'
-                else:
-                    record['process_group_remaining'] = False
+                record['process_group_remaining'] = group_alive(process.pid)
+                if record['process_group_remaining']:
+                    record['error'] = 'Episode process group did not exit after SIGKILL'
                 final_code = process.poll()
                 if final_code is not None:
                     record['returncode'] = final_code

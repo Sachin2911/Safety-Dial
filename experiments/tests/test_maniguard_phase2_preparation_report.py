@@ -299,3 +299,176 @@ def test_malformed_terminal_lifecycle_blocks_prior(tmp_path, monkeypatch):
     report = reporting.build_report(preparation, setup, tmp_path / "report", pilot_path=pilot, timestamp=1100)
     assert not report["prior_accounting_ready"]
     assert any("valid start/finish interval" in reason for reason in report["invalid_reasons"])
+
+
+def recovery_fixture(tmp_path, monkeypatch):
+    """Complete synthetic paid recovery, with a real immutable report/amendment chain."""
+    import shutil
+
+    from helpers.maniguard_phase2_protocol import (
+        IMPLEMENTATION_FILES,
+        build_pilot,
+        build_preparation_amendment,
+    )
+
+    root = tmp_path / "recovery-repo"
+    config = root / "configs/maniguard/phase2"
+    shutil.copytree(ROOT / "configs/maniguard", root / "configs/maniguard")
+    (config / "preparation_amendment.json").unlink(missing_ok=True)
+    for name in IMPLEMENTATION_FILES:
+        target = root / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / name, target)
+    preparation, setup, pilot, measured = report_fixture(root, monkeypatch, complete=True)
+    write(pilot, build_pilot(config, root))
+    monkeypatch.setattr(reporting, "ROOT", root)
+    failed_id, retired_id, replacement_id = ("short-clutter-identity", "short-clutter-composition",
+                                            "short-clutter-identity-recovery")
+    retired = preparation / retired_id
+    (preparation / "attempts" / (retired_id + ".json")).unlink()
+    (retired / "job.json").unlink()
+    measured.pop(str(retired))
+    failed_path = preparation / "attempts" / (failed_id + ".json")
+    failed = json.loads(failed_path.read_text())
+    failed_row = measured[failed["output"]]
+    exact = dict.fromkeys(PRIOR_COUNTS, 0)
+    exact["physics_steps"] = 86
+    failed_row.update(valid=False, steps=0, costs=dict(exact), decisions=[],
+                      invalid_reasons=["Incomplete execution: persisted costs are lower bounds"],
+                      ledger={**exact, "phase": "initialization_failed"})
+    failed.update(status="invalid", returncode=1, ledger=failed_row["ledger"],
+                  process={"returncode": 1, "orphaned_descendants": True, "process_group_remaining": False})
+    write(failed_path, failed)
+    before_dir = root / "before-recovery"
+    before = reporting.build_report(preparation, setup, before_dir, pilot_path=pilot, timestamp=1100)
+    assert not before["prior_accounting_ready"] and not before["ready_for_freeze_review"]
+    audit_dir = setup / "failure-audit"
+    receipt_copy = audit_dir / "receipt.json"
+    write(receipt_copy, failed)
+    receipt_ref = reporting._source(receipt_copy)
+    audit = {"schema": "maniguard-phase2-terminal-cost-audit-v1", "job_id": failed_id,
+             "output": failed["output"], "created_at": 1101,
+             "status": "source_reconciled_terminal_counts", "exact_counts": exact,
+             "subject": {"receipt": receipt_ref}, "source_audit": {"valid": True},
+             "sources": [receipt_ref], "limitations": ["Synthetic test fixture; no physical work"]}
+    audit["sha256"] = record_hash(audit)
+    audit_path = audit_dir / "audit.json"
+    write(audit_path, audit)
+    manifest = json.loads((preparation / "preparation.json").read_text())
+    amendment = build_preparation_amendment(manifest, before_dir / "report.json", audit_path,
+                                            created_at=1102, root=root)
+    amendment_path = config / "preparation_amendment.json"
+    write(amendment_path, amendment)
+    write(pilot, build_pilot(config, root))
+    replacement = amendment["replacement_job"]
+    output = preparation / replacement_id
+    row = measured_case(replacement)
+    row["ledger"] = {**row["costs"], "phase": "completed"}
+    measured[str(output)] = row
+    write(output / "job.json", {**replacement, "max_steps_override": 32, "phase": "phase2"})
+    replacement_receipt = {"job": replacement, "short_check": True, "output": str(output),
+                           "status": "valid", "returncode": 0, "protocol_sha256": manifest["sha256"],
+                           "amendment_sha256": amendment["sha256"], "started_at": 1103,
+                           "elapsed_seconds": 10, "timeout_seconds": 900, "ledger": row["ledger"]}
+    replacement_path = preparation / "attempts" / (replacement_id + ".json")
+    write(replacement_path, replacement_receipt)
+    return {"root": root, "config": config, "preparation": preparation, "setup": setup,
+            "pilot": pilot, "amendment": amendment_path, "audit": audit_path, "measured": measured,
+            "before_report": before_dir / "report.json", "replacement_receipt": replacement_path,
+            "failed_receipt": failed_path, "failed_receipt_bytes": failed_path.read_bytes(),
+            "before": before}
+
+
+def test_recovery_preserves_invalid_attempt_and_resolves_only_bound_costs(tmp_path, monkeypatch):
+    fixture = recovery_fixture(tmp_path, monkeypatch)
+    output = fixture["root"] / "after-recovery"
+    report = reporting.build_report(fixture["preparation"], fixture["setup"], output,
+                                    pilot_path=fixture["pilot"], amendment_path=fixture["amendment"], timestamp=1200)
+    assert report["preparation_complete"] and report["prior_accounting_ready"], report["invalid_reasons"]
+    from helpers.maniguard_phase2_protocol import effective_preparation
+    expected = effective_preparation(
+        json.loads((fixture["preparation"] / "preparation.json").read_text()),
+        json.loads(fixture["amendment"].read_text()), root=fixture["root"])
+    assert report["effective_preparation"] == expected
+    assert report["ready_for_freeze_review"] and report["integration_coverage"]["passed"]
+    assert report["accounting"]["ceilings"]["short"]["attempts"] == 12
+    assert report["accounting"]["ceilings"]["full"]["attempts"] == 24
+    assert len(report["raw_unknown_counts"]) == 7 and report["unknown_counts"] == []
+    assert report["raw_total_counts_known"] == report["total_counts_known"]
+    failure = next(row for row in report["terminal_attempts"] if row["job_id"] == "short-clutter-identity")
+    assert not failure["valid"] and not failure["process_audit"]["valid"]
+    assert len(report["cost_reconciliations"]) == 1
+    assert report["cost_reconciliations"][0]["exact_counts"]["physics_steps"] == 86
+    assert report["integration_coverage"]["omitted_checks"]
+    assert fixture["failed_receipt"].read_bytes() == fixture["failed_receipt_bytes"]
+    assert json.loads((output / "audited_episodes/short-clutter-identity.json").read_text())["valid"] is False
+    copied = report["recovery_snapshots"][str(fixture["amendment"].resolve())]
+    assert Path(copied["path"]).name == "preparation_amendment.json"
+    for original, source in report["recovery_snapshots"].items():
+        assert Path(original).read_bytes() == Path(source["path"]).read_bytes()
+        assert source in report["sources"]
+    prior = json.loads((output / "prior-accounting.json").read_text())
+    budget = ReservationBudget(prior, json.loads(fixture["pilot"].read_text())["resource_envelope"], wall=lambda: 1250)
+    assert budget.snapshot()["allocated_gpu_seconds"] == 250
+
+
+@pytest.mark.parametrize("mutation", ["missing_amendment", "early_claim", "retired_claim"])
+def test_recovery_cannot_ignore_binding_or_reclaim_retired_slot(tmp_path, monkeypatch, mutation):
+    fixture = recovery_fixture(tmp_path, monkeypatch)
+    receipt = json.loads(fixture["replacement_receipt"].read_text())
+    if mutation == "missing_amendment":
+        del receipt["amendment_sha256"]
+    elif mutation == "early_claim":
+        receipt["started_at"] = 1101
+    else:
+        manifest = json.loads((fixture["preparation"] / "preparation.json").read_text())
+        receipt["job"] = next(job for job in manifest["short_jobs"] if job["job_id"] == "short-clutter-composition")
+    write(fixture["replacement_receipt"], receipt)
+    report = reporting.build_report(fixture["preparation"], fixture["setup"], fixture["root"] / "bad-recovery",
+                                    pilot_path=fixture["pilot"], amendment_path=fixture["amendment"], timestamp=1200)
+    assert not report["ready_for_freeze_review"] and not report["prior_accounting_ready"]
+    assert not report["accounting"]["valid"]
+    assert any("assignment" in reason or "Receipt binding" in reason for reason in report["invalid_reasons"])
+    assert report["accounting"]["ceilings"]["short"]["attempts"] == 12
+
+
+def test_recovery_cannot_resolve_an_unrelated_failed_work_counter(tmp_path, monkeypatch):
+    fixture = recovery_fixture(tmp_path, monkeypatch)
+    row = fixture["measured"][str(fixture["preparation"] / "short-jar-identity")]
+    row["valid"] = False
+    row["ledger"]["phase"] = "crashed"
+    report = reporting.build_report(fixture["preparation"], fixture["setup"], fixture["root"] / "other-failure",
+                                    pilot_path=fixture["pilot"], amendment_path=fixture["amendment"], timestamp=1200)
+    assert not report["prior_accounting_ready"] and not report["integration_coverage"]["passed"]
+    assert {item["job_id"] for item in report["unknown_counts"]} == {"short-jar-identity"}
+    assert {item["job_id"] for item in report["cost_reconciliations"]} == {"short-clutter-identity"}
+
+
+@pytest.mark.parametrize("mutation", ["new_directory", "missing_prior_receipt", "changed_prior_receipt"])
+def test_recovery_requires_original_output_and_complete_unchanged_paid_inventory(tmp_path, monkeypatch, mutation):
+    import shutil
+
+    fixture = recovery_fixture(tmp_path, monkeypatch)
+    preparation = fixture["preparation"]
+    if mutation == "new_directory":
+        preparation = fixture["root"] / "fresh-preparation"
+        shutil.copytree(fixture["preparation"], preparation)
+    else:
+        prior_path = preparation / "attempts/short-jar-identity.json"
+        if mutation == "missing_prior_receipt":
+            prior_path.unlink()
+        else:
+            receipt = json.loads(prior_path.read_text())
+            receipt["elapsed_seconds"] += 1
+            write(prior_path, receipt)
+    report = reporting.build_report(preparation, fixture["setup"], fixture["root"] / "invalid-inventory",
+                                    pilot_path=fixture["pilot"], amendment_path=fixture["amendment"], timestamp=1200)
+    assert not report["prior_accounting_ready"] and not report["ready_for_freeze_review"]
+    if mutation == "new_directory":
+        assert any("original preparation output directory" in reason for reason in report["invalid_reasons"])
+    else:
+        assert not report["accounting"]["valid"]
+        assert any("Original paid attempt inventory" in reason for reason in report["invalid_reasons"])
+    if mutation == "missing_prior_receipt":
+        assert report["count_totals_are_lower_bounds"]
+        assert any(item.get("reason") == "missing historical paid receipt" for item in report["unknown_counts"])

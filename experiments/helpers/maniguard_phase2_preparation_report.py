@@ -125,6 +125,72 @@ def snapshot_setup_lifecycle(setup, output):
     return records, sources, issues, pending
 
 
+def snapshot_recovery(amendment_path, output):
+    """Copy the immutable amendment and its bound evidence graph byte for byte.
+
+    Original paths remain in the signed JSON. The index binds each to its local copy;
+    protocol replay also verifies the retained originals and fails if they disappear.
+    No JSON references or historical content hashes are rewritten.
+    """
+    output = Path(output)
+    sources, snapshots, seen = [], {}, set()
+
+    def capture(path, expected=None, target=None):
+        path = Path(path)
+        path = path.resolve() if path.is_absolute() else (ROOT / path).resolve()
+        raw = path.read_bytes()
+        digest = hashlib.sha256(raw).hexdigest()
+        if expected is not None and digest != expected:
+            raise ValueError("Recovery source changed: " + str(path))
+        if str(path) in seen:
+            return
+        seen.add(str(path))
+        target = target or output / "inputs/preparation/recovery" / (f"{len(seen):04d}-" + path.name)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with target.open("xb") as stream:
+            stream.write(raw)
+        source = _source(target)
+        sources.append(source)
+        snapshots[str(path)] = source
+        try:
+            value = json.loads(raw)
+        except (ValueError, UnicodeDecodeError):
+            return
+        if isinstance(value, dict):
+            references = value.get("sources", [])
+            if isinstance(references, list):
+                for reference in references:
+                    capture(reference["path"], reference["sha256"])
+            if value.get("schema") == "maniguard-phase2-preparation-amendment-v1":
+                for name in ("pre_recovery_report", "failure_accounting"):
+                    capture(value[name]["path"], value[name]["sha256"])
+
+    capture(amendment_path, target=output / "inputs/preparation/preparation_amendment.json")
+    return _json(output / "inputs/preparation/preparation_amendment.json"), sources, snapshots
+
+
+def integration_coverage(allocation, measured, reconciliations):
+    """Require observed short-check coverage without making a failed attempt valid."""
+    resolved = {row["job_id"] for row in reconciliations}
+    failures = allocation.get("resolved_failures", {})
+    missing = []
+    for job in allocation["short_jobs"]:
+        job_id = job["job_id"]
+        row = measured.get(job_id)
+        if job_id in failures:
+            replacement = measured.get(failures[job_id]["replacement_job_id"], {})
+            covered = (row is not None and row.get("valid") is False and job_id in resolved
+                       and replacement.get("valid") is True)
+        else:
+            covered = row is not None and row.get("valid") is True
+        if not covered:
+            missing.append(job_id)
+    return {"passed": not missing, "missing_or_invalid_jobs": missing,
+            "source_reconciled_failures": sorted(resolved),
+            "omitted_checks": allocation.get("omitted_checks", []),
+            "failed_outcomes_relabelled": False}
+
+
 def select_references(manifest, measured):
     """Require every declared full case before comparing the two fixed candidates."""
     required = manifest["full_jobs"]
@@ -262,18 +328,33 @@ def throughput_estimate(pilot, terminal, reservation):
                       "runtime bound and does not estimate future idle or unmeasured service switches."}
 
 
-def build_report(preparation, setup, output, *, pilot_path=None, timestamp=None):
+def build_report(preparation, setup, output, *, pilot_path=None, timestamp=None, amendment_path=None):
     """Exclusively create a report directory and optional coordinator-ready prior.
 
     Only terminal receipts are behaviorally re-audited. Started receipts consume
     slots but their active traces/ledgers are never read. Every source for an emitted
-    prior is an immutable copy made inside this report directory.
+    prior is an immutable copy made inside this report directory. A recovery overlay
+    is accepted only through the explicit prospective amendment; it never changes
+    an audited episode validity or the original receipt/ledger.
     """
+    from helpers.maniguard_phase2_protocol import (
+        effective_preparation,
+        validate_preparation_receipt,
+    )
+
     preparation, setup, output = Path(preparation).resolve(), Path(setup).resolve(), Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)
     captured, issues, sources = output / "inputs/preparation", [], []
     manifest, source = _snapshot(preparation / "preparation.json", captured / "preparation.json")
     sources.append(source)
+    amendment, recovery_snapshots = None, {}
+    if amendment_path is not None:
+        amendment, recovery_sources, recovery_snapshots = snapshot_recovery(amendment_path, output)
+        sources.extend(recovery_sources)
+    allocation = effective_preparation(manifest, amendment, root=ROOT)
+    if (allocation.get("preparation_output") is not None
+            and preparation != Path(allocation["preparation_output"]).resolve()):
+        issues.append("Amended report must use the original preparation output directory")
     pilot, source = _snapshot(pilot_path or ROOT / "configs/maniguard/phase2/pilot.json",
                               output / "inputs/pilot.json")
     sources.append(source)
@@ -290,7 +371,7 @@ def build_report(preparation, setup, output, *, pilot_path=None, timestamp=None)
     if lifecycle_pending:
         issues.append("Nonterminal setup lifecycle records: " + ", ".join(lifecycle_pending))
     measured, terminal, features, counts, coverage, unknown, pending = {}, [], [], Counter(), Counter(), [], []
-    seen = set()
+    seen, reconciliations = set(), []
     for path in sorted((preparation / "attempts").glob("*.json")):
         target = captured / "attempts" / path.name
         try:
@@ -311,6 +392,15 @@ def build_report(preparation, setup, output, *, pilot_path=None, timestamp=None)
             pending.append(job["job_id"])
             unknown.extend({"job_id": job["job_id"], "count": key} for key in PRIOR_COUNTS)
             continue
+        receipt_bound = True
+        try:
+            validate_preparation_receipt(receipt, allocation)
+            prior_receipt = allocation.get("pre_recovery_receipts", {}).get(job["job_id"])
+            if prior_receipt is not None and record_hash(receipt) != prior_receipt:
+                raise ValueError("Original paid attempt receipt changed after the recovery checkpoint")
+        except (ValueError, KeyError, TypeError) as error:
+            issues.append("Receipt binding " + path.name + ": " + str(error))
+            receipt_bound = False
         recorded_job = {}
         try:
             recorded_job, source = _snapshot(episode / "job.json", output / "inputs/jobs" / path.name)
@@ -338,6 +428,9 @@ def build_report(preparation, setup, output, *, pilot_path=None, timestamp=None)
         except (OSError, ValueError, KeyError, TypeError) as error:
             row["valid"] = False
             row.setdefault("invalid_reasons", []).append(str(error))
+        if not receipt_bound:
+            row["valid"] = False
+            row.setdefault("invalid_reasons", []).append("Receipt differs from its effective assignment")
         process_audit = audit_process(receipt)
         row["process_audit"] = process_audit
         if not process_audit["valid"]:
@@ -372,10 +465,27 @@ def build_report(preparation, setup, output, *, pilot_path=None, timestamp=None)
                     unknown.append({"job_id": job["job_id"], "count": key, "reason": "trace lower bound"})
             else:
                 unknown.append({"job_id": job["job_id"], "count": key})
+        resolution = allocation["resolved_failures"].get(job["job_id"])
+        if resolution is not None and receipt_bound:
+            exact = resolution["exact_counts"]
+            raw_costs = {key: row.get("costs", {}).get(key, 0 if key == "actor_rpc_attempts" else None)
+                         for key in PRIOR_COUNTS}
+            if row["valid"] or any(value is not None and value != exact[key]
+                                   for key, value in raw_costs.items()):
+                issues.append("Failure reconciliation disagrees with raw evidence: " + job["job_id"])
+            else:
+                reconciliations.append({"job_id": job["job_id"], "output": str(episode),
+                                        "original_episode_valid": False, "raw_costs": raw_costs,
+                                        "exact_counts": exact,
+                                        "failure_accounting": resolution["failure_accounting"]})
         if row["valid"] and job["purpose"] == "engineering" and not baseline:
             features.append({"job_id": job["job_id"], "features": [decision["features"]
                                                                      for decision in row["decisions"]]})
-    accounting = audit_preparation(captured, receipt_ledgers_only=True)
+    for job_id in allocation.get("pre_recovery_receipts", {}):
+        if not (captured / "attempts" / (job_id + ".json")).is_file():
+            unknown.extend({"job_id": job_id, "count": key, "reason": "missing historical paid receipt"}
+                           for key in PRIOR_COUNTS)
+    accounting = audit_preparation(captured, receipt_ledgers_only=True, allocation=allocation)
     issues.extend(accounting["invalid_reasons"])
     for path in preparation.glob("*/job.json"):
         if str(path.parent.resolve()) not in seen:
@@ -398,30 +508,43 @@ def build_report(preparation, setup, output, *, pilot_path=None, timestamp=None)
             issues.append("Encoder smoke interactions differ from the recorded five-batch diagnostic")
     else:
         unknown.extend({"job_id": "setup", "count": key} for key in PRIOR_COUNTS)
-    all_jobs = manifest["short_jobs"] + manifest["full_jobs"]
+    all_jobs = allocation["short_jobs"] + allocation["full_jobs"]
     absent = [job["job_id"] for job in all_jobs if job["job_id"] not in measured]
     complete = not absent and not pending and len(terminal) == len(all_jobs)
     activation = activation_diagnostic(pilot, features)
-    selection = select_references(manifest, measured)
+    selection = select_references(allocation, measured)
+    coverage_audit = integration_coverage(allocation, measured, reconciliations)
     stamp = time.time() if timestamp is None else timestamp
-    allocation = setup_records.get("reservation.json", {})
-    start, gpus = allocation.get("start_unix_seconds"), allocation.get("allocated_gpus")
+    reservation_record = setup_records.get("reservation.json", {})
+    start, gpus = reservation_record.get("start_unix_seconds"), reservation_record.get("allocated_gpus")
     if (type(stamp) not in (int, float) or not math.isfinite(stamp) or type(start) not in (int, float)
             or stamp < start or type(gpus) is not int or gpus < 1):
         raise ValueError("Missing or invalid GPU reservation interval")
     reservation = {"timestamp": stamp, "reservation_started_at": start, "reserved_gpus": gpus,
                    "wall_seconds": stamp - start, "allocated_gpu_seconds": gpus * (stamp - start)}
     estimates = throughput_estimate(pilot, terminal, reservation)
-    total_counts = {key: counts[key] + setup_counts[key] for key in PRIOR_COUNTS}
+    raw_unknown = list(unknown)
+    reconciled_counts = counts.copy()
+    for resolution in reconciliations:
+        for key, exact in resolution["exact_counts"].items():
+            raw = resolution["raw_costs"][key]
+            reconciled_counts[key] += exact - (raw if _count(raw) else 0)
+        unknown = [item for item in unknown if item["job_id"] != resolution["job_id"]]
+    total_counts = {key: reconciled_counts[key] + setup_counts[key] for key in PRIOR_COUNTS}
     prior_ready = complete and not unknown and not issues
     report = {"schema": "maniguard-phase2-preparation-report-v1", "timestamp": stamp,
               "preparation_complete": complete, "training_ready": False,
-              "ready_for_freeze_review": (prior_ready and all(row["valid"] for row in terminal)
+              "ready_for_freeze_review": (prior_ready and coverage_audit["passed"]
                                           and activation["passed"] and selection["ready"]),
               "prior_accounting_ready": prior_ready, "invalid_reasons": issues,
               "absent_or_nonterminal_jobs": absent, "pending_receipts": pending, "terminal_attempts": terminal,
               "accounting": accounting, "reservation": reservation,
+              "effective_preparation": allocation, "recovery_snapshots": recovery_snapshots,
+              "cost_reconciliations": reconciliations, "integration_coverage": coverage_audit,
               "episode_counts_known": dict(counts), "episode_count_coverage": dict(coverage),
+              "episode_counts_reconciled": dict(reconciled_counts),
+              "raw_total_counts_known": {key: counts[key] + setup_counts[key] for key in PRIOR_COUNTS},
+              "raw_unknown_counts": raw_unknown,
               "setup_counts_known": dict(setup_counts), "total_counts_known": total_counts,
               "setup_lifecycle": lifecycle, "pending_setup_lifecycle": lifecycle_pending,
               "unknown_counts": unknown, "count_totals_are_lower_bounds": bool(unknown or pending),
@@ -432,7 +555,9 @@ def build_report(preparation, setup, output, *, pilot_path=None, timestamp=None)
                               "Failed loader wall time is unknown individually but included in the reservation.",
                               ("Service lifecycle records retain setup failures and diagnoses; they do not "
                                "supply missing inference counts or historical process tracebacks."),
-                              "Short checks cannot establish full-task success or safety performance."],
+                              "Short checks cannot establish full-task success or safety performance.",
+                              ("Recovery copies preserve original references. Frozen-protocol replay also "
+                               "requires the original immutable amendment evidence to remain unchanged.")],
               "sources": sources}
     _write(output / "engineering-features.json", features)
     sources.append(_source(output / "engineering-features.json"))
