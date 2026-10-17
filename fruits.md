@@ -17,10 +17,11 @@ Prerequisite guarding and motion smoothing each safely completed one Jar scene w
 the contemporaneous unchanged policy transported an open jar. Across four Jar scenes,
 the guard and unchanged policy each complete three safely, smoothing completes two,
 and no overall improvement is established. The initial Stack screen found no safe-completion
-gain; its motion follow-up now has one promising tight-cap contrast on the cracker scene,
-but the other two cracker seeds remain unsafe unfinished. These are small engineering
-comparisons with differing physical starts, not demonstrated repeatable repairs.
-The release rule rarely activates, bounded retries execute the intended retreat without
+gain. In the completed 24-trial motion follow-up, tight and middle caps each achieve
+one safe completion in six trials versus zero for identity, but each has three episodes
+with violations versus identity's two. These are small engineering comparisons with
+differing physical starts, not demonstrated repeatable repairs.
+The initial release rule rarely activates, bounded retries execute the intended retreat without
 a demonstrated recovery, and the tested settling/requery rule increases cost without
 improving completion.
 
@@ -31,9 +32,10 @@ evidence of premature transport to test, not a demonstrated correction. A 16-epi
 of identity and the fixed guard is queued across all four engineering scenes and two seeds.
 See the [Lid follow-up evidence](docs/research/research_notes/ManiGuard%20fruits%20Lid%20followup.json).
 
-The 24 Stack motion-limit repeats are running. Follow-up queues also contain 12 Stack
-release-trigger comparisons and 48 Jar repeats comparing identity, guard, hand-back
-and smoothing across all four engineering scenes and three root seeds.
+The [24 Stack motion-limit repeats](docs/research/reports/ManiGuard%20Stack%20motion%20repeats.md)
+are complete. The 12 Stack release-trigger comparisons are running, followed by 48 Jar
+repeats comparing identity, guard, hand-back and smoothing across all four engineering
+scenes and three root seeds.
 These remain engineering experiments. No evolutionary search or reserved evaluation has
 run, and no evolutionary advantage has been demonstrated.
 
@@ -182,20 +184,20 @@ interesting if a single cautious setting is inadequate and different situations 
 different settings. Slowing an incorrect path may not help, and motion limits alone do
 not guarantee safety.
 
-The tight 0.01/0.01-radian cap now safely completes the cracker scene at root zero in
-1392 actions, with 634 changed commands. Its unchanged-policy control remains unsafe
-unfinished after 4200 actions. Across the three cracker roots, this cap has one safe
-completion and two unsafe unfinished episodes; identity has two safe unfinished and one
-unsafe unfinished. This exposes a possible correction and adverse outcomes in the same
-small comparison, not a repeatable overall safety improvement.
+The completed repeat comparison gives the tight 0.01/0.01 and middle 0.03/0.02-radian
+caps one safe completion each in six trials, versus zero for identity. Both successes
+occur on the cracker scene, at roots zero and two respectively. Each cap also has three
+episodes with physical violations, versus two for identity. The wider 0.06/0.04 cap has
+no safe completion and four episodes with violations. No bowl trial ever holds the target.
+See the [full report](docs/research/reports/ManiGuard%20Stack%20motion%20repeats.md).
 
-On the bowl scene, roots zero and one leave both identity and the tight cap safely
-unfinished without a target grasp. The cap's third bowl trial tips the target; its control
-is still pending. A reproducible
-[trace audit](docs/research/research_notes/ManiGuard%20fruits%20motion%20tracking.json)
-confirms that the limits reach the executed joint targets, including the successful
-cracker trial. Actual joint motion can exceed the commanded target displacement, so this
-adapter is not a hard velocity limit. The remaining comparisons are in progress.
+A reproducible [trace audit](docs/research/research_notes/ManiGuard%20fruits%20motion%20tracking.json)
+confirms that all capped targets reach execution within their limits. Actual joint motion
+can exceed the commanded displacement, so the adapter is not a hard velocity limit.
+The two successful runs' first images and policy proposals already differ from their
+controls before a capped action. The results retain motion adaptation as a lead with
+adverse outcomes elsewhere; they do not establish a repeatable repair or general safety
+improvement.
 
 ## 3. Prevent premature transitions between task stages
 

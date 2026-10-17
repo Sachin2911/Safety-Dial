@@ -120,7 +120,7 @@ explicitly privileged guard as the Jar prototype.
 4. **Grasp persistence:** the initial trigger needs a more informative test. The Jar release
    rule changes zero actions in all four trials. The Stack rule activates in only one of
    four trials, and its finger-aperture heuristic misses held targets in inspected sticky-grasp
-   traces. A broader fixed trigger is queued. Neither the successful inactive Jar trial nor
+   traces. A broader fixed trigger is now being tested. Neither the successful inactive Jar trial nor
    a zero-change failure measures the effect of delaying a release.
 5. **Bounded retries:** the physical primitive works, but a useful recovery has not been
    shown. Three Jar trials execute five retreats, measuring 14.56 to 14.90 mm against a
@@ -160,21 +160,20 @@ Their two-worker batch takes 870.03 seconds; episode elapsed times sum to 1685.7
 The 84 full episodes covered here therefore total 196,840 actions, 1,188,264 physics ticks
 and 29,661 queries, still excluding references, diagnostics, failures and later trials.
 
-The managed pipeline now runs 24 Stack motion-limit repeats after a fresh Stack reference
-and interleaved replay passed. It then runs 12 Stack release-trigger comparisons and
-48 Jar repeats of identity, guard, hand-back and smoothing across all four engineering
-scenes and root seeds zero, one and two. The new sixteen-trial Lid guard comparison follows
-the Jar repeats after its own policy-switch reference and replay checks. Fixed rules
-remain the first comparison.
-The motion follow-up has produced its first safe-completion contrast: the 0.01/0.01-radian
-cap on the cracker scene at root zero finishes safely in 1392 actions, whereas its identity
-control stays unsafe unfinished after 4200. All three cracker roots are complete for this
-cap and identity: the cap has one safe completion and two unsafe unfinished episodes;
-identity has two safe unfinished and one unsafe unfinished. This is an isolated gain with
-adverse outcomes elsewhere, not a repeatable repair. The other motion comparisons remain
-in progress. See the [current comparisons](../research_notes/ManiGuard%20fruits%20Stack%20motion%20comparison.json)
-and [command/state audit](../research_notes/ManiGuard%20fruits%20motion%20tracking.json).
+The [24 Stack motion repeats](ManiGuard%20Stack%20motion%20repeats.md) are now complete.
+Tight and middle caps each achieve one safe completion in six trials versus zero for
+identity, but each has three episodes with violations versus identity's two. The wider
+cap has no safe completion and four episodes with violations. Both successful cap runs
+have different initial camera images and policy proposals from their controls before the
+cap first changes an action. These are promising individual contrasts with adverse
+outcomes elsewhere, not repeatable causal repairs. The complete report retains all
+outcomes, execution audits and the separate batch cost of 90,794 actions and 11,350 queries.
 
+The twelve-trial Stack release-trigger comparison is now running on the same validated
+policy server. It is followed by 48 Jar repeats of identity, guard, hand-back and smoothing
+across all four engineering scenes and root seeds zero, one and two. The sixteen-trial
+Lid guard comparison follows the Jar repeats after its own policy-switch reference and
+replay checks. Fixed rules remain the first comparison.
 Matched evolution, random search and categorical policy-gradient code exists but has not
 consumed ManiGuard training episodes. Further optimization and final selection remain
 conditional on useful repeatable correction headroom; no optimizer advantage is claimed.

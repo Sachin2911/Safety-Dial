@@ -1,5 +1,5 @@
 {
-  "status": "Initial Stack 24 and Jar 40 screens plus all eight extra Lid baselines completed and validated. Stack motion repeats are running after a fresh reference/replay passed; release, Jar repeats and the new Lid guard comparison remain queued.",
+  "status": "Initial Stack 24 and Jar 40 screens, eight extra Lid baselines and all 24 Stack motion repeats completed and validated. The 12-trial release-trigger batch is running; 48 Jar repeats and 16 Lid guard trials remain queued.",
   "scope": "Engineering scenes only. Full horizon; no optimizer, selected winner, or held-out claims.",
   "completed_episodes": [
     {
@@ -1494,7 +1494,7 @@
     "held_loss_after_open_command_steps": [],
     "interpretation": "Temporal associations only; causal repairs require matched episodes."
   },
-  "interpretation": "Release delay on task_0013 and its contemporaneous repeated identity control both stayed safe but unfinished, with no recorded final-target grasp. The earlier identity run completed unsafely. No repair or causal safety/completion tradeoff from the release rule is established.",
+  "interpretation": "Tight and middle motion caps each yield one safe completion in six trials versus zero for identity, with three violating episodes each versus two for identity. Different initial observations limit causal attribution. Jar guard/smoothing leads still need their declared repeats; no optimizer advantage or general safety improvement is established.",
   "visual_inspection": {
     "frames": [
       740,
@@ -2254,7 +2254,7 @@
     "plan_sha256": "3ea5de0d4810d21465d58f666af4b57e4cb502b45cb0e0ca779711b75d4af0cf",
     "planned_episodes": 24,
     "workers": 2,
-    "status_at_recording": "Predecessor exited normally after all initial Stack/Jar and extra Lid episodes validated. The idle Lid server switched to Stack; reference/replay passed and the 24-trial motion batch started.",
+    "status_at_recording": "Queue exited normally; all 24 physical trials, costs, code/config provenance and command/state audits validate.",
     "prerequisites": "Original Stack 24, Jar 40 and extra Lid 8 finish and validate; then fresh Stack physical reference and same-server replay pass before motion repeats.",
     "reference": {
       "family": "stack",
@@ -2368,14 +2368,16 @@
     "replay_check_sha256": "80311fa0cd9c847d97c8a456ea156a6c3be04258e456546d24aca0ddf82b4707",
     "physical_batch": "runs/maniguard/stack-motion-repeat-v1",
     "batch_statuses_at_recording": {
-      "completed": 21,
-      "awaiting_process_record": 2,
-      "not_started": 1
+      "completed": 24
     },
     "policy_pid_at_recording": 134548,
     "progress_record": "docs/research/research_notes/ManiGuard fruits Stack motion progress.json",
     "condition_comparison": "docs/research/research_notes/ManiGuard fruits Stack motion comparison.json",
-    "motion_tracking": "docs/research/research_notes/ManiGuard fruits motion tracking.json"
+    "motion_tracking": "docs/research/research_notes/ManiGuard fruits motion tracking.json",
+    "complete_report": "docs/research/research_notes/ManiGuard fruits Stack motion complete.json",
+    "initial_input_comparison": "docs/research/research_notes/ManiGuard fruits Stack motion initial inputs.json",
+    "batch_elapsed_seconds": 4869.56248747604,
+    "study_report": "docs/research/reports/ManiGuard Stack motion repeats.md"
   },
   "fixed_horizon_4_diagnostics": [
     {
@@ -3040,8 +3042,21 @@
     "plan_sha256": "62cd89d512da8892de7737ed30dd8551460ed441e75edf87864fbc39dd8e3f87",
     "planned_episodes": 12,
     "workers": 2,
-    "status_at_recording": "Live waiting process; physical follow-up not started.",
-    "prerequisite": "Motion-repeat queue exits normally and all 24 results validate; reuse its existing validated Stack policy server."
+    "status_at_recording": "Motion predecessor completed normally; 2 of 12 release-trigger trials are validated and the batch continues on the unchanged Stack policy server.",
+    "prerequisite": "Motion-repeat queue exits normally and all 24 results validate; reuse its existing validated Stack policy server.",
+    "physical_batch": "runs/maniguard/stack-release-trigger-v1",
+    "batch_pid_at_recording": 166400,
+    "policy_pid_at_recording": 134548,
+    "policy_at_start": {
+      "supervisor_status": "maniguard_policy                 RUNNING   pid 134548, uptime 1:22:46",
+      "note": "Policy service is reused after the validated motion screen; it is not restarted."
+    },
+    "batch_statuses_at_recording": {
+      "completed": 2,
+      "awaiting_process_record": 2,
+      "not_started": 8
+    },
+    "progress_record": "docs/research/research_notes/ManiGuard fruits Stack release progress.json"
   },
   "complete_batch_report": "docs/research/research_notes/ManiGuard fruits Stack screen.json",
   "complete_batch_figure": "docs/research/figures/ManiGuard/stack-fixed-screen-outcomes.png",
@@ -3434,7 +3449,7 @@
     "policy_switch": "Switch idle Stack server to Jar only after predecessor normal completion and all 12 release trials validate; then require fresh 32-action reference and strict six-query interleaved replay.",
     "superseded_waiting_plan": "runs/maniguard/jar-guard-repeat-pipeline-v1/superseded.json"
   },
-  "snapshot_at_utc": "2026-10-17T15:26:37Z",
+  "snapshot_at_utc": "2026-10-17T15:44:27Z",
   "completed_episodes_scope": "The top-level completed_episodes array retains the 24 initial Stack episodes. Complete Jar outcomes and costs are linked under jar_screen; follow-up Lid status is separate.",
   "initial_screen_report": "docs/research/reports/ManiGuard initial adapter screens.md",
   "lid_extra_baselines": {
@@ -4051,5 +4066,6 @@
     ],
     "switch": "After predecessor normal exit and full result/cost validation, switch the idle Jar policy to Lid. Require fresh 32-action reference and six-query interleaved replay matching the first reference query.",
     "reason": "Observed premature lift in the extra task_0003 root-two baseline; includes all scenes to measure adverse interference as well as any repair."
-  }
+  },
+  "initial_stack_screen_interpretation": "Release delay on task_0013 and its contemporaneous repeated identity control both stayed safe but unfinished, with no recorded final-target grasp. The earlier identity run completed unsafely. No repair or causal safety/completion tradeoff from the release rule is established."
 }

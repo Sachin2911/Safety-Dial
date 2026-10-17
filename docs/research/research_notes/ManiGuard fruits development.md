@@ -1349,3 +1349,54 @@ The reproducible command/state audit now passes on all twenty-one completed tria
 preserves the earlier nineteen rows exactly. Two motion trials are live and one remains
 queued. Downstream queues retain their dependencies; no controller, physical plan or
 selection split was changed.
+
+## Motion comparison complete and release-trigger screen started
+
+All twenty-four motion-repeat trials completed normally and passed outcome, ledger,
+source/configuration and command/state audits. The final per-condition counts are:
+
+| Condition | Safe complete | Unsafe complete | Safe unfinished | Unsafe unfinished |
+| --- | ---: | ---: | ---: | ---: |
+| Identity | 0 | 0 | 4 | 2 |
+| Tight cap | 1 | 0 | 2 | 3 |
+| Middle cap | 1 | 1 | 2 | 2 |
+| Wider cap | 0 | 1 | 2 | 3 |
+
+The middle cap adds a second safe-completion contrast on the cracker scene at root two:
+2335 actions, 292 queries and 344 changed commands, versus a safe-unfinished identity
+control. It first holds the target at observation 2223 and stays held through goal
+attainment. The final bowl identity control is unsafe unfinished, first violating both
+stack and target uprightness at observation 3821; the final middle-cap bowl trial is safe
+unfinished after 315 changed commands. No bowl trial ever holds the target.
+
+Both successful capped runs have initial joint state exactly equal to their controls,
+but different overview/wrist images and first original policy proposals before the cap
+changes an action. Saved the two input comparisons and evidence hashes. The full report
+therefore retains both promising completion contrasts and the observed violation increase,
+without interpreting the same root seed as an identical-input counterfactual.
+
+The complete batch costs 90,794 policy actions, 546,828 physics ticks and 11,350 queries.
+Batch wall time is 4869.56 seconds with two workers; the sum of episode process times is
+9540.53 seconds. These figures exclude reference/replay and other batches. All eighteen
+condition/control comparisons are complete and reuse six unique identity trials. The
+completed outcome figure was inspected, and all reported counts and links were checked.
+The complete command audit reproduces the previous twenty-one episode rows exactly.
+
+The motion queue exited normally. Its successor started the twelve-trial release-trigger
+screen with batch PID 166400 and two live episode workers, retaining Stack policy PID
+134548. Jar and Lid queues keep their declared dependencies. The completed motion report,
+structured evidence and fruits.md now reflect the full batch. No runtime controller,
+physical plan or reserved split was changed, and no optimizer was trained.
+
+
+## First broader release-trigger trials activate
+
+The first two release-trigger trials use the broad stable-closing rule at root one.
+The bowl trial delays 38 opening commands and remains safe unfinished for 4200 actions
+without holding the target. The cracker trial delays 37 opening commands and reaches
+the goal unsafely in 2349 actions, with its first stack-uprightness violation at
+observation 1341 while the target itself remains upright. Both retain the declared
+four-action delay limit and horizon eight. Their same-batch identity controls are still
+pending, so these outcomes establish activation rather than comparative benefit.
+Saved the initial complete-result diagnostics, trace hashes and planned comparison
+coverage in the release progress record. The queue continues without a policy restart.
