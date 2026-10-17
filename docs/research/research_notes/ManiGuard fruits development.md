@@ -494,3 +494,9 @@ numerics and concurrent execution differed. Initial screens identify mechanisms 
 a single changed outcome is insufficient to claim a causal adapter benefit. Promising
 settings require repeated comparisons with contemporaneous identity controls before
 validation, selection or reserved testing. The randomized screen continues unchanged.
+
+The first combined smoothing-and-default-cap trial, Stack task_0007/base seed 0, was
+safe unfinished at the full 4,200-action horizon, matching both identity runs on that
+scene. It did not establish a useful motion repair. The screen continues with fixed
+execution horizon 4 and release delay on task_0007. Four of 24 Stack screen episodes
+have completed; no adapter performance gain is established.
