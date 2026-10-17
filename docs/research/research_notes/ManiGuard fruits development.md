@@ -200,3 +200,18 @@ screen uses a 40-step window, 1 cm EEF excursion and 0.003-rad mean demand thres
 This flags windows in both successful and unsuccessful traces, so it is not a validated
 failure detector. The physical comparison must show whether intervening actually helps
 or disrupts useful task behavior. All such choices use development data only.
+
+The third Jar baseline, `task_0002/base` seed 0, was unfinished at 2,000 actions and first
+violated uprightness at step 548, with the jar already closed. The fourth Jar baseline
+is running. Thus the first three completed development episodes comprise one safe
+completion and two unsafe unfinished episodes; this is a small diagnostic sample, not
+a held-out estimate. Partial machine-readable results are preserved in
+[baseline progress](ManiGuard%20fruits%20baseline%20progress.json).
+
+Prepared corresponding four-scene original-policy baseline plans for Lid and Stack.
+Run these with their pinned family checkpoints before finalizing which families provide
+useful mechanisms for each adaptation screen. The draft Jar fixed-control plan remains
+unexecuted. Closure-before-lift and post-intervention hypotheses require actual relevant
+guard events; Jar tipping alone does not establish their headroom. All six physical
+hypothesis evaluations, optimizer comparisons where justified, and reserved evaluation
+remain outstanding.
