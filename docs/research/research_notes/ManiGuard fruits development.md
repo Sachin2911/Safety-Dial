@@ -1993,3 +1993,52 @@ Seven completed comparisons against the same plain guard still contain one hand-
 gain and one loss, one fewer violation, and 5880 versus 1602 queries. The remaining
 physical jobs continue under the unchanged 48-trial plan. No optimizer or reserved
 selection has been run, and these incomplete comparisons establish no robust winner.
+
+
+## Forty-four Jar trials: shared successes and another prolonged hand-back stall
+
+The snapshot validates twelve safe completions, one unsafe completion, twenty-one safe
+unfinished and ten unsafe unfinished outcomes. Four declared trials remain. Every earlier
+diagnosis remains unchanged and the new traces pass the same execution and source audits.
+
+| Candidate versus identity | Completed pairs | Safe-completion gains | Losses | Violation difference | Candidate/control queries |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Guard with settling/requery | 10 | 3 | 2 | -2 | 7881 / 2127 |
+| Plain guard | 11 | 3 | 1 | -2 | 2477 / 2377 |
+| Motion smoothing | 11 | 2 | 1 | 0 | 2358 / 2377 |
+
+All four conditions on task_0008 at root two now finish their tasks. Identity's completion
+is unsafe; all three adapters complete safely. The plain guard takes 742 actions and 108
+queries, smoothing 840 actions and 105 queries, and hand-back 906 actions and 275 queries,
+versus identity's 792 actions and 99 queries. Identity tips at observation 780 while the
+jar is closed. The guard's 29 changes end at proposal 384, before first closure at 393,
+first holding at 635 and departure from support at 644. This is another guard success
+whose interventions all precede the target grasp, not direct interception of the baseline
+tipping boundary.
+
+Smoothing first closes at observation 424, holds at 761 and leaves support at 767. Its
+joint-target caps also activate on 17 actions, all after first target holding, unlike the
+previous task_0013 root-one smoothing gain whose caps never activate. All 840 arm commands
+change, including 79 with the target held before execution; one initial holding value is
+unknown. Gripper proposals remain unchanged. This successful configured motion adapter
+therefore combines smoothing and clipping, and its outcome must not be attributed to
+smoothing alone.
+
+The task_0008 root-zero plain guard remains safe unfinished at 2000 actions and 308
+queries without closure or grasp. Its 82 changed proposals end at 1356, and all have an
+explicitly unheld target. Identity and smoothing are unsafe unfinished in that case;
+the matching hand-back trial is still pending.
+
+Hand-back on task_0017 at root zero also remains safe unfinished without closure or grasp,
+after 2000 actions and 1240 queries. It blocks 683 proposals and performs 992 settling holds,
+changing 1675 actions in total, all with an explicitly unheld target. Its changes continue
+to the final proposal. The matched plain guard also remains safe unfinished but uses
+265 queries. Nine completed hand-back/plain-guard pairs retain one safe-completion gain
+and one loss, one fewer violation and 7395 versus 1975 queries. There is no aggregate
+completion gain from the added settling behavior in those partial comparisons.
+
+A read-only audit also checked all 173 physical job records then present: 92 Jar, 13 Lid
+and 68 Stack, including references, failed attempts and started jobs. Every recorded scene
+belongs to its family's engineering split, and engineering/train/validation/test sets
+are mutually disjoint within each family. These job counts are not completed-trial counts
+or cost totals. No training, selection-validation or reserved evaluation episode was found.
