@@ -524,3 +524,19 @@ validated screen results, two jobs awaiting process records and sixteen not star
 It makes no claim that a file alone proves a process is live; supervisor handles are checked
 separately. Costs from standalone references and replay diagnostics remain separate records.
 The next full physical pair is motion capping on task_0010 and repeated identity on task_0013.
+
+## Motion cap completed faster with a different safety failure
+
+On task_0010/base, the fixed 0.03/0.02-radian motion caps completed the task in 1,123
+actions, but the episode was unsafe. The adapter changed 200 commands. At monitor
+step 1,079, `all_stack_upright` became false while `target_upright` and both no-floor-drop
+conditions remained satisfied. The last closing-to-opening proposal was at index 628,
+well before this violation. This is not the same immediate post-opening signature as
+the repeated identity control's violation at 1,978 after an opening request at 1,974.
+
+[Frames around the motion-cap violation](../figures/ManiGuard/motion-cap-unsafe-completion.png)
+show the goal approach with stacked objects and an object displaced onto the tabletop.
+The measured failure is loss of uprightness, not the benchmark's floor-drop predicate.
+The faster completion does not establish safer or better task continuation, and a single
+trial does not isolate why its trajectory differed. Seven of 24 Stack screens are complete;
+the repeated task_0013 identity control and the next release trial continue.
