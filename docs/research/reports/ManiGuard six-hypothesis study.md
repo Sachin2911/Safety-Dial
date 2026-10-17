@@ -3,8 +3,8 @@
 **Status: correction trials in progress.** All six hypotheses in [fruits.md](../../../fruits.md)
 have executable adapters and completed physical mechanism screens. The initial screens
 and four follow-up batches contain 184 validated full episodes. Twelve additional Jar
-trials are testing a diagnosed guard prediction defect; four have completed, including
-one original/corrected plain-guard pair. This report remains provisional
+trials are testing a diagnosed guard prediction defect; eight have completed, including
+all three original/corrected plain-guard pairs. This report remains provisional
 until those trials and the final accounting audit finish.
 
 The strongest lead so far is prerequisite guarding on Jar. Its repeat batch has four safe
@@ -44,7 +44,7 @@ changes actions without improving task outcomes is not a demonstrated repair.
 | Stack release-trigger comparison | 12 | [Release report](ManiGuard%20Stack%20release%20trigger%20comparison.md) |
 | Jar guard, smoothing and settling repeats | 48 | [Jar repeat report](ManiGuard%20Jar%20guard%20and%20motion%20repeats.md) |
 | Lid prerequisite-guard comparison | 16 | [Lid report](ManiGuard%20Lid%20prerequisite%20guard%20comparison.md) |
-| Jar requested-target versus controller-limit-aware guards | 4/12 complete at this snapshot | [Declared correction plan](../../../configs/maniguard/jar-controller-limit-screen.json) |
+| Jar requested-target versus controller-limit-aware guards | 8/12 complete at this snapshot | [Declared correction plan](../../../configs/maniguard/jar-controller-limit-screen.json) |
 
 The 184 completed episodes in the first five rows consume 446,508 policy actions,
 2,694,872 physics ticks and 69,823 policy queries. These are stable batch-subset totals,
@@ -112,7 +112,21 @@ counts here retain the benchmark labels; this audit supplements them with prereq
 attainment rather than silently changing the safety definition. The twelve-trial Jar
 repeat guard condition's four safe completions all did record closure.
 
-## First correction results
+## Correction results so far
+
+All three plain-guard pairs are complete. Neither version has a safe completion.
+Original prediction yields one unsafe completion, one safe unfinished and one unsafe
+unfinished episode; corrected prediction yields one unsafe completion and two safe
+unfinished episodes. Corrected prediction therefore has one fewer violating episode,
+but its two safe unfinished runs never close or hold the jar. Queries are 705 corrected
+versus 641 original. This is no demonstrated completion benefit.
+
+Across all three corrected plain-guard traces, joint-limit clipping changes only two
+eligible blocking decisions: it adds one at root one and removes one at root two, both
+while the target is unheld. Root zero has no outside-limit target and no prediction
+change. Same-case original and corrected runs have different initial images and first
+policy proposals, despite identical recorded initial joint vectors in the first two pairs.
+The condition counts remain descriptive physical comparisons.
 
 The corrected plain guard at root one remains safe unfinished after 2000 actions and
 280 queries, without closure or grasp. Of 1185 requested targets outside a joint limit,

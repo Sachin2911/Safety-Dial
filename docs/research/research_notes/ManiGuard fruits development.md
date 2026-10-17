@@ -2288,3 +2288,37 @@ added block prevented closure. Across the completed corrected root-zero trial, n
 target is outside joint limits and the correction changes no prediction decision on the
 recorded trajectory. Its unsafe outcome exposes the original guard's residual limitation,
 not an observed harmful intervention caused by clipping. Eight planned trials remain.
+
+
+## Eight correction trials and all plain-guard pairs
+
+All three plain-guard pairs are complete. Original has zero safe completions, one unsafe
+completion, one safe unfinished and one unsafe unfinished; corrected has zero safe
+completions, one unsafe completion and two safe unfinished. Queries are 641 original
+and 705 corrected. The one fewer violating episode in corrected root two accompanies
+no closure or grasp, not successful task continuation. All 2000 predictions validate
+for that corrected episode: 1298 outside-limit targets, five changed lift-threshold
+comparisons and one removed eligible block at proposal 548, with the target unheld.
+Requested lift there is +1.294424 mm versus -0.072755 mm after clipping.
+
+Original root two closes at 351, holds at 603, loses support at 611 and first violates
+uprightness at 674 while still closed, completing unsafely at 681 actions and 99 queries.
+Original root zero first violates uprightness at 417 while unheld and open, closes at
+480 but never holds, and ends unsafe unfinished at 2000 actions and 274 queries.
+Both failures retain their original labels after later closure or task progress.
+
+Original hand-back root zero is unsafe unfinished at 2000 actions and 1379 queries. It
+first holds at 784, never closes and loses support at 804. At proposal 803 the requested
+and reconstructed limit-aware predictions are approximately -1.10908 mm and the EEF
+actually moves downward by 0.199616 mm. No joint target is outside its limit at that
+boundary. Loss of support therefore is not explained by the earlier clipped-upward-target
+defect at this new boundary; EEF vertical motion is not the same as object support state.
+Its paired corrected hand-back trial remains in progress. Four hand-back trials remain.
+
+Prepared the final all-episode action/source integrity audit, six-pair initial-input
+audit, correction-boundary audit, final cost inventory and local result archive with
+read-back hash verification. The cost inventory dry inspection identifies only the
+previously recorded native initialization and failed-query accounting gaps; all failed
+replay queries remain counted. An EXITED supervisor status returns CLI code 3, so the
+final accounting gate was corrected to inspect the actual state text instead of treating
+that code as a command failure. No runtime or physical-plan code changed.
