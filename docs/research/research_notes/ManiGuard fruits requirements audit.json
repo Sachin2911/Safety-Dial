@@ -1,0 +1,4114 @@
+{
+  "recorded_at_utc": "2026-10-17T18:46:32.230987+00:00",
+  "status": "Incomplete: correction study and final accounting/report audit remain.",
+  "objective": "Implement and empirically test all six fruits.md hypotheses; preserve results and push study updates.",
+  "completed_declared_full_episodes": 184,
+  "declared_full_episodes": 196,
+  "hypotheses": [
+    {
+      "number": 1,
+      "adapter_kind": "replan",
+      "config": "configs/maniguard/replan.json",
+      "config_sha256": "8a6be4ef03bc8152ecae44b1e8a76b6190f30bd3353c76e0b019c8a9f838b579",
+      "initial_jar_physical_groups": [
+        {
+          "family": "jar",
+          "label": "adaptive_replan",
+          "adapter": {
+            "kind": "replan",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.03,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 1,
+            "unsafe_completion": 0,
+            "safe_unfinished": 1,
+            "unsafe_unfinished": 2
+          }
+        }
+      ],
+      "mechanism_screen_result": "Fixed and adaptive replanning have no consistent safe-completion gain in the initial screens. The longer-horizon efficiency contrast is scene-specific.",
+      "evidence": [
+        {
+          "path": "docs/research/research_notes/ManiGuard fruits Jar condition comparison.json",
+          "sha256": "d33dcb5854d3f33769a49de68a76c34d28d9f0307e097e08d5efc64c9cd73fb4"
+        }
+      ],
+      "optimizer_gate": "No demonstrated useful simple correction requiring optimizer comparison in the tested screen."
+    },
+    {
+      "number": 2,
+      "adapter_kind": "motion",
+      "config": "configs/maniguard/motion.json",
+      "config_sha256": "047f7eefe8a77e13c8fe11317b3bae457315c4452a6b4a8c620d557dec6845dc",
+      "initial_jar_physical_groups": [
+        {
+          "family": "jar",
+          "label": "motion_smoothing",
+          "adapter": {
+            "kind": "motion",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 0.5,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 2,
+            "unsafe_completion": 0,
+            "safe_unfinished": 1,
+            "unsafe_unfinished": 1
+          }
+        },
+        {
+          "family": "jar",
+          "label": "motion_cap",
+          "adapter": {
+            "kind": "motion",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.03,
+            "grasp_step_limit": 0.02,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 0,
+            "safe_unfinished": 1,
+            "unsafe_unfinished": 3
+          }
+        }
+      ],
+      "mechanism_screen_result": "Motion moderation has individual gains and adverse safety outcomes. Stack repeats and Jar smoothing repeats do not establish a broadly useful repair.",
+      "evidence": [
+        {
+          "path": "docs/research/research_notes/ManiGuard fruits Stack motion progress.json",
+          "sha256": "3d63f0162e6bf4d6e7b0b32ccf1473b4ce084d2bcfaa5951c9a0844e6e25e083"
+        },
+        {
+          "path": "docs/research/research_notes/ManiGuard fruits Jar repeat complete.json",
+          "sha256": "21d0fad312a7d7095b6ca01afacaaaa9350f80e5af9e58d995c389d4d15411bc"
+        }
+      ],
+      "optimizer_gate": "No demonstrated useful simple correction requiring optimizer comparison in the tested screen."
+    },
+    {
+      "number": 3,
+      "adapter_kind": "prerequisite",
+      "config": "configs/maniguard/prerequisite.json",
+      "config_sha256": "a10f9b2706d418c9af2aa830db963995d3bade5f4dd931f436bf048d2774d7b9",
+      "initial_jar_physical_groups": [
+        {
+          "family": "jar",
+          "label": "prerequisite_guard",
+          "adapter": {
+            "kind": "prerequisite",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": true,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 3,
+            "unsafe_completion": 0,
+            "safe_unfinished": 0,
+            "unsafe_unfinished": 1
+          }
+        }
+      ],
+      "mechanism_screen_result": "Plain guarding is the strongest Jar engineering lead, but Lid shows no useful correction. The separately tested controller-limit prediction defect requires the new physical comparison before a final judgement.",
+      "evidence": [
+        {
+          "path": "docs/research/research_notes/ManiGuard fruits Jar repeat complete.json",
+          "sha256": "21d0fad312a7d7095b6ca01afacaaaa9350f80e5af9e58d995c389d4d15411bc"
+        },
+        {
+          "path": "docs/research/research_notes/ManiGuard fruits Lid guard complete.json",
+          "sha256": "c07ebcc3259bb0864db60e21e8cca982d9ebb4c5fce6cfd494fafe85c49ea891"
+        },
+        {
+          "path": "docs/research/research_notes/ManiGuard fruits Jar guard lift prediction mismatch.json",
+          "sha256": "62b401b182b271e4aa91e10f638615de55fc3764c4bc67f67fb4b56aafa383fd"
+        }
+      ],
+      "optimizer_gate": "Not established by the current mechanism screens; reassess prerequisite/hand-back correction after the declared twelve-trial comparison."
+    },
+    {
+      "number": 4,
+      "adapter_kind": "release",
+      "config": "configs/maniguard/release.json",
+      "config_sha256": "2684c3d0d048eca64b53563cb23d1458b086d160087f2d75ff17efe361eb35cd",
+      "initial_jar_physical_groups": [
+        {
+          "family": "jar",
+          "label": "release_delay",
+          "adapter": {
+            "kind": "release",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 1,
+            "unsafe_completion": 0,
+            "safe_unfinished": 1,
+            "unsafe_unfinished": 2
+          }
+        }
+      ],
+      "mechanism_screen_result": "Release-delay rules activate in the follow-up, but every delayed opening is before the goal target is held. No useful target-grasp preservation has been established.",
+      "evidence": [
+        {
+          "path": "docs/research/research_notes/ManiGuard fruits Stack release progress.json",
+          "sha256": "b1fc5521982332083258b32c72fa4c83b37210b1dbc2432d35fffb73bd9bd700"
+        },
+        {
+          "path": "docs/research/research_notes/ManiGuard fruits Stack release control timing.json",
+          "sha256": "09f8f1ad36f7a76cd289cc5429b025dddc8047787d5a160567eae412a4ad7000"
+        }
+      ],
+      "optimizer_gate": "No demonstrated useful simple correction requiring optimizer comparison in the tested screen."
+    },
+    {
+      "number": 5,
+      "adapter_kind": "retry",
+      "config": "configs/maniguard/retry.json",
+      "config_sha256": "2c719210b23bbec21be768180ab3d954ca595170ef2e63c1bea273ee1f45f2ec",
+      "initial_jar_physical_groups": [
+        {
+          "family": "jar",
+          "label": "bounded_retry",
+          "adapter": {
+            "kind": "retry",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 40,
+            "stall_distance": 0.01,
+            "demand_threshold": 0.003,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 1,
+            "safe_unfinished": 2,
+            "unsafe_unfinished": 1
+          }
+        }
+      ],
+      "mechanism_screen_result": "Bounded physical retreats execute close to the requested displacement, but no safe-completion recovery was demonstrated. This does not prove irrecoverability.",
+      "evidence": [
+        {
+          "path": "docs/research/research_notes/ManiGuard fruits Jar retry comparison.json",
+          "sha256": "5882fd14aedcf34f8b46e293a27dab1ec553aaf23f1a68f08b0871c9b8443402"
+        }
+      ],
+      "optimizer_gate": "No demonstrated useful simple correction requiring optimizer comparison in the tested screen."
+    },
+    {
+      "number": 6,
+      "adapter_kind": "handback",
+      "config": "configs/maniguard/handback.json",
+      "config_sha256": "7ec2bdbdf8c6a727fa84b64858efa2105911ab8ea2585b361433825f4e78d73a",
+      "initial_jar_physical_groups": [
+        {
+          "family": "jar",
+          "label": "handback_settle_requery",
+          "adapter": {
+            "kind": "handback",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": true,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 4,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 2,
+            "unsafe_completion": 1,
+            "safe_unfinished": 1,
+            "unsafe_unfinished": 0
+          }
+        }
+      ],
+      "mechanism_screen_result": "Settling/requerying has fewer safe completions than the plain guard and equal violations over twelve repeat pairs, with substantially higher query cost.",
+      "evidence": [
+        {
+          "path": "docs/research/research_notes/ManiGuard fruits Jar repeat handback versus guard complete.json",
+          "sha256": "876150abd71f3aa0b6529fe1c77a8f6102888d7b0c9c171bb47e1b0ceaa35592"
+        }
+      ],
+      "optimizer_gate": "Not established by the current mechanism screens; reassess prerequisite/hand-back correction after the declared twelve-trial comparison."
+    }
+  ],
+  "batch_coverage": {
+    "jar-baseline-engineering-v1": {
+      "planned": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "groups": [
+        {
+          "family": "jar",
+          "label": "identity",
+          "adapter": {
+            "kind": "identity",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 1,
+            "unsafe_completion": 0,
+            "safe_unfinished": 0,
+            "unsafe_unfinished": 3
+          }
+        }
+      ],
+      "recorded_cost_totals": {
+        "physics_steps": 42332,
+        "physics_seconds": 352.76668506488204,
+        "env_step_attempts": 7038,
+        "env_steps_returned": 7038,
+        "policy_queries": 875,
+        "policy_query_seconds": 151.59392356034368,
+        "policy_control_steps": 6998,
+        "elapsed_seconds": 722.7869170089252
+      },
+      "started_episodes_missing_cost_fields": {},
+      "started_episodes_with_unverified_physics_attachment": 0,
+      "finished_processes_missing_elapsed_seconds": 0,
+      "plan_sha256": "6c7d45e17af2f67d670026a3e664eb674bb576b19e6776287e3be45277aa12b8",
+      "complete_marker_present": true
+    },
+    "lid-baseline-engineering-v1": {
+      "planned": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "groups": [
+        {
+          "family": "lid",
+          "label": "identity",
+          "adapter": {
+            "kind": "identity",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 0,
+            "safe_unfinished": 4,
+            "unsafe_unfinished": 0
+          }
+        }
+      ],
+      "recorded_cost_totals": {
+        "physics_steps": 45944,
+        "physics_seconds": 382.8666866347194,
+        "env_step_attempts": 7640,
+        "env_steps_returned": 7640,
+        "policy_queries": 952,
+        "policy_query_seconds": 189.28500254824758,
+        "policy_control_steps": 7600,
+        "elapsed_seconds": 768.502803199226
+      },
+      "started_episodes_missing_cost_fields": {},
+      "started_episodes_with_unverified_physics_attachment": 0,
+      "finished_processes_missing_elapsed_seconds": 0,
+      "plan_sha256": "aa0e5f4c7f4d00cf8f5e51523497df8d5aee4b74d193e94ab5930506bcec317e",
+      "complete_marker_present": true
+    },
+    "stack-baseline-engineering-v1": {
+      "planned": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "groups": [
+        {
+          "family": "stack",
+          "label": "identity",
+          "adapter": {
+            "kind": "identity",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 1,
+            "unsafe_completion": 1,
+            "safe_unfinished": 2,
+            "unsafe_unfinished": 0
+          }
+        }
+      ],
+      "recorded_cost_totals": {
+        "physics_steps": 80516,
+        "physics_seconds": 670.9667016603053,
+        "env_step_attempts": 13402,
+        "env_steps_returned": 13402,
+        "policy_queries": 1671,
+        "policy_query_seconds": 316.60287795285694,
+        "policy_control_steps": 13362,
+        "elapsed_seconds": 1195.724948415067
+      },
+      "started_episodes_missing_cost_fields": {},
+      "started_episodes_with_unverified_physics_attachment": 0,
+      "finished_processes_missing_elapsed_seconds": 0,
+      "plan_sha256": "6768a43e8748ee4ea869576bda12f9cd50a993cac3c243bbf8124e23cd8d76f6",
+      "complete_marker_present": true
+    },
+    "jar-fixed-screens-v1": {
+      "planned": 40,
+      "statuses": {
+        "completed": 40
+      },
+      "groups": [
+        {
+          "family": "jar",
+          "label": "motion_smoothing",
+          "adapter": {
+            "kind": "motion",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 0.5,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 2,
+            "unsafe_completion": 0,
+            "safe_unfinished": 1,
+            "unsafe_unfinished": 1
+          }
+        },
+        {
+          "family": "jar",
+          "label": "motion_cap",
+          "adapter": {
+            "kind": "motion",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.03,
+            "grasp_step_limit": 0.02,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 0,
+            "safe_unfinished": 1,
+            "unsafe_unfinished": 3
+          }
+        },
+        {
+          "family": "jar",
+          "label": "handback_settle_requery",
+          "adapter": {
+            "kind": "handback",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": true,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 4,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 2,
+            "unsafe_completion": 1,
+            "safe_unfinished": 1,
+            "unsafe_unfinished": 0
+          }
+        },
+        {
+          "family": "jar",
+          "label": "prerequisite_guard",
+          "adapter": {
+            "kind": "prerequisite",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": true,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 3,
+            "unsafe_completion": 0,
+            "safe_unfinished": 0,
+            "unsafe_unfinished": 1
+          }
+        },
+        {
+          "family": "jar",
+          "label": "adaptive_replan",
+          "adapter": {
+            "kind": "replan",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.03,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 1,
+            "unsafe_completion": 0,
+            "safe_unfinished": 1,
+            "unsafe_unfinished": 2
+          }
+        },
+        {
+          "family": "jar",
+          "label": "release_delay",
+          "adapter": {
+            "kind": "release",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 1,
+            "unsafe_completion": 0,
+            "safe_unfinished": 1,
+            "unsafe_unfinished": 2
+          }
+        },
+        {
+          "family": "jar",
+          "label": "bounded_retry",
+          "adapter": {
+            "kind": "retry",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 40,
+            "stall_distance": 0.01,
+            "demand_threshold": 0.003,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 1,
+            "safe_unfinished": 2,
+            "unsafe_unfinished": 1
+          }
+        },
+        {
+          "family": "jar",
+          "label": "baseline_repeat",
+          "adapter": {
+            "kind": "identity",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 3,
+            "unsafe_completion": 1,
+            "safe_unfinished": 0,
+            "unsafe_unfinished": 0
+          }
+        },
+        {
+          "family": "jar",
+          "label": "fixed_horizon_16",
+          "adapter": {
+            "kind": "identity",
+            "horizon": 16,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 1,
+            "unsafe_completion": 1,
+            "safe_unfinished": 1,
+            "unsafe_unfinished": 1
+          }
+        },
+        {
+          "family": "jar",
+          "label": "fixed_horizon_4",
+          "adapter": {
+            "kind": "identity",
+            "horizon": 4,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 1,
+            "unsafe_completion": 0,
+            "safe_unfinished": 2,
+            "unsafe_unfinished": 1
+          }
+        }
+      ],
+      "recorded_cost_totals": {
+        "physics_steps": 375320,
+        "physics_seconds": 3127.6668297871947,
+        "env_step_attempts": 62380,
+        "env_steps_returned": 62380,
+        "policy_queries": 10610,
+        "policy_query_seconds": 3060.272193022538,
+        "policy_control_steps": 61980,
+        "elapsed_seconds": 8951.281451340998
+      },
+      "started_episodes_missing_cost_fields": {},
+      "started_episodes_with_unverified_physics_attachment": 0,
+      "finished_processes_missing_elapsed_seconds": 0,
+      "plan_sha256": "5c7e4b516edab8313ddf7572e663e3625b04e5af22b969a2fc18ffccca645d8b",
+      "complete_marker_present": true
+    },
+    "stack-fixed-screens-v1": {
+      "planned": 24,
+      "statuses": {
+        "completed": 24
+      },
+      "groups": [
+        {
+          "family": "stack",
+          "label": "release_delay",
+          "adapter": {
+            "kind": "release",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 0,
+            "safe_unfinished": 3,
+            "unsafe_unfinished": 1
+          }
+        },
+        {
+          "family": "stack",
+          "label": "baseline_repeat",
+          "adapter": {
+            "kind": "identity",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 1,
+            "safe_unfinished": 3,
+            "unsafe_unfinished": 0
+          }
+        },
+        {
+          "family": "stack",
+          "label": "motion_smoothing",
+          "adapter": {
+            "kind": "motion",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 0.5,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 1,
+            "safe_unfinished": 2,
+            "unsafe_unfinished": 1
+          }
+        },
+        {
+          "family": "stack",
+          "label": "fixed_horizon_4",
+          "adapter": {
+            "kind": "identity",
+            "horizon": 4,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 0,
+            "safe_unfinished": 4,
+            "unsafe_unfinished": 0
+          }
+        },
+        {
+          "family": "stack",
+          "label": "motion_cap",
+          "adapter": {
+            "kind": "motion",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.03,
+            "grasp_step_limit": 0.02,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 1,
+            "safe_unfinished": 3,
+            "unsafe_unfinished": 0
+          }
+        },
+        {
+          "family": "stack",
+          "label": "adaptive_replan",
+          "adapter": {
+            "kind": "replan",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.03,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 1,
+            "safe_unfinished": 3,
+            "unsafe_unfinished": 0
+          }
+        }
+      ],
+      "recorded_cost_totals": {
+        "physics_steps": 553680,
+        "physics_seconds": 4614.000240638852,
+        "env_step_attempts": 92176,
+        "env_steps_returned": 92176,
+        "policy_queries": 13679,
+        "policy_query_seconds": 3806.290576030966,
+        "policy_control_steps": 91936,
+        "elapsed_seconds": 10391.354304511333
+      },
+      "started_episodes_missing_cost_fields": {},
+      "started_episodes_with_unverified_physics_attachment": 0,
+      "finished_processes_missing_elapsed_seconds": 0,
+      "plan_sha256": "91b69b5a3dddcaddb154956b18606d3277730b13b46661e59974a4bbe0d9c4d4",
+      "complete_marker_present": true
+    },
+    "lid-extra-baselines-engineering-v1": {
+      "planned": 8,
+      "statuses": {
+        "completed": 8
+      },
+      "groups": [
+        {
+          "family": "lid",
+          "label": "baseline_extra_seed",
+          "adapter": {
+            "kind": "identity",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 8,
+          "statuses": {
+            "completed": 8
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 1,
+            "safe_unfinished": 5,
+            "unsafe_unfinished": 2
+          }
+        }
+      ],
+      "recorded_cost_totals": {
+        "physics_steps": 90472,
+        "physics_seconds": 753.9333726540208,
+        "env_step_attempts": 15044,
+        "env_steps_returned": 15044,
+        "policy_queries": 1874,
+        "policy_query_seconds": 463.33193421084434,
+        "policy_control_steps": 14964,
+        "elapsed_seconds": 1685.7679982592817
+      },
+      "started_episodes_missing_cost_fields": {},
+      "started_episodes_with_unverified_physics_attachment": 0,
+      "finished_processes_missing_elapsed_seconds": 0,
+      "plan_sha256": "b0431951632aa70798fac636ac583e805bd9b39709c95f9aa71543da8825b448",
+      "complete_marker_present": true
+    },
+    "stack-motion-repeat-v1": {
+      "planned": 24,
+      "statuses": {
+        "completed": 24
+      },
+      "groups": [
+        {
+          "family": "stack",
+          "label": "cap_001_001",
+          "adapter": {
+            "kind": "motion",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.01,
+            "grasp_step_limit": 0.01,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 6,
+          "statuses": {
+            "completed": 6
+          },
+          "outcomes": {
+            "safe_completion": 1,
+            "unsafe_completion": 0,
+            "safe_unfinished": 2,
+            "unsafe_unfinished": 3
+          }
+        },
+        {
+          "family": "stack",
+          "label": "identity",
+          "adapter": {
+            "kind": "identity",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 6,
+          "statuses": {
+            "completed": 6
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 0,
+            "safe_unfinished": 4,
+            "unsafe_unfinished": 2
+          }
+        },
+        {
+          "family": "stack",
+          "label": "cap_006_004",
+          "adapter": {
+            "kind": "motion",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.06,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 6,
+          "statuses": {
+            "completed": 6
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 1,
+            "safe_unfinished": 2,
+            "unsafe_unfinished": 3
+          }
+        },
+        {
+          "family": "stack",
+          "label": "cap_003_002",
+          "adapter": {
+            "kind": "motion",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.03,
+            "grasp_step_limit": 0.02,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 6,
+          "statuses": {
+            "completed": 6
+          },
+          "outcomes": {
+            "safe_completion": 1,
+            "unsafe_completion": 1,
+            "safe_unfinished": 2,
+            "unsafe_unfinished": 2
+          }
+        }
+      ],
+      "recorded_cost_totals": {
+        "physics_steps": 546828,
+        "physics_seconds": 4556.900237660855,
+        "env_step_attempts": 91034,
+        "env_steps_returned": 91034,
+        "policy_queries": 11350,
+        "policy_query_seconds": 2987.1834149830975,
+        "policy_control_steps": 90794,
+        "elapsed_seconds": 9455.663808998186
+      },
+      "started_episodes_missing_cost_fields": {},
+      "started_episodes_with_unverified_physics_attachment": 0,
+      "finished_processes_missing_elapsed_seconds": 0,
+      "plan_sha256": "3ea5de0d4810d21465d58f666af4b57e4cb502b45cb0e0ca779711b75d4af0cf",
+      "complete_marker_present": true
+    },
+    "stack-release-trigger-v1": {
+      "planned": 12,
+      "statuses": {
+        "completed": 12
+      },
+      "groups": [
+        {
+          "family": "stack",
+          "label": "stable_closing_release_delay",
+          "adapter": {
+            "kind": "release",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.0,
+            "max_aperture": 0.041,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 1,
+            "safe_unfinished": 3,
+            "unsafe_unfinished": 0
+          }
+        },
+        {
+          "family": "stack",
+          "label": "narrow_release_delay",
+          "adapter": {
+            "kind": "release",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 0,
+            "safe_unfinished": 2,
+            "unsafe_unfinished": 2
+          }
+        },
+        {
+          "family": "stack",
+          "label": "identity",
+          "adapter": {
+            "kind": "identity",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 4,
+          "statuses": {
+            "completed": 4
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 1,
+            "safe_unfinished": 2,
+            "unsafe_unfinished": 1
+          }
+        }
+      ],
+      "recorded_cost_totals": {
+        "physics_steps": 281910,
+        "physics_seconds": 2349.2501225229353,
+        "env_step_attempts": 46933,
+        "env_steps_returned": 46933,
+        "policy_queries": 5852,
+        "policy_query_seconds": 1480.2752996387426,
+        "policy_control_steps": 46813,
+        "elapsed_seconds": 4790.941978111165
+      },
+      "started_episodes_missing_cost_fields": {},
+      "started_episodes_with_unverified_physics_attachment": 0,
+      "finished_processes_missing_elapsed_seconds": 0,
+      "plan_sha256": "62cd89d512da8892de7737ed30dd8551460ed441e75edf87864fbc39dd8e3f87",
+      "complete_marker_present": true
+    },
+    "jar-guard-repeat-v2": {
+      "planned": 48,
+      "statuses": {
+        "completed": 48
+      },
+      "groups": [
+        {
+          "family": "jar",
+          "label": "handback_settle_requery",
+          "adapter": {
+            "kind": "handback",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": true,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 4,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 12,
+          "statuses": {
+            "completed": 12
+          },
+          "outcomes": {
+            "safe_completion": 3,
+            "unsafe_completion": 0,
+            "safe_unfinished": 7,
+            "unsafe_unfinished": 2
+          }
+        },
+        {
+          "family": "jar",
+          "label": "prerequisite_guard",
+          "adapter": {
+            "kind": "prerequisite",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": true,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 12,
+          "statuses": {
+            "completed": 12
+          },
+          "outcomes": {
+            "safe_completion": 4,
+            "unsafe_completion": 0,
+            "safe_unfinished": 6,
+            "unsafe_unfinished": 2
+          }
+        },
+        {
+          "family": "jar",
+          "label": "motion_smoothing",
+          "adapter": {
+            "kind": "motion",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 0.5,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 12,
+          "statuses": {
+            "completed": 12
+          },
+          "outcomes": {
+            "safe_completion": 3,
+            "unsafe_completion": 1,
+            "safe_unfinished": 4,
+            "unsafe_unfinished": 4
+          }
+        },
+        {
+          "family": "jar",
+          "label": "identity",
+          "adapter": {
+            "kind": "identity",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 12,
+          "statuses": {
+            "completed": 12
+          },
+          "outcomes": {
+            "safe_completion": 2,
+            "unsafe_completion": 1,
+            "safe_unfinished": 6,
+            "unsafe_unfinished": 3
+          }
+        }
+      ],
+      "recorded_cost_totals": {
+        "physics_steps": 502560,
+        "physics_seconds": 4188.000218421221,
+        "env_step_attempts": 83552,
+        "env_steps_returned": 83552,
+        "policy_queries": 18345,
+        "policy_query_seconds": 5056.114910985576,
+        "policy_control_steps": 83072,
+        "elapsed_seconds": 12802.203647797462
+      },
+      "started_episodes_missing_cost_fields": {},
+      "started_episodes_with_unverified_physics_attachment": 0,
+      "finished_processes_missing_elapsed_seconds": 0,
+      "plan_sha256": "b0a08fa0cbe2009885fb2e636d6f923b469823b9345e14619e44e2db8eae1f71",
+      "complete_marker_present": true
+    },
+    "lid-guard-screen-v1": {
+      "planned": 16,
+      "statuses": {
+        "completed": 16
+      },
+      "groups": [
+        {
+          "family": "lid",
+          "label": "prerequisite_guard",
+          "adapter": {
+            "kind": "prerequisite",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": true,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 8,
+          "statuses": {
+            "completed": 8
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 0,
+            "safe_unfinished": 7,
+            "unsafe_unfinished": 1
+          }
+        },
+        {
+          "family": "lid",
+          "label": "identity",
+          "adapter": {
+            "kind": "identity",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": false,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 8,
+          "statuses": {
+            "completed": 8
+          },
+          "outcomes": {
+            "safe_completion": 0,
+            "unsafe_completion": 1,
+            "safe_unfinished": 7,
+            "unsafe_unfinished": 0
+          }
+        }
+      ],
+      "recorded_cost_totals": {
+        "physics_steps": 175310,
+        "physics_seconds": 1460.9167428594083,
+        "env_step_attempts": 29149,
+        "env_steps_returned": 29149,
+        "policy_queries": 4615,
+        "policy_query_seconds": 1107.8669684473425,
+        "policy_control_steps": 28989,
+        "elapsed_seconds": 3515.7391065610573
+      },
+      "started_episodes_missing_cost_fields": {},
+      "started_episodes_with_unverified_physics_attachment": 0,
+      "finished_processes_missing_elapsed_seconds": 0,
+      "plan_sha256": "3a098e38d70de0d72e6115d82bc890cfe9e7337ba3f1578a344a8412026b5026",
+      "complete_marker_present": true
+    },
+    "jar-controller-limit-screen-v1": {
+      "planned": 12,
+      "statuses": {
+        "awaiting_process_record": 2,
+        "not_started": 10
+      },
+      "groups": [
+        {
+          "family": "jar",
+          "label": "prerequisite_guard_joint_limits",
+          "adapter": {
+            "kind": "prerequisite",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": true,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": true,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 3,
+          "statuses": {
+            "awaiting_process_record": 1,
+            "not_started": 2
+          },
+          "outcomes": {}
+        },
+        {
+          "family": "jar",
+          "label": "handback_requested_target",
+          "adapter": {
+            "kind": "handback",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": true,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 4,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 3,
+          "statuses": {
+            "awaiting_process_record": 1,
+            "not_started": 2
+          },
+          "outcomes": {}
+        },
+        {
+          "family": "jar",
+          "label": "prerequisite_guard_requested_target",
+          "adapter": {
+            "kind": "prerequisite",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": true,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": false,
+            "handback_hold_steps": 0,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 3,
+          "statuses": {
+            "not_started": 3
+          },
+          "outcomes": {}
+        },
+        {
+          "family": "jar",
+          "label": "handback_joint_limits",
+          "adapter": {
+            "kind": "handback",
+            "horizon": 8,
+            "min_query_interval": 1,
+            "tracking_threshold": 0.1,
+            "replan_on_gripper_change": true,
+            "free_step_limit": 0.12,
+            "grasp_step_limit": 0.04,
+            "smoothing": 1.0,
+            "settle_steps": 0,
+            "release_delay": 4,
+            "min_closing_steps": 3,
+            "min_aperture": 0.003,
+            "max_aperture": 0.035,
+            "aperture_stability": 0.002,
+            "privileged": true,
+            "lift_margin": 0.001,
+            "closure_confirm_steps": 1,
+            "guard_requery_steps": 1,
+            "guard_joint_limits": true,
+            "handback_hold_steps": 4,
+            "handback_requery": true,
+            "stall_window": 20,
+            "stall_distance": 0.003,
+            "demand_threshold": 0.03,
+            "retry_distance": 0.015,
+            "retry_steps": 5,
+            "retry_limit": 2,
+            "retry_cooldown": 40
+          },
+          "planned": 3,
+          "statuses": {
+            "not_started": 3
+          },
+          "outcomes": {}
+        }
+      ],
+      "recorded_cost_totals": {
+        "physics_steps": 1982,
+        "physics_seconds": 16.51666752807796,
+        "env_step_attempts": 322,
+        "env_steps_returned": 321,
+        "policy_queries": 39,
+        "policy_query_seconds": 10.283529012231156,
+        "policy_control_steps": 301,
+        "elapsed_seconds": 127.90565885487013
+      },
+      "started_episodes_missing_cost_fields": {},
+      "started_episodes_with_unverified_physics_attachment": 0,
+      "finished_processes_missing_elapsed_seconds": 0,
+      "plan_sha256": "ece0be867b3b464c474fc3cedf625979eba405f7b074dff9bf85b4151283fe4f",
+      "complete_marker_present": false
+    }
+  },
+  "scene_split_audit": {
+    "split_file_sha256": "1680e28cc32b98543439c7514201417286de737d3654fd88bb8690e0939a8223",
+    "all_four_partitions_disjoint_within_family": true,
+    "all_recorded_jobs_in_engineering": true,
+    "job_counts": [
+      {
+        "family": "jar",
+        "split": "engineering",
+        "count": 100
+      },
+      {
+        "family": "lid",
+        "split": "engineering",
+        "count": 30
+      },
+      {
+        "family": "stack",
+        "split": "engineering",
+        "count": 68
+      }
+    ],
+    "jobs": [
+      {
+        "path": "runs/maniguard/controller-limit-pipeline-v1/reference/job.json",
+        "sha256": "43b26aa6a26a45bdf2033fd1ec9b714aef67a778f17bcd0643c72d4c1cabe1df",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": 32
+      },
+      {
+        "path": "runs/maniguard/engineering/jar-0013-smoke-v1/job.json",
+        "sha256": "fa718a2bfea4e3d5fcebbe1b6973759474c9f28871af456c760859fd0f584c7b",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": 32
+      },
+      {
+        "path": "runs/maniguard/engineering/jar-0013-smoke-v2/job.json",
+        "sha256": "19ebb6a88c94d5b73b8e6b8f555388b03d0bbbc181e858dfb7960bb6253e59c0",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": 32
+      },
+      {
+        "path": "runs/maniguard/engineering/jar-0013-smoke-v3/job.json",
+        "sha256": "841f393f98194f46159f51d8b33784648adf83ec5f8f5e96c5dc9a0949a48e22",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": 32
+      },
+      {
+        "path": "runs/maniguard/jar-baseline-engineering-v1/episode-0000/job.json",
+        "sha256": "0b84e1abb797399ac04b830f073d171f02e06bddfbfda03cb24b1314a85dc2d8",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-baseline-engineering-v1/episode-0001/job.json",
+        "sha256": "efdfb5a3cd52209c489ce7476317337d63d8a25dda4f887732a5935e2d0cc295",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-baseline-engineering-v1/episode-0002/job.json",
+        "sha256": "63901dba348af73d6465a7c04781bf62984176e8c8a282d29caca560c18f77be",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-baseline-engineering-v1/episode-0003/job.json",
+        "sha256": "051d7f3151d60ea676b8e66e946cec65186dc772db4052c2965dcd1a79ca676e",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-controller-limit-screen-v1/episode-0000/job.json",
+        "sha256": "cea20eba8fdf79dc952da7a90648ed4ab399b5ec653e1c39f3ce64bbdf06dea6",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-controller-limit-screen-v1/episode-0001/job.json",
+        "sha256": "fc6449ec1527ef8a2d0c297342d848122bc3914f9df77613ba26730385a40629",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0000/job.json",
+        "sha256": "48e5fe3871171e3f6ab47391bab4f56fee557656066131d9cfefc8a8ecc03b26",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0001/job.json",
+        "sha256": "98b16a2e198a57781fd213ad9be965f2c4d0c5a7a92615ef373c52660a9dcdb2",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0002/job.json",
+        "sha256": "38d064bcd86aa535dfd2baf8d44d89d7cbc20a4767594e1a7e4a8671428d2b9f",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0003/job.json",
+        "sha256": "14b5309065674ff5cf239caf52fb401f114c3555714a2651d1ae22c40b8ab737",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0004/job.json",
+        "sha256": "a933d125e66c0bbc4dd25b7776feabdd864bf51405811500b107cbc46727bc87",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0005/job.json",
+        "sha256": "81c879ff91a92446b09895464c1f8337790cf4f904749feedf6a8b84bb020c4c",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0006/job.json",
+        "sha256": "92e8a933809332cd0b89e3ca172e28206ad2fc4d9c8c4e707ca23177b317d908",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0007/job.json",
+        "sha256": "a74eb9c306eaca471e5ed7393e788cf70e343bc37ea1b3b4482fd64c4aa967a6",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0008/job.json",
+        "sha256": "d4edcfb7791c48ee4a9e223b2db5b5246d54b7f1d71df1597c894d9a4da89368",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0009/job.json",
+        "sha256": "04e7e84866e754d7105774a8c0057e6eefc03debe5fc02e04b70121c60ec2fc8",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0010/job.json",
+        "sha256": "ab1eaf22834c279e8407417de3b989eddb1fba56d4a1fb104a70a12b860ca826",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0011/job.json",
+        "sha256": "f1d5085536177a4f109ba112257931d6888f0db3a39bbee5498b233dff33a18b",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0012/job.json",
+        "sha256": "c052660058c0d7fcca8878cda78c19c877daf8db87e59cabf7ff41c289bcdf61",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0013/job.json",
+        "sha256": "9078766fe1f51b77e127bf530022a8b22a39ed9ea3c1febaeefb1590aa42c12d",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0014/job.json",
+        "sha256": "c58e6f2817fbacb5cac70bed3c247bd843c746d56f8db3ae25bcc9fe80440409",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0015/job.json",
+        "sha256": "9f757742025e92cf32865f7612f517860f75172cf57497e99370210833f3e733",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0016/job.json",
+        "sha256": "cd23988958f431e3eff1199a71483226e31028b7270e49be9024bdad6f132afb",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0017/job.json",
+        "sha256": "9d6d4d13ca10b5d3d2cabf19890ab5abb9195041c13a0142b1f3aede7ad4c686",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0018/job.json",
+        "sha256": "144d17f558515bcdb3ee9fd3e7144988114d69ac928ed65cc0045b5769f46de1",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0019/job.json",
+        "sha256": "b2568f022f1da07abf53aead1b2274613db4a2406bb66c34ac9247933c8dd6cc",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0020/job.json",
+        "sha256": "6b3507c3f7af008a5f6dca2519473b01fde174490bac99ea3ea5977f21e569bb",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0021/job.json",
+        "sha256": "0b5ea42205d970354078b6ec8ae75082fda7cc2aa65ee218a794d071427470f4",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0022/job.json",
+        "sha256": "a19e727e9a75f445cc1838a6e37aab7f8709c910f08eacd62edf408d8705195c",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0023/job.json",
+        "sha256": "491b664a4a9d7e70e445856e2243318106c245d4fa9ad8d6d7d4070a7470453f",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0024/job.json",
+        "sha256": "ac81e6803571d2e2c40a0a3c60ba0d4b1641d5a536ceddce8b79120cf6f9fff9",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0025/job.json",
+        "sha256": "7f9c224a029d680d40d503134c207b4f06df152055234d6ca2af99746b6b2854",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0026/job.json",
+        "sha256": "c5afd6dd36b40ac730b3b8a71848149e64b4ef90e4a1ab39721c553261a28c09",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0027/job.json",
+        "sha256": "fa71a9bf12896ad7054c633977fcfaf2f26b8f1ca70039653451097bc680a9a9",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0028/job.json",
+        "sha256": "a67df1a5d11002f5aac3deda1eba3b5aeab3dbc14d558a47f59ab73c6099a54b",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0029/job.json",
+        "sha256": "a6a4a2df11a6ca68efe187467907fb0e7a0b053fe9a1c7b89d813271e9913618",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0030/job.json",
+        "sha256": "d7c44a3b85546827788dab8ed7977bca183c887d70d0d2bb8939aacc4ed87446",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0031/job.json",
+        "sha256": "f918206562d7da091e2cb612ba1afef1c6668ff4a8cfe1eda1d31e468653cd72",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0032/job.json",
+        "sha256": "c04cf343555b181c3350a8f329ad2678ec847ed49e8a11c8df8d6bb85dd6212e",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0033/job.json",
+        "sha256": "955f0f30423485ef096f0b53df9bafa5e68247d713390cf0d96c76edfa821961",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0034/job.json",
+        "sha256": "08f7669eaf3627e3492b86546d435a17fbd19573e388a30e09ea4a4dcf84863f",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0035/job.json",
+        "sha256": "86fbe03075b7ec81e2ff06aa0150762f273dac3dc4ffa060afb18b6b85dd4f3b",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0036/job.json",
+        "sha256": "b283a8e44bd185739702ef1bf2d58fffc8016f584d34d19c8f3da1ab5399bbca",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0037/job.json",
+        "sha256": "a36011e56ea001a788a4bf09d76b891f3e420a5f1a9e0e35523ab108d3c4c14d",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0038/job.json",
+        "sha256": "bd677b054fbb706df36b1b048ae78389fc05ecc8d6caef278d46d47ddaa1f207",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-fixed-screens-v1/episode-0039/job.json",
+        "sha256": "6905434426f34011269a79543080133205b494348bd1f9d7da2cae5a41487e05",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-pipeline-v2/reference/job.json",
+        "sha256": "c1108f96a59bbcaf46f1ee4197a5a1c8aa64c1ab70544e901e6b0a8a7adc716e",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": 32
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0000/job.json",
+        "sha256": "7f11c37068c5417ceec8432bb58fd025732a8bf4135c5b2bbf005de8494b6e34",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0001/job.json",
+        "sha256": "9465bcf21fa47dc5be887489c8c9b47c400859becaea6f1a7acbfb1dbd699030",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0002/job.json",
+        "sha256": "e1f397cbe7dfbfdeea29f24dabb6fb2154c175e9eec008278ed22da2564a87c4",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0003/job.json",
+        "sha256": "cb3f9328a22af134d97052ca6cde26e0b83d3896a4b02047e3b6280182ee7d0b",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0004/job.json",
+        "sha256": "047677321e78b6a3ca5f00084e2802745ad76c58f319e8ad535575ca4028bb24",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0005/job.json",
+        "sha256": "9cc4d44b8de8fc6773e406c1cb1445d7b4cdca6ffd7512d8fa56917b5ba3b286",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0006/job.json",
+        "sha256": "8ca2c7a1da6c56e3ad4f26b429b1c01bf1bdee25486c33d546a213378d202918",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0007/job.json",
+        "sha256": "f22333a71881746bcc9a59de71d7fd9f4f8096624c26fc3b01855cbd9592df36",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0008/job.json",
+        "sha256": "3bedcba7012ddb8eaece715e88ad245d8c3aa6902078edf6b104fbbf3ff00ed3",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0009/job.json",
+        "sha256": "b6fe6a95abbc693000b20e3d0c98baeecc35c62277c4093d72a6024b34fb3586",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0010/job.json",
+        "sha256": "d82acc2ce82fba68242442c8fb97c0734ecc33ad4b06a0ef5f67726aebed3116",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0011/job.json",
+        "sha256": "3fa41621a8db1693bb09f4b6411d55942bc018b400291f00637cbe49084cc3d2",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0012/job.json",
+        "sha256": "c510512d4991fa410b986266c59e130fb8b57fc5e4779aee8864eea4c5495d7f",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0013/job.json",
+        "sha256": "077e8f4833177f5ad60ae692811d37bc9c23bb889f032893ed2d0c1d100e1bf2",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0014/job.json",
+        "sha256": "a3811e1ae3197aa319c0fe1e4476de10527b5d802e7c233c4d02cad10618e3dd",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0015/job.json",
+        "sha256": "b10b2a1f1efde1b7f7a8782619a344196585bd36094fd152c646c165e1c3131f",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0016/job.json",
+        "sha256": "a8623f394f150dafd7f034ccb86b8b8083a29c4958f60cc166e28e8aec57d9d4",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0017/job.json",
+        "sha256": "89ffbe3be9e547237272f81208ea6bd3b28842ff7e983d9677b427669a98692a",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0018/job.json",
+        "sha256": "7b93bd2ee500b4a8ed16b4ddc9fef6d28c957e8ba359145eeac9570b83191559",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0019/job.json",
+        "sha256": "982b48f1ebaf8f6c6b2c7a3b8c14160fd6896da59bdaf95c28b5003950940ea5",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0020/job.json",
+        "sha256": "0f5e5765d42270079818908967142ddecd31594f7a7da82a5a534140c1331962",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0021/job.json",
+        "sha256": "238339d82e1c147ae4162ec0aa4f37738f7d736c8e2fb7027d68ec76d3c5481c",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0022/job.json",
+        "sha256": "5f006b3e7d03619d7e7801ea669a41e3af82e602a7466ca5ab0b5dbe1ccd2255",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0023/job.json",
+        "sha256": "de560fc3d6f27dcd7d5697e033688f29fbca6dd63815fd4b8cf17db50fc7db60",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0024/job.json",
+        "sha256": "daeca50740082161756c37be9895ba4a95532eb7df3b93d5b06d025c80b5745e",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0025/job.json",
+        "sha256": "239e998fe4a04cfbdab169c2ee79cf7d9da475c18bfb60114b4d5fb1caed31d5",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0026/job.json",
+        "sha256": "75b6c4cc3514152adca03d67b53d223e444315045d2a415ee7846fdef77f42be",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0027/job.json",
+        "sha256": "3175a9fa0a39fcc537a3660a4f6535a58063e5a6c62bcdee9cabc7672bb3181c",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0028/job.json",
+        "sha256": "1f1a293dbb06b0192802c36bfd9e57566ceb7a07ccb8a2e166e59a7b80a30eed",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0029/job.json",
+        "sha256": "63e653adca251aeb447575a237ae6c2c6768acec59b8db3b724504ae526dfdd6",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0030/job.json",
+        "sha256": "53b0aa607a23a7ad2bd18b9e6422db43ae3c623301e31c91eb28f51b02b94963",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0031/job.json",
+        "sha256": "92202efb9a41c7b936fc3ce507c5289db2b8971c193643d7e5488b1bfb742182",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0032/job.json",
+        "sha256": "900476b8b4a8a0809037c69400a4021c8eeb1aab6a32228a3b387bf4ffe3fe0c",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0033/job.json",
+        "sha256": "e1e9c2cfcdf583597033aa3e67c29d4effb7e31289fc96493708cfa77b0dd709",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0034/job.json",
+        "sha256": "ca45d569afceb9b385a04b85cfd4216abdff855023f0d7d805696ebc73b8fcf0",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0035/job.json",
+        "sha256": "72efa6e816608fdd813fcd37b9154e64c05efb73c92f5aef852e25d41eceaf2c",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0036/job.json",
+        "sha256": "4193a4e31ee7f46a838ffe608f649f14f30aa7f0093beca759c2bc9060a40841",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0037/job.json",
+        "sha256": "f4235db757f9d95ec2787b50bbbbd774152755651515667a8487374839e909dd",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0038/job.json",
+        "sha256": "f586f9fe026f8b9642405ebfa7f317060ccd81143e7e41d2f8828d3a4830dfcd",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0039/job.json",
+        "sha256": "cd9501a53d19ce0645dbd9ecd85aee8b63a1cd77c4cf9919a088d6c078a59bea",
+        "family": "jar",
+        "scene": "task_0002/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0040/job.json",
+        "sha256": "2417ca763e38704e182b961ba073f9504a248046420768ec0fb12375e999e3c7",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0041/job.json",
+        "sha256": "ae86994279360f087654edfb7206c3e751642f1d4a5d989601a7aeffc74b52f8",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0042/job.json",
+        "sha256": "7dd0f09091804cba8b168e6f231ae6e1d6b6a67b1f0ad8525df4781e6712826d",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0043/job.json",
+        "sha256": "3327c65fa4830f2907b18fcdd41d49a86a3badb34f21486c9259f2330084783b",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0044/job.json",
+        "sha256": "14730dc608d33f422ca9f244057e67feed1264377c30c39cce150b398c9a3f6f",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0045/job.json",
+        "sha256": "c6d50a12cc2b444b0dee9c3dafe0ea74e00eb4e5fc930e3de92996063bebb025",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0046/job.json",
+        "sha256": "80c7b29a198932612c950736d31dd3b50564b7db08bf6dea29f2ea4d7bb900b8",
+        "family": "jar",
+        "scene": "task_0017/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/jar-guard-repeat-v2/episode-0047/job.json",
+        "sha256": "d7758ec34b8beb7b4ff5332a23299805d34ab67e4f7baf10e53af399df6ae0ff",
+        "family": "jar",
+        "scene": "task_0008/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-baseline-engineering-v1/episode-0000/job.json",
+        "sha256": "c6a3bb31ebfdbfdc4edf20cfba71a675a3b21817abc11a672a8a1677b08ad520",
+        "family": "lid",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-baseline-engineering-v1/episode-0001/job.json",
+        "sha256": "aba2d324e581553f5eef870fe72670706597259eca894a63a25e7eaecaa27354",
+        "family": "lid",
+        "scene": "task_0003/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-baseline-engineering-v1/episode-0002/job.json",
+        "sha256": "49e262833909fd5c021dc2b1856d032030fb7da4fce305d0b7d8d69437c48a45",
+        "family": "lid",
+        "scene": "task_0006/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-baseline-engineering-v1/episode-0003/job.json",
+        "sha256": "c6164e600fd46d7b8d2eefa8194469aec5e38f97db1bf3a1989ddb179d890b05",
+        "family": "lid",
+        "scene": "task_0014/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-extra-baselines-engineering-v1/episode-0000/job.json",
+        "sha256": "8aff8813ac8f2adacb4ae725afe506b8f3a40f31de3c67f762d92c549e918dbc",
+        "family": "lid",
+        "scene": "task_0014/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-extra-baselines-engineering-v1/episode-0001/job.json",
+        "sha256": "4f53a096e5103863fdddea0176e2dacdad71887ceffd592abecb7742c7a87d39",
+        "family": "lid",
+        "scene": "task_0006/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-extra-baselines-engineering-v1/episode-0002/job.json",
+        "sha256": "af3cabe8ffe70faaf2ee131b4fa91ec4fba52933e86b47c901ea07ec34846ec4",
+        "family": "lid",
+        "scene": "task_0003/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-extra-baselines-engineering-v1/episode-0003/job.json",
+        "sha256": "545926dd10354277223a1af59b12e5fdd994d53599ba84918c9737f4018da9d4",
+        "family": "lid",
+        "scene": "task_0003/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-extra-baselines-engineering-v1/episode-0004/job.json",
+        "sha256": "bbcb93d57a5a78788fede17a92e8db98f0ee2be1eca9aed7055254668132d7f5",
+        "family": "lid",
+        "scene": "task_0008/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-extra-baselines-engineering-v1/episode-0005/job.json",
+        "sha256": "9463361cdcde15daa481155d0acaf4a3022f4e3595621d7500afa864acfea88a",
+        "family": "lid",
+        "scene": "task_0008/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-extra-baselines-engineering-v1/episode-0006/job.json",
+        "sha256": "7da21e062a72d988dfee8a64aa13eb0f0e75d068e48b7048688bdfe316240e94",
+        "family": "lid",
+        "scene": "task_0014/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-extra-baselines-engineering-v1/episode-0007/job.json",
+        "sha256": "8c1713f97d01ab82d96ed56078473c7b5a94c8a6657a3722c6a315e6e4da6db8",
+        "family": "lid",
+        "scene": "task_0006/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-pipeline-v1/reference/job.json",
+        "sha256": "6e4550cba807206f73956e7cc898cf519898353ba5845c924ca49f97a3eeed28",
+        "family": "lid",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": 32
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0000/job.json",
+        "sha256": "083ac904aedd9bfe22519023f31b2870f4781a4cf38644e760953633c92e4b72",
+        "family": "lid",
+        "scene": "task_0006/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0001/job.json",
+        "sha256": "50a915c1d59965fc7dfefe9668326dbbe025c305fd2499d2cc19365a55521b80",
+        "family": "lid",
+        "scene": "task_0008/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0002/job.json",
+        "sha256": "18936536629b19624ba2a8e0ee67ca6ec3ea4f4fcd51798626b3e51a5a55051a",
+        "family": "lid",
+        "scene": "task_0014/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0003/job.json",
+        "sha256": "2b573dd6d9a343bd3e47a9f5b4e672310b07a583b02c01f2772e29af358da548",
+        "family": "lid",
+        "scene": "task_0003/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0004/job.json",
+        "sha256": "9d8bf5abef043f5ec9ac711f9a50438d444be4bb4f6ef9531354381e5478f34f",
+        "family": "lid",
+        "scene": "task_0014/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0005/job.json",
+        "sha256": "317b814217bd231fadf0aa026b4f3dd6569f70527b235f327cca0afbc0a38851",
+        "family": "lid",
+        "scene": "task_0003/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0006/job.json",
+        "sha256": "0b7677d482f9c5effd81c9b22b22b2bc7371e1e40f9955b45728ca1ec499e381",
+        "family": "lid",
+        "scene": "task_0014/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0007/job.json",
+        "sha256": "e1b93d43a5f1d107f74d3bc3de44c2890b0cd88f67092f50af5bd72c6ed93aa4",
+        "family": "lid",
+        "scene": "task_0014/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0008/job.json",
+        "sha256": "a5fdca18eba0f2d47584c30a091414559e10095a2332676b38d619eee5b27a54",
+        "family": "lid",
+        "scene": "task_0006/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0009/job.json",
+        "sha256": "5b0151aa14afc1259a6e11e47d9b6dd472c8a85feb8ee630d7e927c2402fce7e",
+        "family": "lid",
+        "scene": "task_0008/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0010/job.json",
+        "sha256": "b3b67be13fe25782b6aa25e6cc7bbfe03a4ef6c55d5b141ed2d9286c916824a7",
+        "family": "lid",
+        "scene": "task_0008/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0011/job.json",
+        "sha256": "b37f92c11f54a2cf9dd0432fce9c4b117d3983bcd6b65977c1fe67c844d870ef",
+        "family": "lid",
+        "scene": "task_0006/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0012/job.json",
+        "sha256": "260b154e6258debb346026271acd7772de0c797af36ddbfe92e0fef5d60de942",
+        "family": "lid",
+        "scene": "task_0003/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0013/job.json",
+        "sha256": "9e047dd3043598678b241f6ff11312af6cb0b43ad47c37a8e7cb355c840e7b56",
+        "family": "lid",
+        "scene": "task_0008/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0014/job.json",
+        "sha256": "12a3cba96c02c740df95281694e5701268eb4deab66274ab79f64ac1e09fac5e",
+        "family": "lid",
+        "scene": "task_0006/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/lid-guard-screen-v1/episode-0015/job.json",
+        "sha256": "ec66b900cafb62595b8a05821e8867526e9bf08c7059fc1cd85cca975755fc2d",
+        "family": "lid",
+        "scene": "task_0003/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/motion-repeat-pipeline-v1/reference/job.json",
+        "sha256": "fd14f03c6389b707bb945c50ed2e9e7644085bd0bc3126766944eac795bc1b83",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": 32
+      },
+      {
+        "path": "runs/maniguard/remaining-fixed-screens-v1/jar-reference/job.json",
+        "sha256": "bd5db24d0118c56eeb28a3e1c251fe37456b98cff1e5319a0f3200e19e0604ce",
+        "family": "jar",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": 32
+      },
+      {
+        "path": "runs/maniguard/remaining-fixed-screens-v1/lid-reference/job.json",
+        "sha256": "31346eae2aa7997c15371dd3ad1fc29297a8509a33287d9eb74fd87b6b88814d",
+        "family": "lid",
+        "scene": "task_0008/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": 32
+      },
+      {
+        "path": "runs/maniguard/stack-baseline-engineering-v1/episode-0000/job.json",
+        "sha256": "f657c5eed59b0dc4243965ae0d022ac19a561dd11b5b584c38684d9d113b19f0",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-baseline-engineering-v1/episode-0001/job.json",
+        "sha256": "443065894ce2718c30560666e24984966e585573c6108d7d835784a3ae5bd466",
+        "family": "stack",
+        "scene": "task_0000/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-baseline-engineering-v1/episode-0002/job.json",
+        "sha256": "4db24929d4a8b0c0e2ffda873d2e487fef43097041817a2d18feec1ef9ad7366",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-baseline-engineering-v1/episode-0003/job.json",
+        "sha256": "dd824bd05c6766430d1ced79d439822a7eb8646a8d0d3183ddf99a0aa543c6b5",
+        "family": "stack",
+        "scene": "task_0007/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0000/job.json",
+        "sha256": "ee4ecc937f047e3aa8392a3640ed9824f6e1d336de16c57c56033034cb4bd146",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0001/job.json",
+        "sha256": "89b2d0c4086eca26b279d54b8b271ef84c5f08d3513e51ba5d7483cc5070cfaf",
+        "family": "stack",
+        "scene": "task_0007/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0002/job.json",
+        "sha256": "2e857068fb5bc694169d32d5ad18c6f35c4f084957d4fe15da067cbc90f053e8",
+        "family": "stack",
+        "scene": "task_0007/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0003/job.json",
+        "sha256": "5df02c1091d48aa29f90f5edef27530b163894c0cd471fe35aea813010f5c655",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0004/job.json",
+        "sha256": "8dd579213e90cfa5548da35f0fbaa35011c2957bddc90bf2b193fdb854083a57",
+        "family": "stack",
+        "scene": "task_0007/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0005/job.json",
+        "sha256": "fc512dffa680ac5b6149d575ed42a8f0ff544d7abddf2a374b339e987f389776",
+        "family": "stack",
+        "scene": "task_0007/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0006/job.json",
+        "sha256": "0af7d46ae029d9a18f9886ac2cc2605161ea4f028a5fe4d2f3d15ed76a1c1487",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0007/job.json",
+        "sha256": "661a414baa04169316fad0514415a26322d04112de29de156fef36198150ef06",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0008/job.json",
+        "sha256": "5908faed647666ab2989b2b67d1d327819d07c219005974f26198e352cc3cf22",
+        "family": "stack",
+        "scene": "task_0000/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0009/job.json",
+        "sha256": "fd0ad04c9f810d2b20e18721c34d09b0b1ddd2556ab5ebd1d236a985939a092e",
+        "family": "stack",
+        "scene": "task_0000/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0010/job.json",
+        "sha256": "7153caa9c913ae2ff22bab7bb38dbf739a90e899e374f58c688d8332424f1e15",
+        "family": "stack",
+        "scene": "task_0007/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0011/job.json",
+        "sha256": "4e0764b1c20ef8d39e0f3f7548301af5a35e6251792705d8a768fb1093b06647",
+        "family": "stack",
+        "scene": "task_0007/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0012/job.json",
+        "sha256": "2c5e7c2da78caad0e65d6cf2895d48341e30827484c8ec58b9da25cf714f6f3f",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0013/job.json",
+        "sha256": "eae140cf928602749eca068efee230eb87fb0032423c5bff47cf0895c7ce9feb",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0014/job.json",
+        "sha256": "59784991f1ccf3a51bbc09c1f6c062cf4d9a85adb214b53f7c1f9b6bc51f120d",
+        "family": "stack",
+        "scene": "task_0000/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0015/job.json",
+        "sha256": "bb08f9e5f3814a96b24146ccfa7f181756fd4710e808b9b78fc9e779d0b92d0f",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0016/job.json",
+        "sha256": "d0312527339d830feef50336d1c9c5eb4f5d9613f42da2a425978bf435c41811",
+        "family": "stack",
+        "scene": "task_0000/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0017/job.json",
+        "sha256": "f4cc33bf365b64192f46f6aa1c06a608ebe2a9d5617d2ff67ab6b029271df6de",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0018/job.json",
+        "sha256": "6415dcfabbf38e0449be48384e7eba4d26c258e88c942e5f17e5fe41b984356d",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0019/job.json",
+        "sha256": "137e4aa72c4eb387688c51a9456638c2bf646f9eca5eb6d4798c14c04f26d68f",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0020/job.json",
+        "sha256": "ae7d06455529fa8f5686a66f6c5fe6e9975d46272b1458c97db23e790aa8974a",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0021/job.json",
+        "sha256": "5b1d503cfa0b899b6aaebd2176ff38c3626a73372b26c9338da01b501f6b1d05",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0022/job.json",
+        "sha256": "89354170bb443362ca925cbda710301e8c65e32fd9eaeb66b26b1f4b50f1af36",
+        "family": "stack",
+        "scene": "task_0000/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-fixed-screens-v1/episode-0023/job.json",
+        "sha256": "6107b28709c879fa120409bddf7b53b6b8c4777262d04deb625adf6d65fe3580",
+        "family": "stack",
+        "scene": "task_0000/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0000/job.json",
+        "sha256": "8e96dcf8e615a3827ed3ef8a832ad6b639c7fbd8721ee11cf2baa482a24331dd",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0001/job.json",
+        "sha256": "7d5dc5b6531c7b626524ab3fb5f7c49cae8daa58bf81ac7b274d824503b122f7",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0002/job.json",
+        "sha256": "eed3b91507204220baf9de5fe17493aa90abb9e2b18b05b6c57a882674f5901f",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0003/job.json",
+        "sha256": "2dce40f7bef03e30f19a67c696b8319804c859c4f63a142ea1bc9abfbeaa014f",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0004/job.json",
+        "sha256": "e0c3af4a625ce7ead030d5b257344afcffaba680075de1cef271470690666b9d",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0005/job.json",
+        "sha256": "d2a12a8609d974dbd405a50555bd08f51d120556fae9f164d05297c8ce5ab76d",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0006/job.json",
+        "sha256": "daad35e0ce2fdd09366079395b348b6dd58e8382abdaf76a4da5cc9166437f76",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0007/job.json",
+        "sha256": "95664ad4072ad84cce8365b77e02b65565e4af1155c5629a1ed6c3b9fba26905",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0008/job.json",
+        "sha256": "a80a7efa6c372af581345975d860e2638ac047d7d8c58c6a039989e8364ea3e5",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0009/job.json",
+        "sha256": "220673c069ea9e59da0c7f64a1ed2c6b4a3ce67b7ab143c07792df2015de0168",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0010/job.json",
+        "sha256": "a4fe6df3d73f94485fa7cc1805bb24521921941c194660fe93be3a07525d5a14",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0011/job.json",
+        "sha256": "977af96c8fb59dc8018f6ca9cd49879bcc5b3a6813b75fc210b4115d5126e8ad",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0012/job.json",
+        "sha256": "0df0e15fd4a92ac545a84ecf042aebfa920d1be8cf85544725052a49d69cf0d6",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0013/job.json",
+        "sha256": "cbe732d486e91a05564e6699cea506cdf5c3226d20794d1e49e6382061776fa0",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0014/job.json",
+        "sha256": "4f93ae0d021ea7a7eb67b649a50762916b1b9d77afddea1a6c03db9844f7bb1a",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0015/job.json",
+        "sha256": "36f1b91057f91441a10bdd5889bb1c037d937be43447029d658f782c997867a1",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0016/job.json",
+        "sha256": "af7b75accc710d70a183c50cd83234d2bc4d0f6eed3c5117ba3ca510d220db05",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0017/job.json",
+        "sha256": "aee5cc27c93311a25969e30c9c555d2cc146415555681d05de281b3d76a176bf",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0018/job.json",
+        "sha256": "67b9fc41011bbf93cec073234aed6f789a8458927cb4b5495ce0100d646643c8",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0019/job.json",
+        "sha256": "8c30ca13996c9ee06ad128294c6683723126e0acae8556248ba62c8d3ee22a46",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0020/job.json",
+        "sha256": "a0f07367e01e4768219c0b4f514e22be3b5e6c887c326f4d17cffa6eb7a84294",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0021/job.json",
+        "sha256": "52dd75885170a6145fc163b73e0d258d69dd18233c8e8e722cb4c3bbefb5b165",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0022/job.json",
+        "sha256": "35c2af8fd9486d47bdd173ba80aec6fe9e95d3ac9917b63dc743ea290f87df58",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 2,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-motion-repeat-v1/episode-0023/job.json",
+        "sha256": "b088e6ccb919f3b7b4befda3f8f90fd2892801431362864de7207d085c7709d1",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-release-trigger-v1/episode-0000/job.json",
+        "sha256": "dfb1b15947cf54de8f4405e9619f4ba1bb9439bd0ad0ffc66ca0b8a976c8bb6b",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-release-trigger-v1/episode-0001/job.json",
+        "sha256": "3bbb55b6642b19ee8d1c49333eeaede445a492afabe1569d3ad2f4730d2e63b7",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-release-trigger-v1/episode-0002/job.json",
+        "sha256": "c53299f0c48d2f9b6c6ee39a49cfeeac2e8dc4c2d26d4b6be8d3492f377faf60",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-release-trigger-v1/episode-0003/job.json",
+        "sha256": "9375ae44863cc362c11efcc8dd09f0a8f6c746074fc46b413455b105dd07d967",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-release-trigger-v1/episode-0004/job.json",
+        "sha256": "a9b982973f040f81664d8f069117ce0582186892e8d9c1eea4f948351d202e1a",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-release-trigger-v1/episode-0005/job.json",
+        "sha256": "2a907aadec30fafb87daa4ce90b1ade88ba3444909a1b222f75aa24d73f757df",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-release-trigger-v1/episode-0006/job.json",
+        "sha256": "a7864a61c0c4b9b9cab7eb585a80fd4faec5633e58879c658f5024f9242e48e1",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-release-trigger-v1/episode-0007/job.json",
+        "sha256": "a61dbf976461800802b63dbf02e5d5bdde7c7dff8094bbbb275464f5d60e4af6",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-release-trigger-v1/episode-0008/job.json",
+        "sha256": "ba9d157e37e36949155ee722fb54dc18761617b18d7f041110378a063555507f",
+        "family": "stack",
+        "scene": "task_0010/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-release-trigger-v1/episode-0009/job.json",
+        "sha256": "c5f004579b9812b9a261213102783595de2e8d03f0cd00d5d10bbb541976d788",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 1,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-release-trigger-v1/episode-0010/job.json",
+        "sha256": "ce0a643c70ff64bc29d6162b500d6714f640772dab5f182caee08844ebfc8fae",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-release-trigger-v1/episode-0011/job.json",
+        "sha256": "a086e946a2ffff31d0da9f2ed72531f710ebf96fa976440b6d25990644580219",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": null
+      },
+      {
+        "path": "runs/maniguard/stack-screen-pipeline-v3/reference/job.json",
+        "sha256": "5bba8b4a3007df86d5472d59b873f1027fa3677e33160f60068093f812bd0460",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": 32
+      },
+      {
+        "path": "runs/maniguard/stack-screen-pipeline-v3/smoke/episode-0000/job.json",
+        "sha256": "f488b942f699b439874c20f85118b392c671ed85d0d4e916fea6fa9124f36a8a",
+        "family": "stack",
+        "scene": "task_0013/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": 32
+      },
+      {
+        "path": "runs/maniguard/stack-screen-pipeline-v3/smoke/episode-0001/job.json",
+        "sha256": "79f94bb6ee29cc684a02d70f0e4ae0e6f07aa14d5a6e5c524b4a5c2c8a09d596",
+        "family": "stack",
+        "scene": "task_0000/base",
+        "seed": 0,
+        "split": "engineering",
+        "max_steps_override": 32
+      }
+    ],
+    "qualification": "Includes initialization failures, short references and active jobs. These are exposure counts, not validated full-episode outcomes. Released VLA pretraining overlap remains unknown."
+  },
+  "remaining_requirements": [
+    "Complete and audit all twelve controller-limit comparison trials; interpret all outcomes, activation and costs.",
+    "Refresh whole-study raw interaction/query/time inventory, retaining known failed-start and missing-latency qualifications.",
+    "Reassess optimization gates against actual correction evidence; no optimizer or reserved evaluation has run.",
+    "Write final six-hypothesis synthesis and verify all report/reproduction links.",
+    "Push remaining results and verify remote branch; refresh off-instance evidence preservation within authorized storage access."
+  ],
+  "interpretation": "This audit does not mark the goal complete. Engineering tests and negative mechanism screens are evidence; they do not establish an evolutionary advantage or physical safety guarantee.",
+  "analysis_source": {
+    "path": "runs/maniguard/reports/requirements-audit-source-before-correction.py",
+    "sha256": "f79627094c05b3197a6cb5a7b801e843ef6da34fd03c15ea45277b93b343c4db"
+  }
+}

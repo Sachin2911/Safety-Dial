@@ -1,0 +1,153 @@
+{
+  "recorded_at_utc": "2026-10-17T18:47:05.826771+00:00",
+  "status": "Corrected reference and strict replay passed; twelve full comparison trials running.",
+  "supervisor_state_at_recording": "maniguard_controller_limit_queue   RUNNING   pid 248763, uptime 0:03:11",
+  "implementation_commit": "9be5486d9b114227ff11ec46557cb6678d77e5fd",
+  "plan_path": "configs/maniguard/jar-controller-limit-screen.json",
+  "plan_sha256": "ece0be867b3b464c474fc3cedf625979eba405f7b074dff9bf85b4151283fe4f",
+  "queue_source_path": "runs/maniguard/controller-limit-pipeline-v1/queue_source.py",
+  "queue_source_sha256": "5102083c2ed1f8e91fb11202b54441aa85cb9222bd12e4d16aa2914fce42822f",
+  "predecessor_audit_path": "docs/research/research_notes/ManiGuard fruits Lid guard complete.json",
+  "predecessor_audit_sha256": "c07ebcc3259bb0864db60e21e8cca982d9ebb4c5fce6cfd494fafe85c49ea891",
+  "reference_audit": {
+    "status": "passed",
+    "proposals": 32,
+    "live_limits_match_pinned_asset": true,
+    "recorded_predictions_match_reconstruction": true,
+    "trace_sha256": "60bf9eed7d430ab1e4cbfcd1182ae2eff9fabcaa7c5e03245f2bf4940abcc106",
+    "scope": "Short runtime integration check, not a full-task safety or completion result."
+  },
+  "reference_ledger": {
+    "physics_steps": 278,
+    "physics_seconds": 2.3166667874902487,
+    "env_step_attempts": 42,
+    "env_steps_returned": 42,
+    "policy_queries": 4,
+    "policy_query_seconds": 24.876826933817938,
+    "policy_control_steps": 32,
+    "guard_steps": 0,
+    "changed_steps": 0,
+    "phase": "completed",
+    "physics_accounting_attached": true,
+    "elapsed_seconds": 68.11953759402968
+  },
+  "strict_replay": {
+    "source_episode": "/workspace/Safety-Dial/runs/maniguard/controller-limit-pipeline-v1/reference",
+    "policy_queries_attempted": 6,
+    "physics_steps": 0,
+    "metadata": {
+      "serve_config": "pi05-base_datagen_v1_jar_joint_2cam_lora",
+      "checkpoint": "/workspace/Safety-Dial/data/maniguard/policies/jar/7400",
+      "checkpoint_revision": "1d84eda070313a202a595e449fcf41a1a1e8a546",
+      "episode_seed_reset": "study_episode_id",
+      "rng_isolation": "per_episode",
+      "server_source_hashes": {
+        "experiments/scripts/maniguard_serve.py": "11845ecb9d061f7b11182c8314a7ca6db7da0e2293eb485cc49fee3726b79b55",
+        "experiments/helpers/maniguard_policy.py": "732bd477c7f284688702360c561972937f3267ee0241266bbba456b18c4f3445",
+        "experiments/helpers/maniguard_parallel_policy.py": "f23127c3a4495069e543f4824c411f35689836c35dbf57c172207ce8374a8c53"
+      }
+    },
+    "query_seconds": [
+      0.1801619390025735,
+      0.17678834800608456,
+      0.17441921099089086,
+      0.16699873004108667,
+      0.17030285205692053,
+      0.1714452758897096
+    ],
+    "status": "passed",
+    "interleaved": true,
+    "query_order": [
+      0,
+      0,
+      1,
+      2,
+      1,
+      2
+    ],
+    "corresponding_queries_equal": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "first_matches_original_episode": true,
+    "action_hashes": [
+      "4f34d917365c964dde5664bcda819811d4c97c0cd1ac2c7c06cc43919ee6d7a7",
+      "0830bf7f7d79c8945ae5af4deed4e0b6198df561a5b081b2a3e95947acbe336f",
+      "4f34d917365c964dde5664bcda819811d4c97c0cd1ac2c7c06cc43919ee6d7a7",
+      "4f34d917365c964dde5664bcda819811d4c97c0cd1ac2c7c06cc43919ee6d7a7",
+      "0830bf7f7d79c8945ae5af4deed4e0b6198df561a5b081b2a3e95947acbe336f",
+      "0830bf7f7d79c8945ae5af4deed4e0b6198df561a5b081b2a3e95947acbe336f"
+    ],
+    "elapsed_seconds": 1.0495392428711057
+  },
+  "completed_setup_processes": [
+    {
+      "name": "policy-reread",
+      "command": [
+        "supervisorctl",
+        "reread"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.11428771796636283
+    },
+    {
+      "name": "policy-update",
+      "command": [
+        "supervisorctl",
+        "update",
+        "maniguard_policy"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 2.946787420893088
+    },
+    {
+      "name": "policy-start",
+      "command": [
+        "supervisorctl",
+        "start",
+        "maniguard_policy"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 5.116397687001154
+    },
+    {
+      "name": "reference",
+      "command": [
+        "/workspace/Safety-Dial/data/maniguard/envs/sim/bin/python",
+        "-u",
+        "experiments/scripts/maniguard_episode.py",
+        "--family",
+        "jar",
+        "--scene",
+        "task_0008/base",
+        "--seed",
+        "0",
+        "--adapter",
+        "configs/maniguard/prerequisite-joint-limits.json",
+        "--output",
+        "/workspace/Safety-Dial/runs/maniguard/controller-limit-pipeline-v1/reference",
+        "--max-steps",
+        "32"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 71.48017003620043
+    },
+    {
+      "name": "interleaved-replay",
+      "command": [
+        "/workspace/Safety-Dial/data/maniguard/envs/sim/bin/python",
+        "experiments/scripts/maniguard_replay_check.py",
+        "--episode",
+        "/workspace/Safety-Dial/runs/maniguard/controller-limit-pipeline-v1/reference",
+        "--output",
+        "/workspace/Safety-Dial/runs/maniguard/controller-limit-pipeline-v1/replay",
+        "--interleaved"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.218872871948406
+    }
+  ],
+  "scope": "One diagnosed Jar engineering scene, three roots, original/corrected plain and hand-back guards. Same one-millimetre trigger. Runtime integration is not a completed physical repair result."
+}

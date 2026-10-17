@@ -282,10 +282,11 @@ an open jar: its requested second-joint target lies beyond the lower joint limit
 controller clips the target internally, reversing the estimated vertical direction.
 The [boundary audit](docs/research/research_notes/ManiGuard%20fruits%20Jar%20guard%20lift%20prediction%20mismatch.json)
 finds a raw prediction of -5.18 mm, a limit-aware prediction of +14.60 mm, and measured
-motion of +13.67 mm. A controller-limit-aware variant is implemented in an isolated checkout and passes
+motion of +13.67 mm. A controller-limit-aware variant is now active and passes
 90 focused tests plus exact compatibility replay of 41,913 old guard/hand-back actions.
-Its declared twelve-trial original/corrected comparison remains pending after the Lid
-batch. These software checks do not establish a physical repair. The
+Its declared twelve-trial original/corrected comparison is now running after completion
+of the Lid batch, a 32-action live-limit integration check and a strict six-query replay.
+These checks do not yet establish a physical repair. The
 completed Lid comparison retained the original guard throughout.
 
 ## 4. Preserve a useful grasp through premature release requests

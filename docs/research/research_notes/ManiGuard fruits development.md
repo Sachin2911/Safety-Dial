@@ -2209,3 +2209,26 @@ diagnostics, and the rendered outcome/query figure. Batch costs are 28,989 actio
 175,310 physics ticks and 4615 queries, with 1809.14 seconds batch wall time. The
 reference and replay costs remain separate. The original supervisor exited normally.
 The Lid result is ready to preserve before activating the isolated correction.
+
+
+## Activated controller-limit correction and started physical comparison
+
+Pushed the complete Lid comparison as `b055a91`, then cherry-picked the independently
+tested correction into the research branch as `9be5486`. The pushed remote branch was
+verified against that full commit hash. No original Lid episode used the corrected code.
+
+Managed correction runner PID 248763 passed its source-hash, predecessor-exit and final
+Lid-audit gates, switched the idle policy to Jar, and ran a fresh 32-action reference.
+Every live joint-limit frame matched the pinned longfinger asset within tolerance; all
+recorded feasible-target predictions matched independent reconstruction. The subsequent
+six-query interleaved replay passed with first-query agreement to the reference. The
+twelve declared full-horizon original/corrected guard trials then started with two workers.
+The one-millimetre trigger stays fixed. No physical correction outcome is claimed yet.
+
+A requirements audit revalidated all 184 completed full episodes across the original
+baselines and declared screens/follow-ups, preserving twelve remaining correction trials.
+All 198 recorded episode jobs at this snapshot, including short references, failed setup
+and active trials, use the frozen engineering partition. All four scene partitions are
+disjoint within each family; no training, selection-validation or reserved scene was used.
+The audit maps all six implementations to their physical mechanism evidence and retains
+unfinished correction, accounting, synthesis and preservation requirements explicitly.
