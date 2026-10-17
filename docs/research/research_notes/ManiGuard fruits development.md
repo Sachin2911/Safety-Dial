@@ -411,3 +411,15 @@ before two concurrent smoke episodes and the randomized full-horizon comparisons
 run. Earlier baselines remain mechanism evidence; the screen includes new identity
 controls in the same server process as the adapters. Structured diagnostics and costs
 are in `ManiGuard fruits sampling variability.json`.
+
+The fresh Stack reference completed with 32 actions, 278 physics ticks and four queries.
+Strict replay on that same server then passed all four interleaving comparisons and
+exact agreement with the physical reference. The two simultaneous 32-action smoke jobs
+have now started; their accounting and successful exits still gate the full comparisons.
+
+Prepared eight additional Lid identity episodes on the same four engineering scenes,
+root seeds 1 and 2, in randomized order. The initial four seed-0 episodes had no premature
+transport violations or container grasps. This extension is intended to diagnose natural
+prerequisite failures before selecting further guard comparisons, not to infer headroom
+from an untriggered guard. The additional Lid plan is not running yet and accesses no
+reserved scenes. Jar's declared 40-episode screen remains the initial test of all six adapters.
