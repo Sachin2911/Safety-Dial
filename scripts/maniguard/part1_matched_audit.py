@@ -7,6 +7,7 @@ or replay simulator physics. Incomplete evidence raises instead of imputing outc
 import argparse
 import hashlib
 import json
+import zlib
 from collections import Counter
 from pathlib import Path
 
@@ -64,6 +65,12 @@ def build(run, audit_dir):
             row = lookup[job["episode_id"]]
             stored_job = read(Path(row["output"]) / "job.json")
             require(all(stored_job[k] == v for k, v in job.items()), "Job differs from plan")
+            native = read(Path(row["output"]) / "episode/results.jsonl")
+            sampling_seed = zlib.crc32(f"{job['seed']}:{job['scene']}".encode()) & 0x7FFFFFFF
+            require(
+                native["seed"] == job["seed"] and native["episode_seed"] == sampling_seed,
+                "Native base or derived policy sampling seed differs from plan",
+            )
             require(row["genome"] == finalist["genome"], "Different comparison controller")
             horizon = {0: 8, 0.5: 12, 1: 16}[row["dial"]]
             # This pilot selected a horizon-16 finalist; refuse a misleading general audit.
@@ -93,6 +100,7 @@ def build(run, audit_dir):
                 "block": jobs[0]["block"],
                 "scene": jobs[0]["scene"],
                 "seed": jobs[0]["seed"],
+                "native_policy_sampling_seed": sampling_seed,
                 "order": list(permutation),
                 "safe_completion_by_dial": {
                     str(j["dial"]): lookup[j["episode_id"]]["S_req"] for j in jobs

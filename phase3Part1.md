@@ -2,10 +2,13 @@
 
 **Date:** 18 October 2026.
 
-**Status:** implementation and experiment plan for the direction Sachin approved.
-The experiment has not been implemented, frozen or launched. The numerical defaults
-below make the implementation concrete; the resulting machine-readable protocol must
-record the final checked values before search outcomes are used.
+**Status:** completed on 18 October 2026. All 48 full episodes passed physical evidence
+audits. The frozen controller recorded 4/8 fresh safe completions and 2/8 violating
+episodes at full strength, compared with identity's 5/8 and 0/8. See the
+[GECCO-template report](docs/research/reports/maniguard-phase3-part1-gecco/named.pdf)
+and [frozen protocol](configs/maniguard/phase3/part1.json). The original planning text
+below is preserved in planning commit `8df7ac9`; this status update does not revise
+the executed protocol or authorize further sampling.
 
 **Resource limit:** one RTX 4090 or RTX 5090, with a hard limit of eight allocated
 wall hours, hence at most eight allocated GPU-hours. Setup on the allocated machine,

@@ -111,7 +111,8 @@ def tables(audit_dir):
             for i, row in enumerate(selected):
                 axis.text(i, row["n"] + 0.05, f"n={row['n']}", ha="center")
             axis.set_ylim(0, max(1, max(r["n"] for r in selected)) + 1)
-        axes[-1].legend(fontsize=8, loc="upper right")
+        handles, labels = axes[-1].get_legend_handles_labels()
+        figure.legend(handles, labels, fontsize=8, loc="outside lower center", ncol=4)
         figure.savefig(audit_dir / "per-scene-outcomes-and-costs.png", dpi=160)
         plt.close(figure)
     print(

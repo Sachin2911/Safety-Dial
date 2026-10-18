@@ -929,7 +929,12 @@ initial sketch; the full-study protocol and historical allocations remain separa
 **Clarification from Sachin, 18 October 2026.** Keep ManiGuard and include actual
 physical evolutionary search. The earlier Push-T/iCEM suggestion misunderstood the
 analogy and is withdrawn. The goal is a small executable experiment with an interpretable
-result, not the complete multi-method GECCO study. No run has been launched.
+result, not the complete multi-method GECCO study. Part 1 has now completed its 48
+full episodes; the [GECCO-template report](docs/research/reports/maniguard-phase3-part1-gecco/named.pdf)
+records an adverse fresh comparison. Full strength achieved 4/8 safe completions
+with 2/8 violating episodes against identity's 5/8 and 0/8. The broader multi-method
+comparisons remain outstanding. The sketch below is retained as planning context;
+Part 1's frozen protocol governs the executed allocation.
 
 ### 21.1 One concrete question
 

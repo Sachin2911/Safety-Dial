@@ -41,3 +41,27 @@ Run files, source snapshots, native videos and checkpoints stay outside Git. The
 credential-scanning `scripts/maniguard/backup_part1.py` preserves run evidence in a
 private Hugging Face dataset, excluding assets, environments and keys. The concise
 report and selected audit summaries belong under `docs/research/`.
+
+For a saved completed run, regenerate the descriptive audit in a new directory, then
+verify the matched comparison and compose every available validation video block:
+
+```bash
+PILOT_RUN=runs/maniguard/phase3-part1/20261018-56578764
+PILOT_AUDIT="$PILOT_RUN/audit-reproduction"
+uv run --no-project --python data/maniguard/envs/sim/bin/python \
+  experiments/scripts/maniguard_phase3_report.py "$PILOT_RUN" "$PILOT_AUDIT"
+uv run --no-project --python data/maniguard/envs/sim/bin/python \
+  scripts/maniguard/part1_report_tables.py "$PILOT_AUDIT"
+uv run --no-project --python data/maniguard/envs/cpu/bin/python \
+  scripts/maniguard/part1_matched_audit.py "$PILOT_RUN" "$PILOT_AUDIT"
+uv run --no-project --python data/maniguard/envs/cpu/bin/python \
+  scripts/maniguard/match_part1_videos.py "$PILOT_RUN" "$PILOT_AUDIT/videos.json" \
+  "$PILOT_RUN/comparison-matched-videos-reproduction"
+```
+
+These commands read recorded physics; composing videos advances no simulator state.
+The matched audit checks this pilot's selected horizon-16 controller, all sealed jobs,
+native base/derived sampling seeds, execution order, exact zero identity and initial
+observation differences. `export_part1_audit.py` additionally exports the small public
+CSV ledger, controller, figures and audit JSON from a complete audit with its retained
+shutdown and postprocessing receipts. It never exports raw run directories or weights.
