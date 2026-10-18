@@ -236,7 +236,7 @@ class Study:
 
 def _legacy_study():
     path = os.environ.get("SAFETY_DIAL_MANIGUARD_JOB")
-    if not path or json.loads(Path(path).read_text()).get("phase") == "phase2":
+    if not path or json.loads(Path(path).read_text()).get("phase") in ("phase2", "phase3_part1"):
         return None
     return Study()
 

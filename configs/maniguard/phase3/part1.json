@@ -1,0 +1,575 @@
+{
+  "schema": "maniguard-phase3-part1-v1",
+  "status": "frozen",
+  "planning_commit": "8df7ac9",
+  "family": "clutter",
+  "source_profile": "legacy",
+  "domain": {
+    "free_step_limit": [
+      null,
+      0.12,
+      0.08,
+      0.04
+    ],
+    "grasp_step_limit": [
+      null,
+      0.08,
+      0.04,
+      0.02
+    ],
+    "smoothing": [
+      1.0,
+      0.75,
+      0.5
+    ],
+    "horizon": [
+      4,
+      8,
+      16
+    ]
+  },
+  "grid_cardinality": 144,
+  "neutral_genome": [
+    0,
+    0,
+    0,
+    1
+  ],
+  "search_seed": 20261018,
+  "schedule_seed": 20261019,
+  "rng": "numpy.random.Generator(PCG64)",
+  "population_size": 4,
+  "allocations": {
+    "48": {
+      "populations": 3,
+      "search": 24,
+      "comparison": 24
+    },
+    "28": {
+      "populations": 2,
+      "search": 16,
+      "comparison": 12
+    }
+  },
+  "utility": "int(C_req and not V) - 2 * int(V)",
+  "V": "raw ltl_violated",
+  "fitness": "mean of two valid full train episodes at dial 1",
+  "tie_rule": "stable slot birth order, copied elite first",
+  "finalist_rule": "best of final evaluated population only; freeze before comparison",
+  "neutral_finalist_rule": "stop; no replacement or redundant comparison",
+  "mutation": {
+    "kernel": "AdapterSearch",
+    "reject_noop": true,
+    "reject_population_duplicate": true,
+    "failed_draws_before_uniform": 100
+  },
+  "native_action_horizon": 1100,
+  "process_timeout_seconds": 1200,
+  "cleanup_margin_seconds": 30,
+  "bookkeeping_reserve_seconds": 300,
+  "engineering": {
+    "scene": "task_0040/base",
+    "genome": [
+      3,
+      3,
+      2,
+      0
+    ],
+    "dials": [
+      0,
+      0.5,
+      1
+    ],
+    "action_horizon": 32,
+    "max_total_actions": 96
+  },
+  "training": {
+    "scenes": [
+      "task_0034/base",
+      "task_0002/base"
+    ],
+    "seed_formula": "1000+10*g+i"
+  },
+  "comparison": {
+    "scenes": [
+      "task_0029/base",
+      "task_0032/base"
+    ],
+    "dials": [
+      0,
+      0.5,
+      1
+    ],
+    "seed_formula": "2000+10*j+r",
+    "repetitions": {
+      "48": 4,
+      "28": 2
+    },
+    "order": "adjacent matched blocks; shuffled six-permutation cycles",
+    "videos": "save all native comparison videos, no physics replay"
+  },
+  "exposure": "Previously used development family; conservatively treat scenes as exposed. Fresh seed repetitions only; no unseen-scene or family-transfer claim.",
+  "allocation": {
+    "schema": "maniguard-part1-allocation-v1",
+    "instance": "56578764",
+    "gpus": 1,
+    "started_utc": "2026-10-18T16:00:37+00:00",
+    "physical_deadline_utc": "2026-10-18T23:00:37+00:00",
+    "hard_deadline_utc": "2026-10-19T00:00:37+00:00",
+    "planning_commit": "8df7ac9",
+    "clock_rule": "Continuous rental time, including setup, implementation, failures and idle time; never reset on restart."
+  },
+  "retry_policy": "no automatic retries; invalid evidence stops population",
+  "information": "proposals, measured joints/fingers and previous final environment inputs",
+  "disabled_controls": [
+    "settling",
+    "retry",
+    "release_delay",
+    "monitor_requery"
+  ],
+  "sources": {
+    "maniguard": {
+      "url": "https://github.com/NU-IDEAS-Lab/ManiGuard.git",
+      "revision": "6bf4c61a1f168cc46e02eb22c41bcb51815e9726"
+    },
+    "behavior": {
+      "url": "https://github.com/StanfordVL/BEHAVIOR-1K.git",
+      "revision": "88454bd04f75dc57c00ab1f1a00bcde1ff505950"
+    },
+    "openpi": {
+      "url": "https://github.com/Physical-Intelligence/openpi.git",
+      "revision": "215abfb217dbac7d5f1273282331b9b1866c0479"
+    },
+    "benchmark": {
+      "repo": "IDEAS-Lab-Northwestern/ManiGuard-Bench",
+      "revision": "af09438cebcd8f532e82cb5302701173ebb59f6e",
+      "family_assets": {
+        "jar": {
+          "prefix": "jar_transport/",
+          "base_tasks": 26,
+          "files": 790,
+          "bytes": 50380475,
+          "runtime_files": 260,
+          "runtime_bytes": 6589992,
+          "metadata_inventory_sha256": "8bf7790b84d3e5f5d98af77cdbd3f1bd75207088e740d85460c89e56adf63b28"
+        },
+        "stack": {
+          "prefix": "stack_retrieve/",
+          "base_tasks": 28,
+          "files": 850,
+          "bytes": 46077216,
+          "runtime_files": 280,
+          "runtime_bytes": 6106945,
+          "metadata_inventory_sha256": "fff59fc4938c64ff967a2c272e9f6e7c13107f0e1991337c8ba920afe8ea6836"
+        },
+        "lid": {
+          "prefix": "lid_transport/",
+          "base_tasks": 30,
+          "files": 910,
+          "bytes": 50651983,
+          "runtime_files": 300,
+          "runtime_bytes": 7260062,
+          "metadata_inventory_sha256": "6c9f403a96999d699945e11554a6b3965cdd174cbaeeb246dab44d1ea19931e9"
+        },
+        "clutter": {
+          "prefix": "clutter_pickup/",
+          "base_tasks": 55,
+          "files": 1660,
+          "bytes": 76274102,
+          "runtime_files": 550,
+          "runtime_bytes": 14708147,
+          "metadata_inventory_sha256": "a02746c816033db5ab77247a47cbb54003a2a0e958ca5b85277fbd3357f90941"
+        },
+        "cabinet": {
+          "prefix": "cabinet_pickup/",
+          "base_tasks": 35,
+          "files": 1060,
+          "bytes": 64383204,
+          "runtime_files": 350,
+          "runtime_bytes": 9838513,
+          "metadata_inventory_sha256": "715e532630a48b5b9fa67b7291f9816a4562293a85cd6e5d92499804852f89db"
+        },
+        "dusty": {
+          "prefix": "dusty_transfer/",
+          "base_tasks": 26,
+          "files": 790,
+          "bytes": 44090405,
+          "runtime_files": 260,
+          "runtime_bytes": 11741684,
+          "metadata_inventory_sha256": "eb1f01edb533d8efa1830bd7ca3ecd13743877cf0f5d81e275e13fb60fa74522"
+        }
+      }
+    },
+    "robot": {
+      "repo": "IDEAS-Lab-Northwestern/franka-panda-longfinger",
+      "revision": "5f65ec0a715bc88ea865c2c69133b08b395c66bc"
+    },
+    "assets": {
+      "repo": "behavior-1k/zipped-datasets",
+      "revision": "9f0d57d465726976ed98138d3f8b8ca3e2186775",
+      "archives": {
+        "behavior-1k-assets-3.7.2rc1.zip": "behavior-1k-assets",
+        "omnigibson-robot-assets.zip": "omnigibson-robot-assets"
+      }
+    },
+    "policies": {
+      "jar": {
+        "repo": "IDEAS-Lab-Northwestern/pi05-base-datagen-v1-jar-joint-2cam-lora",
+        "revision": "1d84eda070313a202a595e449fcf41a1a1e8a546",
+        "step": "7400",
+        "config": "pi05-base_datagen_v1_jar_joint_2cam_lora"
+      },
+      "lid": {
+        "repo": "IDEAS-Lab-Northwestern/pi0-base-datagen-v1-lid-joint-2cam-lora",
+        "revision": "5bff6f0cd4d232874f86a86bdb0a0c1662f95226",
+        "step": "8250",
+        "config": "pi0-base_datagen_v1_lid_joint_2cam_lora"
+      },
+      "stack": {
+        "repo": "IDEAS-Lab-Northwestern/pi05-base-datagen-v1-stack-joint-2cam-lora",
+        "revision": "98e5381eb08e71cc0a38b846b6c81b0504cfbf05",
+        "step": "20750",
+        "config": "pi05-base_datagen_v1_stack_joint_2cam_lora"
+      },
+      "clutter": {
+        "repo": "IDEAS-Lab-Northwestern/pi05-base-datagen-v1-clutter-joint-2cam-lora",
+        "revision": "f572e33bdb498a8d9992a72312ee849be868a2b6",
+        "step": "7100",
+        "config": "pi05-base_datagen_v1_clutter_joint_2cam_lora",
+        "public": true,
+        "available_steps": [
+          "1775",
+          "3550",
+          "5325",
+          "7100"
+        ],
+        "checkpoint_bytes": 6335575342,
+        "checkpoint_files": 17,
+        "metadata_inventory_sha256": "4a2810bfb0f1c4ba6cf2a8c34b3561a3d25e6837a4936abad0f965ea223c9030"
+      },
+      "cabinet": {
+        "repo": "IDEAS-Lab-Northwestern/pi05-base-datagen-v1-cabinet-joint-2cam-lora",
+        "revision": "a26eb80446af577e46e716e194ec919c407b6013",
+        "step": "32650",
+        "config": "pi05-base_datagen_v1_cabinet_joint_2cam_lora",
+        "public": true,
+        "available_steps": [
+          "8163",
+          "16326",
+          "24489",
+          "32650"
+        ],
+        "checkpoint_bytes": 6335980148,
+        "checkpoint_files": 29,
+        "metadata_inventory_sha256": "679977052ee5608bcd26d2e101b78e08cb393474bf188a7ea6c1daca318a0589"
+      },
+      "dusty": {
+        "repo": "IDEAS-Lab-Northwestern/pi05-base-datagen-v1-dusty-joint-2cam-lora",
+        "revision": "2b3c46224dd2a32ca33ad42eee38de12f6cacbf3",
+        "step": "14700",
+        "config": "pi05-base_datagen_v1_dusty_joint_2cam_lora",
+        "public": true,
+        "available_steps": [
+          "3675",
+          "7350",
+          "11025",
+          "14700"
+        ],
+        "checkpoint_bytes": 6336061133,
+        "checkpoint_files": 28,
+        "metadata_inventory_sha256": "ce9352d57aeed5000d762f9674e6456badab278cc70654a88bd8117293ef19a6"
+      }
+    },
+    "_phase2": {
+      "schema_version": 1,
+      "legacy_sources_path": "configs/maniguard/sources.json",
+      "legacy_sources_sha256": "6dfb1d47f77871c1bd5f2d977b8054f438e42a35b344ec28f08973a2c5c02e90",
+      "metadata_checked_utc": "2026-10-17",
+      "new_checkpoint_rule": "Select the largest numeric published checkpoint step from public metadata, without behavioral results.",
+      "transfer_exposure": "Cabinet and Dusty checked only by public repository/file metadata; no local behavioral outcomes."
+    }
+  },
+  "scenes": [
+    {
+      "scene": "task_0040/base",
+      "purpose": "engineering",
+      "sha256": "348d3a553d9c019cec2294faaa2dcf65e03073e05d50781c8cf9ad6f461acc9e",
+      "partition_verified": true
+    },
+    {
+      "scene": "task_0034/base",
+      "purpose": "train",
+      "sha256": "798cc6f04620773569deec3c2155e35041e4dd02392bdf39accb5032bcef0f48",
+      "partition_verified": true
+    },
+    {
+      "scene": "task_0002/base",
+      "purpose": "train",
+      "sha256": "412c993e4514f474c28c2c2f09f535bc51e226473aeeef04d5aaf749dfce08fa",
+      "partition_verified": true
+    },
+    {
+      "scene": "task_0029/base",
+      "purpose": "validation",
+      "sha256": "4575ee4461e9800221320d365e30b8041ede30a38695a5a1b59a3ffe59444006",
+      "partition_verified": true
+    },
+    {
+      "scene": "task_0032/base",
+      "purpose": "validation",
+      "sha256": "1dba2d336b0626f330dc280fb810301eaf0881982484121673249c22e1e84d76",
+      "partition_verified": true
+    }
+  ],
+  "engineering_audits": [
+    {
+      "output": "/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r2-0-a1/data",
+      "valid": true,
+      "engineering_valid": true,
+      "full_episode": false,
+      "errors": [],
+      "costs": {
+        "physics_steps": 278,
+        "physics_seconds": 2.3166667874902487,
+        "env_step_attempts": 42,
+        "env_steps_returned": 42,
+        "policy_queries": 4,
+        "policy_queries_completed": 4,
+        "policy_queries_failed": 0,
+        "policy_query_seconds": 0.4104023277759552,
+        "policy_control_steps": 32,
+        "adapter_seconds": 0.00905073806643486,
+        "initialization_seconds": 44.19968219473958,
+        "elapsed_seconds": 46.78717307001352,
+        "changed_steps": 0
+      },
+      "U": 0,
+      "cost_scope": "complete persisted counters, including initialization physics",
+      "episode_id": "engineering-r2-0",
+      "purpose": "engineering",
+      "genome": [
+        3,
+        3,
+        2,
+        0
+      ],
+      "dial": 0,
+      "scene": "task_0040/base",
+      "seed": 3000,
+      "pre_subscription_physics_ticks": null,
+      "min_chunk_length": 16,
+      "query_count": 4,
+      "changed_commands": 0,
+      "grasp_heuristic_actions": 0,
+      "cap_active_actions": 3,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "benchmark_success": false,
+      "steps": 32,
+      "ever_contacted": false,
+      "ever_grasped": false,
+      "process": {
+        "command": [
+          "uv",
+          "run",
+          "--no-project",
+          "--python",
+          "/workspace/Safety-Dial/data/maniguard/envs/sim/bin/python",
+          "/workspace/Safety-Dial/experiments/scripts/maniguard_phase3_episode.py",
+          "--job",
+          "/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/jobs/engineering-r2-0.json",
+          "--output",
+          "/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r2-0-a1/data"
+        ],
+        "started_at": 1792342223.7966516,
+        "status": "completed",
+        "role": "episode",
+        "timeout": 1200,
+        "pid": 11901,
+        "returncode": 0,
+        "remaining_live_group_members": [],
+        "finished_at": 1792342273.9011254,
+        "elapsed_seconds": 50.104017954319715
+      },
+      "spawn_through_audit_seconds": 50.12208456546068
+    },
+    {
+      "output": "/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r2-0-a1-1-a1/data",
+      "valid": true,
+      "engineering_valid": true,
+      "full_episode": false,
+      "errors": [],
+      "costs": {
+        "physics_steps": 278,
+        "physics_seconds": 2.3166667874902487,
+        "env_step_attempts": 42,
+        "env_steps_returned": 42,
+        "policy_queries": 6,
+        "policy_queries_completed": 6,
+        "policy_queries_failed": 0,
+        "policy_query_seconds": 0.5941645987331867,
+        "policy_control_steps": 32,
+        "adapter_seconds": 0.009273067116737366,
+        "initialization_seconds": 44.50204273685813,
+        "elapsed_seconds": 47.558233607560396,
+        "changed_steps": 32
+      },
+      "U": 0,
+      "cost_scope": "complete persisted counters, including initialization physics",
+      "episode_id": "engineering-r/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r2-0-a1-1",
+      "purpose": "engineering",
+      "genome": [
+        3,
+        3,
+        2,
+        0
+      ],
+      "dial": 0.5,
+      "scene": "task_0040/base",
+      "seed": 3000,
+      "pre_subscription_physics_ticks": null,
+      "min_chunk_length": 16,
+      "query_count": 6,
+      "changed_commands": 32,
+      "grasp_heuristic_actions": 0,
+      "cap_active_actions": 1,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "benchmark_success": false,
+      "steps": 32,
+      "ever_contacted": false,
+      "ever_grasped": false,
+      "process": {
+        "command": [
+          "uv",
+          "run",
+          "--no-project",
+          "--python",
+          "/workspace/Safety-Dial/data/maniguard/envs/sim/bin/python",
+          "/workspace/Safety-Dial/experiments/scripts/maniguard_phase3_episode.py",
+          "--job",
+          "/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/jobs/engineering-r/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r2-0-a1-1.json",
+          "--output",
+          "/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r2-0-a1-1-a1/data"
+        ],
+        "started_at": 1792342274.0090861,
+        "status": "completed",
+        "role": "episode",
+        "timeout": 1200,
+        "pid": 13525,
+        "returncode": 0,
+        "remaining_live_group_members": [],
+        "finished_at": 1792342325.0733466,
+        "elapsed_seconds": 51.06367250531912
+      },
+      "spawn_through_audit_seconds": 51.07382283359766
+    },
+    {
+      "output": "/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r2-0-a1-1-a1-2-a1/data",
+      "valid": true,
+      "engineering_valid": true,
+      "full_episode": false,
+      "errors": [],
+      "costs": {
+        "physics_steps": 278,
+        "physics_seconds": 2.3166667874902487,
+        "env_step_attempts": 42,
+        "env_steps_returned": 42,
+        "policy_queries": 8,
+        "policy_queries_completed": 8,
+        "policy_queries_failed": 0,
+        "policy_query_seconds": 0.822250060737133,
+        "policy_control_steps": 32,
+        "adapter_seconds": 0.009478457272052765,
+        "initialization_seconds": 43.842374332249165,
+        "elapsed_seconds": 46.897355530411005,
+        "changed_steps": 32
+      },
+      "U": 0,
+      "cost_scope": "complete persisted counters, including initialization physics",
+      "episode_id": "engineering-r/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r2-0-a1-1-a1-2",
+      "purpose": "engineering",
+      "genome": [
+        3,
+        3,
+        2,
+        0
+      ],
+      "dial": 1,
+      "scene": "task_0040/base",
+      "seed": 3000,
+      "pre_subscription_physics_ticks": null,
+      "min_chunk_length": 16,
+      "query_count": 8,
+      "changed_commands": 32,
+      "grasp_heuristic_actions": 0,
+      "cap_active_actions": 0,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "benchmark_success": false,
+      "steps": 32,
+      "ever_contacted": false,
+      "ever_grasped": false,
+      "process": {
+        "command": [
+          "uv",
+          "run",
+          "--no-project",
+          "--python",
+          "/workspace/Safety-Dial/data/maniguard/envs/sim/bin/python",
+          "/workspace/Safety-Dial/experiments/scripts/maniguard_phase3_episode.py",
+          "--job",
+          "/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/jobs/engineering-r/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r2-0-a1-1-a1-2.json",
+          "--output",
+          "/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r/workspace/Safety-Dial/runs/maniguard/phase3-part1/20261018-56578764/attempts/engineering-r2-0-a1-1-a1-2-a1/data"
+        ],
+        "started_at": 1792342325.174065,
+        "status": "completed",
+        "role": "episode",
+        "timeout": 1200,
+        "pid": 14625,
+        "returncode": 0,
+        "remaining_live_group_members": [],
+        "finished_at": 1792342375.5335703,
+        "elapsed_seconds": 50.358895264565945
+      },
+      "spawn_through_audit_seconds": 50.38258984684944
+    }
+  ],
+  "code_hashes": {
+    "configs/maniguard/phase2/completion.json": "0f8a75bce655573902d1c013cf7522db6232000ae4c6442e5b82c463c1b84a40",
+    "configs/maniguard/phase2/families.json": "e38b55a14ae96314bda9c83178fe0dd68a030ef45f9ec1d571e5e21df18a0958",
+    "configs/maniguard/phase2/sources.json": "fd76ca78a84796731f5366eea8b254dde18f28267f2871910ead2bb52c1b9478",
+    "configs/maniguard/phase2/splits.json": "78df5ce80dfd501eae33850fee6bc5cf84c87080c49121c0bfb692f70707c862",
+    "configs/maniguard/phase3/allocation.json": "de2f352faad41f951ca3926198fbcb1cc48c37f2986ca37d7df6121a1ae6b033",
+    "experiments/helpers/maniguard_adaptation.py": "009574057fb44eae43b105a38e39281b7e53a308ad2b6286136436d8670edb50",
+    "experiments/helpers/maniguard_client.py": "548154aa19702fbced239698027d1cc3cbf43e7c2c87f5c607dfe7d14f97639c",
+    "experiments/helpers/maniguard_parallel_policy.py": "f23127c3a4495069e543f4824c411f35689836c35dbf57c172207ce8374a8c53",
+    "experiments/helpers/maniguard_phase2_families.py": "03680acfe307e3fa6ae23a38f0424ef054b9384c3c91149e8aa55677d17256ba",
+    "experiments/helpers/maniguard_phase2_outcomes.py": "33ecc9013f8547608adf8790e8cb4592ef396a094a7b7ca9a8379b6d5b859e58",
+    "experiments/helpers/maniguard_phase3_adapter.py": "8756ac69946686a0ebd0b55b4afc7f4d982f276c63451958768d5e141c0ccfdd",
+    "experiments/helpers/maniguard_phase3_budget.py": "cbf25aeb5479ca41267756162a4a2d1d8985140c15bad5918256177d283e4baf",
+    "experiments/helpers/maniguard_phase3_protocol.py": "9c9ff9ebf612e2c67c4f535e146d31663114004cc0f1baef2efef25b184f45ae",
+    "experiments/helpers/maniguard_phase3_results.py": "1561d70b76211db16ed07a0ee95f6b576d600e5f7b6c05250d733d01e1be062d",
+    "experiments/helpers/maniguard_phase3_runtime.py": "8bb6a94fee20a2bccde558b57b69d5507095ce7d7da5b04e5f865e7f98bca07b",
+    "experiments/helpers/maniguard_phase3_search.py": "0e9cf5fffbe03008533368ccccb32c020eb469f1b645c6461e5a8d2de9f3c172",
+    "experiments/helpers/maniguard_phase3_source.py": "411394883c20df160a95b89ae246dfc4116a310ddb184baa121b1202504fb73b",
+    "experiments/helpers/maniguard_policy.py": "732bd477c7f284688702360c561972937f3267ee0241266bbba456b18c4f3445",
+    "experiments/helpers/maniguard_policy_provenance.py": "701929ecb3f7c603b53ad3e702fa35ba1e0e1f779b461b0ce84e7ab4aa9b3a34",
+    "experiments/helpers/maniguard_results.py": "549b3ad6bfe7793438db075bdc5988885a06b1963ce147160d76436ae7c761c0",
+    "experiments/helpers/maniguard_runtime.py": "a9e3fd09ccd9f0a66bba6c2c84efdb813c664bf05cdeea60ba4f52ba341ed0f2",
+    "experiments/helpers/maniguard_source.py": "92b0352f5dfa8db2a0bcb0fc15716d59701940ef4516dbff6fb14bca4f1b01ed",
+    "experiments/scripts/maniguard_phase3_episode.py": "f0e15abdacf8c241bb8f312d35770e641efd998de15d1b05b8aac16960c33e34",
+    "experiments/scripts/maniguard_phase3_pilot.py": "2878491cf5f314edbfb6b59d3e870f7270db11c02c0726436268ec0c75ed6e10",
+    "experiments/scripts/maniguard_phase3_report.py": "891e4d19c29071b24bc38faaff91e84ef27dff8dc49fd8153c8e21ae18d0eb3b",
+    "experiments/scripts/maniguard_serve.py": "c3cfc77ba082ed095ad7ffef2381517a270dca88ee0964378840b10f4cf5e28f"
+  },
+  "input_receipts": {
+    "data/maniguard/policies/clutter/download-provenance.json": "c1738e397fce492a2d83f7487c652796aa0f7a104f670e8ddc3ba9b5fb36efa2",
+    "data/maniguard/benchmark/clutter_pickup/download-provenance.json": "bf92628e2a7cac45353ff35f08cb4d573083fbda6e9dd813bb847bc874794e3d",
+    "data/maniguard/datasets/omnigibson-robot-assets/models/franka/franka_panda_longfinger/download-provenance.json": "e3fd1df1e835116477459a1f3e34db00faa535cc4177f0a11bb5a94f972732db"
+  }
+}
