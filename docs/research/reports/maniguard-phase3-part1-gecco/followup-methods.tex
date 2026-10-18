@@ -1,0 +1,104 @@
+\section{Part 2: isolate correction and feedback}
+Part 1 changes restraint and query horizon together. Its failure investigation
+found some corrected commands followed by cached proposals, motivating a bounded
+mechanism test rather than an established diagnosis. Four conditions use the same
+frozen VLA: A preserves its commands and queries every eight actions; B applies the
+finalist's .04/.02 rad caps at interval eight; C uses those caps at interval four;
+D uses those caps with correction-triggered refresh between four and eight. The
+finger heuristic, componentwise mapping and smoothing one are common to B/C/D.
+There is no new evolutionary search or three-setting dial sweep in Part 2.
+
+After actual environment input $u_t$, D accumulates
+\begin{equation}
+ D_k=\sum_{t\text{ since query}}
+ \frac{\|p_t^{\rm arm}-u_t^{\rm arm}\|_2}{\sqrt7\,(.04\text{ rad})}.
+\end{equation}
+Per-coordinate differences no larger than $10^{-6}$ rad are zeroed first. The
+accumulator resets on a query, preserving previous actual input and finger history.
+Goal termination takes precedence; otherwise refresh occurs once $k\ge4$ and
+$D_k\ge.5$, or at $k=8$. Both the correction and trigger use already executed
+inputs after downstream action-space clipping. Command departure measures neither
+actual displacement nor physical risk. No privileged held label, object pose or
+monitor verdict enters this controller.
+
+The frozen allocation has sixteen full episodes: tasks 0039/0010 each receive two
+fresh base seeds (4000/4001 and 4010/4011), with four conditions in each matched block.
+The prospective order is ABCD, BCDA, CDAB, DABC. Native horizon, goals, monitor and
+policy inference remain unchanged. Engineering checks A/C/D at 32 actions each;
+one pre-application import failure and two coordinator/tooling failures are retained.
+There are no full-episode retries or outcome-dependent additions.
+
+\input{part2-results}
+
+\section{Part 3: model feasibility before evolutionary use}
+The proposed contribution concerns which motion mutants merit physical evaluation,
+using observed errors conditional on execution correction. Dynamics-assisted
+skill search already exists~\cite{daqd}; frozen visual-feature prediction and short
+rollouts also have precedent~\cite{dinowm,mbpo}. These ingredients and an optimizer
+substitution do not establish novelty. We test a compact feasibility stage before
+spending the physical optimizer-comparison allocation.
+
+\paragraph{Data and information.}
+The Part 1 training traces lack later exact images and numerical margins; exposed
+Part 1 comparison episodes are excluded. Before fitting, the declared eight-episode
+recording option is sealed: B/C on tasks 0046/0006, two fresh seeds per task. All
+sixteen Part 2 episodes on 0039/0010 are fitting data; four 0046 episodes calibrate;
+four 0006 episodes audit. Whole tasks, seeds and trajectories remain separated.
+The 0048/0050 final comparison and main-study test partition are outside development.
+Acquisition is charged once, including reused common data.
+
+Passive capture, identical across all Part 2/3 recording conditions, saves the
+already extracted overview/wrist RGB at every step without rendering or advancing
+physics. Evaluation-only numerical targets reproduce the native float32 local
+$+Z$ tilt calculation and per-object thresholds, plus negative target-to-goal
+distance. Targets never enter the live controller or dynamics input. Numerical
+uprightness is audited against native Boolean bindings. The final image remains
+saved but is omitted from model pairs without its missing subsequent two-finger
+proposal frame. A spatial distance readout is distinct from the native held-object
+goal; tilt is distinct from spill/drop safety.
+
+\paragraph{Frozen predictive system.}
+A pinned DINOv2 small encoder~\cite{dinov2} produces $2\times2$ spatially pooled
+patch features from each camera, 3,072 coordinates in total. Fitting-only
+standardization and randomized PCA retain 32 visual coordinates. Seven measured
+arm joints and both finger positions remain separate. Five episode-bootstrap
+128/128-unit residual MLPs predict the next standardized visual/robot state,
+conditioned on the current and previous state and previous/current actual
+8-coordinate environment inputs. Each trains for 30 epochs with fixed settings.
+History shifts causally during rollouts of at most four actions. PCA is compression;
+the action-conditioned residual networks supply the dynamics.
+
+Ridge heads estimate minimum upright margin and short-term progress. The audit
+compares persistence, fitted ridge, action-shuffled ridge and the same ensemble
+with mispaired action sequences, changing-state windows, and actual versus
+predicted future-state readouts. Raw pooled features, PCA and a same-size random
+projection diagnose representation/readout limitations. Correctly paired and
+shuffled sequences share the same trained ensemble in the action-dependence gate.
+Pre-fitting source refinements preserve their original receipts; numerical criteria,
+data groups, physical slots and model hyperparameters are unchanged.
+
+\paragraph{Reliability and prospective search.}
+M trusts ensemble disagreement; C uses an empirical conditional .8-error-quantile
+lookup by factual correction, with sparse bins falling back to the unconditional
+quantile and unsupported contexts abstaining. Both use nominal .5 calibration
+acceptance; actual acceptance and consequential errors must also be reported.
+These are empirical allocation heuristics, not calibrated safety probabilities.
+Planned counterfactual correction never becomes a factual residual without execution.
+
+If the sealed forecast criteria permit, the 64-episode physical pilot evaluates a
+shared four-controller initial population on two cases (eight episodes once),
+three four-slot descendant populations on two fresh cases (24), two shortlisted
+controllers per method on two confirmation cases (12), and identity, one fixed
+Part 2 reference and three frozen finalists on four fresh blocks (20). Each
+method retains an actually re-evaluated elite, one unguided timing mutant and
+two cap mutants from a common pool of at most sixteen proposals. The known
+four-command prefix cannot rank later query timing, so timing genes stay in
+physical exploration. Abstention removes a model recommendation rather than a
+candidate's exploration eligibility. All deployed controllers share the same
+information and family; actual mean $U$ determines selection and confirmation.
+No learned online action veto is installed. Three additional 32-action engineering
+attempts are available before eligible search, with no full-episode replacement.
+The deployed family has 160 genotypes: free caps
+$\{\varnothing,.12,.08,.04\}$ rad, grasp caps
+$\{\varnothing,.08,.04,.02\}$ rad, thresholds $\{0,.5,1,2,\varnothing\}$,
+and minimum intervals $\{4,6\}$, with maximum eight and smoothing one fixed.

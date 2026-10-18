@@ -152,7 +152,8 @@ def plots(result):
             axis.set_yticks(range(5))
             axis.set_xlabel("A identity/8  B cap/8\nC cap/4  D correction/4..8")
         axes[0].set_ylabel("Episodes")
-        axes[-1].legend(fontsize=8, loc="upper left")
+        handles, labels = axes[0].get_legend_handles_labels()
+        fig.legend(handles, labels, fontsize=9, loc="upper center", bbox_to_anchor=(.5, 1.08), ncol=4)
         savefig(fig, "part2-outcomes", provenance)
         fig, axes = plt.subplots(1, 3, figsize=(12, 3.3))
         for axis, key, label in zip(axes, ("policy_control_steps", "policy_queries", "elapsed_seconds"),
@@ -172,11 +173,15 @@ def plots(result):
             axes[0].plot(range(4, 9), counts, marker="o", label=c)
             axes[1].scatter([sum(r["costs"]["policy_queries"] for r in selected)],
                             [sum(r["S_req"] for r in selected)], s=60, label=c)
+            offsets = {"A": (16, 22), "B": (-20, -18), "C": (-15, 8), "D": (16, -4)}
             axes[1].annotate(c, (sum(r["costs"]["policy_queries"] for r in selected),
-                                 sum(r["S_req"] for r in selected)), xytext=(5, 4), textcoords="offset points")
+                                 sum(r["S_req"] for r in selected)), xytext=offsets[c],
+                            textcoords="offset points", arrowprops={"arrowstyle": "-", "lw": .6})
         axes[0].set(xlabel="Executed actions between actual queries", ylabel="Inter-query intervals", xticks=range(4, 9))
         axes[0].legend()
         axes[1].set(xlabel="Total VLA queries (four episodes)", ylabel="Safe completions / 4", yticks=range(5))
+        axes[1].set_ylim(-.25, 4.5)
+        axes[1].margins(x=.15)
         savefig(fig, "part2-feedback", provenance)
     model = ROOT / "data/maniguard/models/phase3-parts2-3-20261018"
     if (model / "forecast-audit.json").exists():
@@ -228,7 +233,8 @@ def matched(records, stage):
         expected = 4 if stage == "part2" else 5 if stage == "part3-comparison" else 2
         if len(entries) != expected:
             continue
-        entries.sort(key=lambda item: item[0]["condition"])
+        condition_order = ["identity", "fixed", "E", "M", "C"] if stage == "part3-comparison" else list("ABCD")
+        entries.sort(key=lambda item: condition_order.index(item[0]["condition"]))
         for camera, suffix in (("overview", "main"), ("wrist", "wrist")):
             destination = folder / f"block{block}-{camera}.mp4"
             inputs, sources, filters = [], [], []
@@ -247,10 +253,11 @@ def matched(records, stage):
             maximum = max(durations)
             columns = 2 if expected <= 4 else 3
             for i, ((job, record), duration) in enumerate(zip(entries, durations, strict=True)):
-                label = f"{job['condition']} | {verdict(record)} | {job['scene']} seed {job['seed']}"
+                label = f"{job['condition']} | {verdict(record)}"
+                case_label = f"{job['scene']} seed {job['seed']}"
                 # Conditions and identifiers are generated internally and path-free.
                 label = label.replace(";", " ")
-                filters.append(f"[{i}:v]fps=20,scale=320:320,pad=320:360:0:40:color=black,drawtext=text='{label}':x=5:y=5:fontsize=10:fontcolor=white,tpad=stop_mode=add:stop_duration={maximum-duration+0.1}:color=black,drawtext=text='ENDED':fontcolor=white:fontsize=30:x=(w-tw)/2:y=(h-th)/2:enable='gte(t,{duration})'[v{i}]")
+                filters.append(f"[{i}:v]fps=20,scale=320:320,pad=320:360:0:40:color=black,drawtext=text='{label}':x=5:y=4:fontsize=12:fontcolor=white,drawtext=text='{case_label}':x=5:y=22:fontsize=11:fontcolor=white,tpad=stop_mode=add:stop_duration={maximum-duration+0.1}:color=black,drawtext=text='ENDED':fontcolor=white:fontsize=30:x=(w-tw)/2:y=(h-th)/2:enable='gte(t,{duration})'[v{i}]")
             layout = "|".join(f"{i % columns * 320}_{i // columns * 360}" for i in range(expected))
             filters.append("".join(f"[v{i}]" for i in range(expected)) + f"xstack=inputs={expected}:layout={layout}:fill=black,format=yuv420p[out]")
             command = ["ffmpeg", "-nostdin", "-v", "error", *inputs, "-filter_complex", ";".join(filters),

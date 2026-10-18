@@ -1,41 +1,55 @@
-# ManiGuard Part 1, GECCO-format report
+# ManiGuard shared GECCO-format report
 
-Open [named.pdf](named.pdf). This four-page named paper uses the repository's archived
-GECCO `acmart`/`sigconf` template. The old paper and its experiment remain unchanged.
-The report leads with the adverse fresh result: full strength has 4/8 safe completions
-and 2/8 violating episodes, compared with identity's 5/8 and 0/8.
+Open [named.pdf](named.pdf). This shared paper uses the repository's GECCO
+`acmart`/`sigconf` template and now covers the completed Part 1 and Part 2 pilots,
+with the frozen Part 3 methods. Part 3's recording/forecast-audit stage is in progress
+in this version. The archived GECCO paper and its experiments remain unchanged.
 
-[Videos and pictures](videos.md) covers every comparison block. All 16 matched videos
-are individually saved in the approved private dataset. Every block has overview and
-wrist video, with dial 0, 0.5 and 1 from left to right. Sixteen PNG strips show the same
-18-second timestamp across every camera and block. The paper's three illustrative
-strips were selected after outcomes and are explicitly labelled as illustrations.
-The public gallery and numerical comparison retain the entire frozen sample.
+Part 1's adverse result is retained: full strength has 4/8 safe completions and 2/8
+violating episodes, versus identity's 5/8 and 0/8. Part 2 has 3/4 safe completions for
+identity, fixed-eight and correction-triggered execution, versus 2/4 for fixed-four.
+Each condition has one violation. D never triggers early; its sole threshold crossing
+is at action eight, when a query is already due. These small pilots establish neither
+superiority nor calibrated risk. Part 3's physical search depends on its frozen
+forecast audit, not on a requirement to produce a positive evolutionary result.
+
+[Part 1 videos and pictures](videos.md) covers every three-dial comparison block.
+[Parts 2 and 3 videos and pictures](followup-videos.md) links all available matched
+videos and complete event/episode strips. Videos are in the approved private dataset,
+revision-pinned and download/hash verified; access requires the owner's account.
+Ended panels are black and labelled ENDED. Reporting never replays simulator physics.
+
+The companion reports are [Part 1](../ManiGuard%20evolutionary%20safety%20dial%20pilot.md),
+[Part 2](../ManiGuard%20Part2%20correction%20triggered%20feedback.md) and
+[Part 3](../ManiGuard%20Part3%20model%20assisted%20evolution.md).
+Part 2's [public audit](../../research_notes/ManiGuard%20phase3%20Part2%20audit.json),
+[mechanism diagnostics](../../research_notes/ManiGuard%20phase3%20Part2%20diagnostics.json),
+[controller export](../../../../configs/maniguard/followup/part2-frozen-controller-export.json)
+and [figure provenance](../../figures/ManiGuard/phase3-followup/figure-provenance.json)
+retain counts, denominators and hashes. Generated run directories, raw datasets,
+licensed assets, credentials and model weights are excluded from Git.
 
 Build from this directory with `make`, using Tectonic 0.17.0, or
 `tectonic -k --keep-logs named.tex`. The compiler is available from its
 [official releases](https://github.com/tectonic-typesetting/tectonic/releases/tag/tectonic%400.17.0).
-A normal TeX installation with `acmart` can instead run `latexmk -pdf named.tex`.
-The source supports the template's anonymous review toggle through `main.tex`, while
-`named.tex` is the named sharing build. Rights metadata identifies an internal pilot.
+A TeX installation with `acmart` can run `latexmk -pdf named.tex`. `main.tex` retains
+an anonymous review toggle; `named.tex` is the named internal sharing build.
 
-The paper builds from committed figures without private run data. Rebuilding the
-vector graphs from the saved audit uses the explicit CPU interpreter:
-
-```bash
-uv run --no-project --python data/maniguard/envs/cpu/bin/python \
-  scripts/maniguard/part1_paper_assets.py RUN/audit-final \
-  docs/research/figures/ManiGuard/phase3-part1
-```
-
-A recorded picture can be reproduced directly from its matched video:
+The paper builds from committed derived figures without private run data. Rebuild
+followup charts, matched videos, pictures and public gallery from the saved evidence:
 
 ```bash
-ffmpeg -nostdin -v error -ss 18 -i MATCHED_VIDEO.mp4 -frames:v 1 FRAME.png
+uv run --no-project --python data/maniguard/envs/cpu/bin/python python \
+  scripts/maniguard/followup_diagnostics.py
+uv run --no-project --python data/maniguard/envs/cpu/bin/python python \
+  scripts/maniguard/followup_evidence.py all
+uv run --no-project --python data/maniguard/envs/cpu/bin/python python \
+  scripts/maniguard/followup_report_assets.py
 ```
 
-No simulator state is restored or advanced, and no policy query is made for reporting.
-Figure/frame provenance records source hashes. The companion Markdown report and public
-52-row ledger carry detailed accounting, including unknown pre-subscription physics.
-The paper includes an AI-assistance disclosure. Build validation and the final private
-backup receipts are recorded with the public audit.
+Part 1's figures retain their original provenance and can be rebuilt independently
+with `scripts/maniguard/part1_paper_assets.py`. Its sixteen fixed-time video strips
+remain unchanged. New pictures use losslessly saved native RGB, with raw source hashes;
+violations have before/at/after strips, and nonviolations start/middle/final strips.
+No policy query or physics step is made for reporting. The shared paper retains the
+AI-assistance disclosure and distinguishes unknown initialization physics from zero.

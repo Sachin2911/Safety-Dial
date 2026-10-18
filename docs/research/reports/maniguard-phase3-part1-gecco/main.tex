@@ -11,7 +11,7 @@
 \acmConference[ManiGuard pilot]{ManiGuard pilot in GECCO format}{18 October 2026}{}
 \usepackage{xurl}
 \setlength{\emergencystretch}{3em}
-\graphicspath{{../../figures/ManiGuard/phase3-part1/}}
+\graphicspath{{../../figures/ManiGuard/phase3-part1/}{../../figures/ManiGuard/phase3-followup/}}
 \begin{document}
 \title{An Evolutionary Safety Dial for Frozen Manipulation Policies: A Physically Audited Pilot}
 \subtitle{Frozen-protocol research report, 18 October 2026}
@@ -20,20 +20,21 @@
 \email{2699183@students.wits.ac.za}
 \renewcommand{\shortauthors}{Mohan}
 \begin{abstract}
-Can evolutionary search discover a compact execution controller that improves safe
-completion around a frozen manipulation policy? We implement a four-parameter
-controller and external intervention-strength dial in ManiGuard Clutter. A frozen
-single-seed protocol allocates 24 simulator episodes to search and 24 fresh episodes
-to comparing one frozen finalist at dial strengths zero, one-half and one. The
-finalist safely completes both final training episodes. This gain does not persist:
-identity achieves 5/8 safe completions with no observed violating episode; half
-strength achieves 3/8 with two violations; full strength achieves 4/8 with two
-violations. Full strength completes more tasks overall, but two completions are
-unsafe. Query cost falls, without a safe-completion improvement. We preserve all
-52 attempts including engineering, complete action/monitor traces, source and
-checkpoint hashes, three-setting videos, and continuous allocated-time accounting.
-This is an adverse descriptive result on two exposed scenes, not evidence that
-evolution outperforms other search methods or that the dial calibrates physical risk.
+Can a compact execution controller improve safe completion around a frozen
+manipulation policy? In ManiGuard Clutter, Part 1 allocates 24 simulator episodes
+to evolutionary search and 24 fresh episodes to one frozen finalist at three dial
+strengths. Its training lead does not persist: identity safely completes 5/8 episodes
+with no observed violation, versus 3/8 with two violations at half strength and 4/8
+with two violations at full strength. Part 2 separates query timing from restraint
+in sixteen new episodes. Identity, fixed-eight and correction-triggered execution
+each safely complete 3/4, versus 2/4 for fixed-four, with one violation per condition.
+The adaptive trigger never refreshes early; fixed-four more than doubles query
+cost without improving measured safe completion. Part 3 prospectively tests a
+frozen visual dynamics ensemble before allowing a matched evolutionary allocation;
+its recording and forecast-audit stage is in progress in this version. We preserve
+causal executed-action histories, native outcomes, videos and continuous allocation
+accounting. These descriptive pilots establish neither optimizer superiority nor
+calibrated physical risk.
 \end{abstract}
 \begin{CCSXML}
 <ccs2012><concept><concept_id>10010147</concept_id>
@@ -53,13 +54,13 @@ an external dial exposes a useful measured trade-off. All physical outcomes here
 are measured in simulation. The monitor labels actions' consequences; it does not
 filter commands.
 
-This pilot implements the Part 1 plan at planning commit \texttt{8df7ac9}. The
+Part 1 implements its plan at planning commit \texttt{8df7ac9}. The
 machine-readable protocol was frozen before search. It contains the controller
 domain, information restrictions, source hashes, scene partitions, schedules,
 selection rules and absolute deadlines. The work establishes an executable and
 auditable experiment. It provides no optimizer-superiority or safety-guarantee claim.
 
-\section{Controller and frozen protocol}
+\section{Part 1: controller and frozen protocol}
 The genome has four categorical coordinates: free-motion joint-target cap
 $\{\varnothing,.12,.08,.04\}$ rad, grasp cap
 $\{\varnothing,.08,.04,.02\}$ rad, smoothing $\{1,.75,.5\}$, and query horizon
@@ -125,7 +126,7 @@ full strength with four safe completions and two violations.}
 \label{fig:outcomes}
 \end{figure*}
 
-\section{Search and fresh comparison}
+\section{Part 1: search and fresh comparison}
 Population-zero timing selected the full 48-episode allocation before selection
 inspected scores. The shared eight episodes count once. The planning duration was
 $\max(417\text{ s},1.25\times\text{slowest})=417$ s; the remaining estimate was
@@ -232,7 +233,7 @@ under the three dial settings, including the initially promising and adverse cas
 \label{fig:frames}
 \end{figure}
 
-\section{Engineering, accounting and provenance}
+\section{Part 1: engineering and provenance}
 CPU verification passes 33 Part 1 tests and 109 regression tests, with four skips.
 Checks cover identity, causal clipped-action history, caps, finger switching,
 interpolation, query schedules, seeded evolution, evidence corruption and owned
@@ -282,9 +283,8 @@ UNISafe installers are not used. Clutter checkpoint revision
 settings. Controller exports retain all eighteen checkpoint-file hashes and code pins.
 
 The original allocation clock starts at 16:00:37 UTC, including setup, implementation,
-failed and idle work before and after replacement. An independent supervised guard
-preserves the 23:00:37 UTC physical target and 00:00:37 UTC next-day hard end across
-restarts. The policy stops at 18:25:29 UTC; process/GPU checks confirm complete exit
+failed and idle work before and after replacement. During Part 1, an independent supervised guard preserves the original
+23:00:37 UTC physical target and 00:00:37 UTC next-day hard end across restarts. The policy stops at 18:25:29 UTC; process/GPU checks confirm complete exit
 by 18:25:57 UTC, at 2.422 allocated GPU-hours. Subsequent paper preparation, backup
 and idle rental continue to count. The public audit records the later accounting
 cutoff and rental-stop scope.
@@ -299,7 +299,7 @@ keys excluded. The \href{https://huggingface.co/datasets/Sachioster/safety-dial-
 requires the owner's access. Git contains derived reporting artifacts rather than
 raw run directories.
 
-\section{Limitations and conclusion}
+\section{Part 1: interpretation}
 The training lead disappears in the fresh check. The controller increases observed
 violations and does not improve safe completion. It is a working interface with an
 adverse pilot result. Matching seeds does not equate observations: all sixteen initial
@@ -309,15 +309,34 @@ support only a descriptive conclusion. Identity's zero violations would give the
 approximate 95\% upper bound $3/8=37.5\%$ even under independent homogeneous sampling;
 repeated scenes further limit interpretation.
 
-A new allocation should isolate query scheduling from caps and compare strong fixed
-settings and matched random search before increasing evolutionary search. Ordinary
-policy learning remains necessary for the broader research claim. This allocation
-contains none of those comparisons and no outcome-dependent extra episodes.
+These findings motivate isolating query scheduling from caps before increasing
+evolutionary search. Ordinary policy learning remains necessary for the broader
+research claim. Part 1 contains no such comparison or outcome-dependent extra episode.
+Parts 2 and 3 follow separately frozen plans at planning baseline \texttt{d4b8182}.
+
+\input{followup-methods}
+
+\section{Followup status, preservation and limitations}
+Part 2 is complete; Part 3 recording and model feasibility are in progress in this
+version. A failed or unsupported forecast audit will gate the proposed 64-episode
+comparison rather than trigger extra data collection or relaxed criteria. Unstarted
+search has no evolutionary result. The full original Part 1 evidence remains preserved.
+The user explicitly extends the physical target to 19 October 03:00:37 UTC and hard
+end to 04:00:37 UTC, without resetting 18 October 16:00:37 UTC as allocation start.
+All setup, failures, model work, reporting and idle rental count. A separate supervised
+guard covers policy, simulation and model process groups through the extended target.
+
+The companion reports and complete video/picture gallery are linked from the paper
+README. Evidence backups remain private, credential-scanned and revision-pinned;
+assets and checkpoints are outside the evidence archives. Derived figures use only
+recorded measurements, with source hashes. Full-episode horizons and test partitions
+remain intact. No safety guarantee or optimizer-superiority claim follows from the
+current small samples, correlated frames or imagined rollouts.
 
 \begin{acks}
 AI coding assistance was used for implementation, analysis code, prose and typesetting.
 Experimental outcomes derive from the recorded simulator/monitor traces, and every
-experimental picture is extracted from native video. The paper adapts the repository's
+experimental picture is extracted from recorded native video or lossless captured RGB. The paper adapts the repository's
 existing GECCO template without changing its archived experiment or results.
 \end{acks}
 \bibliographystyle{ACM-Reference-Format}
