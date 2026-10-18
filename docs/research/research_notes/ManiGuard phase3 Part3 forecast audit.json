@@ -1,0 +1,173 @@
+{
+  "schema": "maniguard-part3-forecast-audit-v1",
+  "at": 1792359083.8582299,
+  "criteria": {
+    "minimum_full_episodes": {
+      "fit": 8,
+      "calibration": 4,
+      "audit": 4
+    },
+    "minimum_changing_windows_audit": 100,
+    "changing_definition": "four-step latent displacement exceeds fitting-window median",
+    "minimum_near_threshold_episodes_calibration": 2,
+    "minimum_near_threshold_episodes_audit": 2,
+    "near_threshold_margin_deg": 10,
+    "minimum_upright_crossing_episodes_audit": 1,
+    "minimum_persistence_improvement_fraction_1_and_4": 0.05,
+    "minimum_action_shuffled_improvement_fraction_4": 0.02,
+    "maximum_relative_ridge_error_4": 1.05,
+    "maximum_actual_latent_margin_mae_deg": 10,
+    "maximum_predicted_latent_near_margin_mae_deg": 10,
+    "maximum_predicted_progress_mae_m": 0.03,
+    "maximum_false_reassurance_fraction": 0.1,
+    "false_reassurance": "actual margin<0, predicted margin>5 degrees",
+    "nominal_acceptance_fraction": 0.5,
+    "minimum_actual_acceptance_fraction_audit_each": 0.1,
+    "minimum_progress_ranking_spearman": 0.25,
+    "minimum_progress_varying_windows": 30,
+    "maximum_screening_seconds_per_16_candidates": 30,
+    "gate_rule": "all accuracy/usefulness criteria pass; missing support is inconclusive; never relax",
+    "inference_limit": "factual prefix prediction/ranking only; no validated counterfactual outcomes"
+  },
+  "metrics": {
+    "audit_episodes": 4,
+    "audit_windows": 552,
+    "audit_episodes_with_windows": 4,
+    "changing_windows": 263,
+    "varying_progress_windows": 152,
+    "near_calibration_episodes": 4,
+    "near_audit_episodes": 2,
+    "crossing_audit_episodes": 1,
+    "near_windows": 101,
+    "crossing_windows": 99,
+    "persistence_improvement_1": -0.27781641483306885,
+    "persistence_improvement_4": -0.4512711763381958,
+    "shuffled_improvement_4": 0.026926696300506592,
+    "action_shuffle_seed": 20261029,
+    "action_shuffle_scope": "same ensemble, mispaired executed-action prefixes within audit partition",
+    "relative_ridge_error_4": 1.15453579740036,
+    "actual_margin_mae_deg": 16.171766075304255,
+    "near_margin_mae_deg": 18.560148634035766,
+    "progress_mae_m": 0.07900861529740524,
+    "false_reassurance_fraction": 0.0,
+    "progress_ranking_spearman": 0.12611485863079983,
+    "M_acceptance": 0.9184782608695652,
+    "C_acceptance": 0.9184782608695652,
+    "M_trusted_rmse": 0.5437176823616028,
+    "C_trusted_rmse": 0.5437176823616028,
+    "screen_seconds_per_16": 0.8095334284007549,
+    "member_calls": 360,
+    "member_examples": 32320,
+    "rollout_seconds": 0.08288140967488289,
+    "scenes": [
+      "task_0006/base"
+    ],
+    "readout_comparison": {
+      "pca": {
+        "margin_mae_deg": 16.556893148720217,
+        "progress_mae_m": 0.08313039667903457
+      },
+      "raw": {
+        "margin_mae_deg": 10.813919186048338,
+        "progress_mae_m": 0.06029982769102166
+      },
+      "random": {
+        "margin_mae_deg": 14.028799977753904,
+        "progress_mae_m": 0.10121054465498885
+      },
+      "pca_visual_only": {
+        "margin_mae_deg": 8.538739962879063,
+        "progress_mae_m": 0.04112986345929512
+      }
+    },
+    "per_episode": [
+      {
+        "episode_id": "part3-record-b2-B",
+        "scene": "task_0006/base",
+        "windows": 71,
+        "near_windows": 2,
+        "four_step_rmse": 0.5696130394935608,
+        "persistence_rmse": 0.33822154998779297,
+        "correction_mean": 0.01842499356454527
+      },
+      {
+        "episode_id": "part3-record-b2-C",
+        "scene": "task_0006/base",
+        "windows": 140,
+        "near_windows": 0,
+        "four_step_rmse": 0.5923662185668945,
+        "persistence_rmse": 0.3463069498538971,
+        "correction_mean": 0.020655216250867983
+      },
+      {
+        "episode_id": "part3-record-b3-B",
+        "scene": "task_0006/base",
+        "windows": 136,
+        "near_windows": 99,
+        "four_step_rmse": 0.4918414354324341,
+        "persistence_rmse": 0.2746797800064087,
+        "correction_mean": 0.0
+      },
+      {
+        "episode_id": "part3-record-b3-C",
+        "scene": "task_0006/base",
+        "windows": 205,
+        "near_windows": 0,
+        "four_step_rmse": 0.5567148327827454,
+        "persistence_rmse": 0.31914007663726807,
+        "correction_mean": 0.014942086711185189
+      }
+    ],
+    "ensemble_1_rmse": 0.26609012484550476,
+    "ensemble_1_changing_rmse": 0.2961946427822113,
+    "ensemble_4_rmse": 0.5514324903488159,
+    "ensemble_4_changing_rmse": 0.5979094505310059,
+    "persistence_1_rmse": 0.19341148436069489,
+    "persistence_1_changing_rmse": 0.2317974865436554,
+    "persistence_4_rmse": 0.3175305426120758,
+    "persistence_4_changing_rmse": 0.4119901657104492,
+    "ridge_4_rmse": 0.468760367336355,
+    "ridge_4_changing_rmse": 0.5178786590050338,
+    "action_shuffled_ridge_4_rmse": 0.472694221613412,
+    "action_shuffled_ridge_4_changing_rmse": 0.5214229156717131,
+    "action_shuffled_ensemble_4_rmse": 0.5707273483276367,
+    "action_shuffled_ensemble_4_changing_rmse": 0.6144546866416931
+  },
+  "gate": {
+    "eligible": false,
+    "status": "failed_accuracy",
+    "support": {
+      "audit_episodes": true,
+      "changing_windows": true,
+      "near_calibration_episodes": true,
+      "near_audit_episodes": true,
+      "crossing_audit_episodes": true,
+      "varying_progress_windows": true,
+      "crossing_forecast_windows": true
+    },
+    "accuracy": {
+      "one_step_beats_persistence": false,
+      "four_step_beats_persistence": false,
+      "action_dependence": true,
+      "ridge_reference": false,
+      "actual_readout": false,
+      "near_forecast_readout": false,
+      "progress_readout": false,
+      "false_reassurance": true,
+      "ranking": false,
+      "M_acceptance": true,
+      "C_acceptance": true,
+      "latency": true
+    },
+    "failed_checks": [
+      "one_step_beats_persistence",
+      "four_step_beats_persistence",
+      "ridge_reference",
+      "actual_readout",
+      "near_forecast_readout",
+      "progress_readout",
+      "ranking"
+    ]
+  },
+  "scope": "factual query-start prefixes on one held-out task; no optimizer superiority or counterfactual causal ranking claim"
+}

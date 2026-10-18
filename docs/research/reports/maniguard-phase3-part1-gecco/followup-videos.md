@@ -1,7 +1,7 @@
 # Parts 2 and 3 recorded evidence
 
 These are recorded simulator observations and native videos. Offline composition
-adds no physics step or policy query. Every available full episode appears below.
+adds no physics step or policy query. Every episode in the frame-index snapshot appears below.
 Video links require access to the approved private dataset; pictures are in Git.
 
 Part 2 panels are A/B above C/D. A is identity at interval eight; B uses caps
@@ -21,6 +21,18 @@ and re-downloaded for SHA256 verification.
 | block1 | [overview](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/9e26419f9262aaa6c79d8c5e43dff26f9f8cae03/matched-videos-followup/part2/block1-overview.mp4) | [wrist](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/9e26419f9262aaa6c79d8c5e43dff26f9f8cae03/matched-videos-followup/part2/block1-wrist.mp4) |
 | block2 | [overview](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/9e26419f9262aaa6c79d8c5e43dff26f9f8cae03/matched-videos-followup/part2/block2-overview.mp4) | [wrist](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/9e26419f9262aaa6c79d8c5e43dff26f9f8cae03/matched-videos-followup/part2/block2-wrist.mp4) |
 | block3 | [overview](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/9e26419f9262aaa6c79d8c5e43dff26f9f8cae03/matched-videos-followup/part2/block3-overview.mp4) | [wrist](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/9e26419f9262aaa6c79d8c5e43dff26f9f8cae03/matched-videos-followup/part2/block3-wrist.mp4) |
+
+## part3-recording: complete matched videos
+
+Pinned private revision: `bbe5bbd378a8b1b9556ead696b49514939172d5b`. Every file was credential-scanned
+and re-downloaded for SHA256 verification.
+
+| Block | Overview | Wrist |
+| --- | --- | --- |
+| block0 | [overview](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/bbe5bbd378a8b1b9556ead696b49514939172d5b/matched-videos-followup/part3-recording/block0-overview.mp4) | [wrist](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/bbe5bbd378a8b1b9556ead696b49514939172d5b/matched-videos-followup/part3-recording/block0-wrist.mp4) |
+| block1 | [overview](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/bbe5bbd378a8b1b9556ead696b49514939172d5b/matched-videos-followup/part3-recording/block1-overview.mp4) | [wrist](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/bbe5bbd378a8b1b9556ead696b49514939172d5b/matched-videos-followup/part3-recording/block1-wrist.mp4) |
+| block2 | [overview](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/bbe5bbd378a8b1b9556ead696b49514939172d5b/matched-videos-followup/part3-recording/block2-overview.mp4) | [wrist](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/bbe5bbd378a8b1b9556ead696b49514939172d5b/matched-videos-followup/part3-recording/block2-wrist.mp4) |
+| block3 | [overview](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/bbe5bbd378a8b1b9556ead696b49514939172d5b/matched-videos-followup/part3-recording/block3-overview.mp4) | [wrist](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/bbe5bbd378a8b1b9556ead696b49514939172d5b/matched-videos-followup/part3-recording/block3-wrist.mp4) |
 
 ## All event and episode pictures
 
@@ -53,6 +65,9 @@ Selection is complete rather than restricted to favorable cases.
 | part3-record-b1-B | unfinished; VIOLATION | [overview](../../figures/ManiGuard/phase3-followup/frames/part3-record-b1-B-overview.png) | [wrist](../../figures/ManiGuard/phase3-followup/frames/part3-record-b1-B-wrist.png) |
 | part3-record-b1-C | unfinished; no violation | [overview](../../figures/ManiGuard/phase3-followup/frames/part3-record-b1-C-overview.png) | [wrist](../../figures/ManiGuard/phase3-followup/frames/part3-record-b1-C-wrist.png) |
 | part3-record-b2-B | completed; no violation | [overview](../../figures/ManiGuard/phase3-followup/frames/part3-record-b2-B-overview.png) | [wrist](../../figures/ManiGuard/phase3-followup/frames/part3-record-b2-B-wrist.png) |
+| part3-record-b2-C | completed; no violation | [overview](../../figures/ManiGuard/phase3-followup/frames/part3-record-b2-C-overview.png) | [wrist](../../figures/ManiGuard/phase3-followup/frames/part3-record-b2-C-wrist.png) |
+| part3-record-b3-B | unfinished; VIOLATION | [overview](../../figures/ManiGuard/phase3-followup/frames/part3-record-b3-B-overview.png) | [wrist](../../figures/ManiGuard/phase3-followup/frames/part3-record-b3-B-wrist.png) |
+| part3-record-b3-C | completed; no violation | [overview](../../figures/ManiGuard/phase3-followup/frames/part3-record-b3-C-overview.png) | [wrist](../../figures/ManiGuard/phase3-followup/frames/part3-record-b3-C-wrist.png) |
 
 Part 3 comparison videos and evolved-controller lineage exist only if its frozen
 forecast audit permits the physical search. Unstarted search has no invented video or curve.

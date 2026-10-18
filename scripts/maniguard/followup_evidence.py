@@ -134,6 +134,8 @@ def savefig(fig, stem, provenance):
 
 def plots(result):
     FIGURES.mkdir(parents=True, exist_ok=True)
+    atomic(FIGURES / "figure-data.json", result)
+    atomic(RUN / "evidence/figure-input-audit.json", result)
     full = [r for r in result["records"] if r.get("full_episode") and r["valid"]]
     provenance = []
     part2 = [r for r in full if r["part"] == 2]
@@ -183,17 +185,36 @@ def plots(result):
         axes[1].set_ylim(-.25, 4.5)
         axes[1].margins(x=.15)
         savefig(fig, "part2-feedback", provenance)
+    recordings = [r for r in full if r["episode_id"].startswith("part3-record-")]
+    if len(recordings) == 8:
+        fig, axes = plt.subplots(1, 2, figsize=(8, 3.8), sharey=True)
+        for axis, scene in zip(axes, sorted({r["scene"] for r in recordings}), strict=True):
+            selected = [r for r in recordings if r["scene"] == scene]
+            values = np.asarray([outcome_counts([r for r in selected if r["condition"] == c]) for c in "BC"])
+            bottom = np.zeros(2)
+            for index, label in enumerate(CATEGORIES):
+                axis.bar(list("BC"), values[:, index], bottom=bottom, color=COLORS[index], label=label)
+                bottom += values[:, index]
+            axis.set(title=scene + " (n=2/condition)", ylim=(0, 2.5), yticks=range(3),
+                     xlabel="B cap/8; C cap/4")
+        axes[0].set_ylabel("Common recording episodes")
+        handles, labels = axes[0].get_legend_handles_labels()
+        fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(.5, 1.08), ncol=2, fontsize=8)
+        savefig(fig, "part3-recording-outcomes", provenance)
     model = ROOT / "data/maniguard/models/phase3-parts2-3-20261018"
     if (model / "forecast-audit.json").exists():
         forecast = json.loads((model / "forecast-audit.json").read_text())
         m = forecast["metrics"]
         fig, axes = plt.subplots(1, 3, figsize=(12, 3.5))
-        keys = ["persistence_4", "ridge_4", "action_shuffled_ridge_4", "ensemble_4"]
-        axes[0].bar(["Persist", "Ridge", "Shuffle", "MLP x5"], [m[k + "_changing_rmse"] for k in keys], color="#5d8398")
-        axes[0].set(ylabel="4-action latent RMSE", title=f"Changing windows (n={m['changing_windows']})")
-        names = list(m["readout_comparison"])
+        keys = ["persistence_4", "ridge_4", "action_shuffled_ensemble_4", "ensemble_4"]
+        axes[0].bar(["Persist", "Ridge", "Shuf MLP", "MLP x5"], [m[k + "_changing_rmse"] for k in keys], color="#5d8398")
+        title = f"Changing windows (n={m['changing_windows']})" if m["changing_windows"] else f"All windows; no changing support (n={m['audit_windows']})"
+        axes[0].set(ylabel="Mean 4-action latent RMSE", title=title)
+        # These three comparisons use every retained actual audit observation.
+        # The separate visual-only metric uses query-start future windows instead.
+        names = ["pca", "raw", "random"]
         axes[1].bar(range(len(names)), [m["readout_comparison"][n]["margin_mae_deg"] for n in names], color="#a06c69")
-        axes[1].set(xticks=range(len(names)), xticklabels=["PCA+q", "Raw+q", "RP+q", "PCA only"], ylabel="Actual-state margin MAE (deg)")
+        axes[1].set(xticks=range(len(names)), xticklabels=["PCA+q", "Raw+q", "RP+q"], ylabel="Actual-state margin MAE (deg)", title="All retained audit observations")
         axes[2].bar(["M", "C"], [m["M_acceptance"], m["C_acceptance"]], color=["#9971a0", "#c58c58"])
         axes[2].set(ylim=(0, 1), ylabel="Accepted audit prefixes", title="Nominal calibration acceptance 0.5")
         savefig(fig, "part3-forecast", provenance)
@@ -209,7 +230,10 @@ def plots(result):
             axes[1].scatter(d["correction"], d["error4"], s=7, alpha=.35)
             axes[1].set(xlabel="Factual normalized correction in prefix", ylabel="Four-action latent RMSE")
             savefig(fig, "part3-correction-error", provenance)
-    atomic(FIGURES / "figure-provenance.json", {"at": time.time(), "source_audit_sha256": sha(RUN / "evidence/audit.json"),
+    atomic(FIGURES / "figure-provenance.json", {"at": time.time(), "source_audit_sha256": sha(FIGURES / "figure-data.json"),
+                                                "source_snapshot": "figure-data.json",
+                                                "model_audit_sha256": sha(model / "forecast-audit.json") if (model / "forecast-audit.json").exists() else None,
+                                                "model_windows_sha256": sha(model / "forecast-windows.npz") if (model / "forecast-windows.npz").exists() else None,
                                                 "files": provenance, "new_simulation_steps": 0, "VLA_queries": 0,
                                                 "script_sha256": sha(__file__)})
 

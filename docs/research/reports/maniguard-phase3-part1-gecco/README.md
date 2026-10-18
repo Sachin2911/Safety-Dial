@@ -2,16 +2,17 @@
 
 Open [named.pdf](named.pdf). This shared paper uses the repository's GECCO
 `acmart`/`sigconf` template and now covers the completed Part 1 and Part 2 pilots,
-with the frozen Part 3 methods. Part 3's recording/forecast-audit stage is in progress
-in this version. The archived GECCO paper and its experiments remain unchanged.
+and the completed Part 3 forecast audit. The latter failed accuracy despite adequate
+event support, so its 64-episode physical optimizer comparison was scientifically gated. The archived GECCO paper and its experiments remain unchanged.
 
 Part 1's adverse result is retained: full strength has 4/8 safe completions and 2/8
 violating episodes, versus identity's 5/8 and 0/8. Part 2 has 3/4 safe completions for
 identity, fixed-eight and correction-triggered execution, versus 2/4 for fixed-four.
 Each condition has one violation. D never triggers early; its sole threshold crossing
 is at action eight, when a query is already due. These small pilots establish neither
-superiority nor calibrated risk. Part 3's physical search depends on its frozen
-forecast audit, not on a requirement to produce a positive evolutionary result.
+superiority nor calibrated risk. Part 3's model was 45.1% worse than persistence at four actions; all calibration
+corrections occupied one bin, making its two trust masks identical. No Part 3
+evolutionary finalist or optimizer outcome is claimed.
 
 [Part 1 videos and pictures](videos.md) covers every three-dial comparison block.
 [Parts 2 and 3 videos and pictures](followup-videos.md) links all available matched
@@ -53,3 +54,11 @@ remain unchanged. New pictures use losslessly saved native RGB, with raw source 
 violations have before/at/after strips, and nonviolations start/middle/final strips.
 No policy query or physics step is made for reporting. The shared paper retains the
 AI-assistance disclosure and distinguishes unknown initialization physics from zero.
+
+The [cumulative attempt ledger](../../research_notes/ManiGuard%20phase3%20cumulative%20attempts.csv)
+and [allocation/model accounting](../../research_notes/ManiGuard%20phase3%20cumulative%20accounting.json)
+count Part 1 and reused data once: 80 physical attempts, 53,911 known controls and
+6,582 known VLA queries. The [Part 3 audit](../../research_notes/ManiGuard%20phase3%20Part3%20forecast%20audit.json)
+and [frozen artifact export](../../../../configs/maniguard/followup/part3-frozen-model-export.json)
+preserve the failed checks and private, revision-pinned model. The final closeout
+receipt distinguishes verified GPU-worker exit from the later provider rental state.

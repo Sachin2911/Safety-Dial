@@ -55,7 +55,7 @@ does not support episode-level causal counterfactual claims. The main-study test
 partition remains unopened. The prescribed Part 3 fixed-reference rule selects B:
 mean utility .25 versus C's 0, with no new tuning or sampling.
 
-Three 32-action engineering checks pass for A/C/D, totaling 96 controls, 20 queries
+Three 32-action engineering checks pass for A/C/D, totaling 96 controls, 16 queries
 and 834 post-subscription physics ticks. One earlier attempt fails before simulator
 startup because of an import-side-effect bug; missing native counters remain unknown.
 Its approximately two-second process record and two earlier coordinator/tooling failures

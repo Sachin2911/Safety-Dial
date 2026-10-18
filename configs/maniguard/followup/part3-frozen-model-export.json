@@ -1,0 +1,177 @@
+{
+  "schema": "maniguard-part3-frozen-model-export-v1",
+  "study_status": "feasibility_complete_scientifically_gated",
+  "gate": {
+    "eligible": false,
+    "status": "failed_accuracy",
+    "support": {
+      "audit_episodes": true,
+      "changing_windows": true,
+      "near_calibration_episodes": true,
+      "near_audit_episodes": true,
+      "crossing_audit_episodes": true,
+      "varying_progress_windows": true,
+      "crossing_forecast_windows": true
+    },
+    "accuracy": {
+      "one_step_beats_persistence": false,
+      "four_step_beats_persistence": false,
+      "action_dependence": true,
+      "ridge_reference": false,
+      "actual_readout": false,
+      "near_forecast_readout": false,
+      "progress_readout": false,
+      "false_reassurance": true,
+      "ranking": false,
+      "M_acceptance": true,
+      "C_acceptance": true,
+      "latency": true
+    },
+    "failed_checks": [
+      "one_step_beats_persistence",
+      "four_step_beats_persistence",
+      "ridge_reference",
+      "actual_readout",
+      "near_forecast_readout",
+      "progress_readout",
+      "ranking"
+    ]
+  },
+  "forecast_audit_sha256": "a51f0d3eb0df6ca60c716bb8afdbe5091267034e974830e4ba8e8f8ca3dba460",
+  "data_decision_sha256": "b2ad4451dcffd5cd2abb464d2b1d36acc122fe88fe9967026b45127290e51031",
+  "model_source_freeze_sha256": "d78190289d2077510a19b332307ab8a2e573c0339f1cb3875fa4441598f6ac30",
+  "forecast_freeze": {
+    "status": "sealed_before_opening_forecast_audit",
+    "at": 1792359078.1732318,
+    "criteria": {
+      "minimum_full_episodes": {
+        "fit": 8,
+        "calibration": 4,
+        "audit": 4
+      },
+      "minimum_changing_windows_audit": 100,
+      "changing_definition": "four-step latent displacement exceeds fitting-window median",
+      "minimum_near_threshold_episodes_calibration": 2,
+      "minimum_near_threshold_episodes_audit": 2,
+      "near_threshold_margin_deg": 10,
+      "minimum_upright_crossing_episodes_audit": 1,
+      "minimum_persistence_improvement_fraction_1_and_4": 0.05,
+      "minimum_action_shuffled_improvement_fraction_4": 0.02,
+      "maximum_relative_ridge_error_4": 1.05,
+      "maximum_actual_latent_margin_mae_deg": 10,
+      "maximum_predicted_latent_near_margin_mae_deg": 10,
+      "maximum_predicted_progress_mae_m": 0.03,
+      "maximum_false_reassurance_fraction": 0.1,
+      "false_reassurance": "actual margin<0, predicted margin>5 degrees",
+      "nominal_acceptance_fraction": 0.5,
+      "minimum_actual_acceptance_fraction_audit_each": 0.1,
+      "minimum_progress_ranking_spearman": 0.25,
+      "minimum_progress_varying_windows": 30,
+      "maximum_screening_seconds_per_16_candidates": 30,
+      "gate_rule": "all accuracy/usefulness criteria pass; missing support is inconclusive; never relax",
+      "inference_limit": "factual prefix prediction/ranking only; no validated counterfactual outcomes"
+    },
+    "files": {
+      "artifacts.npz": "3e3c4efb484ddfbd5ae1a74139c579e4c861487b271240f1fdf6495ef12ba917",
+      "ensemble.pt": "32917f270b8b63a3ace7a980ef637d7e52c4f4b179ca25a81fbe6b20522f14ac",
+      "calibration.json": "e0ebdde09b06571c44df3440004121c8cae87dbc754ae476f983cea4b48fb663",
+      "calibration-windows.npz": "df5a94153d8bdf6d9d3e2a703d97de7e7893711db85acb451dedde1124c324b4"
+    }
+  },
+  "private_model": {
+    "repo_id": "Sachioster/maniguard-phase3-part3-20261018",
+    "revision": "e769694671463f8ac2721e45e43491b0ce621373",
+    "private": true,
+    "download_verified": true,
+    "files": [
+      {
+        "path": "README.md",
+        "bytes": 834,
+        "sha256": "8c03916b1e8ee2b446dda2d22ddf10280006ae8416e46bddd5e530b2af3a00c1"
+      },
+      {
+        "path": "acquisition-engineering.json",
+        "bytes": 31403,
+        "sha256": "098c3a1605f5fb1a161e4ee41911e48dd5d0f4b2e7bc7a56c093c541dd321cdd"
+      },
+      {
+        "path": "artifacts.npz",
+        "bytes": 867132,
+        "sha256": "3e3c4efb484ddfbd5ae1a74139c579e4c861487b271240f1fdf6495ef12ba917"
+      },
+      {
+        "path": "calibration-windows.npz",
+        "bytes": 6886,
+        "sha256": "df5a94153d8bdf6d9d3e2a703d97de7e7893711db85acb451dedde1124c324b4"
+      },
+      {
+        "path": "calibration.json",
+        "bytes": 1091,
+        "sha256": "e0ebdde09b06571c44df3440004121c8cae87dbc754ae476f983cea4b48fb663"
+      },
+      {
+        "path": "context-bank.json",
+        "bytes": 3353,
+        "sha256": "1d80bc8f244619528871fe9b2f9680c464330d515c668eb11cd6e35eefb46ff3"
+      },
+      {
+        "path": "context-bank.npz",
+        "bytes": 16553,
+        "sha256": "3e0990604908f708d3dc9f522c202eb560862679a229fac3944363b7cb07733e"
+      },
+      {
+        "path": "data-decision.json",
+        "bytes": 15044,
+        "sha256": "b2ad4451dcffd5cd2abb464d2b1d36acc122fe88fe9967026b45127290e51031"
+      },
+      {
+        "path": "ensemble.pt",
+        "bytes": 697950,
+        "sha256": "32917f270b8b63a3ace7a980ef637d7e52c4f4b179ca25a81fbe6b20522f14ac"
+      },
+      {
+        "path": "forecast-audit.json",
+        "bytes": 6195,
+        "sha256": "a51f0d3eb0df6ca60c716bb8afdbe5091267034e974830e4ba8e8f8ca3dba460"
+      },
+      {
+        "path": "forecast-freeze.json",
+        "bytes": 1790,
+        "sha256": "842c4bb9658656786ae567c0eced05015b77ad713dee18aaee7cde61aec225fc"
+      },
+      {
+        "path": "forecast-windows.npz",
+        "bytes": 43374,
+        "sha256": "acb26ee804bb6a2829972d35ec36e3ce539aa52fa1b2f089b6bd14a977bb955d"
+      },
+      {
+        "path": "source-freeze.json",
+        "bytes": 7976,
+        "sha256": "d78190289d2077510a19b332307ab8a2e573c0339f1cb3875fa4441598f6ac30"
+      },
+      {
+        "path": "trained-artifact-receipt.json",
+        "bytes": 450,
+        "sha256": "00b0cc512056ba7da2c5e07bef2343c4b925760c86639652d01c98f69a21cc96"
+      },
+      {
+        "path": "training-ledger.json",
+        "bytes": 14188,
+        "sha256": "0e875f8de042b12c0dec9d7595d39bc57e0064580b17e8d5103b911f2f43c2f9"
+      }
+    ]
+  },
+  "encoder": {
+    "repo_id": "facebook/dinov2-small",
+    "revision": "ed25f3a31f01632728cabb09d1542f84ab7b0056",
+    "external_weights_included": false
+  },
+  "optimizer_comparison": {
+    "status": "unstarted_by_frozen_scientific_gate",
+    "planned_full_episodes": 64,
+    "executed_full_episodes": 0,
+    "finalists": [],
+    "lineage": null
+  },
+  "scope": "Preservation of a failed forecast candidate, not a validated safety filter or a selected evolutionary controller."
+}
