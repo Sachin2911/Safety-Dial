@@ -425,3 +425,30 @@ The prepared supervisor launch is one-shot with no automatic retry. An outer tim
 reserves sixty seconds inside the continuous reservation deadline, covering stalls in
 launcher/auditing code as well as the existing per-episode timeout. Native main-evaluation
 qualification and bounded main audit-worker integration remain separate unfinished work.
+
+
+## Ten-hour target and parallel execution preparation
+
+The frozen pilot started under `maniguard_phase2_pilot`, with its first four attempts
+now audited. The first three Clutter processes took 191.40, 177.49 and 190.72 seconds.
+Passive sampling during the second episode observed 14.3 GB total GPU memory and
+51-88 percent GPU utilization. These timings and the earlier family measurements do
+not support a ten-hour serial completion claim.
+
+Sachin requested completion within ten hours and clarified that there is no fixed
+spending cap, asking for a priced upgrade proposal. A separate approval is pending for
+a new four-RTX-4090 rental with EPYC 9354, 250 GB storage, approximately $2.25/hour,
+at most ten rental hours and $35 additional spend. The queried offer is 49038906;
+current market records and the concrete proposal are preserved under
+`runs/maniguard/phase2/setup/parallel-upgrade-proposal-v1/`. No new rental has been made.
+The proposed routing gives Jar and Clutter one two-worker GPU each and Stack two,
+subject to real memory and throughput checks. A speedup is not established yet.
+
+A pure parallel scheduling core now passes fifteen tests, including a real-coordinator
+comparison showing identical search and PPO optimizer states after concurrent synthetic
+completion of the initial blocks. It persists each claim before worker submission,
+reserves all concurrent horizons, drains already running work after failure, and integrates
+overlapping rental GPU-hours. The existing scientific protocol, outcomes and allocation
+remain frozen. Production process/service wiring, multi-GPU placement validation and a
+safe durable-boundary takeover still need completion before using this core for live work.
+The serial pilot continues while these are prepared and rental approval is pending.
