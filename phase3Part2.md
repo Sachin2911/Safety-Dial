@@ -2,10 +2,13 @@
 
 **Date:** 18 October 2026.
 
-**Status:** proposed 16-episode mechanism experiment. This document saves the agreed
-next step; controller details and the execution protocol still need freezing before
+**Status:** scheduled next: a 16-episode mechanism experiment. Controller details and
+the execution protocol still need freezing before
 physical work. No Part 2 episodes have been launched. The completed Part 1 protocol,
 controller and evidence remain unchanged.
+
+The more ambitious [Part 3](phase3Part3.md) is queued after this experiment. Its model
+training and feasibility checks are not dependencies of Part 2.
 
 This follows the recommendations in `rec.md`, the
 [Part 1 investigation](docs/research/reports/ManiGuard%20Part1%20failure%20investigation.md)
