@@ -1,0 +1,2641 @@
+{
+  "scope": "Exploratory CPU-only analysis of all 48 existing full episodes; no causal ablation.",
+  "additional_policy_queries": 0,
+  "additional_physics_steps": 0,
+  "reporting_tolerance_rad": 1e-06,
+  "alignment": "goal[k] follows action k-1; first violation at observed k uses action k-1.",
+  "initial_held_rule": "Unknown at step zero; excluded from held-state denominators.",
+  "sources_sha256": {
+    "audit-final/attempt-ledger.json": "72a939ad491b30eddb62abfde77d6164af88277f7b40df8863767e1326981844",
+    "protocol.json": "27ed0f0e137d5af7f2719958fce276b0e0ba2cac89ef693f68e8166dbd76bea4",
+    "finalist.json": "592ea2b40407c9023abf860be48c4d64dd812d0366706a0aa83dbaf8b57eef8d",
+    "attempts/g0-s0-c0-a1/data/trace.jsonl": "e54750b589180b666a523fa4a39e8271adcdfe9779d445ed4f0a81cb8ad83233",
+    "attempts/g0-s0-c0-a1/data/episode/results.jsonl": "9e8c919e4fa6e78f98800d1a196e9179f29907b005c6be768685098a39aeca13",
+    "attempts/g0-s0-c1-a1/data/trace.jsonl": "f8e51fd48c02a844dc1fcff44096a72a89d8bf0fb3de98f16d3ec1767f58221b",
+    "attempts/g0-s0-c1-a1/data/episode/results.jsonl": "6e1ae6c05365a90045d37742064e33248063457ece6a3dc057dec5d30e4f2fb2",
+    "attempts/g0-s0-c2-a1/data/trace.jsonl": "bc99ebeefb4fbfaca0be902e3e8df5c49209ee32518c6b5c452ec042f67b3506",
+    "attempts/g0-s0-c2-a1/data/episode/results.jsonl": "9dcde96a64ba9ee697b2f6c4a939e0e75fb2c6c9f119b3ad64d700454962058a",
+    "attempts/g0-s0-c3-a1/data/trace.jsonl": "22cc79b14e5a6123094bd74940b44b4ce4068274a401de4b5c6d8d43c871a0c0",
+    "attempts/g0-s0-c3-a1/data/episode/results.jsonl": "981026fc787e4a58c217413ed8c5f478c92824129c17092bf41dc9c81c78c54e",
+    "attempts/g0-s1-c0-a1/data/trace.jsonl": "bc1eab143ef0054537d5379bfdba8daf1a13dc2c0557b97a4fc887eeada86092",
+    "attempts/g0-s1-c0-a1/data/episode/results.jsonl": "6fa2d7789bec1bb8897450ef472dfc105d2acf7ac380cc22e5e9365910f13dc3",
+    "attempts/g0-s1-c1-a1/data/trace.jsonl": "100a2dd521082953992be2fe41d132eb4dc5a8203fddbf754499a70a25a442ff",
+    "attempts/g0-s1-c1-a1/data/episode/results.jsonl": "14e6523444c60eb7a8c1bc19ecdf12749a6b1a9a7b4c732c0dea9dc8e22bf5b8",
+    "attempts/g0-s1-c2-a1/data/trace.jsonl": "49a8635d592d95310cc80236d824503f90a29a36e5fba5ccd10e52d11a3727fd",
+    "attempts/g0-s1-c2-a1/data/episode/results.jsonl": "45fe01410b3f83e63ea11c7d0faa00bef1064f47875ac246dbb5c701bf29e6e6",
+    "attempts/g0-s1-c3-a1/data/trace.jsonl": "d08c597c03effb8f4109d241d8296bac55707ceeaed52f45cb276cfa665ece20",
+    "attempts/g0-s1-c3-a1/data/episode/results.jsonl": "48659a71ce969979401ad902f6b9add6a43f2061f6d7b0876f73527e00d34300",
+    "attempts/g1-s0-c0-a1/data/trace.jsonl": "7170985491be1de98aaffc3ca910e00acd99efbd4fa79cd4906b84f498a6aaaf",
+    "attempts/g1-s0-c0-a1/data/episode/results.jsonl": "24a58c023ca62b3483e026de3e3956632aa3ceb10786f29b172aa3ab4c2526dd",
+    "attempts/g1-s0-c1-a1/data/trace.jsonl": "2157fcdb56b09856114caadc2086a32e8e8b97df2605fcac592f31994b5c9e2b",
+    "attempts/g1-s0-c1-a1/data/episode/results.jsonl": "54e891b9d8b216b258a08b76ef0ffd00dd7fcc99e8a08287232c5a16dc581fe1",
+    "attempts/g1-s0-c2-a1/data/trace.jsonl": "7ae7c76c09b51c8e51e6255d65dd4e34f8f069d56987f2b672b6453b7453af15",
+    "attempts/g1-s0-c2-a1/data/episode/results.jsonl": "b5bdafa2e54673cf8d7445976c548d7eba2c1aaa20183bef887b6cbe08114724",
+    "attempts/g1-s0-c3-a1/data/trace.jsonl": "e6f394914fda6aa6949fcf7e1fcf947912695bc2a65ce1fb1d9224bc5d728b59",
+    "attempts/g1-s0-c3-a1/data/episode/results.jsonl": "f683bfcd7ba0d130269df68da71d8e236a94b573bccc3723670124186cbc65e4",
+    "attempts/g1-s1-c0-a1/data/trace.jsonl": "3c7fb7433e0cbdbf53a0ce010be818036f8786df2218e9db6c54f07708b24efd",
+    "attempts/g1-s1-c0-a1/data/episode/results.jsonl": "c344867aab80b0792141a57771c5f9390b1efd17cc7108c539a7e0c9f26bc6aa",
+    "attempts/g1-s1-c1-a1/data/trace.jsonl": "feddd48dae4dbfe43d0d19b7993052da5d4e711bbdb6a39c7d47d0892e58cf18",
+    "attempts/g1-s1-c1-a1/data/episode/results.jsonl": "20ddc10249581965af536a240e7a0294641bb50b679e10a190f91133fc5b756c",
+    "attempts/g1-s1-c2-a1/data/trace.jsonl": "a7566d37b438c8f9b7f89df8a63fee47b659570b777a75520944d2f67c30bfdf",
+    "attempts/g1-s1-c2-a1/data/episode/results.jsonl": "b20608a8f91740a08e66acda501a143239cd9a104bc1d3025a5074f4260f4029",
+    "attempts/g1-s1-c3-a1/data/trace.jsonl": "0041a3c6351709f4d87acd4fc7ebc47cdc33d3305f2cb50706a9994553d70707",
+    "attempts/g1-s1-c3-a1/data/episode/results.jsonl": "0b714260aa944ab5fb5a7e2d8a4c91cc911f2f29b19451a8319812d75818ea82",
+    "attempts/g2-s0-c0-a1/data/trace.jsonl": "4bdd2ce45fc2d54776a4d179410352c8dff3b37b7701e06caa508ca7025a6e21",
+    "attempts/g2-s0-c0-a1/data/episode/results.jsonl": "c20f083541e4d6527a1723b77f1dbd770ab64ec08875324068cf844b290c0e0a",
+    "attempts/g2-s0-c1-a1/data/trace.jsonl": "f2e5b4f8e56513204488eea1599fd52f2ba4b3f4a0fe5bbc4d462bb25adca788",
+    "attempts/g2-s0-c1-a1/data/episode/results.jsonl": "e091cbc9d70356aadaa9cfab551cf69907bf9e2e0ae8cb0c748bc63ba8f89c9e",
+    "attempts/g2-s0-c2-a1/data/trace.jsonl": "ecd4b80978b4ab7462a271cd8ed4901f6610df9a2f95c00a661e78cfc7797cfa",
+    "attempts/g2-s0-c2-a1/data/episode/results.jsonl": "2c89cf0612479de1d75887d630bfe9752d72b3e1f326836c9586f67624acab38",
+    "attempts/g2-s0-c3-a1/data/trace.jsonl": "c1ff2eac490ea27f9ecdbab2851f9ddb052cbb120742057442236f3dacdb96e0",
+    "attempts/g2-s0-c3-a1/data/episode/results.jsonl": "f93dcf4dee738c71b31abab88638edc75db79bccefd410ce68a2394accb6aa46",
+    "attempts/g2-s1-c0-a1/data/trace.jsonl": "8986445695bcbbdf2a91ca847af3275269866835add5e4d5c3a2f24e005a5f93",
+    "attempts/g2-s1-c0-a1/data/episode/results.jsonl": "46279bbfbfb27d3208656e87220220ecf44f333a4fdb507e73361131f4b62115",
+    "attempts/g2-s1-c1-a1/data/trace.jsonl": "f6ed0bc834b80ca365b9398c6b1defc5c6895d2407b24a7b35769b6f189a9800",
+    "attempts/g2-s1-c1-a1/data/episode/results.jsonl": "e93fe5c1a5583c9c76322acc425e0f8a10d7e7b92ff5190cd7c5cba4a5767efd",
+    "attempts/g2-s1-c2-a1/data/trace.jsonl": "374bf374a2970c47d89cccfb8b6a16d808729d006c2da5661933fbe16d8545f1",
+    "attempts/g2-s1-c2-a1/data/episode/results.jsonl": "c8fcbf01bdf6d288b00672d9344496ba81dc4e92adbe85b0d64aa93238c05b41",
+    "attempts/g2-s1-c3-a1/data/trace.jsonl": "99b64b9a1dd27b884e30bb67e803ae4a98e9266c3faf1173d5c9a426798b48cd",
+    "attempts/g2-s1-c3-a1/data/episode/results.jsonl": "baf3bdbc739a3291a32301ab33591f0717b8afee10533de0d0c6c6d8621bd32f",
+    "attempts/v0-r0-d0-a1/data/trace.jsonl": "b0cbe17a7611a660392a48385a46ff65d5686a0ee267c208f93e26fd5ebedf3e",
+    "attempts/v0-r0-d0-a1/data/episode/results.jsonl": "8e4f535b9771197428bb3c76d6f765f2c8265d2f1fbd576d3bc93c6e111af9fd",
+    "attempts/v0-r0-d0.5-a1/data/trace.jsonl": "a552da878399a1f1c8fa70326cb7353a9a2e1924786206ebc93f4b521c449657",
+    "attempts/v0-r0-d0.5-a1/data/episode/results.jsonl": "2038ea610ed9c0fd559e8127a2a82ac556f5ca2c3f99544daf4fefd03f0d7220",
+    "attempts/v0-r0-d1-a1/data/trace.jsonl": "c8e894b5bd718e3d5735f43dd60e964e64984af8af6e1457c82d1a3956c94418",
+    "attempts/v0-r0-d1-a1/data/episode/results.jsonl": "956ae867ce6677a1a5b39c72567051898dcbb81ffaa1260024370d043f7466dd",
+    "attempts/v0-r1-d0-a1/data/trace.jsonl": "eee4fe913a183b56690b58cba4f3219f2661c5f844565effc3f360e275008545",
+    "attempts/v0-r1-d0-a1/data/episode/results.jsonl": "356b7531dbd0cf471ce4a27dcd8d9c5e2e02b716e8ea7497a81b18aa8c8afebc",
+    "attempts/v0-r1-d0.5-a1/data/trace.jsonl": "3ca67530ad6d995c206a4d0fec4fc3c11d1e4e0c9c6bc248b46c1d20cf4a1bab",
+    "attempts/v0-r1-d0.5-a1/data/episode/results.jsonl": "8b6e55f9b5b1a6af2d8fc910e1bafab0932f8886ba498fb9a300edafcfa8c70d",
+    "attempts/v0-r1-d1-a1/data/trace.jsonl": "6fab3684e32a40a34c52de8942651d98328583b6283350d8faf9b0fa3b54976c",
+    "attempts/v0-r1-d1-a1/data/episode/results.jsonl": "a65cf5d66fc19c115e277abba41ca15a5eff2f1875b04a2431cc8312ff550f4b",
+    "attempts/v0-r2-d0-a1/data/trace.jsonl": "128c3ae3c5946a6e25a6e86b927937633eb431acf8e0a7799f46279bf35a331a",
+    "attempts/v0-r2-d0-a1/data/episode/results.jsonl": "aa7605134549c208024385cf6fcfd1e462c4d4a0797ab26843c0909ad23e0227",
+    "attempts/v0-r2-d0.5-a1/data/trace.jsonl": "d694cb63f224ca4b2fb18775586d3c01f9dae88d85b77d1fd17fd5022ff729f1",
+    "attempts/v0-r2-d0.5-a1/data/episode/results.jsonl": "d76377a284677f38c50d5633d4d80795275c1cadc1f955744e72a34428e6d0bc",
+    "attempts/v0-r2-d1-a1/data/trace.jsonl": "0a23fdc5b970af83b48d9675577940cba0c901239bb69561680837eb6ab2341c",
+    "attempts/v0-r2-d1-a1/data/episode/results.jsonl": "a730edc2645a6e7e2944e3277331950a411ff67410d7c1cd85385def25ec6f5e",
+    "attempts/v0-r3-d0-a1/data/trace.jsonl": "59a22fe6f750383db365c9de25ad64a125fd7538281ddebb6ad9a360bf2101b1",
+    "attempts/v0-r3-d0-a1/data/episode/results.jsonl": "20876b9adadf2884189f6c4cd1429f36ef25352f8cdd68d26d10ddcc30a346cb",
+    "attempts/v0-r3-d0.5-a1/data/trace.jsonl": "baf0aa4f6f82e75c6a9439ac7aae6ad20f5f044a5dc52b3bffd59485fefd17f4",
+    "attempts/v0-r3-d0.5-a1/data/episode/results.jsonl": "3e3cdcd799aaa335be590eecab7ccce9772501d46eeb2df28012b2545af03341",
+    "attempts/v0-r3-d1-a1/data/trace.jsonl": "f2ab536abe9a5f35fc98b086ee1a8bf5e2f4165ab133d66fc1b371a132390949",
+    "attempts/v0-r3-d1-a1/data/episode/results.jsonl": "2f06fd9ec751b8c96e261686232fecbd1004b2ec77ad97b561d5859b31a76bd9",
+    "attempts/v1-r0-d0-a1/data/trace.jsonl": "d1cda5ab3b1c7eaede83840b9a9aceb1238f6c900bf39a21a4f00cb31a01f692",
+    "attempts/v1-r0-d0-a1/data/episode/results.jsonl": "f8c1ad39746aa5b4d0dfeecb42bf0b8a19b1b4e9fe0ee7377c50a12ff51a1f89",
+    "attempts/v1-r0-d0.5-a1/data/trace.jsonl": "5d21cfb53df42e6047bfe681adb22b4f54321d55e24912e7ad431550bd3af6ba",
+    "attempts/v1-r0-d0.5-a1/data/episode/results.jsonl": "18d017763f771b1d80bfb38dce337f10c26b07c3061a88089572d6bd69a9712b",
+    "attempts/v1-r0-d1-a1/data/trace.jsonl": "d4165217896bc5b91d74b2aef31a776137b264a98846e251dc96249235c2c9fa",
+    "attempts/v1-r0-d1-a1/data/episode/results.jsonl": "a0d8d803561e47c40799f8129366b58016a10f394072d26c0325975b5f3824de",
+    "attempts/v1-r1-d0-a1/data/trace.jsonl": "bf1d626e8b8152cb073fdfe7b32f6381fa8a80abfdbd10849ea3d8d727018be3",
+    "attempts/v1-r1-d0-a1/data/episode/results.jsonl": "5cbb98b7d318bc9b2744b9a983ba47b24a811e81211a06b7adafae2a8523e308",
+    "attempts/v1-r1-d0.5-a1/data/trace.jsonl": "4e968ba0d49cbe859ef5c3ba4a394ccd99dab7296d2d5c694be6a880ce9de37c",
+    "attempts/v1-r1-d0.5-a1/data/episode/results.jsonl": "755a4231a41af4bcf1c64d1875a297bd74d264d5cb072714945ba43991805771",
+    "attempts/v1-r1-d1-a1/data/trace.jsonl": "8d56c042786c84c0a1871b3c96ac415ffad0996fb22ec7d6bd472c566b83a4d3",
+    "attempts/v1-r1-d1-a1/data/episode/results.jsonl": "ad472fbcba556edef619655a6359dca1edc7b01214d510df46f2d00a0b5d7f68",
+    "attempts/v1-r2-d0-a1/data/trace.jsonl": "4d814e735779d7213690be5b896048f626069c182f29021facc61b427ecd05cb",
+    "attempts/v1-r2-d0-a1/data/episode/results.jsonl": "865a261348028e501dac512f04819af7d2597f95fca3e5b4ff7fb7b28c61cfa5",
+    "attempts/v1-r2-d0.5-a1/data/trace.jsonl": "6b87991e3e7cac9a37d23c685419ba472009655b0751c57e27f8d4090e286277",
+    "attempts/v1-r2-d0.5-a1/data/episode/results.jsonl": "d0b721cf9d54becb2f205a916911f1eba6a7593c92c1b31ed4e77b10d97d03df",
+    "attempts/v1-r2-d1-a1/data/trace.jsonl": "9de6ad9a395193cc628162f04ef577aa503ed9d33bea0021d3e03cc0af2b194f",
+    "attempts/v1-r2-d1-a1/data/episode/results.jsonl": "96ac7b7131895185a214684fde519b84f836dfc3f042f1b38fd51d38e3f6f842",
+    "attempts/v1-r3-d0-a1/data/trace.jsonl": "f51e3281c5de58b2a51268994849e92ad5d7673248cdf66c96343f27cb72e4dc",
+    "attempts/v1-r3-d0-a1/data/episode/results.jsonl": "91dada522354757e6d1c1be746d7ef710c4f5e5d4df31cda55adc55f7bc38916",
+    "attempts/v1-r3-d0.5-a1/data/trace.jsonl": "467de947db3c908897d53a75de71bdb2ccec47463f8be43aa8ddf93910c4dd36",
+    "attempts/v1-r3-d0.5-a1/data/episode/results.jsonl": "a10069facaf57664a26de9581a728c08b0f97034b92e5157014d70125322793e",
+    "attempts/v1-r3-d1-a1/data/trace.jsonl": "f874fb7fa7541c0ada25daedb517a4db6110f26741d3c7c4c4f28ceccb16f3bc",
+    "attempts/v1-r3-d1-a1/data/episode/results.jsonl": "c36f7cae79c371100d779fd09971f8b486a98ee4af764c0d309eff87666849a7",
+    "population-0-result.json": "07839800177443455291dabc95985b60317a3a0312473f75db2f5da32c0571b0",
+    "population-1-result.json": "cd76cb1e565dfc6b5865b97db9cf089195ab76cda7b9c41a64bdd6b4a4ea10be",
+    "population-2-result.json": "dc238113d04d3bdde11fa43e8a34323e12f8d163933c9a3a7199bb5d17d63789"
+  },
+  "diagnostic_code_sha256": {
+    "experiments/helpers/maniguard_part1_diagnostics.py": "734c7fa8f63ed213962babf66be74667fbf2c620c19e53a3e0e986eb6d2abcfc",
+    "experiments/scripts/maniguard_part1_diagnose.py": "9cda2c11b049d25e2029e4f112b8370897d4b9fd875c9a91ce973462e550cecc",
+    "experiments/tests/test_maniguard_part1_diagnostics.py": "93925628f5be329f46cd78abee7a34fbc75984c02d556bd3437fa02c8d8808cc"
+  },
+  "comparison_totals": [
+    {
+      "dial": 0,
+      "episodes": 8,
+      "counts": {
+        "held_0_heuristic_0": 4622,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 290,
+        "held_1_heuristic_1": 1240,
+        "initial_held_unknown_actions": 8,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 1530,
+        "held_closing_heuristic_actions": 1240,
+        "held_closing_outside_finger_band": 290
+      },
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": 0,
+        "over_five_degrees": 0
+      }
+    },
+    {
+      "dial": 0.5,
+      "episodes": 8,
+      "counts": {
+        "held_0_heuristic_0": 5304,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 389,
+        "held_1_heuristic_1": 955,
+        "initial_held_unknown_actions": 8,
+        "substantially_changed_actions": 205,
+        "held_closing_actions": 1344,
+        "held_closing_heuristic_actions": 955,
+        "held_closing_outside_finger_band": 389
+      },
+      "direction_change": {
+        "nonzero_changed_vectors": 205,
+        "sum_angle_degrees": 648.1201893340732,
+        "max_angle_degrees": 5.974167662762969,
+        "over_five_degrees": 29
+      }
+    },
+    {
+      "dial": 1,
+      "episodes": 8,
+      "counts": {
+        "held_0_heuristic_0": 3428,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 167,
+        "held_1_heuristic_1": 1325,
+        "initial_held_unknown_actions": 8,
+        "substantially_changed_actions": 325,
+        "held_closing_actions": 1492,
+        "held_closing_heuristic_actions": 1325,
+        "held_closing_outside_finger_band": 167
+      },
+      "direction_change": {
+        "nonzero_changed_vectors": 325,
+        "sum_angle_degrees": 2927.351162325829,
+        "max_angle_degrees": 46.825933722889104,
+        "over_five_degrees": 215
+      }
+    }
+  ],
+  "initial_pairs": [
+    {
+      "scene": "task_0029/base",
+      "seed": 2000,
+      "dial": 0.5,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.001398622989654541,
+      "first_action_arm_max_difference_rad": 0.00043708086013793945,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0029/base",
+      "seed": 2000,
+      "dial": 1,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.0009917060378938913,
+      "first_action_arm_max_difference_rad": 0.00043708086013793945,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0029/base",
+      "seed": 2001,
+      "dial": 0.5,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.0012043667957186699,
+      "first_action_arm_max_difference_rad": 0.0003631114959716797,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0029/base",
+      "seed": 2001,
+      "dial": 1,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.003197193145751953,
+      "first_action_arm_max_difference_rad": 0.00042366981506347656,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0029/base",
+      "seed": 2002,
+      "dial": 0.5,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.0018357038497924805,
+      "first_action_arm_max_difference_rad": 0.00023055076599121094,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0029/base",
+      "seed": 2002,
+      "dial": 1,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.0029720664024353027,
+      "first_action_arm_max_difference_rad": 0.0002722740173339844,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0029/base",
+      "seed": 2003,
+      "dial": 0.5,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.0015734434127807617,
+      "first_action_arm_max_difference_rad": 0.00023055076599121094,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0029/base",
+      "seed": 2003,
+      "dial": 1,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.0014526844024658203,
+      "first_action_arm_max_difference_rad": 0.0004611015319824219,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0032/base",
+      "seed": 2010,
+      "dial": 0.5,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.0016422271728515625,
+      "first_action_arm_max_difference_rad": 0.0007430315017700195,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0032/base",
+      "seed": 2010,
+      "dial": 1,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.00508427619934082,
+      "first_action_arm_max_difference_rad": 0.0003059506416320801,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0032/base",
+      "seed": 2011,
+      "dial": 0.5,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.010187983512878418,
+      "first_action_arm_max_difference_rad": 0.0003025531768798828,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0032/base",
+      "seed": 2011,
+      "dial": 1,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.007915258407592773,
+      "first_action_arm_max_difference_rad": 0.0004807710647583008,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0032/base",
+      "seed": 2012,
+      "dial": 0.5,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.006234288215637207,
+      "first_action_arm_max_difference_rad": 0.00024211406707763672,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0032/base",
+      "seed": 2012,
+      "dial": 1,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.004842162132263184,
+      "first_action_arm_max_difference_rad": 0.0003631114959716797,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0032/base",
+      "seed": 2013,
+      "dial": 0.5,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.005069911479949951,
+      "first_action_arm_max_difference_rad": 0.00019240379333496094,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    },
+    {
+      "scene": "task_0032/base",
+      "seed": 2013,
+      "dial": 1,
+      "state_identical": true,
+      "image_hashes_identical": false,
+      "first_chunk_arm_max_difference_rad": 0.002019166946411133,
+      "first_action_arm_max_difference_rad": 0.0006992816925048828,
+      "first_action_differs_over_tolerance": true,
+      "either_first_action_adapted_over_tolerance": false
+    }
+  ],
+  "candidates": [
+    {
+      "generation": 0,
+      "slot": 0,
+      "genome": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "kind": "neutral",
+      "parent_slot": null,
+      "draws": 0,
+      "fallback": false,
+      "score": 0.5,
+      "safe_completions": 1,
+      "episodes": 2
+    },
+    {
+      "generation": 0,
+      "slot": 1,
+      "genome": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "kind": "initial_random",
+      "parent_slot": null,
+      "draws": 0,
+      "fallback": false,
+      "score": 1.0,
+      "safe_completions": 2,
+      "episodes": 2
+    },
+    {
+      "generation": 0,
+      "slot": 2,
+      "genome": [
+        3,
+        1,
+        1,
+        1
+      ],
+      "kind": "initial_random",
+      "parent_slot": null,
+      "draws": 0,
+      "fallback": false,
+      "score": 0.5,
+      "safe_completions": 1,
+      "episodes": 2
+    },
+    {
+      "generation": 0,
+      "slot": 3,
+      "genome": [
+        3,
+        1,
+        2,
+        2
+      ],
+      "kind": "initial_random",
+      "parent_slot": null,
+      "draws": 0,
+      "fallback": false,
+      "score": 1.0,
+      "safe_completions": 2,
+      "episodes": 2
+    },
+    {
+      "generation": 1,
+      "slot": 0,
+      "genome": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "kind": "elite_reevaluation",
+      "parent_slot": 0,
+      "draws": 0,
+      "fallback": false,
+      "score": 1.0,
+      "safe_completions": 2,
+      "episodes": 2
+    },
+    {
+      "generation": 1,
+      "slot": 1,
+      "genome": [
+        3,
+        3,
+        1,
+        2
+      ],
+      "kind": "offspring",
+      "parent_slot": 1,
+      "draws": 2,
+      "fallback": false,
+      "score": 1.0,
+      "safe_completions": 2,
+      "episodes": 2
+    },
+    {
+      "generation": 1,
+      "slot": 2,
+      "genome": [
+        1,
+        2,
+        0,
+        0
+      ],
+      "kind": "offspring",
+      "parent_slot": 1,
+      "draws": 1,
+      "fallback": false,
+      "score": 0.0,
+      "safe_completions": 0,
+      "episodes": 2
+    },
+    {
+      "generation": 1,
+      "slot": 3,
+      "genome": [
+        3,
+        0,
+        0,
+        2
+      ],
+      "kind": "offspring",
+      "parent_slot": 0,
+      "draws": 1,
+      "fallback": false,
+      "score": 0.5,
+      "safe_completions": 1,
+      "episodes": 2
+    },
+    {
+      "generation": 2,
+      "slot": 0,
+      "genome": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "kind": "elite_reevaluation",
+      "parent_slot": 0,
+      "draws": 0,
+      "fallback": false,
+      "score": 0.5,
+      "safe_completions": 1,
+      "episodes": 2
+    },
+    {
+      "generation": 2,
+      "slot": 1,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "kind": "offspring",
+      "parent_slot": 1,
+      "draws": 1,
+      "fallback": false,
+      "score": 1.0,
+      "safe_completions": 2,
+      "episodes": 2
+    },
+    {
+      "generation": 2,
+      "slot": 2,
+      "genome": [
+        0,
+        0,
+        2,
+        2
+      ],
+      "kind": "offspring",
+      "parent_slot": 0,
+      "draws": 1,
+      "fallback": false,
+      "score": 0.5,
+      "safe_completions": 1,
+      "episodes": 2
+    },
+    {
+      "generation": 2,
+      "slot": 3,
+      "genome": [
+        3,
+        3,
+        2,
+        2
+      ],
+      "kind": "offspring",
+      "parent_slot": 1,
+      "draws": 1,
+      "fallback": false,
+      "score": -0.5,
+      "safe_completions": 1,
+      "episodes": 2
+    }
+  ],
+  "within_generation_single_coordinate_pairs": [
+    {
+      "generation": 2,
+      "slots": [
+        1,
+        3
+      ],
+      "genomes": [
+        [
+          3,
+          3,
+          0,
+          2
+        ],
+        [
+          3,
+          3,
+          2,
+          2
+        ]
+      ],
+      "coordinate": 2,
+      "scores": [
+        1.0,
+        -0.5
+      ]
+    }
+  ],
+  "episodes": [
+    {
+      "episode_id": "g0-s0-c0",
+      "purpose": "train",
+      "scene": "task_0034/base",
+      "seed": 1000,
+      "dial": 1,
+      "genome": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": null,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g0-s0-c1",
+      "purpose": "train",
+      "scene": "task_0034/base",
+      "seed": 1000,
+      "dial": 1,
+      "genome": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "steps": 636,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 306,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 329,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 636,
+        "held_closing_actions": 329,
+        "held_closing_heuristic_actions": 329,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": 1,
+      "direction_change": {
+        "nonzero_changed_vectors": 636,
+        "sum_angle_degrees": 327.29716608363555,
+        "max_angle_degrees": 13.554443079865797,
+        "over_five_degrees": 6
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g0-s0-c2",
+      "purpose": "train",
+      "scene": "task_0034/base",
+      "seed": 1000,
+      "dial": 1,
+      "genome": [
+        3,
+        1,
+        1,
+        1
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 994,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 105,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 1100,
+        "held_closing_actions": 105,
+        "held_closing_heuristic_actions": 105,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": 1,
+      "direction_change": {
+        "nonzero_changed_vectors": 1100,
+        "sum_angle_degrees": 442.6631200034112,
+        "max_angle_degrees": 5.192978450921835,
+        "over_five_degrees": 1
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g0-s0-c3",
+      "purpose": "train",
+      "scene": "task_0034/base",
+      "seed": 1000,
+      "dial": 1,
+      "genome": [
+        3,
+        1,
+        2,
+        2
+      ],
+      "steps": 634,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 305,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 328,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 634,
+        "held_closing_actions": 328,
+        "held_closing_heuristic_actions": 328,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": 1,
+      "direction_change": {
+        "nonzero_changed_vectors": 634,
+        "sum_angle_degrees": 299.16420635596404,
+        "max_angle_degrees": 10.844193439545023,
+        "over_five_degrees": 10
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g0-s1-c0",
+      "purpose": "train",
+      "scene": "task_0002/base",
+      "seed": 1001,
+      "dial": 1,
+      "genome": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "steps": 843,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 642,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 200,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 200,
+        "held_closing_heuristic_actions": 200,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": null,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g0-s1-c1",
+      "purpose": "train",
+      "scene": "task_0002/base",
+      "seed": 1001,
+      "dial": 1,
+      "genome": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "steps": 457,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 237,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 219,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 457,
+        "held_closing_actions": 219,
+        "held_closing_heuristic_actions": 219,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": 4,
+      "direction_change": {
+        "nonzero_changed_vectors": 457,
+        "sum_angle_degrees": 470.5944385806928,
+        "max_angle_degrees": 40.418402858275336,
+        "over_five_degrees": 13
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g0-s1-c2",
+      "purpose": "train",
+      "scene": "task_0002/base",
+      "seed": 1001,
+      "dial": 1,
+      "genome": [
+        3,
+        1,
+        1,
+        1
+      ],
+      "steps": 692,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 456,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 235,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 692,
+        "held_closing_actions": 235,
+        "held_closing_heuristic_actions": 235,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": 10,
+      "direction_change": {
+        "nonzero_changed_vectors": 692,
+        "sum_angle_degrees": 463.1090699498374,
+        "max_angle_degrees": 7.972426305013661,
+        "over_five_degrees": 8
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g0-s1-c3",
+      "purpose": "train",
+      "scene": "task_0002/base",
+      "seed": 1001,
+      "dial": 1,
+      "genome": [
+        3,
+        1,
+        2,
+        2
+      ],
+      "steps": 457,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 237,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 219,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 457,
+        "held_closing_actions": 219,
+        "held_closing_heuristic_actions": 219,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": 2,
+      "direction_change": {
+        "nonzero_changed_vectors": 457,
+        "sum_angle_degrees": 464.67699104854876,
+        "max_angle_degrees": 38.44762055016609,
+        "over_five_degrees": 11
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g1-s0-c0",
+      "purpose": "train",
+      "scene": "task_0034/base",
+      "seed": 1010,
+      "dial": 1,
+      "genome": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "steps": 668,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 309,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 358,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 668,
+        "held_closing_actions": 358,
+        "held_closing_heuristic_actions": 358,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": 1,
+      "direction_change": {
+        "nonzero_changed_vectors": 668,
+        "sum_angle_degrees": 704.1727080191598,
+        "max_angle_degrees": 57.7439933152609,
+        "over_five_degrees": 30
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g1-s0-c1",
+      "purpose": "train",
+      "scene": "task_0034/base",
+      "seed": 1010,
+      "dial": 1,
+      "genome": [
+        3,
+        3,
+        1,
+        2
+      ],
+      "steps": 678,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 338,
+        "held_0_heuristic_1": 1,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 338,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 678,
+        "held_closing_actions": 338,
+        "held_closing_heuristic_actions": 338,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": 104,
+      "direction_change": {
+        "nonzero_changed_vectors": 678,
+        "sum_angle_degrees": 304.7326806585431,
+        "max_angle_degrees": 34.86940494854463,
+        "over_five_degrees": 15
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g1-s0-c2",
+      "purpose": "train",
+      "scene": "task_0034/base",
+      "seed": 1010,
+      "dial": 1,
+      "genome": [
+        1,
+        2,
+        0,
+        0
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": 1,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g1-s0-c3",
+      "purpose": "train",
+      "scene": "task_0034/base",
+      "seed": 1010,
+      "dial": 1,
+      "genome": [
+        3,
+        0,
+        0,
+        2
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": 338,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g1-s1-c0",
+      "purpose": "train",
+      "scene": "task_0002/base",
+      "seed": 1011,
+      "dial": 1,
+      "genome": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "steps": 481,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 274,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 206,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 481,
+        "held_closing_actions": 206,
+        "held_closing_heuristic_actions": 206,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": 5,
+      "direction_change": {
+        "nonzero_changed_vectors": 481,
+        "sum_angle_degrees": 471.3230925628781,
+        "max_angle_degrees": 24.49568948825244,
+        "over_five_degrees": 16
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g1-s1-c1",
+      "purpose": "train",
+      "scene": "task_0002/base",
+      "seed": 1011,
+      "dial": 1,
+      "genome": [
+        3,
+        3,
+        1,
+        2
+      ],
+      "steps": 499,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 280,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 218,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 499,
+        "held_closing_actions": 218,
+        "held_closing_heuristic_actions": 218,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": 1,
+      "direction_change": {
+        "nonzero_changed_vectors": 499,
+        "sum_angle_degrees": 300.28844191614667,
+        "max_angle_degrees": 10.22143718983703,
+        "over_five_degrees": 4
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g1-s1-c2",
+      "purpose": "train",
+      "scene": "task_0002/base",
+      "seed": 1011,
+      "dial": 1,
+      "genome": [
+        1,
+        2,
+        0,
+        0
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": 49,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g1-s1-c3",
+      "purpose": "train",
+      "scene": "task_0002/base",
+      "seed": 1011,
+      "dial": 1,
+      "genome": [
+        3,
+        0,
+        0,
+        2
+      ],
+      "steps": 493,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 283,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 209,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 209,
+        "held_closing_heuristic_actions": 209,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": 2,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g2-s0-c0",
+      "purpose": "train",
+      "scene": "task_0034/base",
+      "seed": 1020,
+      "dial": 1,
+      "genome": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 1100,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": 2,
+      "direction_change": {
+        "nonzero_changed_vectors": 1100,
+        "sum_angle_degrees": 1091.4592180062589,
+        "max_angle_degrees": 62.178395904603136,
+        "over_five_degrees": 38
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g2-s0-c1",
+      "purpose": "train",
+      "scene": "task_0034/base",
+      "seed": 1020,
+      "dial": 1,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 656,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 303,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 352,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 58,
+        "held_closing_actions": 352,
+        "held_closing_heuristic_actions": 352,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 48,
+      "first_cap_active_step": 8,
+      "direction_change": {
+        "nonzero_changed_vectors": 58,
+        "sum_angle_degrees": 404.2659627997592,
+        "max_angle_degrees": 17.435493908251146,
+        "over_five_degrees": 34
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g2-s0-c2",
+      "purpose": "train",
+      "scene": "task_0034/base",
+      "seed": 1020,
+      "dial": 1,
+      "genome": [
+        0,
+        0,
+        2,
+        2
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 1100,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": null,
+      "direction_change": {
+        "nonzero_changed_vectors": 1100,
+        "sum_angle_degrees": 1598.1465280817547,
+        "max_angle_degrees": 70.93663761865956,
+        "over_five_degrees": 79
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g2-s0-c3",
+      "purpose": "train",
+      "scene": "task_0034/base",
+      "seed": 1020,
+      "dial": 1,
+      "genome": [
+        3,
+        3,
+        2,
+        2
+      ],
+      "steps": 630,
+      "C_req": true,
+      "S_req": false,
+      "V": true,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 300,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 329,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 630,
+        "held_closing_actions": 329,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 329
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": 2,
+      "direction_change": {
+        "nonzero_changed_vectors": 630,
+        "sum_angle_degrees": 313.13585380065075,
+        "max_angle_degrees": 21.617004427369288,
+        "over_five_degrees": 11
+      },
+      "first_violation": {
+        "observed_step": 445,
+        "action_step": 444,
+        "failed_propositions": [
+          "container_upright"
+        ],
+        "last_query_step": 432,
+        "action_number_in_prefix": 13,
+        "effective_horizon": 16,
+        "held_before_action": true,
+        "fingers_before_action_m": [
+          0.0006183942314237356,
+          0.012457994744181633
+        ],
+        "grasp_heuristic": false,
+        "selected_target_error_cap_rad": 0.04,
+        "cap_active": false,
+        "arm_change_rad": 0.010002732276916504,
+        "cap_active_last_20_actions": 0,
+        "window_actions": 20
+      }
+    },
+    {
+      "episode_id": "g2-s1-c0",
+      "purpose": "train",
+      "scene": "task_0002/base",
+      "seed": 1021,
+      "dial": 1,
+      "genome": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "steps": 447,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 240,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 206,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 447,
+        "held_closing_actions": 206,
+        "held_closing_heuristic_actions": 206,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": 2,
+      "direction_change": {
+        "nonzero_changed_vectors": 447,
+        "sum_angle_degrees": 554.6915595713456,
+        "max_angle_degrees": 53.597054582889825,
+        "over_five_degrees": 28
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g2-s1-c1",
+      "purpose": "train",
+      "scene": "task_0002/base",
+      "seed": 1021,
+      "dial": 1,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 452,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 253,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 198,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 11,
+        "held_closing_actions": 198,
+        "held_closing_heuristic_actions": 198,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 354,
+      "first_cap_active_step": 63,
+      "direction_change": {
+        "nonzero_changed_vectors": 11,
+        "sum_angle_degrees": 58.703515586522364,
+        "max_angle_degrees": 10.071673336563851,
+        "over_five_degrees": 5
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g2-s1-c2",
+      "purpose": "train",
+      "scene": "task_0002/base",
+      "seed": 1021,
+      "dial": 1,
+      "genome": [
+        0,
+        0,
+        2,
+        2
+      ],
+      "steps": 445,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 238,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 206,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 445,
+        "held_closing_actions": 206,
+        "held_closing_heuristic_actions": 206,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": null,
+      "direction_change": {
+        "nonzero_changed_vectors": 445,
+        "sum_angle_degrees": 542.6908655239827,
+        "max_angle_degrees": 70.50494224920286,
+        "over_five_degrees": 27
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "g2-s1-c3",
+      "purpose": "train",
+      "scene": "task_0002/base",
+      "seed": 1021,
+      "dial": 1,
+      "genome": [
+        3,
+        3,
+        2,
+        2
+      ],
+      "steps": 450,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 241,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 208,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 450,
+        "held_closing_actions": 208,
+        "held_closing_heuristic_actions": 208,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 0,
+      "first_cap_active_step": 3,
+      "direction_change": {
+        "nonzero_changed_vectors": 450,
+        "sum_angle_degrees": 575.6104675662141,
+        "max_angle_degrees": 75.7686809034852,
+        "over_five_degrees": 29
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v0-r0-d0",
+      "purpose": "validation",
+      "scene": "task_0029/base",
+      "seed": 2000,
+      "dial": 0,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": 33,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v0-r0-d0.5",
+      "purpose": "validation",
+      "scene": "task_0029/base",
+      "seed": 2000,
+      "dial": 0.5,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 9,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 43,
+      "first_cap_active_step": 43,
+      "direction_change": {
+        "nonzero_changed_vectors": 9,
+        "sum_angle_degrees": 27.432329833047966,
+        "max_angle_degrees": 5.316022558105027,
+        "over_five_degrees": 1
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v0-r0-d1",
+      "purpose": "validation",
+      "scene": "task_0029/base",
+      "seed": 2000,
+      "dial": 1,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 424,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 257,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 166,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 37,
+        "held_closing_actions": 166,
+        "held_closing_heuristic_actions": 166,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 55,
+      "first_cap_active_step": 2,
+      "direction_change": {
+        "nonzero_changed_vectors": 37,
+        "sum_angle_degrees": 196.6064905698996,
+        "max_angle_degrees": 12.903622403114095,
+        "over_five_degrees": 18
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v0-r1-d0",
+      "purpose": "validation",
+      "scene": "task_0029/base",
+      "seed": 2001,
+      "dial": 0,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": 23,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v0-r1-d0.5",
+      "purpose": "validation",
+      "scene": "task_0029/base",
+      "seed": 2001,
+      "dial": 0.5,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 9,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 31,
+      "first_cap_active_step": 1,
+      "direction_change": {
+        "nonzero_changed_vectors": 9,
+        "sum_angle_degrees": 17.920513717517533,
+        "max_angle_degrees": 3.3790036284064247,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v0-r1-d1",
+      "purpose": "validation",
+      "scene": "task_0029/base",
+      "seed": 2001,
+      "dial": 1,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 11,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 26,
+      "first_cap_active_step": 2,
+      "direction_change": {
+        "nonzero_changed_vectors": 11,
+        "sum_angle_degrees": 52.4634988649594,
+        "max_angle_degrees": 10.97791869762057,
+        "over_five_degrees": 4
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v0-r2-d0",
+      "purpose": "validation",
+      "scene": "task_0029/base",
+      "seed": 2002,
+      "dial": 0,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 656,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 365,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 290,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 290,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 290
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": 52,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v0-r2-d0.5",
+      "purpose": "validation",
+      "scene": "task_0029/base",
+      "seed": 2002,
+      "dial": 0.5,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": true,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 7,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 43,
+      "first_cap_active_step": 43,
+      "direction_change": {
+        "nonzero_changed_vectors": 7,
+        "sum_angle_degrees": 7.353554660371215,
+        "max_angle_degrees": 1.7410472077651136,
+        "over_five_degrees": 0
+      },
+      "first_violation": {
+        "observed_step": 345,
+        "action_step": 344,
+        "failed_propositions": [
+          "container_upright"
+        ],
+        "last_query_step": 336,
+        "action_number_in_prefix": 9,
+        "effective_horizon": 12,
+        "held_before_action": false,
+        "fingers_before_action_m": [
+          0.03999999910593033,
+          0.0399974100291729
+        ],
+        "grasp_heuristic": false,
+        "selected_target_error_cap_rad": 0.04,
+        "cap_active": false,
+        "arm_change_rad": 0.0,
+        "cap_active_last_20_actions": 0,
+        "window_actions": 20
+      }
+    },
+    {
+      "episode_id": "v0-r2-d1",
+      "purpose": "validation",
+      "scene": "task_0029/base",
+      "seed": 2002,
+      "dial": 1,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 385,
+      "C_req": true,
+      "S_req": false,
+      "V": true,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 217,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 167,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 15,
+        "held_closing_actions": 167,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 167
+      },
+      "first_substantial_change_step": 49,
+      "first_cap_active_step": 49,
+      "direction_change": {
+        "nonzero_changed_vectors": 15,
+        "sum_angle_degrees": 181.55259550464257,
+        "max_angle_degrees": 46.825933722889104,
+        "over_five_degrees": 7
+      },
+      "first_violation": {
+        "observed_step": 335,
+        "action_step": 334,
+        "failed_propositions": [
+          "container_upright"
+        ],
+        "last_query_step": 320,
+        "action_number_in_prefix": 15,
+        "effective_horizon": 16,
+        "held_before_action": true,
+        "fingers_before_action_m": [
+          0.03999999910593033,
+          0.03249351307749748
+        ],
+        "grasp_heuristic": false,
+        "selected_target_error_cap_rad": 0.04,
+        "cap_active": true,
+        "arm_change_rad": 0.23424625396728516,
+        "cap_active_last_20_actions": 7,
+        "window_actions": 20
+      }
+    },
+    {
+      "episode_id": "v0-r3-d0",
+      "purpose": "validation",
+      "scene": "task_0029/base",
+      "seed": 2003,
+      "dial": 0,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": 39,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v0-r3-d0.5",
+      "purpose": "validation",
+      "scene": "task_0029/base",
+      "seed": 2003,
+      "dial": 0.5,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 4,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 55,
+      "first_cap_active_step": 1,
+      "direction_change": {
+        "nonzero_changed_vectors": 4,
+        "sum_angle_degrees": 8.331060522816077,
+        "max_angle_degrees": 3.2494207676746134,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v0-r3-d1",
+      "purpose": "validation",
+      "scene": "task_0029/base",
+      "seed": 2003,
+      "dial": 1,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 1100,
+      "C_req": false,
+      "S_req": false,
+      "V": false,
+      "ever_grasped": false,
+      "counts": {
+        "held_0_heuristic_0": 1099,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 4,
+        "held_closing_actions": 0,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 46,
+      "first_cap_active_step": 3,
+      "direction_change": {
+        "nonzero_changed_vectors": 4,
+        "sum_angle_degrees": 13.907706643753343,
+        "max_angle_degrees": 5.082419505861065,
+        "over_five_degrees": 1
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v1-r0-d0",
+      "purpose": "validation",
+      "scene": "task_0032/base",
+      "seed": 2010,
+      "dial": 0,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 453,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 224,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 228,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 228,
+        "held_closing_heuristic_actions": 228,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": 3,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v1-r0-d0.5",
+      "purpose": "validation",
+      "scene": "task_0032/base",
+      "seed": 2010,
+      "dial": 0.5,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 463,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 187,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 275,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 52,
+        "held_closing_actions": 275,
+        "held_closing_heuristic_actions": 275,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 203,
+      "first_cap_active_step": 1,
+      "direction_change": {
+        "nonzero_changed_vectors": 52,
+        "sum_angle_degrees": 154.01955776912328,
+        "max_angle_degrees": 5.759640945482823,
+        "over_five_degrees": 7
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v1-r0-d1",
+      "purpose": "validation",
+      "scene": "task_0032/base",
+      "seed": 2010,
+      "dial": 1,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 403,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 185,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 217,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 66,
+        "held_closing_actions": 217,
+        "held_closing_heuristic_actions": 217,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 203,
+      "first_cap_active_step": 1,
+      "direction_change": {
+        "nonzero_changed_vectors": 66,
+        "sum_angle_degrees": 531.8498718732798,
+        "max_angle_degrees": 21.165106725144668,
+        "over_five_degrees": 41
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v1-r1-d0",
+      "purpose": "validation",
+      "scene": "task_0032/base",
+      "seed": 2011,
+      "dial": 0,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 578,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 225,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 352,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 352,
+        "held_closing_heuristic_actions": 352,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": 208,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v1-r1-d0.5",
+      "purpose": "validation",
+      "scene": "task_0032/base",
+      "seed": 2011,
+      "dial": 0.5,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 714,
+      "C_req": true,
+      "S_req": false,
+      "V": true,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 265,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 448,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 65,
+        "held_closing_actions": 448,
+        "held_closing_heuristic_actions": 448,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 290,
+      "first_cap_active_step": 287,
+      "direction_change": {
+        "nonzero_changed_vectors": 65,
+        "sum_angle_degrees": 242.24827842306493,
+        "max_angle_degrees": 5.974167662762969,
+        "over_five_degrees": 13
+      },
+      "first_violation": {
+        "observed_step": 421,
+        "action_step": 420,
+        "failed_propositions": [
+          "obstacles_upright"
+        ],
+        "last_query_step": 420,
+        "action_number_in_prefix": 1,
+        "effective_horizon": 12,
+        "held_before_action": true,
+        "fingers_before_action_m": [
+          0.004727718885987997,
+          0.012238762341439724
+        ],
+        "grasp_heuristic": true,
+        "selected_target_error_cap_rad": 0.02,
+        "cap_active": true,
+        "arm_change_rad": 0.0004878044128417969,
+        "cap_active_last_20_actions": 9,
+        "window_actions": 20
+      }
+    },
+    {
+      "episode_id": "v1-r1-d1",
+      "purpose": "validation",
+      "scene": "task_0032/base",
+      "seed": 2011,
+      "dial": 1,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 584,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 192,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 391,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 68,
+        "held_closing_actions": 391,
+        "held_closing_heuristic_actions": 391,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 216,
+      "first_cap_active_step": 2,
+      "direction_change": {
+        "nonzero_changed_vectors": 68,
+        "sum_angle_degrees": 830.598572100817,
+        "max_angle_degrees": 27.462077407300775,
+        "over_five_degrees": 56
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v1-r2-d0",
+      "purpose": "validation",
+      "scene": "task_0032/base",
+      "seed": 2012,
+      "dial": 0,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 505,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 253,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 251,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 251,
+        "held_closing_heuristic_actions": 251,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": 3,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v1-r2-d0.5",
+      "purpose": "validation",
+      "scene": "task_0032/base",
+      "seed": 2012,
+      "dial": 0.5,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 422,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 189,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 232,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 59,
+        "held_closing_actions": 232,
+        "held_closing_heuristic_actions": 232,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 205,
+      "first_cap_active_step": 2,
+      "direction_change": {
+        "nonzero_changed_vectors": 59,
+        "sum_angle_degrees": 190.8148944081322,
+        "max_angle_degrees": 5.612964096508485,
+        "over_five_degrees": 8
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v1-r2-d1",
+      "purpose": "validation",
+      "scene": "task_0032/base",
+      "seed": 2012,
+      "dial": 1,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 456,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 190,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 265,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 54,
+        "held_closing_actions": 265,
+        "held_closing_heuristic_actions": 265,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 199,
+      "first_cap_active_step": 2,
+      "direction_change": {
+        "nonzero_changed_vectors": 54,
+        "sum_angle_degrees": 350.7315924451789,
+        "max_angle_degrees": 16.93748129945389,
+        "over_five_degrees": 32
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v1-r3-d0",
+      "purpose": "validation",
+      "scene": "task_0032/base",
+      "seed": 2013,
+      "dial": 0,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 668,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 258,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 409,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 409,
+        "held_closing_heuristic_actions": 409,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": 3,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v1-r3-d0.5",
+      "purpose": "validation",
+      "scene": "task_0032/base",
+      "seed": 2013,
+      "dial": 0.5,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 657,
+      "C_req": true,
+      "S_req": true,
+      "V": false,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 267,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 389,
+        "held_1_heuristic_1": 0,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 0,
+        "held_closing_actions": 389,
+        "held_closing_heuristic_actions": 0,
+        "held_closing_outside_finger_band": 389
+      },
+      "first_substantial_change_step": null,
+      "first_cap_active_step": 7,
+      "direction_change": {
+        "nonzero_changed_vectors": 0,
+        "sum_angle_degrees": 0,
+        "max_angle_degrees": null,
+        "over_five_degrees": 0
+      },
+      "first_violation": null
+    },
+    {
+      "episode_id": "v1-r3-d1",
+      "purpose": "validation",
+      "scene": "task_0032/base",
+      "seed": 2013,
+      "dial": 1,
+      "genome": [
+        3,
+        3,
+        0,
+        2
+      ],
+      "steps": 476,
+      "C_req": true,
+      "S_req": false,
+      "V": true,
+      "ever_grasped": true,
+      "counts": {
+        "held_0_heuristic_0": 189,
+        "held_0_heuristic_1": 0,
+        "held_1_heuristic_0": 0,
+        "held_1_heuristic_1": 286,
+        "initial_held_unknown_actions": 1,
+        "substantially_changed_actions": 70,
+        "held_closing_actions": 286,
+        "held_closing_heuristic_actions": 286,
+        "held_closing_outside_finger_band": 0
+      },
+      "first_substantial_change_step": 210,
+      "first_cap_active_step": 25,
+      "direction_change": {
+        "nonzero_changed_vectors": 70,
+        "sum_angle_degrees": 769.6408343232988,
+        "max_angle_degrees": 29.3885356865232,
+        "over_five_degrees": 56
+      },
+      "first_violation": {
+        "observed_step": 355,
+        "action_step": 354,
+        "failed_propositions": [
+          "obstacles_upright"
+        ],
+        "last_query_step": 352,
+        "action_number_in_prefix": 3,
+        "effective_horizon": 16,
+        "held_before_action": true,
+        "fingers_before_action_m": [
+          0.008750293403863907,
+          0.009235173463821411
+        ],
+        "grasp_heuristic": true,
+        "selected_target_error_cap_rad": 0.02,
+        "cap_active": false,
+        "arm_change_rad": 0.0,
+        "cap_active_last_20_actions": 7,
+        "window_actions": 20
+      }
+    }
+  ],
+  "analysis_started_at": 1792352228.9437947,
+  "analysis_elapsed_seconds": 2.702291488647461,
+  "figure_sha256": "f7f4e7a1251a60290c8c7532a3b69cd4de82abd136f73e3260bd1d396502b9d8",
+  "event_frames": [
+    {
+      "episode_id": "g2-s0-c3",
+      "image": "g2-s0-c3.png",
+      "sha256": "e9ff8977a1653523995a5b04f09184f8391cda3267401f542c23692dc26ef0ec",
+      "sources": [
+        {
+          "camera": "main",
+          "sha256": "1de537c6fbd2bebe687292fc36ef9a5d1b96f24a7ffc31647d3dc81179fc01ef",
+          "path": "attempts/g2-s0-c3-a1/data/episode/task_0034/base_main.mp4"
+        },
+        {
+          "camera": "wrist",
+          "sha256": "b4d2a6a944ede3261c09912c1915226de1e43aa1b56bcb59be3fc559f04c7f52",
+          "path": "attempts/g2-s0-c3-a1/data/episode/task_0034/base_wrist.mp4"
+        }
+      ],
+      "frame_indices": [
+        425,
+        445,
+        465
+      ],
+      "alignment": "Native initial frame 0, then one frame per action, 20 fps"
+    },
+    {
+      "episode_id": "v0-r2-d0.5",
+      "image": "v0-r2-d0.5.png",
+      "sha256": "a399930a7eda4a312f647a6758c25515188d7978e7b9ad8c1c4a2772f96a44db",
+      "sources": [
+        {
+          "camera": "main",
+          "sha256": "fb47e82edcc88065e446eeaa3bfb9b095aa940adac9ef326ba59670dbfdef058",
+          "path": "attempts/v0-r2-d0.5-a1/data/episode/task_0029/base_main.mp4"
+        },
+        {
+          "camera": "wrist",
+          "sha256": "f653a84d4c0ee8435ec4483e30b4906b19ed752f27e8fb9fc818bc1643e782e6",
+          "path": "attempts/v0-r2-d0.5-a1/data/episode/task_0029/base_wrist.mp4"
+        }
+      ],
+      "frame_indices": [
+        325,
+        345,
+        365
+      ],
+      "alignment": "Native initial frame 0, then one frame per action, 20 fps"
+    },
+    {
+      "episode_id": "v0-r2-d1",
+      "image": "v0-r2-d1.png",
+      "sha256": "ba7c31f599f2d369a935709da660d7b246ff94cd1919a4d48ca17e952975ed71",
+      "sources": [
+        {
+          "camera": "main",
+          "sha256": "8ee1cac2ae135ae669a4e34616ecf8dca926091e7c178eb4fd1e05588090a37a",
+          "path": "attempts/v0-r2-d1-a1/data/episode/task_0029/base_main.mp4"
+        },
+        {
+          "camera": "wrist",
+          "sha256": "4fc75d3443188382373c7bba105da0f10ff9aef2151582a1dafef1188baf28bb",
+          "path": "attempts/v0-r2-d1-a1/data/episode/task_0029/base_wrist.mp4"
+        }
+      ],
+      "frame_indices": [
+        315,
+        335,
+        355
+      ],
+      "alignment": "Native initial frame 0, then one frame per action, 20 fps"
+    },
+    {
+      "episode_id": "v1-r1-d0.5",
+      "image": "v1-r1-d0.5.png",
+      "sha256": "8d0064649eb990a0423cc46da9f66c697fd6218c5856fecab04fd1046b1ec03f",
+      "sources": [
+        {
+          "camera": "main",
+          "sha256": "3fe12f5cbd56e880dea8fadbd750c0398b176fd5fbef37cac50d593b0939ba7e",
+          "path": "attempts/v1-r1-d0.5-a1/data/episode/task_0032/base_main.mp4"
+        },
+        {
+          "camera": "wrist",
+          "sha256": "ae889e47b14ae20ef1a28475521992b34598dba5b432abd63bd72de429aa0d31",
+          "path": "attempts/v1-r1-d0.5-a1/data/episode/task_0032/base_wrist.mp4"
+        }
+      ],
+      "frame_indices": [
+        401,
+        421,
+        441
+      ],
+      "alignment": "Native initial frame 0, then one frame per action, 20 fps"
+    },
+    {
+      "episode_id": "v1-r3-d1",
+      "image": "v1-r3-d1.png",
+      "sha256": "544ec64b4d86cf64dbe7bdfa2a2c7b5111304cb0a15af7071ade79117985fd9a",
+      "sources": [
+        {
+          "camera": "main",
+          "sha256": "e539bfd0ac06e7c43f5bcff8928e31f6e9e0f20813fb7ca9a9f273c85dca6c8a",
+          "path": "attempts/v1-r3-d1-a1/data/episode/task_0032/base_main.mp4"
+        },
+        {
+          "camera": "wrist",
+          "sha256": "a97faaf532d0eea20680758a98d05f611fb8c6f1338f96847b4ab403dfa841ea",
+          "path": "attempts/v1-r3-d1-a1/data/episode/task_0032/base_wrist.mp4"
+        }
+      ],
+      "frame_indices": [
+        335,
+        355,
+        375
+      ],
+      "alignment": "Native initial frame 0, then one frame per action, 20 fps"
+    }
+  ],
+  "total_analysis_elapsed_seconds": 9.973194599151611
+}

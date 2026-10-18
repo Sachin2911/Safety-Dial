@@ -1,0 +1,63 @@
+{
+  "schema": "maniguard-part1-offline-investigation-accounting-v1",
+  "cutoff_utc": "2026-10-18T19:39:38.625385+00:00",
+  "original_allocation_start_utc": "2026-10-18T16:00:37+00:00",
+  "physical_deadline_utc": "2026-10-18T23:00:37+00:00",
+  "hard_deadline_utc": "2026-10-19T00:00:37+00:00",
+  "continuous_allocation_elapsed_seconds": 13141.625385284424,
+  "continuous_allocated_gpu_hours": 3.65045149591234,
+  "accounting_rule": "Original continuous clock includes implementation, reporting, failures and idle rental. Not an estimate of incremental GPU compute or a verified final billing total.",
+  "additional_policy_queries": 0,
+  "additional_physics_steps": 0,
+  "additional_full_episodes": 0,
+  "full_episodes_read": 48,
+  "raw_attempts_in_original_ledger": 52,
+  "final_trace_analysis_and_frame_decode_seconds": 9.973194599151611,
+  "cpu_checks": {
+    "final_passed": 7,
+    "final_failed": 0,
+    "ruff": "passed",
+    "frozen_protocol": "passed"
+  },
+  "offline_execution_attempts": [
+    {
+      "order": 1,
+      "outcome": "failed",
+      "reason": "Relative/absolute path mismatch while hashing input paths. No output was committed."
+    },
+    {
+      "order": 2,
+      "outcome": "completed",
+      "destination": "Temporary diagnostics JSON and graph"
+    },
+    {
+      "order": 3,
+      "outcome": "completed",
+      "destination": "First derived JSON, graph and five event panels"
+    },
+    {
+      "order": 4,
+      "outcome": "completed",
+      "destination": "Final evidence with final analysis-code hashes; promoted to public derived artifacts"
+    }
+  ],
+  "cpu_test_failures_retained": "Two synthetic query-age fixtures initially lacked newly added frame and cap fields. Fixtures corrected; all seven final checks pass.",
+  "provider_instance": 56582094,
+  "provider_status_at_cutoff": {
+    "actual": "running",
+    "intended": "running"
+  },
+  "earlier_stop_acknowledgement": {
+    "response_at": 1792349263.9169674,
+    "http_status": 200,
+    "success": true,
+    "actual_stopped_state_verified": false
+  },
+  "running_observation_times_unix": [
+    1792351740.32591,
+    1792352115.3496833,
+    1792352378.6253853
+  ],
+  "gpu_compute_applications_at_cutoff": [],
+  "rental_scope": "Provider reports running after an earlier successful stop acknowledgement. Continuous allocation accounting continues. Another stop will be requested after evidence preservation and main push; this receipt does not claim it succeeded."
+}
