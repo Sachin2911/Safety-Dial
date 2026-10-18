@@ -6,6 +6,17 @@ experimental protocol or a report of phase-three results. The safety dial, optim
 details, comparisons, statistical thresholds and total budget still need the decisions
 identified below before implementation and main-study execution.
 
+**Latest resource constraint, 18 October 2026.** Sachin requires the first useful
+experiment to fit on **one RTX 4090 or RTX 5090 within eight hours of allocated wall
+time**, including setup on that machine, exploratory runs and evaluation. The earlier
+eight-GPU estimates and staged ManiGuard allocations below do not satisfy this request
+and are not the next implementation commitment. Sachin clarified that the experiment
+must remain in **ManiGuard with evolutionary search**. Safe CEM with LeWM was an example
+of the desired cost and concreteness, not a request to change platforms. Section 21
+summarizes the agreed small ManiGuard experiment, including the user-controlled dial.
+The comprehensive implementation plan is [phase3Part1.md](phase3Part1.md); its exact
+machine-readable run protocol is not yet frozen.
+
 This document is the active research plan and direction. The
 [plan history](docs/research/history/README.md) preserves the earlier oracle, ideation,
 candidate studies and phase-two plan. The
@@ -66,7 +77,8 @@ The original direction records the following decisions:
 - Require a heritability probe before a ten-seed main study.
 - Use the existing eight-RTX-3090 machine only. The recorded planning rate is about
   USD 53 per day; no second rental was chosen. This is a recorded allocation constraint,
-  not a fresh observation of machine availability or rental status.
+  not a fresh observation of machine availability or rental status. The later single-GPU,
+  eight-hour constraint at the top of this document supersedes it for the next pilot.
 - Keep genetic programming of sub-goal re-prompting as a gated, optional branch.
 
 The exact algorithms and experimental design listed in the original direction are
@@ -162,9 +174,11 @@ or a real-robot result.
 
 ## 5. The safety-dial search space
 
-A candidate is a vector of approximately 10 to 16 bounded parameters. It configures a
-shared causal execution procedure. Parameters stay fixed within an episode; their
-effects vary with current observations and episode-local history.
+A candidate is a bounded parameter vector configuring a shared causal execution
+procedure. Parameters stay fixed within an episode; their effects vary with current
+observations and episode-local history. The original design suggested approximately
+10 to 16 parameters. Section 20 recommends beginning with a four-parameter implementation
+and expanding only when the inexpensive diagnostics justify an additional control.
 
 The proposed control groups are:
 
@@ -635,11 +649,14 @@ an arm or approval to enlarge the budget.
 
 ## 18. Sequence, artifacts and publication planning
 
-Proceed by evidence rather than the original calendar estimates:
+Proceed by evidence rather than the original calendar estimates. Section 20 gives the
+recommended inexpensive implementation and mechanism-screen route within this sequence:
 
 1. Resolve the primary claim, shared-versus-separate controller choice, dial semantics,
    stochastic feasibility rule, ordinary-learning match and primary budget unit.
-2. Complete and audit the existing replicate diagnostic under its frozen protocol.
+2. Locate and audit completed or partial replicate evidence before scheduling any new
+   episodes. Respect the original protocol's stop time and allocation; work outside
+   those limits requires a new prospective protocol rather than silently resuming it.
 3. Freeze a bounded dial engineering and heritability-probe protocol, including costs,
    analysis and pass/fail/inconclusive decisions, then implement only the needed interface.
 4. If warranted, run a separately bounded ES-versus-random pilot to test the complete
@@ -685,3 +702,353 @@ main contribution or a mechanism within the broader adaptation question, how muc
 Jar should receive relative to Clutter, which transfer evidence is necessary, and which
 GECCO track best matches the final contribution. These choices should follow the evidence
 and available budget, rather than a requirement to complete every proposed branch.
+
+## 20. Recommended implementation and inexpensive first experiments
+
+**Planning refinement, 18 October 2026.** The purpose of the first implementation is to
+answer a small number of consequential questions cheaply. These are proposed steps and
+ceilings, not a frozen run protocol, permission to extend an expired allocation, or new
+experimental results. Do not implement the full optimizer comparison before establishing
+a usable execution interface and evaluation procedure.
+
+### 20.1 Reuse the validated boundary, with a smaller controller
+
+The existing code already supplies an eight-dimensional absolute-joint command boundary,
+robot observations, policy queries, action history, simulator accounting and separate
+outcome telemetry. The useful starting points are:
+
+- [maniguard_runtime.py](experiments/helpers/maniguard_runtime.py): proposal, applied-action,
+  query, observation and accounting hooks.
+- [maniguard_adaptation.py](experiments/helpers/maniguard_adaptation.py): causal robot-frame
+  schema and existing pure execution mechanisms.
+- [maniguard_phase2_outcomes.py](experiments/helpers/maniguard_phase2_outcomes.py): requested
+  completion semantics, kept separate from runtime observations.
+- [maniguard_motion_tracking.py](experiments/helpers/maniguard_motion_tracking.py) and
+  [maniguard_release_audit.py](experiments/helpers/maniguard_release_audit.py): existing
+  trace-based mechanism audits.
+- [maniguard_replicate.py](experiments/helpers/maniguard_replicate.py): repeated-outcome
+  diagnostic and retained-cost patterns.
+
+The phase-two runtime loads its CLIP encoder and computes features even for fixed
+controllers. Reusing fixed mode is therefore not automatically a minimal-compute path.
+The initial phase-three adapter should consume robot state and command history directly,
+without adding an encoder, a new VLA checkpoint, a learned critic or multiple proposal
+samples per query. This removes adapter overhead, not the frozen VLA's own visual work.
+Measure any actual saving; simulation was CPU bound on the recorded host.
+
+For a small probe, engineering effort can exceed the value of removing encoder calls.
+First reuse an existing validated entry point unchanged if it can express the nominated
+comparison with the correct information and outcome contract. Do not rebuild the runtime
+solely to remove CLIP before profiling its cost. A new integration becomes necessary
+when the causal controls or semantic configuration are not expressible by the old runner;
+the intended lean implementation below is for that case.
+
+Use new versioned files, leaving the frozen helpers unchanged. A proposed minimal file
+set is `experiments/helpers/maniguard_phase3_adapter.py` for pure controller logic,
+`maniguard_phase3_runtime.py` and `maniguard_phase3_source.py` for the checked integration,
+`maniguard_phase3_results.py` for the new job/trace audit, and
+`experiments/scripts/maniguard_phase3_probe.py` for bounded probe execution and reporting.
+Add configs under `configs/maniguard/phase3/` and only the focused tests needed to validate
+the changed execution and evidence contracts. These files are proposed, not implemented.
+
+The runtime has import-time study dispatch, so a new phase must not accidentally construct
+a legacy study or open a second trace while importing reusable hooks. Resolve that
+explicitly in the new integration and test it without simulator work first. Reuse
+accounting and outcome semantics rather than blindly inheriting a complete frozen runner.
+The phase-two result reader also checks its 692-weight actor, CLIP records and likelihoods;
+it cannot certify a semantic dial unchanged. A phase-three reader must bind the semantic
+configuration hash and verify its own causal decisions, source identity, complete monitor,
+requested completion and cost ledger. Missing evidence remains invalid.
+
+### 20.2 First priority: existing evidence, with no new simulator interaction
+
+Locate the partial pilot, replicate coordinator/report and selected development traces on
+the run machine or in the pinned private backups. Restore the smallest useful evidence
+first, not the full simulator, model collection or video library. Reuse accepted diagnostic
+episodes rather than repeating them. As inspected locally on 18 October, this checkout
+does not contain `runs/maniguard/`, `data/maniguard/` or `third_party/ManiGuard`; no fresh
+raw-trace analysis or simulator result is implied by this plan.
+
+The first offline deliverable should describe actionable opportunities by episode:
+proposal-to-measured-joint displacement, previous-input tracking error, open/close command
+transitions, periods of low end-effector motion, query age, first violation and requested
+completion. Use available object/goal labels only to diagnose whether the event is relevant,
+never as inputs to the deployed controller. Include successful and unfinished traces to
+identify triggers that would interfere with useful behaviour. A recording that lacks the
+required state is unavailable evidence, not evidence of an absent event.
+
+Inspect command caps against actual measured motion using the existing tracking audit.
+The earlier findings already show that target-displacement bounds and physical motion
+are different. The [Stack release study](docs/research/reports/ManiGuard%20Stack%20release%20trigger%20comparison.md)
+also records 179 delayed opening commands while the goal target was unheld. Repeating
+release-delay sweeps on that evidence is low priority. It does not establish that release
+is irrelevant on Clutter or that other objects were unheld.
+
+If repeated outcomes are available, replay the selection decision over the measured
+controller/case grid: compare one, two and four observations per candidate where the data
+permit, keeping some repeats independent of selection. Quantify unstable rankings and
+the benefit of spending evaluation on finalists. Use scene-aware resampling and retain
+the limited number of controllers and replicates in the interpretation. This can inform
+screening allocation; it cannot evaluate unseen mutants, simulate a complete adaptive EA,
+or establish optimizer superiority.
+
+An offline controller replay can establish that a trigger fires, when a command would
+change, or whether identity is exact on the same inputs. Once commands or query timing
+change, the future recorded trajectory is no longer the counterfactual trajectory.
+Offline replay cannot establish improved physical outcomes. Count CPU work separately
+and charge zero new simulator interactions only when no simulator is actually advanced.
+
+### 20.3 Initial hypothesis: conditional command restraint and re-query timing
+
+The cheapest candidate implementation to investigate jointly is an open-command motion
+cap and a persistent-tracking-error query trigger. The reasoning is that abrupt proposed
+movement can require restraint, while continuing stale proposals can require a fresh
+observation-conditioned action. Their interaction might matter. This is a hypothesis to
+check against the trace census, not a diagnosed failure mechanism or an established repair.
+
+A proposed four-parameter vector is an open-command joint-target displacement cap, a
+tracking-error threshold, a persistence duration, and a nominal query interval. Identity
+disables the cap and event trigger and uses the original eight-action query procedure.
+For the first mechanism screen, hold the nominal interval at eight and freeze one
+trace-informed setting for the remaining parameters before observing new outcomes.
+Explicit disabled values must be serializable and distinguishable from active bounds.
+
+Define tracking error using the previous command actually supplied to the environment
+and the current measured joints. The displacement to the next proposed target is demand,
+not automatically tracking error. An error persisting for several control actions can
+make the query trigger eligible, subject to a fixed minimum query interval. It is not
+a detector of task stagnation or failed grasping. Validate the query cooldown and short
+chunk handling; avoid a trigger that requests the same ineffective action indefinitely.
+
+For an eligible motion cap, bound the seven proposed joint targets relative to the
+current measured joints, preserving gripper commands in this initial experiment. Log
+both the unmodified proposal and bounded environment input. Apply no cap in the disabled
+state, and do not interpret an open gripper command as a simulator contact or jar-state
+label. Freeze action normalization, units, decision frequency and composition order.
+
+Defer closed-command caps, smoothing, release holds, low-height conditions and geometric
+lift attenuation until evidence identifies an additional need. Low-height controls need
+an audited coordinate/reference-surface convention; selective lift attenuation needs a
+validated geometric mapping. A new encoder, world model, sampler modification or sub-goal
+language program is not needed for this first probe. If the census does not support the
+proposed pair, nominate a different pair explicitly before writing a run protocol.
+
+### 20.4 First physical screen: a small factorial comparison
+
+After offline checks, the proposed engineering allocation is two short initialization and
+identity checks of at most 32 control actions each. They validate integration, not task
+completion. Initialization and other physics still belong in the ledger. Define separate
+wall-time, query and GPU-allocation limits before running.
+
+The proposed first full-episode allocation is two Clutter development scenes, four
+replicates per scene and four conditions: identity, conditional cap only, event-triggered
+re-query only, and both controls together. This is **32 full episodes**, at most 35,200
+policy control actions at the existing 1,100-action horizon, plus engineering checks and
+all other attempted interaction. Keep the original horizon and native early termination.
+Choose development scenes prospectively, not reserved scenes or cases selected because
+one candidate already won. Interleave the four conditions within scene/replicate blocks
+and balance available workers. Same-seed episodes still have residual variability.
+
+This design measures each single control and whether their combination is worth further
+investigation. Report all four joint outcome categories, counts per scene, query use,
+activation times and changed commands. The descriptive interaction contrast is the
+combination's rate minus the two single-control rates plus the identity rate; eight
+episodes per condition give it substantial uncertainty. It is an engineering comparison,
+not a powered safety or optimizer-superiority result.
+
+If a control never activates, explain the missing opportunity or implementation mismatch
+before more episodes. If behaviour changes but only produces waiting or extra queries,
+do not call that progress. An isolated extra completion is a lead, not a repeatable gain.
+If one simple control is sufficient, retain it as a strong reference. If there is credible
+activation and possible headroom but no clear rate gain, a bounded search may still be
+justified; this screen does not restore the old requirement that a hand-written repair
+must win before optimization.
+
+Before making a repeatability claim, a possible second allocation repeats the same four
+conditions on two additional development scenes, again four times each: **32 further
+episodes**, for 64 full screen episodes in total. Freeze the controls before this second
+allocation; changing them creates another exploratory study whose costs remain visible.
+This is conditional follow-up, not automatic permission for 64 episodes. A small effect
+may remain inconclusive at this budget; do not extend sampling until significance appears.
+
+### 20.5 How the inexpensive evidence changes the trajectory
+
+If raw evidence is missing, first retrieve and audit it. If infrastructure or source
+identity is wrong, repair that before interpreting controller outcomes. If the proposed
+triggers have no relevant opportunities, remove them from the dial and investigate the
+observed failure rather than adding search. If the interface visibly changes relevant
+behaviour, use the heritability probe to measure variation and local structure. A useful
+fixed control is helpful evidence and a baseline, not the sole route to that probe.
+
+The 320-episode parent-offspring design remains a proposal to cost and freeze after these
+checks. It need not be launched as the first experiment. One possible staged allocation
+starts with eight parent-offspring pairs, two Clutter scenes and two replicates each:
+**64 episodes**. Extending those same prospectively sampled controllers to the full
+16-pair, eight-Clutter-plus-two-Jar design can total 320, rather than 64 plus a fresh 320.
+Preserve the initial observations and identities. Any intermediate look is descriptive
+unless a valid sequential decision rule is frozen; it cannot become an uncorrected
+early statistical pass. Specify how fail and inconclusive decisions are handled before
+execution. Jar costs and any reference anchors remain explicit.
+
+Only after useful variation and evaluation precision are understood should a small
+ES/random-search comparison test the complete adaptation procedure. For scale, two
+methods, two search seeds, two evaluated populations, four candidates and four rollouts
+per candidate total **128 training episodes**, before independent finalist evaluation.
+This gives only one evolutionary transition per run and tests basic search behaviour;
+it is not powered evidence of eventual EA superiority. Choose population, generations
+and replication from the measured signal, rather than treating this arithmetic as a
+frozen optimizer budget. A tiny pilot's null does not prove that longer adaptation fails.
+
+At the recorded planning throughput, 32 Clutter episodes are approximately 33 minutes of
+eight-GPU workload-equivalent wall time; 64 are about 66 minutes. These calculations use
+1,400 episodes per day and exclude restoration, new integration, queues, changed query
+cost and different host/load behaviour. They are not current throughput measurements or
+promises. Actual rental accounting includes every allocated GPU, including idle time.
+
+The first implementation order is therefore the evidence audit, pure four-parameter
+controller, checked no-encoder runtime and result reader, bounded mechanism screen,
+then the appropriate heritability and optimizer pilot. Add PPO, NSGA-II, external
+adaptation baselines and further task coverage when the shared execution and outcome
+interfaces are stable. They remain necessary for the corresponding final claims, but
+they are not dependencies of this initial mechanism test. GP, additional families and
+new learned models require separate evidence and budgets rather than automatic expansion.
+
+The existing 192-episode replicate diagnostic and any completed work retain their
+original cost scope. The 32/64 screen, 64-to-320 heritability allocation and 128-episode
+pilot are distinct proposed allocations; do not add or spend them as one automatically
+approved package. A new protocol must include all references, unsuccessful candidates,
+re-evaluations, initialization, failures, queries and elapsed time, with an explicit
+decision at each allocation boundary.
+
+## 21. Candidate ManiGuard evolution pilot on one GPU
+
+The approved recommendation is expanded into a standalone implementation and experiment
+plan in [phase3Part1.md](phase3Part1.md). Its precise Part 1 definitions refine this
+initial sketch; the full-study protocol and historical allocations remain separate.
+
+**Clarification from Sachin, 18 October 2026.** Keep ManiGuard and include actual
+physical evolutionary search. The earlier Push-T/iCEM suggestion misunderstood the
+analogy and is withdrawn. The goal is a small executable experiment with an interpretable
+result, not the complete multi-method GECCO study. No run has been launched.
+
+### 21.1 One concrete question
+
+Can a small evolutionary search find execution parameters that improve a frozen
+Clutter policy's safe requested completion on fresh episodes, with a user-controlled
+safety dial to vary the strength of adaptation?
+
+Clutter is the recommended first family because its recorded pilot includes both safe
+completions and failures, and its native horizon is 1,100 actions rather than Jar's 2,000
+or Stack's 4,200. This is observed headroom, not proof that execution parameters can
+repair the failures. The earlier six-hypothesis study did not establish a repeatable
+adapter improvement. The pilot should test that possibility without assuming it.
+
+Use the released, pinned Clutter VLA, unchanged simulator and monitor, and one serial
+simulation worker on the same GPU as the policy server. The monitor evaluates physical
+outcomes; it does not supply a predictive action-changing filter. Keep privileged object
+states and monitor labels out of the execution adapter. Do not train the VLA, a world
+model, an encoder or a new safety predictor.
+
+### 21.2 Reuse the existing adapter and evolutionary machinery
+
+Start with the existing `motion` adapter and four parameters: free-motion joint-target
+displacement cap, grasp-conditioned displacement cap, smoothing coefficient and policy
+execution horizon. These are existing fields in
+[maniguard_adaptation.py](experiments/helpers/maniguard_adaptation.py), not a new neural
+controller. Grasp conditioning uses the existing finger-based heuristic and proposed
+closing command, not privileged target-held state. Fix the other thresholds and settling
+behaviour. Freeze finite domains after checking controller units, supported chunk lengths
+and a short physical smoke test. The domain must include permissive settings so severe
+slowing is not forced on every candidate.
+
+Part 1 adds a user dial `d` with settings zero, one-half and one. Zero reproduces the
+original executor; one applies the evolved controller fully; one-half blends the arm
+adaptation and query horizon. Search runs at one, then all three settings use the same
+frozen anchor for the fresh comparison. This measures intervention strength and its
+physical safety/completion effects, not a calibrated failure probability or a guaranteed
+monotonic safety response. Exact semantics are specified in [Part 1](phase3Part1.md#44-the-user-controlled-safety-dial).
+
+Use the existing categorical evolutionary implementation as the starting point: a
+population of four, three evaluated populations, elitism and mutation. This gives an
+initial population and two actual evolutionary transitions. Re-evaluate the retained
+elite rather than reusing its previous fitness. It is one optimizer seed, not a repeated
+optimizer-superiority experiment. Score against measured requested completion and raw
+physical violations, with a prospectively fixed selection rule. Part 1 uses the current
+contract's `S_req - 2*V` utility; it does not test penalty-free selection. Preserve the
+four joint outcomes separately.
+
+The small launcher should reuse audited search and result logic, not launch the old
+phase-two coordinator or alter its frozen allocation. The earlier search validator
+requires all three optimizers and its legacy source map lacks Clutter; it is not an
+unchanged drop-in entry point for this proposal. Use the pinned phase-two Clutter source
+metadata and current completion contract. A new pilot protocol must explicitly support
+one method and the semantic adapter. Do not relax the old study's checks globally.
+
+### 21.3 Allocate 24 episodes to search and 24 to checking the result
+
+The proposed full allocation is:
+
+- Search: four candidates, three evaluated populations and two training scenes per
+  candidate, for **24 full episodes**. Count elite re-evaluations and failed attempts.
+- Independent check: freeze one finalist using search data only, then compare dial
+  settings zero, one-half and one on two validation scenes with four repetitions per
+  scene, for **24 further full episodes**, eight per setting. Interleave settings within
+  scene/repetition blocks. Exclude these scenes from controller selection and tuning.
+
+This totals **48 full episodes**, at most 52,800 policy control actions at the original
+horizon, plus initialization, short checks, failures and all other physical interaction.
+Use frozen training and validation partitions; keep the reserved main-study scenes
+untouched. Repeated simulator roots still have rendering and policy variability.
+
+Prioritize the independent identity comparison over adding several tiny optimizer arms.
+This first pilot asks whether the discovered controller is useful. It cannot show that
+evolution is more sample-efficient than random search or ordinary learning. A matched
+random-search comparison is the next requirement if a promising controller is found;
+it is not silently included in this allocation or optional for a later evolutionary
+advantage claim. Existing fixed controls remain relevant follow-up baselines too.
+
+Report safe requested completion, unsafe completion, safe unfinished and unsafe unfinished
+counts per scene and condition. Include actual control steps, physical interactions,
+policy queries and elapsed time, plus intervention frequency and matched videos. Reduced
+violations through inactivity are not success. Eight episodes per setting give a
+noisy exploratory estimate, not a safety guarantee or a conclusive generalization result.
+Select one finalist before checking it and retain null and adverse outcomes.
+
+### 21.4 Single-GPU feasibility and enforced eight-hour ceiling
+
+Historical serial Clutter processes took about 177 to 191 seconds in the early pilot;
+under the later eight-way load the recorded median was 417 seconds. At three to seven
+minutes per episode, 48 episodes represent approximately **2.4 to 5.6 hours of serial
+rollout time**. This arithmetic is not a 4090/5090 benchmark or a guarantee: the hosts,
+load, setup and policy-query schedules differ. The historical passive total-memory
+sample was 14.3 GB, supporting a single-24-GB-GPU feasibility check, not proving that
+memory will stay below that value. Use one policy and one simulator; verify actual
+peak memory, renderer configuration, device compatibility and throughput on the run host.
+
+Prepare source and the intended ManiGuard environments before starting the timed pilot
+where possible. A preparation template is not an installed research stack. Include all
+on-machine setup, initialization, smoke tests, idle allocation and failures in the
+single-GPU eight-hour ledger. Do not promise a cold installation plus a complete study
+inside eight hours before a real preflight.
+
+Reserve time for setup and final auditing, then choose the episode allocation from
+conservative end-to-end timing alone, before viewing comparative outcomes. If 48 episodes
+will not fit, the predefined smaller pilot is four candidates, two populations and two
+training scenes (**16 search episodes**), followed by the three dial settings on two
+validation scenes and two repetitions (**12 checking episodes**), for **28 full episodes**.
+This has one evolutionary transition and narrower scope. Do not shorten the
+native task horizon merely to claim throughput or claim that incomplete rollouts failed
+at the original horizon.
+
+Use a wall-time deadline that stops new launches with enough time to save and audit
+records, and an outer hard allocation stop at eight hours. Preserve and account for any
+incomplete attempt. If the stack is not ready or measured timings do not support even
+the smaller allocation, report that directly. No positive outcome or minimum completed
+sample count is guaranteed by the deadline.
+
+The tangible deliverable is a saved evolved parameter vector, search lineage, fresh
+three-setting outcome counts, an interaction/time ledger and matched videos.
+A useful gain justifies testing evolution against matched random search and identifying
+which controller change caused the effect. A short null informs further spending but
+does not establish that this interface or a longer search cannot work. Neither outcome
+alone establishes a GECCO contribution.
