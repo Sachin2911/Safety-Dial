@@ -11,7 +11,9 @@ initialization. Its recovery used an unspent slot and added no budget; the indep
 Clutter fixed-composition check was omitted, with that coverage retained on Jar/Stack.
 The repaired encoder passed both Clutter identity and stochastic checks. All 24 full
 training-only Jar, Stack and Clutter preparation references now have valid audits. The pilot protocol is now frozen after the final source and budget review; no learning result or reserved
-evaluation exists yet. The [development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
+evaluation exists yet. The pilot was paused for migration after eight audited random-search
+Clutter episodes; 514 episodes remain. See **section 13** for the current handoff and
+restore instructions. The [development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
 and [requirements ledger](docs/research/research_notes/ManiGuard%20phase2%20requirements.json)
 record the current evidence and limitations. Preparation assignments and their explicit
 recovery amendment are frozen; the pilot freeze binds all full reference measurements and a measured 58.83-GPU-hour
@@ -402,8 +404,8 @@ not a hidden prerequisite of the first study.
 Reuse audited episode execution, policy sampling isolation, source hashing, outcome
 reports and ledgers from [the existing stack](configs/maniguard/README.md).
 The pilot coordinator now schedules family sub-batches with verified matching policy
-servers and equal-weight candidate aggregation; its full physical optimization remains
-pending preparation completion and protocol freeze.
+servers and equal-weight candidate aggregation; its full physical optimization is in progress under the frozen protocol, currently
+paused for migration after eight audited episodes.
 
 Jar/Stack use pi0.5 while Lid uses pi0, with different predicted chunk lengths. Their common
 joint interface does not align hidden representations. The shared Frame now supplies
@@ -426,8 +428,8 @@ simulator/policy environments and managed services; preserve old runs and enviro
 
 ## 12. Choices to freeze before the pilot
 
-The accepted direction is shared adaptation with cross-task evidence. The draft pilot records the implementation choices below; final source, outcome and
-resource reviews must bind them before launch:
+The accepted direction is shared adaptation with cross-task evidence. The pilot now freezes
+the choices below, bound by the completed source, outcome and resource reviews:
 
 - Common encoder, projection, recurrent architecture and exact parameter count.
 - Action domains, composition rules and ordinary-learning settings.
@@ -437,6 +439,199 @@ resource reviews must bind them before launch:
 - Preparation allocation, measured resource estimate and GPU-hour ceiling.
 - Closest compatible prior-method baseline and the distinction we will test.
 
-The next experimental deliverable is completed full-reference preparation and a costed
-pilot freeze, followed by the bounded comparative pilot. A local repair, transfer across tasks and an evolutionary
+Full-reference preparation and the costed pilot freeze are complete. The next experimental
+deliverable is the completed bounded comparative pilot. A local repair, transfer across tasks and an evolutionary
 advantage remain separate empirical outcomes throughout.
+
+
+## 13. Migration handoff, 18 October 2026
+
+This section supersedes earlier instructions to keep the serial pilot running or rent
+another machine. Sachin has rented replacement compute and will launch a new agent there.
+Price is not the decision criterion. An 8×RTX3090 Finland offer (type 29381071, EPYC 7302,
+64 advertised CPU threads, 484 GB RAM) was discussed; the actual replacement instance ID,
+hardware and rental start time have **not** been confirmed to this agent. Inspect them.
+The ten-hour pilot target remains an operational target, not a measured completion promise;
+record the actual deadline instead of silently resetting it on migration.
+
+### Preserved state and what has actually run
+
+- Branch: `research/maniguard-fruits` in `Sachin2911/Safety-Dial`.
+- Frozen protocol: `configs/maniguard/phase2/pilot.json`, content hash
+  `c9a541fbb999cb1a9ad359c7d12b3b83b7bc2ab2d81e56fc44cc82577921fdcb`.
+- Final preparation: `runs/maniguard/phase2/reports/preparation-final-source-v3/`.
+  All 24 full references were audited; eleven short checks were valid and one retained
+  initialization was invalid. The training-selected fixed comparator is smoothing 0.75.
+- Resume `runs/maniguard/phase2/pilot-v1/coordinator.json`. Its saved content hash is
+  `4655e10f295f467a03b680e6643da671670cd03b60ae7e2ce8521d7fb393933d`.
+  There are **8 accepted episodes, 514 remaining, no in-flight claims, no blocked
+  scientific reasons**. Sixteen jobs remain in the current 24-job dependency block.
+- All eight completed jobs are random search, optimizer seed 17, training panel 0,
+  Clutter. Four achieved safe completion, three had measured violations, and one was
+  unfinished without an observed violation. These are eight different initial candidates
+  on one scene, not independent evidence of improvement or an evolutionary result.
+- Their measured costs total 6,821 policy control actions, 917 policy queries,
+  41,614 physics steps and 1,286.68 episode seconds. Continuous rental accounting is
+  additional and must include idle/setup/migration time.
+- At 06:54:49 UTC the old launcher was stopped between fully audited episodes.
+  `pilot-v1/migration-boundary.json` records the zero-claim, zero-child boundary.
+  `launch.json` says `blocked` with `KeyboardInterrupt: Signal 15` because the existing
+  launcher has no external pause command. This is an administrative stop, not a failed
+  episode or blocked coordinator. Preserve that receipt; do not rewrite its history.
+- `maniguard_phase2_pilot` is EXITED; `maniguard_policy` is STOPPED. Both have autostart
+  and autorestart disabled. No simulation/policy GPU process remains. Old instance
+  **56372479 remains rented**, with its filesystem intact. Stopping these services does
+  not stop GPU billing. Do not destroy it before restoration is verified.
+
+### Restore before running anything
+
+Clone into **`/workspace/Safety-Dial`** and check out the branch above. Ignored evidence
+is required by the frozen protocol: a Git clone alone cannot validate or resume it.
+The private Hugging Face dataset repository
+[`Sachioster/safety-dial-phase2-handoff-20261018`](https://huggingface.co/datasets/Sachioster/safety-dial-phase2-handoff-20261018)
+holds the migration archives. Use the exact revision and SHA256 manifest recorded in
+`configs/maniguard/phase2/handoff-20261018.json`. The verified immutable revision is
+`83eedc3181de0849b37f1a0982c397c3fc3b69e8` (2.56 GB evidence and 13.70 GB runtime). Authenticate
+through the new machine's environment; credentials are not included in Git or the archive.
+
+1. Download the pinned `manifest.json` and archives. Check every archive SHA256 before
+   extracting into the clone. `evidence.tar.gz` restores `runs/maniguard/` including
+   phase-one evidence, preparation/recovery reviews, source snapshots and the complete
+   pilot state. Redundant old backup archives and inactive lock files are omitted.
+2. `runtime.tar.gz` restores the two separate environments and upstream source trees:
+   `data/maniguard/envs/sim`, `third_party/ManiGuard`, and `third_party/openpi` including
+   its `.venv`. Git metadata is excluded; upstream revisions are recorded in
+   `runtime-provenance.json` and the frozen source config. If upstream Git operations
+   are needed, clone those exact revisions before overlaying the archive.
+3. The OpenPI Python symlink targets
+   `/.uv/python_install/cpython-3.11-linux-x86_64-gnu/bin/python3.11`, resolving here to
+   Python **3.11.16**. Restore that interpreter with `uv python install 3.11.16` and
+   repair the environment's interpreter symlink if the new base image lacks it.
+   The simulator has its own conda Python 3.10. Do not root-sync the old project lockfile.
+4. Datasets, pretrained VLA policies, the CLIP checkpoint, encryption keys and account
+   credentials are **not** in the archives. Restore public assets at their pinned
+   revisions using the existing downloaders, or copy the owner's existing asset tree
+   directly between the instances. Do not publish the BEHAVIOR data or encryption key.
+   `scripts/maniguard/download.py` supports `assets`, then `robot`, and the original
+   `benchmark`, `jar`, `stack`, `lid` layouts. For Clutter/Cabinet/Dusty use
+   `scripts/maniguard/phase2_download.py FAMILY both --execute`. Download the CLIP encoder
+   with `scripts/maniguard/phase2_encoder.py`; it refuses a changed encoder contract.
+   Jar/Stack plus Clutter are needed now; Lid/Cabinet/Dusty remain reserved for later work.
+   Preserve old download provenance if copying; do not mix incompatible downloader formats
+   into an already populated destination. Install the BEHAVIOR key through its official
+   installer, or transfer the existing private key directly under the owner's access.
+5. Check CUDA **and** Isaac rendering libraries, `libGLU`/`libXt`, asset paths and the
+   separate policy/simulation interpreters. Both 3090 and 4090 support this CUDA 12.4
+   software stack; verify actual device operations. Model inference and physical startup
+   checks still consume the declared resource accounting.
+6. Before any episode, call `validate_protocol(load_protocol(), require_frozen=True)` and
+   `PilotCoordinator.load(...)` from the simulator environment. The old machine verified
+   both after stopping: status `training`, eight accepted, no claims, sixteen pending in
+   the current block. Do not regenerate preparation or change hashes to bypass a failure.
+
+For the archive download, an interpreter with `huggingface_hub` can use the pinned receipt
+without printing the token:
+
+```python
+import hashlib, json
+from pathlib import Path
+from huggingface_hub import hf_hub_download
+
+receipt = json.loads(Path("configs/maniguard/phase2/handoff-20261018.json").read_text())
+for item in receipt["files"]:
+    path = Path(hf_hub_download(receipt["repo_id"], item["file"],
+                               repo_type="dataset", revision=receipt["revision"],
+                               local_dir="/workspace/maniguard-handoff"))
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(8 * 1024**2), b""):
+            digest.update(block)
+    assert digest.hexdigest() == item["sha256"], item["file"]
+```
+
+Then extract the verified `evidence.tar.gz` and `runtime.tar.gz` with `tar -xzf` from
+`/workspace/Safety-Dial`. Start with a fresh clone; do not overlay a directory containing
+new live runs or different environments. The receipt is a private-account artifact pointer,
+not a credential.
+
+The copied supervisor configs are historical examples, not an instruction to restart the
+old serial wrapper. That wrapper is one-shot, has an old absolute reservation deadline,
+and creates an exclusive watchdog receipt. The replacement needs a new operational launch
+record that explicitly resumes the existing coordinator.
+
+### Immediate implementation work on the new machine
+
+The pure scheduling core `experiments/helpers/maniguard_pilot_parallel.py` is committed
+and passed 15 tests, including equivalent serial/parallel search and PPO state updates
+using the real coordinator. It is **not yet a working live multi-GPU entry point**.
+
+1. Implement a separate operational parallel entry point and managed supervisor services.
+   Load the existing coordinator and preserve canonical output/job IDs. Keep one parent
+   writing claims/results, persist a claim before process launch, and never automatically
+   rerun a claimed or already completed episode. Drain paid in-flight work on failure.
+   Keep the existing frozen `maniguard_phase2_*` sources unchanged; pin the new operational
+   sources and routing separately with a review explaining unchanged scientific semantics.
+2. Use fixed per-GPU family policy servers on distinct localhost ports with
+   `--parallel-clients` and episode-specific RNG isolation. The current `PolicyService`
+   assumes one global server and cannot safely switch families during concurrent episodes.
+   Wire the new pool explicitly. Start with one simulator per GPU, then consider two only
+   after measured memory and throughput across Jar/Stack/Clutter establish headroom.
+   One measured Clutter simulator plus policy used about 14.3 GB on the old 24 GB GPU;
+   two-worker capacity is an estimate, not a qualification.
+3. Verify physical GPU assignment for JAX, PyTorch, Isaac rendering and PhysX, not just
+   `CUDA_VISIBLE_DEVICES`. Pinned OmniGibson uses `OMNIGIBSON_GPU_ID` for active/physics GPU;
+   check its mapping on the new host. Isolate `OMNIGIBSON_APPDATA_PATH`, logs and output
+   directories; inspect shared Kit startup-file writes before simultaneous startup.
+   Bound CPU threads to prevent oversubscription. Do not alter render/physics semantics.
+   Record host/GPU/software provenance for every attempt and disclose the first eight
+   episodes on the old host; do not assume bitwise equivalence across different hardware.
+4. Preserve dependency blocks, training panels, common seeds and canonical aggregation.
+   EA/random candidates can run concurrently within the current block. PPO family
+   triplets can run concurrently, but successive updates remain sequential. Do not use
+   future-panel outcomes or reserve-test data to accelerate selection.
+5. Use `AllocationClock` with actual old/new rental start/end timestamps and the frozen
+   prior-accounting snapshot. Old reservation start: **1792272868** Unix seconds, one GPU.
+   Overlap, setup and idle rental time count. Stopping a process does not end a rental.
+   The unchanged ceiling is **72 aggregate GPU-hours**; eight GPUs for ten hours alone
+   would cost 80 GPU-hours before prior work. If the measured plan cannot fit, report the
+   conflict and propose a prospectively documented protocol amendment before exceeding it.
+   The user's unrestricted monetary budget does not silently amend the scientific budget.
+6. Measure the first legitimate scheduled jobs on each family and re-estimate from the
+   remaining dependency blocks, including service/startup/audit overhead and the PPO
+   sequential floor. Do not spend extra unallocated benchmark episodes or discard slow
+   attempts. The 8×3090 versus 4×4090 crossover is twofold *per-card episode throughput*
+   under comparable utilization, not advertised TFLOPS. RAM is ample on the discussed
+   Finland offer; CPU contention, single-core speed and worker occupancy still need checks.
+7. Resume all **514 remaining episodes** under managed services with bounded process
+   cleanup and continuous accounting. Keep local evidence durable and back it up privately.
+   Push code, configs and numerical summaries to the authorized GitHub branch. Finish with
+   family-wise EA/random/PPO versus identity/fixed-reference results and a proceed/revise/
+   stop decision. Report safe completion, violations and unfinished episodes together.
+
+### Work after the pilot, not implied complete by this handoff
+
+The full phase-two goal still requires a costed main protocol, enough independent seeds
+and precision for meaningful effect/safety claims, reserved scene/family evaluation,
+AAC comparison, and history/shared-versus-separate/contextual-versus-constant ablations.
+Lid is design-exposed transfer; Cabinet and Dusty remain behaviorally untouched transfer.
+Two pilot optimizer seeds do not establish EA superiority.
+
+The main dispatcher, guarded child and physics-accounting implementation are preserved.
+The CPU audit worker is now wired into the parent with deadline and cleanup reservations,
+bounded failure ledgers and exact request/source checks. Its focused parent/child/worker
+suite passed **99 tests**, including parent success, timeout, wrong-command and wrong-
+binding paths; the complete main suite then passed **362 tests**. Ruff passed. This is synthetic validation. Native PhysX qualification and
+end-to-end main execution remain unrun and the main live gate must remain closed until
+qualified. A concrete native qualification outline is included with the private handoff
+as `maniguard-main-native-qualification-plan.md`.
+
+### Short goal prompt for the replacement agent
+
+> Read AGENTS.md, oracle.md and phase2.md, especially section 13. Restore and verify the
+> pinned private Hugging Face handoff at /workspace/Safety-Dial. Resume the existing
+> eight-episode checkpoint without replaying work. Finish and test the multi-GPU launcher,
+> measure throughput on this machine, and complete the remaining 514 pilot episodes toward
+> the ten-hour target while preserving the frozen science and aggregate GPU-hour budget.
+> Use managed services, back up evidence, push updates to research/maniguard-fruits, and
+> produce the cross-task EA/random/PPO comparison and proceed/revise/stop report. Report
+> blockers or deadline conflicts promptly; do not rent more hardware.

@@ -452,3 +452,34 @@ overlapping rental GPU-hours. The existing scientific protocol, outcomes and all
 remain frozen. Production process/service wiring, multi-GPU placement validation and a
 safe durable-boundary takeover still need completion before using this core for live work.
 The serial pilot continues while these are prepared and rental approval is pending.
+
+
+## Migration pause and successor handoff, 18 October 2026
+
+Sachin has rented replacement compute, requested cleanup and a new-agent handoff, and
+explicitly allowed Hugging Face storage. The earlier rental proposal is superseded; do
+not act on its pending approval. An eight-3090 Finland offer was discussed, but the actual
+new instance details remain unconfirmed. Price is not a constraint; the frozen scientific
+GPU-hour ceiling remains unchanged.
+
+The serial launcher was stopped at 06:54:49 UTC after eight fully audited Clutter random
+candidates, with no outstanding claim or active episode. Its administrative SIGTERM is
+preserved in launch.json; the coordinator remains valid and training, with sixteen jobs
+pending in its current block and 514 episodes remaining overall. Four candidates completed
+safely, three violated safety, and one remained unfinished without an observed violation.
+No evolutionary or comparative finding exists yet. The policy server is stopped too.
+Frozen protocol validation and coordinator reload passed after the stop.
+
+The bounded main CPU audit worker and parent integration are preserved with 99 passing
+focused tests and clean Ruff, including timeout, wrong-command and wrong-binding parent
+checks. The complete main suite also passed 362 tests. Native physics qualification and full live execution remain outstanding. The
+parallel core's fifteen tests do not establish live multi-GPU operation. Section 13 of
+phase2.md records the implementation gaps, resume state, budget rules, restoration steps
+and short successor prompt. A private Hugging Face backup preserves ignored evidence and
+runtime environments; datasets, pretrained policies, encryption keys and account secrets
+are excluded. The old instance is left intact until restoration is verified.
+
+The authorized private upload completed at Hugging Face revision
+`83eedc3181de0849b37f1a0982c397c3fc3b69e8`. Remote archive LFS SHA256 values match local
+checksums, small files were downloaded and checked, and repository privacy was verified.
+The immutable receipt is `configs/maniguard/phase2/handoff-20261018.json`.

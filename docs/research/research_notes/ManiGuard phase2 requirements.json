@@ -1,7 +1,7 @@
 {
   "schema": "maniguard-phase2-requirements-v1",
   "objective": "Implement phase2.md fully and push regularly",
-  "plan_sha256": "b2e94c8b184750f2076c2136a1bcb06965500690e2bdc5128100c07a914d8ee8",
+  "plan_sha256": "9304cf9369de3372e9f09d7136b0b14b0f6cad379c5b3bfb86029606e35dfc82",
   "status": "active",
   "requirements": [
     {
@@ -305,9 +305,11 @@
         "experiments/helpers/maniguard_main_launcher.py",
         "experiments/helpers/maniguard_main_episode.py",
         "experiments/helpers/maniguard_main_episode_meter.py",
-        "experiments/helpers/maniguard_main_physics.py"
+        "experiments/helpers/maniguard_main_physics.py",
+        "experiments/helpers/maniguard_main_audit_worker.py",
+        "experiments/tests/test_maniguard_main_audit_worker.py"
       ],
-      "progress_note": "Exact frozen-job parent/child execution is wired with a durable meter and independent reader. All seven profiles have synthetic execution coverage. Native physics qualification, entry-point activation, bounded audit worker and numerical scientific protocol remain outstanding."
+      "progress_note": "Exact frozen-job parent/child execution and a bounded independent CPU audit worker are wired, including process deadline, cleanup reservation and uncertain-cost fallback. The focused parent/child/worker suite passes 99 synthetic tests. Native physics qualification, full live activation and numerical scientific protocol remain outstanding."
     },
     {
       "id": "main_results",
@@ -582,6 +584,25 @@
       "scheduler_tests": 15,
       "live_parallel_execution": false,
       "proposal": "runs/maniguard/phase2/setup/parallel-upgrade-proposal-v1/proposal.json"
+    },
+    "migration_handoff": {
+      "date": "2026-10-18",
+      "plan_section": 13,
+      "pilot_accepted": 8,
+      "pilot_remaining": 514,
+      "in_flight_claims": 0,
+      "coordinator_status": "training",
+      "launcher_status": "administrative SIGTERM at audited boundary",
+      "old_instance_id": 56372479,
+      "old_instance_still_rented": true,
+      "parallel_live_launcher_complete": false,
+      "main_audit_worker_tests": 99,
+      "main_audit_worker_validation": "synthetic only; native qualification pending",
+      "private_backup_repo": "Sachioster/safety-dial-phase2-handoff-20261018",
+      "backup_status": "uploaded; pinned private repository and remote SHA256 values verified",
+      "main_full_suite_tests": 362,
+      "backup_revision": "83eedc3181de0849b37f1a0982c397c3fc3b69e8",
+      "backup_receipt": "configs/maniguard/phase2/handoff-20261018.json"
     }
   }
 }

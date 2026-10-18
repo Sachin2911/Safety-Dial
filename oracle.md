@@ -23,7 +23,10 @@ or performance result. All 24 full training-only Jar, Stack and Clutter preparat
 have valid audits. The pilot protocol and measured budget are now frozen after 342 passing phase-two tests
 and final source/identity/completion review. No comparative learning or reserved result exists yet. See the
 [phase-two development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
-for the evidence and remaining work. The sections below preserve the earlier motivation,
+for the evidence and remaining work. The pilot is now paused for migration after eight
+audited random-search Clutter episodes, with no in-flight claims. Section 13 of phase2.md
+records the private backup, exact resume state and remaining multi-GPU integration.
+The sections below preserve the earlier motivation,
 decisions and research trail; this update governs the new phase.
 
 ## Earlier research focus
