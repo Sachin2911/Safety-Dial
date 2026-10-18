@@ -350,12 +350,13 @@ def rmse_per_window(a, b):
 def check_gate(metrics, threshold=None):
     c = criteria() if threshold is None else threshold
     support = {
-        "audit_episodes": metrics["audit_episodes"] >= c["minimum_full_episodes"]["audit"],
+        "audit_episodes": min(metrics["audit_episodes"], metrics.get("audit_episodes_with_windows", metrics["audit_episodes"])) >= c["minimum_full_episodes"]["audit"],
         "changing_windows": metrics["changing_windows"] >= c["minimum_changing_windows_audit"],
         "near_calibration_episodes": metrics["near_calibration_episodes"] >= c["minimum_near_threshold_episodes_calibration"],
         "near_audit_episodes": metrics["near_audit_episodes"] >= c["minimum_near_threshold_episodes_audit"],
         "crossing_audit_episodes": metrics["crossing_audit_episodes"] >= c["minimum_upright_crossing_episodes_audit"],
         "varying_progress_windows": metrics["varying_progress_windows"] >= c["minimum_progress_varying_windows"],
+        "crossing_forecast_windows": metrics.get("crossing_windows", int(metrics["false_reassurance_fraction"] is not None)) > 0,
     }
     accuracy = {
         "one_step_beats_persistence": metrics["persistence_improvement_1"] >= c["minimum_persistence_improvement_fraction_1_and_4"],
@@ -394,6 +395,14 @@ def audit(features, directory, device="cpu"):
     started = time.monotonic()
     predicted = predictor.rollout(w["x"], w["previous"], w["prior_action"], w["actions"])
     elapsed = time.monotonic() - started
+    # Matched action-dependence negative control: the same trained ensemble sees
+    # a deterministically permuted four-action sequence from another audit window.
+    # Images/history and factual future targets stay aligned. These deliberately
+    # mispaired forecasts are not claimed as counterfactual physical outcomes.
+    permutation = np.random.default_rng(20261029).permutation(len(w["actions"]))
+    shuffled_ensemble = predictor.rollout(
+        w["x"], w["previous"], w["prior_action"], w["actions"][permutation],
+    ).mean(0)
     mean = predicted.mean(0)
     error1 = rmse_per_window(mean[:, 0, :32], w["future"][:, 0, :32])
     error4 = rmse_per_window(mean[:, 3, :32], w["future"][:, 3, :32])
@@ -403,6 +412,7 @@ def audit(features, directory, device="cpu"):
     shuffled_prediction = ridge_rollout(w, a, "action_shuffled_ridge")
     ridge_error = rmse_per_window(ridge_prediction[:, 3, :32], w["future"][:, 3, :32])
     shuffled_error = rmse_per_window(shuffled_prediction[:, 3, :32], w["future"][:, 3, :32])
+    shuffled_ensemble_error = rmse_per_window(shuffled_ensemble[:, 3, :32], w["future"][:, 3, :32])
     calibration = json.loads((directory / "calibration.json").read_text())
     changing = persistence4 > calibration["fitting_changing_threshold"]
     # Report full and changing windows separately; gate the latter to prevent static wins.
@@ -430,6 +440,7 @@ def audit(features, directory, device="cpu"):
 
     metrics = {
         "audit_episodes": len(episodes), "audit_windows": len(error4),
+        "audit_episodes_with_windows": len(set(w["episode"].tolist())),
         "changing_windows": int(changing.sum()), "varying_progress_windows": int(varying.sum()),
         "near_calibration_episodes": episode_count(calibration_episodes, 10),
         "near_audit_episodes": episode_count(episodes, 10),
@@ -437,7 +448,9 @@ def audit(features, directory, device="cpu"):
         "near_windows": int(near.sum()), "crossing_windows": int(crossings.sum()),
         "persistence_improvement_1": improvement(error1, persistence1),
         "persistence_improvement_4": improvement(error4, persistence4),
-        "shuffled_improvement_4": improvement(error4, shuffled_error),
+        "shuffled_improvement_4": improvement(error4, shuffled_ensemble_error),
+        "action_shuffle_seed": 20261029,
+        "action_shuffle_scope": "same ensemble, mispaired executed-action prefixes within audit partition",
         "relative_ridge_error_4": float(np.mean(error4[selected]) / max(np.mean(ridge_error[selected]), 1e-12)),
         "actual_margin_mae_deg": float(np.mean(np.abs(actual_head[:, 0] - w["target"][:, 0]))),
         "near_margin_mae_deg": float(np.mean(np.abs(forecast_head[near, 0] - w["target"][near, 0]))) if near.any() else None,
@@ -470,13 +483,14 @@ def audit(features, directory, device="cpu"):
         metrics["per_episode"].append({
             "episode_id": episode["episode_id"], "scene": episode["scene"],
             "windows": int(mask.sum()), "near_windows": int((mask & near).sum()),
-            "four_step_rmse": float(error4[mask].mean()),
-            "persistence_rmse": float(persistence4[mask].mean()),
-            "correction_mean": float(w["correction"][mask].mean()),
+            "four_step_rmse": float(error4[mask].mean()) if mask.any() else None,
+            "persistence_rmse": float(persistence4[mask].mean()) if mask.any() else None,
+            "correction_mean": float(w["correction"][mask].mean()) if mask.any() else None,
         })
     for label, values in (("ensemble_1", error1), ("ensemble_4", error4),
                           ("persistence_1", persistence1), ("persistence_4", persistence4),
-                          ("ridge_4", ridge_error), ("action_shuffled_ridge_4", shuffled_error)):
+                          ("ridge_4", ridge_error), ("action_shuffled_ridge_4", shuffled_error),
+                          ("action_shuffled_ensemble_4", shuffled_ensemble_error)):
         metrics[label + "_rmse"] = float(values.mean())
         metrics[label + "_changing_rmse"] = float(values[selected].mean())
     # Benchmark the actual acquisition code, including controller rollouts, on a
@@ -493,7 +507,8 @@ def audit(features, directory, device="cpu"):
               "criteria": criteria(), "metrics": metrics, "gate": check_gate(metrics),
               "scope": "factual query-start prefixes on one held-out task; no optimizer superiority or counterfactual causal ranking claim"}
     np.savez_compressed(directory / "forecast-windows.npz", error1=error1, error4=error4,
-                        persistence4=persistence4, ridge4=ridge_error, shuffled4=shuffled_error,
+                        persistence4=persistence4, ridge4=ridge_error, shuffled4=shuffled_ensemble_error,
+                        shuffled_ridge4=shuffled_error, action_permutation=permutation,
                         disagreement=disagreement, correction=w["correction"],
                         actual_target=w["target"], forecast_target=forecast_head,
                         actual_latent_head=actual_head, accepted_m=accepted_m, accepted_c=accepted_c,

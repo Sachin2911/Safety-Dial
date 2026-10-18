@@ -1,7 +1,7 @@
 {
   "schema": "maniguard-part3-model-source-freeze-v1",
   "status": "frozen",
-  "at": 1792356456.9836419,
+  "at": 1792357395.291116,
   "clock": {
     "at": 1792356456.9837246,
     "elapsed_seconds": 17219.983724594116,
@@ -59,7 +59,7 @@
     "experiments/helpers/maniguard_part2_source.py": "e2410e93faa98a51cd5f358c50329c327481a300327d4abc35b0f72414dfd554",
     "experiments/helpers/maniguard_part3_acquisition.py": "362d0c7efcc136af3bca9448f104957a5ef8074bdcaa37e68917b2abe86eb817",
     "experiments/helpers/maniguard_part3_data.py": "9f101cc6e0a0ea2c4fca09647a996d063cdaa495373b7768404cf56ea2bef267",
-    "experiments/helpers/maniguard_part3_model.py": "465d52d54adbd63c5252dc5a4561ea2087d6718fdb5aee80e68fd5073d4b9511",
+    "experiments/helpers/maniguard_part3_model.py": "d135f112d20b67ae36d09d9f90e18992cc0da32e11f7fa87a5340181c43db0fb",
     "experiments/helpers/maniguard_part3_protocol.py": "c078202e5b5980761a22369d264196b63d24032c82b9586e7f3a3d115614e202",
     "experiments/helpers/maniguard_part3_search.py": "afeb97cf5e0db2f69715de7f3074485f6946fb9634e71d604af38270cc003000",
     "experiments/helpers/maniguard_phase2_families.py": "03680acfe307e3fa6ae23a38f0424ef054b9384c3c91149e8aa55677d17256ba",
@@ -94,5 +94,8 @@
     "synthetic_acquisition_member_calls": 320,
     "synthetic_acquisition_seconds": 0.7419062107801437
   },
-  "scope": "Prospective model/data/search implementation. Synthetic engineering checks are not empirical forecast evidence."
+  "scope": "Prospective model/data/search implementation. Synthetic engineering checks are not empirical forecast evidence.",
+  "version": 3,
+  "supersedes_sha256": "c328fe243ce153fb801a71557d9eebd9320f2a1d797bc38d348ab7475f7cbddc",
+  "reason": "Pre-fitting robustness review: use the matched-ensemble action-shuffle control and retain the fitted ridge control. Count forecast-bearing episodes and crossing prefixes for support; episodes without a four-action window have null errors rather than NaN. All numerical criteria, cases, physical slots and training hyperparameters remain unchanged."
 }

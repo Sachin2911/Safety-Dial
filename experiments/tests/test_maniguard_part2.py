@@ -10,6 +10,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+
 from helpers.maniguard_followup_budget import clock
 from helpers.maniguard_part2_controller import (
     Config,
@@ -161,3 +162,60 @@ STUDY.close()
                     str(root / "experiments/scripts/maniguard_part2_episode.py"), str(job)],
                    check=True, capture_output=True, text=True)
     assert (tmp_path / "ledger.json").exists()
+
+
+def test_extended_guard_kills_owned_policy_tree_without_coordinator(tmp_path):
+    import json
+    import os
+    import signal
+    import subprocess
+    import time
+    from datetime import datetime
+
+    from helpers.maniguard_followup_budget import live_group_members, register
+
+    pid_file = tmp_path / "grandchild.pid"
+    child = subprocess.Popen([
+        sys.executable, "-c",
+        "import subprocess,sys,time,pathlib; p=subprocess.Popen([sys.executable,'-c','import time; time.sleep(30)']); pathlib.Path(sys.argv[1]).write_text(str(p.pid)); time.sleep(30)",
+        str(pid_file),
+    ], start_new_session=True)
+    guard_process = None
+    try:
+        until = time.monotonic() + 3
+        while not pid_file.exists() and time.monotonic() < until:
+            time.sleep(.02)
+        assert pid_file.exists()
+        register(tmp_path, child, "policy")
+        now = time.time()
+        stamp = lambda value: datetime.fromtimestamp(value).astimezone().isoformat()
+        allocation = {
+            "started_utc": stamp(now - 39600 + 2),
+            "original_hard_deadline_utc": stamp(now - 10800 + 2),
+            "physical_deadline_utc": stamp(now + 2),
+            "hard_deadline_utc": stamp(now + 3602),
+            "gpus": 1, "extension": {"authority": "synthetic guard test only"},
+        }
+        path = tmp_path / "test-allocation.json"
+        path.write_text(json.dumps(allocation))
+        root = Path(__file__).resolve().parents[2]
+        guard_process = subprocess.Popen([
+            sys.executable, str(root / "experiments/helpers/maniguard_followup_budget.py"),
+            str(tmp_path), "--allocation", str(path),
+        ], start_new_session=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        until = time.monotonic() + 6
+        while live_group_members(child.pid) and time.monotonic() < until:
+            time.sleep(.05)
+        assert not live_group_members(child.pid)
+        events = [json.loads(line) for line in (tmp_path / "deadline-events.jsonl").read_text().splitlines()]
+        assert any(row["role"] == "policy" for row in events)
+        # Policy stops at the physical target even with a full reporting hour left.
+        assert time.time() < now + 3600
+    finally:
+        for process in (child, guard_process):
+            if process is not None:
+                try:
+                    os.killpg(process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+                process.wait(timeout=3)
