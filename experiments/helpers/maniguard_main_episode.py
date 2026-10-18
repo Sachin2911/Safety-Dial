@@ -132,7 +132,8 @@ def preflight_backend(protocol, job, runtime_contract, *, root=ROOT, config_dir=
     protocol_api._check_signed(contract)
     required = {'schema', 'supported_profiles', 'episode_timeout_seconds',
                 'policy_startup_timeout_seconds', 'termination_grace_seconds',
-                'cleanup_reserve_seconds', 'per_episode_startup_counts',
+                'cleanup_reserve_seconds', 'audit_timeout_seconds', 'audit_cleanup_reserve_seconds',
+                'per_episode_startup_counts',
                 'per_episode_failed_work_counts', 'backend', 'sha256'}
     if (set(contract) != required or contract['schema'] != RUNTIME_SCHEMA
             or not isinstance(contract['supported_profiles'], list)
@@ -140,12 +141,15 @@ def preflight_backend(protocol, job, runtime_contract, *, root=ROOT, config_dir=
             or len(set(contract['supported_profiles'])) != len(contract['supported_profiles'])):
         raise ValueError('Unsupported exact main runtime contract')
     for name in ('episode_timeout_seconds', 'policy_startup_timeout_seconds',
-                 'termination_grace_seconds', 'cleanup_reserve_seconds'):
+                 'termination_grace_seconds', 'cleanup_reserve_seconds',
+                 'audit_timeout_seconds', 'audit_cleanup_reserve_seconds'):
         value = contract[name]
         if type(value) not in (int, float) or not math.isfinite(value) or value <= 0:
             raise ValueError('Positive finite main runtime timeouts are required')
     if contract['cleanup_reserve_seconds'] < 3 * contract['termination_grace_seconds']:
         raise ValueError('Cleanup reserve cannot fund the termination sequence')
+    if contract['audit_cleanup_reserve_seconds'] < 3 * contract['termination_grace_seconds']:
+        raise ValueError('Audit cleanup reserve cannot fund the termination sequence')
     for name in ('per_episode_startup_counts', 'per_episode_failed_work_counts'):
         if counts(contract[name])['policy_control_steps']:
             raise ValueError('Extra reservations cannot create additional policy-action slots')

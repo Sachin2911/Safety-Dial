@@ -20,6 +20,7 @@ from copy import deepcopy
 from functools import partial
 from pathlib import Path
 
+from helpers import maniguard_main_audit_worker as audit_worker
 from helpers import maniguard_main_protocol as protocol_api
 from helpers import maniguard_phase2_services as services
 from helpers.maniguard_main_dispatch import (
@@ -47,6 +48,8 @@ PARENT_SOURCES = (
     'experiments/helpers/maniguard_main_protocol.py',
     'experiments/helpers/maniguard_main_episode.py',
     'experiments/helpers/maniguard_main_results.py',
+    audit_worker.SOURCE_PATH,
+    audit_worker.SCRIPT_PATH,
     'experiments/helpers/maniguard_phase2_services.py',
     'experiments/scripts/maniguard_main_episode.py',
     'experiments/scripts/maniguard_main_run.py',
@@ -73,7 +76,8 @@ def load_runtime_contract(protocol, reference, *, root):
     value = json.loads(protocol_api._file(reference, root).read_text())
     _check_signed(value)
     expected = {'schema', 'supported_profiles', 'episode_timeout_seconds', 'policy_startup_timeout_seconds',
-                'termination_grace_seconds', 'cleanup_reserve_seconds', 'per_episode_startup_counts',
+                'termination_grace_seconds', 'cleanup_reserve_seconds', 'audit_timeout_seconds',
+                'audit_cleanup_reserve_seconds', 'per_episode_startup_counts',
                 'per_episode_failed_work_counts', 'backend', 'sha256'}
     if set(value) != expected or value['schema'] != RUNTIME_SCHEMA:
         raise ValueError('Unsupported explicit main runtime contract')
@@ -82,11 +86,14 @@ def load_runtime_contract(protocol, reference, *, root):
             or not set(profiles) <= MAIN_PROFILES):
         raise ValueError('Runtime contract has unsupported or duplicate profiles')
     for key in ('episode_timeout_seconds', 'policy_startup_timeout_seconds',
-                'termination_grace_seconds', 'cleanup_reserve_seconds'):
+                'termination_grace_seconds', 'cleanup_reserve_seconds',
+                'audit_timeout_seconds', 'audit_cleanup_reserve_seconds'):
         if not _positive(value[key]):
             raise ValueError('Every runtime timeout must be explicit, finite and positive')
     if value['cleanup_reserve_seconds'] < 3 * value['termination_grace_seconds']:
         raise ValueError('Cleanup reserve must cover natural-exit, TERM and KILL grace')
+    if value['audit_cleanup_reserve_seconds'] < 3 * value['termination_grace_seconds']:
+        raise ValueError('Audit cleanup reserve must cover natural-exit, TERM and KILL grace')
     for key in ('per_episode_startup_counts', 'per_episode_failed_work_counts'):
         _counts(value[key])
         if value[key]['policy_control_steps'] != 0:
@@ -362,7 +369,8 @@ def _remaining_seconds(dispatch):
 
 
 def _require_time(dispatch, contract, *, before_service):
-    needed = contract['episode_timeout_seconds'] + contract['cleanup_reserve_seconds']
+    needed = (contract['episode_timeout_seconds'] + contract['cleanup_reserve_seconds']
+              + contract['audit_timeout_seconds'] + contract['audit_cleanup_reserve_seconds'])
     if before_service:
         needed += contract['policy_startup_timeout_seconds']
     if _remaining_seconds(dispatch) < needed:
@@ -375,10 +383,84 @@ def _process_ok(process):
                                                      'orphaned_descendants')))
 
 
+
+def _failed_audit_row(claim, protocol, reason, *, elapsed=0):
+    lower = audit_worker.lower_bound_snapshot(claim['output'], claim['job'])
+    return {'valid': False, 'output': claim['output'], 'protocol_sha256': protocol['sha256'],
+            'costs': {**lower['costs'], 'elapsed_seconds': elapsed},
+            'cost_breakdown': lower['cost_breakdown'], 'unknown_cost_fields': list(WORK_COUNTS),
+            'missing_cost_fields': list(WORK_COUNTS),
+            'cost_issues': ['Independent audit incomplete; ledger counters are unaudited lower bounds'],
+            'invalid_reasons': [reason], 'outcome': None, 'fallback_evidence': lower}
+
+
+def _audit_in_worker(dispatch, claim, attempt, protocol_path, config_dir, contract, *,
+                     python, runner, wall):
+    """Run full replay off the parent thread, retaining uncertainty on every failure."""
+    job, protocol, root = claim['job'], dispatch.protocol, dispatch.root
+    try:
+        cleanup = contract['audit_cleanup_reserve_seconds']
+        timeout = contract['audit_timeout_seconds']
+        if _remaining_seconds(dispatch) < timeout + cleanup:
+            raise RuntimeError('Remaining GPU reservation cannot fund independent audit and cleanup')
+        request_path, result_path = attempt / 'audit_request.json', attempt / 'audit_result.json'
+        request = _signed({'schema': audit_worker.REQUEST_SCHEMA, 'root': str(root),
+            'config_dir': str(config_dir), 'protocol_path': str(protocol_path), 'job': job,
+            'output': claim['output'], 'process_receipt_path': str(attempt / 'main_process.json'),
+            'result_path': str(result_path), 'lower_bound_path': str(attempt / 'audit_lower_bound.json'),
+            'deadline': wall() + timeout})
+        dispatch.write_evidence(request_path, request)
+        command = [str(python), str(root / audit_worker.SCRIPT_PATH), '--request', str(request_path)]
+
+        def started(record):
+            dispatch.state['claims'][job['episode_id']]['audit_process'] = _evidence(record)
+            dispatch._persist()
+
+        environment = dict(os.environ, CUDA_VISIBLE_DEVICES='', OMP_NUM_THREADS='1',
+                           OPENBLAS_NUM_THREADS='1')
+        process = runner(command, attempt / 'audit.log', timeout, env=environment,
+                         termination_grace=contract['termination_grace_seconds'], on_started=started)
+        if dispatch.persistence_failure is not None:
+            raise DispatchPersistenceError('Audit process evidence failed to persist')
+        dispatch.write_evidence(attempt / 'audit_process.json', _signed({
+            'schema': 'maniguard-main-audit-process-v1', 'request_sha256': request['sha256'],
+            'process': process}))
+        if (not _process_ok(process) or process.get('command') != command
+                or wall() >= request['deadline']):
+            raise RuntimeError('Independent audit worker failed or exceeded its deadline')
+        # Result summaries are small. Never parse an unbounded child artifact on
+        # the parent thread after the worker's deadline has ended.
+        with result_path.open('rb') as stream:
+            raw = stream.read((4 << 20) + 1)
+        if len(raw) > 4 << 20:
+            raise ValueError('Independent audit result exceeds bounded summary size')
+        result = json.loads(raw)
+        _check_signed(result)
+        expected = {'schema': audit_worker.RESULT_SCHEMA, 'protocol_sha256': protocol['sha256'],
+                    'job_sha256': record_hash(job), 'output': claim['output'],
+                    'request_sha256': request['sha256'],
+                    'audit_worker_sha256': _hash_file(root / audit_worker.SOURCE_PATH),
+                    'audit_reader_sha256': _hash_file(root / audit_worker.READER_PATH)}
+        if set(result) != {*expected, 'row', 'sha256'} or any(
+                result.get(key) != value for key, value in expected.items()):
+            raise ValueError('Independent audit result differs from its exact request/source')
+        if not isinstance(result['row'], dict):
+            raise TypeError('Independent audit result is not a row mapping')
+        if _remaining_seconds(dispatch) <= 0:
+            raise RuntimeError('GPU reservation expired before independent audit acceptance')
+        return result['row']
+    except Exception as error:
+        if dispatch.persistence_failure is not None:
+            raise
+        return _failed_audit_row(claim, protocol,
+            f'Independent audit failure: {type(error).__name__}: {error}',
+            elapsed=max(0.0, wall() - claim['claimed_at']))
+
+
 def run_main(protocol_path, prior_path, runtime_reference, *, root, config_dir=None, resume=False,
              max_jobs=None, port=18000, python=sys.executable, service=None, runner=None, reader=None,
              preflight=None, validator=None, source_verifier=verify_parent_sources, wall=time.time,
-             managed_check=None):
+             managed_check=None, audit_runner=None):
     """Run exact main jobs under one managed parent; dependencies are injectable for tests.
 
     Never retry a claim. The default child preflight currently refuses unsupported
@@ -410,13 +492,12 @@ def run_main(protocol_path, prior_path, runtime_reference, *, root, config_dir=N
         if job['resource_contract']['profile'] not in contract['supported_profiles']:
             raise ValueError('Frozen runtime contract does not support every declared controller')
         preflight(protocol, job, contract, root=root, config_dir=config_dir)
-    if reader is None:
-        reader = audit_module.read_main_episode
     if 'maniguard_main_episode.py' not in services.EPISODE_SCRIPTS:
         raise RuntimeError('Machine process scanner does not yet recognize the main child entry point')
     service = service or services.PolicyService(root=root, port=port,
                                                 lease_path=root / 'runs/maniguard/setup/execution.lock')
     runner = runner or services.run_fresh_episode
+    audit_runner = audit_runner or services.run_fresh_episode
     with MainLiveDispatch.open(protocol, prior, root=root, config_dir=config_dir, resume=resume,
                                clock=wall, validator=validator) as dispatch:
         completed = 0
@@ -502,8 +583,14 @@ def run_main(protocol_path, prior_path, runtime_reference, *, root, config_dir=N
                     # Store parent evidence next to child output only when the child created it.
                     if Path(claim['output']).is_dir():
                         dispatch.write_evidence(Path(claim['output']) / 'main_process.json', process_record)
-                    row = reader(claim['output'], protocol, job, process_receipt=process_record,
-                                 root=root, config_dir=config_dir)
+                    if reader is None:
+                        row = _audit_in_worker(dispatch, claim, attempt, protocol_path, config_dir,
+                            contract, python=python, runner=audit_runner, wall=wall)
+                    else:
+                        # Injectable synthetic reader only; production always uses
+                        # the isolated CPU worker and a process-level deadline.
+                        row = reader(claim['output'], protocol, job, process_receipt=process_record,
+                                     root=root, config_dir=config_dir)
                     if not _process_ok(process):
                         row = {**row, 'valid': False,
                                'invalid_reasons': list(row.get('invalid_reasons') or []) + ['Main child process failed']}
@@ -524,6 +611,9 @@ def run_main(protocol_path, prior_path, runtime_reference, *, root, config_dir=N
                         'missing_cost_fields': [] if known_zero else list(WORK_COUNTS),
                         'cost_breakdown': {part: _zero() for part in ('slot', 'startup', 'failed_work')}
                                           if known_zero else None}
+                    if not known_zero:
+                        failure = _failed_audit_row(claim, protocol, failure['invalid_reasons'][0],
+                                                   elapsed=costs['elapsed_seconds'])
                     result = dispatch.record_audited(claim, failure)
                 if not isinstance(error, Exception):
                     raise

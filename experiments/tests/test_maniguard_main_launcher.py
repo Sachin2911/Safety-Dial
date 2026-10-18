@@ -33,6 +33,7 @@ def main_fixture(tmp_path, monkeypatch):
     contract = _signed({'schema': api.RUNTIME_SCHEMA, 'supported_profiles': ['phase2_learned'],
         'episode_timeout_seconds': 10.0, 'policy_startup_timeout_seconds': 5.0,
         'termination_grace_seconds': 1.0, 'cleanup_reserve_seconds': 3.0,
+        'audit_timeout_seconds': 5.0, 'audit_cleanup_reserve_seconds': 3.0,
         'per_episode_startup_counts': counts(physics_steps=2),
         'per_episode_failed_work_counts': counts(physics_steps=1),
         'backend': {'kind': 'test-only-not-a-live-driver'}})
@@ -493,3 +494,44 @@ def test_child_rejects_claim_state_disagreeing_with_signed_anchor(main_fixture):
         return original(command, *args, **kwargs)
 
     assert run(main_fixture, runner=runner, max_jobs=1)['blocked_reasons'] == []
+
+
+@pytest.mark.parametrize('failure', [None, 'timeout', 'wrong_command', 'wrong_binding'])
+def test_parent_routes_production_audit_and_rejects_worker_failures(main_fixture, failure):
+    value = main_fixture
+
+    def audit_runner(command, log_path, timeout, *, env, termination_grace, on_started):
+        assert env['CUDA_VISIBLE_DEVICES'] == ''
+        assert timeout == value['contract']['audit_timeout_seconds']
+        request = json.loads(Path(command[-1]).read_text())
+        process = {'command': command, 'pid': 45678, 'returncode': 0,
+                   'timed_out': False, 'interrupted': False, 'process_group_remaining': False}
+        on_started(process)
+        receipt = json.loads(Path(request['process_receipt_path']).read_text())
+        row = value['reader'](request['output'], value['protocol'], request['job'],
+                              process_receipt=receipt, root=value['root'], config_dir=None)
+        result = _signed({'schema': api.audit_worker.RESULT_SCHEMA,
+            'protocol_sha256': value['protocol']['sha256'],
+            'job_sha256': record_hash(request['job']), 'output': request['output'],
+            'request_sha256': request['sha256'],
+            'audit_worker_sha256': api._hash_file(value['root'] / api.audit_worker.SOURCE_PATH),
+            'audit_reader_sha256': api._hash_file(value['root'] / api.audit_worker.READER_PATH),
+            'row': row})
+        if failure == 'wrong_binding':
+            result = _signed({**result, 'request_sha256': '0' * 64})
+        Path(request['result_path']).write_text(json.dumps(result))
+        if failure == 'timeout':
+            process['timed_out'] = True
+        if failure == 'wrong_command':
+            process['command'] = ['different-worker']
+        return process
+
+    report = run(value, max_jobs=1, reader=None, audit_runner=audit_runner)
+    saved = json.loads(Path(report['state_path']).read_text())
+    claim = next(iter(saved['claims'].values()))
+    row = claim['row']['audited_main_row']
+    assert row['valid'] is (failure is None)
+    assert bool(report['blocked_reasons']) is (failure is not None)
+    if failure is not None:
+        assert row['unknown_cost_fields'] == list(api.WORK_COUNTS)
+        assert row['outcome'] is None

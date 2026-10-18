@@ -446,6 +446,7 @@ def test_capability_gate_checks_sources_then_rejects_unqualified_native_driver(m
     contract = signed({'schema': episode.RUNTIME_SCHEMA, 'supported_profiles': ['phase2_learned'],
                        'episode_timeout_seconds': 60, 'policy_startup_timeout_seconds': 60,
                        'termination_grace_seconds': 2, 'cleanup_reserve_seconds': 6,
+                       'audit_timeout_seconds': 5, 'audit_cleanup_reserve_seconds': 6,
                        'per_episode_startup_counts': dict.fromkeys(WORK_COUNTS, 0),
                        'per_episode_failed_work_counts': dict.fromkeys(WORK_COUNTS, 0),
                        'backend': {'kind': 'maniguard-main-guarded-v1', 'physics_driver': 'unavailable'}})
