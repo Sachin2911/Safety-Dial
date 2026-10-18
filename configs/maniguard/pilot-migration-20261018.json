@@ -1,0 +1,91 @@
+{
+  "schema": "maniguard-pilot-deployment-v1",
+  "instance_id": "56515754",
+  "deadline": 1792344390,
+  "deadline_utc": "2026-10-18T17:26:30Z",
+  "deadline_basis": "User explicitly reset the ten-hour operational target on 18 October at 07:26:30 UTC. The frozen scientific budget is unchanged.",
+  "allocations": [
+    {
+      "instance_id": "56372479",
+      "gpus": 1,
+      "started_at": 1792272868,
+      "ended_at": 1792308390
+    },
+    {
+      "instance_id": "56515754",
+      "gpus": 8,
+      "started_at": 1792307675.8142586,
+      "ended_at": null
+    }
+  ],
+  "old_stop_time_basis": "Conservative upper bound: user confirmed the old instance stopped by 07:26:30 UTC. Exact rental stop time unavailable; no refund is inferred from service shutdown.",
+  "routes": [
+    {
+      "gpu": 0,
+      "family": "jar",
+      "port": 18100,
+      "slots": 1
+    },
+    {
+      "gpu": 1,
+      "family": "jar",
+      "port": 18101,
+      "slots": 1
+    },
+    {
+      "gpu": 2,
+      "family": "stack",
+      "port": 18102,
+      "slots": 1
+    },
+    {
+      "gpu": 3,
+      "family": "stack",
+      "port": 18103,
+      "slots": 1
+    },
+    {
+      "gpu": 4,
+      "family": "stack",
+      "port": 18104,
+      "slots": 1
+    },
+    {
+      "gpu": 5,
+      "family": "stack",
+      "port": 18105,
+      "slots": 1
+    },
+    {
+      "gpu": 6,
+      "family": "clutter",
+      "port": 18106,
+      "slots": 1
+    },
+    {
+      "gpu": 7,
+      "family": "clutter",
+      "port": 18107,
+      "slots": 1
+    }
+  ],
+  "episode_timeout": 3600,
+  "startup_timeout": 600,
+  "cleanup_reserve": 120,
+  "threads_per_process": 4,
+  "initial_qualification": "One simulator per GPU. JAX servers verified on their own GPU by memory. Shared Kit apps-directory copies are made race-free by the worker shim. No extra benchmark episodes.",
+  "route_basis": "Old-host median full-episode process times (Jar about 210 s, Stack about 375 s, Clutter about 160 s) give per-family work near 2:4:2 GPUs.",
+  "policy_services": "maniguard_policy_gpu<N>: serve.sh --phase2 --parallel-clients, CUDA_VISIBLE_DEVICES=N",
+  "dispatch": "lanes",
+  "lane_priority": [
+    "random/s17",
+    "evolution/s17",
+    "references",
+    "random/s29",
+    "evolution/s29",
+    "ppo/s17",
+    "ppo/s29"
+  ],
+  "lane_priority_basis": "Sachin chose on 2026-10-18 to keep the 72 GPU-hour ceiling and run a partial pilot, prioritizing EA, random search and references; PPO fills spare slots. Priority changes dispatch order only.",
+  "worker_gpu_view": "CUDA_VISIBLE_DEVICES=<gpu> with OMNIGIBSON_GPU_ID unset: one visible GPU per simulator, as on the frozen single-GPU host. Kit selects the matching renderer and PhysX uses CUDA ordinal 0; verified by probe and recorded per attempt."
+}

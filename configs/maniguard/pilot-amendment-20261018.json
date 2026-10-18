@@ -1,0 +1,99 @@
+{
+  "schema": "maniguard-pilot-operational-amendment-v1",
+  "created_at": 1792315630.4793289,
+  "protocol_sha256": "c9a541fbb999cb1a9ad359c7d12b3b83b7bc2ab2d81e56fc44cc82577921fdcb",
+  "scientific_invariants": [
+    "Frozen protocol, schedule, candidates, seeds, horizons, controller, encoder, outcome contract and audits unchanged.",
+    "Every block is prepared, bound, scored and updated by the frozen PilotCoordinator methods.",
+    "Each (method, seed) lane runs its blocks in frozen order with the frozen dispatch permutation; PPO triplets and successive updates stay sequential.",
+    "No future-panel, validation or reserved outcome informs any earlier block.",
+    "Lane priority changes dispatch order only."
+  ],
+  "approvals": {
+    "concurrent_lanes": "Approved by Sachin in session on 2026-10-18 after the GPU-hour conflict was reported.",
+    "void_zero_interaction": "Standing rule approved by Sachin on 2026-10-18: attempts failing before simulator initialization and before any policy query may be voided and rerun with disclosure.",
+    "void_device_bug_crashes": "Approved by Sachin on 2026-10-18: void and rerun multi-GPU device-bug crashes, counting their interactions in a void ledger.",
+    "budget": "Sachin chose on 2026-10-18 to keep the 72 aggregate GPU-hour ceiling and accept a partial pilot prioritizing EA, random search and references."
+  },
+  "operational_sources": {
+    "experiments/helpers/maniguard_pilot_lanes.py": "500084319f5810be9c1040bf9b9c212142464935abe5940a79581b8705f83e83",
+    "experiments/helpers/maniguard_pilot_parallel.py": "fe238b54486104212fb78440dea3c101a5cd31244e191836646b14083847f169",
+    "experiments/scripts/maniguard_pilot_parallel.py": "bf1f822de7e5f9845e724596c1aa41ef44a7814ce6de5f0ee98f4c7dd5f86fef",
+    "experiments/scripts/maniguard_pilot_worker.py": "db8d49fc5dd5fe6d54b7831e810865ff63377a723631f586e742bb9ffd8135a3",
+    "experiments/scripts/maniguard_pilot_void.py": "567a8da55cef33672de002fd7e60f7fd1186fc8df54f53715afcfe0ec9a2e5f6",
+    "experiments/scripts/maniguard_pilot_partial_report.py": "f4c4f4ded1d94f6a7427c43cdf3fbf12ceb5f0e19e73341208156686eb094edf",
+    "scripts/maniguard/backup_pilot.py": "7f5816af41286099a33ce00ef3d1031047a62697b0cb456a67262e76e08c2814",
+    "experiments/tests/test_maniguard_pilot_lanes.py": "d9028146ad2f5c2725353e84ca1e7703a631d7b527ea97032599ff522568df32",
+    "experiments/tests/test_maniguard_pilot_parallel.py": "d14aa90043e8949051292622b240798431d38a325e6316dc79b6f8fb627091c7"
+  },
+  "deployment_config": {
+    "path": "configs/maniguard/pilot-migration-20261018.json",
+    "sha256": "17ad6d1ff8492e3c7b0568af13c32a3f5a42501a5e31608d9bdb36634af9129e"
+  },
+  "environment_repairs": [
+    "Restored pinned .git metadata for ManiGuard 6bf4c61, BEHAVIOR-1K 88454bd and openpi 215abfb with unchanged working trees, plus the tracked asset_pipeline/mtlconvert.log missing from the runtime archive.",
+    "Completed the ManiGuard-Bench download at af09438c (3105 files hash-verified); the earlier tree lacked diagnostics.jsonl for Jar and Stack.",
+    "Installed /usr/share/glvnd/egl_vendor.d/10_nvidia.json for libEGL_nvidia.so.0 (580.95.05); without it the NVIDIA Vulkan ICD failed to initialize.",
+    "Each simulator sees exactly one GPU (CUDA_VISIBLE_DEVICES, OMNIGIBSON_GPU_ID unset), as on the frozen single-GPU host.",
+    "Installed the BEHAVIOR key through OmniGibson download_key after its academic license terms; CLIP checkpoint re-downloaded and verified against its pinned SHA256."
+  ],
+  "lane_takeover": {
+    "content_sha256": "6f0d922dfc128b001512ff96af42d84fb610f2d19cf0c68d05ba86fc3d5cae48",
+    "file_sha256": "8c81de274290604cf291b0e3a52f41767526f1613d2dfc71c27d8ddd39f55d8c",
+    "report": {
+      "accepted_episode_slots": 12,
+      "blocked_reasons": [],
+      "completed_stages": 0,
+      "cost_totals": {
+        "adapter_decisions": 4807.0,
+        "adapter_seconds": 1.7905026474036276,
+        "changed_steps": 540.0,
+        "elapsed_seconds": 3751.5006283654366,
+        "encoder_image_attempts": 4807.0,
+        "encoder_image_calls": 4807.0,
+        "encoder_images": 9614.0,
+        "encoder_load_seconds": 56.26098276139237,
+        "encoder_seconds": 97.86816702526994,
+        "encoder_text_attempts": 12.0,
+        "encoder_text_calls": 12.0,
+        "env_step_attempts": 19341.0,
+        "env_steps_returned": 19341.0,
+        "guard_steps": 0.0,
+        "physics_seconds": 969.6500505711883,
+        "physics_steps": 116358.0,
+        "policy_control_steps": 19221.0,
+        "policy_queries": 2717.0,
+        "policy_query_seconds": 594.3857689436991
+      },
+      "expected_episode_slots": 522,
+      "in_flight_claims": {},
+      "incomplete_cost_records": [],
+      "nominee_runs": [],
+      "observed_work_lower_bounds": {
+        "adapter_decisions": 4807.0,
+        "encoder_image_calls": 4807.0,
+        "encoder_images": 9614.0,
+        "policy_control_steps": 19221.0,
+        "policy_queries": 2717.0
+      },
+      "physical_attempts_recorded": 12,
+      "reference_metrics": {},
+      "selected_runs": [],
+      "simulator_launched_by_coordinator": false,
+      "status": "training",
+      "total_stages": 67
+    },
+    "serial_file": "coordinator-serial-takeover.json",
+    "taken_over_at": 1792314701.3073096
+  },
+  "void_receipts": {
+    "runs/maniguard/phase2/pilot-v1/void-attempts/serial-8x3090-a/void.json": "cbf2735c67dd4fe7720ece5c9af82c5f7068dabc85903dec5b1a404950ad78c4",
+    "runs/maniguard/phase2/pilot-v1/void-attempts/serial-8x3090-b-canary/void.json": "dd7ce846ac320223aecbfb9ae08e849219f8dd063e29a481441876431c017702",
+    "runs/maniguard/phase2/pilot-v1/void-attempts/serial-8x3090-c-canary/void.json": "61d3100c8ea38afc7c235d6de4c194a77883fa6cd177b56f618c8e950b8b85d2",
+    "runs/maniguard/phase2/pilot-v1/void-attempts/serial-8x3090-e/void.json": "3e324cfe3e19ab9cf15b3614f93cc926bd303dbe96869b7bf9d3cd4ab212bb14"
+  },
+  "automatic_void_rule": "Launcher voids only attempts whose trace holds job/policy_metadata records and whose ledger shows zero interaction; at most 2 per job and 8 per deployment; receipts in void-attempts/<deployment>/auto-void.jsonl.",
+  "disclosures": [
+    "The rerun of train/random/s17/p0/c3/stack used the Stack server on port 18102 where its voided device-bug attempt made 138 queries, so its policy noise continued that episode-seeded stream instead of restarting it."
+  ]
+}

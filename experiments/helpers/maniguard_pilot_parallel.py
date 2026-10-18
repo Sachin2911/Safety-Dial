@@ -102,13 +102,16 @@ def validate_routes(routes, families):
 
 
 def run_parallel(coordinator, routes, state_path, output_for, execute, accept, budget, *,
-                 max_new_jobs=None, on_progress=None, timeout_reserve=30):
+                 max_new_jobs=None, on_progress=None, timeout_reserve=30, stop_requested=None,
+                 release=None):
     """Drain concurrent results before stopping; never resample/retry a claimed job.
 
     ``execute`` owns a fresh process and its bounded cleanup; ``accept`` independently
     reads and binds its result. Both are supplied by the managed deployment. All
     coordinator reads/writes and audits happen on this parent thread. A failed
     result prevents new launches while already running work is drained and paid.
+    ``accept`` may return None only for an attempt voided under an approved
+    zero-interaction rule; ``release`` then frees its claim so the same job reruns.
     """
     slots = validate_routes(routes, coordinator.protocol['families'])
     if coordinator.report()['in_flight_claims']:
@@ -118,13 +121,24 @@ def run_parallel(coordinator, routes, state_path, output_for, execute, accept, b
     in_flight, launched = {}, 0
     stopped = False
     failure = None
+    saved_revision = None
     with ThreadPoolExecutor(max_workers=len(slots), thread_name_prefix='pilot-episode') as pool:
         while True:
-            report = coordinator.report()
-            if report['status'] in ('blocked', 'complete'):
-                stopped = True
-            pending = [] if stopped else coordinator.next_jobs()
-            coordinator.save(state_path)
+            pending = []
+            try:
+                # Any scheduling failure stops launches but still drains claimed work.
+                if stop_requested is not None and stop_requested():
+                    stopped = True
+                if coordinator.report()['status'] in ('blocked', 'complete'):
+                    stopped = True
+                pending = [] if stopped else coordinator.next_jobs()
+                revision = getattr(coordinator, 'revision', None)
+                if revision is None or revision != saved_revision:
+                    coordinator.save(state_path)
+                    saved_revision = revision
+            except Exception as error:  # noqa: BLE001 - drain already claimed physical work
+                stopped, pending = True, []
+                failure = failure or error
             busy = {record['slot']['slot_id'] for record in in_flight.values()}
             try:
                 for slot in slots:
@@ -142,13 +156,14 @@ def run_parallel(coordinator, routes, state_path, output_for, execute, accept, b
                     output = output_for(job)
                     coordinator.mark_started(job['job_id'], output)
                     coordinator.save(state_path)
+                    saved_revision = getattr(coordinator, 'revision', None)
                     # Submission follows the durable claim, never the reverse.
                     future = pool.submit(execute, deepcopy(job), deepcopy(slot), output)
                     in_flight[future] = {'job': job, 'slot': slot, 'output': output}
                     pending.remove(job)
                     launched += 1
             except Exception as error:  # noqa: BLE001 - drain already claimed physical work
-                stopped, failure = True, error
+                stopped, failure = True, failure or error
             if not in_flight:
                 if failure is not None:
                     raise failure
@@ -163,11 +178,23 @@ def run_parallel(coordinator, routes, state_path, output_for, execute, accept, b
                     error = None
                 except Exception as worker_error:  # noqa: BLE001 - retain every paid worker failure
                     value, error = None, worker_error
-                row = accept(record['job'], record['slot'], record['output'], value, error)
-                coordinator.record_result(record['job']['job_id'], row)
-                coordinator.save(state_path)
+                try:
+                    row = accept(record['job'], record['slot'], record['output'], value, error)
+                    if row is None:
+                        if release is None:
+                            raise RuntimeError('Accept voided an attempt without a release policy')
+                        release(record['job']['job_id'])
+                    else:
+                        coordinator.record_result(record['job']['job_id'], row)
+                    coordinator.save(state_path)
+                    saved_revision = getattr(coordinator, 'revision', None)
+                except Exception as audit_error:  # noqa: BLE001 - the claim stays for reconciliation
+                    stopped, failure = True, failure or audit_error
                 if coordinator.report()['status'] == 'blocked':
                     stopped = True
             if on_progress is not None:
-                on_progress(coordinator.report(), list(in_flight.values()))
+                try:
+                    on_progress(coordinator.report(), list(in_flight.values()))
+                except Exception as progress_error:  # noqa: BLE001 - stop launching, keep draining
+                    stopped, failure = True, failure or progress_error
     return coordinator.report()

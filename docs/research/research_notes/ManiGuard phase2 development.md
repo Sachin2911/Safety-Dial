@@ -483,3 +483,59 @@ The authorized private upload completed at Hugging Face revision
 `83eedc3181de0849b37f1a0982c397c3fc3b69e8`. Remote archive LFS SHA256 values match local
 checksums, small files were downloaded and checked, and repository privacy was verified.
 The immutable receipt is `configs/maniguard/phase2/handoff-20261018.json`.
+
+## Migration to 8×RTX 3090 and concurrent lanes, 18 October 2026
+
+The pilot resumed on Vast instance 56515754 (8×RTX 3090, AMD EPYC 7302, 64 vCPUs on 32
+physical cores; rental start 07:14:35.8 UTC). The pinned handoff archives matched their
+SHA256 receipt, and the restored evidence is byte-identical to `evidence.tar.gz`. Before any
+episode, `validate_protocol` passed for c9a541fb and the coordinator loaded with content hash
+4655e10f: eight accepted, no claims, sixteen pending. The old instance's GPU allocation is
+counted until the user-confirmed 07:26:30 UTC stop; its exact rental stop time was not observable here.
+
+Four restore gaps surfaced as failed attempts, each before or during the first launches:
+missing upstream `.git` metadata, an incomplete benchmark tree without `diagnostics.jsonl`,
+a missing GLVND EGL vendor manifest that left the NVIDIA Vulkan ICD unable to initialize,
+and a multi-GPU device bug. With all GPUs visible, PhysX resets the CUDA current device to 0
+while the frozen CLIP encoder resolves `cuda` per call, so tensors split across GPUs. Each
+simulator now sees exactly one GPU, as on the frozen single-GPU host; Kit and PhysX probes
+selected the routed physical GPU, and every attempt records Kit's active renderer UUID.
+
+Sachin approved voiding these failures. Eight zero-interaction setup attempts were voided
+under a standing rule (failure before simulator initialization and before any policy query).
+Three device-bug crashes with partial interaction were voided by explicit decision; their
+4,768 policy actions, 1,102 policy queries and 28,866 physics steps stay in a void ledger
+(`runs/maniguard/phase2/pilot-v1/void-attempts/`) and are added to every reported total.
+Nothing was deleted: blocked coordinator states, outputs, logs and receipts are preserved.
+
+The frozen dispatcher runs one block at a time, so PPO's 48 sequential triplets would leave
+five of eight GPUs idle but billed. Sachin approved concurrent lanes:
+`maniguard_pilot_lanes.py` keeps one active block per independent (method, seed) run or the
+reference block, and executes every preparation, claim, binding check, update and selection
+through the frozen coordinator methods. Tests reproduce the frozen serial state exactly for
+random interleavings, save/load with in-flight claims, mid-block takeover and blocking. The
+takeover receipt pins serial content hash 6f0d922d, and `coordinator.json` was renamed to
+`coordinator-serial-takeover.json` so it cannot be resumed.
+
+Measured episodes here take about 1.5 times the old host's time alone and about 2.2 times
+under eight-way concurrency (CPU-bound simulation). The remaining work therefore cannot fit
+the 72 aggregate GPU-hour ceiling, which binds near 15:00 UTC. Sachin kept the ceiling and
+accepted a partial pilot. Dispatch priority is random/s17, evolution/s17, references,
+random/s29, evolution/s29, then PPO; priority changes order only. The amendment record
+`configs/maniguard/pilot-amendment-20261018.json` pins the operational sources, approvals,
+repairs, takeover and void receipts. Progress archives are uploaded to `pilot-progress/` in
+the private handoff dataset repository.
+
+Under eight-way load, Kit occasionally segfaults during startup inside
+`SimulationApp._wait_for_viewport`, before simulator initialization or any policy query.
+The launcher now applies the standing rule automatically: an attempt whose trace and ledger
+prove zero interaction is moved to `void-attempts/<deployment>/` with an `auto-void.jsonl`
+receipt, and its claim is released so the identical job reruns. At most two automatic voids
+per job and eight per deployment are allowed; anything else is recorded and blocks.
+
+Disclosure: policy servers key sampling RNG by episode identifier, which is the canonical
+output path. The rerun of `train/random/s17/p0/c3/stack` ran on the same Stack server
+(port 18102) where its voided device-bug attempt had made 138 queries, so its policy noise
+continued that seeded stream rather than restarting it. The episode is otherwise a valid
+fresh physical episode; the other device-bug reruns used different servers, and automatic
+voids require zero queries, so they leave no server RNG state.
