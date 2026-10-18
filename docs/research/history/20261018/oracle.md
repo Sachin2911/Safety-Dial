@@ -1,0 +1,245 @@
+# Oracle: task continuation under safety filtering
+
+**Central reference for the research rethink. Updated 18 October 2026.**
+
+## Active plan: phase three
+
+On 18 October 2026 Sachin paused the frozen phase-two pilot at a block boundary and chose a
+new direction for a GECCO 2027 full paper: a bounded safety-dial execution layer evolved with
+penalty-free, noise-aware evolution against random search, a scalar-penalty ablation and PPO,
+gated by a heritability probe. [phase3.md](phase3.md) is the active working plan, consolidating
+the subsequent methodological review, corrected budget estimates and decisions needed before
+implementation and protocol freeze. [direction.md](direction.md) preserves the original
+18 October decision record. The core study is safe execution adaptation; continuation under
+a learned action-changing safety filter requires a separately specified extension. No
+phase-three main protocol or expanded compute allocation is frozen by this plan. The
+sections below remain the record of phase two and its evidence.
+
+## Current phase-two direction
+
+On 17 October, after the completed ManiGuard mechanism screens, Sachin endorsed a shared
+adaptation method with evidence across task families. [phase2.md](phase2.md) records the
+new plan: one history-dependent execution controller around frozen family policies,
+joint optimization, matched evolutionary/random-search/ordinary-learning comparisons,
+and reserved scene and family transfer evaluation. Jar remains a diagnostic case rather
+than the central contribution. A useful hand-written repair is no longer a mandatory
+gate before a bounded optimization pilot.
+
+The core phase-two claim is safe execution adaptation. Continuation under a learned safety
+filter requires the separately specified filter extension; ManiGuard's existing monitor
+does not intervene. The amended short integration allocation is complete, with eleven
+valid 32-action checks across Jar, Stack and Clutter and one retained invalid initialization.
+Clutter's encoder repair passed identity and stochastic checks; recovery consumed an
+unspent slot without increasing the budget. The omitted Clutter composition check is
+explicitly recorded. These checks establish bounded integration evidence, not a learning
+or performance result. All 24 full training-only Jar, Stack and Clutter preparation references now
+have valid audits. The pilot protocol and measured budget are now frozen after 342 passing phase-two tests
+and final source/identity/completion review. No comparative learning or reserved result exists yet. See the
+[phase-two development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
+for the evidence and remaining work. The pilot is now paused for migration after eight
+audited random-search Clutter episodes, with no in-flight claims. Section 13 of phase2.md
+records the private backup, exact resume state and remaining multi-GPU integration.
+The sections below preserve the earlier motivation,
+decisions and research trail; this update governs the new phase.
+
+## Earlier research focus
+
+We have chosen to focus on helping a robotic manipulation agent complete its task when
+a learned safety filter intervenes. This choice remains conditional on finding meaningful,
+avoidable stalls in an accessible task. The specific method and experiment plan remain open.
+
+On 15 October 2026, Sachin also selected three adjacent ideas for further exploration:
+evolutionary active perception, selection of safety-model training data, and evolved
+temporal safety monitors. These are candidate supporting studies or alternative directions.
+Task continuation remains the chosen conditional focus; no switch or combined experiment
+plan has been decided.
+
+Use this document to develop the current focus. Earlier proposals and experiment plans
+remain records of their respective studies; their methods, deadlines and gates are not
+decisions for this research rethink.
+
+## The research question
+
+> Can evolutionary adaptation help a pretrained manipulation policy work more effectively
+> with its safety filter, improving safe task completion?
+
+The central problem is the interaction between task competence and safety intervention.
+A filter can redirect a dangerous action while leaving the task policy in a configuration
+it does not know how to handle. The robot may remain protected but fail to finish its job.
+
+For example, imagine a robot extracting a block from a tower. Its filter interrupts a pull
+that appears dangerous. The robot then repeatedly attempts a rejected movement or cannot
+continue from its new position. Useful adaptation might improve what it does next, or
+change its earlier approach so that this interaction no longer prevents completion.
+This remains an illustrative filter-induced failure. The first migrated UNISafe pilot
+observed widespread low-progress timeouts in both filtered and unfiltered arms, with
+causal attribution still unresolved; see the [pilot report](docs/research/reports/UNISafe%20baseline%20pilot.md).
+
+## How the components fit
+
+| Component | Role in the direction |
+| --- | --- |
+| Task policy | Proposes actions to complete the manipulation task. |
+| Latent world model | Supplies representations and predictive dynamics that can support safety assessment. |
+| Safety filter | Evaluates proposed behaviour and modifies or replaces actions when necessary. |
+| Evolutionary algorithm | Adapts task behaviour according to how the complete filtered system performs. |
+
+Evolution could adapt a compact part of an existing policy or another limited behavioural
+interface. The representation, search space and optimizer should follow the diagnosed
+problem. A standard evolutionary method may be sufficient for a useful empirical
+contribution; a new planning architecture is not a prerequisite.
+
+Candidate behaviour can be evaluated through actual simulator outcomes while the world
+model supplies latent state and safety assessment. If imagined outcomes are used for
+selection, they must remain distinct from observed simulator outcomes. Improvement inside
+the model does not establish improved physical safety.
+
+## What must make this problem worth solving
+
+The initial question is whether the available system has consequential stalls that better
+task behaviour could avoid under the same safety constraints. An incomplete episode alone
+does not establish that diagnosis. Similar symptoms could come from an overly restrictive
+filter, inaccurate predictions, missing information or insufficient time.
+
+We therefore need to understand what happens after an intervention and what successful
+continuation would require. Failed attempts do not prove that completion is impossible.
+The strongest continuation motivation in the reviewed literature comes from a different
+manipulation setup; its explanation still needs to be checked in the task we choose.
+
+Ordinary task-policy learning with the same filter present is an essential comparison.
+The broad idea of learning through safety interventions already exists. The potential
+contribution is to explain a remaining difficulty and demonstrate effective evolutionary
+adaptation under comparable information and interaction budgets.
+
+The intended result is improved safe task completion. Report task success, physical
+violations and unfinished episodes together, with useful progress and completion time
+where relevant. Fewer interventions alone could reward inactivity. Keeping a filter fixed
+does not establish that a changed policy has the same violation rate, and zero observed
+violations does not establish zero risk. Simulator interactions, model queries and elapsed
+time should be accounted for separately, including adaptation and candidate evaluation.
+
+## Authorized experimental exploration
+
+Sachin subsequently authorized continued diagnosis, evolutionary experiments and other
+environments if needed until a solid result is established. The completed bounded study
+adapted gripper-release behavior under the unchanged UNISafe filter, comparing evolution,
+random search, a simple fixed rule and policy-gradient learning in the same adapter family.
+The completed reserved evaluation improves completion from 2/64 for baseline to 54/64 for
+evolution, 55/64 for a fixed rule, 56/64 for random search and 54/64 for categorical policy
+gradient. Evolution has seven physical failures and one boundary exit, versus six physical
+failures for baseline. Most of the completion gain persists without filtering. This establishes
+a useful grasp-maintenance response on the migrated stack, with no demonstrated evolutionary
+advantage, filter-specific continuation benefit or unchanged safety risk. See the
+[completed study](docs/research/reports/UNISafe%20grasp%20maintenance%20and%20evolutionary%20adaptation.md)
+and [development protocol and log](docs/research/research_notes/UNISafe%20adaptation%20development.md).
+The initial empirical objective is complete; the broader research contribution remains open.
+
+## Decisions still open
+
+UNISafe is a candidate starting point because its release contains relevant task-policy,
+world-model and safety-filter components. A first migrated 20-seed comparison now measures
+runtime and outcomes: both arms completed 2/20 tasks, failed on 2/20 and timed out on 16/20.
+The unfinished episodes have low object progress, but avoidable filter-induced stalls
+have not been established. Rendering differences and basic task recovery need further
+investigation. A matched replay of the shown filtered seed-1 episode now isolates premature
+gripper opening before the first intervention: briefly holding the proposed gripper closed
+completes that case at 2.8 seconds with the same filter enabled. This demonstrates avoidable
+loss of progress in one case, not a filter-induced stall or recovery from an existing stall.
+The actor's reason for opening early remains unresolved. The automatic adapter's reserved
+results above now extend the behavioral correction beyond that case; see the
+[release and switching diagnosis](docs/research/reports/UNISafe%20release%20and%20switching%20diagnosis.md).
+The environment and world model are not yet fixed.
+
+We have also left open the behavioural parameters to adapt, the evolutionary algorithm,
+the role of ROSARL, and the training and evaluation budgets. Holding the world model and
+filter fixed initially could help attribute changes to task behaviour, but this remains
+an experimental choice. The exploration is not restricted to earlier experiments or the
+previous thesis schedule.
+
+Physical robustness can become a later extension if changing conditions helps explain
+the same continuation problem. The immediate focus is understanding task progress under
+safety intervention in one concrete manipulation setting.
+
+## Adjacent directions to explore
+
+The following questions broaden the exploration across sensing, safety-model learning and
+monitoring. They do not depend on first establishing avoidable continuation stalls, although
+each could help explain or address lost progress under filtering. Their usefulness,
+implementation burden and specific contribution still need investigation. The linked work
+provides foundations, not evidence that these questions are novel or already solved.
+
+### Evolutionary active perception
+
+> Can evolution discover short sensing motions that improve safety predictions and
+> subsequent manipulation?
+
+A safety filter may intervene because a contact or object is poorly observed. Evolution
+could search a compact description of camera poses or inspection movements that gather
+useful information before manipulation. A world model could supply representations,
+predictions and uncertainty estimates for safety assessment.
+
+A bounded first study could use one task with controlled occlusion and compare fixed
+observation, a scripted inspection and evolved inspection. Evaluate prediction errors,
+safe completion, physical violations and time spent gathering information. Lower predicted
+uncertainty alone could reflect misplaced confidence. Inspection actions must remain under
+safety filtering, and their interactions count toward the budget. A pretrained model's
+usefulness under changed viewpoints needs checking; viewpoint changes may require training.
+
+[Active Perception and Representation for Robotic Manipulation](https://arxiv.org/abs/2003.06734)
+provides a manipulation foundation. The proposed emphasis is gathering information that
+makes learned safety assessment more useful.
+
+### Evolutionary selection of safety-model training data
+
+> Can evolutionary selection produce a better safety model from the same amount of
+> training data?
+
+The coverage of a safety model's training examples may matter more than their raw number.
+Evolution could select trajectory subsets or sampling proportions from a fixed pool,
+seeking coverage of different failure mechanisms. One bounded implementation could freeze
+the visual encoder and train a small failure predictor for each candidate selection.
+
+Compare with random, class-balanced and uncertainty-based selection at matched data and
+training budgets. Keep trajectory-level training, selection-validation and final test splits
+separate. Measure missed failures and false alarms on untouched trajectories, then assess
+closed-loop completion and physical violations. Filter interventions are not ground-truth
+physical failure labels. Account for acquisition of the original pool and all candidate
+training and evaluation, including discarded selections.
+
+[UNISafe](https://arxiv.org/html/2505.00779) supplies a relevant foundation through its use of
+successful and failed trajectories. The proposed question concerns safety-data coverage and
+generalization; it does not assume that evolutionary subset selection outperforms simpler
+sampling methods.
+
+### Evolved temporal safety monitors
+
+> Can genetic programming discover short temporal rules that predict manipulation
+> failures early enough for useful intervention?
+
+Warning signs such as rising contact force, gradual slipping or persistent object tilting
+develop over time. Genetic programming could construct interpretable rules over observation
+histories, using signals available to the deployed robot. Learned visual or world-model
+features are possible inputs; additional force or tactile sensing is an open choice.
+
+Begin with recorded trajectories and evaluate missed failures, false alarms and warning
+time on held-out episodes. Compare with single-step predictors, simple temporal rules and
+a learned sequence predictor using comparable information. A later closed-loop study would
+test whether responding to warnings improves actual safety and completion. Physical
+violation definitions remain fixed while the monitor is learned. A predictive warning is
+not a certified barrier function or a guarantee of safe intervention.
+
+[Interpretable Early Failure Detection via Machine Learning and Trace Checking-based Monitoring](https://arxiv.org/abs/2508.17786)
+already uses genetic programming to learn temporal properties from historical traces.
+The manipulation-specific monitoring and intervention contribution would need establishing.
+
+## Research trail
+
+- [Research archive](archive/README.md): preserved Push-T Safe CEM, Hopper/Walker and
+  earlier LeWM studies, with their original code, results and demonstrations.
+- [Chosen-focus record](docs/research/research_notes/task-continuation-focus-20261008.md).
+- [Comparative literature review and reading guide](docs/research/reports/Safe%20manipulation%20progress%20and%20robustness.md).
+- [Detailed task-continuation literature](docs/research/research_notes/Safe%20manipulation%20progress%20and%20robustness/task_progress_after_intervention.md).
+- [Available assets and evolutionary scope](docs/research/research_notes/Safe%20manipulation%20progress%20and%20robustness/feasibility_and_evolutionary_scope.md).
+- [UNISafe compute and compatibility audit](docs/research/reports/UNISafe%20inference%20and%20training%20compute.md).
+
+- [Migrated UNISafe baseline and continuation diagnostics](docs/research/reports/UNISafe%20baseline%20pilot.md).

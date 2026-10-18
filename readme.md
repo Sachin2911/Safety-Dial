@@ -1,20 +1,23 @@
 # SafetyDial
 
-**Evolutionary adaptation for task continuation under learned safety filtering.**
+**Evolutionary execution adaptation for safe manipulation.**
 
 Sachin Mohan, BSc Honours Computer Science, University of the Witwatersrand.
 Supervised by Geraud Nangue Tasse.
 
-Start with [oracle.md](oracle.md), the central reference for the current research direction:
-can evolutionary adaptation help a pretrained manipulation policy work more effectively
-with its safety filter, improving safe task completion? The choice remains conditional on
-finding meaningful, avoidable stalls. The method and experiment plan are still open.
+Start with [phase3.md](phase3.md), the active research plan and direction: can evolutionary
+search discover a compact execution controller that improves safe completion around a
+frozen manipulation policy under matched interaction budgets? The plan records the
+proposed safety dial, comparisons, experimental gates and decisions still open before
+implementation and protocol freeze.
 
 ## Current workspace
 
 - [Research and documentation](docs/README.md): the manipulation literature, UNISafe asset
   and compute audits, proposal template and academic context.
-- [Research oracle](oracle.md): decisions, scope and unresolved questions.
+- [Active phase-three plan](phase3.md): direction, methods, evaluation and open decisions.
+- [Research index](oracle.md) and [earlier plans](docs/research/history/README.md).
+- [Paused phase-two pilot](phase2.md): preserved protocol and handoff.
 - [Experiment workspace](experiments/README.md): where new implementation will go.
 - [Agent and engineering guidance](AGENTS.md).
 

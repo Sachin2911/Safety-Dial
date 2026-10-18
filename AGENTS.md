@@ -2,16 +2,19 @@
 
 ## Current direction and authority
 
-Read [oracle.md](oracle.md) first. On 8 October 2026, Sachin chose **task continuation
-under learned safety filtering** as the focus of the research rethink. The question is
-whether evolutionary adaptation can help a pretrained manipulation policy work more
-effectively with its safety filter and improve safe task completion.
+Read the short [oracle.md](oracle.md) index, then [phase3.md](phase3.md), the active
+research plan and direction. The current question is whether evolutionary search can
+discover a compact execution controller that improves safe completion around frozen
+manipulation policies under matched interaction budgets. The phase-three protocol is not
+yet frozen; its controller details, comparisons, statistical thresholds and total budget
+retain the open decisions recorded in the plan.
 
-The choice is conditional on meaningful, avoidable stalls in an accessible manipulation
-task. The environment, world model, behavioural search space, evolutionary algorithm,
-ROSARL integration and experiment budget remain open. UNISafe is a candidate foundation.
-Do not turn those open choices into assumed requirements or inherit the old Walker
-method, timelines or run gates as the new implementation plan.
+The core study is safe execution adaptation in ManiGuard. Its monitor labels violations
+but does not change actions. Continuation under a learned safety filter, a new world
+model and ROSARL integration are not assumed components of the current implementation.
+Earlier task-continuation decisions and the UNISafe evidence are preserved in the
+[plan history](docs/research/history/README.md). Do not inherit old Walker methods,
+timelines or run gates as the new implementation plan.
 
 - **Student:** Sachin Mohan (2699183), BSc Honours CS, University of the Witwatersrand.
 - **Supervisor:** Geraud Nangue Tasse.
@@ -24,8 +27,10 @@ method, timelines or run gates as the new implementation plan.
 
 ## Repository map
 
-1. `oracle.md`: central authority for the current research focus and decisions;
-   `direction.md` is the active phase-three plan and decision record (18 October 2026).
+1. `phase3.md`: active research plan and direction, with open choices and corrected
+   budgets. `oracle.md` is a short navigation index. `phase2.md` retains the paused pilot's
+   protocol and handoff. `docs/research/history/` preserves earlier root plans; root
+   `fruits.md`, `ideation.md` and `direction.md` are compatibility links, not active plans.
 2. `docs/research/`: current literature reviews, supporting notes and asset audits.
 3. `docs/templates/`: reusable document source templates.
 4. `experiments/`: workspace for new implementation; add reusable Python under `helpers/`

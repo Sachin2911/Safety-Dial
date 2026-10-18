@@ -1,11 +1,16 @@
 # Documentation
 
-[oracle.md](../oracle.md) records the current research direction: evolutionary adaptation
-for task continuation under learned safety filtering.
+[phase3.md](../phase3.md) is the active research plan and direction: evolutionary execution
+adaptation for safe manipulation. [oracle.md](../oracle.md) is a short navigation index.
 
 ## Current research
 
-- [Research Concept Note](researchConceptNote.pdf), with
+- [Phase-three plan](../phase3.md): proposed method, comparisons, gates, corrected budget
+  and unresolved decisions before implementation and protocol freeze.
+- [Phase-two protocol and handoff](../phase2.md): retained for the paused pilot.
+- [Research plan history](research/history/README.md): archived fruits, ideation, original
+  phase-three direction and full earlier oracle, with unchanged-content hashes.
+- [Earlier Research Concept Note](researchConceptNote.pdf), with
   [editable LaTeX source and build instructions](researchConceptNote/README.md).
 - [Safe manipulation progress and robustness](research/reports/Safe%20manipulation%20progress%20and%20robustness.md):
   the detailed comparison that led to choosing task continuation.

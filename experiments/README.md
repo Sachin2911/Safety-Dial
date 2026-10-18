@@ -1,7 +1,8 @@
 # Current experiment workspace
 
-New implementation follows [oracle.md](../oracle.md). The manipulation environment,
-model and adaptation method are still being selected.
+New implementation follows [phase3.md](../phase3.md), the active safe-execution adaptation
+plan. Its main protocol is not yet frozen. [oracle.md](../oracle.md) indexes the research
+history, and [phase2.md](../phase2.md) preserves the paused pilot's protocol and handoff.
 
 Add reusable Python under `helpers/`, entry points under `scripts/`, tests under `tests/`
 and study configs under `../configs/`. There is no `src/` package.
