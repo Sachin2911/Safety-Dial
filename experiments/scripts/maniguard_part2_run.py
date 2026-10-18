@@ -27,10 +27,20 @@ def save_new(path, value):
 
 
 def ensure_policy():
-    from helpers.maniguard_phase2_services import PolicyService
+    from helpers.maniguard_phase2_services import PolicyService, probe_policy_metadata
 
     require_guard()
-    service = PolicyService().ensure_family("clutter", RUN / "service", startup_timeout=600)
+    service_dir = RUN / "service"
+    i = 1
+    while service_dir.exists():
+        i += 1
+        service_dir = RUN / f"service-{i}"
+    probe = lambda timeout: probe_policy_metadata(
+        18000, timeout, python=ROOT / "data/maniguard/envs/sim/bin/python",
+    )
+    service = PolicyService(probe=probe).ensure_family(
+        "clutter", service_dir, startup_timeout=600,
+    )
     pid = int(subprocess.check_output(["supervisorctl", "pid", "maniguard_policy"], text=True))
     register(RUN, SimpleNamespace(pid=pid), "policy")
     return service
@@ -74,11 +84,15 @@ def launch(directory, job, protocol=None):
 
 
 def engineering(directory):
-    save_new(directory / "draft.json", draft())
+    if (directory / "draft.json").exists():
+        if json.loads((directory / "draft.json").read_text()) != draft():
+            raise ValueError("Prospective configuration changed")
+    else:
+        save_new(directory / "draft.json", draft())
     ensure_policy()
     records = []
     for i, condition in enumerate(("A", "C", "D")):
-        job = {"episode_id": f"part2-engineering-{condition}", "part": 2,
+        job = {"episode_id": f"part2-engineering-{condition}-checked", "part": 2,
                "purpose": "engineering", "condition": condition, "scene": ENGINEERING,
                "seed": 3900, "action_horizon": 32,
                "controller": asdict(conditions()[condition])}

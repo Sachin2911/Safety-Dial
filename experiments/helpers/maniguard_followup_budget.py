@@ -121,12 +121,11 @@ def guard(directory, allocation=ALLOCATION, interval=1):
         if time.time() - last_sample >= 5:
             # Discover this run's policy during startup too, before the coordinator's
             # ready-handshake registration. Configuration identity proves ownership.
-            requested = directory / "service/requested-policy.conf"
+            requested_paths = list(directory.glob("service*/requested-policy.conf"))
             installed = Path("/etc/supervisor/conf.d/maniguard_policy.conf")
             if (
-                requested.exists()
-                and installed.exists()
-                and requested.read_bytes() == (installed.read_bytes())
+                installed.exists()
+                and any(p.read_bytes() == installed.read_bytes() for p in requested_paths)
             ):
                 try:
                     response = subprocess.run(

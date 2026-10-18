@@ -107,7 +107,8 @@ def test_schedule_has_only_four_matched_training_blocks_and_no_expansion():
         assert len({(j["scene"], j["seed"]) for j in selected}) == 1
         assert {j["condition"] for j in selected} == set("ABCD")
         assert all(j["action_horizon"] == 1100 for j in selected)
-    assert draft()["engineering"]["attempts"] == 3
+    assert draft()["engineering"]["attempts"] == 4
+    assert draft()["engineering"]["max_successful_actions"] == 96
     assert {j["purpose"] for j in jobs} == {"train"}
 
 
@@ -134,3 +135,29 @@ def test_frozen_part1_and_checked_additive_source_remain_intact(tmp_path):
 def test_part3_four_parameter_configs_round_trip(genome):
     cfg = Config.from_genome(genome)
     assert Config(**asdict(cfg)) == cfg
+
+
+def test_entry_point_preloads_legacy_before_setting_active_job(tmp_path):
+    import json
+    import subprocess
+
+    root = Path(__file__).resolve().parents[2]
+    job = tmp_path / "job.json"
+    job.write_text(json.dumps({
+        "phase": "phase3_followup", "output": str(tmp_path), "controller": asdict(Config()),
+        "controller_sha256": __import__("helpers.maniguard_part2_controller", fromlist=["config_hash"]).config_hash(Config()),
+    }))
+    code = """
+import runpy,os,sys
+runpy.run_path(sys.argv[1],run_name='preload_check')
+assert 'SAFETY_DIAL_MANIGUARD_JOB' not in os.environ
+os.environ['SAFETY_DIAL_MANIGUARD_JOB']=sys.argv[2]
+from helpers.maniguard_part2_runtime import STUDY
+assert STUDY.config.kind == 'phase3_followup'
+assert STUDY.config.privileged is False
+STUDY.close()
+"""
+    subprocess.run([sys.executable, "-c", code,
+                    str(root / "experiments/scripts/maniguard_part2_episode.py"), str(job)],
+                   check=True, capture_output=True, text=True)
+    assert (tmp_path / "ledger.json").exists()

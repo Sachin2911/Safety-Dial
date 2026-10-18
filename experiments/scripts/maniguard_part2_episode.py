@@ -1,6 +1,7 @@
 """One serial followup episode with passive raw observations and causal feedback."""
 
 import argparse
+import importlib
 import json
 import os
 import runpy
@@ -22,6 +23,8 @@ from helpers.maniguard_part2_protocol import implementation_files, validate_froz
 from helpers.maniguard_part2_source import prepare_runtime
 from helpers.maniguard_phase2_families import family_spec, validate_scene_access
 from helpers.maniguard_phase3_protocol import check_sources, sha
+
+importlib.import_module("helpers.maniguard_phase3_runtime")
 
 
 def main():
