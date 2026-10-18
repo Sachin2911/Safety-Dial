@@ -536,8 +536,13 @@ def _recovery_snapshot_evidence(amendment_path, snapshots, sources, root):
         except (ValueError, UnicodeDecodeError):
             return
         if isinstance(value, dict):
-            for reference in value.get('sources', []):
-                visit(reference['path'], reference['sha256'])
+            # Nested configs also use 'sources' for filename-to-digest metadata.
+            # Only the artifact-reference list is a traversable evidence graph,
+            # matching snapshot_recovery's capture rules.
+            references = value.get('sources', [])
+            if isinstance(references, list):
+                for reference in references:
+                    visit(reference['path'], reference['sha256'])
             if value.get('schema') == AMENDMENT_SCHEMA:
                 for key in ('pre_recovery_report', 'failure_accounting'):
                     visit(value[key]['path'], value[key]['sha256'])

@@ -25,7 +25,7 @@ from helpers.maniguard_phase2_optim import record_hash
 PRIOR_SCHEMA = 'maniguard-phase2-prior-accounting-v1'
 PRIOR_COUNTS = ('policy_control_steps', 'policy_queries', 'physics_steps', 'encoder_image_calls',
                 'encoder_images', 'encoder_text_calls', 'adapter_decisions', 'actor_rpc_attempts')
-EPISODE_SCRIPTS = {'maniguard_episode.py', 'maniguard_phase2_episode.py'}
+EPISODE_SCRIPTS = {'maniguard_episode.py', 'maniguard_phase2_episode.py', 'maniguard_main_episode.py'}
 SERVER_SOURCES = ('experiments/scripts/maniguard_serve.py',
                   'experiments/helpers/maniguard_policy_provenance.py',
                   'experiments/helpers/maniguard_policy.py',

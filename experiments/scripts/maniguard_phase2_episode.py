@@ -45,6 +45,8 @@ def main():
     parser.add_argument("--baseline-executor", action="store_true",
                         help="Engineering equivalence check with the original eight-action executor")
     args = parser.parse_args()
+    if args.purpose in ("test", "transfer") or args.frozen_protocol is not None:
+        raise ValueError("Reserved evaluation requires the exact-job maniguard_main_episode.py runner")
     validate_registry()
     genome, _, _ = load_model(args.model)
     actor_sha = genome_hash(genome)
@@ -53,13 +55,7 @@ def main():
         or actor_sha != genome_hash(identity_genome())
     ):
         raise ValueError("Original executor checks require engineering identity episodes")
-    frozen = False
-    if args.frozen_protocol:
-        protocol = json.loads(args.frozen_protocol.read_text())
-        frozen = protocol.get("evaluation_frozen") is True
-        if not frozen or actor_sha not in protocol.get("actor_sha256", []):
-            raise ValueError("Reserved evaluation requires a frozen protocol matching the actor")
-    validate_scene_access(args.family, args.scene, args.purpose, frozen_evaluation=frozen)
+    validate_scene_access(args.family, args.scene, args.purpose, frozen_evaluation=False)
     if args.stochastic and args.purpose not in ("train", "engineering"):
         raise ValueError("Evaluation must use deterministic controller decoding")
     if args.max_steps is not None and (

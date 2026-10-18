@@ -394,3 +394,34 @@ content hash `31b64fccff0f3b083814c72a5546696a42a5ec860010847d02e8443c4b43f96c`.
 Preparation and prior accounting are complete and ready for freeze review; training is
 not yet authorized by a frozen protocol. The prespecified reference selection chooses
 smoothing 0.75 as the fixed comparator. This training-only selection is not a held-out result.
+
+
+## Pilot freeze, 18 October 2026
+
+The final source and budget review passed all 342 phase-two tests and Ruff. Source/AST
+checks preserve the benchmark monitor, goal checks and native success-persistence block;
+actor/critic inputs exclude completion and monitor labels. Replaying all three original
+and identity engineering pairs confirms unchanged same-frame transformations and eight-action
+query cadence. Recorded initial images differ, so no physical trajectory identity is claimed.
+The idle-boundary changes close the obsolete reserved-evaluation boolean gate and include
+the main episode runner in the active-process scan. A real-evidence freeze replay exposed
+a nested source-metadata mapping incorrectly treated as an artifact list. The reader now
+matches the snapshot writer; regression tests cover successful replay and tamper rejection.
+No original preparation receipt, amendment or measured outcome was changed.
+
+Frozen pilot content hash: `c9a541fbb999cb1a9ad359c7d12b3b83b7bc2ab2d81e56fc44cc82577921fdcb`.
+Final preparation report: `runs/maniguard/phase2/reports/preparation-final-source-v3/report.json`,
+content hash `0215e7792dfd92f27131393d9b4889911f595a9fd65a3108ad1fec8ccb238521`.
+Three scoped reviews and their source/test snapshots are under
+`runs/maniguard/phase2/setup/final-freeze-review-v2/`.
+The measured future-episode estimate is 49.93 GPU-hours;
+including prior continuous reservation gives 58.83 hours.
+Future service, auditing and idle overhead still consume the fixed 72-hour ceiling.
+The schedule remains 432 training, 72 finalist-validation and 18 reference-validation
+episodes. Smoothing 0.75 is the training-selected fixed comparator. Optimization settings,
+family exposure, scene splits, outcome semantics and allocations are unchanged.
+
+The prepared supervisor launch is one-shot with no automatic retry. An outer timeout
+reserves sixty seconds inside the continuous reservation deadline, covering stalls in
+launcher/auditing code as well as the existing per-episode timeout. Native main-evaluation
+qualification and bounded main audit-worker integration remain separate unfinished work.

@@ -707,3 +707,28 @@ def test_recovery_freeze_rejects_relabelled_failure_or_unbound_accounting(comple
         fixture['write'](fixture['path'], resign(report))
     with pytest.raises(ValueError, match=expected):
         freeze_fixture(fixture)
+
+
+@pytest.mark.parametrize('tamper', [False, True])
+def test_recovery_snapshot_replay_handles_nested_source_metadata(tmp_path, tamper):
+    import json
+
+    from helpers.maniguard_phase2_preparation_report import snapshot_recovery
+    from helpers.maniguard_phase2_protocol import _recovery_snapshot_evidence, _sha
+
+    # A real evidence list may contain a config whose "sources" field is a map,
+    # as completion.json does. The map is content, not another artifact list.
+    metadata = tmp_path / 'completion.json'
+    metadata.write_text(json.dumps({'sources': {'upstream/monitor.py': 'a' * 64}}))
+    evidence = tmp_path / 'evidence.json'
+    evidence.write_text(json.dumps({'sources': [{'path': str(metadata),
+                                               'sha256': _sha(metadata)}]}))
+    _, references, snapshots = snapshot_recovery(evidence, tmp_path / 'captured')
+    sources = {row['path']: row['sha256'] for row in references}
+    if tamper:
+        metadata.write_text('{}')
+        with pytest.raises(ValueError, match='Original recovery evidence changed'):
+            _recovery_snapshot_evidence(evidence, snapshots, sources, tmp_path)
+    else:
+        _recovery_snapshot_evidence(evidence, snapshots, sources, tmp_path)
+        assert set(snapshots) == {str(evidence), str(metadata)}

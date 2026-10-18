@@ -139,14 +139,15 @@ def test_service_deadline_includes_polling_and_saves_timeout(tmp_path):
 def test_process_scan_identifies_legacy_and_phase2_but_not_unrelated_python(tmp_path):
     entries = {1: ['/python', '/workspace/maniguard_episode.py', '--scene', 'a'],
                2: ['/python', '/workspace/maniguard_phase2_episode.py'],
-               3: ['/python', 'analysis.py', 'maniguard_episode.py.txt']}
+               3: ['/python', 'analysis.py', 'maniguard_episode.py.txt'],
+               4: ['/python', '/workspace/maniguard_main_episode.py']}
     for pid, args in entries.items():
         directory = tmp_path / str(pid)
         directory.mkdir()
         (directory / 'cmdline').write_bytes(b'\0'.join(value.encode() for value in args))
         (directory / 'environ').write_text('DO_NOT_READ_SECRET')
     (tmp_path / 'self').mkdir()
-    assert {row['pid'] for row in active_episode_processes(tmp_path)} == {1, 2}
+    assert {row['pid'] for row in active_episode_processes(tmp_path)} == {1, 2, 4}
 
 
 def test_handshake_probe_bounds_an_external_client_and_ignores_prior_stdout():

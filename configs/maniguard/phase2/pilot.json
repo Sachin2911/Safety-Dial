@@ -1,6 +1,6 @@
 {
   "schema": "maniguard-phase2-pilot-v1",
-  "status": "freeze_incomplete",
+  "status": "frozen",
   "purpose": "Bounded comparative feasibility pilot; no reserved/transfer outcomes.",
   "families": [
     "jar",
@@ -230,7 +230,7 @@
     "violating": -2,
     "aggregation": "equal-family macro mean",
     "guarantee": false,
-    "completion_checklists": "pending_preparation_audit"
+    "completion_checklists": "source_and_preparation_audited"
   },
   "references": [
     {
@@ -251,7 +251,14 @@
         1,
         0
       ],
-      "selection": "pending training-only preparation; proposed smoothing alpha 0.75"
+      "selection": "Reproduced equal-family training-only preparation comparison; U descending, V ascending, attempted queries ascending, name ascending.",
+      "selected_choices": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "selected_candidate": "smooth075"
     },
     {
       "name": "contextual",
@@ -275,7 +282,27 @@
         ],
         "meaning": "Normalized tracking error exceeds 0.5, equivalent to 0.1 rad."
       },
-      "selection": "pending training-only preparation; freeze selected rule before validation"
+      "selection": "Prespecified preparation rule; threshold unchanged.",
+      "selected_rule": {
+        "feature_slice": [
+          12,
+          19
+        ],
+        "comparison": "max(abs(slice)) > 0.5",
+        "true_choices": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "false_choices": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "meaning": "Normalized tracking error exceeds 0.5, equivalent to 0.1 rad."
+      }
     }
   ],
   "selection": {
@@ -314,42 +341,66 @@
     "selection_partition": "train",
     "integration_partition": "engineering"
   },
-  "freeze_provenance": null,
+  "freeze_provenance": {
+    "preparation_report": {
+      "evidence_path": "runs/maniguard/phase2/reports/preparation-final-source-v3/report.json",
+      "sha256": "b9c5872dc8f207edf045185164eba97ddda026007e5b159c8e7e3301af995610"
+    },
+    "preparation_report_content_sha256": "0215e7792dfd92f27131393d9b4889911f595a9fd65a3108ad1fec8ccb238521",
+    "prior_accounting": {
+      "evidence_path": "runs/maniguard/phase2/reports/preparation-final-source-v3/prior-accounting.json",
+      "sha256": "a5116a09ba5027d468869b5fe0bb7fcc50b87d6fe752b1c66f92f1b8e0c4e141"
+    },
+    "review_evidence": {
+      "identity_equivalence": {
+        "evidence_path": "runs/maniguard/phase2/setup/final-freeze-review-v2/identity_equivalence.json",
+        "sha256": "cf0a9c61f921d8963ae124b5cd2c7cbbe34c5b7c5ac602d52cb1cc800b415ad8"
+      },
+      "completion_semantics": {
+        "evidence_path": "runs/maniguard/phase2/setup/final-freeze-review-v2/completion_semantics.json",
+        "sha256": "082b4882ad45935a0f83209fe86caf4da44ee259b01dd0658af8fbd73c72a2dd"
+      },
+      "runtime_execution_audit": {
+        "evidence_path": "runs/maniguard/phase2/setup/final-freeze-review-v2/runtime_execution_audit.json",
+        "sha256": "cc56fdfa99fe2b1fdff0b4831bb5ed448533f1ef243c545bd343b2fcde121c94"
+      }
+    }
+  },
   "freeze_checks": {
     "preparation_plan": {
-      "passed": false,
-      "evidence_path": null,
-      "sha256": null
+      "passed": true,
+      "evidence_path": "runs/maniguard/phase2/reports/preparation-final-source-v3/report.json",
+      "sha256": "b9c5872dc8f207edf045185164eba97ddda026007e5b159c8e7e3301af995610"
     },
     "measured_costing": {
-      "passed": false,
-      "evidence_path": null,
-      "sha256": null
+      "passed": true,
+      "evidence_path": "runs/maniguard/phase2/reports/preparation-final-source-v3/report.json",
+      "sha256": "b9c5872dc8f207edf045185164eba97ddda026007e5b159c8e7e3301af995610"
     },
     "feature_contract": {
-      "passed": false,
-      "evidence_path": null,
-      "sha256": null
+      "passed": true,
+      "evidence_path": "runs/maniguard/phase2/reports/preparation-final-source-v3/report.json",
+      "sha256": "b9c5872dc8f207edf045185164eba97ddda026007e5b159c8e7e3301af995610"
     },
     "identity_equivalence": {
-      "passed": false,
-      "evidence_path": null,
-      "sha256": null
+      "passed": true,
+      "evidence_path": "runs/maniguard/phase2/setup/final-freeze-review-v2/identity_equivalence.json",
+      "sha256": "cf0a9c61f921d8963ae124b5cd2c7cbbe34c5b7c5ac602d52cb1cc800b415ad8"
     },
     "completion_semantics": {
-      "passed": false,
-      "evidence_path": null,
-      "sha256": null
+      "passed": true,
+      "evidence_path": "runs/maniguard/phase2/setup/final-freeze-review-v2/completion_semantics.json",
+      "sha256": "082b4882ad45935a0f83209fe86caf4da44ee259b01dd0658af8fbd73c72a2dd"
     },
     "reference_selection": {
-      "passed": false,
-      "evidence_path": null,
-      "sha256": null
+      "passed": true,
+      "evidence_path": "runs/maniguard/phase2/reports/preparation-final-source-v3/report.json",
+      "sha256": "b9c5872dc8f207edf045185164eba97ddda026007e5b159c8e7e3301af995610"
     },
     "runtime_execution_audit": {
-      "passed": false,
-      "evidence_path": null,
-      "sha256": null
+      "passed": true,
+      "evidence_path": "runs/maniguard/phase2/setup/final-freeze-review-v2/runtime_execution_audit.json",
+      "sha256": "cc56fdfa99fe2b1fdff0b4831bb5ed448533f1ef243c545bd343b2fcde121c94"
     }
   },
   "input_files": {
@@ -372,10 +423,10 @@
     "experiments/helpers/maniguard_phase2_outcomes.py": "33ecc9013f8547608adf8790e8cb4592ef396a094a7b7ca9a8379b6d5b859e58",
     "experiments/helpers/maniguard_phase2_results.py": "8fda79e125d6cdde9f3c574869db4f5e66e9a3ac386f5558580b466f2a295a87",
     "experiments/helpers/maniguard_phase2_audit.py": "9571e1584fd36c1ae4114da7a2b4ee59b120794ecaf68e80c2b09a242ac7e39e",
-    "experiments/helpers/maniguard_phase2_protocol.py": "b2e845291e8ec3bd30989b083f6955f90f83230cd6f06282527ef2c376432517",
+    "experiments/helpers/maniguard_phase2_protocol.py": "468cd5be3220be3d8d40958c5163d5e5aba4c78a62421506c1b2299a4c0d161b",
     "experiments/helpers/maniguard_phase2_preparation_report.py": "9202d10b598c2c80ea18eadfa052ba8eb54fc9f46d49f2545486858eff4dfb3f",
     "experiments/helpers/maniguard_phase2_coordinator.py": "3be43d5ccf73a30101445a5429ded35ff136f83d14f95a5bad7c99834d8e0f7d",
-    "experiments/helpers/maniguard_phase2_services.py": "c106f41d196d0ceaeed8a6c4a872a9a4f5d79c83560cc6e21c78d06afb3010a4",
+    "experiments/helpers/maniguard_phase2_services.py": "7ae7dbb7640a24aa585a2f53446914df67885210e22de99e062fec1c355f0943",
     "experiments/helpers/maniguard_runtime.py": "b0843186f6a0bedd93d1af3e97af2d884dac87d92e6ee13688872a920134b60a",
     "experiments/helpers/maniguard_source.py": "92b0352f5dfa8db2a0bcb0fc15716d59701940ef4516dbff6fb14bca4f1b01ed",
     "experiments/helpers/maniguard_adaptation.py": "009574057fb44eae43b105a38e39281b7e53a308ad2b6286136436d8670edb50",
@@ -384,7 +435,7 @@
     "experiments/helpers/maniguard_policy.py": "732bd477c7f284688702360c561972937f3267ee0241266bbba456b18c4f3445",
     "experiments/helpers/maniguard_policy_provenance.py": "701929ecb3f7c603b53ad3e702fa35ba1e0e1f779b461b0ce84e7ab4aa9b3a34",
     "experiments/helpers/maniguard_parallel_policy.py": "f23127c3a4495069e543f4824c411f35689836c35dbf57c172207ce8374a8c53",
-    "experiments/scripts/maniguard_phase2_episode.py": "8890b2759cd1b5e3b7f001b3184c8745ef6f91e906445cf13430905ff32d7232",
+    "experiments/scripts/maniguard_phase2_episode.py": "38bfd995fbac3cbb931278d9576eae862e97b1618c2d338affa5ef63681b231c",
     "experiments/scripts/maniguard_phase2_train.py": "8bbc469d0bd7617c061387bb390ac62365a3cb1c8e186887ed8015f3d43a0381",
     "experiments/scripts/maniguard_phase2_prepare.py": "b2bb8dfabf6c24235d176ea8393e0527ac9e2678a528794c66c0b5dca73bb697",
     "experiments/scripts/maniguard_phase2_preparation_report.py": "123b927e7ef5ca255e5e03d1372a40624718ad57704b660dec5c7bb9f032beea",
@@ -415,10 +466,10 @@
     ],
     "gpu_hours_ceiling": 72,
     "gpu_hour_definition": "Sum of allocated GPU-hours across devices; not the sum of overlapping process durations.",
-    "gpu_hours_status": "provisional_until_preparation_costing",
-    "measured_wall_hours_estimate": null,
+    "gpu_hours_status": "frozen_after_preparation_costing",
+    "measured_wall_hours_estimate": 58.82642225443081,
     "estimate_scope": "Prior continuous reservation plus projected pilot episode process time; future idle and unmeasured policy lifecycle overhead are excluded. This is a feasibility estimate, not a hard runtime bound. Service startup and idle time still consume the enforced allocated-GPU ceiling.",
     "failure_rule": "Count every attempted interaction and stop affected work on infrastructure failure. No unbudgeted replacement episodes or free retries."
   },
-  "sha256": "cf7de15c55f19a10885c32beb4a62cd238253b0ff2db9ead2452dc585b036a0a"
+  "sha256": "c9a541fbb999cb1a9ad359c7d12b3b83b7bc2ab2d81e56fc44cc82577921fdcb"
 }

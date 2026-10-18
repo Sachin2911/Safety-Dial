@@ -10,12 +10,12 @@ valid checks across Jar, Stack and Clutter, plus one retained invalid Clutter en
 initialization. Its recovery used an unspent slot and added no budget; the independent
 Clutter fixed-composition check was omitted, with that coverage retained on Jar/Stack.
 The repaired encoder passed both Clutter identity and stochastic checks. All 24 full
-training-only Jar, Stack and Clutter preparation references now have valid audits. No comparative pilot, learning result or reserved
-evaluation has run. The [development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
+training-only Jar, Stack and Clutter preparation references now have valid audits. The pilot protocol is now frozen after the final source and budget review; no learning result or reserved
+evaluation exists yet. The [development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
 and [requirements ledger](docs/research/research_notes/ManiGuard%20phase2%20requirements.json)
 record the current evidence and limitations. Preparation assignments and their explicit
-recovery amendment are frozen; the pilot still requires full reference measurements and
-an evidence-based resource estimate before its protocol can be frozen.
+recovery amendment are frozen; the pilot freeze binds all full reference measurements and a measured 58.83-GPU-hour
+estimate, including prior reservation, within the unchanged 72-GPU-hour ceiling.
 
 ## 1. Research objective and intended contribution
 
