@@ -1,9 +1,10 @@
 # Phase-two evaluation tooling
 
 These modules support [phase2.md](../../../phase2.md) and have been checked with
-synthetic records. No optimizer results are available. The AAC hook now executes the
-actual generated benchmark loop with fake clients/environments in tests; parent live
-authorization and complete main outcome auditing remain unwired at this checkpoint.
+synthetic records. No optimizer results are available. The main parent, child, native guard and independent reader are connected and tested
+with synthetic inputs. Actual main execution remains gated on native qualification,
+activation of two staged entry-point controls, a bounded audit worker and a scientifically
+frozen main protocol. No main or AAC physical comparison has run.
 These tools do not establish a performance improvement or safety margin.
 
 ## Pilot comparison and model handoff
@@ -72,9 +73,9 @@ accounted through policy RPCs and timing, separately from supplementary CLIP.
 The planner derives envelopes per controller for all 11 work counters, including
 encoder attempts and loads. Total caps must additionally fund explicit `prior`,
 `startup` and `failed_work` allocations. These allocations cannot add replacement
-episode slots or startup/failed policy actions. Measured GPU costs and a durable live
-launcher enforcing exact jobs, unique claims and cumulative actual costs are still
-required; `authorize_job` alone checks membership, not those live limits.
+episode slots or startup/failed policy actions. The main launcher now binds exact jobs and cumulative costs; measured numerical budgets
+and native execution qualification remain required. `authorize_job` alone checks
+membership, not those live limits.
 
 ## Protocol-aware main analysis
 
@@ -97,8 +98,8 @@ identical physical starts. Optimization and validation selection are not rerun.
 
 Violation intervals at observed boundaries, including zero events, are withheld. The
 report retains the declared risk margin but does not execute safety-margin,
-meaningful-effect or multiple-comparison decision rules. It trusts the pinned reader's
-physical audit and does not enforce live budgets. The lower-level `analyze` API remains
+meaningful-effect or multiple-comparison decision rules. It consumes the pinned main reader's independent source/action/outcome/cost audit and
+does not itself enforce live budgets. The lower-level `analyze` API remains
 available for an independently supplied grid; main reporting should use the wrapper.
 
 ## AAC-joint proposal sampling
@@ -127,8 +128,9 @@ Actual generated-loop tests cover singleton, two-action and fixed-eight cadence,
 zero supplementary CLIP, failures and tampering.
 
 Sequential requests have no demonstrated batched latency or physical-task result.
-The parent claim/lease/budget gate, full outcome/process/physics audit, frozen AAC settings
-and costed action-bearing integration remain outstanding. See the
+The new main parent/child/reader now bind AAC execution and independently audit its
+archived proposal arrays and costs. Native qualification, frozen AAC settings and costed
+action-bearing integration remain outstanding. See the
 [primary-source review](ManiGuard%20phase2%20related%20work.md) for the scope of this adaptation.
 
 
@@ -146,10 +148,10 @@ A failed state write raises `DispatchPersistenceError`, poisons the current hand
 prevents further callbacks or a misleading success report. Best-effort diagnostics retain
 uncommitted evidence separately, and unresolved diagnostics also block reopening. Tests
 cover claim, backend, terminal, blocked-state, extra-work and synchronization failures.
-This module has 55 passing synthetic tests plus an independent reproduction of the
-original write-failure bug. It does not yet authorize a real simulator backend; AAC and
-the original benchmark profile remain excluded from this synthetic dispatcher's supported
-profiles pending their explicit live integration.
+The synthetic base retains its restricted profiles and is not a simulator authorization.
+The new main launcher subclass derives its supported profiles from the independent
+reader, which supports all seven profiles, including AAC and the original executor.
+Its real backend remains subject to the separate qualification gates below.
 
 ## Pilot cost histories and figures
 
@@ -182,3 +184,61 @@ violations against paid action and query costs, retaining every seed. They provi
 confidence intervals or superiority conclusion. Episode-time axes do not estimate GPU
 reservation time; preparation, startup, idle time and optimization overhead require their
 separate records. Synthetic previews were visually checked and are not empirical results.
+
+
+## Main execution and independent result audit
+
+The new [parent launcher](../../../experiments/helpers/maniguard_main_launcher.py) uses
+canonical study claims, an immutable parent request, the machine execution lease and
+pinned policy-service handshakes. The [child](../../../experiments/helpers/maniguard_main_episode.py)
+accepts one exact compiled job without independent scene/seed/actor/horizon overrides.
+It rechecks frozen authorization and inherited parent ownership before creating output
+or connecting to a policy. Scientific fixed-comparator identity remains separate from
+an identity model used only to carry the existing phase-two implementation.
+
+A durable [operation meter](../../../experiments/helpers/maniguard_main_episode_meter.py)
+reserves attempts and returned work before RPC, encoder, action and physics operations.
+It distinguishes successful-slot, startup and failed-work allowances. The actual generated
+benchmark loops route learned/fixed/contextual, original-eight, AAC and sampled-fixed-eight
+execution separately. Archived requests, source/config files, actor/controller records,
+loaded module paths and final runtime evidence support replay.
+
+The independent [reader](../../../experiments/helpers/maniguard_main_results.py) binds
+actual execution evidence to the frozen job, then reconstructs controller actions,
+requested-sequence outcomes and all eleven counters. Original execution checks native
+eight-action chunks; AAC recomputes selection from its twenty archived proposals. Invalid
+processes or incomplete evidence produce no fitness. Valid journal prefixes preserve
+known paid work through stale summaries and malformed failure tails; unresolved work stays
+reserved and blocks subsequent dispatch. Tests pass real synthetic reader rows through
+parent accounting without relabeling fixed comparators as learned actors.
+
+## Native physics guard and remaining activation work
+
+The [physics driver](../../../experiments/helpers/maniguard_main_physics.py) uses the
+installed PhysX 106.5.7 pre/post event interface. The
+[API documentation](https://docs.omniverse.nvidia.com/kit/docs/omni_physics/107.0/extensions/runtime/source/omni.physx/docs/api/python.html)
+explains that the pre-step callback occurs before the native advance. The driver reserves
+one instrumented tick there and settles it in the post-step callback. A budget,
+persistence or ordering failure terminates the isolated child with exit code 86, because
+throwing a Python exception alone need not stop a native callback dispatcher. Twenty-three
+focused tests include an actual subprocess proving that this termination cannot be swallowed
+by a surrounding exception handler. Independent source review found no additional blocker.
+
+The guard is inactive for current preparation. A main launch requires a source-bound native
+qualification for direct simulation update, SimulationContext stepping and app updates,
+including real over-budget termination. Those native checks have not run. App startup
+before callback registration remains explicitly outside the instrumented physics counter;
+its elapsed time stays in continuous reservation accounting. This is not a claim to count
+all native physics since process start.
+
+Two existing-source edits are staged until the preparation queue is idle: registering the
+new episode entry point in process detection, and rejecting the old boolean-only reserved
+evaluation path. The latter has three staged CLI rejection checks before model loading or
+output creation. These edits must be applied and source reviews refreshed before pilot
+repinning. Native qualification gets its own prospective, paid engineering allocation;
+it cannot use a free retry or an extra slot from the completed short-check preparation.
+
+A bounded audit worker is also pending: the current parent detects a continuous GPU-time
+overrun during synchronous post-child auditing but does not preempt that audit. Action/RPC/
+encoder/physics child limits are enforced separately. Main study size, risk margin,
+optimizer-seed expansion, protocol freeze and actual six-family outcomes remain unfinished.

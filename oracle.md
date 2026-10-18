@@ -1,6 +1,6 @@
 # Oracle: task continuation under safety filtering
 
-**Central reference for the research rethink. Updated 17 October 2026.**
+**Central reference for the research rethink. Updated 18 October 2026.**
 
 ## Current phase-two direction
 
@@ -19,8 +19,8 @@ valid 32-action checks across Jar, Stack and Clutter and one retained invalid in
 Clutter's encoder repair passed identity and stochastic checks; recovery consumed an
 unspent slot without increasing the budget. The omitted Clutter composition check is
 explicitly recorded. These checks establish bounded integration evidence, not a learning
-or performance result. All eight full training-only Clutter preparation references now
-have valid audits; sixteen Jar/Stack references remain. No comparative pilot or reserved evaluation has run,
+or performance result. All 24 full training-only Jar, Stack and Clutter preparation references now
+have valid audits. No comparative pilot or reserved evaluation has run,
 and the pilot protocol and measured compute budget still need to be frozen. See the
 [phase-two development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
 for the evidence and remaining work. The sections below preserve the earlier motivation,

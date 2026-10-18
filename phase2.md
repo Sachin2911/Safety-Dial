@@ -4,14 +4,13 @@
 ManiGuard repairs to a shared method with evidence across tasks. This document preserves
 that direction and the proposed implementation and evaluation programme.
 
-**Implementation checkpoint, 17 October 2026:** the shared controller and supporting
+**Implementation checkpoint, 18 October 2026:** the shared controller and supporting
 runtime are implemented. The amended short integration allocation is complete: eleven
 valid checks across Jar, Stack and Clutter, plus one retained invalid Clutter encoder
 initialization. Its recovery used an unspent slot and added no budget; the independent
 Clutter fixed-composition check was omitted, with that coverage retained on Jar/Stack.
-The repaired encoder passed both Clutter identity and stochastic checks. All eight full
-training-only Clutter preparation references now have valid audits; sixteen Jar/Stack
-references remain. No comparative pilot, learning result or reserved
+The repaired encoder passed both Clutter identity and stochastic checks. All 24 full
+training-only Jar, Stack and Clutter preparation references now have valid audits. No comparative pilot, learning result or reserved
 evaluation has run. The [development log](docs/research/research_notes/ManiGuard%20phase2%20development.md)
 and [requirements ledger](docs/research/research_notes/ManiGuard%20phase2%20requirements.json)
 record the current evidence and limitations. Preparation assignments and their explicit
@@ -111,13 +110,13 @@ unchanged physical risk.
 The six families and full horizons are verified against the pinned upstream pipeline
 inventory and joint-evaluation configs, referenced by
 [the phase-two source manifest](configs/maniguard/phase2/sources.json). Assets and
-checkpoints are local for Jar, Stack, Lid and Clutter. Phase-two short physical engineering
+checkpoints are local and verified for all six families. Phase-two short physical engineering
 checks cover Jar, Stack and Clutter; metadata preparation alone is not behavioral validation.
 
 | Family | Base tasks | Full action horizon | Current local state | Proposed role |
 | --- | ---: | ---: | --- | --- |
-| Jar transport | 26 | 2,000 | Assets/policy; four valid phase-two short checks | Development and pilot |
-| Stack retrieve | 28 | 4,200 | Assets/policy; four valid phase-two short checks | Development and pilot |
+| Jar transport | 26 | 2,000 | Four valid short checks; eight full references audited | Development and pilot |
+| Stack retrieve | 28 | 4,200 | Four valid short checks; eight full references audited | Development and pilot |
 | Lid transport | 30 | 1,900 | Phase-one assets/policy and evaluated runner; no phase-two run | Existing development evidence; later cross-family check |
 | Clutter pickup | 55 | 1,100 | Original, identity and stochastic short checks valid; eight full references audited | Add to pilot for a different task structure |
 | Cabinet pickup | 35 | 5,700 | Pinned assets/policy verified; no behavioral evaluation | Reserve for transfer |
@@ -402,13 +401,15 @@ not a hidden prerequisite of the first study.
 
 Reuse audited episode execution, policy sampling isolation, source hashing, outcome
 reports and ledgers from [the existing stack](configs/maniguard/README.md).
-The current search and batch launchers assume one family; add a coordinator over family
-sub-batches with verified matching policy servers and equal-weight candidate aggregation.
+The pilot coordinator now schedules family sub-batches with verified matching policy
+servers and equal-weight candidate aggregation; its full physical optimization remains
+pending preparation completion and protocol freeze.
 
 Jar/Stack use pi0.5 while Lid uses pi0, with different predicted chunk lengths. Their common
-joint interface does not align hidden representations. The current Frame exposes no
-visual/text features. New downloads, all-family preparation, feature extraction, composable
-learned decisions and multi-family optimization are substantive implementation work.
+joint interface does not align hidden representations. The shared Frame now supplies
+robot/history features and frozen projected visual/text context. All-family asset downloads
+are verified, and composable learned decisions are implemented. Full optimization,
+reserved evaluation and the main execution qualification still require measured evidence.
 
 Put reusable code under experiments/helpers/, entry points under experiments/scripts/,
 versioned protocols under configs/maniguard/phase2/, and new outputs under
@@ -425,8 +426,8 @@ simulator/policy environments and managed services; preserve old runs and enviro
 
 ## 12. Choices to freeze before the pilot
 
-The accepted direction is shared adaptation with cross-task evidence. These implementation
-choices remain proposed until milestones A/B resolve them:
+The accepted direction is shared adaptation with cross-task evidence. The draft pilot records the implementation choices below; final source, outcome and
+resource reviews must bind them before launch:
 
 - Common encoder, projection, recurrent architecture and exact parameter count.
 - Action domains, composition rules and ordinary-learning settings.
@@ -436,6 +437,6 @@ choices remain proposed until milestones A/B resolve them:
 - Preparation allocation, measured resource estimate and GPU-hour ceiling.
 - Closest compatible prior-method baseline and the distinction we will test.
 
-The next deliverable is the shared-controller protocol and implemented interface, followed
-by the bounded comparative pilot. A local repair, transfer across tasks and an evolutionary
+The next experimental deliverable is completed full-reference preparation and a costed
+pilot freeze, followed by the bounded comparative pilot. A local repair, transfer across tasks and an evolutionary
 advantage remain separate empirical outcomes throughout.

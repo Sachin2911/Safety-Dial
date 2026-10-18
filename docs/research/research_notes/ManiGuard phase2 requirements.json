@@ -1,7 +1,7 @@
 {
   "schema": "maniguard-phase2-requirements-v1",
   "objective": "Implement phase2.md fully and push regularly",
-  "plan_sha256": "d71d974a9e15c6941f3f390ef071a2fc58ad0e5139840739f25a277b93de9952",
+  "plan_sha256": "d40fabfd9e88abb75f63d0cff3c3123c90f75e6ccacebb253e74272671a41808",
   "status": "active",
   "requirements": [
     {
@@ -15,9 +15,10 @@
         "experiments/helpers/maniguard_phase2_model.py",
         "experiments/helpers/maniguard_phase2_results.py",
         "runs/maniguard/phase2/reports/preparation-partial-v2/report.json",
-        "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json"
+        "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json",
+        "runs/maniguard/phase2/reports/preparation-jar-clutter-complete-v1/report.json"
       ],
-      "progress_note": "One shared runtime has valid short engineering evidence on Jar, Stack and Clutter and eight full Clutter reference audits. Shared learned performance remains unmeasured."
+      "progress_note": "One shared runtime has valid short integration on Jar/Stack/Clutter and all sixteen full Jar/Clutter references audited. Shared learned performance remains unmeasured."
     },
     {
       "id": "prior_work",
@@ -175,9 +176,10 @@
       "evidence": [
         "experiments/helpers/maniguard_phase2_preparation_report.py",
         "runs/maniguard/phase2/reports/preparation-partial-v2/report.json",
-        "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json"
+        "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json",
+        "runs/maniguard/phase2/reports/preparation-jar-clutter-complete-v1/report.json"
       ],
-      "progress_note": "Eight full Clutter references are valid; sixteen Jar/Stack assignments remain. No fixed reference is selected until all 24 original full cases validate. The contextual threshold is unchanged."
+      "progress_note": "All sixteen Jar/Clutter full references audited valid. Stack references are underway. Fixed-reference selection waits for all 24 original full cases; no learned comparison has run."
     },
     {
       "id": "completion",
@@ -234,9 +236,12 @@
         "runs/maniguard/phase2/reports/preparation-integration-v1/report.json",
         "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json",
         "experiments/helpers/maniguard_pilot_history.py",
-        "experiments/tests/test_maniguard_pilot_history.py"
+        "experiments/tests/test_maniguard_pilot_history.py",
+        "runs/maniguard/phase2/reports/preparation-jar-clutter-complete-v1/report.json",
+        "experiments/helpers/maniguard_main_episode_meter.py",
+        "experiments/helpers/maniguard_main_physics.py"
       ],
-      "progress_note": "Preparation totals remain those of the cited immutable Clutter report; Jar/Stack queue is running. New pilot histories charge earlier interleaved work and all nominee validation, suppress unknown exact axes, and distinguish episode time from continuous GPU reservation. Full Jar/Stack rates are still needed before costing the pilot."
+      "progress_note": "The Jar/Clutter report records lower bounds of 18,400 actions, 2,315 queries and 112,808 physics ticks while Stack was in flight; reservation was 2.40386 GPU-hours. Full Stack preparation is still required for pilot costing. Main operation guards are implemented; native qualification and a bounded post-child audit remain outstanding."
     },
     {
       "id": "preparation",
@@ -250,9 +255,10 @@
         "runs/maniguard/phase2/reports/preparation-partial-v4/report.json",
         "configs/maniguard/phase2/preparation_amendment.json",
         "runs/maniguard/phase2/reports/preparation-integration-v1/report.json",
-        "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json"
+        "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json",
+        "runs/maniguard/phase2/reports/preparation-jar-clutter-complete-v1/report.json"
       ],
-      "progress_note": "All 12 short slots are consumed: 11 valid checks and one retained invalid initialization. All eight full Clutter references audited valid; 16 original Jar/Stack full slots remain. Recovery omitted the separate Clutter composition check without increasing ceilings. The supervised original Jar then Stack queue is now running."
+      "progress_note": "All12 short slots consumed:11 valid plus one retained invalid initialization. All16 Jar/Clutter full references valid; eight Stack references underway. Original ceilings and recovery omission unchanged."
     },
     {
       "id": "pilot",
@@ -295,17 +301,25 @@
         "experiments/helpers/maniguard_main_protocol.py",
         "experiments/tests/test_maniguard_main_protocol.py",
         "experiments/helpers/maniguard_main_dispatch.py",
-        "experiments/tests/test_maniguard_main_dispatch.py"
+        "experiments/tests/test_maniguard_main_dispatch.py",
+        "experiments/helpers/maniguard_main_launcher.py",
+        "experiments/helpers/maniguard_main_episode.py",
+        "experiments/helpers/maniguard_main_episode_meter.py",
+        "experiments/helpers/maniguard_main_physics.py"
       ],
-      "progress_note": "Exact-case planner now distinguishes unchanged benchmark and identity-adapter costs. Durable synthetic dispatch binds canonical claims, all eleven counters and separate cost allowances; write failures poison the handle and block reopening. Live backend/audit integration, numerical design and freeze evidence remain outstanding."
+      "progress_note": "Exact frozen-job parent/child execution is wired with a durable meter and independent reader. All seven profiles have synthetic execution coverage. Native physics qualification, entry-point activation, bounded audit worker and numerical scientific protocol remain outstanding."
     },
     {
       "id": "main_results",
       "plan_sections": "10",
       "requirement": "Reserved scene evaluation and allsixfamilies",
       "acceptance": "Executed frozen-controller comparisons with full outcome accounting",
-      "status": "pending",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "experiments/helpers/maniguard_main_results.py",
+        "experiments/tests/test_maniguard_main_results.py"
+      ],
+      "progress_note": "Independent seven-profile source/action/outcome/cost reader is implemented and tested synthetically. No reserved or main physical evaluation has run."
     },
     {
       "id": "transfer",
@@ -346,9 +360,12 @@
         "experiments/tests/test_maniguard_phase2_runtime.py",
         "runs/maniguard/phase2/reports/preparation-partial-v2/report.json",
         "runs/maniguard/phase2/setup/service-clutter-v1/service.json",
-        "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json"
+        "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json",
+        "runs/maniguard/phase2/reports/preparation-jar-clutter-complete-v1/report.json",
+        "experiments/helpers/maniguard_main_episode_runtime.py",
+        "experiments/helpers/maniguard_main_episode_source.py"
       ],
-      "progress_note": "Jar/Stack/Clutter short integration and Clutter full reference execution are validated, including pinned policy routing. Lid/Cabinet/Dusty phase-two execution remains unrun."
+      "progress_note": "Three-family short integration, sixteen Jar/Clutter full references and the initial Stack full references are valid. Main backend routing is tested with fake dependencies against generated loops. Native guard qualification and reserved execution have not run."
     },
     {
       "id": "provenance",
@@ -375,7 +392,8 @@
         "runs/maniguard/phase2/reports/preparation-partial-v2/report.json",
         "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json",
         "experiments/scripts/maniguard_pilot_figures.py",
-        "docs/research/research_notes/ManiGuard phase2 evaluation tooling.md"
+        "docs/research/research_notes/ManiGuard phase2 evaluation tooling.md",
+        "runs/maniguard/phase2/reports/preparation-jar-clutter-complete-v1/report.json"
       ],
       "progress_note": "Pilot history/figure CLI and tooling docs are implemented; synthetic PNG/PDF previews were visually checked. Readiness reviews are staged. No real pilot figures, final results or full completion audit exist yet."
     },
@@ -388,7 +406,7 @@
       "evidence": [
         "runs/maniguard/phase2/reports/preparation-integration-v1/report.json"
       ],
-      "progress_note": "Implementation checkpoints through 65ac3c1 are verified pushed to research/maniguard-fruits; the next reviewed tooling/readiness checkpoint is being prepared."
+      "progress_note": "Checkpoint1f7f62c67267f19141ba11fbaf12c0f54800128b is pushed to research/maniguard-fruits and remote equality verified."
     }
   ],
   "evidence_checkpoint": {
@@ -445,50 +463,50 @@
   },
   "original_plan_sha256": "29155a2b03c660feea760f64d0283d243bd3ef3f4127f1eb525ebba2f918da13",
   "latest_checkpoint": {
-    "updated_utc": "2026-10-17T23:32:27.182053+00:00",
-    "report": "runs/maniguard/phase2/reports/preparation-clutter-complete-v1/report.json",
-    "report_sha256": "cf3493f4c60b8f30252277ffd415a0c1ad04e8deddd8b799f7a205571cad8140",
+    "updated_utc": "2026-10-18T00:11:27.196342+00:00",
+    "report": "runs/maniguard/phase2/reports/preparation-jar-clutter-complete-v1/report.json",
+    "report_sha256": "a6beb0c481a7feeb1d9bbdd497d27ed9e132283e2a25a78850ff31b36e872346",
     "short_attempts": 12,
     "valid_short_attempts": 11,
     "failed_short_attempts": 1,
-    "full_preparation_attempts": 8,
-    "valid_full_preparation_attempts": 8,
-    "running_full_preparation_attempts": 0,
+    "full_preparation_attempts": 16,
+    "valid_full_preparation_attempts": 16,
+    "running_full_preparation_attempts": 1,
     "pilot_attempts": 0,
-    "state": "clutter_full_preparation_complete_jar_stack_queue_running",
+    "state": "jar_clutter_full_preparation_complete_stack_running",
     "amendment": "configs/maniguard/phase2/preparation_amendment.json",
     "reservation_snapshot": {
-      "timestamp": 1792279665.0248284,
+      "timestamp": 1792281521.8843381,
       "reservation_started_at": 1792272868,
       "reserved_gpus": 1,
-      "wall_seconds": 6797.0248284339905,
-      "allocated_gpu_seconds": 6797.0248284339905
+      "wall_seconds": 8653.884338140488,
+      "allocated_gpu_seconds": 8653.884338140488
     },
     "episode_counts_reconciled": {
-      "policy_control_steps": 5214,
-      "policy_queries": 664,
-      "physics_steps": 33004,
-      "encoder_image_calls": 1282,
-      "encoder_images": 2564,
-      "encoder_text_calls": 16,
-      "adapter_decisions": 1282,
+      "policy_control_steps": 18400,
+      "policy_queries": 2315,
+      "physics_steps": 112808,
+      "encoder_image_calls": 4579,
+      "encoder_images": 9158,
+      "encoder_text_calls": 24,
+      "adapter_decisions": 4579,
       "actor_rpc_attempts": 0
     },
     "setup_inclusive_counts": {
-      "policy_control_steps": 5214,
-      "policy_queries": 664,
-      "physics_steps": 33004,
-      "encoder_image_calls": 1287,
-      "encoder_images": 2574,
-      "encoder_text_calls": 17,
-      "adapter_decisions": 1282,
+      "policy_control_steps": 18400,
+      "policy_queries": 2315,
+      "physics_steps": 112808,
+      "encoder_image_calls": 4584,
+      "encoder_images": 9168,
+      "encoder_text_calls": 25,
+      "adapter_decisions": 4579,
       "actor_rpc_attempts": 0
     },
     "training_ready": false,
     "pilot_protocol_frozen": false,
     "reserved_behavioral_evaluations": 0,
     "queue_launch": "runs/maniguard/phase2/setup/preparation-full-rest-v1/launch-check.json",
-    "reference_report_snapshot_note": "Attempt/counter counts are frozen at the cited report timestamp; the subsequent Jar/Stack queue is recorded separately.",
+    "reference_report_snapshot_note": "Counts are frozen at the report timestamp, before the first Stack episode completed. Subsequent Stack results are described in the development log.",
     "reserved_assets": {
       "status": "verified",
       "files": 669,
@@ -506,6 +524,35 @@
       "completion_review": "runs/maniguard/phase2/setup/completion-review-v1/review.json",
       "freeze_authorized": false,
       "actual_optimizer_results": false
+    },
+    "count_totals_are_lower_bounds": true,
+    "pending_at_report_snapshot": [
+      "full-stack-0-identity"
+    ],
+    "main_integration": {
+      "tests": 222,
+      "synthetic": true,
+      "ruff_passed": true,
+      "native_qualification": false,
+      "reserved_evaluations": 0,
+      "remaining_activation": [
+        "native qualification",
+        "staged process-scan and legacy-gate edits",
+        "bounded post-child audit",
+        "scientific protocol and numerical budget freeze"
+      ]
+    },
+    "subsequent_full_preparation_update": {
+      "queue_status": "completed",
+      "full_attempts": 24,
+      "valid_full_attempts": 24,
+      "pilot_attempts": 0,
+      "note": "Earlier report counts above remain an immutable prior snapshot. Final report reconciles all preparation; pilot freeze is pending.",
+      "report": "runs/maniguard/phase2/reports/preparation-all-complete-v1/report.json",
+      "report_sha256": "31b64fccff0f3b083814c72a5546696a42a5ec860010847d02e8443c4b43f96c",
+      "prior_accounting_ready": true,
+      "ready_for_freeze_review": true,
+      "training_ready": false
     }
   }
 }

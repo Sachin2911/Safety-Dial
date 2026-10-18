@@ -645,3 +645,30 @@ def test_post_replace_error_poison_does_not_claim_rollback_or_terminal_success(f
         assert resumed.report()['terminal_jobs'] == 1
         with pytest.raises(RuntimeError, match='persistence failure'):
             resumed.pending_jobs()
+
+
+def test_reported_unknown_work_keeps_numeric_lower_bound_and_full_remaining_reservation(fixture):
+    with open_dispatch(fixture) as dispatch:
+        job = dispatch.pending_jobs()[0]
+        claim = dispatch.claim(job)
+        report = dispatch.record_result(job['episode_id'], row_for(dispatch, claim, valid=False,
+            costs={**counts(policy_queries=2), 'elapsed_seconds': 1}, unknown_cost_fields=['policy_queries']))
+        assert report['accounting']['known_counts']['policy_queries'] == 2
+        assert report['accounting']['reserved_counts']['policy_queries'] == claim['reservation']['policy_queries'] - 2
+        assert dispatch.state['claims'][job['episode_id']]['unknown_counts'] == ['policy_queries']
+    with open_dispatch(fixture, resume=True) as resumed:
+        assert resumed.report()['accounting']['known_counts']['policy_queries'] == 2
+        with pytest.raises(RuntimeError, match='blocked'):
+            resumed.pending_jobs()
+
+
+def test_extra_numeric_lower_bound_does_not_resolve_declared_unknown_work(fixture):
+    with open_dispatch(fixture) as dispatch:
+        dispatch.reserve_extra('unknown', 'failed_work', counts(physics_steps=5))
+        report = dispatch.settle_extra('unknown', counts(physics_steps=2), unknown_fields=['physics_steps'])
+        assert report['accounting']['known_counts']['physics_steps'] == 2
+        assert report['accounting']['reserved_counts']['physics_steps'] == 3
+    with open_dispatch(fixture, resume=True) as resumed:
+        assert resumed.report()['accounting']['reserved_counts']['physics_steps'] == 3
+        with pytest.raises(RuntimeError, match='blocked'):
+            resumed.pending_jobs()

@@ -102,6 +102,17 @@ def _known(value):
     return known, unknown
 
 
+def _uncertain(known, missing, declared=()):
+    """A numeric lower bound can still have unresolved attempted work above it."""
+    if not isinstance(declared, (list, tuple)) or any(name not in WORK_COUNTS for name in declared):
+        raise ValueError('Unknown counters must name only declared work counters')
+    return known, [name for name in WORK_COUNTS if name in missing or name in declared]
+
+
+def _result_counts(row):
+    return _uncertain(*_known(row.get('costs')), row.get('unknown_cost_fields', ()))
+
+
 class MainDispatch:
     """Root-bound, single-owner synthetic dispatcher with durable single-use claims.
 
@@ -109,6 +120,11 @@ class MainDispatch:
     a validator for wholly synthetic metadata; they do not create a real study freeze.
     All returned reports explicitly deny live execution and performance evidence.
     """
+
+    schema = SCHEMA
+    execution_kind = 'synthetic_only'
+    evidence_kind = 'synthetic'
+    supported_profiles = SUPPORTED_PROFILES
 
     @classmethod
     def open(cls, protocol, prior, *, root, config_dir=None, resume=False, clock=time.time,
@@ -145,11 +161,11 @@ class MainDispatch:
         self.lock = (self.directory / 'dispatch.lock').open('a')
         try:
             fcntl.flock(self.lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            binding = {'schema': SCHEMA, 'study_root': str(self.root), 'study_id': study,
+            binding = {'schema': self.schema, 'study_root': str(self.root), 'study_id': study,
                        'protocol_sha256': protocol['sha256'], 'grid_sha256': protocol['grid_sha256'],
                        'prior_sha256': prior['sha256'],
                        'implementation_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-                       'execution_kind': 'synthetic_only'}
+                       'execution_kind': self.execution_kind}
             if resume:
                 anchor = json.loads(self.anchor.read_text())
                 _check_signed(anchor)
@@ -248,7 +264,7 @@ class MainDispatch:
                 raise ValueError('Unknown claim status')
             _counts(claim['known_counts'], complete=claim['status'] == 'claimed')
             if claim['status'] == 'terminal':
-                known, unknown = _known(claim['row'].get('costs'))
+                known, unknown = _result_counts(claim['row'])
                 if claim['known_counts'] != known or claim['unknown_counts'] != unknown:
                     raise ValueError('Saved result accounting differs from its retained row')
         for key, event in self.state['extra_events'].items():
@@ -258,7 +274,7 @@ class MainDispatch:
             if event['status'] not in ('reserved', 'terminal'):
                 raise ValueError('Unknown extra-event status')
             if event['status'] == 'terminal':
-                known, unknown = _known(event['raw_counts'])
+                known, unknown = _uncertain(*_known(event['raw_counts']), event.get('uncertain_counts', ()))
                 if known != event['known_counts'] or unknown != event['unknown_counts']:
                     raise ValueError('Saved extra accounting differs from retained counters')
 
@@ -401,7 +417,7 @@ class MainDispatch:
                 or authorization != {'authorized': True, 'protocol_sha256': self.protocol['sha256'],
                     'episode_id': job_id, 'job_sha256': record_hash(job)}):
             raise ValueError('Exact frozen-job authorization differs from requested dispatch')
-        if job['resource_contract']['profile'] not in SUPPORTED_PROFILES:
+        if job['resource_contract']['profile'] not in self.supported_profiles:
             raise ValueError('AAC and unsupported live execution profiles are not implemented in this slice')
         if job_id in self.state['claims']:
             raise ValueError('A durable episode claim can be consumed only once')
@@ -437,13 +453,13 @@ class MainDispatch:
         self._persist()
         return deepcopy(self.state['extra_events'][event_id])
 
-    def settle_extra(self, event_id, counts, *, issues=()):
+    def settle_extra(self, event_id, counts, *, issues=(), unknown_fields=()):
         self._usable()
         event = self.state['extra_events'][event_id]
         if event['status'] != 'reserved':
             raise ValueError('Extra work is already terminal and cannot be counted twice')
         counts = _evidence(counts)
-        known, unknown = _known(counts)
+        known, unknown = _uncertain(*_known(counts), unknown_fields)
         reasons = list(issues)
         if unknown:
             reasons.append('Unknown extra-work counts: ' + ', '.join(unknown))
@@ -452,7 +468,7 @@ class MainDispatch:
         reasons.extend('Extra-work reservation exceeded: ' + name for name, value in known.items()
                        if value > event['reservation'][name])
         event.update(status='terminal', known_counts=known, unknown_counts=unknown, raw_counts=deepcopy(counts),
-                     issues=reasons)
+                     issues=reasons, uncertain_counts=list(unknown_fields))
         self._persist()
         self._block(reasons + self._budget_issues())
         return self.report()
@@ -465,13 +481,13 @@ class MainDispatch:
         row = _evidence(row)
         if not isinstance(row, dict):
             row = {'raw_row': row, 'valid': False, 'costs': {}}
-        known, unknown = _known(row.get('costs'))
+        known, unknown = _result_counts(row)
         reasons = []
-        if (row.get('evidence_kind') != 'synthetic' or row.get('valid') is not True or
+        if (row.get('evidence_kind') != self.evidence_kind or row.get('valid') is not True or
                 row.get('protocol_sha256') != self.protocol['sha256'] or
                 record_hash(row.get('job')) != claim['job_sha256'] or
                 row.get('output') != claim['output']):
-            reasons.append('Result is invalid or differs from its synthetic exact-job binding')
+            reasons.append('Result is invalid or differs from its exact-job binding')
         for name in ('cost_issues', 'missing_cost_fields'):
             if row.get(name) != []:
                 reasons.append('Unresolved result accounting: ' + name)
@@ -496,6 +512,8 @@ class MainDispatch:
         A failure preserves the receipt and any known counts, blocks the dispatcher,
         and never retries. Callbacks are trusted test code, not a security sandbox.
         """
+        if self.execution_kind != 'synthetic_only':
+            raise RuntimeError('Synthetic callback loop is unavailable on a live dispatcher')
         if not callable(runner) or not callable(reader):
             raise TypeError('Supply explicit synthetic runner and reader callbacks')
         claim = self.claim(job)
@@ -542,12 +560,12 @@ class MainDispatch:
     def report(self):
         self._usable()
         unresolved = [key for key, value in self.state['claims'].items() if value['status'] == 'claimed']
-        return {'schema': SCHEMA, 'state_path': str(self.path), 'protocol_sha256': self.protocol['sha256'],
+        return {'schema': self.schema, 'state_path': str(self.path), 'protocol_sha256': self.protocol['sha256'],
                 'claimed_jobs': len(self.state['claims']), 'terminal_jobs': sum(
                     value['status'] == 'terminal' for value in self.state['claims'].values()),
                 'unresolved_claims': unresolved, 'unresolved_extra_events': [key for key, value in
                     self.state['extra_events'].items() if value['status'] == 'reserved'],
                 'blocked_reasons': list(self.state['blocked_reasons']),
-                'accounting': self.snapshot(), 'execution_kind': 'synthetic_only',
+                'accounting': self.snapshot(), 'execution_kind': self.execution_kind,
                 'live_execution_authorized': False, 'physical_evidence_audited': False,
                 'performance_results': False}

@@ -312,3 +312,85 @@ Synthetic figure previews were visually checked. These are implementation checks
 learned performance, a physical AAC result or a live main-study authorization. The existing
 Jar/Stack preparation queue continues on its archived unchanged sources. The preceding
 checkpoint `65ac3c1` is verified pushed to the authorized research branch.
+
+
+## Jar full preparation complete; Stack running
+
+All eight original Jar full references have valid audits. None completes the full requested
+sequence: identity, smoothing0.75 and cap0.06 each have two violating noncompletions;
+the contextual rule has one safe noncompletion and one violating noncompletion. Two
+runs meet the native spatial-success condition but fail the supplemental closure sequence
+and have a physical violation. They remain failed requested tasks. These are two training
+cases per setting, not learned performance or a causal identical-start comparison.
+
+The [Jar/Clutter-complete snapshot](../../../runs/maniguard/phase2/reports/preparation-jar-clutter-complete-v1/report.json)
+contains 28 terminal paid attempts: eleven valid short checks, the retained invalid
+initialization with separately reconciled costs, and sixteen valid full references.
+Its content hash is `a6beb0c481a7feeb1d9bbdd497d27ed9e132283e2a25a78850ff31b36e872346`.
+At 2026-10-17 23:58:41 UTC it records lower bounds of 18,400 policy actions, 2,315 queries
+and 112,808 physics ticks, because the first Stack job was still in flight. Including
+setup, recorded encoder work is 4,584 image batches, 9,168 images and 25 text calls.
+Continuous GPU reservation is 2.40386 hours at that snapshot. The short-only Stack
+extrapolation remains explicitly provisional and cannot authorize a 72-GPU-hour pilot.
+
+The first Stack identity reference subsequently completed valid: 4,200 actions, 525
+queries, 25,286 physics ticks and 394.94 launcher seconds, with no violation and no
+completion. The remaining original Stack assignments continue serially without retries.
+All 24 full cases are still required before selecting the fixed comparator and freezing
+the measured pilot budget. Checkpoint `1f7f62c` was pushed and remote equality verified.
+
+
+The first Stack smoothing0.75 and cap0.06 references then completed safely, using 2,024
+and 2,092 actions respectively (201.54 and 205.61 launcher seconds). The matched nominal
+identity case reached 4,200 actions safely without completion. These single-case counts
+suggest execution headroom but do not establish a repeatable effect or physically identical
+starting states. The remaining Stack references are required before reference selection.
+
+## Main executor integration checkpoint
+
+New main parent, child, operation meter, source hooks, independent reader and native
+pre/post physics guard are wired together with synthetic validation. All seven execution
+profiles are represented, including unchanged VLA and the two twenty-proposal AAC arms.
+The combined integration checkpoint passes 222 tests and Ruff. Review caught and fixed
+acceptance of a relocated/re-signed parent registry and loss of proved journal-prefix costs
+after malformed failure records. Main paths now preserve canonical claims, fixed-controller
+identity and known paid work without turning invalid evidence into rewards.
+
+Native qualification has not run and the real backend stays gated. The physics guard has
+23 passing source/callback/process tests and an independent read-only review; it does not
+authorize new physical work. The main CLI requires the qualified native source/receipt graph,
+explicit runtime allowances, actual selected actors and a frozen scientific protocol.
+A finite post-child audit worker remains to be added before claiming preemptive enforcement
+of the continuous GPU-time ceiling through auditing. The current synchronous audit retains
+and flags any overrun. Old entry-point/process-scan edits are staged for the next idle
+boundary, leaving the running preparation sources unchanged.
+
+
+## Completed full preparation, 18 October 2026
+
+The supervised queue finished all original Jar and Stack assignments. Together with
+Clutter, all 24 full preparation episodes have valid audits. Safe requested completions
+per two cases are:
+
+| Family | Identity | Smoothing 0.75 | Cap 0.06 | Contextual rule |
+| --- | ---: | ---: | ---: | ---: |
+| Jar | 0/2 | 0/2 | 0/2 | 0/2 |
+| Stack | 0/2 | 1/2 | 1/2 | 0/2 |
+| Clutter | 2/2 | 2/2 | 1/2 | 2/2 |
+
+Stack had zero observed violations in eight episodes; its six failures were unfinished.
+Jar had seven violating episodes and one safe unfinished episode. Clutter had one
+violating failure, under the movement cap. These tiny training-only samples suggest
+execution headroom on Stack and a possible cost of uniformly restricting movement on
+Clutter. They do not establish causal effects, generalization, or an evolutionary advantage.
+No learned pilot has run. The joint EA, random-search and PPO comparison remains next,
+after final preparation accounting, current-source review and budget freeze.
+
+The current main integration checks pass 222 tests and Ruff. Native qualification and
+the bounded post-child audit integration remain outstanding.
+
+The final immutable report is `runs/maniguard/phase2/reports/preparation-all-complete-v1/report.json`,
+content hash `31b64fccff0f3b083814c72a5546696a42a5ec860010847d02e8443c4b43f96c`.
+Preparation and prior accounting are complete and ready for freeze review; training is
+not yet authorized by a frozen protocol. The prespecified reference selection chooses
+smoothing 0.75 as the fixed comparator. This training-only selection is not a held-out result.
