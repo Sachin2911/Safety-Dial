@@ -2,6 +2,14 @@
 
 **Central reference for the research rethink. Updated 18 October 2026.**
 
+## Active plan: phase three
+
+On 18 October 2026 Sachin paused the frozen phase-two pilot at a block boundary and chose a
+new direction for a GECCO 2027 full paper: a bounded safety-dial execution layer evolved with
+penalty-free, noise-aware evolution against random search, a scalar-penalty ablation and PPO,
+gated by a heritability probe. [direction.md](direction.md) is the decision record and active
+plan; the sections below remain the record of phase two and its evidence.
+
 ## Current phase-two direction
 
 On 17 October, after the completed ManiGuard mechanism screens, Sachin endorsed a shared

@@ -24,7 +24,8 @@ method, timelines or run gates as the new implementation plan.
 
 ## Repository map
 
-1. `oracle.md`: central authority for the current research focus and decisions.
+1. `oracle.md`: central authority for the current research focus and decisions;
+   `direction.md` is the active phase-three plan and decision record (18 October 2026).
 2. `docs/research/`: current literature reviews, supporting notes and asset audits.
 3. `docs/templates/`: reusable document source templates.
 4. `experiments/`: workspace for new implementation; add reusable Python under `helpers/`
