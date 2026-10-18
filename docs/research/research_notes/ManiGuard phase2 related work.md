@@ -1,7 +1,7 @@
 # ManiGuard phase-two related work and baseline choice
 
 Reviewed 17 October 2026. This note compares five primary papers and the author code
-located during the review. It supports [phase2.md](../../../phase2.md); it is not an
+located during the review. It supports [phase2.md](../history/20261018/phase2.md); it is not an
 exhaustive novelty review, a reproduction, or evidence that our proposed method works.
 No models were downloaded and no experiments were run for this review.
 
@@ -80,7 +80,7 @@ Start with **AAC-joint**, a clearly named adaptation of the pinned method. This 
 engineering recommendation, not a completed baseline. ManiGuard supplies seven absolute
 arm-joint targets and a signed gripper command; the proposed adapter already works at
 that execution boundary. Its shared sixteen-action prefix is specified in
-[phase2.md](../../../phase2.md). The necessary port has five parts:
+[phase2.md](../history/20261018/phase2.md). The necessary port has five parts:
 
 1. **Expose multiple independent proposals.** At each query, collect a fixed number of
    stochastic chunks from exactly the same observation and instruction. Begin the

@@ -1,7 +1,7 @@
 # Research archive
 
 Archived 8 October 2026 while narrowing the current research to
-[task continuation under learned safety filtering](../oracle.md).
+[task continuation under learned safety filtering](../docs/research/history/20261018/oracle.md).
 
 Earlier work is preserved in `legacy/` with its original relative directory layout.
 The shared helpers and configurations make a single historical workspace more reliable

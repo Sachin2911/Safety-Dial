@@ -13,7 +13,7 @@ with six physical failures for the baseline.
 The improvement largely persists without filtering. The evidence supports preventing a
 basic loss of grasp; it does not yet establish a filter-specific continuation contribution.
 This closes the initial objective of explaining one weakness and evaluating a response.
-The broader research question in [oracle.md](../../../oracle.md) remains open.
+The broader research question in [oracle.md](../history/20261018/oracle.md) remains open.
 
 ![Reserved evaluation outcomes](assets/unisafe-grasp-maintenance-20261016/outcomes.png)
 

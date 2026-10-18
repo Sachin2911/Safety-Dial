@@ -1,8 +1,10 @@
 # Current experiment workspace
 
 New implementation follows [phase3.md](../phase3.md), the active safe-execution adaptation
-plan. Its main protocol is not yet frozen. [oracle.md](../oracle.md) indexes the research
-history, and [phase2.md](../phase2.md) preserves the paused pilot's protocol and handoff.
+plan. Its main protocol is not yet frozen. The
+[research history](../docs/research/history/README.md) preserves earlier directions, and
+the [phase-two plan](../docs/research/history/20261018/phase2.md) retains the paused pilot's
+protocol and handoff.
 
 Add reusable Python under `helpers/`, entry points under `scripts/`, tests under `tests/`
 and study configs under `../configs/`. There is no `src/` package.

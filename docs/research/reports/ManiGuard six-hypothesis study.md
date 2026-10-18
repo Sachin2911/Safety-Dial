@@ -1,6 +1,6 @@
 # ManiGuard six-hypothesis study
 
-All six hypotheses in [fruits.md](../../../fruits.md) have executable adapters and completed
+All six hypotheses in [fruits.md](../history/20261018/fruits.md) have executable adapters and completed
 physical mechanism screens. The declared study contains **196 validated full episodes**.
 It finds useful implementation and evaluation problems, but no repeatable simple repair
 that currently supports an evolutionary-optimization study. No ManiGuard optimizer was

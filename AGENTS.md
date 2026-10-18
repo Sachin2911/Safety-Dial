@@ -2,8 +2,8 @@
 
 ## Current direction and authority
 
-Read the short [oracle.md](oracle.md) index, then [phase3.md](phase3.md), the active
-research plan and direction. The current question is whether evolutionary search can
+Read [phase3.md](phase3.md), the active research plan and direction. The current question
+is whether evolutionary search can
 discover a compact execution controller that improves safe completion around frozen
 manipulation policies under matched interaction budgets. The phase-three protocol is not
 yet frozen; its controller details, comparisons, statistical thresholds and total budget
@@ -28,9 +28,9 @@ timelines or run gates as the new implementation plan.
 ## Repository map
 
 1. `phase3.md`: active research plan and direction, with open choices and corrected
-   budgets. `oracle.md` is a short navigation index. `phase2.md` retains the paused pilot's
-   protocol and handoff. `docs/research/history/` preserves earlier root plans; root
-   `fruits.md`, `ideation.md` and `direction.md` are compatibility links, not active plans.
+   budgets. `docs/research/history/` preserves the earlier fruits, ideation, direction,
+   oracle and phase-two plans. The archived phase-two plan retains the paused pilot's
+   protocol and handoff. The old root files and compatibility links have been removed.
 2. `docs/research/`: current literature reviews, supporting notes and asset audits.
 3. `docs/templates/`: reusable document source templates.
 4. `experiments/`: workspace for new implementation; add reusable Python under `helpers/`

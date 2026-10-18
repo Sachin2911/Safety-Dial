@@ -6,13 +6,15 @@ experimental protocol or a report of phase-three results. The safety dial, optim
 details, comparisons, statistical thresholds and total budget still need the decisions
 identified below before implementation and main-study execution.
 
-This document is the active research plan and direction. [oracle.md](oracle.md) is a
-short navigation index. The [archived direction](docs/research/history/20261018/direction.md)
-preserves the original 18 October decision record and its initial estimates. This
-document supersedes that record's prospective experimental
-details where the review corrects them. [phase2.md](phase2.md), its frozen configs and
-recorded results remain unchanged. Creating this plan does not resume a paused job,
-authorize additional rental or freeze a new run allocation.
+This document is the active research plan and direction. The
+[plan history](docs/research/history/README.md) preserves the earlier oracle, ideation,
+candidate studies and phase-two plan. The
+[archived direction](docs/research/history/20261018/direction.md) records the original
+18 October decisions and initial estimates. This document supersedes that record's
+prospective experimental details where the review corrects them. The
+[phase-two plan](docs/research/history/20261018/phase2.md), its frozen configs and recorded
+results remain unchanged. Creating this plan does not resume a paused job, authorize
+additional rental or freeze a new run allocation.
 
 ## 1. Research question and contribution
 

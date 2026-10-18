@@ -17,8 +17,9 @@ draft, not an approved proposal or an official university template.
   Add citations with `\parencite{key}` or `\textcite{key}` and restore
   `\printbibliography` in `main.tex` if references are needed.
 
-The draft follows the current direction in [oracle.md](../../oracle.md).
-Environment, algorithm, model and budget choices remain open. The crest is
+The draft records the earlier direction in the
+[archived oracle](../research/history/20261018/oracle.md). The active plan is
+[phase3.md](../../phase3.md); the concept note has not been revised to match it. The crest is
 copied from the existing template, which extracted it from the supplied proposal.
 
 ## Building

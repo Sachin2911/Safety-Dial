@@ -1,6 +1,6 @@
 # Phase-two evaluation tooling
 
-These modules support [phase2.md](../../../phase2.md) and have been checked with
+These modules support [phase2.md](../history/20261018/phase2.md) and have been checked with
 synthetic records. No optimizer results are available. The main parent, child, native guard and independent reader are connected and tested
 with synthetic inputs. Actual main execution remains gated on native qualification,
 activation of two staged entry-point controls, a bounded audit worker and a scientifically

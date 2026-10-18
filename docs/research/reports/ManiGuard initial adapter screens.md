@@ -2,7 +2,7 @@
 
 **Initial screens and declared follow-ups completed 17 October 2026.**
 
-All six adapters in [fruits.md](../../../fruits.md) have executable implementations and
+All six adapters in [fruits.md](../history/20261018/fruits.md) have executable implementations and
 physical engineering-screen evidence. The initial screens do not establish a general
 safe-completion improvement. Prerequisite guarding and smoothing each have one promising
 Jar scene contrast, but their aggregate safe-completion counts do not exceed the repeated

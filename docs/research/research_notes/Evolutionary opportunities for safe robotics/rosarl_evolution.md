@@ -65,7 +65,7 @@ Three hypotheses merit screening, in descending order below. None yet justifies 
 
 ### Cited Findings
 
-- The repository's current oracle records that grasp correction substantially improves completion, that simpler methods match or exceed evolution, and that most improvement persists without filtering. This is the local reason to abandon filter-induced continuation as an assumed mechanism. [Current oracle](../../../../oracle.md)
+- The repository's current oracle records that grasp correction substantially improves completion, that simpler methods match or exceed evolution, and that most improvement persists without filtering. This is the local reason to abandon filter-induced continuation as an assumed mechanism. [Current oracle](../../history/20261018/oracle.md)
 - Failure-focused curricula, safe curricula and temporal-rule discovery have verified precedents above. They are foundations and mandatory comparison targets, rather than evidence that any of the following questions is novel. [Genetic Curriculum](https://arxiv.org/abs/2202.08393); [SCG](https://proceedings.iclr.cc/paper_files/paper/2025/hash/120ed726cf129dbeb8375b6f8a0686f8-Abstract-Conference.html); [monitoring](https://arxiv.org/abs/2508.17786)
 
 ### Inferences

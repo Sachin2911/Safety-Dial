@@ -1,6 +1,6 @@
 # Adjacent opportunities: robustness and reliability of filtered manipulation
 
-Research date: 13 October 2026. This is a focused primary-source search and proposal assessment, not an exhaustive novelty review. No simulator or training was run. The recommendations below are inferences, and the current authority remains [oracle.md](../../../../oracle.md). Engineering effort means marginal effort after a working filtered manipulation baseline, whose reproduction remains a separate unresolved cost.
+Research date: 13 October 2026. This is a focused primary-source search and proposal assessment, not an exhaustive novelty review. No simulator or training was run. The recommendations below are inferences, and the current authority remains [oracle.md](../../history/20261018/oracle.md). Engineering effort means marginal effort after a working filtered manipulation baseline, whose reproduction remains a separate unresolved cost.
 
 ## Can evolution discover informative intervention failures and turn them into useful adaptation cases?
 

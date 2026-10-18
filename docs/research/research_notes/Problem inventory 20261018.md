@@ -26,7 +26,7 @@ stage 6 under `archive/legacy/docs/evoPlan/results/stage6-*`, [GECCO draft](../.
 [Safe CEM](../../../archive/legacy/notes/safeCEM.md), [Phase 0](../../../archive/legacy/notes/phase0Report.md),
 [LeWM through S4](../../../archive/legacy/docs/mainPlan/reports/through-s4-20260927/report.md),
 [UNISafe study](../reports/UNISafe%20grasp%20maintenance%20and%20evolutionary%20adaptation.md),
-[ManiGuard six hypotheses](../reports/ManiGuard%20six-hypothesis%20study.md) and [direction.md](../../../direction.md).
+[ManiGuard six hypotheses](../reports/ManiGuard%20six-hypothesis%20study.md) and [direction.md](../history/20261018/direction.md).
 
 ## Problems
 

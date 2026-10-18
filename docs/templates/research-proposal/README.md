@@ -19,7 +19,7 @@ The six main chapters retain the reference's structure:
 The abstract, declaration, contents and bibliography are included. Topic-specific
 subsections use editable prompts for Sachin's current research interests. No
 environment, algorithm, hypothesis, result or date range has been selected by
-this template. `oracle.md` remains the authority for research decisions.
+this template. [phase3.md](../../../phase3.md) is the active research plan and direction.
 
 ## Editing
 

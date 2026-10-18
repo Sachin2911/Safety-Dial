@@ -1,6 +1,6 @@
 # Shared-controller phase-two study
 
-The research scope and decision gates are in [phase2.md](../../../phase2.md).
+The research scope and decision gates are in [phase2.md](../../../docs/research/history/20261018/phase2.md).
 Implementation and evidence are tracked in
 [the development log](../../../docs/research/research_notes/ManiGuard%20phase2%20development.md)
 and [requirements ledger](../../../docs/research/research_notes/ManiGuard%20phase2%20requirements.json).

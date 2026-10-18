@@ -1,6 +1,6 @@
 # ManiGuard fruit experiments
 
-This study implements the six hypotheses in [fruits.md](../../fruits.md). The initial mechanism screens and the Stack, Jar and Lid follow-ups are complete;
+This study implements the six hypotheses in [fruits.md](../../docs/research/history/20261018/fruits.md). The initial mechanism screens and the Stack, Jar and Lid follow-ups are complete;
 the twelve-trial controller-limit correction comparison is also complete. All 196 declared full episodes validate. See the
 [six-hypothesis synthesis](../../docs/research/reports/ManiGuard%20six-hypothesis%20study.md).
 The tested settings did not establish a repeatable useful correction, so optimizer

@@ -1,1 +1,0 @@
-docs/research/history/20261018/fruits.md

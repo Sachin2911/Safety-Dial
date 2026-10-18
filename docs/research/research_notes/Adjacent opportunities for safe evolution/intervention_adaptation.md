@@ -1,6 +1,6 @@
 # Intervention-aware evolutionary adaptation
 
-Focused primary-source search, 13 October 2026. Candidate opportunities below are hypotheses, not verified novelty gaps. No experiments were run. The current authority remains [oracle.md](../../../../oracle.md).
+Focused primary-source search, 13 October 2026. Candidate opportunities below are hypotheses, not verified novelty gaps. No experiments were run. The current authority remains [oracle.md](../../history/20261018/oracle.md).
 
 ## Can intervention traces improve evolutionary adaptation?
 
@@ -97,7 +97,7 @@ The project should first seek evidence that avoidable continuation failures exis
 ### Cited Findings
 
 - CoFiT explicitly evaluates realized constraint satisfaction rather than claiming unconditional safety from its fixed filter. It also notes that different proposals can yield the same executed action and reward. [Paper, Sections III-B and IV-B](https://arxiv.org/html/2610.02341)
-- The repository oracle makes the chosen direction conditional on consequential avoidable stalls, and requires reporting physical violations, unfinished episodes and all adaptation interactions. [Current research authority](../../../../oracle.md)
+- The repository oracle makes the chosen direction conditional on consequential avoidable stalls, and requires reporting physical violations, unfinished episodes and all adaptation interactions. [Current research authority](../../history/20261018/oracle.md)
 
 ### Inferences
 

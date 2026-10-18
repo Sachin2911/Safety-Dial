@@ -16,8 +16,8 @@ implementation and protocol freeze.
 - [Research and documentation](docs/README.md): the manipulation literature, UNISafe asset
   and compute audits, proposal template and academic context.
 - [Active phase-three plan](phase3.md): direction, methods, evaluation and open decisions.
-- [Research index](oracle.md) and [earlier plans](docs/research/history/README.md).
-- [Paused phase-two pilot](phase2.md): preserved protocol and handoff.
+- [Earlier research plans](docs/research/history/README.md): preserved decisions and studies.
+- [Paused phase-two pilot](docs/research/history/20261018/phase2.md): preserved protocol and handoff.
 - [Experiment workspace](experiments/README.md): where new implementation will go.
 - [Agent and engineering guidance](AGENTS.md).
 
