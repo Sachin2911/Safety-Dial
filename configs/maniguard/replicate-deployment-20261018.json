@@ -1,0 +1,58 @@
+{
+  "schema": "maniguard-replicate-deployment-v1",
+  "instance_id": "56515754",
+  "routes": [
+    {
+      "gpu": 0,
+      "family": "clutter",
+      "port": 18100,
+      "slots": 1
+    },
+    {
+      "gpu": 1,
+      "family": "clutter",
+      "port": 18101,
+      "slots": 1
+    },
+    {
+      "gpu": 2,
+      "family": "clutter",
+      "port": 18102,
+      "slots": 1
+    },
+    {
+      "gpu": 3,
+      "family": "clutter",
+      "port": 18103,
+      "slots": 1
+    },
+    {
+      "gpu": 4,
+      "family": "clutter",
+      "port": 18104,
+      "slots": 1
+    },
+    {
+      "gpu": 5,
+      "family": "clutter",
+      "port": 18105,
+      "slots": 1
+    },
+    {
+      "gpu": 6,
+      "family": "clutter",
+      "port": 18106,
+      "slots": 1
+    },
+    {
+      "gpu": 7,
+      "family": "clutter",
+      "port": 18107,
+      "slots": 1
+    }
+  ],
+  "episode_timeout": 2400,
+  "cleanup_reserve": 120,
+  "threads_per_process": 4,
+  "policy_services": "maniguard_policy_gpu<N>: serve.sh --family clutter --phase2 --parallel-clients, CUDA_VISIBLE_DEVICES=N"
+}

@@ -34,7 +34,7 @@
     },
     {
       "gpu": 2,
-      "family": "stack",
+      "family": "jar",
       "port": 18102,
       "slots": 1
     },
@@ -74,18 +74,18 @@
   "cleanup_reserve": 120,
   "threads_per_process": 4,
   "initial_qualification": "One simulator per GPU. JAX servers verified on their own GPU by memory. Shared Kit apps-directory copies are made race-free by the worker shim. No extra benchmark episodes.",
-  "route_basis": "Old-host median full-episode process times (Jar about 210 s, Stack about 375 s, Clutter about 160 s) give per-family work near 2:4:2 GPUs.",
+  "route_basis": "Jar is the bottleneck for the two remaining blocks (11 Jar, 8 Stack episodes), so GPU 2 moves from Stack to Jar.",
   "policy_services": "maniguard_policy_gpu<N>: serve.sh --phase2 --parallel-clients, CUDA_VISIBLE_DEVICES=N",
   "dispatch": "lanes",
   "lane_priority": [
-    "random/s17",
     "evolution/s17",
-    "references",
-    "random/s29",
-    "evolution/s29",
-    "ppo/s17",
-    "ppo/s29"
+    "references"
   ],
   "lane_priority_basis": "Sachin chose on 2026-10-18 to keep the 72 GPU-hour ceiling and run a partial pilot, prioritizing EA, random search and references; PPO fills spare slots. Priority changes dispatch order only.",
-  "worker_gpu_view": "CUDA_VISIBLE_DEVICES=<gpu> with OMNIGIBSON_GPU_ID unset: one visible GPU per simulator, as on the frozen single-GPU host. Kit selects the matching renderer and PhysX uses CUDA ordinal 0; verified by probe and recorded per attempt."
+  "worker_gpu_view": "CUDA_VISIBLE_DEVICES=<gpu> with OMNIGIBSON_GPU_ID unset: one visible GPU per simulator, as on the frozen single-GPU host. Kit selects the matching renderer and PhysX uses CUDA ordinal 0; verified by probe and recorded per attempt.",
+  "lane_allowlist": [
+    "evolution/s17",
+    "references"
+  ],
+  "lane_allowlist_basis": "Sachin chose on 2026-10-18 to pause the frozen pilot at a block boundary: finish evolution/s17 panel 0 (the paired replicate of random/s17 panel 0) and the reference block, then stop for the replicate diagnostic. Allowlist and priority are dispatch-only."
 }

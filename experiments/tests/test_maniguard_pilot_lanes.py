@@ -232,3 +232,4 @@ def test_voided_attempt_releases_claim_and_reruns_same_job(frozen_protocol, tmp_
     with pytest.raises(RuntimeError, match='release policy'):
         run_parallel(LaneCoordinator(PilotCoordinator(frozen_protocol)), ROUTES, tmp_path / 'x.json',
                      output, execute, lambda *args: None, value, max_new_jobs=1)
+

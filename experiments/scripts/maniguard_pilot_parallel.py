@@ -49,7 +49,7 @@ from helpers.maniguard_phase2_services import (
     probe_policy_metadata,
     run_fresh_episode,
 )
-from helpers.maniguard_pilot_lanes import LaneCoordinator
+from helpers.maniguard_pilot_lanes import LaneCoordinator, lane_key
 from helpers.maniguard_pilot_parallel import AllocationClock, run_parallel, validate_routes
 
 SCHEMA = 'maniguard-parallel-launch-v1'
@@ -113,12 +113,45 @@ def kit_render_gpu(appdata, started_at):
     return {'log': str(log), 'active_uuid_prefix': active, 'physx_cuda_ordinals': physx}
 
 
-def take_over_lanes(output, priority):
+class AllowlistedLanes(LaneCoordinator):
+    """Dispatch-only lane restriction; frozen state, hashes and updates are untouched."""
+
+    allowlist = None
+
+    @classmethod
+    def load(cls, path, *, allowlist=None, **kwargs):
+        lanes = super().load(path, **kwargs)
+        lanes.set_allowlist(allowlist)
+        return lanes
+
+    def __init__(self, base, *, allowlist=None, **kwargs):
+        super().__init__(base, **kwargs)
+        self.set_allowlist(allowlist)
+
+    def set_allowlist(self, allowlist):
+        if allowlist is not None and not set(allowlist) <= set(self.lanes):
+            raise ValueError('Lane allowlist must name known lanes')
+        self.allowlist = None if allowlist is None else set(allowlist)
+
+    def next_jobs(self):
+        jobs = super().next_jobs()
+        if self.allowlist is None:
+            return jobs
+        return [job for job in jobs
+                if lane_key(self.base.stage_plan[self._active_stage_of(job['job_id'])]) in self.allowlist]
+
+    def report(self):
+        report = super().report()
+        report['lane_allowlist'] = None if self.allowlist is None else sorted(self.allowlist)
+        return report
+
+
+def take_over_lanes(output, priority, allowlist=None):
     """Move the frozen serial state into lanes exactly once; never leave both resumable."""
     serial, lanes_path = output / 'coordinator.json', output / 'lanes.json'
     moved = output / 'coordinator-serial-takeover.json'
     if lanes_path.exists():
-        coordinator = LaneCoordinator.load(lanes_path, priority=priority)
+        coordinator = AllowlistedLanes.load(lanes_path, priority=priority, allowlist=allowlist)
         if serial.exists():
             if file_hash(serial) != coordinator.takeover['file_sha256'] or moved.exists():
                 raise RuntimeError('Serial and lane coordinator states disagree; reconcile first')
@@ -130,7 +163,7 @@ def take_over_lanes(output, priority):
     takeover = {'serial_file': moved.name, 'file_sha256': file_hash(serial),
                 'content_sha256': base._last_saved_sha256, 'taken_over_at': time.time(),
                 'report': base.report()}
-    coordinator = LaneCoordinator(base, takeover=takeover, priority=priority)
+    coordinator = AllowlistedLanes(base, takeover=takeover, priority=priority, allowlist=allowlist)
     coordinator.save(lanes_path)
     os.replace(serial, moved)
     return coordinator
@@ -138,7 +171,8 @@ def take_over_lanes(output, priority):
 
 def load_dispatch(config, output):
     if config.get('dispatch', 'serial') == 'lanes':
-        return take_over_lanes(output, config.get('lane_priority')), output / 'lanes.json'
+        return (take_over_lanes(output, config.get('lane_priority'), config.get('lane_allowlist')),
+                output / 'lanes.json')
     if config.get('dispatch', 'serial') != 'serial':
         raise ValueError('Dispatch must be serial or lanes')
     return PilotCoordinator.load(output / 'coordinator.json'), output / 'coordinator.json'
@@ -205,7 +239,8 @@ def check(config_path, output):
                              protocol['resource_envelope'])
     output = Path(output)
     if config.get('dispatch') == 'lanes' and (output / 'lanes.json').exists():
-        coordinator = LaneCoordinator.load(output / 'lanes.json', priority=config.get('lane_priority'))
+        coordinator = AllowlistedLanes.load(output / 'lanes.json', priority=config.get('lane_priority'),
+                                            allowlist=config.get('lane_allowlist'))
     else:
         coordinator = PilotCoordinator.load(output / 'coordinator.json')
     report = coordinator.report()
@@ -270,6 +305,7 @@ def run(config_path, output, deployment, *, max_new_jobs=None):
             manifest.update(resume_content_sha256=coordinator._last_saved_sha256,
                             state_path=str(state_path), dispatch=config.get('dispatch', 'serial'),
                             lane_priority=config.get('lane_priority'),
+                            lane_allowlist=config.get('lane_allowlist'),
                             takeover=getattr(coordinator, 'takeover', None))
             if coordinator.report()['in_flight_claims']:
                 raise RuntimeError('Existing claims require reconciliation; never replay them')
