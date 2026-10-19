@@ -8,6 +8,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{xurl}
+\usepackage{needspace}
 \setlength{\emergencystretch}{2em}
 \graphicspath{{../../figures/ManiGuard/phase3-recovery/}{../../figures/ManiGuard/phase3-part1/}}
 \newcommand{\ind}{\mathbf{1}}
@@ -141,8 +142,20 @@ The monitor labels consequences and never changes commands
 refers to our map and query scheduler. There is no learned online safety filter,
 world-model veto or ROSARL integration in the executed system.
 
+\Needspace{20\baselineskip}
 \section{Methodology}
 \subsection{Original categorical execution controller}
+Evolution can adjust four execution settings:
+\begin{itemize}
+ \item \textbf{Free-motion cap ($c_f$):} the limit on joint-target displacement
+ relative to measured joints during ordinary movement.
+ \item \textbf{Grasp-conditioned cap ($c_g$):} a separate displacement limit when
+ a fixed finger-based heuristic suggests a possible grasp.
+ \item \textbf{Command smoothing ($\alpha$):} how much of the new arm proposal is
+ blended with the previous final arm input to moderate command changes.
+ \item \textbf{Policy-query interval ($h$):} how many commands are executed before
+ requesting fresh instructions from the frozen policy.
+\end{itemize}
 Part 1 searches $\theta=(c_f,c_g,\alpha,h)$ over
 \begin{align}
  c_f&\in\{\disabled,.12,.08,.04\}\ \mathrm{rad}, &

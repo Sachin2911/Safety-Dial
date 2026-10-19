@@ -1,7 +1,20 @@
 # Research plan history
 
-[phase3.md](../../../phase3.md) is the active working plan and direction.
+[Evolutionary improvement on ManiGuard](../../../Evolutionary%20improvement%20on%20ManiGuard.md)
+is the current research direction.
 [AGENTS.md](../../../AGENTS.md) contains engineering and preservation guidance.
+
+## Documents archived on 19 October 2026
+
+The six former Phase 3 root plans are preserved byte-for-byte under
+[20261019](20261019/README.md): the overall direction, Parts 1 to 4 and recovery proposal.
+Their frozen protocols, completed results and original stop decisions remain evidence
+of those studies. Their prospective instructions are historical context.
+
+The new root direction replaces them as the research entry point. The
+[19 October manifest](20261019/manifest.json) records original paths, hashes, navigation
+snapshots and shared links. The earlier `20261018/phase3.md` history link now points to
+the preserved Phase 3 plan; the 18 October manifest remains unchanged as its original record.
 
 ## Documents archived on 18 October 2026
 
@@ -36,18 +49,19 @@ links and navigation changes.
 
 The root `fruits.md`, `ideation.md`, `direction.md`, `oracle.md` and `phase2.md` paths have
 been removed. Markdown links now point directly to the archived plans. No compatibility
-aliases or index files remain at the root; the only root Markdown files are `phase3.md`,
-`AGENTS.md` and `readme.md`.
+aliases or index files remain at the root. Following the 19 October cleanup, the root
+Markdown files are the current research direction, `AGENTS.md` and `readme.md`.
 
 Two navigation documents were hash-pinned by the completed ManiGuard audit. Their exact
 original bytes are preserved under `20261018/preserved-navigation/`, with a `.txt`
-suffix. Their current copies differ only in Markdown link destinations. The
+suffix. Their working copies at that reorganization differed only in link destinations. The
 `navigation_originals` entries map the audit's original paths and hashes to those preserved
 copies and record the updated navigation hashes. Frozen audit JSON and source snapshots
 retain their original paths and checksums.
 
-The dated directory contains relative links named `docs`, `archive`, `configs` and
-`phase3.md`. They preserve the archived plans' original root-relative Markdown links without
+The 18 October directory contains relative links named `docs`, `archive`, `configs` and
+`phase3.md`. The last now resolves to the preserved 19 October plan. These references
+preserve the archived plans' original Markdown links without
 editing the archived text or copying the referenced material. They are shared references,
 not additional archived datasets or experiment workspaces.
 

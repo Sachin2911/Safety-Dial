@@ -33,6 +33,8 @@ class TemplateTests(unittest.TestCase):
             "created-template.json",
             "README.md",
             "UNISAFE.md",
+            "maniguard-evolution.json",
+            "MANIGUARD-EVOLUTION.md",
         ):
             (config_dir / name).write_bytes((ROOT / "configs/vast" / name).read_bytes())
         self.config = json.loads((config_dir / "evo-safety-filter.json").read_text())
@@ -93,6 +95,50 @@ class TemplateTests(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "Could not identify"):
             self.invoke(["--update"], run)
         self.assertEqual(run.call_count, 2)
+        self.assertEqual(json.loads(self.record_path.read_text()), self.record)
+
+    def test_creation_cannot_overwrite_an_existing_record(self):
+        run = mock.Mock()
+        with self.assertRaisesRegex(SystemExit, "Template record already exists"):
+            self.invoke([], run)
+        self.assertEqual(run.call_count, 1)
+        self.assertEqual(json.loads(self.record_path.read_text()), self.record)
+
+    def test_new_profile_creation_preserves_the_legacy_record(self):
+        profile = json.loads((self.root / "configs/vast/maniguard-evolution.json").read_text())
+        saved = {"id": 900001, "hash_id": "new-profile-hash", "name": profile["name"]}
+        run = mock.Mock(
+            side_effect=[
+                subprocess.CompletedProcess([], 0),
+                subprocess.CompletedProcess([], 0, "[]"),
+                subprocess.CompletedProcess([], 0, "New Template: " + repr(saved)),
+            ]
+        )
+        self.invoke(["--config", "configs/vast/maniguard-evolution.json"], run)
+        command = run.call_args.args[0]
+        self.assertEqual(command[:3], ["vastai", "create", "template"])
+        self.assertEqual(command[command.index("--name") + 1], profile["name"])
+        self.assertEqual(json.loads((self.root / profile["record_file"]).read_text()), saved)
+        self.assertEqual(json.loads(self.record_path.read_text()), self.record)
+
+    def test_new_profile_update_uses_its_own_template_identity(self):
+        profile = json.loads((self.root / "configs/vast/maniguard-evolution.json").read_text())
+        record_path = self.root / profile["record_file"]
+        record = {"id": 900001, "hash_id": "new-profile-hash", "name": profile["name"]}
+        record_path.write_text(json.dumps(record))
+        saved = {**record, "hash_id": "updated-profile-hash"}
+        run = mock.Mock(
+            side_effect=[
+                subprocess.CompletedProcess([], 0),
+                subprocess.CompletedProcess([], 0, json.dumps([record])),
+                subprocess.CompletedProcess([], 0, "updated template: " + json.dumps(saved)),
+            ]
+        )
+        self.invoke(["--config", "configs/vast/maniguard-evolution.json", "--update"], run)
+        self.assertEqual(
+            run.call_args.args[0][:4], ["vastai", "update", "template", record["hash_id"]]
+        )
+        self.assertEqual(json.loads(record_path.read_text()), saved)
         self.assertEqual(json.loads(self.record_path.read_text()), self.record)
 
     def test_unisafe_installer_refuses_maniguard_before_host_checks(self):

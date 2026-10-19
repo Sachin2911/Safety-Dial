@@ -1,16 +1,21 @@
 # Documentation
 
-[phase3.md](../phase3.md) is the active research plan and direction: evolutionary execution
-adaptation for safe manipulation. Earlier plans are in the
+[Evolutionary improvement on ManiGuard](../Evolutionary%20improvement%20on%20ManiGuard.md)
+is the current research direction: shared latent execution adaptation around frozen
+manipulation policies. Earlier plans are in the
 [research history](research/history/README.md).
 
 ## Current research
 
-- [Phase-three plan](../phase3.md): proposed method, comparisons, gates, corrected budget
-  and unresolved decisions before implementation and protocol freeze.
+- [Current direction](../Evolutionary%20improvement%20on%20ManiGuard.md): the recommended
+  method, four latent extensions, prior art and staged generalization tests.
+- [Agent execution prompt](research/research_notes/ManiGuard%20latent%20evolution%20goal%20prompt.md):
+  the executable handoff, current allocation and GitHub/Hugging Face storage instructions.
+- [Archived Phase 3 plans](research/history/20261019/README.md): earlier direction,
+  Parts 1 to 4 and recovery proposal, retained with preservation hashes.
 - [Phase-two protocol and handoff](research/history/20261018/phase2.md): retained for the paused pilot.
-- [Research plan history](research/history/README.md): archived fruits, ideation, original
-  phase-three direction, full earlier oracle and phase-two plan, with preservation hashes.
+- [Research plan history](research/history/README.md): earlier directions, protocols and
+  handoffs with preservation hashes.
 - [Earlier Research Concept Note](researchConceptNote.pdf), with
   [editable LaTeX source and build instructions](researchConceptNote/README.md).
 - [Safe manipulation progress and robustness](research/reports/Safe%20manipulation%20progress%20and%20robustness.md):

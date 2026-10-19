@@ -1,0 +1,68 @@
+{
+  "schema": "maniguard-rental-handoff-v1",
+  "recorded_utc": "2026-10-19T19:33:12.129407+00:00",
+  "instance_id": 56777435,
+  "status_at_check": "running",
+  "label": "maniguard-dual-20261019",
+  "offer_id": 49900874,
+  "machine_id": 54514,
+  "cloud_tier": "verified Community Cloud",
+  "geolocation": "New Zealand, NZ",
+  "hardware": {
+    "num_gpus": 2,
+    "gpu_name": "RTX 3090",
+    "vram_mib_per_gpu": 24576,
+    "driver_version": "580.173.02",
+    "allocated_cpu_ram_mb": 128283,
+    "effective_cpu_cores": 20.0,
+    "disk_gb": 200
+  },
+  "pricing": {
+    "approved_max_hourly_usd": 0.65,
+    "observed_hourly_usd_with_disk": 0.6125925925925926,
+    "disk_hourly_usd": 0.09259259259259259,
+    "transfer_charges_separate": true
+  },
+  "provider_started_epoch": 1792437736.7653263,
+  "provider_started_utc": "2026-10-19T19:22:16.765326+00:00",
+  "max_session_wall_hours": 8,
+  "allocated_gpu_hours_per_wall_hour": 2,
+  "stop": {
+    "deadline_utc": "2026-10-20T03:00:00Z",
+    "deadline_sast": "2026-10-20T05:00:00+02:00",
+    "provider_schedule_id": 4986,
+    "schedule_readback_verified": true,
+    "action": "stop_retaining_disk",
+    "storage_billing_continues_when_stopped": true
+  },
+  "base": {
+    "image": "vastai/base-image:cuda-12.4.1-cudnn-devel-ubuntu22.04-py310-2026-09-07",
+    "python": "3.10.21",
+    "cuda_toolkit": "12.4.1",
+    "uv": "/usr/local/bin/uv",
+    "node": "24.20.0",
+    "npm": "11.19.0",
+    "tmux_installed": true,
+    "maniguard_installed": false,
+    "simulator_camera_validated": false,
+    "workspace_is_volume": false,
+    "initial_render_library_probe": {
+      "gl": false,
+      "optix": false,
+      "vulkan": false
+    },
+    "render_library_repair": {
+      "helper": "/opt/instance-tools/bin/install-display-drivers",
+      "method": "Extract matching graphics userspace libraries; host kernel driver unchanged",
+      "verified_render_libraries": {
+        "gl": true,
+        "optix": true,
+        "vulkan": true
+      },
+      "driver_after_repair": "580.173.02",
+      "simulator_camera_validated": false,
+      "verified_utc": "2026-10-19T19:36:39.923986+00:00"
+    }
+  },
+  "provenance": "Rental, provider schedule and compute tools checked over Vast API and SSH on 19 October 2026. This receipt contains no credentials and authorizes no further allocation."
+}

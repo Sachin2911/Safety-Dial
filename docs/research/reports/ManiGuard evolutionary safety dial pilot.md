@@ -52,7 +52,7 @@ heuristic chooses the grasp cap. No object identity, object states, goal flags o
 labels enter it. Joint-target caps do not bound contact force or guarantee object
 uprightness. Logged environment inputs precede the native low-level controller's clipping.
 
-The [Part 1 plan](../../../phase3Part1.md), from planning commit `8df7ac9`, took
+The [Part 1 plan](../history/20261019/phase3Part1.md), from planning commit `8df7ac9`, took
 precedence. Its [machine-readable protocol](../../../configs/maniguard/phase3/part1.json)
 was frozen before search. One PCG64 seed, `20261018`, evaluated three populations of
 four candidates on two training scenes. Utility was `int(S_req) - 2*int(V)`, using

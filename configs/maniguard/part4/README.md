@@ -1,6 +1,6 @@
 # Part 4: counterexample acquisition
 
-The controlling plan is [phase3Part4.md](../../../phase3Part4.md). This directory is a
+The controlling plan is [phase3Part4.md](../../../docs/research/history/20261019/phase3Part4.md). This directory is a
 new namespace. Earlier protocols and raw evidence remain unchanged.
 
 The [bounded premise check](../../../docs/research/reports/ManiGuard%20Part4%20counterexample%20premise.md)

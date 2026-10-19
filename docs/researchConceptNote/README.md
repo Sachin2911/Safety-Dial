@@ -18,8 +18,9 @@ draft, not an approved proposal or an official university template.
   `\printbibliography` in `main.tex` if references are needed.
 
 The draft records the earlier direction in the
-[archived oracle](../research/history/20261018/oracle.md). The active plan is
-[phase3.md](../../phase3.md); the concept note has not been revised to match it. The crest is
+[archived oracle](../research/history/20261018/oracle.md). The current direction is
+[Evolutionary improvement on ManiGuard](../../Evolutionary%20improvement%20on%20ManiGuard.md);
+the concept note has not been revised to match it. The crest is
 copied from the existing template, which extracted it from the supplied proposal.
 
 ## Building

@@ -5,20 +5,22 @@
 Sachin Mohan, BSc Honours Computer Science, University of the Witwatersrand.
 Supervised by Geraud Nangue Tasse.
 
-Start with [phase3.md](phase3.md), the active research plan and direction: can evolutionary
-search discover a compact execution controller that improves safe completion around a
-frozen manipulation policy under matched interaction budgets? The plan records the
-proposed safety dial, comparisons, experimental gates and decisions still open before
-implementation and protocol freeze.
+Start with [Evolutionary improvement on ManiGuard](Evolutionary%20improvement%20on%20ManiGuard.md),
+the current research direction: evolve a shared controller around frozen manipulation
+policies, with safe completion and transfer across tasks as the targets. It compares
+latent steering options, prior evidence, matched baselines and staged evaluation.
+The proposed method and experiment budgets still require a prospective protocol freeze.
 
 ## Current workspace
 
 - [Research and documentation](docs/README.md): the manipulation literature, UNISafe asset
   and compute audits, proposal template and academic context.
-- [Active phase-three plan](phase3.md): direction, methods, evaluation and open decisions.
-- [Recovery plan](phase3Recovery.md): concrete repairs across Parts 1 to 4, bounded
-  comparisons and persistent execution rules, with a
-  [goal prompt](docs/research/research_notes/ManiGuard%20recovery%20goal%20prompt.md).
+- [Current research direction](Evolutionary%20improvement%20on%20ManiGuard.md): shared
+  latent controllers, low-cost extensions and cross-task comparisons.
+- [Agent execution prompt](docs/research/research_notes/ManiGuard%20latent%20evolution%20goal%20prompt.md):
+  implementation, recovery, the current rental limits and GitHub/Hugging Face preservation.
+- [Archived Phase 3 plans](docs/research/history/20261019/README.md): the earlier
+  direction, Parts 1 to 4 and recovery proposal, with original contents preserved.
 - [Part 4 premise result](docs/research/reports/ManiGuard%20Part4%20counterexample%20premise.md):
   frozen direct prediction check, scientifically gated before physical acquisition.
 - [Shared GECCO-format report](docs/research/reports/maniguard-phase3-part1-gecco/named.pdf):
@@ -60,6 +62,47 @@ ManiGuard simulation, assets and model-serving environments are separate manual 
 steps described in the template notes. The template does not install or validate them.
 For the completed UNISafe study, use the preserved
 [Python 3.12 / CUDA 13 platform](configs/vast/UNISAFE.md) and its installer instead.
+
+## Install Codex and start the agent on Vast
+
+On the rented machine, load the image's Node installation and install the CLI. The
+current base has Node 24, npm and tmux. These commands follow the
+[official Codex installation guidance](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex)
+and [headless authentication instructions](https://learn.chatgpt.com/docs/auth#login-on-headless-devices).
+
+```bash
+source /opt/nvm/nvm.sh
+npm install -g @openai/codex@latest
+codex --version
+codex login --device-auth
+```
+
+Complete device-code sign-in in your browser. Enable device-code login in your ChatGPT
+security/workspace settings if required. Keep the authentication cache outside Git.
+
+Clone `main` into a fresh working directory if you have not already cloned it:
+
+```bash
+cd /workspace
+git clone --branch main https://github.com/Sachin2911/Safety-Dial.git
+cd Safety-Dial
+tmux new -s maniguard
+codex
+```
+
+For an existing clone, first inspect `git status` and update it without discarding local
+work. In Codex, paste:
+
+```text
+/goal Execute docs/research/research_notes/ManiGuard latent evolution goal prompt.md, following AGENTS.md and Evolutionary improvement on ManiGuard.md. Implement and physically evaluate the authorized pilot, diagnose and repair failures, preserve fair comparisons, and verify GitHub/Hugging Face backups within the current rental deadline.
+```
+
+The [full prompt](docs/research/research_notes/ManiGuard%20latent%20evolution%20goal%20prompt.md)
+contains the current instance/deadline, private HF input repositories and new output
+destinations. [The dated rental record](configs/vast/maniguard-rental-20261019.json)
+records the two-GPU allocation; verify it is still active before using it. Starting a
+goal does not extend the rental. Detach tmux with `Ctrl-b`, then `d`; reconnect using
+`tmux attach -t maniguard`. This preserves the terminal across SSH disconnections.
 
 ## Pretrained UNISafe checkpoints
 

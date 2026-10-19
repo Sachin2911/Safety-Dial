@@ -1,7 +1,8 @@
 # Current experiment workspace
 
-New implementation follows [phase3.md](../phase3.md), the active safe-execution adaptation
-plan. Its main protocol is not yet frozen. The
+New implementation follows
+[Evolutionary improvement on ManiGuard](../Evolutionary%20improvement%20on%20ManiGuard.md),
+the current shared-controller research direction. Its main protocol is not yet frozen. The
 [research history](../docs/research/history/README.md) preserves earlier directions, and
 the [phase-two plan](../docs/research/history/20261018/phase2.md) retains the paused pilot's
 protocol and handoff.
@@ -9,12 +10,10 @@ protocol and handoff.
 Add reusable Python under `helpers/`, entry points under `scripts/`, tests under `tests/`
 and study configs under `../configs/`. There is no `src/` package.
 
-The [recovery plan](../phase3Recovery.md) specifies the next prospective implementation:
-a repaired execution interface and matched physical comparison, followed by supported
-model assistance or acquisition studies. Use new `maniguard_recovery_*` files and run
-paths. Preserve frozen Part 1 to 4 sources and receipts. The plan distinguishes retrying
-a failed process from stopping a provider instance; its launchers are not implemented
-merely by adding this documentation.
+The [archived recovery plan](../docs/research/history/20261019/phase3Recovery.md) records
+the earlier cap/query repair route. Preserve frozen Part 1 to 4 sources and receipts.
+Native-noise steering and its extensions need new versioned implementation, run paths
+and a prospective protocol; the historical launchers do not implement that direction.
 
 [Part 4](../configs/maniguard/part4/README.md) implements causal first-uprightness labels,
 direct predictors and four acquisition bookkeeping kernels. Its frozen offline premise

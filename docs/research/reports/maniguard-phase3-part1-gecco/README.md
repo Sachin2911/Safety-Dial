@@ -1,11 +1,15 @@
 # ManiGuard shared GECCO-format report
 
 For the **19 October supervisor check-in**, open
-[supervisor-draft.pdf](supervisor-draft.pdf) and the
+[draft.pdf](draft.pdf) and the
 [one-page meeting brief](meeting-brief.pdf). The paper draft uses the same ACM
 format with a focused research narrative, formal controller equations, three
 algorithms, an information-flow diagram and the completed saved-trace recovery
 diagnostic. The original cumulative report below remains unchanged.
+
+The paper was renamed from `supervisor-draft` to `draft`. The revision adds parameter
+descriptions and layout support; the reported empirical outcomes are unchanged.
+Historical build receipts retain the filenames used when those builds were recorded.
 
 The new diagnostic reuses 18,657 commands from 24 historical episodes. At a uniform
 .04 rad cap, componentwise clipping distorts joint-error direction by more than five

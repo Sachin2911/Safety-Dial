@@ -19,7 +19,9 @@ The six main chapters retain the reference's structure:
 The abstract, declaration, contents and bibliography are included. Topic-specific
 subsections use editable prompts for Sachin's current research interests. No
 environment, algorithm, hypothesis, result or date range has been selected by
-this template. [phase3.md](../../../phase3.md) is the active research plan and direction.
+this template.
+[Evolutionary improvement on ManiGuard](../../../Evolutionary%20improvement%20on%20ManiGuard.md)
+is the current research direction.
 
 ## Editing
 

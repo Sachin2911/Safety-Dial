@@ -9,7 +9,7 @@ The proposed R/U/E/D acquisition and repair comparison was therefore not launche
 This result tests a particular frozen predictor and historical corpus. It does not
 test evolutionary acquisition efficacy or establish that confident hazards are absent.
 
-The [plan](../../../phase3Part4.md), [frozen offline protocol](../../../configs/maniguard/part4/offline-protocol.json),
+The [plan](../history/20261019/phase3Part4.md), [frozen offline protocol](../../../configs/maniguard/part4/offline-protocol.json),
 [public offline audit](../research_notes/ManiGuard%20phase3%20Part4%20offline%20audit.json),
 [donor audit](../research_notes/ManiGuard%20phase3%20Part4%20donor%20audit.json),
 [cost accounting](../research_notes/ManiGuard%20phase3%20Part4%20accounting.json) and

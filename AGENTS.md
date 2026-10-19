@@ -2,19 +2,22 @@
 
 ## Current direction and authority
 
-Read [phase3.md](phase3.md), the active research plan and direction. The current question
-is whether evolutionary search can
-discover a compact execution controller that improves safe completion around frozen
-manipulation policies under matched interaction budgets. The phase-three protocol is not
-yet frozen; its controller details, comparisons, statistical thresholds and total budget
-retain the open decisions recorded in the plan.
+Read [Evolutionary improvement on ManiGuard](Evolutionary%20improvement%20on%20ManiGuard.md),
+the current research direction. The target is a shared observation- and
+instruction-conditioned controller that improves safe completion across ManiGuard's
+family-specific frozen policies under matched interaction budgets. Native-noise steering
+is the primary research bet; sampling distribution, persistence, response-informed
+coordinates and internal activation gates are prospective extensions. Their physical
+benefits, evolutionary advantage and transfer remain untested. A new protocol, comparison
+design and budget must be frozen before execution.
 
 The core study is safe execution adaptation in ManiGuard. Its monitor labels violations
 but does not change actions. Continuation under a learned safety filter, a new world
 model and ROSARL integration are not assumed components of the current implementation.
 Earlier task-continuation decisions and the UNISafe evidence are preserved in the
 [plan history](docs/research/history/README.md). Do not inherit old Walker methods,
-timelines or run gates as the new implementation plan.
+timelines or run gates as the new implementation plan. The archived Phase 3 plans and
+recovery prompt record earlier directions, not current launch instructions.
 
 - **Student:** Sachin Mohan (2699183), BSc Honours CS, University of the Witwatersrand.
 - **Supervisor:** Geraud Nangue Tasse.
@@ -27,10 +30,10 @@ timelines or run gates as the new implementation plan.
 
 ## Repository map
 
-1. `phase3.md`: active research plan and direction, with open choices and corrected
-   budgets. `docs/research/history/` preserves the earlier fruits, ideation, direction,
-   oracle and phase-two plans. The archived phase-two plan retains the paused pilot's
-   protocol and handoff. The old root files and compatibility links have been removed.
+1. `Evolutionary improvement on ManiGuard.md`: current research direction, latent
+   extensions, comparisons and staged generalization tests. `docs/research/history/`
+   preserves earlier directions. The six Phase 3 root plans are under `20261019/`,
+   unchanged and hash-recorded; the paused phase-two protocol is under `20261018/`.
 2. `docs/research/`: current literature reviews, supporting notes and asset audits.
 3. `docs/templates/`: reusable document source templates.
 4. `experiments/`: workspace for new implementation; add reusable Python under `helpers/`

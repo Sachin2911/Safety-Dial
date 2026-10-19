@@ -1,8 +1,16 @@
-# evo safety filter: ManiGuard base
+# Vast templates for ManiGuard
 
-The private Vast.ai template now targets ManiGuard preparation, selected on 17 October
-2026. Select **evo safety filter** from [My Templates](https://cloud.vast.ai/templates/).
-Template updates change future rental defaults. Existing instances keep their image.
+For the current latent-evolution study, use **ManiGuard latent evolution** from
+[My Templates](https://cloud.vast.ai/templates/). Its
+[dedicated instructions](MANIGUARD-EVOLUTION.md) and
+[profile](maniguard-evolution.json) select RTX 3090/4090 hosts with driver 580.178.04
+exactly. A live check found that Vast's driver range query could return newer hosts,
+so the new template uses a checked equality filter and its own template record.
+
+The private **evo safety filter** template, selected for ManiGuard preparation on
+17 October 2026, remains preserved. The sections below describe that earlier, broader
+profile. Template updates change future rental defaults. Existing instances keep their
+image.
 
 ## Image and startup
 
@@ -32,6 +40,16 @@ problems on drivers newer than 580. NVIDIA permits some older drivers through CU
 minor-version compatibility; this template uses a more conservative lower limit.
 ManiGuard specifically verifies 580.x. Prefer that branch for the first smoke test;
 the wider range is a candidate range, not a claim that every driver was validated.
+The 19 October market check also found that Vast did not reliably enforce this range's
+upper bound. Independently check an offer's reported driver, or use the new exact-filter
+profile above.
+
+The two-GPU rental authorized on 19 October is recorded separately in
+[maniguard-rental-20261019.json](maniguard-rental-20261019.json). It uses a different
+580.x patch and two RTX 3090s; the template's one-GPU search filters do not describe
+that acquired allocation. Check the dated record's absolute deadline before use.
+Verified Community Cloud and Secure Cloud are different tiers. This template does
+not require Secure Cloud; the acquired host is verified Community Cloud.
 
 The compute-capability selection `[750,860,890]` covers Turing, Ampere and Ada candidates
 for the default PyTorch cu124 environment. It excludes A100/H100 and Blackwell from this

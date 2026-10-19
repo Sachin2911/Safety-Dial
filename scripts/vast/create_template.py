@@ -21,8 +21,8 @@ def main() -> None:
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
     config_path = root / args.config
-    record_path = root / "configs/vast/created-template.json"
     config = json.loads(config_path.read_text())
+    record_path = root / config.get("record_file", "configs/vast/created-template.json")
     onstart = config["onstart_cmd"]
     subprocess.run(["bash", "-n"], input=onstart, text=True, check=True)
     if config["private"] is not True:
@@ -31,8 +31,22 @@ def main() -> None:
 
     record = json.loads(record_path.read_text()) if args.update else {}
     if args.dry_run:
-        print(json.dumps({"update": args.update, "record": record, "config": config}, indent=2))
+        print(
+            json.dumps(
+                {
+                    "update": args.update,
+                    "record_path": str(record_path),
+                    "record": record,
+                    "config": config,
+                },
+                indent=2,
+            )
+        )
         return
+    if not args.update and record_path.exists():
+        raise SystemExit(
+            "Template record already exists. Use --update or a config with a new record_file."
+        )
 
     query = (
         f"private=true id={record['id']}"

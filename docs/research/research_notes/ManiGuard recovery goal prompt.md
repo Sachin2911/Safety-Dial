@@ -1,11 +1,16 @@
 # ManiGuard recovery goal prompt
 
+**Historical prompt.** This belongs to the
+[archived Phase 3 recovery proposal](../history/20261019/phase3Recovery.md).
+Root filenames inside the quoted prompt retain their historical meaning. The current
+direction is [Evolutionary improvement on ManiGuard](../../../Evolutionary%20improvement%20on%20ManiGuard.md).
+
 19 October 2026. Copy the prompt below into a session that can access this repository
 and the instance you have authorized. This file supplies a future goal; writing it
 does not arm a goal, rent/restart a machine or launch an experiment.
 
 The detailed scope, alternative designs and repair limits are in
-[phase3Recovery.md](../../../phase3Recovery.md). The default is the repaired execution
+[phase3Recovery.md](../history/20261019/phase3Recovery.md). The default is the repaired execution
 comparison, with bounded offline repairs for Parts 3/4. A full scene-acquisition study
 is an alternative primary session and needs its own frozen prerequisite/budget record.
 

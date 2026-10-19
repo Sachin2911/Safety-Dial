@@ -1,0 +1,457 @@
+# Past experimental evidence for evolutionary improvement on ManiGuard
+
+Local primary-evidence audit, 19 October 2026. This note reads retained reports, protocols,
+source and structured diagnostics. It launches no simulator, policy, training, rental or
+remote restoration. Archived evidence is unchanged. The synthetic example is excluded from
+all empirical reasoning. Links below identify local evidence, using the current repository
+layout. Historical plans are interpreted as plans unless accompanied by completed results.
+
+## 1. What do our completed and partial studies actually establish?
+
+### Takeaway
+
+We have demonstrated a large behavioural repair in UNISafe, but fixed and ordinary-learning
+controls explain the improvement. In ManiGuard, there is no completed positive evolutionary
+comparison: simple mechanisms give mixed outcomes, the completed evolved controller harms
+fresh safe completion, and the prediction/acquisition branches fail their prerequisites.
+
+### Cited Findings
+
+- **Current authority and scientific target.** The active question is whether compact
+  execution adaptation around frozen manipulation policies improves safe requested
+  completion under matched interaction budgets. The monitor observes native violations;
+  it is not an action-changing predictive filter. No world model or ROSARL dependency is
+  assumed. Four claims remain distinct: useful interface, evolutionary value, contribution
+  of constraint handling, and generalization. The next first useful pilot must fit one
+  4090/5090 and eight allocated hours, including setup and failed work; this is not a full
+  paper budget. No new run is authorized by these planning edits. [AGENTS.md](/home/sachin/Desktop/Research/Safety-Dial/AGENTS.md),
+  [phase3.md](../../history/20261019/phase3.md).
+
+- **UNISafe: real task improvement, no evolutionary advantage.** On 64 reserved starts
+  per filtered controller, baseline has 2 successes, 6 physical failures, 0 boundary exits
+  and 56 timeouts; fixed hold has 55/7/0/2; random search 56/6/0/2; policy gradient
+  54/7/1/2; evolution 54/7/1/2. The evolutionary success gain over baseline is 81.25
+  percentage points, but its difference against fixed hold is -1.56 points, random -3.13,
+  policy gradient zero. Evolution has 8/64 episodes with any physical or boundary violation
+  versus baseline 6/64; safety non-inferiority is unsupported. Each search method used 192
+  training episodes across three search seeds. The whole adaptation study used 1,424
+  episodes, 166,697 controls and 833,485 physics steps, including development and selection.
+  [Completed study](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/UNISafe%20grasp%20maintenance%20and%20evolutionary%20adaptation.md).
+
+- **UNISafe mechanism was loss of grasp, not established filter-induced stagnation.** In
+  the diagnosed case, the task actor opens at 2.15 seconds before the first safety
+  replacement at 2.50 seconds. Suppressing replacements fails to complete the task;
+  hand-timed closing succeeds at 2.80 seconds. In the first 32 reserved starts, filtered
+  evolution succeeds 28/32 versus baseline 0/32, and unfiltered evolution 26/32 versus
+  baseline 0/32. The practical repair mostly survives removal of filtering. The adapter
+  additionally receives finger state; all optimizer controls share that information.
+  [Causal diagnosis](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/UNISafe%20release%20and%20switching%20diagnosis.md),
+  [Completed study](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/UNISafe%20grasp%20maintenance%20and%20evolutionary%20adaptation.md).
+
+- **ManiGuard six-hypothesis study is 196 validated full engineering episodes, not an
+  optimizer comparison.** It tests adaptive replanning, motion moderation, prerequisite
+  guarding, grasp persistence, bounded retreat/retry, and return after intervention.
+  No optimizer consumes training episodes and no reserved scene is evaluated. All full
+  episodes jointly consume 466,491 controls, 2,815,802 physics ticks and 76,956 VLA queries.
+  Including retained short references, failed setup and inference diagnostics gives
+  466,811 controls, 2,818,668 ticks and 77,065 queries, with explicitly documented gaps in
+  earliest startup instrumentation. [Study](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20six-hypothesis%20study.md).
+
+- **Jar privileged guarding gives a local lead, not a repeatable repaired mechanism.**
+  In twelve trials per condition, identity's joint outcomes are safe complete 2,
+  unsafe complete 1, safe unfinished 6, unsafe unfinished 3. Plain guard is 4/0/6/2;
+  smoothing is 3/1/4/4; guard plus settling/requery is 3/0/7/2. Thus guard has 4/12 safe
+  completions, 2/12 violating episodes and 8/12 unfinished versus identity's 2/12,
+  4/12 and 9/12. All 434 plain-guard changes occur while the target is unheld; in the
+  four successful guard runs, modifications stop before first target hold. The originally
+  promising task_0017 screen does not reproduce in any of its three guard or smoothing
+  repeats. Guard uses privileged closure/contact/holding information. It is not an
+  observation-only deployed solution. Settling uses 10,452 queries versus guard's 2,746.
+  [Jar repeats](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20Jar%20guard%20and%20motion%20repeats.md).
+
+- **Correcting a real controller-interface bug does not establish a useful physical
+  repair.** One Jar guard prediction estimates 5.18 mm downward while feasible
+  joint-limit reconstruction estimates 14.60 mm upward, close to measured 13.67 mm
+  upward. Corrected plain guard and corrected hand-back each achieve 0/3 safe completion;
+  each has one unsafe completion, two safe unfinished and zero unsafe unfinished.
+  Original plain guard is 0/1/1/1, original hand-back 1/0/1/1. The sole original
+  hand-back safe benchmark label lacks jar closure, so it is not requested-sequence
+  success. Only two eligible blocking decisions change under clipping correction, both
+  while the goal target is unheld. End-effector height alone misses loss of support and
+  tipping. [Correction comparison](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20controller-limit%20guard%20comparison.md),
+  [Study summary and semantics](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20six-hypothesis%20study.md).
+
+- **Stack shows mixed execution headroom and limited grasp competence.** Six trials per
+  cap setting give joint outcomes identity 0/0/4/2; tight .01/.01 rad 1/0/2/3;
+  middle .03/.02 rad 1/1/2/2; wider .06/.04 rad 0/1/2/3. Each successful cap gains a
+  grasp that its corresponding identity recording never obtains, but same-root initial
+  images and original proposals already differ. None of twelve bowl trials holds its
+  target. A cap bounds requested displacement, not measured motion: one .01 rad cap
+  success has a .01532 rad measured step. [Stack motion repeats](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20Stack%20motion%20repeats.md).
+
+- **The remaining six-hypothesis interventions do not provide the missing repair.**
+  Adaptive Jar replanning makes 361 early queries without aggregate benefit; the broader
+  release trigger delays 179 openings while the goal target is unheld and gets no safe
+  completion; bounded retreat moves 14.56 to 14.90 mm against 15 mm requested across
+  five events in three Jar trials, without safe completion; Lid guarding has no safe
+  completion. Activation or correct movement does not imply useful recovery.
+  [Six-hypothesis study](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20six-hypothesis%20study.md).
+
+- **Phase two prepared a richer recurrent controller, but its comparative experiment is
+  incomplete.** The implemented actor has 692 weights, 64 inputs and eight recurrent
+  units; every four actions it selects requery interval 8/4/16, cap off/.03/.06 rad,
+  smoothing 1/.75/.5 and opening delay 0/2/4 actions. There are evolution, random-search
+  and recurrent PPO implementations sharing this class. All 24 full preparation
+  episodes complete: safe completion over two cases each is Jar 0/2 for every reference;
+  Stack identity 0/2, smoothing 1/2, cap 1/2, contextual query 0/2; Clutter identity
+  2/2, smoothing 2/2, cap 1/2, contextual 2/2. Stack has 0/8 violations and six
+  unfinished; Jar has seven violating and one safe unfinished; Clutter's one unsuccessful
+  cap episode is unsafe unfinished. Smoothing .75 is selected on these training data.
+  [Development and preparation](/home/sachin/Desktop/Research/Safety-Dial/docs/research/research_notes/ManiGuard%20phase2%20development.md),
+  [Adapter implementation](/home/sachin/Desktop/Research/Safety-Dial/experiments/helpers/maniguard_phase2_adapter.py).
+
+- **Phase-two partial outcomes reveal evaluation noise, not an evolutionary win.**
+  Of 22 paired Clutter/Jar episodes sharing initial genomes, nominal cases and seeds,
+  nine differ in outcome. Initial robot states agree while 40 to 70 percent of first
+  image pixels differ by one or two levels. Partial Clutter observations are near 50
+  percent safe completion; Jar has two safe completions among 22 inspected episodes,
+  both for evolutionary candidates whose random-search twins time out. Stack has no
+  completion in 25 episodes on the replacement host versus two in eight on the earlier
+  host. Jar closes the lid in 9/22 traces but can fail before closure or fail to grasp
+  after closure. These are partial, host-dependent observations. [Active plan evidence
+  summary](../../history/20261019/phase3.md),
+  [Preserved direction](/home/sachin/Desktop/Research/Safety-Dial/docs/research/history/20261018/direction.md).
+
+- **The 192-episode replicate diagnostic must not be described as completed on current
+  local evidence.** A frozen protocol plans eight round-zero controllers by three
+  Clutter scenes by eight repetitions. The active plan requests locating/restoring
+  completed or partial receipts; it explicitly records that raw ManiGuard run/data/
+  upstream directories were absent in the local checkout when inspected. This audit
+  finds the protocol/deployment and code, but no completed local result audit.
+  [Replicate protocol](/home/sachin/Desktop/Research/Safety-Dial/configs/maniguard/phase2/replicate-v1.json),
+  [Active plan, sections 10 and 20.2](../../history/20261019/phase3.md).
+
+- **Part one completes actual evolution, with adverse independent results.** Search has
+  four candidates, three evaluated populations, two scenes per measurement: 24 full
+  episodes. Only ten distinct genomes are evaluated; five of twelve measurements have
+  maximum utility; a repeated elite scores 1, 1 and .5. The selected genome applies
+  .04/.02 rad free/grasp caps, smoothing 1 and 16-action query chunks. Fresh eight-trial
+  joint outcomes per setting are identity 5/0/3/0; midpoint 3/1/3/1; full 4/2/2/0.
+  Thus full strength has 4/8 safe completions, 2/8 violations and 2/8 unfinished versus
+  identity 5/8, 0/8 and 3/8. No random/PPO comparison is part of this pilot. Total
+  ledger: 52 attempts including engineering, 35,158 controls, 3,401 queries and
+  215,420 recorded physics ticks. [Part-one report](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20evolutionary%20safety%20dial%20pilot.md).
+
+- **Part-one geometry and heuristic failures are concrete, but not complete causal
+  diagnoses.** The full-strength grasp heuristic misses all 167 held-and-closing actions
+  in one unsafe transport episode because a finger is about .040 m, outside the .003
+  to .035 m band. It also misses hundreds of actions in safe episodes and recognizes
+  grasps at both obstacle-uprightness failures. Independent clipping changes
+  joint-error direction by over five degrees in 215/325 substantially changed full-strength
+  actions, maximum 46.8 degrees. Violations occur both late and early within chunks.
+  First proposals differ before adaptation in all sixteen matched initial comparisons.
+  [Failure investigation](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20Part1%20failure%20investigation.md).
+
+- **Part two does not test active adaptive timing.** Four trials per condition yield
+  joint outcomes A identity 3/0/0/1; B caps/interval8 3/0/0/1; C caps/interval4
+  2/1/1/0; D caps/adaptive4-to8 3/0/0/1. Every arm violates once; A/B/D leave one
+  unfinished, C also leaves one unfinished. All 337 between-query D intervals equal
+  eight; its only .5 threshold crossing is at the mandatory eighth action. C uses
+  750 queries versus B's 336 without improving safe completion. This does not show an
+  actively calibrated trigger cannot help. [Part-two report](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20Part2%20correction%20triggered%20feedback.md).
+
+- **Part three exposes bad readouts and dynamics before optimizer allocation.** On 263
+  changing audit windows, ensemble prediction is 27.8 percent worse than persistence
+  after one action and 45.1 percent worse after four; it is 15.45 percent worse than
+  ridge at four. Actual future-state margin readout MAE is 16.17 degrees before adding
+  imagined-dynamics error; visual-only PCA gives a post hoc 8.54 degrees but is not an
+  accepted replacement. All calibration corrections occupy one bin, so correction-aware
+  and disagreement acceptance masks coincide. Eight common new recordings have joint
+  outcomes 3/0/1/4: safe completion 3/8, violations 4/8, unfinished 5/8. The proposed
+  64-episode physical evolution comparison never launches. [Part-three report](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20Part3%20model%20assisted%20evolution.md).
+
+- **Part four is an offline failed warning premise, not negative evidence about
+  evolutionary acquisition.** The frozen primary ensemble alarms on 2,045/2,229 negative
+  development windows (91.75 percent) after calibration to 4.98 percent weighted
+  false alarms. Development has one first-event episode, timely warned, and no confident
+  miss. Fitting event support spans one task, calibration one task and development one
+  task. All four physical acquisition arms, confirmation, repair and fresh audit remain
+  unstarted. Reused 24 historical episodes have joint outcomes 14/1/2/7, not new Part-four
+  outcomes; all prior controls are counted once. [Part-four report](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20Part4%20counterexample%20premise.md).
+
+- **Archived Safe-CEM supports careful constraints and real feedback, with narrow scope.**
+  Corrected Push-T starts/goals clear the virtual hazard. Safe-CEM at margins 0/20/40
+  records nine of nine zero-hazard-violation episodes across three seeds per margin;
+  nonzero-penalty arms have four of nine zero-violation episodes. Task error differs,
+  sample size is tiny, and no evolutionary-versus-random/learning comparison is made.
+  Margin60 escapes the arena on 95.3 percent of steps while reporting zero hazard
+  violations and 80.6 percent candidate feasibility. The earlier claim that any penalty
+  collapses task performance is explicitly retracted as an infeasible-start confound.
+  [Preserved Safe-Dial report source](/home/sachin/Desktop/Research/Safety-Dial/archive/legacy/docs/safeDial/latex/main.tex).
+
+- **Archived LeWM Push-T/Walker studies warn against premature model-assistance claims.**
+  Push-T known development false-safe attribution is imagination 21/28, real-image
+  readout 7/28, temporal sampling zero. Representative test has accepted unresolved
+  futures for every arm, so point false-safe acceptance is undefined. Even a conservative
+  upper relative-reduction bound of 18.05 percent falls below the frozen25percent
+  repair target; goal retention remains incomplete. Walker health readout recall67/71
+  and specificity107/121 pass while speed specificity15/32 fails, despite high speed
+  regression R2. Its representative health false-safe rate is225/504 for no-update;
+  boundary acquisition has no consistent advantage over random over three seeds and
+  budgets128/512. Smaller-budget stress benefit accompanies lower acceptance and does
+  not reproduce at512. Prediction retention mostly worsens. [Completed through-S4
+  report](/home/sachin/Desktop/Research/Safety-Dial/archive/legacy/docs/mainPlan/reports/through-s4-20260927/report.md).
+
+### Inferences
+
+- The demonstrated bottleneck is not the lack of an EA implementation. We repeatedly
+  lack a behavioural lever capable of repairing the relevant failure, or an evaluation
+  signal precise enough to select it. Current evidence supports testing authority and
+  repeatability before building another optimizer or predictor.
+- UNISafe is a control against overclaiming: a large baseline improvement can be real
+  while evolutionary contribution remains absent. A strong fixed comparator must stay
+  in the ManiGuard study even if it matches or beats evolution.
+- The finite legacy world-model failures increase the value of a direct simulator-scored
+  study. They do not prove that world models cannot work or justify importing old
+  Walker stage gates into current work.
+
+### Gaps
+
+- A completed replicated EA/random/PPO ManiGuard comparison, a verified completed
+  192-episode replicate report, and full current raw phase-two outcomes were not available
+  locally in this audit. Restore only pinned needed evidence before making stronger claims.
+- Existing studies do not establish that rendering variation alone causes outcome
+  disagreement, or how much expected candidate signal remains after replication.
+- No current result establishes a calibrated monotone safety dial or real-robot safety.
+
+## 2. Which behavioural interface is most worth betting on?
+
+### Takeaway
+
+The present direction-preserving-cap repair is a valid engineering correction with very
+sparse opportunities. The useful new question is how to give search authority to choose a
+different coordinated motion, rather than only slowing existing targets. Conditional on the
+coordinator's separate verification of native sampler-noise control, policy-native noise
+steering is the first bet, with a bounded motion residual as the fallback. Neither has
+demonstrated steerability or physical benefit in our experiments. Merely renaming existing
+recurrent cap/query/delay choices as phases adds no authority.
+
+### Cited Findings
+
+- **Latest cap opportunities are scarce.** The structured saved-trace diagnostic covers
+  24 historical episodes, four tasks and18,657 factual controls. Summing its geometry
+  rows gives uniform .04rad cap changes55/18,657 controls(0.295percent), .08rad3/18,657,
+  .12rad1/18,657. Of55 changes at .04,44 occur on task0046; task0006 has2/3,067,
+  task0010 5/4,054,task0039 4/7,136. Direction scaling removes the9 angles above5degrees
+  produced by component clipping at .04(max10.32degrees). Its maximum numerical angular
+  discrepancy is .000189degrees and no logged downstream arm clipping changes these
+  rows. These are counterfactual commands at factual measured joints, not physical
+  outcomes under the alternative command. [Structured diagnostic](/home/sachin/Desktop/Research/Safety-Dial/docs/research/research_notes/ManiGuard%20recovery%20checkin%20diagnostic.json).
+
+- **Latest correction timing has weak support.** Selected threshold .089753 is the
+  median of only five positive eligible calibration values. At minimum interval4,
+  calibration has1/669 early-opportunity prefixes across eight B/D episodes; diagnostic
+  has3/482 across four B episodes. All three diagnostic opportunities occur on task0046,
+  two in one episode and one in another; task0006 has none. Minimum interval6 has the
+  same eligible-prefix totals. There is no new physics, VLA/encoder query or fitted model,
+  and the exported controller says physical benefit unevaluated. [Diagnostic](/home/sachin/Desktop/Research/Safety-Dial/docs/research/research_notes/ManiGuard%20recovery%20checkin%20diagnostic.json),
+  [Controller export](/home/sachin/Desktop/Research/Safety-Dial/configs/maniguard/recovery/20261019-checkin/controller-export.json).
+
+- **Existing modes already cover many proposed phase knobs.** The phase-two controller
+  can already switch state-dependent caps, smoothing, opening delay and query length
+  every four actions. Its inputs are40 robot/action/history features plus eight projected
+  values each from overview,wrist and task text. Feature encoding and input-dependent
+  decisions have engineering validation, not learned behavioural improvement. [Phase-two
+  plan](/home/sachin/Desktop/Research/Safety-Dial/docs/research/history/20261018/phase2.md),
+  [Adapter source](/home/sachin/Desktop/Research/Safety-Dial/experiments/helpers/maniguard_phase2_adapter.py),
+  [Development log](/home/sachin/Desktop/Research/Safety-Dial/docs/research/research_notes/ManiGuard%20phase2%20development.md).
+
+- **The raw joint interface has room for a different controller class.** Family metadata
+  fixes eight-dimensional actions(seven arm target joints plus native gripper), raw joint
+  position control,20Hz control and120Hz physics. Clutter uses assisted grasping and a
+  1,100-action horizon. Its Part-one checkpoint is frozen at revision
+  f572e33bdb498a8d9992a72312ee849be868a2b6,step7100. A direct bounded residual is not
+  implemented or physically validated by the cited cap code; it is a proposed addition
+  with substantially different command authority. [Family manifest](/home/sachin/Desktop/Research/Safety-Dial/configs/maniguard/phase2/families.json),
+  [Part-one report](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20evolutionary%20safety%20dial%20pilot.md),
+  [Current recovery cap source](/home/sachin/Desktop/Research/Safety-Dial/experiments/helpers/maniguard_recovery_controller.py).
+
+- **Clutter is the best first family by cost and observed headroom.** It has55 base
+  tasks and1,100actions, with both safe completion and physical failures in prior local
+  pilots. Jar is26tasks/2,000actions and often fails before usable transport; Stack is
+  28tasks/4,200actions and frequently never grasps; Lid is30tasks/1,900actions with no
+  observed safe completion in the guard follow-up. Cabinet35tasks/5,700actions and
+  Dusty26tasks/5,100actions have pinned assets but their outcomes are reserved. They
+  should not be opened to hunt for favourable development outcomes. [Family manifest](/home/sachin/Desktop/Research/Safety-Dial/configs/maniguard/phase2/families.json),
+  [Active plan evidence](../../history/20261019/phase3.md),
+  [Six-hypothesis study](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20six-hypothesis%20study.md).
+
+### Inferences
+
+- **Priority1,conditional new bet: policy-native sampler-noise steering.** The coordinator's
+  separate source audit reports explicit noise access in pinned OpenPI; this local
+  experiment audit does not independently certify that API or cite it as a completed
+  experiment. If that source/integration contract is confirmed, evolve a compact
+  observation-conditioned control of noise while retaining native cadence,policy weights
+  and low-level executor. The local reason to prefer this before a raw motion residual is
+  that postprocessing joint targets has already distorted joint coordination,whereas
+  native sample steering asks the policy to construct its own coordinated chunk. This
+  is a representational hypothesis,not a guarantee that selected samples stay safe or
+  task-competent. Different noise must first demonstrably yield meaningful,candidate-
+  dependent action diversity on identical saved observations. Repeated fresh episodes
+  must then establish that the control has stable outcome signal rather than merely
+  introducing more noise. Native identity must reproduce the benchmark's original noise
+  distribution and RNG accounting; evolutionary/random/ordinary-learning comparisons
+  must share the same noise interface and all physical candidate costs. Literature
+  novelty for noise steering belongs to the external audit,not this empirical note.
+- **Priority2,fallback new bet: compact bounded motion residual around Clutter's frozen policy.**
+  It should be able to add a small direction-changing arm target correction conditioned
+  on current robot/action/history and a permitted common visual representation, with an
+  exact zero identity and fixed native query cadence. Unlike a cap, it can change an
+  unsafe approach or transport orientation when the proposal error is already small.
+  This is an inference about representational authority, not observed improvement.
+  Keeping native query cadence and initially preserving gripper isolates the new lever.
+  Low-dimensional residual bases or a tiny controller are preferable to unrestricted
+  high-dimensional weight evolution for a first pilot, but the rank/bounds need audit.
+- **Priority3,reuse: noise-aware evolution over the existing recurrent execution class.**
+  It is the cheapest implementation path and remains scientifically untested against
+  completed matched controls. However, its mode outputs cannot fix missing routes or
+  grasp geometry if slowing/requerying never generates the required motion. It is a
+  reasonable reference or fallback, not evidence that phases are the contribution.
+- **Priority4,semantic/subgoal program.** It could add task-sequence authority, especially
+  Jar close-then-carry, but local evidence proves neither that frozen policies obey such
+  prompts nor that allowed robot/visual inputs identify phase reliably. Existing native
+  task conditions and all-family separate checkpoints complicate the comparison.
+  Demonstrate prompt controllability before an evolutionary prompt search. Do not
+  silently pass privileged closure/held/monitor flags into a semantic phase controller.
+- **Lower priority: more uniform caps, release-only adaptation, or timing-only search.**
+  Caps are sparse in latest Clutter recordings; prior release delay acts while the
+  target is unheld; timing triggers lack opportunity, and fixed frequent feedback has
+  no measured benefit. These are useful controls/engineering repairs rather than the
+  central new scientific bet.
+- **Defer model assistance and evolutionary scene acquisition.** Both need useful
+  representations,predictors/calibration and task support before their search can
+  answer the claimed question. A new model project would add dependencies to the direct
+  baseline-beating objective. Existing failures do not invalidate these ideas generally.
+
+### Gaps
+
+- No past physical evidence currently validates sampler-noise steerability,phase
+  recognition,low-rank residual control,task-conditioned rotation correction,evolutionary
+  prompt execution or safe completion under either proposed steering interface. No
+  promise of a winner is justified. The explicit-noise API needs the coordinator's
+  separate primary-source support; local wrappers currently forward observation-only
+  policy inference and do not expose a validated steering experiment.
+- A direction-changing joint residual might itself damage coordinated Cartesian
+  motion. Its authority is useful only if checked against joint bounds, measured motion,
+  contact timing and physical outcomes. Preserving joint direction is also not the same
+  as preserving end-effector path or object orientation.
+- Meaningful change frequency for a proposed residual must be measured in an opportunity
+  census. It must not be made large by arbitrary activation or floating-point noise.
+
+## 3. What smallest decisive study and reusable assets follow from this evidence?
+
+### Takeaway
+
+The next allocation should first establish an observable, causally valid steering lever on
+Clutter, then complete a small physical evolutionary comparison and independent finalist
+evaluation. The eight-hour pilot can reject a nonfunctional interface or reveal a lead;
+the paper needs replicated matched optimizer evaluation, reserved scenes, strong fixed
+controls and broader task coverage under a separate budget.
+
+### Cited Findings
+
+- **One4090 feasibility has actual supporting evidence.** Part one runs one simulator
+  and one policy on an RTX4090, sampled maximum17,714MiB(17.3GiB). Its48full episodes,
+  engineering and search/comparison account for5,982.17seconds summed outer episode time;
+  policy/workers have fully exited at2.422allocatedGPUhours from the retained original
+  allocation start. Reporting,backups and later idle rental still count separately.
+  This is a warm prepared stack result, not a cold-install promise. [Part-one report](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20evolutionary%20safety%20dial%20pilot.md).
+
+- **Historical throughput is host/load dependent.** Serial phase-two Clutter attempts
+  take177to191seconds; later eight-way load has a417second median in planning evidence
+  and is CPU-bound. Eight GPUs do not guarantee useful speedup. ManiGuard requires
+  separately prepared Python3.10simulator and Python3.11policy environments. The current
+  Vast base template installs neither; root uv environment and UNISafe setup must not
+  be synced into them. [Phase-two development](/home/sachin/Desktop/Research/Safety-Dial/docs/research/research_notes/ManiGuard%20phase2%20development.md),
+  [Part-one report](/home/sachin/Desktop/Research/Safety-Dial/docs/research/reports/ManiGuard%20evolutionary%20safety%20dial%20pilot.md),
+  [Engineering instructions](/home/sachin/Desktop/Research/Safety-Dial/AGENTS.md).
+
+- **Assets to reuse without altering evidence.** Pinned checkpoint/source manifests,
+  whole-task partitions, native simulator/policy wrappers, physical/query accounting,
+  independent trace audits, requested-sequence completion contracts, exact identity,
+  seeded evolutionary lineage, categorical ES/random/REINFORCE and recurrent PPO,
+  bounded process cleanup, matched video composition and private backup receipts all
+  exist. Raw datasets,trained weights and licensed assets remain outside Git; restored
+  assets still require run-machine verification. [Experiment guide](/home/sachin/Desktop/Research/Safety-Dial/experiments/README.md),
+  [ManiGuard configuration guide](/home/sachin/Desktop/Research/Safety-Dial/configs/maniguard/README.md),
+  [Phase-three helper map](../../history/20261019/phase3.md),
+  [Completion contract](/home/sachin/Desktop/Research/Safety-Dial/docs/research/research_notes/ManiGuard%20phase2%20completion%20contract.md).
+
+- **Latest recovery plan has a useful persistence rule, but its proposed mechanism is
+  not empirically validated.** It requires an eight-full-episode four-arm cap/timing
+  engineering screen, then actual evolution,matched random search,ordinary learning and
+  independent final evaluation. A failed model candidate ends that candidate, not the
+  whole rental; all work remains bounded and charged. The latest saved diagnostic
+  weakens the cap/timing premise, so a prospective protocol amendment is needed if the
+  first new lever changes to residual motion. [Recovery plan](../../history/20261019/phase3Recovery.md),
+  [Latest offline export](/home/sachin/Desktop/Research/Safety-Dial/configs/maniguard/recovery/20261019-checkin/controller-export.json).
+
+### Inferences
+
+- **Before physics:** restore only necessary pinned raw development traces; verify saved
+  input inference repeatability if the needed environment exists; audit failed and
+  successful trajectories by pregrasp/held/transport and first violation, using privileged
+  labels only for diagnosis. Measure proposal tracking error, posture/orientation changes,
+  contact/holding and query age. For native-noise steering,hold the exact observation and
+  nonsteering RNG stream fixed,then compare compact perturbations for materially distinct
+  complete action chunks,consistency across saved task states and whether outputs are
+  effectively identical. This first needs no physics. If native-noise controllability
+  fails,check whether a permitted bounded residual produces materially distinct alternatives
+  near repeated failure opportunities,and whether online nonprivileged observations can
+  select them. The audit cannot identify the physical counterfactual after the first
+  changed command.
+- **Failure decision for the nominated interface:** if proposed corrections collapse
+  to identity, act only after violations, require privileged state unavailable online,
+  or only add waiting without changing the relevant failed approach/transport, do not
+  spend the remainder on evolutionary tuning of that representation. Preserve the
+  diagnostic and move only to one predeclared alternate authority. A tiny adverse
+  physical screen does not prove impossibility, but absent relevant authority is an
+  engineering reason to reject a representation.
+- **First physical pilot:** freeze bounds,information,native cadence,composition and
+  a small steering basis before scoring. Interleave identity,a strong fixed steering/
+  adaptation setting and the nominated controller across development blocks. Allocate
+  actual evolutionary transitions and matched random candidate evaluations,then lock
+  one finalist per method before independent repetitions. Retain an ordinary-learning
+  arm if the budget can support a meaningful shared-class comparison; otherwise label
+  it explicitly outstanding and do not claim evolutionary value over learning. Do not
+  force four tiny underpowered arms merely to print a favourable ranking.
+- **Eight-hour arithmetic:**48Clutter episodes at conservative3to7minutes each means
+  2.4to5.6hours of rollout alone, plus on-host setup,engineering,new integration,failures,
+  audit and idle allocation. Existing Part-one timing is encouraging; choose a smaller
+  frozen allocation from measured throughput before outcomes if needed. Never shorten
+  the native1,100-action horizon to claim completion within budget. The first pilot is
+  a feasibility and effect-size lead,not the whole paper.
+- **Full-paper claim:** improvement is safe requested completion over frozen native
+  execution and strong fixed adaptation,on reserved tasks,with violations and unfinished
+  episodes reported jointly. Evolutionary value additionally requires repeated search
+  runs versus matched random and ordinary learning,all candidate/discarded/reevaluation
+  interactions charged,scene-aware uncertainty and fixed independent finalist evaluation.
+  Noise-aware evaluation may matter,but must be ablated against equivalent reevaluation
+  resources for other optimizers. A normal EA plus a useful controller can support an
+  empirical contribution,but novelty requires primary-literature checking separately.
+- **Generalization budget:** Clutter is the first diagnostic family; Jar/Lid/Stack and
+  eventually reserved Cabinet/Dusty should test the resulting scope without post hoc
+  favourable-family replacement. A pilot on a few Clutter scenes cannot be described as
+  beating the entire benchmark suite. Keep environment/base/target/language/location
+  shift results separate,and disclose original-checkpoint training overlap as unknown.
+
+### Gaps
+
+- New-machine setup duration,cold-install reliability,peak memory under the proposed
+  steering and exact remaining scene exposure need verification before a launch protocol.
+- No existing result gives the effect size or between-controller variation needed to
+  power a decisive full-paper study. A preset sample count must not be called powered
+  without an independent rationale,and sampling must not continue until a win appears.
+- The exact steering representation and ordinary-learning match require a protocol;
+  these notes recommend a prioritized testable hypothesis,not a frozen run or authorization.
