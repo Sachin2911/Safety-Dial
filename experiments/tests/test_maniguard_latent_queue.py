@@ -64,3 +64,19 @@ def test_live_handle_is_observed_without_relaunch(tmp_path, monkeypatch):
     worker.wait()
     assert process_identity(worker.pid) is None
     assert process_identity(os.getpid()) is not None
+
+
+def test_colocated_jobs_require_declared_workers_and_separate_endpoints(tmp_path):
+    q = queue(tmp_path)
+    job = {"id": "a", "family": "clutter", "scene": "task_0039/base", "seed": 1,
+           "controller": "controller.npz", "worker": 0}
+    with pytest.raises(ValueError, match="declared"):
+        q.command(job, tmp_path / "episode")
+    q.protocol["workers"] = 2
+    for worker in [0, 1]:
+        assigned = {**job, "worker": worker}
+        command = q.command(assigned, tmp_path / str(worker))
+        assert command[command.index("--port") + 1] == str(18000 + worker)
+        assert command[command.index("--simulation-device") + 1] == str(worker)
+        assert command[command.index("--policy-device") + 1] == str(worker)
+        assert q.environment(assigned)["CUDA_VISIBLE_DEVICES"] == str(worker)

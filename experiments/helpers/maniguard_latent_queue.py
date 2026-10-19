@@ -10,6 +10,7 @@ import subprocess
 import time
 from pathlib import Path
 
+from helpers.maniguard_latent_hardware import assignment
 from helpers.maniguard_latent_results import read_episode
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -84,6 +85,32 @@ class PhysicalQueue:
             if len(invalid) > 4:
                 raise RuntimeError("Infrastructure replacement allowance exhausted")
 
+    def command(self, job, output):
+        devices = assignment(job.get("worker"))
+        if "worker" in job and self.protocol.get("workers") != 2:
+            raise ValueError("Concurrent worker placement requires the declared two-worker protocol")
+        command = [str(ROOT / "data/maniguard/envs/sim/bin/python"), "-u",
+                   str(ROOT / "experiments/scripts/maniguard_latent_episode.py"),
+                   "--family", job["family"], "--scene", job["scene"],
+                   "--seed", str(job["seed"]), "--controller", job["controller"],
+                   "--protocol", str(self.protocol_path), "--output", str(output),
+                   "--port", str(devices["port"]),
+                   "--simulation-device", str(devices["simulation_device"]),
+                   "--policy-device", str(devices["policy_device"])]
+        if job.get("engineering"):
+            command += ["--engineering-max-steps", str(job["max_steps"])]
+        return command
+
+    def environment(self, job):
+        environment = os.environ.copy()
+        environment.update(CUDA_VISIBLE_DEVICES=str(assignment(job.get("worker"))["simulation_device"]),
+                           OMP_NUM_THREADS="4", OPENBLAS_NUM_THREADS="4",
+                           LD_LIBRARY_PATH="/usr/local/nvidia/lib:/usr/local/nvidia/lib64",
+                           __EGL_VENDOR_LIBRARY_FILENAMES=str(
+                               ROOT / "configs/maniguard/latent-evolution/nvidia-egl-vendor.json"),
+                           OMNI_KIT_ACCEPT_EULA="YES", OMNIGIBSON_HEADLESS="1")
+        return environment
+
     def evaluate(self, job_id, *, repair_note=None, episode_seconds=180):
         row = self.state["jobs"][job_id]
         job = row["definition"]
@@ -113,13 +140,7 @@ class PhysicalQueue:
         attempt_id = job_id + f"-a{len(row['attempt_ids'])}"
         output = self.run / "episodes" / attempt_id
         output.parent.mkdir(exist_ok=True)
-        command = [str(ROOT / "data/maniguard/envs/sim/bin/python"), "-u",
-                   str(ROOT / "experiments/scripts/maniguard_latent_episode.py"),
-                   "--family", job["family"], "--scene", job["scene"],
-                   "--seed", str(job["seed"]), "--controller", job["controller"],
-                   "--protocol", str(self.protocol_path), "--output", str(output)]
-        if job.get("engineering"):
-            command += ["--engineering-max-steps", str(job["max_steps"])]
+        command = self.command(job, output)
         attempt = {"id": attempt_id, "job_id": job_id, "stage": job["stage"],
                    "engineering": job.get("engineering", False), "status": "starting",
                    "command": command, "output": str(output), "started_epoch": time.time(),
@@ -131,12 +152,7 @@ class PhysicalQueue:
         self.state["attempts"].append(attempt)
         self.save()
         append(self.run / "attempts.jsonl", attempt)
-        environment = os.environ.copy()
-        environment.update(CUDA_VISIBLE_DEVICES="0", OMP_NUM_THREADS="4", OPENBLAS_NUM_THREADS="4",
-                           LD_LIBRARY_PATH="/usr/local/nvidia/lib:/usr/local/nvidia/lib64",
-                           __EGL_VENDOR_LIBRARY_FILENAMES=str(
-                               ROOT / "configs/maniguard/latent-evolution/nvidia-egl-vendor.json"),
-                           OMNI_KIT_ACCEPT_EULA="YES", OMNIGIBSON_HEADLESS="1")
+        environment = self.environment(job)
         with (self.run / "episodes" / (attempt_id + ".log")).open("x") as log:
             request = self.run / "episodes" / (attempt_id + "-request.json")
             terminal = self.run / "episodes" / (attempt_id + "-terminal.json")

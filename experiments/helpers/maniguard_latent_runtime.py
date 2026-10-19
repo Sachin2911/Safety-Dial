@@ -47,8 +47,8 @@ class LatentStudy(Study):
             raise ValueError("Unexpected preexisting renderer GPU override")
         sys.argv.append(f"--/renderer/activeGpu={self.job['renderer_vulkan_index']}")
         self.write("gpu_mapping", renderer_vulkan_index=self.job["renderer_vulkan_index"],
-                   simulation_gpu_uuid="GPU-0bfb3ed5-af55-472e-3199-058727ff80a7",
-                   policy_gpu_uuid="GPU-4f452774-6f8b-6fcc-4ce1-2d4d190e6d07")
+                   simulation_gpu_uuid=self.job["simulation_gpu_uuid"],
+                   policy_gpu_uuid=self.job["policy_gpu_uuid"])
 
     def connect_policy(self, cfg, upstream_connect):
         if self.job["random_policy"]:
@@ -79,9 +79,17 @@ class LatentStudy(Study):
                 or metadata.get("audit_service") is not False
                 or metadata.get("model_shape") != [16, 32]):
             raise ValueError("Physical study requires the verified native-noise service")
+        if metadata.get("physical_gpu_uuid") != self.job["policy_gpu_uuid"]:
+            raise ValueError("Policy service is on the wrong physical GPU")
 
     def start(self, scene, obs, env, robot, monitor):
         self.env, self.robot = env, robot
+        import torch
+
+        actual_gpu = "GPU-" + str(torch.cuda.get_device_properties(0).uuid).removeprefix("GPU-")
+        if actual_gpu != self.job["simulation_gpu_uuid"]:
+            raise ValueError("Simulator CUDA device differs from the declared physical GPU")
+        self.write("cuda_device_verified", actual_gpu_uuid=actual_gpu)
         super().start(scene, obs)
         from PIL import Image
 

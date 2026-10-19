@@ -20,6 +20,7 @@ import numpy as np
 
 from helpers.maniguard_adaptation import AdapterConfig
 from helpers.maniguard_latent import LatentController
+from helpers.maniguard_latent_hardware import GPU_UUIDS
 from helpers.maniguard_latent_source import prepare_runtime
 
 
@@ -32,6 +33,8 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--protocol", type=Path, required=True)
     parser.add_argument("--port", type=int, default=18000)
+    parser.add_argument("--simulation-device", type=int, choices=[0, 1], default=0)
+    parser.add_argument("--policy-device", type=int, choices=[0, 1], default=1)
     parser.add_argument("--engineering-max-steps", type=int)
     parser.add_argument("--camera-smoke", action="store_true")
     args = parser.parse_args()
@@ -69,7 +72,11 @@ def main():
            "random_policy": args.camera_smoke, "camera_smoke": args.camera_smoke,
            "policy": sources["policies"][args.family],
            "source_profile": "high_fidelity",
-           "renderer_vulkan_index": 0,
+           "renderer_vulkan_index": args.simulation_device,
+           "simulation_gpu_uuid": GPU_UUIDS[args.simulation_device],
+           "policy_gpu_uuid": GPU_UUIDS[args.policy_device],
+           "simulation_cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
+           "policy_port": args.port,
            "protocol_sha256": hashlib.sha256(args.protocol.read_bytes()).hexdigest(),
            "repository_commit": subprocess.check_output(
                ["git", "-C", str(ROOT), "rev-parse", "HEAD"], text=True).strip()}

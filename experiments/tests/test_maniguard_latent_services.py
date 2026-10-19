@@ -45,3 +45,16 @@ def test_mode_revision_and_shape_are_part_of_serving_contract():
     for key, value in [("checkpoint_revision", "unverified"), ("model_shape", [16, 8]),
                        ("native_noise_steering", False), ("audit_service", 0)]:
         assert not services.policy_matches({**good, key: value}, "jar", False)
+
+
+def test_two_worker_reuse_verifies_device_before_any_live_replacement(tmp_path, monkeypatch):
+    live_queue(tmp_path)
+
+    def observed(port):
+        return {**metadata("clutter"), "physical_gpu_uuid": services.GPU_UUIDS[port - 18000]}
+
+    monkeypatch.setattr(services, "metadata", observed)
+    services.ensure_worker_policies(tmp_path, "clutter")
+    monkeypatch.setattr(services, "metadata", lambda port: observed(18000))
+    with pytest.raises(RuntimeError, match="live"):
+        services.ensure_worker_policies(tmp_path, "clutter")

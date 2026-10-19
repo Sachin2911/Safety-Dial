@@ -45,6 +45,11 @@ def main():
     train_configs.register()
     policy = policy_config.create_trained_policy(config.get_config(spec["config"]), checkpoint)
     wrapper = NativeNoisePolicy(policy, args.ledger, audit=args.audit)
+    device = os.environ.get("CUDA_VISIBLE_DEVICES")
+    if device not in ["0", "1"]:
+        raise ValueError("Policy serving requires one explicit authorized physical GPU")
+    gpu_uuid = subprocess.check_output(
+        ["nvidia-smi", "-i", device, "--query-gpu=uuid", "--format=csv,noheader"], text=True).strip()
     files = [Path(__file__), ROOT / "experiments/helpers/maniguard_latent.py",
              ROOT / "experiments/helpers/maniguard_latent_policy.py",
              ROOT / "third_party/openpi/src/openpi/policies/policy.py",
@@ -52,6 +57,7 @@ def main():
     metadata = {"serve_config": spec["config"], "checkpoint_revision": spec["revision"],
                 "episode_seed_reset": "study_episode_id", "native_noise_steering": True,
                 "audit_service": args.audit, "model_shape": [wrapper.horizon, wrapper.action_dim],
+                "physical_gpu_uuid": gpu_uuid, "cuda_visible_devices": device,
                 "checkpoint_provenance": provenance,
                 "source_hashes": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
                                   for p in files}}
