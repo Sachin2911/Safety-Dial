@@ -2,7 +2,11 @@
 
 import pytest
 
-from helpers.maniguard_latent_capacity import comparison_design, planning_bound
+from helpers.maniguard_latent_capacity import (
+    comparison_design,
+    planning_bound,
+    provider_window_confirmed,
+)
 
 
 def test_capacity_does_not_treat_early_success_as_full_timeout_cost():
@@ -28,3 +32,17 @@ def test_comparison_keeps_four_conditions_independent_and_balanced():
         for position in range(4):
             assert {case["order"][position] for case in audit} == {"native", "fixed", "ea", "random"}
         assert len({case["seed"] for case in audit}) == 4
+
+
+def test_earlier_provider_confirmation_cannot_cover_a_later_extension():
+    assert provider_window_confirmed("2026-10-20T03:00:00Z")
+    for deadline in ["2026-10-20T05:00:00Z", "2026-10-20T14:00:00Z"]:
+        assert not provider_window_confirmed(deadline)
+    confirmation = {"instance_id": 56777435, "earlier_stop_removed_or_moved": True,
+                    "no_provider_stop_before_utc": "2026-10-20T05:00:00Z"}
+    assert provider_window_confirmed("2026-10-20T05:00:00Z", confirmation)
+    assert not provider_window_confirmed("2026-10-20T14:00:00Z", confirmation)
+    confirmation["no_provider_stop_before_utc"] = "2026-10-20T14:00:00Z"
+    assert provider_window_confirmed("2026-10-20T14:00:00Z", confirmation)
+    confirmation["instance_id"] = 1
+    assert not provider_window_confirmed("2026-10-20T14:00:00Z", confirmation)

@@ -53,6 +53,25 @@ def comparison_design(family):
                          "foundation_training": "No foundation-policy training-data exclusion claim."}}
 
 
+def provider_window_confirmed(deadline, confirmation=None):
+    """An extension's evidence must cover its exact target, including later changes."""
+    original = "2026-10-20T03:00:00Z"
+    if deadline <= original:
+        return True
+    if (not confirmation or confirmation.get("instance_id") != 56777435
+            or confirmation.get("earlier_stop_removed_or_moved") is not True):
+        return False
+    covered = confirmation.get("no_provider_stop_before_utc")
+    if not isinstance(covered, str):
+        return False
+    try:
+        target_epoch = calendar.timegm(time.strptime(deadline, "%Y-%m-%dT%H:%M:%SZ"))
+        covered_epoch = calendar.timegm(time.strptime(covered, "%Y-%m-%dT%H:%M:%SZ"))
+    except ValueError:
+        return False
+    return covered_epoch >= target_epoch
+
+
 def select(run, development_protocol, *, now=None):
     run, development_protocol = Path(run), Path(development_protocol)
     protocol = json.loads(development_protocol.read_text())
@@ -110,11 +129,8 @@ def select(run, development_protocol, *, now=None):
         family["required_seconds"] = remaining_waves * family["episode_seconds"] + reserve
         family["fits_time"] = family["required_seconds"] <= cutoff - now
     confirmation_path = run / "provider-extension-confirmation.json"
-    extension_confirmed = protocol["deadline_utc"] != "2026-10-20T05:00:00Z"
-    if confirmation_path.exists():
-        confirmation = json.loads(confirmation_path.read_text())
-        extension_confirmed = (confirmation.get("instance_id") == 56777435
-                               and confirmation.get("earlier_stop_removed_or_moved") is True)
+    confirmation = json.loads(confirmation_path.read_text()) if confirmation_path.exists() else None
+    extension_confirmed = provider_window_confirmed(protocol["deadline_utc"], confirmation)
     selected = next((name for name in ["jar", "clutter"] if families[name]["fits_time"]
                      and authority_pass), None)
     decision = {**protocol, "schema": "maniguard-latent-capacity-v1",
