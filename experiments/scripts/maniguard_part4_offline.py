@@ -20,6 +20,7 @@ from helpers.maniguard_part4_model import (
     discrimination,
     event_metrics,
     fit_predictors,
+    Predictor,
 )
 from helpers.maniguard_part4_protocol import CONFIG, ROOT, RUN, atomic, clock, digest, read
 
@@ -104,7 +105,7 @@ def premise_gate(metrics):
             "scope": "One bounded frozen-target premise check on exposed historical development tasks, not a fresh final audit"}
 
 
-def run_offline(run=RUN):
+def run_offline(run=RUN, resume_baseline=False):
     began = time.time()
     run = Path(run)
     if (run / "offline-audit.json").exists():
@@ -113,7 +114,15 @@ def run_offline(run=RUN):
         raise RuntimeError("Insufficient budget before cleanup reserve")
     episodes = load_donors(run)
     directory = run / "models/baseline"
-    predictor, ledger = fit_predictors(episodes, directory)
+    if resume_baseline:
+        ledger = read(directory / "training-ledger.json")
+        if digest(directory / "predictors.npz") != ledger["predictors_sha256"]:
+            raise ValueError("Cannot resume a changed baseline")
+        if digest(CONFIG / "offline-protocol.json") != ledger["protocol_sha256"]:
+            raise ValueError("Cannot change the protocol when resuming prediction")
+        predictor = Predictor(directory)
+    else:
+        predictor, ledger = fit_predictors(episodes, directory)
     predictions = {e["episode_id"]: predictor.predict(e) for e in episodes}
     calibration = [e for e in episodes if e["group"] == "calibration"]
     y = np.concatenate([e["y"] for e in calibration])
@@ -166,4 +175,6 @@ def run_offline(run=RUN):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run", type=Path, default=RUN)
-    run_offline(parser.parse_args().run)
+    parser.add_argument("--resume-baseline", action="store_true")
+    args = parser.parse_args()
+    run_offline(args.run, args.resume_baseline)

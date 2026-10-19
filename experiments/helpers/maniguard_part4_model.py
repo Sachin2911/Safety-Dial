@@ -1,6 +1,7 @@
 """Bounded direct event predictors with fit-only preprocessing and episode bootstrap."""
 
 import time
+from types import SimpleNamespace
 
 import numpy as np
 from scipy.special import expit, logit
@@ -145,10 +146,13 @@ class Predictor:
     def __init__(self, directory):
         with np.load(directory / "predictors.npz", allow_pickle=False) as value:
             self.a = {k: value[k].copy() for k in value.files}
-        # A transform-only object, avoiding pickle or arbitrary-code loading.
-        self.pca = PCA(n_components=32)
-        self.pca.components_, self.pca.mean_ = self.a["pca_components"], self.a["pca_mean"]
-        self.pca.n_components_, self.pca.n_features_in_ = 32, len(self.pca.mean_)
+        # The frozen non-whitened PCA transform is explicit numerical data. Do
+        # not reconstruct a partly fitted sklearn estimator or load a pickle.
+        self.pca = SimpleNamespace(n_components_=len(self.a["pca_components"]),
+                                   transform=self.transform_visual)
+
+    def transform_visual(self, visual):
+        return (visual - self.a["pca_mean"]) @ self.a["pca_components"].T
 
     def predict(self, episode):
         a = self.a
@@ -234,3 +238,55 @@ def discrimination(y, p):
         return {"auroc": None, "auprc": None, "prevalence": float(np.mean(y)) if len(y) else None}
     return {"auroc": float(roc_auc_score(y, p)),
             "auprc": float(average_precision_score(y, p)), "prevalence": float(y.mean())}
+
+
+def repair_predictor(baseline_directory, episodes, directory, arm):
+    """Matched offline updates from identical trained baselines, never audit data.
+
+    The caller supplies historical fitting episodes, every valid shared initial
+    trajectory and every valid discovery for this arm. Confirmation and calibration
+    trajectories remain excluded. This conditional stage is uncalled when the
+    premise gate fails; unit-test execution is not physical repair evidence.
+    """
+    if arm not in ("common", "R", "U", "E", "D"):
+        raise ValueError("Unknown repair arm")
+    for e in episodes:
+        if e.get("role") not in ("historical_fit", "shared_initial", "acquisition"):
+            raise ValueError("Repair donor is not permitted fitting/acquisition data")
+        if e["role"] == "acquisition" and (arm == "common" or e.get("method") != arm):
+            raise ValueError("An arm cannot use another method's private discoveries")
+        if e.get("group") in ("calibration", "development", "audit", "confirmation"):
+            raise ValueError("Held-out groups cannot enter repair fitting")
+        if e.get("valid") is False:
+            raise ValueError("Invalid physical proposals are not training trajectories")
+    baseline = Predictor(baseline_directory)
+    a = {k: v.copy() for k, v in baseline.a.items()}
+    designs = [causal_design(e, baseline.pca) for e in episodes]
+    by_task = {task: [i for i, e in enumerate(episodes) if e["task"] == task]
+               for task in sorted({e["task"] for e in episodes})}
+    members = []
+    for member, seed in enumerate(read(CONFIG / "offline-protocol.json")["models"]["seeds"]):
+        rng = np.random.default_rng(seed)
+        selection = [int(i) for ids in by_task.values()
+                     for i in rng.choice(ids, len(ids), replace=True)]
+        x, y, w = training_pool([episodes[i] for i in selection], [designs[i] for i in selection])
+        x = (x - a["scale_mean"]) / a["scale_std"]
+        initial = [baseline.a[f"member_{member}_{k}"] for k in range(4)]
+        parameters, _, losses = mlp_fit(x, y, balance_weights(y, w), seed, initial=initial)
+        for k, value in enumerate(parameters):
+            a[f"initial_{member}_{k}"] = initial[k].copy()
+            a[f"member_{member}_{k}"] = value
+        members.append({"seed": seed, "updates": 500, "loss_curve": losses,
+                        "bootstrap": [episodes[i]["episode_id"] for i in selection]})
+    directory.mkdir(parents=True, exist_ok=False)
+    np.savez_compressed(directory / "predictors.npz", **a)
+    atomic(directory / "repair-ledger.json", {
+        "arm": arm, "baseline_sha256": digest(baseline_directory / "predictors.npz"),
+        "preprocessing": "baseline PCA/scalers unchanged", "members": members,
+        "donors": [{k: e.get(k) for k in ("episode_id", "task", "role", "method")} for e in episodes],
+        "missing_valid_data": "no cross-arm replacement; episode-normalized capped contributions",
+        "logistic_references": "baseline references preserved; primary comparison updates only MLP copies",
+        "gradient_updates": 2500, "examples": 5 * 500 * 256,
+        "predictors_sha256": digest(directory / "predictors.npz"), "audit_accessed": False,
+    })
+    return Predictor(directory)

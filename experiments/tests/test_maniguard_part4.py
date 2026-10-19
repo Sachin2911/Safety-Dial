@@ -9,8 +9,13 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from helpers.maniguard_part4_data import causal_design, native_agreement, warning_labels
-from helpers.maniguard_part4_model import calibration_rule, capped_windows, event_metrics
+from helpers.maniguard_part4_model import Predictor, calibration_rule, capped_windows, event_metrics
 from helpers.maniguard_part4_protocol import assert_partitioning
+from helpers.maniguard_part4_acquisition import (
+    Acquisition, Scenario, archive_cell, interleaved_schedule, reflect_bounds,
+)
+from helpers.maniguard_part4_gate import authorize_acquisition, close_failed_premise
+from helpers.maniguard_part4_protocol import atomic
 
 
 def test_first_onset_no_post_event_or_padded_future():
@@ -103,3 +108,77 @@ def test_window_cap_retains_positives_and_episode_mass():
 def test_whole_task_variants_cannot_cross_partition():
     with pytest.raises(ValueError, match="leaks"):
         assert_partitioning({"fit": ["task_0001/base"], "audit": ["task_0001/perturbed"]})
+
+
+def test_frozen_prediction_loads_without_estimator_or_pickle_state(tmp_path):
+    a = {"pca_mean": np.zeros(40), "pca_components": np.eye(40)[:32],
+         "scale_mean": np.zeros(255), "scale_std": np.ones(255),
+         "visual_mean": np.zeros(32), "visual_std": np.ones(32),
+         "logistic_coef": np.zeros(255), "logistic_intercept": np.zeros(1),
+         "visual_coef": np.zeros(32), "visual_intercept": np.zeros(1)}
+    for member in range(5):
+        for k, value in enumerate([np.zeros((255, 64)), np.zeros(64),
+                                   np.zeros((64, 1)), np.zeros(1)]):
+            a[f"member_{member}_{k}"] = value
+    np.savez_compressed(tmp_path / "predictors.npz", **a)
+    e = {"steps": np.array([4]), "visual": np.zeros((10, 40)),
+         "robot": np.zeros((10, 9)), "proposed": np.zeros((10, 8)),
+         "action": np.zeros((10, 8)), "controller": np.zeros(9),
+         "query_age": np.zeros(10)}
+    prediction = Predictor(tmp_path).predict(e)
+    assert prediction["primary"].tolist() == [.5]
+    assert prediction["uncertainty"].tolist() == [0]
+
+
+def shared_scenarios():
+    return [Scenario(f"seed-{i}", f"task-{i % 2}", (i / 8, -i / 8), i, True,
+                     i / 10, i / 100, (i / 8, -i / 8)) for i in range(8)]
+
+
+def test_four_methods_interleaved_and_invalid_slots_are_not_free():
+    schedule = interleaved_schedule()
+    assert len(schedule) == 48
+    for slot in range(12):
+        assert {r["method"] for r in schedule if r["slot"] == slot} == {"R", "U", "E", "D"}
+    for method in ("R", "U", "E", "D"):
+        search = Acquisition(method, shared_scenarios(), 7, slots=2)
+        for slot in range(2):
+            proposal = search.propose()
+            with pytest.raises(ValueError, match="recorded"):
+                search.propose()
+            invalid = Scenario(proposal["proposal_id"], proposal["task"],
+                               tuple(proposal["genome"]), slot + 8, False, None, None)
+            cost = {"controls": 0, "physics_steps": 6, "VLA_queries": 0,
+                    "seconds": 1., "validation_attempts": 1}
+            search.update(invalid, cost)
+        with pytest.raises(StopIteration):
+            search.propose()
+        assert sum(r["cost"]["physics_steps"] for r in search.records) == 12
+        assert all(r["evaluation"]["quality"] is None for r in search.records)
+
+
+def test_uncertainty_parent_choice_is_independent_of_future_safety_labels():
+    shared = shared_scenarios()
+    changed = [Scenario(s.proposal_id, s.task, s.genome, s.order, True,
+                        1 - s.quality, s.uncertainty, s.descriptor) for s in shared]
+    first, second = Acquisition("U", shared, 8), Acquisition("U", changed, 8)
+    assert first.propose() == second.propose()
+
+
+def test_descriptor_boundaries_and_reflected_mutation():
+    assert archive_cell((-1, -1)) == (0, 0)
+    assert archive_cell((1, 1)) == (3, 3)
+    with pytest.raises(ValueError):
+        archive_cell((1.001, 0))
+    assert np.allclose(reflect_bounds(np.array([1.25, -1.25])), [.75, -.75])
+
+
+def test_failed_premise_prevents_any_physical_search_and_records_unstarted_stages(tmp_path):
+    atomic(tmp_path / "offline-audit.json", {"gate": {
+        "eligible": False, "shared_initial_eligible": False, "status": "failed_discrimination"}})
+    with pytest.raises(ValueError, match="did not pass"):
+        authorize_acquisition(tmp_path)
+    terminal = close_failed_premise(tmp_path)
+    assert terminal["new_physical_attempts"] == 0
+    assert terminal["stages"]["fresh_audit"]["labels_opened"] is False
+    assert all(v["executed"] == 0 for v in terminal["stages"]["acquisition"].values())
