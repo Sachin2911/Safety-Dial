@@ -1,0 +1,30 @@
+{
+  "schema": "maniguard-latent-learning-interface-v1",
+  "status": "software_interface_only_not_authorized_for_physical_execution",
+  "implementation": "experiments/helpers/maniguard_latent_learning.py:ParameterReinforce",
+  "method": "episodic REINFORCE over a squashed Gaussian distribution of conditional controller parameters",
+  "actor": "The same44 causal features,4 by44 weights in[-1,1], fixed arm basis and native-noise steering runtime as the minimum pilot",
+  "defaults_not_physically_tuned": {
+    "seed": 20261020,
+    "sigma": 0.25,
+    "learning_rate": 0.05,
+    "population": 4,
+    "cases_per_sample": 2,
+    "batches": 2,
+    "baseline": "Mean return of the other three samples; no privileged reward input",
+    "shared_initialization": "Accept exactly four bounded controllers with two valid case scores each; initialize at the best by score sum, then stable identifier",
+    "mean_controller": "tanh(center), with the original LatentController execution semantics"
+  },
+  "checkpoint": "RNG, center, fixed configuration, shared data, pending raw draws, weights and hashes, partial scores and completed update history",
+  "cost_contract": "The caller must account for shared initialization once globally and every new full, partial or failed attempt in a prospective physical queue. Stored valid scores do not replace an interaction ledger.",
+  "physical_runs": 0,
+  "additional_model_calls": 0,
+  "new_dependencies": [],
+  "requires_before_physical_use": [
+    "A new authorized complete learning arm and independent audit within an explicit interaction and time budget",
+    "Matched observations, action domain, shared initialization, tuning allowance and task/seed cases",
+    "Prospectively frozen learning hyperparameters and finalist rule",
+    "Full native episode and causal/source verification before recording scores"
+  ],
+  "scope": "A tested interface, not learning efficacy, evolutionary superiority or a competent state-conditioned latent SAC baseline. It is excluded from the frozen minimum EA/random-search pilot."
+}

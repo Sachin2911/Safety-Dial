@@ -26,6 +26,17 @@ all 176 weights, including 96 semantic weights. Removing semantic features offli
 changed its code by RMS 0.3781 on factual observations. This is not a physical
 counterfactual or a measurement of semantic task competence.
 
+The requested ordinary-learning interface is also implemented as
+`ParameterReinforce`, an episodic score-function update over a bounded distribution
+of the same 176 conditional weights. It can accept the shared initialization data
+and persists pending samples, partial scores and RNG. Its four CPU checks cover
+the analytic gradient, interrupted-batch recovery, fixed allowance and artifact
+consistency. It launches no physical jobs and remains an
+[unfunded interface](../../../configs/maniguard/latent-evolution/learning-interface.json),
+outside the frozen minimum comparison. Its mean controller has no physical evidence.
+This parameter-gradient interface does not supply the competent latent SAC baseline
+needed for the stronger practical-learning comparison.
+
 The source launch revision is `4783369c5b599580e26f9c3a2723ee55518c46a3`.
 Versioned development protocols, source/checkpoint pins and reconstruction commands
 are in the [study directory](../../../configs/maniguard/latent-evolution/README.md).
@@ -138,7 +149,7 @@ reconcile historical handles before any physical resume. Do not restart archived
 services. The analysis exporter supplies attempts, candidate curves and independent
 audit CSVs; comparative files currently have no data rows.
 
-Thirty study tests have passed using the separate intended interpreters. These
+Thirty-four study tests have passed using the separate intended interpreters. These
 include the real pinned OpenPI sampling interface, physical receipt replay, global
 budget/recovery behavior, matched optimizer accounting, finalist protection and
 provider-confirmation coverage. New Python files pass Ruff. Unit tests and development

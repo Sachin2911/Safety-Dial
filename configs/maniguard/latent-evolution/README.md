@@ -114,6 +114,25 @@ Shared initialization appears in each optimizer's data curve but is counted once
 in the global physical-cost ledger. This exporter does not certify preservation
 or completion of the full research objective.
 
+`helpers.maniguard_latent_learning.ParameterReinforce` supplies the requested
+ordinary-learning interface for a separately budgeted comparison. It learns a
+fixed-variance distribution over the same 176 conditional weights, using a
+score-function gradient and leave-one-out return baselines. Shared initialization
+can contain the same four candidates and eight case scores as EA/random search.
+The caller must persist `state()` before physical admission, export each proposed
+controller, submit only independently verified full-episode scores to `record()`
+and complete all four samples before `update()`. Pending draws, partial scores
+and RNG survive checkpoint recovery; observation does not resample candidates.
+Every failed or partial physical attempt still belongs in the global queue ledger.
+
+This interface has no simulator launcher and no funded physical arm. Its mean
+controller is untested until separately evaluated. It does not replace a competent
+state-conditioned latent SAC comparison, enter the frozen four-condition pilot,
+authorize extra episodes or establish learning efficacy. Its mathematical gradient,
+partial-batch recovery, fixed batch allowance and controller/checkpoint consistency
+have CPU checks. Learning hyperparameters, finalist selection, matched information,
+adaptation budget and independent evaluation require a new prospective protocol.
+
 The private output repositories are the dataset
 `Sachioster/maniguard-latent-evolution-runs` and model
 `Sachioster/maniguard-latent-evolution-controllers`. Each append-only stage has exact
