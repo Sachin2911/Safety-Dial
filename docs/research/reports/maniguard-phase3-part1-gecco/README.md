@@ -1,5 +1,65 @@
 # ManiGuard shared GECCO-format report
 
+For the **19 October supervisor check-in**, open
+[supervisor-draft.pdf](supervisor-draft.pdf) and the
+[one-page meeting brief](meeting-brief.pdf). The paper draft uses the same ACM
+format with a focused research narrative, formal controller equations, three
+algorithms, an information-flow diagram and the completed saved-trace recovery
+diagnostic. The original cumulative report below remains unchanged.
+
+The new diagnostic reuses 18,657 commands from 24 historical episodes. At a uniform
+.04 rad cap, componentwise clipping distorts joint-error direction by more than five
+degrees on 9/55 modified commands; vector scaling has 0/55, with a maximum of
+.00019 degrees. The median threshold gives three early-query opportunities in
+482 factual prefixes, all on one diagnostic task, from only five positive eligible
+calibration values. This is a geometry and activation diagnostic. It adds no new
+physics, VLA queries, encoder calls, model fits or physical safety result.
+Its [protocol](../../../../configs/maniguard/recovery/20261019-checkin/protocol.json),
+[public result](../../research_notes/ManiGuard%20recovery%20checkin%20diagnostic.json)
+and [figure provenance](../../figures/ManiGuard/phase3-recovery/provenance.json)
+retain the scope, task roles, thresholds, counts and source hashes.
+
+The three presentation videos are saved locally under
+`runs/maniguard/recovery/20261019-checkin/showcase/` and backed up to the explicitly
+approved private Hugging Face destination, pinned at revision
+`c20b8b5f53bbd579935e93b90fb06bebbc107769`:
+
+- [Selected full-dial success](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/c20b8b5f53bbd579935e93b90fb06bebbc107769/recovery-checkin/20261019/videos/01-selected-success.mp4).
+- [All settings complete safely](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/c20b8b5f53bbd579935e93b90fb06bebbc107769/recovery-checkin/20261019/videos/02-all-settings-safe.mp4).
+- [Adverse comparison for context](https://huggingface.co/datasets/Sachioster/safety-dial-phase3-part1-20261018/blob/c20b8b5f53bbd579935e93b90fb06bebbc107769/recovery-checkin/20261019/videos/03-adverse-context.mp4).
+
+Access requires the owner's Hugging Face account. The six source clips and local
+hash/timing receipts remain saved. These are historical, post hoc illustrative
+cases, including the adverse case. Both native cameras, original frame count/rate
+and ended panels are retained. Generated videos remain outside public Git; the
+complete historical gallery remains below. The presentation does not turn the
+native monitor into an action filter. The [private preservation receipt](../../research_notes/ManiGuard%20recovery%20checkin%20videos.json)
+verifies all five uploaded files by download and SHA-256.
+
+Build these new documents with `make checkin TECTONIC=/path/to/tectonic`.
+Reproduce the diagnostic in a dedicated uv-managed CPU environment, without syncing
+the root project into ManiGuard's simulation/policy environments:
+
+```bash
+uv venv --python 3.12 data/maniguard/envs/recovery-cpu
+uv pip install --python data/maniguard/envs/recovery-cpu/bin/python \
+  -r configs/maniguard/recovery/20261019-checkin/cpu-requirements.txt
+uv run --no-project --python data/maniguard/envs/recovery-cpu/bin/python python \
+  scripts/maniguard/part4_restore.py --run runs/maniguard/recovery/fresh-checkin
+uv run --no-project --python data/maniguard/envs/recovery-cpu/bin/python python \
+  experiments/scripts/maniguard_recovery_trace_screen.py \
+  --run runs/maniguard/recovery/fresh-checkin \
+  --protocol configs/maniguard/recovery/20261019-checkin/protocol.json \
+  --output runs/maniguard/recovery/fresh-checkin/diagnostic
+```
+
+Restoration requires the owner's private Hugging Face access. A new output directory
+is required; the runner will not overwrite scientific records. The recorded v1/v2
+analyses have identical geometry/timing tables. The second adds automatic source
+snapshot preservation and lint cleanup, with the first source/results retained.
+The public result identifies its exact scored source hashes. Twenty-one targeted
+CPU tests cover controller semantics and replay eligibility; Ruff passes.
+
 Open [named.pdf](named.pdf). This shared paper uses the repository's GECCO
 `acmart`/`sigconf` template and now covers the completed Part 1 and Part 2 pilots,
 the completed Part 3 forecast audit, and Part 4's completed offline counterexample

@@ -1,0 +1,68 @@
+{
+  "schema": "maniguard-recovery-saved-trace-screen-v1",
+  "study_id": "20261019-checkin",
+  "status": "prospective_recipe_before_diagnostic_scoring",
+  "question": "Does uniform vector scaling remove joint-error direction distortion, and do causal early-query opportunities exist under a trace-derived positive threshold?",
+  "authority": "User requests one small experiment and supervisor paper within one hour; user confirms this machine and saved traces.",
+  "scope": "Offline development diagnostic, no new physical comparison or optimizer search.",
+  "donors": {
+    "repo_id": "Sachioster/safety-dial-phase3-part1-20261018",
+    "repo_type": "dataset",
+    "revision": "f070abcb707b853892893f6a69251d927c6bfeee",
+    "archive": "followup/followup-20261018T213427Z-raw-final.tar.gz",
+    "sha256": "c9be31415d17d6e96cfe605e4d297ec678e077ac9766b0777d65f861796ca832",
+    "expected_full_episodes": 24,
+    "exposure": "All four historical tasks are exposed development evidence; none is a new recovery audit."
+  },
+  "geometry": {
+    "episodes": "all 24 verified full Part2/3 recordings, engineering excluded",
+    "caps_rad": [null, 0.12, 0.08, 0.04],
+    "maps": ["componentwise", "direction"],
+    "smoothing": 1,
+    "grasp_conditioning": false,
+    "gripper": "unchanged",
+    "dtype": "recorded proposal dtype, normally float32",
+    "bounds": "recorded action-space bounds after adaptation; low-level actuator output limits are not replayed",
+    "substantial_tolerance_rad": 0.000001,
+    "metrics": ["changed_commands", "angles_above_5_degrees", "maximum_angle", "maximum_target_error", "downstream_clipping_changes", "zero_error_angles_undefined"]
+  },
+  "timing": {
+    "common_cap_rad": 0.04,
+    "common_cap_choice": "Original free-motion cap and recovery-plan domain; fixed before scoring, no outcome selection.",
+    "map": "direction",
+    "calibration_tasks": ["task_0010", "task_0039"],
+    "calibration_conditions": ["B", "D"],
+    "calibration_expected_episodes": 8,
+    "diagnostic_tasks": ["task_0046", "task_0006"],
+    "diagnostic_conditions": ["B"],
+    "diagnostic_expected_episodes": 4,
+    "eligible_chunks": "Only factual complete eight-action prefixes; each restarts at its actual query. Discard incomplete final prefixes and four-action schedules.",
+    "eligible_ages": [4, 5, 6, 7],
+    "normalizer_rad": "sqrt(7)*0.04",
+    "threshold_quantiles": [0.5, 0.75, 0.9],
+    "quantile_method": "linear, over strictly positive accumulated eligible-prefix correction values on calibration episodes only",
+    "selected_threshold": "median positive eligible correction; if absent, omit positive-threshold timing gene",
+    "minimum_intervals": [4, 6],
+    "maximum_interval": 8,
+    "reference_thresholds": [0.5],
+    "counterfactual_scope": "First would-trigger age within a recorded factual prefix only. Stop interpretation there. No refreshed VLA proposals or changed-state trajectories are inferred.",
+    "claim": "Opportunity counts are replay diagnostics, not realized new query costs or safe completion."
+  },
+  "budget": {
+    "maximum_analysis_seconds": 600,
+    "new_simulator_controls": 0,
+    "new_physics_steps": 0,
+    "new_policy_queries": 0,
+    "new_encoder_calls": 0,
+    "trained_model_fits": 0,
+    "count_historical_acquisition_once": true,
+    "task_horizon": "No original episode is truncated or relabelled."
+  },
+  "outputs": ["source-freeze.json", "diagnostic.json", "geometry.csv", "timing.csv", "diagnostic.pdf", "diagnostic.png"],
+  "limitations": [
+    "Joint-space direction preservation is an algebraic property, not an uprightness or collision guarantee.",
+    "Counterfactual commands are evaluated only at factual measured joints; physical effects require a later matched simulator screen.",
+    "Threshold calibration uses correlated prefixes from only two tasks; task denominators remain explicit.",
+    "No result is used to claim evolution beats random search or ordinary learning."
+  ]
+}
