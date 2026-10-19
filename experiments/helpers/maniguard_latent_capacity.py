@@ -99,23 +99,40 @@ def select(run, development_protocol, *, now=None):
                          for f in families.values())
     valid_remaining, replacements_remaining = 56, 4 - invalid
     reserve = 900
+    workers = protocol.get("workers", 1)
+    if workers not in [1, 2]:
+        raise ValueError("Unsupported evaluation worker count")
+    # All training jobs and all four-condition audit blocks pack into pairs in
+    # the declared two-worker design. Four replacement slots protect two waves.
+    remaining_waves = (valid_remaining + replacements_remaining + workers - 1) // workers
     for family in families.values():
-        family["required_seconds"] = (valid_remaining + replacements_remaining) * family["episode_seconds"] + reserve
+        family["remaining_waves"] = remaining_waves
+        family["required_seconds"] = remaining_waves * family["episode_seconds"] + reserve
         family["fits_time"] = family["required_seconds"] <= cutoff - now
+    confirmation_path = run / "provider-extension-confirmation.json"
+    extension_confirmed = protocol["deadline_utc"] != "2026-10-20T05:00:00Z"
+    if confirmation_path.exists():
+        confirmation = json.loads(confirmation_path.read_text())
+        extension_confirmed = (confirmation.get("instance_id") == 56777435
+                               and confirmation.get("earlier_stop_removed_or_moved") is True)
     selected = next((name for name in ["jar", "clutter"] if families[name]["fits_time"]
                      and authority_pass), None)
     decision = {**protocol, "schema": "maniguard-latent-capacity-v1",
-                "status": "capacity_selected_frozen" if selected else "capacity_insufficient_or_authority_failed",
+                "status": ("capacity_selected_frozen" if extension_confirmed else
+                           "capacity_selected_pending_provider_extension") if selected else
+                          "capacity_insufficient_or_authority_failed",
                 "selected_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(now)),
                 "source_commit": subprocess.check_output(["git", "-C", str(ROOT), "rev-parse", "HEAD"],
                                                           text=True).strip(),
                 "development_protocol_sha256": hashlib.sha256(development_protocol.read_bytes()).hexdigest(),
                 "family": selected, "capacity": {"fits": selected is not None,
+                    "workers": workers, "remaining_waves": remaining_waves,
+                    "provider_extension_confirmed": extension_confirmed,
                     "episode_seconds": families[selected]["episode_seconds"] if selected else None,
                     "available_seconds": cutoff - now, "valid_remaining": valid_remaining,
                     "replacements_remaining": replacements_remaining, "lifecycle_backup_reserve_seconds": reserve,
                     "families": families, "all_development_families_authority_pass": authority_pass,
-                    "reason": "Complete 56 remaining valid episodes plus remaining replacements and lifecycle/backups must fit before the unchanged physical cutoff. Full native timeout throughput is included. Comparative scores are not inputs."},
+                    "reason": "Complete56 remaining valid episodes plus remaining replacements and lifecycle/backups must fit before the authorized physical cutoff. The declared two-worker design packs jobs into pairs; full native timeout throughput remains included. Comparative scores are not inputs. An unresolved earlier provider stop prevents launch against the extended window."},
                 "unselected_designs": {name: comparison_design(name) for name in ["jar", "clutter"]}}
     if selected:
         decision.update(comparison_design(selected))
