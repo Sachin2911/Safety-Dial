@@ -31,6 +31,9 @@ class Queue:
             self.completed[name] = {"score": 0}
         return self.completed[name]
 
+    def evaluate_batch(self, names, **kwargs):
+        return [self.evaluate(name, **kwargs) for name in names]
+
 
 def protocol(tmp_path):
     path = tmp_path / "protocol.json"
@@ -93,3 +96,34 @@ def test_audit_cannot_run_before_sealing_and_protocol_cannot_change(tmp_path):
     path.write_text(json.dumps(changed))
     with pytest.raises(ValueError, match="changed"):
         Pilot(run, path, queue=Queue())
+
+
+def test_paired_design_balances_hardware_and_preserves_all_56_physical_jobs(tmp_path):
+    path = protocol(tmp_path)
+    data = json.loads(path.read_text())
+    data["workers"] = 2
+    path.write_text(json.dumps(data))
+    run = tmp_path / "run"
+    run.mkdir()
+    q = Queue()
+    with pytest.raises(ValueError, match="balance"):
+        Pilot(run, path, queue=q)
+    orders = [["native", "fixed", "ea", "random"], ["fixed", "random", "native", "ea"],
+              ["ea", "native", "random", "fixed"], ["random", "ea", "fixed", "native"]]
+    for block, order in zip(data["audit_blocks"], orders, strict=True):
+        block["order"] = order
+    path.write_text(json.dumps(data))
+    pilot = Pilot(run, path, queue=q)
+    pilot.run_search()
+    pilot.run_audit()
+    assert len(q.completed) == 56
+    for generation in [1, 2]:
+        for slot in range(4):
+            for case in range(2):
+                ea = q.jobs[f"ea-g{generation}-{slot}-case{case}"]
+                random = q.jobs[f"random-g{generation}-{slot}-case{case}"]
+                assert (ea["worker"], ea["seed"], ea["scene"]) == (
+                    random["worker"], random["seed"], random["scene"])
+    for condition in ["native", "fixed", "ea", "random"]:
+        workers = [job["worker"] for job in q.jobs.values() if job.get("condition") == condition]
+        assert workers.count(0) == workers.count(1) == 2

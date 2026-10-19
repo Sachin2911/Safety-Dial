@@ -176,13 +176,14 @@ stdout_logfile_maxbytes=0
     raise RuntimeError("Policy startup observation timed out; inspect same supervisor handle")
 
 
-def start_runner(run, protocol, jobs, name):
+def start_runner(run, protocol, jobs, name, *, paired=False):
     if any(c not in "abcdefghijklmnopqrstuvwxyz_" for c in name):
         raise ValueError("Invalid supervisor coordinator name")
     run, protocol, jobs = Path(run).resolve(), Path(protocol).resolve(), Path(jobs).resolve()
     path = Path("/etc/supervisor/conf.d") / (name + ".conf")
+    script = "maniguard_latent_parallel_run.py" if paired else "maniguard_latent_run.py"
     config = f"""[program:{name}]
-command={ROOT}/data/maniguard/envs/tools/bin/python -u {ROOT}/experiments/scripts/maniguard_latent_run.py --run {run} --protocol {protocol} --jobs {jobs}
+command={ROOT}/data/maniguard/envs/tools/bin/python -u {ROOT}/experiments/scripts/{script} --run {run} --protocol {protocol} --jobs {jobs}
 directory={ROOT}
 autostart=true
 autorestart=false

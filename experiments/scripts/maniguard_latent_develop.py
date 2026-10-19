@@ -15,11 +15,18 @@ from maniguard_latent_checkpoint import checkpoint
 
 from helpers.maniguard_latent_queue import atomic
 from helpers.maniguard_latent_results import read_episode
-from helpers.maniguard_latent_services import ensure_policy, service_status, start_runner
+from helpers.maniguard_latent_services import (
+    ensure_policy,
+    ensure_worker_policies,
+    service_status,
+    start_runner,
+)
 
 
 def wait_development(run, protocol, jobs, service):
     definitions = json.loads(jobs.read_text())
+    if definitions and isinstance(definitions[0], list):
+        definitions = [job for wave in definitions for job in wave]
     resumes = 0
     while True:
         queue = json.loads((run / "queue.json").read_text())
@@ -88,22 +95,32 @@ def main():
         checkpoint(args.run, "development-jar")
         phase("clutter-development")
     if state["phase"] == "clutter-development":
-        ensure_policy(args.run, "clutter")
+        protocol = json.loads(args.protocol.read_text())
+        paired = protocol.get("workers") == 2
+        if paired:
+            ensure_worker_policies(args.run, "clutter")
+        else:
+            ensure_policy(args.run, "clutter")
         definitions = [{"id": "engineering-clutter-conditional-v6", "stage": "engineering",
                         "engineering": True, "max_steps": 32, "family": "clutter",
                         "scene": "task_0039/base", "seed": 6101805,
                         "controller": str(args.run / "initial-controllers/initial-3.npz")}]
-        protocol = json.loads(args.protocol.read_text())
-        for job in protocol["development_episodes"][2:]:
+        if paired:
+            definitions[0]["worker"] = 0
+        for i, job in enumerate(protocol["development_episodes"][2:]):
             definitions.append({k: v for k, v in job.items() if k != "initial_controller"} | {
                 "stage": "development", "controller": str(args.run / "initial-controllers"
                                                              / f"initial-{job['initial_controller']}.npz")})
+            if paired:
+                definitions[-1]["worker"] = i
+        if paired:
+            definitions = [definitions[:1], definitions[1:]]
         jobs = args.run / "clutter-development-jobs.json"
         if jobs.exists() and json.loads(jobs.read_text()) != definitions:
             raise ValueError("Clutter development job definitions changed")
         if not jobs.exists():
             atomic(jobs, definitions)
-        start_runner(args.run, args.protocol, jobs, "maniguard_latent_development_clutter")
+        start_runner(args.run, args.protocol, jobs, "maniguard_latent_development_clutter", paired=paired)
         wait_development(args.run, args.protocol, jobs, "maniguard_latent_development_clutter")
         phase("clutter-authority")
     if state["phase"] == "clutter-authority":

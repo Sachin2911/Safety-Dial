@@ -9,6 +9,7 @@ from pathlib import Path
 import numpy as np
 
 from helpers.maniguard_latent import CandidateSearch, LatentController, initial_weights
+from helpers.maniguard_latent_parallel import PairedPhysicalQueue
 from helpers.maniguard_latent_queue import ROOT, PhysicalQueue, atomic
 
 
@@ -19,7 +20,17 @@ class Pilot:
         if (self.protocol["status"] != "capacity_selected_frozen"
                 or not self.protocol["capacity"]["fits"]):
             raise ValueError("Physical search requires a prospectively selected complete pilot")
-        self.queue = PhysicalQueue(self.run, self.protocol_path) if queue is None else queue
+        if self.protocol.get("workers") == 2:
+            hardware_counts = {name: [0, 0] for name in ["native", "fixed", "ea", "random"]}
+            for case in self.protocol["audit_blocks"]:
+                if set(case["order"]) != set(hardware_counts) or len(case["order"]) != 4:
+                    raise ValueError("Every audit block must contain all four conditions")
+                for position, condition in enumerate(case["order"]):
+                    hardware_counts[condition][position % 2] += 1
+            if any(counts != [2, 2] for counts in hardware_counts.values()):
+                raise ValueError("The four-block audit must balance every condition across both GPUs")
+        queue_class = PairedPhysicalQueue if self.protocol.get("workers") == 2 else PhysicalQueue
+        self.queue = queue_class(self.run, self.protocol_path) if queue is None else queue
         self.directory = self.run / "search"
         self.directory.mkdir(exist_ok=True)
         self.path = self.directory / "state.json"
@@ -51,15 +62,23 @@ class Pilot:
         return str(path)
 
     def jobs(self, candidate, generation):
-        return [{"id": f"{candidate['id']}-case{i}", "stage": "shared_initial" if generation == 0
+        jobs = [{"id": f"{candidate['id']}-case{i}", "stage": "shared_initial" if generation == 0
                  else f"search_generation_{generation}", "family": self.protocol["family"],
                  "scene": case["scene"], "seed": case["seed"],
                  "controller": self.weights_file(candidate)}
                 for i, case in enumerate(self.protocol["training_panels"][generation])]
+        if self.protocol.get("workers") == 2:
+            for i, job in enumerate(jobs):
+                job["worker"] = (i + generation) % 2
+        return jobs
 
     def evaluate(self, candidate, generation):
         jobs = self.jobs(candidate, generation)
         self.queue.plan(jobs)
+        if self.protocol.get("workers") == 2:
+            receipts = self.queue.evaluate_batch([job["id"] for job in jobs],
+                                                episode_seconds=self.protocol["capacity"]["episode_seconds"])
+            return [receipt["score"] for receipt in receipts]
         scores = []
         for job in jobs:
             print("Observe or execute", job["id"], flush=True)
@@ -147,13 +166,20 @@ class Pilot:
             raise ValueError("Seal all four finalists before any independent comparison")
         jobs = []
         for block, case in enumerate(self.protocol["audit_blocks"]):
-            for condition in case["order"]:
+            for position, condition in enumerate(case["order"]):
                 jobs.append({"id": f"audit-b{block}-{condition}", "stage": "independent_audit",
                              "family": self.protocol["family"], "scene": case["scene"],
                              "seed": case["seed"], "condition": condition, "block": block,
                              "controller": self.state["finalists"][condition]["controller"]})
+                if self.protocol.get("workers") == 2:
+                    jobs[-1]["worker"] = position % 2
         self.queue.plan(jobs)
-        for job in jobs:
-            self.queue.evaluate(job["id"],
-                                episode_seconds=self.protocol["capacity"]["episode_seconds"])
+        if self.protocol.get("workers") == 2:
+            for i in range(0, len(jobs), 2):
+                self.queue.evaluate_batch([job["id"] for job in jobs[i:i + 2]],
+                                           episode_seconds=self.protocol["capacity"]["episode_seconds"])
+        else:
+            for job in jobs:
+                self.queue.evaluate(job["id"],
+                                    episode_seconds=self.protocol["capacity"]["episode_seconds"])
         self.milestone("independent-audit")

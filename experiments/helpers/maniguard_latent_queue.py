@@ -186,6 +186,9 @@ class PhysicalQueue:
         try:
             receipt = read_episode(attempt["output"], require_full=not attempt["engineering"])
             terminal = json.loads(Path(attempt["terminal_receipt"]).read_text())
+            attempt["observed_finished_epoch"] = attempt["finished_epoch"]
+            attempt["finished_epoch"] = terminal["finished_epoch"]
+            attempt["elapsed_seconds"] = terminal["finished_epoch"] - terminal["started_epoch"]
             if terminal["exit_code"] != 0 or attempt.get("exit_code", 0) != 0:
                 raise ValueError("Nonzero process exit despite a physical receipt")
         except Exception as exc:
