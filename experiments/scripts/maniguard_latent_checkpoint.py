@@ -68,6 +68,15 @@ def checkpoint(run, stage):
                 if source.is_file() and not source.is_symlink():
                     relative = str(Path("episodes") / episode.name / source.relative_to(episode))
                     (models if source.name == "controller.npz" else data)[relative] = str(source)
+        # Exit receipts and stderr live beside episode directories. They are
+        # required to distinguish valid outcomes from infrastructure failures.
+        for attempt in queue["attempts"]:
+            if attempt.get("status") not in ["completed", "invalid"]:
+                continue
+            for suffix in [".log", "-request.json", "-terminal.json"]:
+                source = Path(attempt["output"]).parent / (attempt["id"] + suffix)
+                if source.exists():
+                    data["episodes/" + source.name] = str(source)
         for folder in auxiliary:
             for source in folder.rglob("*"):
                 if source.is_file() and not source.is_symlink():
@@ -76,7 +85,8 @@ def checkpoint(run, stage):
         for name in ["status.json", "queue.json", "attempts.jsonl", "recovery.jsonl",
                      "deadline-watchdog.json", "hf-assets.json", "handoff-runtime.json",
                      "restore/restored.json", "restore/pending-links.json",
-                     "sim-freeze.txt", "policy-freeze.txt", "tools-freeze.txt"]:
+                     "sim-freeze.txt", "policy-freeze.txt", "tools-freeze.txt",
+                     "backups/index.json", "development-driver.json", "active-policy.json"]:
             source = run / name
             if source.exists():
                 target = directory / name
