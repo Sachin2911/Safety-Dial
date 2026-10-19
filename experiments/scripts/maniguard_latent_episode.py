@@ -84,9 +84,8 @@ def main():
               ROOT / "configs/maniguard/phase2/encoder.json",
               ROOT / "configs/maniguard/phase2/completion.json",
               ROOT / "configs/maniguard/phase2/sources.json"]
-    files += [ROOT / "configs/maniguard/latent-evolution/platform-v1.json",
-              ROOT / "configs/maniguard/latent-evolution/platform-v2.json",
-              ROOT / "configs/maniguard/latent-evolution/nvidia-egl-vendor.json"]
+    files += sorted((ROOT / "configs/maniguard/latent-evolution").glob("platform-v*.json"))
+    files += [ROOT / "configs/maniguard/latent-evolution/nvidia-egl-vendor.json"]
     job["code_hashes"] = {}
     for source in files:
         relative = source.relative_to(ROOT)

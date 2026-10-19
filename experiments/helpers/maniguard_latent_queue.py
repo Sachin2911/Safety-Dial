@@ -70,7 +70,9 @@ class PhysicalQueue:
     def _cost_gate(self, engineering):
         if engineering:
             # Earlier manual starts are retained in the root ledger as well.
-            previous = [json.loads(line) for line in (self.run / "attempts.jsonl").read_text().splitlines()]
+            ledger = self.run / "attempts.jsonl"
+            previous = [json.loads(line) for line in ledger.read_text().splitlines()] \
+                if ledger.exists() else []
             starts = {row["id"] for row in previous if row.get("stage") == "engineering"}
             if len(starts) >= 6:
                 raise RuntimeError("Six-start engineering repair allowance exhausted")
@@ -121,7 +123,8 @@ class PhysicalQueue:
         attempt = {"id": attempt_id, "job_id": job_id, "stage": job["stage"],
                    "engineering": job.get("engineering", False), "status": "starting",
                    "command": command, "output": str(output), "started_epoch": time.time(),
-                   "deadline_epoch": min(time.time() + 1200, self.cutoff),
+                   "deadline_epoch": min(time.time() + (1200 if job.get("engineering") else 3600),
+                                         self.cutoff),
                    "protocol_sha256": self.protocol_hash, "repair_note": repair_note}
         row.update(status="running", output=str(output))
         row["attempt_ids"].append(attempt_id)

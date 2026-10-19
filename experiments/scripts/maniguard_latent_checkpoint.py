@@ -1,0 +1,129 @@
+"""Preserve completed new-study evidence and controller state in private repositories."""
+
+import argparse
+import json
+import os
+import subprocess
+import sys
+import tarfile
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "experiments"))
+
+from maniguard_latent_preserve import preserve
+
+from helpers.maniguard_latent_queue import atomic
+
+
+def archive(path, entries):
+    if path.exists():
+        return
+    temporary = path.with_suffix(".partial")
+    secrets = [os.environ[name].encode() for name in
+               ["HF_TOKEN", "GITHUB_TOKEN", "WANDB_API_KEY", "CONTAINER_API_KEY"]
+               if len(os.environ.get(name, "")) >= 12]
+    with tarfile.open(temporary, "w:gz", compresslevel=3) as output:
+        for name, source in entries.items():
+            if source.is_symlink() or not source.is_file():
+                raise ValueError("Only ordinary explicitly selected study files may be preserved")
+            if any(part in [".env", ".vast_api_key", "credentials", "behavior-1k.key"]
+                   for part in Path(name).parts):
+                raise ValueError("Credential files are excluded from study artifacts")
+            contents = source.read_bytes()
+            if any(value in contents for value in secrets):
+                raise ValueError("A selected study artifact contains a credential: " + name)
+            output.add(source, arcname=name, recursive=False)
+    temporary.replace(path)
+
+
+def checkpoint(run, stage):
+    if not stage or any(c not in "abcdefghijklmnopqrstuvwxyz0123456789-" for c in stage):
+        raise ValueError("Invalid immutable stage name")
+    run = Path(run).resolve()
+    directory = run / "backups" / stage
+    directory.mkdir(parents=True, exist_ok=True)
+    index_path = run / "backups/index.json"
+    index = json.loads(index_path.read_text()) if index_path.exists() else {"stages": {}}
+    if stage in index["stages"]:
+        return index["stages"][stage]
+    frozen_index = directory / "selected.json"
+    if not frozen_index.exists():
+        queue = json.loads((run / "queue.json").read_text())
+        backed = {name for item in index["stages"].values() for name in item["episodes"]}
+        episodes = [Path(a["output"]).resolve() for a in queue["attempts"]
+                    if a.get("status") in ["completed", "invalid"]]
+        episodes += [p for p in run.iterdir() if p.is_dir()
+                     and (p.name.startswith("engineering-") or p.name == "camera-v1")]
+        episodes = sorted({p for p in episodes if p.name not in backed})
+        source_commit = subprocess.check_output(["git", "-C", str(ROOT), "rev-parse", "HEAD"],
+                                                text=True).strip()
+        data, models = {}, {}
+        for episode in episodes:
+            for source in episode.rglob("*"):
+                if source.is_file() and not source.is_symlink():
+                    relative = str(Path("episodes") / episode.name / source.relative_to(episode))
+                    (models if source.name == "controller.npz" else data)[relative] = str(source)
+        # Copy live ledgers now so archive creation and upload use a stable snapshot.
+        for name in ["status.json", "queue.json", "attempts.jsonl", "recovery.jsonl",
+                     "deadline-watchdog.json", "hf-assets.json", "handoff-runtime.json",
+                     "restore/restored.json", "restore/pending-links.json",
+                     "sim-freeze.txt", "policy-freeze.txt", "tools-freeze.txt"]:
+            source = run / name
+            if source.exists():
+                target = directory / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(source.read_bytes())
+                data["run/" + name] = str(target)
+        for source in run.glob("*.log"):
+            target = directory / source.name
+            target.write_bytes(source.read_bytes())
+            data["logs/" + source.name] = str(target)
+        for source in run.glob("server-*.jsonl"):
+            target = directory / source.name
+            target.write_bytes(source.read_bytes())
+            data["server/" + source.name] = str(target)
+        for folder in [run / "search", run / "initial-controllers"]:
+            if folder.exists():
+                for source in folder.iterdir():
+                    if source.is_file() and source.suffix in [".npz", ".json"]:
+                        target = directory / (folder.name + "-" + source.name)
+                        target.write_bytes(source.read_bytes())
+                        models[str(Path(folder.name) / source.name)] = str(target)
+        for source in (ROOT / "configs/maniguard/latent-evolution").glob("*.json"):
+            target = directory / ("config-" + source.name)
+            target.write_bytes(source.read_bytes())
+            models["configs/" + source.name] = str(target)
+        atomic(frozen_index, {"episodes": [p.name for p in episodes], "source_commit": source_commit,
+                              "data": data, "models": models})
+    selected = json.loads(frozen_index.read_text())
+    for kind, field, repo in [
+        ("model", "models", "Sachioster/maniguard-latent-evolution-controllers"),
+        ("dataset", "data", "Sachioster/maniguard-latent-evolution-runs"),
+    ]:
+        package = directory / (kind + ".tar.gz")
+        archive(package, {name: Path(source) for name, source in selected[field].items()})
+        receipt = directory / (kind + "-receipt.json")
+        if not receipt.exists():
+            preserve(repo, kind, "20261019/" + stage,
+                     {package.name: str(package), "selected.json": str(frozen_index)},
+                     selected["source_commit"], receipt)
+    index["stages"][stage] = {"episodes": selected["episodes"],
+                               "receipts": [str(directory / (k + "-receipt.json"))
+                                            for k in ["model", "dataset"]]}
+    atomic(index_path, index)
+    print(json.dumps({"stage": stage, "episodes": selected["episodes"],
+                      "remote_readback_verified": True}), flush=True)
+    return index["stages"][stage]
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--run", type=Path, required=True)
+    parser.add_argument("--stage", required=True)
+    args = parser.parse_args()
+    checkpoint(args.run, args.stage)
+
+
+if __name__ == "__main__":
+    main()
