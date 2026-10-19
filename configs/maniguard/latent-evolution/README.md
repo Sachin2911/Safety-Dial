@@ -6,12 +6,15 @@ code and asset identifiers. Its coordinator and earlier studies are not launched
 `platform-v3.json` preserve the measured infrastructure repairs and their costs.
 A capacity-selected pilot protocol is required before physical search can start.
 
-The authorized instance is 56777435. Physical acquisition ends at 02:30 UTC on
-20 October 2026 and the supervised deadline watchdog requests stop, retaining disk,
-at 03:00 UTC. These absolute times do not reset when a coordinator restarts.
-The user authorized the internal watchdog after provider schedule readback failed.
-No provider stop job was removed or postponed. A later rental or restart requires
-new authorization.
+The authorized instance is 56777435. The user explicitly extended the rental to
+05:00 UTC on 20 October 2026. `development-v2.json` changes the physical cutoff to
+04:30 UTC and retains all interaction ceilings. The supervised watchdog is armed for
+05:00 UTC, retaining disk; the original 03:00 records remain preserved. The separate
+provider job 4986 still needs updating or removal: the account scheduling API rejected
+the attempted extension with HTTP 401. Until that is resolved it may stop the instance
+at 03:00. The extension record is
+`configs/vast/maniguard-rental-20261019-extension.json`. Absolute times do not reset
+when a coordinator restarts. A later rental or restart requires new authorization.
 
 ## Reconstruct the environments and assets
 
@@ -95,6 +98,13 @@ raw traces, images, videos, source snapshots and ledgers. Model archives retain 
 controller weights, optimizer state, basis and configs. Neither contains base VLA
 weights or licensed simulator asset bundles. Receipts distinguish untrained initial
 controllers from physically selected finalists.
+
+`maniguard_latent_recover.py --receipts RECEIPTS_IN_STAGE_ORDER --output NEW_STAGING`
+redownloads the named immutable archives, verifies privacy, manifests and full archive
+hashes, and safely extracts each original stage plus a merged evidence view. It starts
+no jobs. The first full Jar episode passed the complete independent physical verifier
+after this remote round trip. Copied process handles are historical; reconcile them
+and any incomplete attempt before an authorized physical resume.
 
 Checks use explicit interpreters and `PYTHONPATH=experiments`. The tools interpreter
 runs the core, queue and pilot tests; the policy interpreter runs

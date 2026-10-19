@@ -116,7 +116,7 @@ def main():
         # observation-level means must cross the prospective authority threshold.
         values = [np.mean([r["prefix_arm_rms_rad"] for r in subset
                            if r["id"].startswith(f"o{index:02d}-")]) for index in range(8)]
-        passed.append(sum(value >= .001 for value in values) >= 4)
+        passed.append(bool(sum(value >= .001 for value in values) >= 4))
     summary = {"family": job["family"], "decoder_calls": len(rows),
                "directions_passing": passed, "authority_pass": sum(passed) >= 2,
                "same_noise_identity_pass": True,
