@@ -43,12 +43,26 @@ def snapshot(run):
     for family in ["jar", "clutter"]:
         path = run / ("authority-" + family) / "requests.jsonl"
         decoder_calls[family] = len(path.read_text().splitlines()) if path.exists() else 0
+    servers = []
+    for path in sorted(run.glob("server-*.jsonl")):
+        # A live writer can be between writes. Keep complete records and expose
+        # any incomplete tail rather than treating it as a returned call.
+        contents = path.read_text()
+        lines = contents.splitlines()
+        pending = bool(contents and not contents.endswith("\n"))
+        calls = [json.loads(line) for line in (lines[:-1] if pending else lines)]
+        servers.append({"ledger": path.name, "calls": len(calls),
+                        "returned": sum(row.get("status") == "returned" for row in calls),
+                        "failed": sum(row.get("status") == "failed" for row in calls),
+                        "elapsed_seconds": sum(row.get("elapsed_seconds", 0) for row in calls),
+                        "incomplete_tail": pending})
     rental = json.loads((ROOT / "configs/vast/maniguard-rental-20261019.json").read_text())
     now = time.time()
     wall_hours = (now - rental["provider_started_epoch"]) / 3600
     return {"schema": "maniguard-latent-cost-snapshot-v1", "observed_epoch": now,
             "attempts": rows, "unique_attempts": len(attempts), "recorded_totals": totals,
             "decoder_calls": decoder_calls, "decoder_calls_remaining": 320 - sum(decoder_calls.values()),
+            "server_model_calls": servers,
             "engineering_starts": engineering, "engineering_starts_remaining": 6 - engineering,
             "engineering_controls": engineering_controls, "engineering_controls_remaining": 96 - engineering_controls,
             "full_attempts_started": len(full), "full_attempts_remaining": 64 - len(full),

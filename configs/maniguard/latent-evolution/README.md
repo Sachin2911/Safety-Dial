@@ -89,6 +89,31 @@ then executes sixteen independent comparison episodes. It checkpoints optimizer 
 ancestry and candidate weights, with verified private backups after each generation.
 No unit test or short engineering episode supplies comparative fitness.
 
+The prospective `development-v3.json` declares two concurrent physical workers,
+each colocating one simulator and its family policy on one GPU. Their endpoints
+are 18000 and 18001. Worker placement rotates between training generations and
+balances each audit condition across both GPUs. Use
+`maniguard_latent_parallel_run.py --run RUN --protocol DEVELOPMENT_V3 --jobs JOBS_JSON`
+for its development waves. Both workers share one queue, coordinator lock and
+64-attempt ceiling. Restarting only the coordinator observes surviving PID and
+process-start identities and reconciles a finished partner without launching more physics.
+
+After all four full development episodes and both 160-call audits finish, run
+`maniguard_latent_capacity.py --run RUN --development-protocol DEVELOPMENT_V3
+--output NEW_CAPACITY_JSON`. This protects 56 remaining valid comparison episodes,
+four replacement slots and preservation time using measured native-timeout throughput.
+The selector does not read comparative scores. An unresolved earlier provider stop
+prevents launching against the extended window. An insufficient decision does not
+authorize a smaller comparison, shortened horizons or another rental.
+
+`maniguard_latent_report.py --run RUN --output RUN/analysis` independently rechecks
+completed episodes and exports requested-sequence and raw benchmark outcomes,
+failed and partial attempt costs, decoder authority, candidate ancestry and curves,
+and initial-image differences within independent audit blocks when available.
+Shared initialization appears in each optimizer's data curve but is counted once
+in the global physical-cost ledger. This exporter does not certify preservation
+or completion of the full research objective.
+
 The private output repositories are the dataset
 `Sachioster/maniguard-latent-evolution-runs` and model
 `Sachioster/maniguard-latent-evolution-controllers`. Each append-only stage has exact

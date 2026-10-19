@@ -85,10 +85,12 @@ def _checkpoint(run, stage):
         # Copy live ledgers now so archive creation and upload use a stable snapshot.
         for name in ["status.json", "queue.json", "attempts.jsonl", "recovery.jsonl",
                      "deadline-watchdog.json", "hf-assets.json", "handoff-runtime.json",
+                     "deadline-credential-preflight.json",
                      "restore/restored.json", "restore/pending-links.json",
                      "sim-freeze.txt", "policy-freeze.txt", "tools-freeze.txt",
                      "backups/index.json", "development-driver.json", "active-policy.json",
                      "active-worker-policies.json", "cost-snapshot.json",
+                     "paired-recovery-before.json", "paired-recovery-verified.json",
                      "provider-extension-readback.json", "provider-extension-update.json",
                      "provider-extension-confirmation.json"]:
             source = run / name
@@ -105,6 +107,12 @@ def _checkpoint(run, stage):
             target = directory / source.name
             target.write_bytes(source.read_bytes())
             data["server/" + source.name] = str(target)
+        for source in (run / "analysis").glob("*"):
+            if source.is_file() and source.suffix in [".json", ".csv", ".md", ".png", ".svg"]:
+                target = directory / "analysis" / source.name
+                target.parent.mkdir(exist_ok=True)
+                target.write_bytes(source.read_bytes())
+                data["analysis/" + source.name] = str(target)
         for folder in [run / "search", run / "initial-controllers"]:
             if folder.exists():
                 for source in folder.iterdir():
