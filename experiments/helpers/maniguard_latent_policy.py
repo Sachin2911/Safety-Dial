@@ -43,7 +43,11 @@ class NativeNoisePolicy:
         features = finite(obs.pop("latent_features"), (FEATURE_DIM,), "actor features")
         controller = LatentController(weights)
         explicit = obs.pop("latent_audit_noise", None)
-        if explicit is not None and not self.audit:
+        audit_offset = obs.pop("latent_audit_offset", None)
+        if explicit is not None and audit_offset is not None:
+            raise ValueError("An audit request must select noise or offset, not both")
+        is_probe = explicit is not None or audit_offset is not None
+        if is_probe and not self.audit:
             raise ValueError("Explicit probe noise is forbidden on the physical-study service")
         if any(k.startswith(("latent_", "study_")) for k in obs):
             raise ValueError("Unknown study payload")
@@ -62,14 +66,19 @@ class NativeNoisePolicy:
         noise = None if controller.identity else native + offset[None]
         if explicit is not None:
             noise = finite(explicit, (1, self.horizon, self.action_dim), "audit noise")
+        if audit_offset is not None:
+            noise = native + finite(audit_offset, (self.horizon, self.action_dim),
+                                    "audit offset")[None]
         receipt = {"episode": episode, "query_index": self.query_index,
                    "seed": seed, "weights_sha256": controller.sha256(),
                    "features_sha256": array_hash(features),
                    "native_noise_sha256": array_hash(native),
                    "offset_sha256": array_hash(offset),
                    "rng_before": np.asarray(before).tolist(),
-                   "identity_native_path": noise is None, "audit": explicit is not None,
+                   "identity_native_path": noise is None, "audit": is_probe,
                    "code": controller.code(features).tolist(), "shape": list(native.shape)}
+        if audit_offset is not None:
+            receipt["audit_offset_sha256"] = array_hash(audit_offset)
         try:
             # Omitting noise, rather than passing zeros or an externally drawn
             # equivalent, preserves native RNG advancement and numerical inference.

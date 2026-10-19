@@ -2,6 +2,7 @@
 
 import json
 import os
+import sys
 import time
 from pathlib import Path
 
@@ -38,7 +39,20 @@ class LatentStudy(Study):
                            encoder_text_calls=0, encoder_seconds=0.)
         self.ledger()
 
+    def install_accounting(self, og):
+        super().install_accounting(og)
+        # The bundled Vulkan loader's device order was checked against GPU UUIDs.
+        # Kit consumes this after benchmark parsing; physics keeps CUDA device 0.
+        if any(arg.startswith("--/renderer/activeGpu=") for arg in sys.argv):
+            raise ValueError("Unexpected preexisting renderer GPU override")
+        sys.argv.append(f"--/renderer/activeGpu={self.job['renderer_vulkan_index']}")
+        self.write("gpu_mapping", renderer_vulkan_index=self.job["renderer_vulkan_index"],
+                   simulation_gpu_uuid="GPU-0bfb3ed5-af55-472e-3199-058727ff80a7",
+                   policy_gpu_uuid="GPU-4f452774-6f8b-6fcc-4ce1-2d4d190e6d07")
+
     def connect_policy(self, cfg, upstream_connect):
+        if self.job["random_policy"]:
+            return upstream_connect(cfg)
         study = self
         from helpers.maniguard_client import StudyClient
 
@@ -49,13 +63,17 @@ class LatentStudy(Study):
                 if (receipt.get("weights_sha256") != study.controller.sha256()
                         or receipt.get("audit") is not False):
                     raise ValueError("Physical server did not use the frozen controller")
-                study.write("noise_receipt", step=study.query_step, receipt=receipt)
+                study.write("noise_receipt", step=study.query_step, receipt=receipt,
+                            raw_actions=result["actions"],
+                            raw_action_dtype=str(np.asarray(result["actions"]).dtype))
                 return result
 
         return ReceiptClient(host=cfg.host, port=cfg.port), "openpi"
 
     def validate_policy(self, policy, client_type):
         super().validate_policy(policy, client_type)
+        if self.job["random_policy"]:
+            return
         metadata = policy.get_server_metadata()
         if (metadata.get("native_noise_steering") is not True
                 or metadata.get("audit_service") is not False
@@ -65,6 +83,23 @@ class LatentStudy(Study):
     def start(self, scene, obs, env, robot, monitor):
         self.env, self.robot = env, robot
         super().start(scene, obs)
+        from PIL import Image
+
+        references = robot.prim.GetMetadata("references")
+        reference_paths = [] if references is None else [
+            str(ref.assetPath) for ref in references.GetAddedOrExplicitItems()]
+        layers = [str(spec.layer.identifier) for spec in robot.prim.GetPrimStack()]
+        self.write("runtime_contract", robot_usd_path=str(robot.usd_path),
+                   reference_asset_paths=reference_paths, robot_prim_layers=layers,
+                   overview_shape=list(np.shape(obs["overview_image"])),
+                   wrist_shape=list(np.shape(obs["wrist_images"])))
+        if not any("franka_panda_longfinger" in path for path in reference_paths + layers):
+            raise ValueError("The live robot USD prim does not prove long-finger asset loading")
+        for key in ["overview_image", "wrist_images"]:
+            value = np.asarray(obs[key])
+            if value.shape != (640, 640, 3) or value.dtype != np.uint8 or value.std() < 1:
+                raise ValueError("Native 640-pixel camera is unavailable or blank: " + key)
+            Image.fromarray(value).save(self.output / (key + ".png"))
         # The monitor is evaluation telemetry only; it is absent from feature_vector.
         if monitor is None:
             raise ValueError("Physical outcomes require a live passive monitor")

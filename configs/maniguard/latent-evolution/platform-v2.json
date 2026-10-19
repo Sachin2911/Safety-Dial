@@ -1,0 +1,24 @@
+{
+  "schema": "maniguard-latent-platform-amendment-v2",
+  "supersedes": "platform-v1.json graphics library search path only",
+  "instance_id": 56777435,
+  "reason": "NVIDIA EGL vendor selection repaired Vulkan. The broad /opt/nvidia-drivers/lib64 search path then loaded a second libcuda beside the injected host libcuda and PhysX reported CUDA initialization failure. A minimal probe with only the EGL vendor override passes Vulkan entry-point and actual Torch CUDA operations, with one injected host libcuda mapped.",
+  "simulator_environment": {
+    "CUDA_VISIBLE_DEVICES": "0",
+    "LD_LIBRARY_PATH": "/usr/local/nvidia/lib:/usr/local/nvidia/lib64",
+    "__EGL_VENDOR_LIBRARY_FILENAMES": "/workspace/Safety-Dial/configs/maniguard/latent-evolution/nvidia-egl-vendor.json"
+  },
+  "renderer_active_gpu": 0,
+  "host_driver": "580.173.02 unchanged",
+  "engineering_repair_allowance": {
+    "original_short_launches": 3,
+    "additional_pre_control_infrastructure_starts": 3,
+    "total_short_start_ceiling": 6,
+    "total_short_policy_control_ceiling": 96,
+    "reason": "Prospective bounded preparation repair before any comparative outcomes. All failed launches retain elapsed time and unknown startup physics. This adds no controls, full development episodes, decoder-audit calls, full-comparison attempts, rental time or spending authority.",
+    "full_attempt_ceiling": 64,
+    "decoder_audit_ceiling": 320,
+    "hard_deadline_utc": "2026-10-20T03:00:00Z"
+  },
+  "evidence": "integration-native-v3.log; process library maps; successful in-process Vulkan and actual CUDA probe without graphics directory in LD_LIBRARY_PATH"
+}
