@@ -89,10 +89,10 @@ def main():
         phase("clutter-development")
     if state["phase"] == "clutter-development":
         ensure_policy(args.run, "clutter")
-        definitions = [{"id": "engineering-clutter-v6", "stage": "engineering",
+        definitions = [{"id": "engineering-clutter-conditional-v6", "stage": "engineering",
                         "engineering": True, "max_steps": 32, "family": "clutter",
                         "scene": "task_0039/base", "seed": 6101805,
-                        "controller": str(args.run / "initial-controllers/initial-0.npz")}]
+                        "controller": str(args.run / "initial-controllers/initial-3.npz")}]
         protocol = json.loads(args.protocol.read_text())
         for job in protocol["development_episodes"][2:]:
             definitions.append({k: v for k, v in job.items() if k != "initial_controller"} | {
