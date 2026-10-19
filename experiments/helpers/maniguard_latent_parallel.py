@@ -65,6 +65,9 @@ class PairedPhysicalQueue(PhysicalQueue):
         if any(type(worker) is not int or worker not in [0, 1] for worker in workers) \
                 or len(set(workers)) != len(workers):
             raise ValueError("At most one physical job may occupy each declared worker")
+        if all(row["status"] == "completed" for row in rows):
+            return [read_episode(row["output"], require_full=not row["definition"].get("engineering"))
+                    for row in rows]
         for attempt in self.state["attempts"]:
             identity = attempt.get("process_identity")
             if (identity is not None and process_identity(identity["pid"]) == identity
@@ -90,6 +93,7 @@ class PairedPhysicalQueue(PhysicalQueue):
         # Observe both handles and both absolute timeouts; waiting on one worker
         # must never leave its partner unbounded. A context restart reuses these
         # exact saved identities instead of creating replacement physics.
+        receipts, failures, reconciled = {}, [], set()
         while True:
             live = False
             for attempt in attempts.values():
@@ -100,6 +104,13 @@ class PairedPhysicalQueue(PhysicalQueue):
                         attempt["exit_code"] = code
                 identity = attempt.get("process_identity")
                 if identity is None or process_identity(identity["pid"]) != identity:
+                    name = attempt["job_id"]
+                    if name not in reconciled:
+                        try:
+                            receipts[name] = self._reconcile(self.state["jobs"][name], attempt)
+                        except RuntimeError as exc:
+                            failures.append(str(exc))
+                        reconciled.add(name)
                     continue
                 live = True
                 if time.time() >= attempt["deadline_epoch"]:
@@ -112,8 +123,9 @@ class PairedPhysicalQueue(PhysicalQueue):
             if not live:
                 break
             time.sleep(1)
-        receipts, failures = {}, []
         for name, row in zip(job_ids, rows, strict=True):
+            if name in reconciled:
+                continue
             try:
                 if name in attempts:
                     receipts[name] = self._reconcile(row, attempts[name])

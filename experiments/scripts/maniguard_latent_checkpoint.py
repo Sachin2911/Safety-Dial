@@ -87,7 +87,10 @@ def _checkpoint(run, stage):
                      "deadline-watchdog.json", "hf-assets.json", "handoff-runtime.json",
                      "restore/restored.json", "restore/pending-links.json",
                      "sim-freeze.txt", "policy-freeze.txt", "tools-freeze.txt",
-                     "backups/index.json", "development-driver.json", "active-policy.json"]:
+                     "backups/index.json", "development-driver.json", "active-policy.json",
+                     "active-worker-policies.json", "cost-snapshot.json",
+                     "provider-extension-readback.json", "provider-extension-update.json",
+                     "provider-extension-confirmation.json"]:
             source = run / name
             if source.exists():
                 target = directory / name

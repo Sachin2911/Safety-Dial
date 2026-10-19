@@ -55,9 +55,12 @@ def test_concurrent_processes_resume_both_handles_without_extra_physics(tmp_path
         pytest.fail("A saved live worker must never be relaunched")
 
     monkeypatch.setattr(subprocess, "Popen", duplicate)
+    resumed.plan([{"id": "previous-wave", "worker": 0, "stage": "engineering", "engineering": True}])
+    resumed.state["jobs"]["previous-wave"].update(status="completed", output=str(tmp_path))
+    assert resumed.evaluate_batch(["previous-wave"]) == [{"score": 0}]
     assert resumed.evaluate_batch(["j0", "j1"]) == [{"score": 0}, {"score": 0}]
-    evidence = [json.loads((Path(row["output"]) / "evidence.json").read_text())
-                for row in resumed.state["jobs"].values()]
+    evidence = [json.loads((Path(resumed.state["jobs"][name]["output"]) / "evidence.json").read_text())
+                for name in ["j0", "j1"]]
     assert max(row["started"] for row in evidence) < min(row["finished"] for row in evidence)
     assert {row["device"] for row in evidence} == {"0", "1"}
     assert len(resumed.state["attempts"]) == 2

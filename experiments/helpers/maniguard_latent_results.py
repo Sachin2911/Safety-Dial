@@ -30,6 +30,14 @@ def read_episode(output, *, require_full=True):
     jobs = [row["job"] for row in rows if row["type"] == "job"]
     if jobs != [job]:
         raise ValueError("Telemetry job differs from the archived job")
+    metadata = [row["metadata"] for row in rows if row["type"] == "policy_metadata"]
+    if not job["random_policy"]:
+        if len(metadata) != 1:
+            raise ValueError("Exactly one verified policy handshake is required")
+        for name in ["experiments/helpers/maniguard_latent.py",
+                     "experiments/helpers/maniguard_latent_policy.py"]:
+            if metadata[0]["source_hashes"].get(name) != job["code_hashes"][name]:
+                raise ValueError("Server actor code differs from the frozen episode snapshot")
     for name, expected in job["code_hashes"].items():
         if hashlib.sha256((output / "study_source" / name).read_bytes()).hexdigest() != expected:
             raise ValueError("Archived source checksum mismatch: " + name)

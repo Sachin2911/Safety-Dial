@@ -81,6 +81,10 @@ class LatentStudy(Study):
             raise ValueError("Physical study requires the verified native-noise service")
         if metadata.get("physical_gpu_uuid") != self.job["policy_gpu_uuid"]:
             raise ValueError("Policy service is on the wrong physical GPU")
+        for name in ["experiments/helpers/maniguard_latent.py",
+                     "experiments/helpers/maniguard_latent_policy.py"]:
+            if metadata.get("source_hashes", {}).get(name) != self.job["code_hashes"][name]:
+                raise ValueError("Policy server actor code differs from the frozen episode snapshot")
 
     def start(self, scene, obs, env, robot, monitor):
         self.env, self.robot = env, robot
