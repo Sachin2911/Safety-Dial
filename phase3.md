@@ -1,6 +1,6 @@
 # Phase 3: evolutionary execution adaptation for safe manipulation
 
-**Active working plan, 18 October 2026.** This document consolidates the phase-three
+**Active working plan, updated 19 October 2026.** This document consolidates the phase-three
 direction and the subsequent methodological review. It is a research plan, not a frozen
 experimental protocol or a report of phase-three results. The safety dial, optimizer
 details, comparisons, statistical thresholds and total budget still need the decisions
@@ -27,6 +27,19 @@ negative windows; only one development first-event episode is available. The fai
 premise gates scene engineering, all four physical acquisition arms, repair and fresh
 audit. No new simulator interaction is charged, and no evolutionary outcome is claimed.
 Creating a follow-up does not reset an existing allocation clock.
+
+**Recovery direction, 19 October 2026.** Sachin requests concrete repairs and a persistent,
+compute-efficient route to a completed comparison. The [recovery plan](phase3Recovery.md)
+now governs prospective repair work across Parts 1 to 4. It separates recoverable
+engineering failures, bounded scientific development and final evaluation. A failed
+model candidate ends that candidate's use; it does not automatically end the research
+allocation or request provider shutdown. The first priority is a repaired execution
+comparison with actual evolution, matched random search and matched ordinary learning.
+Model/readout repair runs on reusable recordings; model assistance and scene acquisition
+have separately specified prerequisites and budgets. The
+[ready-to-run goal prompt](docs/research/research_notes/ManiGuard%20recovery%20goal%20prompt.md)
+defines persistence, evidence, retries and shutdown boundaries. These edits authorize
+planning, not a new rental or an experiment launch in this conversation.
 
 This document is the active research plan and direction. The
 [plan history](docs/research/history/README.md) preserves the earlier oracle, ideation,

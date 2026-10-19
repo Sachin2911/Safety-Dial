@@ -9,6 +9,13 @@ protocol and handoff.
 Add reusable Python under `helpers/`, entry points under `scripts/`, tests under `tests/`
 and study configs under `../configs/`. There is no `src/` package.
 
+The [recovery plan](../phase3Recovery.md) specifies the next prospective implementation:
+a repaired execution interface and matched physical comparison, followed by supported
+model assistance or acquisition studies. Use new `maniguard_recovery_*` files and run
+paths. Preserve frozen Part 1 to 4 sources and receipts. The plan distinguishes retrying
+a failed process from stopping a provider instance; its launchers are not implemented
+merely by adding this documentation.
+
 [Part 4](../configs/maniguard/part4/README.md) implements causal first-uprightness labels,
 direct predictors and four acquisition bookkeeping kernels. Its frozen offline premise
 failed before physical scene engineering or comparative acquisition. The

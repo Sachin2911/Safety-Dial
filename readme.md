@@ -16,6 +16,9 @@ implementation and protocol freeze.
 - [Research and documentation](docs/README.md): the manipulation literature, UNISafe asset
   and compute audits, proposal template and academic context.
 - [Active phase-three plan](phase3.md): direction, methods, evaluation and open decisions.
+- [Recovery plan](phase3Recovery.md): concrete repairs across Parts 1 to 4, bounded
+  comparisons and persistent execution rules, with a
+  [goal prompt](docs/research/research_notes/ManiGuard%20recovery%20goal%20prompt.md).
 - [Part 4 premise result](docs/research/reports/ManiGuard%20Part4%20counterexample%20premise.md):
   frozen direct prediction check, scientifically gated before physical acquisition.
 - [Shared GECCO-format report](docs/research/reports/maniguard-phase3-part1-gecco/named.pdf):

@@ -2,15 +2,31 @@
 
 **Date:** 18 October 2026.
 
-**Status:** queued after [Part 2](phase3Part2.md). This is a prospective design, not a
-frozen execution protocol. Part 2 remains the next physical experiment. No Part 3
-model has been trained and no Part 3 physical episode has been launched.
+**Status:** its feasibility stage completed on 18 October 2026. Eight common recording
+episodes were collected and the model was trained. Four-action ensemble error was
+45.1% worse than persistence; the main readout was inaccurate even on actual future
+observations, and correction-dependent trust collapsed to the disagreement reference.
+The 64-episode optimizer comparison was not launched. The
+[completed report](docs/research/reports/ManiGuard%20Part3%20model%20assisted%20evolution.md)
+and frozen audit retain these results.
+
+**Prospective repair, 19 October 2026:** follow the
+[shared recovery plan](phase3Recovery.md#3-part-3-repair-readouts-before-dynamics).
+Repair and validate actual-state readouts first; compare simple residual dynamics
+against persistence; replace unsupported correction bins with a supported, regularized
+calibration rule or omit the correction-dependent arm. Use a finite development queue
+and a fresh model audit. The direct physical evolutionary comparison can proceed
+without a predictive model. A failed forecast candidate no longer implies immediate
+provider shutdown or completion of the whole recovery goal.
 
 **Working scope:** one frozen ManiGuard Clutter policy, one compact controller family,
 a small predictive model and a controlled evolutionary-method comparison. The proposed
 physical pilot contains 64 full episodes, with a separately identified eight-episode
 data-collection option. The allocation and timing decision remain open until the data
 and engineering audit. Neither budget is added automatically to the current rental.
+The sections below preserve the original prospective design. Its host ID, timestamps,
+unexecuted stages and old finish-at-gate rule are historical; a recovery experiment
+requires a new namespace, protocol and allocation under the shared recovery plan.
 
 ## 1. Research question
 
@@ -454,6 +470,7 @@ The execution freeze must resolve:
 5. All scene/seed assignments, mutation pools, finalist confirmation and condition order.
 6. Engineering/retry caps, timing feasibility and the applicable allocation/deadlines.
 
-Queue order is **Part 2 physical mechanism test, Part 3 model feasibility, then the
-bounded Part 3 optimizer comparison if its prerequisites and allocation support it**.
-An adverse or incomplete result remains a valid deliverable at every stage.
+The original queue order was **Part 2 physical mechanism test, Part 3 model feasibility,
+then the bounded Part 3 optimizer comparison if its prerequisites and allocation support it**.
+The recovery plan now specifies the next work. An adverse or incomplete result remains
+recorded evidence; a feasibility diagnostic alone does not complete its comparison goal.

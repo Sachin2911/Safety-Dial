@@ -2,15 +2,23 @@
 
 **Date:** 18 October 2026.
 
-**Status:** scheduled next: a 16-episode mechanism experiment. Controller details and
-the execution protocol still need freezing before
-physical work. No Part 2 episodes have been launched. The completed Part 1 protocol,
-controller and evidence remain unchanged.
+**Status:** completed on 18 October 2026. Identity, restrained interval-eight execution
+and correction-triggered feedback each recorded 3/4 safe completions; restrained
+interval-four execution recorded 2/4. Every condition had one violating episode. The
+adaptive trigger caused no early query. The
+[completed report](docs/research/reports/ManiGuard%20Part2%20correction%20triggered%20feedback.md)
+and [frozen protocol](configs/maniguard/followup/part2-protocol.json) govern that result.
 
-The more ambitious [Part 3](phase3Part3.md) is queued after this experiment. Its model
-training and feasibility checks are not dependencies of Part 2.
+**Prospective repair, 19 October 2026:** use the
+[shared recovery plan](phase3Recovery.md#2-parts-1-and-2-repair-the-execution-interface)
+to select an active trigger from designated development traces, compare it against
+fixed intervals and a control with the same query allowance, and separate feedback
+timing from cap geometry. A dormant threshold calls for bounded development, rather
+than another unchanged comparison. Model training remains outside the execution
+controller's dependencies. The remaining sections preserve the original design and
+allocation history; their dates and launch instructions are not a current run command.
 
-This follows the recommendations in `rec.md`, the
+This follows the
 [Part 1 investigation](docs/research/reports/ManiGuard%20Part1%20failure%20investigation.md)
 and the broader research direction in [phase3.md](phase3.md).
 
@@ -123,8 +131,10 @@ idle allocation time; Part 2 does not reset the clock. Check remaining time befo
 launch and supervise experiment processes independently. Preserve incomplete evidence
 if the work cannot finish within the existing limits.
 
-Keep the rented instance running as requested by the user. This is separate from
-enforcing experiment-process deadlines and does not expand the episode allocation.
+The original instruction was to keep the rented instance running while enforcing
+experiment-process deadlines. A new run uses the recovery plan's allocation and
+shutdown rules, with the actual provider start and any earlier authorized deadline.
+Historical timestamps do not grant a new allocation.
 
 A subsequent, separately specified experiment can evolve a supported controller and
 confirm finalists more thoroughly. The broader 48-episode search recommendation is

@@ -10,6 +10,16 @@ The [result and evidence](docs/research/reports/ManiGuard%20Part4%20counterexamp
 and [frozen offline protocol](configs/maniguard/part4/offline-protocol.json) retain the
 failed criteria and limited task support. No new simulator interaction was made.
 
+**Prospective repair, 19 October 2026:** the
+[shared recovery plan](phase3Recovery.md#4-part-4-repair-task-support-and-warning-calibration)
+adds a bounded multi-task data and calibration route, finite visual/robot ablations and
+a separately named error-acquisition alternative if confident-miss support remains
+absent. These changes belong to a new protocol; the frozen Part 4 criteria and negative
+result stay intact. A failed detector candidate should trigger the next permitted
+development step, while a failed scene builder blocks physical scene search. Neither
+event alone requests shutdown of the whole research instance. Direct controller
+evolution remains available under its own frozen comparison.
+
 **Original experiment direction:** the remaining sections preserve the prospective
 comparison design. They are not claims that its gated stages were executed. The
 proposed ceiling is **80 full episodes**, with a small, separately counted engineering

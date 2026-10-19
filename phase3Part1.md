@@ -10,6 +10,15 @@ and [frozen protocol](configs/maniguard/phase3/part1.json). The original plannin
 below is preserved in planning commit `8df7ac9`; this status update does not revise
 the executed protocol or authorize further sampling.
 
+**Prospective repair, 19 October 2026:** follow the
+[shared recovery plan](phase3Recovery.md#2-parts-1-and-2-repair-the-execution-interface).
+Test direction-preserving joint-error scaling, a uniform-cap reference that avoids the
+known grasp-heuristic gap, and a feedback threshold with demonstrated development
+activation. Hold smoothing at one and the maximum query interval at eight. Then compare
+evolution, random search and episodic ordinary learning using the same repaired controller
+and independently checked finalists. These are new experiments with new source freezes;
+the completed controller, 48 episodes and adverse fresh comparison remain unchanged.
+
 **Resource limit:** one RTX 4090 or RTX 5090, with a hard limit of eight allocated
 wall hours, hence at most eight allocated GPU-hours. Setup on the allocated machine,
 warm-up, failed attempts, idle time, simulation and reporting all consume this limit.
