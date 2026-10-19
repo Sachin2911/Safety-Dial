@@ -1,0 +1,94 @@
+{
+  "schema": "maniguard-part4-offline-protocol-v1",
+  "status": "frozen_before_reading_part4_event_labels",
+  "planning_commit": "cb7f7c2",
+  "event": "first native uprightness violation of any proposition-scoped protected object",
+  "horizon_actions": 8,
+  "deadline_actions": 4,
+  "history_actions": 4,
+  "alignment": "Observation t precedes action t; executed history stops at t-1; the already proposed command t is allowed. Labels require observed t+8. No padding.",
+  "partitions": {
+    "fit": ["task_0039", "task_0010"],
+    "calibration": ["task_0046"],
+    "development": ["task_0006"]
+  },
+  "donors": {
+    "repo_id": "Sachioster/safety-dial-phase3-part1-20261018",
+    "repo_type": "dataset",
+    "revision": "f070abcb707b853892893f6a69251d927c6bfeee",
+    "archive": "followup/followup-20261018T213427Z-raw-final.tar.gz",
+    "sha256": "c9be31415d17d6e96cfe605e4d297ec678e077ac9766b0777d65f861796ca832",
+    "controller_policy": "Use all verified Part2/3 exact records; explicitly condition on cap enablement, cap values, correction trigger, minimum interval, and current query age.",
+    "part1": "excluded: no later exact observations",
+    "historical_cost": "reused once; report original acquisition separately from zero new physical interaction"
+  },
+  "representation": {
+    "encoder": "facebook/dinov2-small",
+    "revision": "ed25f3a31f01632728cabb09d1542f84ab7b0056",
+    "features": 3072,
+    "pca_dimensions": 32,
+    "pca_fit": "at most 256 uniformly spaced observations per fitting episode, fitting tasks only",
+    "primary": "PCA camera features, robot joints/fingers, current proposed command, previous four executed commands, causal four-observation history, controller metadata, query age",
+    "ablation": "current PCA camera features only",
+    "excluded": ["object states", "monitor predicates", "future observations", "future executed commands", "event time", "task ID", "scene genotype"]
+  },
+  "models": {
+    "reference": "L2 logistic regression, C=1, max_iter=1000, episode-normalized class-balanced weights",
+    "primary": "five episode-bootstrap MLPs; one 64-unit tanh hidden layer; Adam lr=.001; weight decay=.001; 500 fixed minibatch updates; batch=256",
+    "seeds": [20261040, 20261041, 20261042, 20261043, 20261044],
+    "bootstrap": "sample fitting episodes with replacement, stratified by base task; no frame bootstrap",
+    "window_cap_per_episode": 256,
+    "window_selection": "all eligible positive windows, then uniform negative windows to cap; inverse inclusion weighting and equal total episode weight",
+    "preprocessing": "fit-only PCA and standardization; fixed through repair",
+    "repair": "same initial weights, seeds, optimizer, 500 updates and sampling rule; common plus each arm's valid discoveries; confirmation/audit excluded",
+    "prefixes": [0, 4, 8, 12]
+  },
+  "operating_rule": {
+    "probability_calibration": "Platt logistic on calibration ensemble mean logit with episode weights; unsupported single-class calibration is inconclusive",
+    "alarm": "smallest threshold yielding <=.05 episode-weighted negative-window false alarms, alarm uses p>=threshold; deterministic strict tie handling",
+    "low_risk_cutoff": 0.1,
+    "low_disagreement": "25th percentile of calibration negative-window member probability standard deviation",
+    "event_quality": "1-p(tau-4) only if no alarm in [tau-8,tau-4], p(tau-4)<=.1, and u(tau-4)<=calibrated cutoff; otherwise zero",
+    "uncertainty_score": "mean member-probability standard deviation on eligible pre-first-event windows",
+    "threshold_sweep": [0.01, 0.025, 0.05, 0.1, 0.2, 0.5]
+  },
+  "premise_gate": {
+    "minimum_fit_event_episodes": 2,
+    "minimum_fit_event_tasks": 2,
+    "minimum_calibration_event_episodes": 2,
+    "minimum_development_event_episodes": 2,
+    "minimum_development_event_tasks": 1,
+    "minimum_development_auroc": 0.65,
+    "minimum_development_auprc": 0.05,
+    "minimum_auprc_over_prevalence": 1.5,
+    "maximum_development_negative_window_false_alarm": 0.15,
+    "minimum_confident_missed_development_events": 2,
+    "simple_reference": "report logistic and always-safe/always-alarm outcomes; no architecture retuning",
+    "missing_support": "inconclusive, never treated as successful discrimination",
+    "shared_initial_rescue": "Only if discrimination passes and missing event/miss support is the sole deficit; predictor remains frozen, at most eight predeclared shared initial slots.",
+    "failure": "finish bounded diagnostic; no method-specific slots, repair or fresh audit; do not change target, cutoffs or model to rescue results"
+  },
+  "fixed_controller": {
+    "free_step_limit": 0.04,
+    "grasp_step_limit": 0.02,
+    "correction_threshold": null,
+    "minimum_interval": 4,
+    "query_horizon": 8,
+    "smoothing": 1,
+    "grasp_heuristic": "original Part2 finger heuristic",
+    "monitor": "passive"
+  },
+  "physical_ceiling": {
+    "shared_initial": 8,
+    "acquisition_per_method": 12,
+    "methods": ["R", "U", "E", "D"],
+    "confirmation_per_method": 2,
+    "fresh_audit": 16,
+    "horizon": 1100,
+    "maximum_full_episode_controls": 88000,
+    "engineering": {"attempts": 3, "controls_per_attempt": 32},
+    "automatic_retries": 0,
+    "invalid_physical_slots": "charged, no replacement",
+    "initialization_physics": "count measured steps; retain unknown if instrumentation unavailable"
+  }
+}
