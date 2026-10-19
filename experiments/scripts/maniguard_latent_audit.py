@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT / "experiments"))
 
 from helpers.maniguard_client import StudyClient
 from helpers.maniguard_latent import CODE_DIM, FEATURE_DIM, arm_basis
+from helpers.maniguard_latent_results import read_episode
 
 
 def main():
@@ -30,6 +31,7 @@ def main():
         raise ValueError("Decoder probes require the explicitly enabled audit service")
     inputs = []
     for episode in args.episodes:
+        read_episode(episode, require_full=True)
         job = json.loads((episode / "job.json").read_text())
         paths = sorted((episode / "query_observations").glob("*.npz"))[:4]
         if len(paths) != 4 or job["policy"]["revision"] != metadata["checkpoint_revision"]:
@@ -99,6 +101,11 @@ def main():
                         (actions[:, :7] - reference[:, :7])**2)))
                     receipt["gripper_max_change"] = float(np.max(abs(actions[:, 7] - reference[:, 7])))
                     receipt["gripper_saturated_fraction"] = float(np.mean(abs(actions[:, 7]) >= .999))
+                    def command(values):
+                        return np.where(abs(values) > .01, np.sign(values), -1.)
+
+                    receipt["prefix_gripper_command_changes"] = int(np.sum(
+                        command(actions[:8, 7]) != command(reference[:8, 7])))
                     receipt_path.write_text(json.dumps(receipt, indent=2) + "\n")
                 print(name, "verified", flush=True)
     rows = [json.loads(p.read_text()) for p in args.output.glob("o*.json")]

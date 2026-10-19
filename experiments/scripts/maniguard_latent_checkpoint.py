@@ -56,6 +56,10 @@ def checkpoint(run, stage):
         episodes += [p for p in run.iterdir() if p.is_dir()
                      and (p.name.startswith("engineering-") or p.name == "camera-v1")]
         episodes = sorted({p for p in episodes if p.name not in backed})
+        backed_auxiliary = {name for item in index["stages"].values()
+                            for name in item.get("auxiliary", [])}
+        auxiliary = [run / name for name in ["authority-jar", "authority-clutter"]
+                     if name not in backed_auxiliary and (run / name / "summary.json").exists()]
         source_commit = subprocess.check_output(["git", "-C", str(ROOT), "rev-parse", "HEAD"],
                                                 text=True).strip()
         data, models = {}, {}
@@ -64,6 +68,10 @@ def checkpoint(run, stage):
                 if source.is_file() and not source.is_symlink():
                     relative = str(Path("episodes") / episode.name / source.relative_to(episode))
                     (models if source.name == "controller.npz" else data)[relative] = str(source)
+        for folder in auxiliary:
+            for source in folder.rglob("*"):
+                if source.is_file() and not source.is_symlink():
+                    data[str(Path("authority") / folder.name / source.relative_to(folder))] = str(source)
         # Copy live ledgers now so archive creation and upload use a stable snapshot.
         for name in ["status.json", "queue.json", "attempts.jsonl", "recovery.jsonl",
                      "deadline-watchdog.json", "hf-assets.json", "handoff-runtime.json",
@@ -94,7 +102,8 @@ def checkpoint(run, stage):
             target = directory / ("config-" + source.name)
             target.write_bytes(source.read_bytes())
             models["configs/" + source.name] = str(target)
-        atomic(frozen_index, {"episodes": [p.name for p in episodes], "source_commit": source_commit,
+        atomic(frozen_index, {"episodes": [p.name for p in episodes],
+                              "auxiliary": [p.name for p in auxiliary], "source_commit": source_commit,
                               "data": data, "models": models})
     selected = json.loads(frozen_index.read_text())
     for kind, field, repo in [
@@ -109,6 +118,7 @@ def checkpoint(run, stage):
                      {package.name: str(package), "selected.json": str(frozen_index)},
                      selected["source_commit"], receipt)
     index["stages"][stage] = {"episodes": selected["episodes"],
+                               "auxiliary": selected.get("auxiliary", []),
                                "receipts": [str(directory / (k + "-receipt.json"))
                                             for k in ["model", "dataset"]]}
     atomic(index_path, index)
