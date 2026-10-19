@@ -71,7 +71,8 @@ def recover(receipts, output):
                 # Mutable run state is layered in the explicit supplied stage
                 # order. Preserve each original independently under stages/.
                 if (destination.exists() and digest(source) != digest(destination)
-                        and relative.parts[0] not in ["run", "logs", "server", "configs", "search"]):
+                        and relative.parts[0] not in ["run", "logs", "server", "configs", "search",
+                                                      "analysis"]):
                     raise ValueError("Immutable physical evidence differs across stages: "
                                      + str(relative))
                 destination.parent.mkdir(parents=True, exist_ok=True)

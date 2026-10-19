@@ -125,6 +125,11 @@ same-noise identity pairs, without new model calls or physics. Recovery receipts
 [Jar](../../../configs/maniguard/latent-evolution/full-jar-recovery-receipt.json) and
 [Clutter](../../../configs/maniguard/latent-evolution/clutter-recovery-receipt.json).
 Controllers are untrained initialization weights, not selected finalists.
+The [complete reconstruction receipt](../../../configs/maniguard/latent-evolution/complete-development-recovery-receipt.json)
+checks all ten stage archives together, all seven completed physical receipts,
+all ten attempt rows and the 871-call accounting total. Analysis-stage model and
+dataset revisions are `66a7a8ee34cf5c53bede4da081a3c82a93f3198b` and
+`1732765e1bf16a522342dc4c8cfc0c848a5d8451`, respectively.
 
 Use the study README's recovery command with model and dataset receipts in stage
 order: integration, native Jar, completed Jar, completed Clutter, then analysis.
