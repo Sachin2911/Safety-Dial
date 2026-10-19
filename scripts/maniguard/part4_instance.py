@@ -45,11 +45,12 @@ def request(method="GET"):
         return {"error": type(error).__name__}
 
 
-def stop(hard_deadline=False):
+def stop(hard_deadline=False, publish_status=False):
     if not hard_deadline:
         receipt = read(RUN / "final-preservation.json")
         head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
-        if not receipt.get("ready_for_provider_stop") or head != receipt.get("git_commit"):
+        if (not receipt.get("ready_for_provider_stop") or head != receipt.get("git_commit")
+                or head != receipt.get("remote_main")):
             raise ValueError("Verify final GitHub and private HF preservation first")
         gpu = subprocess.check_output(
             ["nvidia-smi", "--query-compute-apps=pid", "--format=csv,noheader"], text=True
@@ -74,6 +75,19 @@ def stop(hard_deadline=False):
         ))
         atomic(RUN / "provider-stop-verification.json", result)
         print(json.dumps(observed), flush=True)
+        if publish_status:
+            from huggingface_hub import HfApi
+
+            repo = "Sachioster/safety-dial-phase3-part4-20261019"
+            api = HfApi()
+            if api.dataset_info(repo).private is not True:
+                raise ValueError("Provider state destination must remain private")
+            api.upload_file(
+                path_or_fileobj=str(RUN / "provider-stop-verification.json"),
+                path_in_repo="closeout/provider-stop-verification.json",
+                repo_id=repo, repo_type="dataset",
+                commit_message="Record Part4 provider stop observation",
+            )
         if result["actual_stopped_state_verified"]:
             return result
         time.sleep(5)
@@ -90,11 +104,12 @@ def watch():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("status", "stop", "watch"))
+    parser.add_argument("--publish-status", action="store_true")
     args = parser.parse_args()
     if args.action == "watch":
         watch()
     elif args.action == "stop":
-        stop()
+        stop(publish_status=args.publish_status)
     else:
         result = {**request(), "clock": clock()}
         atomic(RUN / "provider-status.json", result)
