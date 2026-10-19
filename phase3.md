@@ -15,10 +15,14 @@ must remain in **ManiGuard with evolutionary search**. Safe CEM with LeWM was an
 of the desired cost and concreteness, not a request to change platforms. Section 21
 summarizes the agreed small ManiGuard experiment, including the user-controlled dial.
 The completed pilot is documented in [phase3Part1.md](phase3Part1.md), with its
-[frozen protocol](configs/maniguard/phase3/part1.json). The current queue is
-[Part 2: correction-triggered feedback](phase3Part2.md), followed by
-[Part 3: model-assisted evolution](phase3Part3.md). Their execution protocols remain
-prospective; neither queued experiment resets the original allocation clock.
+[frozen protocol](configs/maniguard/phase3/part1.json). **Follow-up, 19 October:**
+[Part 2's feedback comparison](docs/research/reports/ManiGuard%20Part2%20correction%20triggered%20feedback.md)
+is complete. [Part 3's forecast audit](docs/research/reports/ManiGuard%20Part3%20model%20assisted%20evolution.md)
+failed its accuracy criteria, so its physical evolutionary comparison was not launched.
+The next proposed experiment is [Part 4: evolutionary acquisition of safety counterexamples](phase3Part4.md).
+It shifts the immediate outcome to safety-predictor repair under a matched acquisition
+budget. Its execution protocol remains prospective; creating a follow-up does not reset
+an existing allocation clock.
 
 This document is the active research plan and direction. The
 [plan history](docs/research/history/README.md) preserves the earlier oracle, ideation,
