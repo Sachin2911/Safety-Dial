@@ -9,7 +9,9 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from helpers.maniguard_part4_data import causal_design, native_agreement, warning_labels
-from helpers.maniguard_part4_model import Predictor, calibration_rule, capped_windows, event_metrics
+from helpers.maniguard_part4_model import (
+    Predictor, calibration_rule, capped_windows, event_metrics, repair_predictor,
+)
 from helpers.maniguard_part4_protocol import assert_partitioning
 from helpers.maniguard_part4_acquisition import (
     Acquisition, Scenario, archive_cell, interleaved_schedule, reflect_bounds,
@@ -182,3 +184,28 @@ def test_failed_premise_prevents_any_physical_search_and_records_unstarted_stage
     assert terminal["new_physical_attempts"] == 0
     assert terminal["stages"]["fresh_audit"]["labels_opened"] is False
     assert all(v["executed"] == 0 for v in terminal["stages"]["acquisition"].values())
+
+
+@pytest.mark.parametrize("donor", [
+    {"role": "audit"}, {"role": "confirmation"},
+    {"role": "historical_fit", "group": "calibration"},
+    {"role": "acquisition", "method": "E"},
+])
+def test_repair_rejects_held_out_or_other_arm_data_before_loading_weights(tmp_path, donor):
+    with pytest.raises(ValueError):
+        repair_predictor(tmp_path / "absent-baseline", [donor], tmp_path / "new-model", "D")
+    assert not (tmp_path / "new-model").exists()
+
+
+def test_rental_request_rejects_a_different_instance_before_network(monkeypatch):
+    import importlib.util
+
+    path = Path(__file__).resolve().parents[2] / "scripts/maniguard/part4_instance.py"
+    spec = importlib.util.spec_from_file_location("part4_instance_test", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    monkeypatch.setenv("CONTAINER_ID", "not-the-authorized-instance")
+    with pytest.raises(ValueError, match="current instance"):
+        module.request("PUT")
+    with pytest.raises(ValueError, match="not yet authorized"):
+        module.stop(hard_deadline=True)

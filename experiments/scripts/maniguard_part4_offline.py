@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import numpy as np
 
 from helpers.maniguard_part4_data import load_donors
+from helpers.maniguard_part4_gate import close_failed_premise
 from helpers.maniguard_part4_model import (
     calibrated,
     calibration_rule,
@@ -165,6 +166,8 @@ def run_offline(run=RUN, resume_baseline=False):
                                            "logistic_references": 2 * sum(len(e["steps"]) for e in episodes)},
              "fresh_audit_opened": False, "method_specific_episodes": 0}
     atomic(run / "offline-audit.json", audit)
+    if not gate["eligible"] and not gate["shared_initial_eligible"]:
+        close_failed_premise(run)
     print(json.dumps({"gate": gate, "metrics": {g: {n: {k: m[k] for k in (
         "auroc", "auprc", "prevalence", "eligible_events", "missed_timely_warnings",
         "confident_missed_events", "negative_window_false_alarm")}

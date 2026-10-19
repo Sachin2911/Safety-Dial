@@ -59,7 +59,7 @@ def preserve_model():
             raise ValueError("Frozen baseline changed before preservation")
     card = directory / "README.md"
     card.write_text(
-        "---\ntags:\n- robotics\n- research\nlicense: mit\n---\n"
+        "---\ntags:\n- robotics\n- research\n---\n"
         "# ManiGuard Part 4 bounded direct-event predictor\n\n"
         "Private preservation of five bootstrap MLPs, logistic references, fit-only "
         "PCA/scalers, initial weights and calibration. The frozen development gate "
@@ -105,7 +105,11 @@ def preserve_evidence(label):
                       "donor_policy": "Original exact inputs remain private and revision-pinned in donor-restore.json; no duplicate acquisition charge.",
                       "model_policy": "Own trained baseline separately preserved in private model repository.",
                       "excluded": ["external checkpoints", "asset bundles", "credentials", "duplicate donors"]})
-    receipt = upload_paths(DATASET, "dataset", [(path.name, path), (manifest.name, manifest)], label)
+    paths = [(path.name, path), (manifest.name, manifest)]
+    paths += [("videos/" + p.name, p) for p in sorted((RUN / "evidence/videos").glob("*.mp4"))]
+    if (RUN / "evidence/gallery.json").exists():
+        paths.append(("videos/gallery.json", RUN / "evidence/gallery.json"))
+    receipt = upload_paths(DATASET, "dataset", paths, label)
     atomic(RUN / (label + "-evidence-backup.json"), receipt)
     return receipt
 

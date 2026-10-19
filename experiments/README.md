@@ -9,6 +9,12 @@ protocol and handoff.
 Add reusable Python under `helpers/`, entry points under `scripts/`, tests under `tests/`
 and study configs under `../configs/`. There is no `src/` package.
 
+[Part 4](../configs/maniguard/part4/README.md) implements causal first-uprightness labels,
+direct predictors and four acquisition bookkeeping kernels. Its frozen offline premise
+failed before physical scene engineering or comparative acquisition. The
+[report](../docs/research/reports/ManiGuard%20Part4%20counterexample%20premise.md) and shared
+GECCO paper preserve this bounded result, not a repair or evolutionary win.
+
 Earlier notebooks, helpers, runners and tests are preserved in
 [archive/legacy/experiments](../archive/legacy/experiments/README.md). Start from the
 [archive index](../archive/README.md) for the useful results and reproduction guidance.

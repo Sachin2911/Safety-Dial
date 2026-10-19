@@ -2,8 +2,16 @@
 
 **Date:** 19 October 2026.
 
-**Status:** agreed experiment direction, recorded for implementation review. This is a
-prospective plan, not a frozen execution protocol or a report of new results. The
+**Implementation outcome, 19 October 2026:** the bounded offline premise check is
+complete and **scientifically gated before scene engineering or physical acquisition**.
+The frozen primary predictor has development average precision .0121 and alarms on
+2,045/2,229 negative windows, with zero confident misses among one first-event episode.
+The [result and evidence](docs/research/reports/ManiGuard%20Part4%20counterexample%20premise.md)
+and [frozen offline protocol](configs/maniguard/part4/offline-protocol.json) retain the
+failed criteria and limited task support. No new simulator interaction was made.
+
+**Original experiment direction:** the remaining sections preserve the prospective
+comparison design. They are not claims that its gated stages were executed. The
 proposed ceiling is **80 full episodes**, with a small, separately counted engineering
 allowance, on one RTX 4090 or RTX 5090 within eight hours of allocated wall time. Scene
 generation, predictor feasibility and measured throughput must support that allocation

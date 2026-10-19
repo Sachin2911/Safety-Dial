@@ -19,10 +19,14 @@ The completed pilot is documented in [phase3Part1.md](phase3Part1.md), with its
 [Part 2's feedback comparison](docs/research/reports/ManiGuard%20Part2%20correction%20triggered%20feedback.md)
 is complete. [Part 3's forecast audit](docs/research/reports/ManiGuard%20Part3%20model%20assisted%20evolution.md)
 failed its accuracy criteria, so its physical evolutionary comparison was not launched.
-The next proposed experiment is [Part 4: evolutionary acquisition of safety counterexamples](phase3Part4.md).
-It shifts the immediate outcome to safety-predictor repair under a matched acquisition
-budget. Its execution protocol remains prospective; creating a follow-up does not reset
-an existing allocation clock.
+[Part 4: evolutionary acquisition of safety counterexamples](phase3Part4.md) shifts
+the immediate outcome to safety-predictor repair under a matched acquisition budget.
+Its [bounded offline premise check](docs/research/reports/ManiGuard%20Part4%20counterexample%20premise.md)
+is now complete. The frozen predictor's development false-alarm rate is 2,045/2,229
+negative windows; only one development first-event episode is available. The failed
+premise gates scene engineering, all four physical acquisition arms, repair and fresh
+audit. No new simulator interaction is charged, and no evolutionary outcome is claimed.
+Creating a follow-up does not reset an existing allocation clock.
 
 This document is the active research plan and direction. The
 [plan history](docs/research/history/README.md) preserves the earlier oracle, ideation,

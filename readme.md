@@ -16,6 +16,10 @@ implementation and protocol freeze.
 - [Research and documentation](docs/README.md): the manipulation literature, UNISafe asset
   and compute audits, proposal template and academic context.
 - [Active phase-three plan](phase3.md): direction, methods, evaluation and open decisions.
+- [Part 4 premise result](docs/research/reports/ManiGuard%20Part4%20counterexample%20premise.md):
+  frozen direct prediction check, scientifically gated before physical acquisition.
+- [Shared GECCO-format report](docs/research/reports/maniguard-phase3-part1-gecco/named.pdf):
+  Parts 1 through 4, including adverse and null results.
 - [Earlier research plans](docs/research/history/README.md): preserved decisions and studies.
 - [Paused phase-two pilot](docs/research/history/20261018/phase2.md): preserved protocol and handoff.
 - [Experiment workspace](experiments/README.md): where new implementation will go.

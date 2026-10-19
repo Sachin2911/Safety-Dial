@@ -8,13 +8,13 @@
 \settopmatter{printacmref=false}
 \acmDOI{}
 \acmISBN{}
-\acmConference[ManiGuard pilot]{ManiGuard pilot in GECCO format}{18 October 2026}{}
+\acmConference[ManiGuard pilot]{ManiGuard pilot in GECCO format}{19 October 2026}{}
 \usepackage{xurl}
 \setlength{\emergencystretch}{3em}
-\graphicspath{{../../figures/ManiGuard/phase3-part1/}{../../figures/ManiGuard/phase3-followup/}}
+\graphicspath{{../../figures/ManiGuard/phase3-part1/}{../../figures/ManiGuard/phase3-followup/}{../../figures/ManiGuard/phase3-part4/}}
 \begin{document}
 \title{An Evolutionary Safety Dial for Frozen Manipulation Policies: A Physically Audited Pilot}
-\subtitle{Frozen-protocol pilots and forecast audit, 18 October 2026}
+\subtitle{Execution pilots, forecast audit and counterexample premise, 19 October 2026}
 \author{Sachin Mohan}
 \affiliation{\institution{University of the Witwatersrand}\city{Johannesburg}\country{South Africa}}
 \email{2699183@students.wits.ac.za}
@@ -33,7 +33,11 @@ cost without improving measured safe completion. Part 3 prospectively tests a
 frozen visual dynamics ensemble before allowing a matched evolutionary allocation;
 its forecast audit fails accuracy despite adequate event support, gating the
 physical optimizer comparison. Four-action error is 45.1\% worse than persistence,
-and correction calibration collapses to ordinary disagreement trust. We preserve
+and correction calibration collapses to ordinary disagreement trust. Part 4 then
+tests a direct uprightness-event predictor on 24 verified historical trajectories.
+Its development operating point alarms on 2,045/2,229 negative windows, with no
+confident miss among one first-event episode; its frozen gate stops physical
+counterexample acquisition before new simulator interaction. We preserve
 causal executed-action histories, native outcomes, videos and continuous allocation
 accounting. These descriptive pilots establish neither optimizer superiority nor
 calibrated physical risk.
@@ -320,8 +324,10 @@ Parts 2 and 3 follow separately frozen plans at planning baseline \texttt{d4b818
 
 \input{part3-results}
 
+\input{part4-results}
+
 \section{Cumulative accounting and preservation}
-Both followup studies reach their accurately reported terminal outcomes. The
+Parts 2 and 3 reach their accurately reported terminal outcomes. The
 complete allocation contains eighty physical attempts: Part 1's 52 once,
 Part 2's twenty including engineering, and eight common Part 3 recordings
 (Table~\ref{tab:cumulative}). The sixteen Part 2 fitting episodes are reused rather
@@ -345,6 +351,7 @@ Part 1, all & 52 & 35,158 & 3,401 & 215,420 \\
 Part 2, engineering & 4 & 96 & 16 & 834 \\
 Part 2, comparison & 16 & 11,190 & 1,780 & 68,516 \\
 Part 3, recording & 8 & 7,467 & 1,385 & 45,490 \\
+Part 4, offline only & 0 & 0 & 0 & 0 \\
 Total & 80 & 53,911 & 6,582 & 330,260 \\
 \bottomrule
 \end{tabular}
@@ -399,6 +406,13 @@ ordinary disagreement. These are separate findings. Neither a timeout nor any on
 case identifies a unique failure cause. The eight common data episodes and simple
 forecast references supply direction while avoiding an unsupported physical ranking
 experiment. No optimizer-superiority, calibrated-risk or safety-guarantee claim follows.
+
+Part 4 retains a calibration low-risk miss but fails its separate development
+warning trade-off and event support. It therefore supplies no acquisition,
+diversity or repair comparison. The stronger visual-only ranking remains an
+information-ablation lead with excessive false alarms at its frozen operating
+point. Neither the absent development confident misses nor the unexecuted
+search establishes that counterexample acquisition cannot work.
 
 A later study should establish saved-input repeatability and useful trigger activation
 on designated development data, validate prediction/readout generalization across
