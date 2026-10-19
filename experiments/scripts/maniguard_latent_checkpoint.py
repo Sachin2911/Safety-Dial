@@ -1,6 +1,7 @@
 """Preserve completed new-study evidence and controller state in private repositories."""
 
 import argparse
+import fcntl
 import json
 import os
 import subprocess
@@ -37,7 +38,7 @@ def archive(path, entries):
     temporary.replace(path)
 
 
-def checkpoint(run, stage):
+def _checkpoint(run, stage):
     if not stage or any(c not in "abcdefghijklmnopqrstuvwxyz0123456789-" for c in stage):
         raise ValueError("Invalid immutable stage name")
     run = Path(run).resolve()
@@ -135,6 +136,14 @@ def checkpoint(run, stage):
     print(json.dumps({"stage": stage, "episodes": selected["episodes"],
                       "remote_readback_verified": True}), flush=True)
     return index["stages"][stage]
+
+
+def checkpoint(run, stage):
+    directory = Path(run) / "backups"
+    directory.mkdir(parents=True, exist_ok=True)
+    with (directory / "checkpoint.lock").open("a") as lock:
+        fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
+        return _checkpoint(run, stage)
 
 
 def main():
