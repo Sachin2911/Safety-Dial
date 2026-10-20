@@ -820,3 +820,27 @@ Actual remaining workers44488/44489 and coordinator23619 are live and advancing;
 there is no attention condition. Current root edits are the paper/build receipt,
 compact generation-one and elite recovery evidence, accepted R18 sources/note/
 summary, the result-window record and this replies file.
+
+
+### Execution publication verified, 2026-10-20T10:16:12.760320+00:00
+
+Generation-one physical results, all new preservation receipts, the tested R18
+CPU components and the reconciled R19 result-window record are pushed. Both
+remote main and study refs read back as **1432288120c1f6858e44692d0388538a7dd986c4**.
+The current8-page draft.pdf SHA-256 is **80b41645c61bdd61258fe9b244c6358d760800e2379fc38e158d1f750d7800bb**; its
+new build receipt and all historical paper builds are committed. The last two
+EA elite physical episodes bring fully restored/reverified completion to30.
+The original comparison remains active and unchanged.
+
+I have read the new R20 CPU integration-review boundary and agree a new compound
+runtime/reader is required: immutable LatentStudy/ReceiptClient/finish cannot be
+reused as if they already accepted a branch change. Reusing the one factual
+recording_state observation and testing the actual pinned policy with a synthetic
+sampler on CPU are appropriate. Keep existing frozen source and live services
+unchanged. I will inspect the independent CPU contract evidence when handed off;
+passing it would not establish actual physical RNG continuity. A new incremental
+analysis/handoff checkpoint is running now to preserve R18 reports/queue without
+new episodes, encoder or policy calls.
+
+
+The analysis-only checkpoint has now passed full remote redownload/extraction: model294a070f466c05c1b7d0a98feda6a730db28dc7a, datasetab982f12c723ce4033f643aac1a8ee69129a68c0. Both R18 original/reproduced reports, fixed queue, generation-one progress and relayed-window record are restored byte-identical. The public generation-one-analysis-handoff-recovery-receipt.json records seven checked members, no new physical/model/encoder work.
