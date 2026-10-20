@@ -95,3 +95,57 @@ def test_incomplete_original_cannot_create_a_complete_restoration_proof(tmp_path
                   "episodes": {a["id"]: [] for a in attempts}})
     with pytest.raises(ValueError, match="exact current original queue"):
         restoration.build_inventory(run, protocol, paths, tmp_path / "unused-source-proof.json")
+
+
+@pytest.mark.parametrize("change", [None, "empty", "omitted", "extra", "substituted",
+                                   "short_digest", "non_mapping", "wrong_git_digest"])
+def test_full_inventory_requires_the_exact_source_authority_before_physical_callbacks(
+        tmp_path, monkeypatch, change):
+    protocol_path = restoration.ROOT / "configs/maniguard/latent-evolution/capacity-20261020-v2.json"
+    source_path = restoration.ROOT / "configs/maniguard/latent-evolution/design-verification-20261020-initial.json"
+    protocol = json.loads(protocol_path.read_text())
+    proof = json.loads(source_path.read_text())
+    original = dict(proof["frozen_critical_source_hashes"])
+    assert len(original) == 13
+    first = next(iter(original))
+    hashes = proof["frozen_critical_source_hashes"]
+    if change == "empty":
+        hashes.clear()
+    elif change == "omitted":
+        hashes.pop(first)
+    elif change == "extra":
+        hashes["experiments/helpers/unfrozen.py"] = "a" * 64
+    elif change == "substituted":
+        hashes.pop(first)
+        hashes["experiments/helpers/unfrozen.py"] = "a" * 64
+    elif change == "short_digest":
+        hashes[first] = "a" * 63
+    elif change == "non_mapping":
+        proof["frozen_critical_source_hashes"] = list(hashes)
+    elif change == "wrong_git_digest":
+        hashes[first] = "f" * 64
+    source_copy = tmp_path / "source-proof.json"
+    write(source_copy, proof)
+    run = tmp_path / "original"
+    attempts = [{"id": f"synthetic-{i}", "status": "completed", "engineering": False}
+                for i in range(60)]
+    write(run / "queue.json", {"attempts": attempts})
+    paths = tmp_path / "paths.json"
+    write(paths, {"original_queue_sha256": restoration.digest(run / "queue.json"),
+                  "episodes": {a["id"]: [{"output": "synthetic-unused"}] for a in attempts}})
+    called = []
+
+    def physical_callback(attempt, location, actual, policies):
+        called.append(attempt["id"])
+        assert actual == original and policies["jar"]
+        return {"attempt": attempt["id"], "synthetic": True}
+
+    monkeypatch.setattr(restoration, "verify_restored_attempt", physical_callback)
+    if change is None:
+        result = restoration.build_inventory(run, protocol_path, paths, source_copy)
+        assert len(called) == 60 and result["canonical_frozen_source_paths_verified"] == sorted(original)
+        assert protocol["source_pins"] in result["canonical_frozen_source_paths_verified"]
+    else:
+        with pytest.raises(ValueError, match="13 frozen source paths|differs from Git"):
+            restoration.build_inventory(run, protocol_path, paths, source_copy)
+        assert called == []

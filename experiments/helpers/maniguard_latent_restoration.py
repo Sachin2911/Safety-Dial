@@ -14,6 +14,22 @@ from helpers.maniguard_latent_results import read_episode
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def require_complete_source_hashes(protocol, hashes):
+    """Match the original design verifier's exact thirteen-source authority."""
+    expected = {"experiments/helpers/" + name + ".py" for name in (
+        "maniguard_latent", "maniguard_latent_policy", "maniguard_latent_runtime",
+        "maniguard_latent_source", "maniguard_runtime", "maniguard_source",
+        "maniguard_adaptation", "maniguard_phase2_features", "maniguard_phase2_outcomes",
+    )}
+    expected.update(("experiments/scripts/maniguard_latent_episode.py",
+                     "configs/maniguard/phase2/encoder.json",
+                     "configs/maniguard/phase2/completion.json", protocol["source_pins"]))
+    if (len(expected) != 13 or not isinstance(hashes, dict) or set(hashes) != expected
+            or any(not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{64}", value) is None
+                   for value in hashes.values())):
+        raise ValueError("Require exactly the 13 frozen source paths and valid SHA256 digests")
+
+
 def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -88,6 +104,7 @@ def build_inventory(run, protocol_path, paths_path, source_proof_path, *, requir
             or source_proof["frozen_critical_source_commit"] != protocol["source_commit"]):
         raise ValueError("Original frozen source proof does not match its protocol")
     hashes = source_proof["frozen_critical_source_hashes"]
+    require_complete_source_hashes(protocol, hashes)
     for name, expected in hashes.items():
         data = subprocess.check_output(["git", "-C", str(ROOT), "show", protocol["source_commit"] + ":" + name])
         if hashlib.sha256(data).hexdigest() != expected:
@@ -110,6 +127,7 @@ def build_inventory(run, protocol_path, paths_path, source_proof_path, *, requir
             "all_archives_redownloaded_and_sha256_checked": True,
             "all_60_original_valid_episodes_covered": len(rows) == 60,
             "frozen_source_commit": protocol["source_commit"],
+            "canonical_frozen_source_paths_verified": sorted(hashes),
             "path_inventory_sha256": digest(paths_path),
             "source_proof_sha256": digest(source_proof_path),
             "verification_source_hashes": {

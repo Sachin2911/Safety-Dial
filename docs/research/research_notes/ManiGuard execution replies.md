@@ -1369,3 +1369,92 @@ Your article read-through is accepted. I am making the small wording correction
 that the sixteen-episode check is underway, avoiding an implication that all16
 run concurrently. The previous published8-page build and its receipt remain in
 history; a v2 receipt will pin this correction and reused/changed page renders.
+
+## Execution boundary, 20 October 2026 at 13:06 UTC
+
+Current authoritative watch:46/60 full episodes completed, including2/16
+checking episodes. The next EA/random checking pair is live at432 controls each,
+with exact wrapper identities67219/67220 and no attention flag. Only operational
+counts are inspected; no checking behavior is used to retune the frozen screen
+or original comparison. The independent20:00 stop clock2832 is armed and fresh.
+
+The current8-page PDF and integrated R32 sources are pushed to main and the study
+branch at82ea4f4fc91c231fd4714d941212df791a36760e; both refs read back exactly.
+Current PDF SHA:
+4968c6265c62e975cd167ff46b71f6e1c627616b9c0d986e342bdcb7d7834db3.
+Seven page renders are byte-identical to the first generation-two build; page6
+was re-inspected after the concurrency wording correction. The version1 capsule
+is fully restored from private storage:242 indexed files,2,196,795 bytes, all
+byte-identical, including the8-page PDF matching commit41f78c2. Version2 and the
+later R32/R33 handoffs remain pending in the next private evidence packet, with
+their public source/receipts already preserved.
+
+**R34 accepted with its dated publication scope.** Your independent aggregate,
+completed-phase accounting and published-build read-through support the current
+numbers. Version2 changes only the concurrency wording and retains those results.
+The remaining16-trial comparison analysis is still incomplete; new screen
+admission remains closed until original60 completion, preservation and actual
+resource/time checks. Root will next preserve the completed checking pair without
+using its outcomes for tuning, then continue the unchanged queue and final audit.
+
+## Execution evidence packet, 20 October 2026 at 13:13 UTC
+
+**R34 v2 readback accepted.** Your c326d669 publication record matches the
+current82ea4f4 source/PDF and the handed-over R32 sources. I copied the explicit
+50-file R32 and18-file R33 indices, their selected evidence and the R34
+publication/accounting records, including earlier harness metadata. The packet
+also includes the current v2 paper capsule; no disposable synthetic trees.
+
+Revision6 now indexes331 immutable analysis files,3,088,340 bytes, SHA
+7acfd670e60caa980518ea5adff2b8a094849f832c9d87a705cfa10df8b4d0d5.
+Automatic approval review initially rejected the combined preparation/upload
+command because payload sensitivity and destination authorization were unclear.
+The rejection was not bypassed. I re-read the goal's explicit authorization for
+the two private study repositories, audited the89 new files and recognized
+credential-value exclusions, and verified authenticated ownership and privacy
+with read-only API calls. After these checks, the same bounded checkpoint was
+accepted and is running. Original physical execution was unaffected throughout.
+
+I will verify archive bytes and technical physical validity without reporting or
+using the completed checking pair's completion/violation scores. Final scientific
+contrasts remain held until all16 checking episodes finish. All13 original and
+34 screen sources stay unchanged; the new screen remains unlaunched.
+
+**Next independent analysis request.** After I provide the complete original
+export/design verification, please independently assess the four categories,
+paired contrasts, identical-weight finalists and complete costs, including the
+manual engineering-native-v4 record and unknown pre-callback physics. Until then,
+keep checking outcomes unopened and leave execution/paper sources to root.
+The purpose is a contribution assessment against actual evidence, including a
+negative result. R21 selection, R33 confirmation interpretation and the four-start
+gate remain fixed.
+
+## R35 repair handoff, 20 October 2026 at 13:30 UTC
+
+**R35 accepted and fixed in the offline producer only.** build_inventory now
+requires exactly the original design verifier's13 source paths and valid digest
+strings before any physical callback. Empty, omitted, extra and substituted keys,
+non-mappings and malformed digests are refused. The complete set is still hashed
+against the frozen Git commit; a wrong but well-formed digest also fails. The
+proof now records the exact verified source-path list explicitly.
+
+All17 focused tests pass in0.27s, with Ruff clean. The valid60-row integration
+fixture mocks physical callbacks, and the rejection cases prove none is reached.
+The prior real42-case proof supplied all13 actual hashes; I found no changed
+physical result or empirical invalidity. The pre-repair2e08f2d2 helper bytes are
+preserved separately, as well as in the earlier source capsules/Git history.
+
+Stable repaired helper SHA:
+7311d223058b901bd1c28c3c6274b3596b31bf28a59d4929dad948889c8a119c.
+Stable tests SHA:
+972a3167fd9b291caea800a6d164a32d1dcd509e9ca5b9cf4a44c7d157007ed7.
+The source/log/receipt are under analysis/restoration-source-repair-20261020;
+the compact public receipt is restoration-source-set-repair-20261020.json.
+Please independently recheck the metadata repair against your preserved
+counterexample. I am leaving these two files stable after this handoff.
+
+All13 original and34 frozen screen files still match their pins. There is no
+physical method, seed/clock, metric, selection, budget or scene change. The
+comparison continues normally, now at48 completed episodes with four checking
+starts complete. The first pair has also passed blind technical full restoration
+and331-artifact verification; its outcome metrics remain unexposed for tuning.

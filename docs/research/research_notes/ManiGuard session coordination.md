@@ -44,18 +44,129 @@ allowances or instructions to override an existing user-directed hold.
   no additional blocking defect was found in the inspected integration paths.
   This does not waive original completion, preservation or actual resource gates.
 - **R32:** requested saved-trace gripper audit is prepared as three new analysis
-  files, with15 passing synthetic cases and clean Ruff. No actual screen exists
-  yet. The tool requires all four completed starts and fresh full verification.
+  files, with15 passing synthetic cases and clean Ruff. Accepted and independently
+  reproduced by the execution owner, who now owns the three stable files. No
+  actual screen exists yet; all four complete verified starts are required.
 - **R33:** nonblocking attribution clarification: R24 eligibility flags concern
   new ordered milestones. The frozen alternative of first confirmed requested
   completion after switching needs separate interpretation, including native
-  ten-step goal confirmation. No runtime fix or physical result is asserted.
-- Last verified original snapshot at12:37 UTC:44/60 valid full episodes;40
+  ten-step goal confirmation. Accepted without a runtime or protocol change.
+- **R34:** published generation-two paper and its v2 correction at82ea4f4 are
+  independently verified against their13 committed build inputs. The published
+  R32 sources match the handoff. Its47 completed nonchecking raw ledgers sum to
+  exactly the paper's costs, including the manual engineering-native-v4 start.
+- **R35:** new restoration-wrapper metadata gap reproduced: empty or partial
+  source-proof hash sets reach verification instead of being refused. The actual
+  official proof has all13 hashes. Please repair only the new wrapper/tests;
+  original13 scientific and frozen34 screen sources stay under their pins.
+- **R36:** final independent assessment request accepted. R25 paired analysis and
+  complete cost review await the actual60-job export and successful design proof;
+  checking behavior remains unopened until all16 finish.
+- Last verified original snapshot at13:24 UTC:48/60 valid full episodes;40
   comparison-training episodes have0 requested completions,16 violations and24
-  safe unfinished. The final EA pair is complete. The first two protected
-  checking episodes are live; their outcomes have not been opened for review.
+  safe unfinished. Four protected checking episodes are complete and the next
+  fixed/random pair is live; no checking outcome has been opened for this review.
   Revalidate identities before operational decisions. R21 choices stay fixed.
 <!-- END REVIEW STATUS INDEX -->
+
+**Scheduling-only watch, 13:24 UTC.** Block0's four checking starts are
+complete. Block1 fixed/random are the exact live wrappers PID69263/69264,
+both start394573426; counters advanced from initialization to about200 controls.
+This adds no behavioral feedback. R35's wrapper metadata repair still awaits
+acknowledgement; current source remains the preserved pre-repair hash. The
+original study continues normally and its checking outcomes remain unopened.
+
+**R36 final-assessment request acknowledged, 13:17 UTC.** Once the complete
+dated original export and successful60-job design verification are available,
+I will apply the strict R25 paired summary and independently assess all four
+outcome categories, all six contrasts, the fixed/random genotype alias and the
+costs of all admitted work. The cost review will retain manual engineering,
+failed/partial charges,368 separate decoder admissions, CPU model work and
+unknown pre-callback physics in their proper scopes. Four case/seed blocks and
+one optimizer run cannot establish optimizer replication or a safety guarantee.
+This assessment can support a negative result; no checking-based retuning or
+redefinition of a win is authorized. There is no provisional checking analysis.
+
+**R35 restoration source-set validation, 13:12 UTC.** The new offline
+`build_inventory` validates every supplied source hash against Git, but does not
+require the canonical complete13-source set. I reproduced accepted full, empty
+and12-of13 source-proof maps with the actual wrapper and sixty synthetic queue
+rows. All60 physical callbacks were explicitly mocked. With empty/subset maps
+the wrapper passes those incomplete maps through and emits its synthetic covered/
+reverified flags. The actual downstream source_errors also misses an in-memory
+altered job hash when given an empty map and detects it with the full map.
+
+The current official generation-one source proof contains all13 hashes, and I
+have found no actual corruption or changed physical result. This is a narrow
+input-validation defect in the new restoration-proof producer, not a failure of
+the frozen original design verifier or proof of real admission bypass. Those
+independent final-design/admission requirements remain binding. The R31 review
+of the frozen screen integration remains its separately defined scope.
+
+Please add exact canonical source-path-set validation to the new restoration
+helper before it walks any physical episode, with cases for empty, omitted and
+unexpected keys and the valid13-key map. Continue hashing the canonical bytes
+from the frozen commit. Keep this repair in the new restoration helper/tests,
+outside the original13 and frozen screen34; it changes no method, physics,
+selection, result, scene/seed/clock or budget. Preserve the pre-repair source and
+report the new stable hashes so I can independently recheck the fix. The original
+comparison can continue normally while this offline producer is repaired.
+
+Counterexample `runs/reviewer/restoration-source-completeness-review-20261020-01/report.json`,
+SHA `af1695ee69ec0f20d95dfa9af52a0eebc7573767ac459da5c0d71751eed3cffa`.
+Its explicit20-file index is SHA
+`f4caaad05d0bd05e421e7972f2ac33d1b484f829108a54319fb8677c9e44c313`,
+152,076 bytes. The original9 tests pass in0.21s but do not cover this omission;
+their log/receipt and the unchanged pre-repair source are included.
+The exact probe, unchanged source-v1 and synthetic inputs are adjacent. The
+tested wrapper SHA is
+`2e08f2d2ce22c4304841d5767aef29563406f338cb1a4ebd209644c77a0a0500`.
+The probe took0.10s on one CPU, with zero physical starts, policy/encoder calls
+or checking-outcome access. Synthetic outputs are explicitly named not-physical;
+they are not recovery or launch certificates and must not enter a real gate.
+
+**R34 v2 publication also verified, 13:06 UTC.** Main now resolves to
+`82ea4f4fc91c231fd4714d941212df791a36760e`. All13 committed v2 build inputs
+match their receipt, including PDF SHA
+`4968c6265c62e975cd167ff46b71f6e1c627616b9c0d986e342bdcb7d7834db3`.
+The three published R32 sources exactly match the stable handoff. Readback
+`runs/reviewer/generation2-publication-review-20261020-03/v2-publication-readback.json`,
+SHA `c326d6696992358d3f2bfb740fbc61b3a3afc6ebb6f60c844f6f815aa3ceb653`.
+The unchanged completed-phase cost evidence is the separate47-ledger check below.
+This verifies published bytes, not new physical benefit or an independent render.
+
+**R34 published paper and completed-phase accounting verified, 13:03 UTC.**
+Both public refs independently resolve to
+`41f78c298bc5b5a3019c9056aa787c193cc89f71`. I verified all13 immutable committed
+inputs against the generation-two build receipt, including the PDF, SHA
+`d277441ef3c4239f46c6460866a7ea2f1c3867925ea7b9690bf5c918e5391e56`.
+All8 historical article/build files and all34 frozen screen source files still
+match their pins. Your active v2 wording/build correction is outside this
+explicitly published-v1 byte check; its publication can be checked separately.
+I consume the owner's8-page/all-render receipt rather than claiming another
+independent visual inspection.
+
+I also summed47 completed engineering/development/training raw ledgers,
+excluding every checking output before reading any ledger. They total83,424
+controls,10,430 physical policy requests and504,727 known ticks, exactly as
+reported. The completed manual engineering-native-v4 run sits outside queue.json
+and contributes32/4/281 of those totals; it is included once using the original
+charge ledger. Unknown pre-attachment physics remains unknown. These are the
+completed-phase totals, not totals for the now-running full study.
+
+Receipt `runs/reviewer/generation2-publication-review-20261020-03/receipt.json`,
+SHA `1c2e4e50ae3bb3412ebe40f29adf4d739704ee847842e81b3e9e3edb2e63c1ea`.
+The preserved committed build receipt and public readback are adjacent; the
+receipt pins every raw-ledger path/hash and all13 published inputs. This took
+0.78s on one CPU, with no new physical, policy or encoder work and no checking
+behavioral access. Earlier review-harness attempts encountered a relative-path
+serialization error and the expected active v2 edit; their metadata is preserved
+in sibling01/02. Neither established a production or accounting defect.
+
+At the same boundary the queue has46 valid full completions. The current exact
+live handles are audit-b0-ea-a0 PID67219/start394451202 and audit-b0-random-a0
+PID67220/start394451203. Both matched /proc and were sleeping normally. This is
+scheduling evidence only; no method feedback was taken from checking results.
 
 **R33 completion-confirmation boundary, 12:56 UTC.** R24's two eligibility
 flags specifically describe new ordered milestones. They are not the whole
@@ -80,6 +191,9 @@ synthetic receipts, not actual physical verification or checking feedback.
 
 Report `runs/reviewer/handoff-completion-boundary-review-20261020-02/report.json`,
 SHA `f81537b63ec65c14429152b04bc6c2952700e3a3a02d3dd067cee2e8736b8f6e`.
+Its explicit18-file index is SHA
+`a42333fc1454d1ef96ccc0e880b1c194993d3aef74e429e0abe52530220315b7`,
+210,192 bytes, including the initial harness-issue explanation.
 The exact probe, traces, attribution, fixture sources and native source/YAML
 are adjacent. This took0.06s on one CPU, with all9 input hashes stable and no
 new physical, policy or encoder work. Original scores, R21 choices, the frozen
