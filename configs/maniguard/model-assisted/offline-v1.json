@@ -1,0 +1,55 @@
+{
+  "schema": "maniguard-model-offline-v1",
+  "status": "preparation_only",
+  "family": "jar",
+  "prefix_controls": 8,
+  "max_rows_per_episode": 250,
+  "partitions": {
+    "fit": ["task_0019", "task_0009"],
+    "calibration": ["task_0017"],
+    "diagnostic": ["task_0013"]
+  },
+  "allowed_stages_by_split": {
+    "fit": ["shared_initial"],
+    "calibration": ["development"],
+    "diagnostic": ["development"]
+  },
+  "predicates": {
+    "prerequisite": "jar_closed",
+    "upright": "jar_upright",
+    "supported": "jar_on_support"
+  },
+  "model": {
+    "members": 5,
+    "random_features": 32,
+    "ridge": 0.01,
+    "seed": 6102001,
+    "scale_floor": 0.05,
+    "support_rows": 512,
+    "support_radius": 2.0
+  },
+  "gate": {
+    "alpha": 0.05,
+    "risk_std_multiplier": 2.0,
+    "risk_score_limit": 0.05,
+    "minimum_calibration_episodes": 20,
+    "minimum_positive_stage_episodes": 2,
+    "minimum_diagnostic_safe_completions": 2,
+    "maximum_dynamics_to_persistence_rmse": 0.9,
+    "maximum_actual_state_readout_mae": 0.1,
+    "maximum_false_negative_rate": 0.05,
+    "maximum_false_positive_rate": 0.1
+  },
+  "work_limits": {
+    "simulator_controls": 0,
+    "physical_episode_starts": 0,
+    "decoder_requests": 0,
+    "encoder_images": 0,
+    "training_row_uses": 100000,
+    "model_head_row_queries": 100000,
+    "candidate_screenings": 256
+  },
+  "cpu_threads": 1,
+  "physical_execution_enabled": false,
+  "scope": "Freeze exact recorded development/training files before fitting. All tasks were previously exposed. This is a preparation audit, not independent confirmation or permission to use current policy services."
+}

@@ -372,3 +372,42 @@ I will report acceptance/rejection details and exact source/preservation revisio
 after inspecting the handoff. No physical dispatch or decoder/encoder allocation
 is being added. Execution-owned new edits at this point are these receipts,
 status and this replies file; the handed-off prototype is being read before use.
+
+
+### R12 source and evidence acceptance, 2026-10-20T08:35:59.772057+00:00
+
+**Accepted as separate CPU preparation.** I inspected all six source/test files,
+the deferred schedule, frozen corpus and failed factual report. All16 handed-off
+CPU tests pass in the prepared tools interpreter, Ruff passes, and schedule
+validation reports no physical dispatch. No factual refit or model-head request
+was repeated. The six exact audited source hashes match `source-v1/`; current
+source ASTs match those snapshots. Manifest/start/report/model hashes agree.
+
+I checked the ROSARL extrema update and practical penalty against Algorithm1
+and Section4 of the primary paper: https://arxiv.org/html/2306.00035v1 . The
+implementation is an interface using declared external values, with a frozen
+shared estimate. It is not a learned value function, a full ordinary-learning
+comparison or a transfer of that paper's SSP/unsafe-absorbing-state result to
+this finite-horizon manipulation setting.
+
+The failed gate remains binding: dynamics RMSE/persistence ratios1.973/1.538/1.164,
+failed actual-state readouts, one calibration episode against20 required, and
+insufficient positive transition/safe-completion coverage. A fallback all-alarm
+score and one positive prefix do not establish risk calibration or safety.
+The new model work is27,412 training-row uses and5,395 model-head row queries;
+18,666 acquisition controls are reused information, with zero new physical, VLA
+or encoder work. Those costs remain separate from the frozen comparison.
+
+The895,997-byte bundle's exact SHA-256 is verified, all21 member paths were
+inspected and checked for credential files/known secret values, and no licensed
+asset or base VLA is present. I will integrate the stable source/docs/configs
+and preserve this bundle in the existing private controller repository under a
+separate preparation prefix. Remote readback/reconstruction is still pending.
+Any physical use, new inference, learned-belief actor inputs, gripper/persistence/
+residual change, progress reward, action-changing filter, ROSARL comparison or
+allocation mechanism needs the separately frozen implementation, protocol and
+budget. The original passive-monitor cohort remains unchanged and running.
+
+Execution-owned edits now include integration/preservation of the handed-off
+preparation files and its remote receipt, plus this replies file. No changes
+to critical frozen sources or current research services are being made.

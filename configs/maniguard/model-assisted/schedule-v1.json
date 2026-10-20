@@ -1,0 +1,72 @@
+{
+  "schema": "maniguard-model-deferred-schedule-v1",
+  "recorded_utc": "2026-10-20T08:03:19Z",
+  "owner": "review session",
+  "automatic_physical_dispatch": false,
+  "current_physical_study": {
+    "run": "runs/latent-evolution-20261019",
+    "state": "running under its existing frozen comparison",
+    "physical_cutoff_utc": "2026-10-20T19:30:00Z",
+    "rental_stop_utc": "2026-10-20T20:00:00Z",
+    "new_work_charged_to_this_study": false
+  },
+  "preparation": [
+    {
+      "id": "cpu-implementation-and-tests",
+      "state": "complete",
+      "verified_utc": "2026-10-20T08:24:15Z",
+      "cpu_tests_passed": 16,
+      "ruff": "pass",
+      "target_review_utc": "2026-10-20T09:00:00Z",
+      "resources": "one CPU thread; no GPU, simulator, encoder or VLA calls",
+      "deliverables": ["transition model", "action-changing filter", "ROSARL interface", "candidate allocation", "unit and integration tests"]
+    },
+    {
+      "id": "recorded-data-audit",
+      "state": "complete_prediction_gate_failed",
+      "verified_utc": "2026-10-20T08:24:15Z",
+      "report": "runs/reviewer/model-assisted-offline-20261020-01/audit-v1/report.json",
+      "report_sha256": "c74f001d302ea148326a438ee67a7c1ea7ec90703a2bc32b3014d4d9730faffd",
+      "next_action": "Establish controllable prerequisite progress and positive transition coverage; freeze a new model audit after repair",
+      "configuration": "configs/maniguard/model-assisted/offline-v1.json",
+      "resources": "one CPU thread; previously recorded development/training traces only",
+      "deliverables": ["frozen file/split manifest", "model artifact", "prediction and coverage audit", "accounted CPU/model work"]
+    }
+  ],
+  "next_physical_development": {
+    "state": "planned_not_dispatched",
+    "start_time_utc": null,
+    "earliest_trigger": "Current comparison and its preservation complete; new protocol, resources and budget frozen",
+    "purpose": "Establish controllable lid closure, grasping and safe transport before scaling model-assisted search",
+    "decoder_authority_ceiling_proposed": 64,
+    "screen": {
+      "conditions_proposed": ["native", "declared scale/persistence", "arm-and-gripper steering", "bounded action residual"],
+      "development_tasks": 2,
+      "seeds_per_task": 1,
+      "valid_full_episodes": 8
+    },
+    "confirmation": {
+      "conditions": ["native", "development-selected candidate"],
+      "development_tasks": 2,
+      "fresh_seeds_per_task": 2,
+      "valid_full_episodes": 8
+    },
+    "valid_full_episodes_proposed": 16,
+    "invalid_replacement_slots_proposed": 2,
+    "maximum_full_attempts_proposed": 18,
+    "timing_rule": "Use at least 1.25 times the latest slowest measured full episode per two-worker wave, plus startup and preservation; exact capacity and initialization/settling ceilings remain to freeze",
+    "launch_requirements": [
+      "All condition implementations and numerical bounds fixed before comparative feedback",
+      "Exact task/seed partitions, selection rule and raw outcome contracts frozen",
+      "Repeatable physical prerequisite progress; robot finger closure is distinct from jar lid closure",
+      "Explicit new physical, decoder, encoder, model and elapsed-time allowances",
+      "Existing rental deadline and protected checking set respected",
+      "Model-guided action changes require a passing factual readout, prediction, support and coverage gate"
+    ]
+  },
+  "later_main_comparison": {
+    "state": "unallocated_design",
+    "requirements": ["model-free and model-assisted EA", "matched random allocation/search", "competent ordinary learning with the same filter", "native, native-with-filter and strong fixed references", "independent confirmation, optimizer replication and family-transfer allocation"]
+  },
+  "scope": "This is a deferred dependency schedule, not a daemon, booked rental or physical launch authorization. CPU preparation is authorized now."
+}
