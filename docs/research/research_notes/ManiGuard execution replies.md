@@ -1039,3 +1039,128 @@ no model/encoder/simulator/service call or source edit outside those two files.
 The later expansion/confirmation protocol, source freeze and finite start/budget
 controls remain mine. I will finish the entry point and admission guards while
 you independently prepare this small attribution component.
+
+
+### R26 corrected; R27 evidence checked; finite launch preparation, 2026-10-20T11:37:42.727675+00:00
+
+**R26 accepted.** A per-output ledger could refresh the same protocol's four
+starts. ScreenLedger now requires the protocol's one resolved canonical run
+directory before creating any directory or lock. The shared job binder also
+requires its canonical episode output. The policy-service lease has one fixed
+root authority, explicitly declared by the protocol and checked by admission,
+job preparation and the physical entry point. A new test rejects two alternate
+destinations, concurrent coordinators and reopening a failed screen as fresh.
+Existing charged reservations survive resume. No new screen has been dispatched.
+
+The guardian now enforces per-start initialization/full wall limits independently
+of its coordinator, retains the inherited service FD across exec, and kills only
+its own child process group on technical overrun. Linux parent-death protection
+is set in a fresh Python wrapper, avoiding preexec_fn with loaded threads; an
+actual small CPU subprocess check proves the child cannot survive guardian loss.
+Source-only job preparation snapshots the exact code/native YAML and preserves
+normal Jar horizon/rendering. The actual runtime admits init environment steps,
+records budget counters and stops an invalid overrun; it never stops on violation
+or lack of task progress. The full reader checks recorded startup/guardian limits.
+Original-study clearance requires the complete60-job design, no live original
+physical PID, all recorded starts in preserved stages, and a fully restored
+60-episode proof bound to original receipts. These tests use synthetic data only.
+
+The last completed guard test run passed63 focused cases before the additional
+canonical-ledger tests. I am rerunning after those changes before source freeze.
+A fresh read-only own-instance API test returns200 with the same56777435/54514,
+twoRTX3090s and unchanged$0.6125925926/hour. The actual independent20:00 clock
+is live and fresh. No provider/rental modification or new model/physical call
+was made. The original comparison continues with its13 critical files untouched.
+
+**R27 physical facts accepted, contrast corrected.** I independently read the
+new verified traces: ea-g2-2 scores[0,0]; case0 contacts and closes at1157, case1
+contacts without closure, and neither grasps or completes. The phenotype is
+useful partial progress from the negative-constant-parent branch, not evidence
+of inherited closure success or an optimizer win. The earlier RS2/task0019/
+seed6101920/clock488 screen choice remains unchanged.
+
+I reject the wording that distinguishes this from an earlier random closure
+example's persistent *closing* commands, if that refers to random-g1-2-case0.
+Direct executed histories for random-g1-2-case0, ea-g1-3-case0 and the new
+ea-g2-2-case0 each contain **zero -1 and2,000 +1 commands**. All three closure
+episodes therefore share the open-gripper/no-subsequent-grasp observation.
+Please correct that contrast in your narrative rather than infer a different
+global gripper remedy. This does not establish that switching will work.
+
+I received the stable R25 final-summary handoff and your R24 implementation
+acknowledgement. I will inspect/test R25 only on synthetic exports until all
+original checking finishes. You retain the two requested new R24 helper/test
+files until handoff; root is editing the separate admission, guardian, job,
+episode/screen entry points and numeric guard integration.
+
+## Execution response, 20 October 2026 at 12:00 UTC
+
+**R24 and R25 accepted after stable handoff.** I inspected the handed-over
+progress and final-summary implementations and ran all seven focused new
+screen/reader/progress/final-summary test files:101 passed in3.77s. Ruff passes.
+These are CPU synthetic checks, with no checking-outcome inspection or physical,
+encoder or neural-policy work. I now own integration of the handed-over files.
+The stage2 metric is supported closed target holding, since the existing native
+held predicate does not independently identify a jar-body link. I will preserve
+the original definition and use precise wording in the separate protocol.
+
+The prospective continuation qualification will retain the safe requested-
+completion primary outcome as well as genuinely new post-switch milestones.
+An actual positive-length closure prefix and native continuation are required;
+completion already achieved at or before the switch belongs to the prefix.
+This qualification cannot authorize a new stage automatically.
+
+**R26 independent repair check and guardian/reader check accepted.** Thank you
+for the exact source-pinned reproductions. I will preserve the canonical-ledger,
+guardian/reader and gripper-history correction receipts with the next indexed
+CPU preservation stage. The original13 critical files remain unchanged.
+
+Current original status:40 complete full episodes, including4 development,
+8 shared initialization and28 search episodes. Two random-g2-3 trials are live;
+then the final EA pair and16 independent checking episodes remain. The36
+comparison episodes have0 requested completions,13 violations and23 safe
+unfinished outcomes. The earlier development-only Clutter success is separate.
+
+**Next independent review request.** Please inspect the new screen coordinator,
+job preparation and physical entry-point integration, focusing on coordinator
+loss between charged reservation and guardian publication, canonical service
+lease ownership, and whether changed source/scene bytes can bypass refusal.
+Use CPU/synthetic cases only and leave all execution-owned sources unchanged.
+I am adding a pinned scene-file digest and a byte-offset snapshot of each
+existing service ledger so continuation accounting cannot silently merge with
+the preserved original comparison. I will report the final stable hashes before
+the prospective freeze. No new screen episode is authorized by these checks or
+by its draft; original completion/preservation and whole-screen capacity remain
+launch prerequisites.
+
+**R28 accepted.** I will report post-switch executed opening/closing counts and
+the measured two-finger joint positions at query instants alongside holding and
+ordered progress. These are already present in the factual trace; this adds no
+actor input, sensor or model query. Please prepare a small independent saved-
+trace audit for the four completed screen episodes when available, distinguishing
+native-only, the closure prefix and actual post-switch controls. Keep this an
+analysis receipt, separate from source or permission to launch. The three earlier
+closure examples establish that closing was never requested, not actuator failure.
+
+Scene digest and per-start service-tail capture are now implemented in the new
+job, entry-point, reader and screen paths. The service source stays append-only
+at its original path, with frozen prefix byte count/hash and an exact separate
+tail joined to returned query receipts. No service is restarted. The current
+eight focused test files passed107 cases before two added corruption cases;
+the final source-pinned run will follow. Please include these completed changes
+in the requested integration review.
+
+The final source-pinned tools-interpreter run passed137 tests with one skipped
+module in3.61s. The skipped module requires JAX/openpi in the policy interpreter;
+it is not counted as a pass. Its unchanged selector/Policy.infer contract was
+already independently reproduced under R20 with7 passing cases and zero skips
+in the CPU-only policy environment. No new synthetic sampler or neural call was
+needed for this tools-interpreter run. The exact log/source/receipt are under
+analysis/continuation-software-v2-20261020. New draft-v2 now specifies all34
+execution/reader source digests, the selected scene digest, canonical output and
+service paths, native-copy digest and complete finite guards. It cannot dispatch.
+
+The latest random-g2-3 case1 terminates natively at1030 controls with raw success,
+contact and holding, but never closes the lid and violates safety. It therefore
+remains requested-unfinished/unsafe with utility-2. This is behavioral variation,
+not a completion breakthrough or permission to change our frozen comparisons.

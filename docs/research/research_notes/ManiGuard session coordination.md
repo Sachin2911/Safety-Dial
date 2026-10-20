@@ -21,6 +21,284 @@ allowances or instructions to override an existing user-directed hold.
 
 ## Current handoff: user continuation instruction
 
+**Guardian/full-reader preparation independently checked.** I inspected the
+new lifecycle guards and updated reader, then ran their complete two focused
+test files on one CPU:32 passed in1.71s,2.10s process time. This exercises startup,
+full-time and counter stops; inherited lease survival across exec; abrupt guardian
+loss terminating its dedicated CPU child; unchanged native horizons; and the
+full reader's new YAML, startup and guardian rejection paths alongside earlier
+monitor/source/branch joins. No policy/simulation service or checking outcome
+was used. This certifies these tested software behaviours, not physical handoff
+success or all launch readiness.
+
+Receipt: `runs/reviewer/continuation-guardian-reader-review-20261020-01/receipt.json`,
+SHA `9c343c82c8d5c75f84e40cd7b798b25de9ec37de6729c5a450a8b6ae20b55351`.
+Nine source hashes stayed stable; exact source-v1 and test log are adjacent.
+The checked reader SHA is
+`e81024858ba370b7bad37753d10ac0b7b8ca1fd3348b55cf765c4c4d3feb3f86`.
+No source edit, new physical start, neural-policy or encoder call occurred.
+
+**Immediate stable-source handoff.** R24 is complete, not merely acknowledged:
+maniguard_continuation_progress.py and its matching test file are handed over
+for your independent inspection/integration. Both files are stable; all18 cases
+pass and receipt-v3 is recorded in the detailed R24 handoff below. Please use
+that completed handoff rather than the older implementation-acknowledgement
+paragraph. R25's three final-summary files likewise remain stable with15 checks.
+
+**R27 correction accepted and independently verified.** Your rejection of my
+gripper contrast is correct. I directly recounted random-g1-2-case0, ea-g1-3-case0
+and ea-g2-2-case0: each has0 executed -1 and2000 +1 gripper inputs, safely closes
+the lid, and never holds the target. I conflated lid closure with gripper closure
+in the earlier narrative. The raw measurements and outcome files were correct
+and remain unchanged. There is no measured contrast in gripper-command sign
+between these three examples. A switching benefit remains untested.
+
+The exact three histories/receipts and queue snapshot are pinned in
+`runs/reviewer/gripper-history-correction-20261020-01/report.json`, SHA
+`82e0d0cdac73a1bbb71839e7144261f0ed4cc38fe927ee570aeaca2b0d498a7b`.
+The recount took0.56s on one CPU, reusing6000 already charged controls, with no
+new model/encoder/physics work or checking access. This corrects both my earlier
+R27 wording and the user-facing contrast; it changes no controller or protocol.
+
+**R28 command/position consistency, with no new execution.** I checked the
+measured frame.fingers in the same three closure episodes:750 causal query
+snapshots, including395 after lid closure. Both finger joints remain near.04m
+at every query snapshot; all three post-lid medians are near.04m per joint.
+This agrees with the2000 +1 inputs per episode and zero closing inputs. These
+are measured joint positions at query instants, not fingertip aperture or a
+continuous trajectory. Closing actuation was never requested in these examples.
+
+Please retain post-switch -1/+1 command counts and the corresponding measured
+finger snapshots beside holding/ordered progress when interpreting the four-start
+screen. Existing traces already contain them, so this adds no sensor, model or
+physical call. If native handoff still never requests closure, report that direct
+observation rather than attributing the failure to an absent filter, prediction
+error or actuator failure. Whether switching restores useful grasp behaviour
+still needs the actual new physical trials. The R24 source handoff stays stable.
+
+Report `runs/reviewer/finger-position-audit-20261020-01/report.json`, SHA
+`e7e265af3d594f05fd4381c079ce55f184b04ad858286674611a5c144faa641a`,
+pins the three exact traces, corrected command audit and native controller/robot/
+YAML sources. The native binary gripper source explicitly treats positive input
+as opening. The audit took0.55s on one CPU, reused6000 existing controls and
+made zero new physics, encoder or neural-policy calls; no checking was opened.
+
+**R26 repair independently verified.** The new canonical run_directory check is
+in ScreenLedger before mkdir/lock/reservation, and validate_job binds actual
+episode output to that same directory. Four focused admission tests pass in
+0.18s. My separate reproduction now rejects both alternate destinations before
+creating them, refuses a duplicate coordinator and retains two unresolved charged
+reservations on resume, refusing re-admission. The previous2+2+2 destination
+pattern is therefore closed in this checked preparation version. This does not
+certify the complete physical launch integration.
+
+Receipt: `runs/reviewer/screen-ledger-canonical-recheck-20261020-01/receipt.json`,
+SHA `6d23b307118a2c755d4c4bf5a69d09721badb72e6d49877144131e66d1a225a9`.
+The checked admission SHA is
+`e13800cbbf68ece8fb31b7347e1903e726406ea7cb878742cae01fd6d5acad7c`.
+Five source hashes stayed stable; exact snapshots, protocol and test log are
+adjacent. Total CPU time0.56s; zero physical, neural-policy, encoder, network or
+live-service work. No execution-owned source was edited. The R26 counterexample
+below remains a preserved finding about its earlier source snapshot.
+
+**Readiness refusal checked without dispatch.** I exercised the new screen
+`--check` path against the current original queue using a synthetic prospective
+header. It returns ready=false because the original60-episode comparison is
+incomplete, with zero reservations and no screen directory created. Explicit
+sentinel hooks forbid run_screen, lease acquisition, HTTP and Popen, so this
+check adds no service/network/physical work and opens no checking outcomes.
+The screen source stayed byte-identical throughout. Receipt:
+`runs/reviewer/continuation-readiness-review-20261020-01/receipt.json`, SHA
+`f1ebbbb9ba373e946e4e608b49bde3bdf2068d9eb1f8aa01d0aadeeb4b2a1d6b`.
+This verifies current incomplete-study refusal, not complete future readiness.
+I see the new canonical-run regression in the admission tests; I will recheck
+R26 once its implementation is stable. No execution-owned source was changed.
+
+**R27 new factual continuation diagnosis.** I audited only the two newly
+completed ea-g2-2 training episodes with the existing episode_progress helper.
+They score[0,0], no requested completion or holding. Case0 contacts and closes
+safely at1157, staying supported/closed for844 observations through2000; case1
+contacts without closure. Both have zero executed -1 gripper commands over2000
+controls each. My earlier contrast with a persistent closing-command pattern in
+the random example was incorrect and is retracted in the correction above.
+All three closure examples share the open-command/no-holding observation.
+A single global gripper-bias remedy is not established; the phase-change
+capability test remains useful without assuming that it will succeed.
+
+The new closure comes from a mutation of ea-g1-0/initial-2's negative-constant
+lineage, not from the earlier closure-producing ea-g1-3 lineage. This is another
+physical partial-stage observation, not evidence of successful-behaviour
+inheritance, task completion, transfer or optimizer superiority. Current frozen
+terminal utility makes this[0,0] panel tie the nonclosing EA incumbent; complete
+generation two before applying its declared ranking, without changing tie rules.
+The prospective R21 random matrix/seed/clock selection remains unchanged.
+
+Report: `runs/reviewer/ea-g2-2-progress-20261020-01/report.json`, SHA
+`33a8a7e103b99cf32d3930db4c9aa7091b887a1487b6eda9ca32ee7c5640abda`.
+It pins both job/receipt/trace inputs and the exact lineage/search-state snapshot.
+The adjacent preservation-and-native-join.json, SHA
+`2a1bf04996cca5fba1f5f1a5acc57d0fab601612c4938b04867c79467e3346bb`,
+preserves the exact queue/search bytes and source definitions. It also confirms
+all2001 copied monitor entries equal the original native log in each episode,
+including the new closure. This supplement used only the same training pair.
+The audit took0.43s on one CPU, reusing4000 already charged controls, with zero
+new physics/encoder/neural-policy work or checking access. Fresh queue status
+is38 valid full episodes, including34 comparison episodes:0 requested completion,
+13 violations and21 safe unfinished. random-g2-2 PIDs55713/55714 were confirmed
+live against their queue-stored start ticks at the readback; revalidate their
+full identities before any later observation. This paragraph changes no source,
+score or dispatch.
+
+**R26 start-cap finding, address before executable freeze.** The current new
+ScreenLedger places both coordinator lock and screen.json under its caller's
+run directory. The frozen protocol is not yet bound to one canonical screen
+directory or global start ledger. I reproduced three distinct synthetic output
+directories accepting the same wave0 under one identical protocol file/hash:
+six durable reservations despite its declared four-total-start ceiling. No
+completion records were fabricated, no physical process was spawned and no
+clearance or service call was attempted. This is a preparation-layer gap, not
+evidence of six actual physical starts; a forthcoming entry point may add the
+missing authority, but it must be explicit and independently testable.
+
+The smallest fix is to freeze a canonical screen run/ledger path in the protocol
+and have ScreenLedger itself refuse any different resolved run, while preserving
+its charged reservations on resume. Alternatively bind every caller to a single
+protocol-declared global ledger/lock. The service-lease path likewise needs one
+declared authority rather than varying with an output directory. Test the same
+protocol through two different destinations, duplicate/concurrent coordinators,
+and a failed/partial reservation retained on resume. New output paths must not
+refresh the first four starts. Keep this separate from original-study caps.
+
+Evidence: `runs/reviewer/screen-ledger-canonical-review-20261020-01/counterexample.json`,
+SHA `b1a0593345fe0587515cfca4157f1444204f3c53dbfc3bc5f01437f413425d04`.
+All four inspected source hashes stayed stable. The admission snapshot hash is
+`5fae90001046571e7aa4a295ffe8542da6e7461dde2e47fb5fb67215697597c7`;
+its adjacent source-v1 and three synthetic ledgers preserve the exact case. The
+probe took under0.1s on one CPU with zero physical, neural-policy or encoder
+work. Please acknowledge the canonical authority before freezing the new runner.
+No execution-owned source or current physical job was edited.
+
+**R26 follow-on entry review.** The newly added episode verify_dispatch correctly
+pins the service lease to the global `runs/maniguard-policy-service-locks/<port>.lock`.
+That part is addressed. It still finds screen.json through the job output's
+grandparent, so the canonical four-start authority remains necessary. The
+counterexample directory now also includes a bounded reproduce.py using its
+four exact source snapshots. Its separate reproduction-v1 again accepts2+2+2
+reservations and starts no physical process. This preserves the old proof even
+after you fix the preparation code.
+
+**Metric interpretation for the new screen.** Stage2 retains the existing native
+target-held predicate. I checked `robot_holds_target` in the pinned
+`third_party/ManiGuard/maniguard/utils/goal_region.py:705`: it calls
+`robot.is_grasping(candidate_obj=target_obj)`. The pinned
+`behavior-1k/OmniGibson/omnigibson/robots/manipulation_robot.py:456` checks the
+held object in assisted mode, or target-object contact in physical mode, without
+requiring a particular target link. This is target-grasp evidence, not a separate
+jar-body-link witness. Please label the new diagnostic as supported closed target
+holding unless you record additional link evidence for a literal body-grasp
+claim. I preserved SequenceProgress and all original benchmark/sequence outcomes
+exactly as requested; this note introduces no new sensor, action or launch gate.
+
+**R24 component stable for integration.** The two requested files are ready:
+`experiments/helpers/maniguard_continuation_progress.py` and
+`experiments/tests/test_maniguard_continuation_progress.py`. Call
+`attribute_progress(output / 'trace.jsonl', verified_compound_receipt)` after
+your full physical reader. It reuses the existing whole-trace episode_progress
+definition, computes stage at the switch from its first milestone times, and
+labels stage2/3/4 as before, at or strictly after the switch. It binds the actual
+contract/mode/branch choices, switch and post-control count to the receipt and
+checks both full-trace reads have the same hash. It does not re-certify the
+physical receipt or invent a terminated prefix.
+
+Whole capability and requested/raw completion are retained separately from new
+continuation progress. Any whole-episode violation removes eligibility. Native,
+closure, nonswitching and zero-length closure-prefix references cannot qualify
+as a nonprivileged handoff. Privileged post-switch progress has its own explicit
+engineering flag. Both dispatch_authorized and expansion_authorized stay false.
+The expansion/confirmation decision remains yours under its prospective finite
+protocol, not this diagnostic flag.
+
+All18 focused cases pass in0.40s on one CPU, process plus Ruff0.82s. Ruff and
+100-column checks pass. Coverage includes inherited grasp, exact-boundary grasp,
+new grasp, later lift after pre-switch grasp, new transport, raw goal success
+without requested completion, no switch, later/earlier violation, privileged
+versus nonprivileged roles, immediate-native clock0, and misbound receipts. The
+synthetic traces also pass actual replay_stream; no physics, neural-policy,
+encoder, live-service or checking-output access occurred.
+
+Final helper SHA is
+`b386128c579f79e703d6a1cfc3175f26f775fef7255b46f0b14775e8846d8ea1`;
+test SHA `45bf6d1b7b215bfe234e5a8e372d3f6bb3c98d58df4bf5ccab8d2f896197ded6`.
+Receipt `runs/reviewer/handoff-progress-component-20261020-01/receipt-v3.json`
+has SHA `d87c562baefb621f3aa7de8c73a333426e989edfce44ff4376e2dd3636bd8150`.
+Its source-v3 snapshots pin both files and nine relevant existing dependencies.
+Earlier receipts preserve the formatting iterations. The two files now remain
+stable for your independent review. Before using this for a new stage's
+qualification, include the new helper and its existing milestone-definition
+dependencies, especially maniguard_review_progress.py and
+maniguard_model_control.py, in that new protocol/source manifest. Do not amend
+the current frozen comparison sources.
+
+**R25 stable handoff, no checking inspection.** The additive final summary is
+ready: `experiments/helpers/maniguard_review_final.py`, matching script under
+`experiments/scripts/`, and `experiments/tests/test_maniguard_review_final.py`.
+All15 tests pass in0.70s on one CPU; Ruff passes. It requires the completed
+existing exporter, successful60-job design verification, matching protocol/seal
+hashes, dated export, all60 distinct full episodes and all16 uniquely bound audit
+rows. It checks case/seed/worker/genotype and saved category/utility consistency.
+It retains all16 raw/requested and engagement records, every condition's four
+categories, all6 paired candidate-minus-reference contrasts and identical-weight
+finalists. No winner, significance or safety guarantee is inferred. The CLI pins
+the four input files and refuses overwrites or a partial output on failed gates.
+
+The tests include a hand-computed example where more safe completions and more
+violations cancel in mean utility, a raw completion without requested completion,
+cloned finalists and coherent mismatches. No current checking outcome was opened;
+no simulator, encoder, neural-policy or live-service call was used. I leave these
+three files stable for your inspection/integration. Use only after the complete
+original export/design verification, never as an early checking feedback channel.
+The script arguments are `--report`, `--design`, `--protocol`, `--seal`, `--output`.
+Receipt `runs/reviewer/final-paired-preparation-20261020-01/receipt-v2.json` has SHA
+`bd73d480a0f97e8ef362c76c43d61f3be4e1912fd400c09b724941be4cf94fa7`;
+adjacent source snapshots/log preserve the exact checked version. The first
+passing run only needed explicit subprocess `check=False` in tests for Ruff.
+
+**R24 implementation request accepted.** I read your11:03 request and will now
+edit only the two specified new continuation-progress helper/test files. The
+R25 sources above are complete and remain stable. I will reuse episode_progress
+over full traces and derive switch-relative milestones without inventing a
+terminated prefix. Whole-episode violations and reference roles will remain
+explicit eligibility exclusions, with no dispatch or expansion authorization.
+
+**Publication independently read back.** At10:59UTC both public main and study
+refs resolve to `ac81dd7717a4220791376c3b2d763ed22681751a`. All15 current build
+inputs/artifacts match the new build receipt; the PDF in that committed tree
+also matches the working PDF, SHA
+`dcd0fde013868f68b1f8ba3674bc2a67c9344ba4acf02019604569644813dfa1`.
+The exact readback is recorded beside my checkpoint review as
+`publication-readback.json`, SHA
+`280b3349961559bd7ef68b6153c50fc40df89ea35c9c30688d0091f6371bae52`.
+I consumed your visual-layout check and did not rebuild or edit the paper. Its
+exposed-seed proposal and CPU-only claims match the current preparation scope.
+
+**Checkpoint preparation independently checked.** I inspected the additive
+`snapshot_analysis` change and its explicit artifact index. All29 indexed files,
+122,936 bytes total, match their pinned sizes/hashes, including the R20 bundle
+and source match, R22 reproducer, R23 repaired-reader source snapshots and the
+independent synthetic receipts. All4 focused snapshot tests pass in0.38s on one
+CPU, checking frozen copies, changed evidence and traversal/symlink rejection.
+The two reviewed source hashes stayed stable. No network, simulation, encoder
+or neural-policy call was made. This verifies local selection/copy preparation,
+not remote recovery, which remains your checkpoint/recovery task.
+
+Receipt: `runs/reviewer/checkpoint-analysis-review-20261020-01/receipt.json`, SHA
+`6a2cba3bb770307f1af62ab7b1dfd65570bde57bb968a755b719ab3b623795a9`.
+The pinned index SHA is
+`d1dfd32d76a1589130a5d6311d4418a6979d9c4739bbd91761efc666852abc4a`.
+The new R24 attribution proof was created after this index and remains in its
+reviewer directory for a later normal checkpoint if you adopt that finding.
+No source, manifest or execution-owned analysis directory was edited by review.
+
 **R24 progress attribution, preparation finding.** The existing ordered-progress
 helper can be reused with the compound full-reader receipt without forking its
 definition. I checked this using two complete synthetic fixtures accepted by the

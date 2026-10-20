@@ -1,0 +1,210 @@
+{
+  "schema": "maniguard-continuation-feasibility-draft-v2",
+  "status": "cpu_preparation_not_authorized_for_launch",
+  "recorded_utc": "2026-10-20T10:37:25.761898+00:00",
+  "scientific_scope": "Development feasibility, on an exposed training task and seed. Test whether a preserved closure behaviour can hand control to native grasp/transport. No EA, learned-filter, transfer or fresh-generalization claim.",
+  "original_protocol": "configs/maniguard/latent-evolution/capacity-20261020-v2.json",
+  "original_protocol_sha256": "f54d46711a0712d7ddb840cc08e0c7eed431a0e6012d0238489242cae7beb083",
+  "prerequisite": "Complete the original 60-valid-episode comparison, independent final verification, and its remote preservation before any screen admission. No service overlap.",
+  "source_parent_commit": "771e0c6d40fed741f7b78eecf887526d9881d190",
+  "source_freeze_complete": false,
+  "entry_point_complete": true,
+  "physical_starts": 0,
+  "family": "jar",
+  "scene": "task_0019/base",
+  "seed": 6101920,
+  "seed_exposure": "Already used for original generation-one training, chosen before this new physical screen because random-g1-2 closed safely there. Every reference shares that prior information. Camera identity and repeated closure remain unguaranteed.",
+  "closure_controller_id": "random-g1-2",
+  "closure_controller_sha256": "72cf19deb23bf2122c93ec8159ef9872218c20aef3227e7a558a8b09b33f9f50",
+  "selection_rule": "Earlier supported safe-closure training example, with first closure482 and prospective debounce484/query488; provides more continuation horizon than the EA closure example. Not an optimizer-derived contribution.",
+  "prior_acquisition": "Charge all original development/training information inspected to choose the example, including negative candidates and reviewer diagnostics; report separately from new starts.",
+  "selector_parameters": {
+    "native_only": {
+      "mode": "native_only",
+      "debounce": 3,
+      "clock_switch_step": 488
+    },
+    "closure_only": {
+      "mode": "closure_only",
+      "debounce": 3,
+      "clock_switch_step": 488
+    },
+    "clock_handoff": {
+      "mode": "clock_handoff",
+      "debounce": 3,
+      "clock_switch_step": 488
+    },
+    "privileged_lid_handoff": {
+      "mode": "privileged_lid_handoff",
+      "debounce": 3,
+      "clock_switch_step": 488
+    }
+  },
+  "selector_contract_sha256": {
+    "native_only": "832aa719d89b18dc6d38c49f2a8c30b4c006e97f3037e80c2fbfe76e660bf0a6",
+    "closure_only": "48994129e663bb9adc87904e8e321ef4b4f50fd170849ba15871b7e0572e55f7",
+    "clock_handoff": "d05e9c5ff4d436fadf6093b64ebc62b35771190073b8032f00f51c77f50653f5",
+    "privileged_lid_handoff": "ba68e05f97c2bc15e84297677d6255a66e8e7237d537d663175bb639875d524b"
+  },
+  "episodes": [
+    {
+      "id": "screen-native",
+      "condition": "native_only",
+      "worker": 0,
+      "wave": 0
+    },
+    {
+      "id": "screen-closure",
+      "condition": "closure_only",
+      "worker": 1,
+      "wave": 0
+    },
+    {
+      "id": "screen-clock",
+      "condition": "clock_handoff",
+      "worker": 1,
+      "wave": 1
+    },
+    {
+      "id": "screen-privileged",
+      "condition": "privileged_lid_handoff",
+      "worker": 0,
+      "wave": 1
+    }
+  ],
+  "first_screen_budget": {
+    "maximum_full_starts_including_partial_failures": 4,
+    "automatic_replacements": 0,
+    "policy_controls_each": 2000,
+    "total_policy_controls": 8000,
+    "policy_requests_admitted_each": 250,
+    "total_policy_requests_admitted": 1000,
+    "encoder_image_batches_each": 250,
+    "total_encoder_images": 2000,
+    "total_text_encodings": 4,
+    "physics_before_accounting_attachment": "Unknown, not zero or covered by a falsely claimed total tick ceiling. Retain actual measured ticks and initialization wall time.",
+    "runtime_limits_binding": "runtime_limits freezes and enforces all per-start ceilings; all partial starts remain charged.",
+    "maximum_observed_initialization_ticks": 15360,
+    "minimum_whole_screen_seconds_including_guardian_grace_and_preservation": 6308,
+    "scheduled_policy_physics_ticks_at_full_horizons": 48000,
+    "physics_tick_scope": "Scheduled native control ticks and separately bounded observed initialization ticks. Unknown pre-attachment physics is not zero; these are not a measured total-physics ceiling."
+  },
+  "failure_rule": "All partial/failed starts remain charged within four. Finish any healthy already admitted partner, diagnose the invalid trial, and do not automatically launch the later wave or a replacement. A nonswitching valid timeout is a valid outcome and is not replaced.",
+  "observations": "Same native two640 RGB views, frozen44 causal features/encoder schedule, checkpoint/horizon/grasp/physics contract. Clock handoff also has an explicit query-clock input; privileged handoff receives actual passive monitor state. These engineering advantages must be declared.",
+  "outcomes": [
+    "requested/raw completion and four completion/violation categories",
+    "contact/grasp counts",
+    "qualifying observations, first debounce, first actual switch, final branch",
+    "remaining native horizon and actual post-switch controls",
+    "ordered supported closed target holding, later closed lift and transport, with raw violations retained",
+    "executed opening/closing commands by phase and measured two-finger joint positions at query instants"
+  ],
+  "progress_rule": "A separate next stage may be considered only for an actual handoff with a positive-length closure prefix and native post-switch controls, no whole-episode violation, and either a new ordered milestone2/3/4 strictly after the switch or requested safe completion first achieved after the switch. At-switch observations belong to the prefix. Milestone2 is supported closed target holding under the unchanged native held predicate, without an independently identified body-link witness. Only a progressing nonprivileged handoff can qualify for fresh native-versus-method confirmation. No automatic expansion or replacement.",
+  "later_stages_status": "No larger stage frozen or launched. The older twelve-valid/fourteen-total proposal is conditional and not additive to any allocation.",
+  "resource_record": "configs/vast/maniguard-result-window-20261020.json",
+  "actual_current_clock_stop_utc": "2026-10-20T20:00:00Z",
+  "result_delivery_deadline_utc": "2026-10-21T03:35:00Z",
+  "admission_rule": "Before dependent work, verify current instance/rate, actual armed deadline, absence of live original workers, finite whole-screen timeout bound plus preservation reserve, immutable protocol/source and all start caps. No current dependence on extra GPU hours.",
+  "failed_world_model_deployed": false,
+  "physical_launch_authorized_by_this_draft": false,
+  "workers": {
+    "0": {
+      "simulation_physical_device": 0,
+      "policy_physical_device": 0,
+      "port": 18000,
+      "renderer_vulkan_index": 0,
+      "simulation_gpu_uuid": "GPU-0bfb3ed5-af55-472e-3199-058727ff80a7",
+      "policy_gpu_uuid": "GPU-0bfb3ed5-af55-472e-3199-058727ff80a7",
+      "service_ledger": "/workspace/Safety-Dial/runs/latent-evolution-20261019/server-jar-worker0-physical.jsonl"
+    },
+    "1": {
+      "simulation_physical_device": 1,
+      "policy_physical_device": 1,
+      "port": 18001,
+      "renderer_vulkan_index": 1,
+      "simulation_gpu_uuid": "GPU-4f452774-6f8b-6fcc-4ce1-2d4d190e6d07",
+      "policy_gpu_uuid": "GPU-4f452774-6f8b-6fcc-4ce1-2d4d190e6d07",
+      "service_ledger": "/workspace/Safety-Dial/runs/latent-evolution-20261019/server-jar-worker1-physical.jsonl"
+    }
+  },
+  "recorded_epoch": 1792497922.705386,
+  "supersedes": "configs/maniguard/continuation/handoff-screen-draft-v1.json",
+  "superseded_draft_sha256": "f1b56351d8460616960023c1a0467fb3f621e0d4defaf6c7dd873e965f240849",
+  "run_directory": "/workspace/Safety-Dial/runs/maniguard-continuation-screen-20261020-v1",
+  "service_lease_directory": "/workspace/Safety-Dial/runs/maniguard-policy-service-locks",
+  "original_run": "/workspace/Safety-Dial/runs/latent-evolution-20261019",
+  "original_physical_recovery_proof": "/workspace/Safety-Dial/configs/maniguard/latent-evolution/original-60-physical-recovery-proof.json",
+  "closure_controller_file": "/workspace/Safety-Dial/runs/latent-evolution-20261019/search/random-g1-2.npz",
+  "instance_id": 56777435,
+  "machine_id": 54514,
+  "physical_cutoff_utc": "2026-10-20T19:30:00Z",
+  "watchdog_receipt": "/workspace/Safety-Dial/runs/latent-evolution-20261019/deadline-watchdog.json",
+  "runtime_limits": {
+    "policy_controls": 2000,
+    "policy_requests": 250,
+    "encoder_image_batches": 250,
+    "encoder_images": 500,
+    "encoder_text_encodings": 1,
+    "initialization_environment_steps": 64,
+    "total_environment_steps": 2064,
+    "observed_initialization_physics_ticks": 3840,
+    "initialization_wall_seconds": 600,
+    "full_start_wall_seconds": 2700,
+    "preservation_reserve_seconds": 900
+  },
+  "policy": {
+    "repo": "IDEAS-Lab-Northwestern/pi05-base-datagen-v1-jar-joint-2cam-lora",
+    "revision": "1d84eda070313a202a595e449fcf41a1a1e8a546",
+    "step": "7400",
+    "config": "pi05-base_datagen_v1_jar_joint_2cam_lora"
+  },
+  "new_screen_supplemental_decoder_probe_allowance": 0,
+  "service_accounting": "Keep the existing service and append-only ledger. Before each reserved start, snapshot original prefix byte count/hash; after guardian exit copy only its new tail and require exact joins to actual returned policy receipts. No original history is truncated or attributed to the new screen.",
+  "scene_asset_sha256": "fca69754b480b778d9df0469767c7e0fe6e1e2b43ed34a4e29b12a95f0cda2df",
+  "native_evaluator_config_sha256": "7d9a6d65b9ee8653433adb1ec4c8ad35d1d9aac0655e6ea9407b62bfbb2357a7",
+  "critical_source_hashes": {
+    "experiments/helpers/maniguard_latent.py": "40507f8a6251b7e701318648c4fc81d5e472bdd577b46bd18c59044b5eafe2ef",
+    "experiments/helpers/maniguard_latent_policy.py": "aaac8d17a3c16b058e3fd4a2fb641abb1ab654ccb68d31cf38f92c1ece6b926c",
+    "experiments/helpers/maniguard_latent_runtime.py": "77ebba7e5bf4b9061023eccbae7f8a7242759819691bb19a25361e0d3b9be201",
+    "experiments/helpers/maniguard_latent_source.py": "4d9a4fdece112034cac1a2fc974e8a722f7ccfbcdb634070f8d9bed893d0c5b0",
+    "experiments/helpers/maniguard_runtime.py": "a9e3fd09ccd9f0a66bba6c2c84efdb813c664bf05cdeea60ba4f52ba341ed0f2",
+    "experiments/helpers/maniguard_source.py": "92b0352f5dfa8db2a0bcb0fc15716d59701940ef4516dbff6fb14bca4f1b01ed",
+    "experiments/helpers/maniguard_client.py": "548154aa19702fbced239698027d1cc3cbf43e7c2c87f5c607dfe7d14f97639c",
+    "experiments/helpers/maniguard_adaptation.py": "009574057fb44eae43b105a38e39281b7e53a308ad2b6286136436d8670edb50",
+    "experiments/helpers/maniguard_phase2_features.py": "6c693651d4d533edad070a54dcfd3d8d8d577bb1f6c249e3324ae9d89fbe5580",
+    "experiments/helpers/maniguard_phase2_outcomes.py": "33ecc9013f8547608adf8790e8cb4592ef396a094a7b7ca9a8379b6d5b859e58",
+    "experiments/helpers/maniguard_results.py": "549b3ad6bfe7793438db075bdc5988885a06b1963ce147160d76436ae7c761c0",
+    "experiments/helpers/maniguard_latent_completion.py": "c914045cea222f07eedc2108d9d5fd9c558474e9b20b5ce1a6856f42c6047822",
+    "experiments/helpers/maniguard_continuation_handoff.py": "24e1faad07addde2d2835679817cd8178a3c53715ee9a0d8046bcf0037364015",
+    "experiments/helpers/maniguard_continuation_evidence.py": "9e5d782dea6938e79aba7a07e2bb942eedc03fee826bd7e5cdb53597dd29441f",
+    "experiments/helpers/maniguard_continuation_runtime.py": "5e6b3806edbca490c330d611d1b95432fab068e1e2932d9a6cb09b94720c4748",
+    "experiments/helpers/maniguard_continuation_source.py": "e93baa4987746e1b8373b69e9fd1188a0af6efda103b6faef8d2c08a2de3d962",
+    "experiments/helpers/maniguard_continuation_results.py": "6c3380071c0b2253a64370cf18e58aab24a60af56dca6fa44f26569b6ec5e706",
+    "experiments/helpers/maniguard_continuation_protocol.py": "aa2b89329545ebe70a825f5b2975cb08e65bd36944494d0b40f730b970917aad",
+    "experiments/helpers/maniguard_continuation_limits.py": "3fde02cdb47e4a5acc1f47c753a2855e9427323be32e32888b568d1dbcb52c6c",
+    "experiments/helpers/maniguard_continuation_guardian.py": "94094b2e97cb6e6b3098dfc754f9fffc3cbd13df2c4ae373a9a648aa6e79729b",
+    "experiments/helpers/maniguard_continuation_admission.py": "e13800cbbf68ece8fb31b7347e1903e726406ea7cb878742cae01fd6d5acad7c",
+    "experiments/helpers/maniguard_continuation_service.py": "cee7dfb5d932e5ccf2978f0687ea38be6eeddbdcecbcb38dfdf19a31a555d0e5",
+    "experiments/helpers/maniguard_continuation_jobs.py": "5d32dfbbde9c8c5a1fef9cac4ca15aec8d465233a583f6f35c52a74e33085bd0",
+    "experiments/helpers/maniguard_latent_queue.py": "288357bee67f23889613364eb933c3f6deef9726dcec3a4714f6fe2a39fff67c",
+    "experiments/helpers/maniguard_latent_results.py": "542ac5a2ac740f73168757fa3780f7bef9745bedf4f2014519e56bb8361456f0",
+    "experiments/helpers/maniguard_latent_hardware.py": "63c7c4fb4746255cb1167c63f0094fd56d8c7a99406af4559e048177a51ba1c9",
+    "experiments/helpers/maniguard_continuation_progress.py": "b386128c579f79e703d6a1cfc3175f26f775fef7255b46f0b14775e8846d8ea1",
+    "experiments/helpers/maniguard_review_progress.py": "9c394ef0ab0753376359009ac56f8ddd309248ed0d27d3fac455084eb9f603f8",
+    "experiments/helpers/maniguard_model_control.py": "1b742a260e33ca5a961576bd99b978aa12d91df1cc98c6900fae3cf37fbf695f",
+    "experiments/scripts/maniguard_continuation_episode.py": "91234c395646dca600d01c6307655692bdf340135be9cd840346ed519eba2662",
+    "experiments/scripts/maniguard_continuation_screen.py": "b89e6ee15eda990dc24dfbde085a0f5ba6ff8f21bbfbf384c542dcf238621e04",
+    "configs/maniguard/phase2/encoder.json": "668c57049f16c04d81f65d1e924c6bc243e0d27609460c4825b2724da5bf6097",
+    "configs/maniguard/phase2/completion.json": "0f8a75bce655573902d1c013cf7522db6232000ae4c6442e5b82c463c1b84a40",
+    "configs/maniguard/phase2/sources.json": "fd76ca78a84796731f5366eea8b254dde18f28267f2871910ead2bb52c1b9478"
+  },
+  "selection_fixed_before_checking": {
+    "original_queue_sha256": "69730628283227c9bce59b862ae0da0f98d2c5cb1e700ea1d3e3f672af76c1d5",
+    "checking_starts": 0,
+    "unchanged_choice_since_draft_v1": true
+  },
+  "instrumented_runtime_sha256": "5e1076d6ea3649ef20ee29d473f716a9a646004023f17d15c36dfae423a0b857",
+  "preparation_status": "CPU checks passed. Separate prospective source/protocol freeze, original60 completion/physical restoration and fresh resource/capacity clearance remain required. This draft cannot launch.",
+  "software_receipt": "configs/maniguard/continuation/software-preparation-v2-20261020.json",
+  "software_receipt_sha256": "16d2659d53f30cab35bcc686411682433f4f626a041c7a9df5b068ac5667c8c2"
+}

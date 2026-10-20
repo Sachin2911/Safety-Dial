@@ -18,6 +18,7 @@ from helpers.maniguard_continuation_evidence import (
     replay_stream,
 )
 from helpers.maniguard_continuation_handoff import HandoffReference
+from helpers.maniguard_continuation_limits import DEFAULT_LIMITS
 from helpers.maniguard_latent import feature_vector, initial_weights
 from helpers.maniguard_latent_policy import array_hash
 
@@ -160,6 +161,7 @@ def job_files(tmp_path, mode="clock_handoff"):
     job = {"study": "continuation-feasibility-v1", "family": "jar", "random_policy": False,
            "max_steps_override": None, "controller": str(controller), "output": str(tmp_path),
            "controller_sha256": reference.closure.sha256(), "episode_id": "synthetic",
+           "runtime_limits": dict(DEFAULT_LIMITS),
            "continuation": {"mode": mode, "debounce": 3, "clock_switch_step": 0},
            "continuation_contract_sha256": reference.contract_sha256}
     path = tmp_path / "job.json"

@@ -14,8 +14,15 @@ REQUIRED_SOURCES = tuple("experiments/helpers/" + name + ".py" for name in (
     "maniguard_continuation_evidence", "maniguard_continuation_runtime",
     "maniguard_continuation_source", "maniguard_continuation_results",
     "maniguard_continuation_protocol",
+    "maniguard_continuation_limits", "maniguard_continuation_guardian",
+    "maniguard_continuation_admission",
+    "maniguard_continuation_service",
+    "maniguard_continuation_jobs", "maniguard_latent_queue", "maniguard_latent_results",
+    "maniguard_latent_hardware",
+    "maniguard_continuation_progress", "maniguard_review_progress", "maniguard_model_control",
 )) + (
     "experiments/scripts/maniguard_continuation_episode.py",
+    "experiments/scripts/maniguard_continuation_screen.py",
     "configs/maniguard/phase2/encoder.json", "configs/maniguard/phase2/completion.json",
     "configs/maniguard/phase2/sources.json",
 )

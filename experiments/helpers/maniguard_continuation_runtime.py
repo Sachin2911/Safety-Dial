@@ -2,6 +2,7 @@
 
 import json
 import os
+import time
 import zlib
 from pathlib import Path
 
@@ -9,6 +10,7 @@ import numpy as np
 
 from helpers.maniguard_continuation_evidence import check_return, choice_record, encode_bounds
 from helpers.maniguard_continuation_handoff import HandoffReference
+from helpers.maniguard_continuation_limits import counter_violations, validate_limits
 from helpers.maniguard_latent import LatentController, feature_vector, outcome_score
 from helpers.maniguard_latent_policy import array_hash
 from helpers.maniguard_phase2_outcomes import derive_outcome
@@ -33,12 +35,51 @@ class ContinuationStudy(LatentStudy):
             self.reference = HandoffReference(data["weights"], **job["continuation"])
         if self.reference.contract_sha256 != job["continuation_contract_sha256"]:
             raise ValueError("Compound selector contract differs from the episode job")
+        self.limits = job["runtime_limits"]
+        validate_limits(self.limits)
+        self.initialization_finished = False
+        self.budget_failures = []
         self.choice = None
         self.previous_policy_rng = None
         super().__init__()
         self.counts.update(native_policy_requests_admitted=0, native_policy_responses_received=0,
-                           native_policy_responses_verified=0)
+                           native_policy_responses_verified=0, initialization_env_step_attempts=0)
+        self.write("technical_budget_contract", limits=self.limits)
         self.ledger()
+
+    def ledger(self):
+        self.counts["initialization_finished"] = self.initialization_finished
+        for reason in counter_violations(self.counts, self.limits):
+            if reason not in self.budget_failures:
+                self.budget_failures.append(reason)
+        self.counts["budget_violation_reasons"] = list(self.budget_failures)
+        super().ledger()
+
+    def enforce_budget(self, reason=None):
+        if reason is not None and reason not in self.budget_failures:
+            self.budget_failures.append(reason)
+        self.ledger()
+        if self.budget_failures:
+            raise RuntimeError("Continuation technical budget exceeded: " + ", ".join(self.budget_failures))
+
+    def install_accounting(self, og):
+        super().install_accounting(og)
+        original_step = og.Environment.step
+        study = self
+
+        def bounded_step(env, *args, **kwargs):
+            study.enforce_budget()
+            if study.counts["env_step_attempts"] >= study.limits["total_environment_steps"]:
+                study.enforce_budget("next_environment_step_would_exceed_limit")
+            if not study.initialization_finished:
+                if (study.counts["initialization_env_step_attempts"]
+                        >= study.limits["initialization_environment_steps"]):
+                    study.enforce_budget("next_initialization_step_would_exceed_limit")
+                study.counts["initialization_env_step_attempts"] += 1
+                study.ledger()
+            return original_step(env, *args, **kwargs)
+
+        og.Environment.step = bounded_step
 
     def observed(self, step, obs, monitor):
         # Use the same single passive snapshot as the original telemetry hook.
@@ -56,6 +97,11 @@ class ContinuationStudy(LatentStudy):
 
     def start(self, scene, obs, env, robot, monitor):
         super().start(scene, obs, env, robot, monitor)
+        self.enforce_budget()
+        self.counts["initialization_physics_steps"] = self.counts["physics_steps"]
+        self.initialization_finished = True
+        self.counts["initialization_completed_epoch"] = time.time()
+        self.ledger()
         self.expected_policy_seed = zlib.crc32(
             f"{self.job['seed']}:{scene['name']}".encode()
         ) & 0x7FFFFFFF
@@ -64,6 +110,7 @@ class ContinuationStudy(LatentStudy):
 
     def before_query(self, step, obs, frame):
         # Encode once, then log the actual selected component, including native.
+        self.enforce_budget()
         self.query_step = step
         Study.before_query(self, step, obs, frame)
         try:

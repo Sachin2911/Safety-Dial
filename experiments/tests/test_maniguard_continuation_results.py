@@ -9,6 +9,7 @@ from test_maniguard_continuation_evidence import stream
 
 from helpers.maniguard_continuation_evidence import replay_stream
 from helpers.maniguard_continuation_handoff import HandoffReference
+from helpers.maniguard_continuation_limits import DEFAULT_LIMITS
 from helpers.maniguard_continuation_protocol import validate_job
 from helpers.maniguard_continuation_results import read_episode
 from helpers.maniguard_continuation_source import REQUIRED_SOURCES, prepare_runtime
@@ -39,24 +40,37 @@ def full_fixture(tmp_path):
     runtime = tmp_path / "benchmark_instrumented.py"
     runtime.write_text("# Synthetic reader fixture, never executed\n")
     runtime_hash = digest(runtime.read_bytes())
+    native_config = tmp_path / "native-config.yaml"
+    native_config.write_text("synthetic configuration, never executed")
+    config_hash = digest(native_config.read_bytes())
     closure = rows[0]["contract"]["closure_controller_sha256"]
     contract_hash = next(r["choice"]["contract_sha256"] for r in rows
                          if r["type"] == "continuation_choice")
     parameters = {"mode": "privileged_lid_handoff", "debounce": 3, "clock_switch_step": 8}
     protocol = {"status": "prospectively_frozen", "critical_source_hashes": hashes,
+                "run_directory": str(tmp_path / "historical-screen"),
+                "service_lease_directory": "/synthetic/policy-locks",
                 "policy": {"revision": "synthetic"},
                 "instrumented_runtime_sha256": runtime_hash, "closure_controller_sha256": closure,
                 "scene": "synthetic-scene", "seed": 123,
                 "selector_parameters": {"privileged_lid_handoff": parameters},
                 "selector_contract_sha256": {"privileged_lid_handoff": contract_hash}}
+    protocol["native_evaluator_config_sha256"] = config_hash
     modes = ["native_only", "closure_only", "clock_handoff", "privileged_lid_handoff"]
     protocol.update(
-        episodes=[{"id": mode, "condition": mode, "worker": 0} for mode in modes],
+        original_run="/synthetic/original", scene_asset_sha256="a" * 64,
+        episodes=[{"id": mode, "condition": mode, "worker": [0, 1, 1, 0][i], "wave": i // 2}
+                  for i, mode in enumerate(modes)],
         workers={"0": {"port": 18000, "renderer_vulkan_index": 0,
-                       "simulation_gpu_uuid": "synthetic-sim", "policy_gpu_uuid": "synthetic-policy"}},
+                       "simulation_gpu_uuid": "synthetic-sim", "policy_gpu_uuid": "synthetic-policy"},
+                 "1": {"port": 18001, "renderer_vulkan_index": 1,
+                       "simulation_gpu_uuid": "synthetic-sim1", "policy_gpu_uuid": "synthetic-policy1"}},
         first_screen_budget={"maximum_full_starts_including_partial_failures": 4,
                             "automatic_replacements": 0},
+        runtime_limits=dict(DEFAULT_LIMITS),
     )
+    for worker, spec in protocol["workers"].items():
+        spec["service_ledger"] = f"/synthetic/original/server-jar-worker{worker}-physical.jsonl"
     for mode in modes:
         protocol["selector_parameters"][mode] = {**parameters, "mode": mode}
         protocol["selector_contract_sha256"][mode] = HandoffReference(
@@ -72,7 +86,14 @@ def full_fixture(tmp_path):
            "simulation_gpu_uuid": "synthetic-sim", "policy_gpu_uuid": "synthetic-policy",
            "adapter": {"kind": "identity"}, "repository_commit": "0" * 40,
            "protocol_episode_id": "privileged_lid_handoff", "condition": "privileged_lid_handoff",
+           "output": str(tmp_path / "historical-screen/episodes/privileged_lid_handoff-a0"),
+           "service_lock_path": "/synthetic/policy-locks/18000.lock",
            "worker": 0, "policy_port": 18000, "renderer_vulkan_index": 0,
+           "runtime_limits": dict(DEFAULT_LIMITS), "admitted_epoch": 0, "deadline_epoch": 2700,
+           "native_evaluator_config_sha256": config_hash,
+           "scene_asset_sha256": "a" * 64,
+           "service_ledger_baseline": {"path": protocol["workers"]["0"]["service_ledger"],
+                                       "bytes": 0, "sha256": digest(b"")},
            "continuation": {"mode": "privileged_lid_handoff", "debounce": 3,
                             "clock_switch_step": 8},
            "continuation_contract_sha256": next(r["choice"]["contract_sha256"] for r in rows
@@ -101,6 +122,7 @@ def full_fixture(tmp_path):
             row["request"]["seed"] = seed
     head = [
         {"type": "job", "job": job}, {"type": "initial", "scene": {"name": "synthetic-scene"}},
+        {"type": "technical_budget_contract", "limits": dict(DEFAULT_LIMITS)},
         {"type": "cuda_device_verified", "actual_gpu_uuid": job["simulation_gpu_uuid"]},
         {"type": "runtime_contract", "overview_shape": [640, 640, 3],
          "wrist_shape": [640, 640, 3], "reference_asset_paths": ["franka_panda_longfinger"]},
@@ -125,6 +147,14 @@ def full_fixture(tmp_path):
     complete.append({"type": "result", "result": result})
     trace = tmp_path / "trace.jsonl"
     trace.write_text("".join(json.dumps(row, default=json_value) + "\n" for row in complete))
+    service_bytes = "".join(json.dumps(row["receipt"]) + "\n" for row in complete
+                            if row["type"] == "noise_receipt").encode()
+    (tmp_path / "server-receipts.jsonl").write_bytes(service_bytes)
+    write_json(tmp_path / "service-ledger-readback.json", {
+        "baseline": job["service_ledger_baseline"], "bytes": len(service_bytes),
+        "sha256": digest(service_bytes), "records": 2, "episode": job["episode_id"]})
+    write_json(tmp_path / "scene-asset-readback.json", {
+        "scene": job["scene"], "sha256": job["scene_asset_sha256"], "checked_epoch": 0})
     write_json(tmp_path / "episode/results.jsonl", result)
     write_json(tmp_path / "episode/synthetic-scene_ltl.json", {
         "total_steps_monitored": 17, "violated": False,
@@ -132,7 +162,11 @@ def full_fixture(tmp_path):
     write_json(tmp_path / "ledger.json", {"physics_accounting_attached": True,
         "policy_control_steps": 16, "policy_queries": 2, "encoder_image_calls": 2,
         "encoder_images": 4, "encoder_text_calls": 1, "native_policy_requests_admitted": 2,
-        "native_policy_responses_received": 2, "native_policy_responses_verified": 2})
+        "native_policy_responses_received": 2, "native_policy_responses_verified": 2,
+        "initialization_finished": True, "initialization_completed_epoch": 1,
+        "initialization_physics_steps": 0, "budget_violation_reasons": []})
+    write_json(tmp_path / "guardian-terminal.json", {"exit_code": 0, "technical_stop_reason": None,
+        "started_epoch": 0, "finished_epoch": 2, "deadline_epoch": 2700})
     observations = [{"step": row["step"], **row["monitor"]["observation"]}
                     for row in complete if row["type"] == "observed"]
     goals = [row for row in complete if row["type"] == "goal"]
@@ -198,7 +232,8 @@ def test_admission_and_reader_share_explicit_frozen_job_binding(full_fixture, ch
 
 @pytest.mark.parametrize("corruption", ["unfrozen", "source_omission", "source_bytes",
                                       "runtime", "encoder_count", "saved_outcome", "image",
-                                      "selector", "case"])
+                                      "selector", "case", "native_config", "startup", "guardian",
+                                      "scene_asset", "service_tail"])
 def test_full_reader_rejects_broken_joins(full_fixture, corruption):
     path = full_fixture
     if corruption in ("unfrozen", "source_omission"):
@@ -223,6 +258,20 @@ def test_full_reader_rejects_broken_joins(full_fixture, corruption):
         write_json(p, value)
     elif corruption == "source_bytes":
         (path / "study_source" / REQUIRED_SOURCES[0]).write_text("changed")
+    elif corruption == "native_config":
+        (path / "native-config.yaml").write_text("changed")
+    elif corruption == "scene_asset":
+        p = path / "scene-asset-readback.json"
+        value = json.loads(p.read_text())
+        value["sha256"] = "0" * 64
+        write_json(p, value)
+    elif corruption == "service_tail":
+        (path / "server-receipts.jsonl").write_bytes(b"")
+    elif corruption in ("startup", "guardian"):
+        p = path / ("ledger.json" if corruption == "startup" else "guardian-terminal.json")
+        value = json.loads(p.read_text())
+        value["initialization_completed_epoch" if corruption == "startup" else "finished_epoch"] = 3000
+        write_json(p, value)
     elif corruption == "runtime":
         (path / "benchmark_instrumented.py").write_text("changed")
     elif corruption == "encoder_count":

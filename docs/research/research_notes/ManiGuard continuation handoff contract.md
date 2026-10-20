@@ -24,7 +24,7 @@ All conditions retain the same policy/checkpoint, 640-pixel cameras, encoder
 schedule, native Gaussian source, sixteen-action decoded chunk and eight-command
 execution prefix. Native also pays the matched feature-extraction cost. Balance
 worker assignments and retain initial robot/image hashes; common seeds alone do
-not establish identical camera pixels. Freeze cases, fresh seeds, clock step and
+not establish identical camera pixels. Freeze cases, seeds, clock step and
 execution order before feedback. The privileged reference tests feasibility and
 data acquisition, rather than learned-method or safety-filter performance.
 
@@ -58,7 +58,7 @@ constant-genotype receipt cannot validate this hybrid by assumption.
 
 Retain proposals, decoded chunks and actual environment-input histories, raw
 violations, requested/raw completion and unfinished outcomes. Ordered closed,
-supported body grasp, later closed lift and transport are secondary progress
+supported target holding, later closed lift and transport are secondary progress
 labels, removed from terminal progress fitness after any violation. None replaces
 the existing requested-completion reader. Preserve all outcomes, full source/data
 hashes and private reconstruction receipts. No learned predicate or risk score
@@ -68,16 +68,22 @@ is qualified by the current model audit.
 
 The first screen is capped at four full starts, including partial and failed
 starts. If all are valid, these cover the four references on one exposed
-development case with a shared fresh seed. Expand by a separately frozen stage for the same references
-on a second case only if at least one handoff produces a supported, closed body
-grasp in the required order and finishes without a raw violation, or achieves
-requested safe completion. A valid timeout is an outcome. An invalid screen must
+development case. The selected engineering screen uses the already exposed
+random-g1-2 task0019/base and seed6101920, with clock488 and debounce3, as recorded
+in the versioned draft. Expand by a separately frozen stage on a second case
+only if an actual handoff produces new supported closed target holding, later
+lift or transport strictly after switching and finishes without a raw violation,
+or first achieves requested safe completion after switching. The switch-boundary
+observation still belongs to the closure prefix. Native-only, closure-only and
+nonswitching references cannot establish new handoff progress. Target holding
+uses the native held predicate without an independent body-link witness.
+A valid timeout is an outcome. An invalid screen must
 be diagnosed before further admissions; replacement slots do not permit retuning.
 
 After a passing screen on both cases, a four-episode confirmation may compare
 native with the selected nonprivileged reference on two fresh task/seed blocks.
 Require the selected nonprivileged reference itself to have reached safe ordered
-body grasp or requested safe completion before spending confirmation trials.
+target holding or requested safe completion after handoff before spending confirmation trials.
 If only the privileged reference progresses, retain that feasibility evidence
 and diagnose the phase detector rather than confirming inactive fair references.
 Freeze selection before screening: maximize summed requested-safe-completion

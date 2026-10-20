@@ -2,13 +2,20 @@
 
 import hashlib
 import json
+import math
 import zlib
 from pathlib import Path
 
 import numpy as np
 
 from helpers.maniguard_continuation_evidence import replay_stream
+from helpers.maniguard_continuation_limits import (
+    GUARDIAN_OVERRUN_SECONDS,
+    counter_violations,
+    validate_limits,
+)
 from helpers.maniguard_continuation_protocol import validate_job
+from helpers.maniguard_continuation_service import verify_service_records
 from helpers.maniguard_continuation_source import REQUIRED_SOURCES
 from helpers.maniguard_latent import LatentController, outcome_score
 from helpers.maniguard_latent_completion import runtime_errors, source_errors
@@ -46,8 +53,15 @@ def read_episode(output):
             and required <= set(job["code_hashes"])):
         raise ValueError("Compound protocol/job omits required execution or validity sources")
     validate_job(protocol, job)
+    validate_limits(protocol["runtime_limits"])
+    if job["runtime_limits"] != protocol["runtime_limits"]:
+        raise ValueError("Actual technical limits differ from the frozen screen")
     physical = read_physical(output)
     rows = [json.loads(line) for line in (output / "trace.jsonl").read_text().splitlines()]
+    verify_service_records(output, job, rows)
+    scene_asset = json.loads((output / "scene-asset-readback.json").read_text())
+    if scene_asset["scene"] != job["scene"] or scene_asset["sha256"] != job["scene_asset_sha256"]:
+        raise ValueError("The actual scene readback differs from the prospective asset digest")
     results = [row["result"] for row in rows if row["type"] == "result"]
     raw = [json.loads(line) for line in (output / "episode/results.jsonl").read_text().splitlines()]
     if len(results) != 1 or raw != results:
@@ -80,6 +94,9 @@ def read_episode(output):
             or provenance["runtime_sha256"] != protocol["instrumented_runtime_sha256"]
             or provenance["study"] != "continuation-feasibility-v1"):
         raise ValueError("Actual evaluator differs from the prospectively checked compound copy")
+    if (job["native_evaluator_config_sha256"] != protocol["native_evaluator_config_sha256"]
+            or sha(output / "native-config.yaml") != protocol["native_evaluator_config_sha256"]):
+        raise ValueError("Archived native evaluator configuration differs from the frozen protocol")
     with np.load(output / "controller.npz", allow_pickle=False) as data:
         weights = data["weights"]
     closure = LatentController(weights)
@@ -105,6 +122,23 @@ def read_episode(output):
                         or image_hash != query_images[row["step"]][native_key]):
                     raise ValueError("Saved compound camera differs from the actual query/encoder input")
     ledger = physical["ledger"]
+    terminal = json.loads((output / "guardian-terminal.json").read_text())
+    limits = protocol["runtime_limits"]
+    elapsed = terminal["finished_epoch"] - terminal["started_epoch"]
+    if (terminal["exit_code"] != 0 or terminal["technical_stop_reason"] is not None
+            or terminal["started_epoch"] != job["admitted_epoch"]
+            or terminal["deadline_epoch"] != job["deadline_epoch"]
+            or not math.isfinite(elapsed) or not 0 <= elapsed
+            <= limits["full_start_wall_seconds"] + GUARDIAN_OVERRUN_SECONDS
+            or terminal["finished_epoch"] > job["deadline_epoch"] + GUARDIAN_OVERRUN_SECONDS
+            or ledger.get("initialization_finished") is not True
+            or not 0 <= ledger["initialization_completed_epoch"] - job["admitted_epoch"]
+            <= limits["initialization_wall_seconds"]
+            or ledger.get("budget_violation_reasons") != [] or counter_violations(ledger, limits)):
+        raise ValueError("The full episode exceeded a frozen technical/startup/guardian budget")
+    budgets = [row["limits"] for row in rows if row["type"] == "technical_budget_contract"]
+    if budgets != [limits]:
+        raise ValueError("Actual runtime technical guard contract is missing or different")
     count = len(features)
     if any(ledger[key] != count for key in (
         "policy_queries", "encoder_image_calls", "native_policy_requests_admitted",
