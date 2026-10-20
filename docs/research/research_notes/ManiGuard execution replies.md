@@ -1503,3 +1503,57 @@ R35 independent recheck receipt under configs/maniguard/latent-evolution. The
 offline verifier is preserved as analysis/checking-block-zero-technical-
 verification-20261020.py. All13 original and34 screen source hashes remain
 unchanged. Root will commit these exact receipts and continue the original queue.
+
+## Pre-final accounting preparation, 20 October 2026 at 13:55 UTC
+
+The previous goal turn made concrete progress: the second block-zero pair and
+367-artifact packet passed independent remote reconstruction, and the receipts
+and R35 peer recheck were pushed to main and the study branch at
+fe090c4e9739baf2139a4c8f06c52853957a3fb9. Both remote refs read back exactly.
+The original native worker remains live and advancing; this is not a stalled
+queue or a reason to restart it.
+
+I independently reconciled the50 nonchecking attempt records,47 completed and
+three infrastructure failures. Every ledger is present. All50 together retain
+the paper's83,424 controls,10,430 physical policy requests and504,727 known
+physics ticks. They also record83,894 Env.step attempts,20,860 encoded images,
+10,430 encoder image calls and47 text calls. The manual engineering-native-v4
+entry contributes32 controls/four requests/281 ticks exactly once. The three
+failed starts are retained even where callbacks have no nonzero counters;
+physics before callback attachment remains unknown.
+
+The368 decoder starts and separate CPU audit's27,412 training-row uses and5,395
+model-head row queries remain explicit. The reused ten-episode model corpus is
+not new acquisition. analysis/pre-final-cost-coverage-20261020.json pins the50
+raw ledgers and lists final reconciliation checks. This is not final accounting:
+the complete terminal comparison must reconcile client starts, returned/failed
+server calls and unresolved requests without a live-writer race, then retain
+both allocated GPUs from the provider's original start and separate billing
+uncertainty/storage/transfer. No checking outcomes were opened for this check.
+
+Revision8 adds your six R37 evidence files and explicit index, plus the block-zero
+offline verifier and compact recovery/recheck records. The377-file explicit
+manifest has3,485,441 bytes, SHA
+0be437739ee62015f036871a9d76aba6afb4bd8253caaba30e690adb2f64ccd7.
+Versions1 through7 remain unchanged. The current private checkpoint selects the
+three completed block-one EA/fixed/random starts; native is still running. It
+also includes the flat pre-final cost record. Full remote readback is pending.
+I am editing this reply and new offline evidence only, with no frozen-source,
+protocol, budget, finalist or actor change. R36 still waits for the final16.
+
+**Block-one first packet verified, 13:58 UTC.** All three selected full episodes
+passed the separate restored-array/source/action/native-monitor technical check.
+Every one of the377 indexed artifacts and the flat pre-final cost record is
+byte-identical after redownload. The pinned model revision is
+4d512d8f575cdd8e5cf253ad904f09494c4b63fc; dataset revision is
+52f30ce0413a0f123c446e6a435f04695bf552d5. Compact technical/model/dataset
+receipts use the checking-block-one-first suffix. The independently restored
+50-attempt cost-coverage record is also copied to configs/maniguard/latent-evolution
+for the final R36 audit. It explicitly remains a pre-final nonchecking record.
+
+All51 currently completed full episodes now have a technical remote replay.
+At13:58 the exact native worker71369/start394697588 had1685 controls, with
+the original coordinator live and no attention flags. No checking outcome was
+exposed or used for method decisions. No new simulator, policy or encoder call
+was made by these preservation checks. Root is publishing these receipts now;
+the remaining original queue continues unchanged.
