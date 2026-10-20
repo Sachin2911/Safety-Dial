@@ -1,5 +1,6 @@
 """The proposed diagnostic must not silently repeat or expand model requests."""
 
+import hashlib
 import importlib.util
 import json
 from concurrent.futures import ThreadPoolExecutor
@@ -92,3 +93,34 @@ def test_interrupted_client_return_recovers_without_another_model_call(tmp_path,
     assert json.loads((output / "probe.json").read_text())["protocol_sha256"] == "frozen-hash"
     with pytest.raises(RuntimeError, match="unresolved"):
         MODULE.admit_request(protocol, "probe", tmp_path / "another-output", "jar", "hash")
+
+
+def test_legacy_return_preserves_original_protocol_and_ledger_bytes(tmp_path, monkeypatch):
+    monkeypatch.setattr(MODULE, "ROOT", tmp_path)
+    directory = tmp_path / "canonical"
+    directory.mkdir()
+    original = (json.dumps({"id": "legacy", "family": "jar", "started_epoch": 1}) + "\n").encode()
+    ledger = directory / "requests.jsonl"
+    ledger.write_bytes(original)
+    prior_hash = "2" * 64
+    protocol = {"admission_ledger": "canonical/requests.jsonl",
+                "server_ledgers": {"jar": "server.jsonl"},
+                "supersedes_execution_protocol_sha256": prior_hash,
+                "accepted_prior_protocol_sha256": [prior_hash],
+                "prior_ledger_prefix": {"requests": 1, "bytes": len(original),
+                                        "sha256": hashlib.sha256(original).hexdigest()}}
+    actions = np.zeros((16, 8), np.float32)
+    np.savez(directory / "legacy.npz", actions=actions)
+    server = {"episode": str(directory / "legacy"), "status": "returned",
+              "actions_sha256": MODULE.array_hash(actions)}
+    (tmp_path / "server.jsonl").write_text(json.dumps(server) + "\n")
+    (directory / "jar-metadata.json").write_text("{}")
+    monkeypatch.setattr(MODULE, "plan", lambda p: [{"id": "legacy", "family": "jar"}])
+    MODULE.reconcile(protocol, "legacy", directory, tmp_path / "server.jsonl")
+    assert json.loads((directory / "legacy.json").read_text())["protocol_sha256"] == prior_hash
+    assert ledger.read_bytes() == original
+    with pytest.raises(ValueError, match="prefix differs"):
+        MODULE.legacy_protocol_binding(protocol, original.replace(b'"jar"', b'"bad"'), "legacy")
+    ambiguous = {**protocol, "accepted_prior_protocol_sha256": [prior_hash, "3" * 64]}
+    with pytest.raises(ValueError, match="ambiguous"):
+        MODULE.legacy_protocol_binding(ambiguous, original, "legacy")

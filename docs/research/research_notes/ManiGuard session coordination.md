@@ -19,6 +19,41 @@ remain authoritative. Versioned protocols and recorded user authorizations gover
 execution. Suggestions here are review findings, not amendments, extra compute
 allowances or instructions to override an existing user-directed hold.
 
+## Current handoff: user continuation instruction
+
+Update at 07:20:42 UTC: execution reports an explicit **Resume original comparison**
+instruction in its own session and resumed the original service at 07:18:02 UTC.
+The reviewer independently verified live coordinator PID 23619, and live workers
+23726 and 23727 with the exact recorded start ticks. They are running
+`random-g1-1-case0-a0` and `random-g1-1-case1-a0`, with 16 and 32 controls recorded
+at that observation. No additional restart is requested. The continuation
+instruction below is retained as communication history.
+
+After being told here that the physical run was held and that new candidate
+feedback was realistic within an hour of resuming, the user replied:
+
+> Ok great stuff thanks let's power on!
+
+This is the user's latest continuation instruction in the review session. I
+interpret it as the go-ahead to continue the already authorized original frozen
+comparison after the completed diagnostic, with the same actor, reward, cases,
+attempt ceilings and deadline. It does not authorize a new method or rental.
+Execution should reconcile this instruction with its latest state, perform its
+fresh process/capacity check and resume the existing durable queue if it fits.
+No additional confirmation is requested by the review session. R08 recovery
+hardening can proceed offline alongside physical execution.
+
+Review remains responsible for isolated analysis and review-owned files. Execution
+retains service, queue and protocol ownership. Please record the actual restart
+time and new attempt identities in the replies file when available.
+
+Capacity observation at 07:19:51 UTC: 16 full episodes completed, 44 planned valid
+episodes plus four replacement slots remaining. The unchanged rule requires
+43,402.824 seconds including its 900-second reserve; 43,808.772 seconds remained
+until 19:30 UTC, leaving 405.948 seconds of slack. This is a dated fit calculation,
+not an extension or a substitute for execution's admission check. Prioritize the
+authorized continuation over additional offline bookkeeping.
+
 ## Ownership and communication
 
 - The experiment session owns live execution, services, run state, scientific
@@ -415,3 +450,91 @@ proposal while completing the immediate diagnostic/continuation decision. A
 larger penalty or an action veto cannot manufacture missing grasp/closure skills;
 establish task-progress headroom and useful safe alternatives first. Do not
 silently replace the current experiment with a new three-component stack.
+
+## Stable-patch review, 20 October 2026 at 07:14 UTC
+
+I read execution's 07:12 update and independently ran the eight focused diagnostic
+and accounting tests; all passed in 0.21 seconds. An additional temporary-fixture
+check started with 47 admissions and two concurrent distinct request IDs in two
+output directories. Exactly one was admitted and the ledger ended at 48. The
+canonical lock therefore protects the final global slot, as well as duplicate IDs.
+The current accounting helper also correctly follows a recorded alternative output
+directory for its returned receipt. No real records were changed and no inference
+or physical work was used in these checks.
+
+The completed diagnostic has 24 returned calls per family, all eight same-noise
+pairs passing, no 0.5-amplitude command flips, and amp-2 flips on 3/4 Jar and 4/4
+Clutter inputs. The positive amp-2 direction opens the gripper in all four Clutter
+frames, including the two factual held-target frames. The negative direction closes
+it in the two safe unfinished Jar-bias frames. That is useful directional authority
+information, but a changed sign during an existing grasp could also release the
+target. Continue to call this influence, with conditional timing still untested.
+
+### R08: Recover inherited v2 admissions without rewriting their provenance
+
+Priority: recovery correctness; not a reason to extend the physical hold.
+Status: reproducible source finding, execution-owned fix requested.
+
+The first 24 Jar request rows use the original v2 schema: `id`, `family` and
+`started_epoch`. Their frozen prefix has no `protocol_sha256` or `output` fields.
+The new `reconcile()` permits their original canonical output via its fallback,
+but constructing a recovered client receipt indexes
+`admitted[0]["protocol_sha256"]`. A valid legacy row, matching saved action array,
+unique server receipt and family metadata therefore raises
+`KeyError: 'protocol_sha256'` instead of recovering the interrupted artifact.
+I reproduced this with an isolated temporary fixture against the current script.
+The newly added recovery test covers only v3 admissions made by `admit_request()`.
+Both Jar and Clutter metadata files do exist in the actual diagnostic directory.
+
+All 48 actual client receipts are currently intact. This finding does not invalidate
+their results, imply uncharged work or justify extra model calls. It concerns the
+advertised recovery path for the already charged, inherited Jar portion.
+
+Suggested fix: derive the legacy request's protocol binding from its membership in
+the byte-verified prior prefix and an explicitly pinned v2 protocol hash or migration
+manifest. Require an unambiguous binding, preserve the original ledger bytes and
+use that original protocol hash in the recovered client receipt. A generic fallback
+to the new protocol hash or an arbitrary accepted-prior list element loses
+provenance. Add a legacy-prefix regression check and reject modified or ambiguous
+prefixes. This can be repaired and tested offline without reopening the diagnostic
+or delaying the already requested physical continuation decision.
+
+The review session will keep the R05 source stable for execution's next commit.
+Please include its three new source/test files when integrating the mailbox, and
+retain or preserve the 96 KB reviewer JSON if useful; all its inputs and source
+hashes are included, so it can also be regenerated at a new output path.
+
+## User status request, 20 October 2026 at 07:18 UTC
+
+The user asks how the collaboration is going and whether useful results or feedback
+can arrive within the next hour. I explained that diagnostic feedback already exists,
+and that new physical candidate outcomes within about an hour are realistic after
+resumption, based on recent paired waves taking roughly 22 to 24 minutes. In the
+frozen order the next new random candidate precedes the first new EA candidate;
+two conservative waves allow roughly 59 minutes. This is an estimate, not a
+promised comparative win or a completed audit.
+
+Please prioritize the current continuation decision and give an actual start time
+and next-result estimate in the replies file. Reconcile the latest user instruction
+with existing authorization for the original comparison. If it already permits
+resumption after diagnosis, no repeat approval is needed for that unchanged work.
+If a newer explicit hold requires a decision, retain that boundary rather than
+treating this status question as authorization. R08 is offline recovery hardening
+and should not delay an otherwise authorized, capacity-fitting physical resume.
+
+At the last observed queue snapshot there were 16 completed full episodes, no live
+physical attempts and no sealed finalists. I will not independently start services
+or modify the running protocol.
+
+## R08 verification, 20 October 2026 at 07:20 UTC
+
+The reviewer independently ran
+`test_legacy_return_preserves_original_protocol_and_ledger_bytes`; it passed in
+0.20 seconds. The implementation binds legacy requests to the unique, byte-verified
+prior prefix and pinned original protocol, and the test covers prefix corruption
+and ambiguous binding. R08 is addressed. No actual diagnostic artifact was changed
+or repeated by this verification.
+
+The original physical comparison is now confirmed live. Review can continue on
+offline diagnosis, attribution and reporting while the two new candidate episodes
+run. Execution's ownership and the frozen comparison conditions remain intact.

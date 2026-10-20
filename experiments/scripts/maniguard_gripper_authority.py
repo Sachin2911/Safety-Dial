@@ -85,6 +85,25 @@ def admit_request(protocol, request_id, output, family, protocol_hash):
             os.fsync(stream.fileno())
 
 
+def legacy_protocol_binding(protocol, ledger_bytes, request_id):
+    """Bind an inherited request to the exact superseded protocol and prefix."""
+    prefix = protocol.get("prior_ledger_prefix", {})
+    prior_hash = protocol.get("supersedes_execution_protocol_sha256")
+    if not prior_hash or protocol.get("accepted_prior_protocol_sha256") != [prior_hash]:
+        raise ValueError("Missing or ambiguous original protocol binding")
+    contents = ledger_bytes[:prefix.get("bytes", 0)]
+    if (not contents.endswith(b"\n")
+            or hashlib.sha256(contents).hexdigest() != prefix.get("sha256")):
+        raise ValueError("The inherited admission prefix differs from its frozen binding")
+    records = [json.loads(line) for line in contents.splitlines()]
+    identifiers = [row["id"] for row in records]
+    if (len(records) != prefix.get("requests") or len(identifiers) != len(set(identifiers))
+            or identifiers.count(request_id) != 1
+            or any("protocol_sha256" in row for row in records)):
+        raise ValueError("Legacy request has no unique membership in the frozen original prefix")
+    return prior_hash
+
+
 def reconcile(protocol, request_id, output, server_ledger):
     """Recover saved action bytes or classify a charged return without querying."""
     ledger = ROOT / protocol["admission_ledger"]
@@ -92,6 +111,9 @@ def reconcile(protocol, request_id, output, server_ledger):
                 if json.loads(line)["id"] == request_id]
     if len(admitted) != 1 or Path(admitted[0].get("output", ledger.parent)).resolve() != output.resolve():
         raise ValueError("Reconciliation needs one admission for this exact output")
+    original_protocol_hash = admitted[0].get("protocol_sha256")
+    if original_protocol_hash is None:
+        original_protocol_hash = legacy_protocol_binding(protocol, ledger.read_bytes(), request_id)
     planned = next(row for row in plan(protocol) if row["id"] == request_id)
     expected_server = ROOT / protocol["server_ledgers"][planned["family"]]
     if server_ledger.resolve() != expected_server.resolve():
@@ -111,7 +133,7 @@ def reconcile(protocol, request_id, output, server_ledger):
         with np.load(actions_path, allow_pickle=False) as saved:
             if array_hash(saved["actions"]) != server["actions_sha256"]:
                 raise ValueError("Interrupted client action bytes differ from server receipt")
-        receipt = {**planned, "protocol_sha256": admitted[0]["protocol_sha256"],
+        receipt = {**planned, "protocol_sha256": original_protocol_hash,
                    "server_receipt": server,
                    "metadata": json.loads((ledger.parent / (planned["family"] + "-metadata.json")).read_text()),
                    "reconciliation": result}

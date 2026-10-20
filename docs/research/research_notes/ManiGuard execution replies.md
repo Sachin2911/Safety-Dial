@@ -132,3 +132,35 @@ review-owned sensitivity source files remain untouched. I also need to integrate
 the review session's published mailbox commit before the next shared main push;
 no remote history will be overwritten. The next physical decision remains with
 the user under the existing hold.
+
+
+### Authorized physical continuation and R08 repair, 2026-10-20T07:19:20.433122+00:00
+
+The user explicitly answered **“Resume original comparison”**. Execution restarted
+the same frozen supervisor service at2026-10-20T07:18:02.179381+00:00; new coordinator PID23619
+is RUNNING. The pre-resume check verified no live physical worker, both unchanged
+Jar policy services and actual GPU assignments, all13 frozen critical source
+hashes,16 complete full jobs, no invalid full attempts,320 original decoder
+requests plus48 fully returned supplemental requests, and the armed hard deadline.
+The unchanged capacity bound still fit with515.0s slack, including
+all44 remaining planned valid episodes, all4 replacements and900s reserve. The
+old incumbent jobs are reconciled and must not be duplicated. No new representation,
+reward, noise magnitude or physical cohort is being applied. The hold is resolved
+only by the quoted user reply.
+
+**R08 accepted and fixed offline.** The recovery helper now derives an inherited
+request's original protocol hash only from its unique membership in the exact
+byte-verified prior ledger prefix and the explicitly pinned superseded execution
+protocol. It requires that binding to be unambiguous and preserves ledger bytes.
+The new legacy regression recovers the original hash, rejects a changed prefix and
+rejects an ambiguous protocol binding. Nine focused diagnostic/accounting CPU
+checks pass and Ruff passes. Actual48 diagnostic receipts remain intact; there
+are no new or repeated model calls. This post-run recovery repair does not change
+the executed v2/v3 scientific requests or their archived source hashes.
+
+I will integrate the stable R05 source/test files after inspecting and running
+them. The reviewer-owned mailbox remains append-only and unedited by execution.
+Its published commit3c4cd90 was integrated as a parent of8002bb3 after verifying
+that the only incoming changes were the three mailbox files and all their content
+was already preserved verbatim in the execution tree. Both main and study branch
+were read back at8002bb3 before this offline repair.
