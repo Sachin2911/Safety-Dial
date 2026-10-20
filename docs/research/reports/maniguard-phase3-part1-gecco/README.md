@@ -1,8 +1,42 @@
 # ManiGuard shared GECCO-format report
 
-For the **19 October supervisor check-in**, open
-[draft.pdf](draft.pdf) and the
-[one-page meeting brief](meeting-brief.pdf). The paper draft uses the same ACM
+Open **[draft.pdf](draft.pdf)** for the current native-noise controller paper,
+updated on 20 October 2026. Its article source is
+[native-noise-paper.tex](native-noise-paper.tex), included by `draft.tex`.
+It describes the 176-parameter observation/instruction-conditioned adapter,
+native-sampling identity, the completed 320-call decoder audit and four full
+development episodes, and the frozen native/fixed/EA/random-search Jar comparison.
+The optimizer comparison is running. Comparative rates and finalist results are
+pending and are not inferred from development outcomes. The original cumulative
+report, its historical figures and numerical results remain in `main.tex`/`named.pdf`.
+
+The new [protocol](../../../../configs/maniguard/latent-evolution/capacity-20261020-v2.json),
+[development summary](../../../../configs/maniguard/latent-evolution/development-summary-20261019.json),
+[study report](../ManiGuard%20latent%20evolution%20pilot.md) and
+[study README](../../../../configs/maniguard/latent-evolution/README.md) supply exact
+task/seed lists, costs, source pins and restoration instructions. The current build
+receipt is `latent-build-20261020.json`. The paper distinguishes implemented paths,
+decoder responses, physical development evidence and pending comparisons. Ordinary
+learning, optimizer replication and cross-family adapter transfer remain untested.
+
+Build the current paper with `make paper TECTONIC=/path/to/tectonic` (`make` also
+selects it). Tectonic 0.17.0 is pinned by the build receipt. The added figure uses
+only the committed numerical development summary, with zero new physics/model calls:
+
+```bash
+uv run --isolated --no-project --python /usr/bin/python3 \
+  --with matplotlib==3.10.7 --with pymupdf==1.26.7 \
+  python experiments/scripts/maniguard_latent_paper_assets.py
+```
+
+Run the figure command at the repository root. The plotting dependencies are isolated
+from the simulation/policy environments. Its new figure and source/hash receipt live
+under `docs/research/figures/ManiGuard/latent-evolution/`. Closest primary sources are
+recorded separately in `latent-references.bib`; the historical bibliography is retained.
+
+The following notes describe the **19 October supervisor check-in**, including its
+[paper PDF at the preserved main revision](https://github.com/Sachin2911/Safety-Dial/blob/4783369c5b599580e26f9c3a2723ee55518c46a3/docs/research/reports/maniguard-phase3-part1-gecco/draft.pdf)
+and [one-page meeting brief](meeting-brief.pdf). That paper draft uses the same ACM
 format with a focused research narrative, formal controller equations, three
 algorithms, an information-flow diagram and the completed saved-trace recovery
 diagnostic. The original cumulative report below remains unchanged.
@@ -40,7 +74,10 @@ complete historical gallery remains below. The presentation does not turn the
 native monitor into an action filter. The [private preservation receipt](../../research_notes/ManiGuard%20recovery%20checkin%20videos.json)
 verifies all five uploaded files by download and SHA-256.
 
-Build these new documents with `make checkin TECTONIC=/path/to/tectonic`.
+The meeting brief remains the historical 19 October document. Its paper source
+is recoverable at the preserved revision above; `make paper` builds the current
+native-noise article. Build the historical brief with
+`make meeting-brief.pdf TECTONIC=/path/to/tectonic`.
 Reproduce the diagnostic in a dedicated uv-managed CPU environment, without syncing
 the root project into ManiGuard's simulation/policy environments:
 

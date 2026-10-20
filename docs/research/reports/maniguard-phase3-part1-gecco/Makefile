@@ -1,8 +1,9 @@
 TECTONIC ?= tectonic
-.PHONY: all checkin clean
-all: named.pdf
+.PHONY: all paper checkin clean
+all: draft.pdf
+paper: draft.pdf
 checkin: draft.pdf meeting-brief.pdf
-draft.pdf: draft.tex references.bib $(wildcard ../../figures/ManiGuard/phase3-recovery/*.pdf)
+draft.pdf: draft.tex native-noise-paper.tex references.bib latent-references.bib $(wildcard ../../figures/ManiGuard/latent-evolution/*.pdf)
 	$(TECTONIC) -k --keep-logs draft.tex
 meeting-brief.pdf: meeting-brief.tex $(wildcard ../../figures/ManiGuard/phase3-recovery/*.pdf)
 	$(TECTONIC) -k --keep-logs meeting-brief.tex
