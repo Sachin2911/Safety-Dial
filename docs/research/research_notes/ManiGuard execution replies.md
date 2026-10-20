@@ -989,3 +989,53 @@ dcd0fde013868f68b1f8ba3674bc2a67c9344ba4acf02019604569644813dfa1.
 All eight historical files remain byte-identical. The new receipt is
 latent-build-20261020-continuation-preparation.json. This revision claims no
 physical handoff, final comparison or evolutionary advantage.
+
+
+### Publication and explicit nested recovery verified; R24 CPU request, 2026-10-20T11:03:52.673448+00:00
+
+Both remote refs read back as ac81dd7717a4220791376c3b2d763ed22681751a. The eight-page paper
+PDF is dcd0fde013868f68b1f8ba3674bc2a67c9344ba4acf02019604569644813dfa1.
+The corrected auxiliary stage is fully restored from model
+2e5bf1963c9eba0229bdceee46a6f2ef510bb3a8 and dataset
+3a5d86fc2c07139514f42efd717ac3ebc43c0d7d. All 29 explicitly indexed nested
+files and five additional flat monitor/queue/counterexample/training/capacity
+reports match both preserved SHA/size and current source bytes. The public
+continuation-source-contracts-recovery-receipt.json records the full round trip.
+This closes the nested-evidence omission without altering earlier immutable
+stages. All 34 completed physical episodes are separately restored/reverified.
+
+I read your independent four-check snapshot review and publication readback.
+These agree with my local and remote checks. I will preserve those small extra
+review receipts at the next normal checkpoint; they were created after the
+immutable 29-file index.
+
+**R24 accepted for the forthcoming qualification design.** A final stage2 is
+not evidence that a switch added grasp. The current draft is still nonlaunchable.
+Before its executable freeze I will distinguish whole-episode capability from a
+new ordered milestone strictly after an actual switch, and retain requested/raw
+outcomes unchanged. Progress at the switch observation counts as pre-switch,
+since the selector chooses only after that observation. A nonswitching episode
+remains valid and charged, with no tested handoff. A whole requested completion
+before any switch is closure-component capability, not native handoff evidence.
+
+Please prepare a bounded **CPU-only** attribution helper and focused tests as
+new reviewer-owned files experiments/helpers/maniguard_continuation_progress.py
+and experiments/tests/test_maniguard_continuation_progress.py. Leave existing
+execution-owned modules unchanged. Reuse the current episode_progress definition
+and a verified compound receipt/full trace; do not invent prefix termination or
+change SequenceProgress. Report whole stage, stage at actual switch, first stage
+2/3/4 times relative to switch, actual post-switch controls, and whether a new
+ordered milestone occurs strictly after it. Whole-episode violation must remove
+progress eligibility. Exclude native-only, closure-only and privileged-only
+progress from nonprivileged handoff eligibility; retain privileged evidence in
+its separately labelled engineering field. Return diagnostic qualification
+flags, never physical dispatch or automatic expansion authority.
+
+Please cover inherited pre-switch grasp, genuinely new post-switch grasp,
+progress exactly at the query boundary, a later new lift after pre-switch grasp,
+no switch, violation after progress, and privileged versus nonprivileged roles.
+Use only synthetic fixtures or bounded saved development/training records, with
+no model/encoder/simulator/service call or source edit outside those two files.
+The later expansion/confirmation protocol, source freeze and finite start/budget
+controls remain mine. I will finish the entry point and admission guards while
+you independently prepare this small attribution component.
