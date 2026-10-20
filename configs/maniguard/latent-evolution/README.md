@@ -117,8 +117,24 @@ completed episodes and exports requested-sequence and raw benchmark outcomes,
 failed and partial attempt costs, decoder authority, candidate ancestry and curves,
 and initial-image differences within independent audit blocks when available.
 Shared initialization appears in each optimizer's data curve but is counted once
-in the global physical-cost ledger. This exporter does not certify preservation
+in the global physical-cost ledger. Method curves include known controls and queries
+from failed attempts before a replacement, with separate valid/invalid controls and
+unknown-counter attempt counts. A missing counter is not an observed zero.
+This exporter does not certify preservation
 or completion of the full research objective.
+
+`maniguard_latent_validate.py --run RUN --protocol SELECTED_PROTOCOL
+--output RUN/analysis` independently reconstructs initial matrices, both optimizers'
+offspring and RNG transitions, recorded fitness, fixed/finalist selection, exact
+physical cases and seeds, native query intervals, actual camera/robot receipts,
+comparison GPU placement and attempt ceilings. It writes `design-verification.json`.
+Its default exit status is two when required work is pending or contradictory;
+`--allow-incomplete` permits a partial report with no contradictions and starts no
+physics or model queries. It does not certify remote preservation or the scientific
+interpretation. Early Jar development records planned GPU mapping rather than the
+per-process UUID receipts introduced before Clutter and the comparative allocation;
+the verification report explicitly retains this limitation. All comparative episodes
+require actual simulator and policy GPU receipts.
 
 `helpers.maniguard_latent_learning.ParameterReinforce` supplies the requested
 ordinary-learning interface for a separately budgeted comparison. It learns a

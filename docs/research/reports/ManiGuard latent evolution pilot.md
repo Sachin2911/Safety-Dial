@@ -59,6 +59,40 @@ with one colocated simulator and policy per GPU. They share one admission ledger
 64-full-attempt limit. GPU placement rotates between training generations and balances
 every final comparison condition across the two GPUs.
 
+## First shared initialization observations and verification
+
+The first native pair completed both 2,000-control horizons on training tasks
+0019/0009 at seeds 6101910/6101911. Neither completed the requested task. Task 0019
+recorded a violation and grasping; task 0009 recorded contact without grasping and
+no violation. These are one unsafe unfinished and one safe unfinished episode,
+not two safe outcomes. The [compact pair receipt](../../../configs/maniguard/latent-evolution/initial-native-pair-summary-20261020.json)
+preserves the individual cases, source/controller hashes and evidence timestamp.
+These remain shared training observations; they do not supply an independent
+comparison or an estimate of a bias benefit.
+
+A separate [design verifier](../../../experiments/helpers/maniguard_latent_completion.py)
+now reconstructs the frozen initial matrices, offspring, RNG progression, recorded
+fitness and finalist choices. It checks cases/seeds, native execution and query
+intervals, actual comparison GPU receipts, all attempt ceilings and thirteen
+critical source hashes against the frozen source commit. Its
+[first partial receipt](../../../configs/maniguard/latent-evolution/design-verification-20261020-initial.json)
+verifies six valid full episodes with no contradictions and explicitly retains
+the pending comparison. The two earlier Jar development episodes have planned
+device mapping rather than the per-process UUID receipts introduced before
+Clutter and comparative execution; the verifier records that limitation.
+
+Nine targeted CPU checks pass for completion verification and cost reporting,
+including adverse cases with a changed finalist, case, device, offspring, source,
+early audit or excess replacements. Per-method curves now include known controls
+and queries from failed attempts before replacements and count unknown counters
+explicitly. This software work adds no physics, decoder queries or encoder calls.
+
+The five-page [current GECCO draft](maniguard-phase3-part1-gecco/draft.pdf) was
+built, visually checked and pushed to `main` at `82c885a`. It presents the new
+method, frozen comparison, completed development evidence and primary related
+work. Comparative results remain pending. Its historical cumulative report and
+recorded figures/results are unchanged.
+
 ## Full development episodes
 
 | Family and controller | Task, seed | Controls | Policy calls | Requested completion | Violation | Score |

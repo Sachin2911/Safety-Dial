@@ -153,22 +153,36 @@ def search_curves(run, queue, verified):
     if not path.exists():
         return []
     state = json.loads(path.read_text())
+    attempts = {row["id"]: row for row in queue["attempts"]}
     rows = []
     for method in ["ea", "random"]:
         cumulative_controls, cumulative_queries, best = 0, 0, None
+        cumulative_unknown_controls, cumulative_unknown_queries = 0, 0
         candidates = state["optimizers"][method]["candidates"]
         for index, candidate in enumerate(candidates):
-            controls, queries, scores = 0, 0, []
+            controls, queries, valid_controls, scores = 0, 0, 0, []
+            unknown_controls, unknown_queries = 0, 0
             for case in range(2):
                 job = queue["jobs"][f"{candidate['id']}-case{case}"]
                 receipt = verified[job["attempt_ids"][-1]]
                 scores.append(receipt["score"])
-                controls += receipt["physical"]["ledger"]["policy_control_steps"]
-                queries += receipt["physical"]["ledger"]["policy_queries"]
+                valid_controls += receipt["physical"]["ledger"]["policy_control_steps"]
+                for attempt_id in job["attempt_ids"]:
+                    if attempt_id in verified:
+                        ledger = verified[attempt_id]["physical"]["ledger"]
+                    else:
+                        ledger_path = Path(attempts[attempt_id]["output"]) / "ledger.json"
+                        ledger = json.loads(ledger_path.read_text()) if ledger_path.exists() else {}
+                    unknown_controls += ledger.get("policy_control_steps") is None
+                    unknown_queries += ledger.get("policy_queries") is None
+                    controls += ledger.get("policy_control_steps") or 0
+                    queries += ledger.get("policy_queries") or 0
             if candidate["scores"] != scores:
                 raise ValueError("Optimizer fitness differs from independently verified physics")
             cumulative_controls += controls
             cumulative_queries += queries
+            cumulative_unknown_controls += unknown_controls
+            cumulative_unknown_queries += unknown_queries
             score = sum(scores)
             best = score if best is None else max(best, score)
             rows.append({"method": method, "candidate": candidate["id"],
@@ -176,6 +190,12 @@ def search_curves(run, queue, verified):
                          "generation": candidate["generation"],
                          "score_sum": score, "best_observed_score_sum": best,
                          "candidate_controls": controls, "cumulative_controls": cumulative_controls,
+                         "candidate_valid_controls": valid_controls,
+                         "candidate_invalid_controls": controls - valid_controls,
+                         "candidate_unknown_control_attempts": unknown_controls,
+                         "candidate_unknown_query_attempts": unknown_queries,
+                         "cumulative_unknown_control_attempts": cumulative_unknown_controls,
+                         "cumulative_unknown_query_attempts": cumulative_unknown_queries,
                          "cumulative_policy_queries": cumulative_queries,
                          "shared_initial_data": index < 4})
     return rows

@@ -32,3 +32,32 @@ def test_partial_report_preserves_requested_sequence_and_failed_start_cost(tmp_p
     assert not result["physical_comparison_complete"]
     assert not result["full_goal_completion_assessed"]
     assert len((tmp_path / "analysis/attempts.csv").read_text().splitlines()) == 3
+
+
+def test_method_cost_curves_include_failed_and_unobserved_attempts(tmp_path):
+    search = tmp_path / "search"
+    search.mkdir()
+    candidate = {"id": "initial-0", "generation": 0, "scores": [-2, 0]}
+    (search / "state.json").write_text(json.dumps({
+        "optimizers": {method: {"candidates": [candidate]} for method in ("ea", "random")}}))
+    failed = tmp_path / "partial"
+    failed.mkdir()
+    (failed / "ledger.json").write_text(json.dumps({"policy_control_steps": 17,
+                                                  "policy_queries": 3}))
+    queue = {"attempts": [{"id": "failed", "output": str(failed)},
+                          {"id": "unobserved", "output": str(tmp_path / "missing")}],
+             "jobs": {"initial-0-case0": {"attempt_ids": ["unobserved", "failed", "valid0"]},
+                      "initial-0-case1": {"attempt_ids": ["valid1"]}}}
+    verified = {"valid0": {"score": -2, "physical": {"ledger": {
+        "policy_control_steps": 100, "policy_queries": 13}}},
+        "valid1": {"score": 0, "physical": {"ledger": {
+            "policy_control_steps": 2000, "policy_queries": 250}}}}
+    curves = report.search_curves(tmp_path, queue, verified)
+    assert len(curves) == 2  # The shared acquisition belongs to both information budgets.
+    for row in curves:
+        assert row["candidate_controls"] == row["cumulative_controls"] == 2117
+        assert row["candidate_valid_controls"] == 2100
+        assert row["candidate_invalid_controls"] == 17
+        assert row["cumulative_policy_queries"] == 266
+        assert row["cumulative_unknown_control_attempts"] == 1
+        assert row["cumulative_unknown_query_attempts"] == 1
