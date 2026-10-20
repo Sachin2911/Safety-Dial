@@ -24,9 +24,11 @@ allowances or instructions to override an existing user-directed hold.
 <!-- BEGIN REVIEW STATUS INDEX -->
 **Current review index.** Detailed evidence and exact receipts follow below.
 
-- **R21 next physical test:** the separately frozen four-total-start closure/
-  native-continuation screen follows original60 completion, physical preservation
-  and fresh resource admission. The existing48-call gripper diagnostic already
+- **R21 current physical test:** the separately frozen four-total-start closure/
+  native-continuation screen started at16:07 after original60 completion,
+  physical/analysis preservation and fresh resource admission. Its first native/
+  closure reference pair is live; handoff conditions are the predeclared second
+  wave. The existing48-call gripper diagnostic already
   shows no executed-command flips at amplitude0.5 and directional flips at2.0,
   including opening on held Clutter inputs. Phase timing remains untested; the
   screen tests native continuation after a closure prefix. The CPU world-model
@@ -52,8 +54,9 @@ allowances or instructions to override an existing user-directed hold.
   This does not waive original completion, preservation or actual resource gates.
 - **R32:** requested saved-trace gripper audit is prepared as three new analysis
   files, with15 passing synthetic cases and clean Ruff. Accepted and independently
-  reproduced by the execution owner, who now owns the three stable files. No
-  actual screen exists yet; all four complete verified starts are required.
+  reproduced by the execution owner, who now owns the three stable files. The
+  physical screen has started; all four complete verified starts are required
+  before running this full-screen audit.
 - **R33:** nonblocking attribution clarification: R24 eligibility flags concern
   new ordered milestones. The frozen alternative of first confirmed requested
   completion after switching needs separate interpretation, including native
@@ -88,6 +91,11 @@ allowances or instructions to override an existing user-directed hold.
   the existing ea-g2-2 has[1,0] with no violation in either case. A diagnostic
   progress tie-break distinguishes that safe closure, without establishing full
   completion or an optimizer gain. No current fitness or screen choice changes.
+- **R41:** original60 paper publication independently verified at828d34e8 on both
+  public branches. All16 declared current files and eight historical files match
+  the published Git objects; the historical files also match launch4783369.
+  The external decoder figure matches the source-parent and publication. All
+  nine owner-rendered pages were inspected, without a new build or render.
 - Last verified original evidence at15:53 UTC:60/60 full completions and all16
   checking outcomes pass complete design verification. The complete owner remote-
   restoration proof now exists and matches my original-record export on all60
@@ -95,7 +103,42 @@ allowances or instructions to override an existing user-directed hold.
   owner's remote download/replay. The separate screen directory is still absent;
   actual admission remains with fresh live resource and preservation clearance.
   R21 choices stay fixed and cannot use checking feedback for tuning.
+- Current screen observation at16:12 UTC: exactly2 charged starts, both wave0
+  references. Native guardian86506/start395576222 and closure guardian86513/
+  start395576231 match live `/proc` identities, at384/370 controls. The owner
+  accepted R36/R40 and reports complete528-file private original-analysis recovery.
+  No physical handoff result is available; revalidate handles before decisions.
 <!-- END REVIEW STATUS INDEX -->
+
+**R41 original60 paper publication review.** Fresh public `git ls-remote` confirms
+main and `maniguard/latent-evolution-20261019` both at
+`828d34e8a2d13180523ae7dcc99d3584d920e88a`. I compared the build receipt and
+every one of its16 current file hashes with actual published Git objects. All
+match. All eight historical files also match both the publication and the
+recorded launch commit. The separately included decoder-authority PDF, SHA
+`62c3e32f0ebd44d96a30e5ae3e22319e188b90a466e6a52826c785531e24b0e7`,
+is outside the16-file map but equals both the recorded source-parent and the
+publication. This reviewer record binds it separately. No asset reconstruction
+failure is inferred from that map's scope.
+
+The nine owner-rendered page images were individually inspected. The new
+checking table, full-category counts, six contrasts, unsafe raw goals, SFT/native
+meaning, original accounting, failed CPU gate and engineering-screen scope agree
+with R36 and the actual admission. No visible clipping was found. This review
+did not rebuild LaTeX or independently rerender the PDF. A nonblocking wording
+suggestion for the next paper edit is to state that the camera MAE and quantile
+values use RGB normalized to[0,1]. The raw audit stores0..255 channel units;
+the reported fractions are their normalized equivalents. No immediate new paper
+build or physical hold is requested for this clarification.
+
+Evidence: `runs/reviewer/original60-publication-review-20261020-01/receipt.json`,
+SHA `a713a6fdabb7975f6d140d53f14041ff2d37fa32fdb137d6718efac6f374ab28`;
+explicit index SHA
+`c8cf240f756258f092cf540b4056dc82aea43bfa6b272dde64fddb6d36e9ee58`,
+2 files /13,835 bytes, including the exact owner build receipt. Current PDF SHA
+is `e8c0177f62014095843c473aa7e64d260ba4441856bbbd591fa3b63ba4189216`.
+This verifies the published negative pilot and its scoped preparation, not GECCO
+novelty, acceptance, final submission pagination or a physical continuation gain.
 
 **R40 factual fitness-information audit.** I tested the sparse-fitness explanation
 against all40 completed comparison-training episodes, with all16 checking outputs

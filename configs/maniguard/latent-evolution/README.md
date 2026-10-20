@@ -4,7 +4,7 @@ This is the new 19 October study. The historical phase-two source manifest suppl
 code and asset identifiers. Its coordinator and earlier studies are not launched.
 `development-v1.json` freezes development before behavior. `platform-v1.json` through
 `platform-v3.json` preserve the measured infrastructure repairs and their costs.
-A capacity-selected pilot protocol is required before physical search can start.
+A capacity-selected pilot protocol was frozen before physical search started.
 
 The original frozen pilot is now complete:60 full episodes,16 protected checking
 episodes, zero invalid full starts. Every checking condition has0/4 safe requested
@@ -25,6 +25,60 @@ reviewer packet:528 immutable indexed artifacts, all restored and byte-checked.
 The separately frozen four-total-start continuation screen is underway only after
 these original prerequisites and fresh physical resource/service gates pass. It
 has its own run/ledger and cannot replace or amend the completed comparison.
+
+The completed original study's portable catalog is
+`preservation-catalog-20261020-original60.json`. It embeds all84 exact preservation
+receipts across42 immutable stages, including the final analysis and paper. All33
+preservation source commits are ancestors of the published source. The materialization
+receipt records actual byte-for-byte reconstruction of all84 receipts. This is
+additional to the separately completed physical replay; it does not claim another
+full download/replay. `original60-paper-review-recovery-20261020.json` records the
+latest private round trip:547 selected artifacts, including the nine-page published
+paper and the training-only fitness audit. Original accounting uses the frozen
+pre-screen server prefixes. Later global service snapshots may also contain
+separately charged screen requests.
+
+To reconstruct receipts from Git alone, use a fresh directory and the tools Python:
+
+```python
+import hashlib
+import json
+from pathlib import Path
+
+catalog = json.loads(Path(
+    "configs/maniguard/latent-evolution/preservation-catalog-20261020-original60.json"
+).read_text())
+destination = Path("NEW_RECEIPT_DIRECTORY")
+destination.mkdir()
+receipts = []
+for i, stage in enumerate(catalog["ordered_main_run_stages"]):
+    for receipt in stage["preservation_receipts"]:
+        data = receipt["raw_json"].encode()
+        assert hashlib.sha256(data).hexdigest() == receipt["receipt_sha256"]
+        path = destination / f"{i:03d}-{receipt['repo_type']}-receipt.json"
+        path.write_bytes(data)
+        receipts.append(str(path))
+```
+
+Pass those paths, in that order, to `maniguard_latent_recover.py --receipts ...
+--output NEW_STAGING_DIRECTORY`, using the existing private-repository credential
+in the environment. The recovery script verifies privacy, pinned revisions,
+manifests and archive hashes before extraction. It starts no service or simulator.
+The separate failed CPU model is a zip referenced by the catalog, not a tar-stage
+receipt to pass to this command.
+
+`original60-canonical-layout-20261020.json` maps all66 archived episode directories
+to their original canonical destinations. On a fresh host at `/workspace/Safety-Dial`,
+copy `merged/run` metadata into a new canonical run, then place each merged episode
+directory at that mapping, preserving all job/queue bytes. Restore `search`,
+`initial-controllers` and `analysis` from the matching merged directories. Copy the
+original clearance from its explicitly recorded analysis snapshot into the run root.
+Materialized receipts can populate `backups/STAGE/{model,dataset}-receipt.json`;
+rebuild the backup index from the catalog's ordered stages and their episode lists.
+Copied PIDs, watchdogs and historical commands remain evidence, not live processes
+or instructions to resume. The existing validator and restored-physical verifier
+can then check the original comparison without neural inference or new physics.
+Environment, upstream source and separately licensed asset setup are described below.
 
 The authorized instance is 56777435. On 20 October the user explicitly authorized
 the full comparison and prioritized the contribution/result. The current deadline

@@ -1972,3 +1972,51 @@ Four total starts including failures, zero replacements and zero extra decoder
 probes remain binding. Root is updating and building the original60 paper during
 execution. Please keep the frozen sources/protocol stable; no outcome or causal
 benefit is claimed before full verification.
+
+
+## R40 accepted as a factual selection diagnosis, separate future method
+
+The reviewer training-only audit is accepted and being privately preserved with
+its exact script, full factual panel analysis, diagnostic tie comparisons and
+receipt. It changes the diagnostic preferred panel in2/5 observed cohorts: EA
+generation two and random generation one. The actual frozen utility/tie rule
+remains authoritative; no sealed finalist, original result or screen choice is
+changed. Safe closure and safe inactivity tying at zero is a concrete limitation
+of the current fitness information. A progress secondary objective could preserve
+partial behaviour in a future protocol, but this audit does not simulate a changed
+search history, predict checking success or establish an EA advantage. Future
+fitness/controller changes need their own frozen matched budgets and fresh checks.
+
+The original60 paper/PDF and compact results are now committed and pushed to main
+and the study branch at828d34e8a2d13180523ae7dcc99d3584d920e88a. Fresh remote
+readback confirms both heads. All nine pages were individually inspected; no
+overflow or unresolved references. The historical eight files match launch4783369.
+The paper explicitly identifies the family-fine-tuned Jar LoRA checkpoint at7400.
+The two live first-wave screen trials are progressing, with no method/source edit.
+
+
+## R41 accepted; complete-screen review request
+
+Accepted the independent published-Git/hash/layout review within its stated scope.
+Its selected two-file packet and index are copied for the next explicit analysis
+preservation. The decoder-authority figure keeps its separately bound SHA. The
+next final paper edit will explicitly say the camera MAE/quantiles use RGB in[0,1].
+No rebuild, new measurement or physical hold is needed for this wording note.
+
+The published original60 paper and R40 audit have now actually round-tripped
+privately: modela69aab2370ac8801787fe04697f90f21c662df19, dataset
+60473a9747ae49a7696afe7c34a9366a36d97f19, all547 selected files/20,443,227
+bytes verified. The new portable original60 catalog embeds84 exact receipts for
+42 stages, all actually materialized identically; all33 source commits are
+ancestors of the pushed paper source. A canonical66-directory layout map retains
+all60 full episodes and six engineering starts for fresh-host reconstruction.
+
+After all four frozen screen starts finish and their complete reader/attribution
+checks pass, please independently inspect those saved records using R32/R24/R33,
+including executed gripper commands, measured finger positions, actual switch and
+remaining horizon, ordered post-switch milestones and whole-episode outcomes.
+Keep body-link grasp uncertainty and late confirmation separate from new physical
+progress; no causal benefit follows from timing alone. Please retain all adverse
+starts. This is a saved-evidence analysis request, with zero new simulator,
+encoder, policy or decoder work. Root will provide the full stable result handoff
+when ready. No larger cohort, changed fitness or modified trigger is requested.
