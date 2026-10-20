@@ -86,6 +86,8 @@ def _checkpoint(run, stage):
         for name in ["status.json", "queue.json", "attempts.jsonl", "recovery.jsonl",
                      "deadline-watchdog.json", "hf-assets.json", "handoff-runtime.json",
                      "deadline-credential-preflight.json",
+                     "instance-resume-readback-20261020.json",
+                     "provider-resume-schedule-readback.json", "goal-blocked-audit.json",
                      "restore/restored.json", "restore/pending-links.json",
                      "sim-freeze.txt", "policy-freeze.txt", "tools-freeze.txt",
                      "backups/index.json", "development-driver.json", "active-policy.json",
@@ -124,6 +126,11 @@ def _checkpoint(run, stage):
             target = directory / ("config-" + source.name)
             target.write_bytes(source.read_bytes())
             models["configs/" + source.name] = str(target)
+        rental = ROOT / "configs/vast/maniguard-rental-20261020-comparison.json"
+        if rental.exists():
+            target = directory / rental.name
+            target.write_bytes(rental.read_bytes())
+            models["rental/" + rental.name] = str(target)
         atomic(frozen_index, {"episodes": [p.name for p in episodes],
                               "auxiliary": [p.name for p in auxiliary], "source_commit": source_commit,
                               "data": data, "models": models})

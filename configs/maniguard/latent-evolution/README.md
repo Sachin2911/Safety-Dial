@@ -6,15 +6,21 @@ code and asset identifiers. Its coordinator and earlier studies are not launched
 `platform-v3.json` preserve the measured infrastructure repairs and their costs.
 A capacity-selected pilot protocol is required before physical search can start.
 
-The authorized instance is 56777435. The user explicitly extended the rental to
-05:00 UTC on 20 October 2026. `development-v2.json` changes the physical cutoff to
-04:30 UTC and retains all interaction ceilings. The supervised watchdog is armed for
-05:00 UTC, retaining disk; the original 03:00 records remain preserved. The separate
-provider job 4986 still needs updating or removal: the account scheduling API rejected
-the attempted extension with HTTP 401. Until that is resolved it may stop the instance
-at 03:00. The extension record is
-`configs/vast/maniguard-rental-20261019-extension.json`. Absolute times do not reset
-when a coordinator restarts. A later rental or restart requires new authorization.
+The authorized instance is 56777435. On 20 October the user explicitly authorized
+the full comparison and prioritized the contribution/result. The current deadline
+is 20:00 UTC, with a 19:30 physical cutoff, at the unchanged hourly rate and episode
+ceilings. `development-v4.json` and `capacity-20261020-v2.json` freeze that window
+and select the complete Jar pilot before comparative feedback. The independent
+supervised watchdog is armed for 20:00 UTC, retaining disk. The rental authorization
+is `configs/vast/maniguard-rental-20261020-comparison.json`.
+
+The original03:00 and later05:00 records remain historical. Known provider job4986
+had its original03:00 stop before this resumed run; its next daily occurrence would
+be after20:00. The schedule API still returns401, so no provider modification is
+claimed. `deadline-protection-20261020.json` records the authorized local clock,
+its fresh heartbeat and a running-instance readback. The full comparison is managed
+by supervisor service `maniguard_latent_comparison`. Absolute times do not reset
+when a coordinator restarts. Another rental is not authorized by this record.
 
 ## Reconstruct the environments and assets
 

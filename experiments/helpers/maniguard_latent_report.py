@@ -54,12 +54,16 @@ def build(run):
                "valid_full_episode": False, "requested_category": None,
                "benchmark_category": None, "requested_completion": None,
                "benchmark_completion": None, "violation": None, "score": None}
+        row.update(ever_contacted_task_object=None, ever_grasped_task_object=None)
         if partial["status"] == "completed" and job:
             receipt = read_episode(output, require_full=partial["stage"] != "engineering")
             verified[name] = receipt
             if partial["stage"] != "engineering":
                 outcome = receipt["outcome"]
                 row.update(valid_full_episode=True,
+                           ever_contacted_task_object=receipt.get("physical", {}).get(
+                               "ever_contacted"),
+                           ever_grasped_task_object=receipt.get("physical", {}).get("ever_grasped"),
                            requested_category=category(outcome["C_req"], outcome["V"]),
                            benchmark_category=category(outcome["benchmark_success"], outcome["V"]),
                            requested_completion=outcome["C_req"],

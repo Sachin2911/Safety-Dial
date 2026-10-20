@@ -1,11 +1,25 @@
-# ManiGuard native-noise development pilot, 19 October 2026
+# ManiGuard native-noise pilot, 19-20 October 2026
 
-The controller, physical integration and bounded decoder audit work. The intended
-physical optimizer comparison remains **unmet** because neither family fits the
-authorized rental window under the prospective capacity rule. No comparative
-initialization, EA descendant, random-search descendant or independent audit
-episode has run. These development results establish measurable steering authority,
-not improved safety, evolutionary advantage or transfer.
+The controller, physical integration and bounded decoder audit work. The complete
+Jar comparison is **running** after the user authorized the full comparison on
+20 October. Shared initialization began at 04:28 UTC with two live native episodes.
+The fixed protocol then acquires eight shared initialization episodes, sixteen
+descendant episodes per optimizer, sealed finalists and sixteen independent
+checking episodes. The results below currently describe completed development,
+not a completed optimizer comparison. No evolutionary or transfer benefit is
+claimed while that comparison remains incomplete.
+
+The [new capacity record](../../../configs/maniguard/latent-evolution/capacity-20261020-v2.json)
+selects Jar using the original timing rule, before comparative feedback. The user
+explicitly prioritized running the full comparison after the earlier 14:00 proposal
+became too short. A fixed 20:00 UTC stop and 19:30 physical cutoff provide the
+required window. Tasks, seeds, hardware balancing, controller, objective and the
+60-valid/64-attempt limits are unchanged. Both Jar policy servers were verified
+before new physics. The known provider 03:00 stop is past; its next daily occurrence
+would be after the new deadline. The provider schedule API still returns 401.
+The [deadline receipt](../../../configs/maniguard/latent-evolution/deadline-protection-20261020.json)
+records an armed user-authorized local clock and a fresh running-instance readback,
+without claiming any provider schedule modification or account-key access.
 
 ## Implementation and controls
 
@@ -112,7 +126,7 @@ it was not replaced or excluded from timing. Restarting the coordinator reattach
 the same live process identity, reconciled its completed partner and added zero
 attempts. A regression check reproduces that recovery behavior.
 
-The [immutable capacity decision](../../../configs/maniguard/latent-evolution/capacity-20261019-v1.json)
+The earlier [immutable capacity decision](../../../configs/maniguard/latent-evolution/capacity-20261019-v1.json)
 uses complete development process times and observed startup/control throughput,
 including full native timeouts and a 25% margin. With two workers, 30 remaining waves
 protect all 56 valid episodes and four replacements. Jar needs 54,028.5 seconds
@@ -121,10 +135,10 @@ seconds (15.200 hours). Only 24,268.5 seconds remained until the authorized 04:3
 physical cutoff when selected. Both authority tests passed; timing caused rejection.
 Horizons, rendering and the protected comparison were not reduced.
 
-The user authorized a 05:00 UTC stop on 20 October. Its independent local watchdog
-is armed, and its injected credential passed a read-only check of this instance.
-The provider schedule API returned HTTP 401, so job 4986 may still stop at 03:00.
-There is no claimed confirmation that the earlier job moved.
+The original 05:00 authorization was superseded by the full-comparison authorization
+on 20 October. The current independent local watchdog is armed for 20:00 UTC and
+its injected credential passed a read-only check of this running instance. The
+provider schedule API remains unavailable; no provider-job modification is claimed.
 
 ## Preservation, reconstruction and remaining work
 
@@ -149,24 +163,24 @@ reconcile historical handles before any physical resume. Do not restart archived
 services. The analysis exporter supplies attempts, candidate curves and independent
 audit CSVs; comparative files currently have no data rows.
 
-Thirty-four study tests have passed using the separate intended interpreters. These
+Thirty-six study tests have passed using the separate intended interpreters. These
 include the real pinned OpenPI sampling interface, physical receipt replay, global
 budget/recovery behavior, matched optimizer accounting, finalist protection and
 provider-confirmation coverage. New Python files pass Ruff. Unit tests and development
 integration do not substitute for the missing physical comparison.
 
-The [unapproved resource proposal](../../../configs/maniguard/latent-evolution/resource-proposal-20261019.json)
-would extend this same instance to 14:00 UTC on 20 October, preserving its rate,
+The earlier [resource proposal](../../../configs/maniguard/latent-evolution/resource-proposal-20261019.json)
+would have extended this same instance to 14:00 UTC on 20 October, preserving its rate,
 episode ceilings and comparison. The nine additional hours cost at most $5.5133
 at the observed running rate; maximum running cost from original start would be
-$11.4118. This proposal authorizes no action. It also needs confirmation that no
-provider job stops the instance before the new deadline. If approved while capacity
-still fits, record the authorization, freeze a deadline-only protocol revision,
-update the independent watchdog, rerun capacity selection and execute:
+$11.4118. Its deadline no longer fit when the user resumed the goal. The separately
+recorded [full-comparison authorization](../../../configs/vast/maniguard-rental-20261020-comparison.json)
+now owns the 20:00 UTC deadline. The comparison runs under supervisor with this command:
 
 ```bash
 data/maniguard/envs/tools/bin/python experiments/scripts/maniguard_latent_pilot.py \
-  --run runs/latent-evolution-20261019 --protocol APPROVED_CAPACITY_PROTOCOL.json
+  --run runs/latent-evolution-20261019 \
+  --protocol configs/maniguard/latent-evolution/capacity-20261020-v2.json
 ```
 
 The next scientific work remains eight shared initialization episodes, sixteen
