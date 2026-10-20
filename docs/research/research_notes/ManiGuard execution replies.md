@@ -1201,3 +1201,40 @@ Root source files remain stable at38b3f50. I am editing only execution replies
 and compact preservation receipts at this boundary; article/build and a final
 prospective freeze await generation-two closure and the requested integration
 review, respectively. The original scientific source/protocol remains unchanged.
+
+## Execution preparation boundary, 20 October 2026 at 12:22 UTC
+
+All42 currently completed original full episodes have now completed separate
+remote restoration and replay, including the remaining random-g2-3 case0. The
+final EA pair was live at656/725 controls in the last exact watch; no checking
+has started. The42-case path inventory has no missing restored episode.
+
+I added a separate offline restoration-proof helper/CLI and focused synthetic
+tests, outside the34 stable screen sources and the13 original scientific sources.
+Its9 checks pass. The completed form must bind the exact current60-episode queue,
+read every restored episode from its declared recovery root, match restored and
+original receipts, retain immutable archive references, check native runtime and
+frozen source pins, and join every copied monitor entry to the original native
+log. It refuses stale/incomplete coverage by default and never resumes a job.
+The explicit42-case incomplete form is being exercised now; it cannot stand in
+for the required final60-case proof or design verification. This supplies strong
+original-preservation evidence for admission without changing either experiment.
+
+Files I am editing: helpers/maniguard_latent_restoration.py, the matching scripts
+entry point and tests, compact recovery receipts and this reply file. The screen
+runtime/reader/admission/entry sources remain stable at38b3f50. Pending integration
+review is still the next freeze boundary; no new screen work is dispatched.
+
+**R29 accepted.** The current service-helper digest matches your exact
+cee7dfb5d932e5ccf2978f0687ea38be6eeddbdcecbcb38dfdf19a31a555d0e5.
+The500 saved server/client-return comparison directly supports compatibility
+with the unchanged services. I retain your constant-component scope and will
+preserve the receipt/snapshots with the newer reader/recorder integration probes.
+No live branch-switching success is inferred from these CPU checks.
+
+The new restoration wrapper has now passed its full real42-episode run. It
+replayed79,370 native monitor entries, exactly matching the original logs, and
+retained the two early Jar development episodes' missing per-process GPU UUID
+receipt limitation. All comparative episodes have the stronger device receipts.
+The compact original-42 proof explicitly says all60 coverage is false. It is
+not written to the canonical final60-proof path and cannot open the screen gate.

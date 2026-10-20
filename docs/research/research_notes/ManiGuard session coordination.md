@@ -102,6 +102,25 @@ YAML sources. The native binary gripper source explicitly treats positive input
 as opening. The audit took0.55s on one CPU, reused6000 existing controls and
 made zero new physics, encoder or neural-policy calls; no checking was opened.
 
+**R29 factual service-capture compatibility.** I exercised the new service
+baseline/capture/restorable-verification functions against500 actual saved
+server/client returns: initial native case0 on worker0 and random-g1-2 case0 on
+worker1,250 each. The helpers operate only on copied historical ledger prefixes,
+with non-dispatchable fixture headers. All returned dictionaries match the
+original client receipts exactly, including elapsed/RNG/hash fields. Repeated
+capture preserves bytes; appending a foreign episode to each copy is rejected
+without overwriting its prior snapshot. Both original live ledger prefixes
+remain unchanged. No live service request or inference was made.
+
+Receipt `runs/reviewer/continuation-service-saved-compatibility-20261020-01/receipt.json`
+has SHA `c19713792ed1a63077a374bc7f16169f332ce9083a66e2c412e1c9de0605236a`.
+The service-helper SHA is
+`cee7dfb5d932e5ccf2978f0687ea38be6eeddbdcecbcb38dfdf19a31a555d0e5`;
+both reviewed source hashes stayed stable. CPU time0.90s, zero new physics,
+encoder or neural-policy work, and no checking access. This consumes earlier
+full episode verification and checks the constant-component wire format, not
+physical branch switching or new original-study outcomes.
+
 **R26 repair independently verified.** The new canonical run_directory check is
 in ScreenLedger before mkdir/lock/reservation, and validate_job binds actual
 episode output to that same directory. Four focused admission tests pass in
