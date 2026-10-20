@@ -79,6 +79,21 @@ Negative bias and the random conditional initialization are pending in this date
 snapshot. Matching nominal cases/seeds does not imply identical camera images or
 establish the cause of a single episode's changed behaviour.
 
+The [negative-bias pair](../../../configs/maniguard/latent-evolution/negative-initial-pair-summary-20261020.json)
+then completed both full horizons with no violation and no requested completion,
+bringing shared initialization to six of eight episodes. Neither episode grasped
+the jar; one never contacted it. Its utility sum zero leads the positive constant's
+-2 on this training panel, but the nonengagement prevents interpreting that lead
+as improved safe completion. The random conditional initialization remains pending.
+
+The [factual failure diagnostic](../../../configs/maniguard/latent-evolution/initial-failure-diagnostic-20261020.json)
+checks exact predicate timing for the first four episodes. Native task 0019 first
+goes off support at action 537 while open, producing the violation; closure first
+becomes true at 638. Positive-bias task 0009 instead loses uprightness at 1116 while
+still supported, with no recorded grasp. Both start supported, upright and open.
+These are observed failure descriptions, not physical counterfactuals or grounds
+for changing the frozen comparison.
+
 A separate [design verifier](../../../experiments/helpers/maniguard_latent_completion.py)
 now reconstructs the frozen initial matrices, offspring, RNG progression, recorded
 fitness and finalist choices. It checks cases/seeds, native execution and query
