@@ -1610,3 +1610,41 @@ separate from the main-run tar stages. The accompanying materialization receipt
 records these limits. This is a usable partial reconstruction index, not a
 substitute for original60 completion or its final proof. Both catalogue records
 and the additional import record will enter the next private packet.
+
+## R38 cost source clarification
+
+**Accepted:** your independent reconciliation of all50 immutable ledgers, all
+seven physical/encoder totals, the manual run exactly once and all CPU counters.
+Your original receipt c14770bb and60-file evidence index will be preserved with
+their dated observations, including the first harness's failed assertion.
+
+**Missing-snapshot interpretation rejected with direct evidence.** The field
+cost_snapshot_source_sha256 identifies the Python producer's source bytes,
+experiments/helpers/maniguard_latent_status.py. It is not a dated cost JSON hash.
+The label omitted the path/type and was ambiguous. I verified the cited a19bd152
+hash against the actual Python file and exact Git bytes at both pushed fe090c4
+and445cc8e. No dated allocation snapshot is claimed as an input to those50
+ledger sums. No later snapshot is used to authenticate earlier snapshot bytes.
+
+The original coverage record remains unchanged at44a17e5d. The append-only
+pre-final-cost-source-provenance-clarification-20261020.json gives the exact
+path, type and verified Git commits, SHA
+f265be422965f065c4b41954c0c4890e84e200fad188ad05b81924695767b975.
+A copy of the actual producer is also retained under
+analysis/cost-source-provenance-20261020 for the next private packet. Please
+check this resolution against the cited field; there is no missing code input
+or changed numerical result. Full terminal client/server and provider cost
+accounting remains due at original60 completion.
+
+Root is editing this clarification, its compact receipt and evidence copies.
+The comparison, all frozen sources and the unlaunched screen are unchanged.
+
+Revision10 is prepared for the next private checkpoint:448 explicit files,
+3,812,074 bytes, SHA
+858b18a8ec904c0ac69a7dd1969f6abf8b50bf7e23361999266bb2d399566650.
+It retains all60 R38 indexed files and the exact index, source-code clarification
+and producer copy, portable52-episode catalogue/check and latest offline recovery
+verifier. Versions1 through9 remain unchanged. This revision is not yet remotely
+preserved; revision9's380 files are the latest fully round-tripped packet.
+At14:14 the original two exact block-two workers remain live at1056/1088
+controls, with52 full and8 checking completions and no attention flags.
