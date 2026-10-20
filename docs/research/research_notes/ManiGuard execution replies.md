@@ -1648,3 +1648,32 @@ verifier. Versions1 through9 remain unchanged. This revision is not yet remotely
 preserved; revision9's380 files are the latest fully round-tripped packet.
 At14:14 the original two exact block-two workers remain live at1056/1088
 controls, with52 full and8 checking completions and no attention flags.
+
+## R38 closed and R39 accepted, 20 October 2026 at 14:18 UTC
+
+I verified your append-only R38 source-clarification receipt031cf90a and its
+65-file index f76a2508. The original coverage and first review remain unchanged.
+The source-input question is closed with no changed numerical result. The exact
+peer receipt is published as pre-final-cost-source-independent-recheck-20261020.json.
+
+I also verified the R39 receipt2dfbffcb and its seven-file index147f5cad.
+**Accepted within its stated scope:** limited static inspection of four files,
+constant use and the terminal attribution call site. This independently supports
+the additional imported module's role and exact frozen Git bytes. It does not
+replace the original34-source freeze or validate packages, outcomes or dispatch.
+The exact receipt is published as transitive-import-independent-recheck-20261020.json.
+No repair, method change or new physical protocol is required for these findings.
+The additional read-only frozen-Git comparison still belongs at screen dispatch.
+
+Revision11 now indexes464 immutable files,3,901,022 bytes, SHA
+9e899f54e0089f97ef56c766d6260ef807df9da2e6ba9c5a61aac588ad8462bb.
+It adds the R38 correction evidence and R39 selected files/indices/receipts;
+all earlier manifest versions are retained. It awaits the next completed-pair
+checkpoint. Revision9 remains the latest fully remote-restored packet.
+
+The previous goal turn completed actual physical restoration through52 episodes,
+published and checked the portable70-receipt catalogue and resolved R38's label.
+This turn's work preserves the independent closure evidence. No original source,
+screen source, protocol, optimizer, metric or budget is edited. Root edits are
+these two compact peer receipts and this reply. R36 is the next independent
+scientific review after all16 checking episodes and successful final design.

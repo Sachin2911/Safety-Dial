@@ -68,14 +68,59 @@ allowances or instructions to override an existing user-directed hold.
   This is not a guarantee for serialized failures/stalls or a dispatch approval.
 - **R38:** independently reconciled all50 pinned nonchecking ledgers and all
   seven counter sums, including manual-v4 exactly once. CPU work matches its
-  pinned audit. The dated cost-snapshot hash is not found locally; check its
-  private preservation before treating that dated source as restored evidence.
+  pinned audit. The source hash is the Python producer, verified at both cited
+  Git commits. My earlier dated-JSON interpretation was incorrect and is closed.
+- **R39:** requested limited import classification confirmed. The additional
+  sensitivity module matches frozen38b3f50 exactly; its two constants are used
+  by standalone training analysis, not episode_progress. The inspected screen
+  path uses progress attribution after terminal verification. No source edit.
 - Last verified original snapshot at14:04 UTC:52/60 valid full episodes;40
   comparison-training episodes have0 requested completions,16 violations and24
   safe unfinished. Eight protected checking episodes are complete; the block-two
   EA/native wrappers remain live. No checking outcome has been opened for review.
   Revalidate identities before operational decisions. R21 choices stay fixed.
 <!-- END REVIEW STATUS INDEX -->
+
+**R39 requested limited import review, 14:16 UTC.** Independently confirmed
+the exact sensitivity-module SHA
+e6685d2e8568c08edcddd897e4bc9764c6e57fdceb7b1ba89cb94f9ecb5ab4cc
+against frozen38b3f50, together with review_progress, continuation_progress and
+the screen script. review_progress imports only ROOT/TRAINING_STAGES from that
+module. Its standalone analyze uses both; episode_progress references neither.
+The imported module has only imports, constant assignments and function
+definitions at top level. Its top-level calls construct slices and a Path; it
+does not call its sensitivity functions. The screen invokes attribute_progress
+inside record_verification after read_episode on successful terminal output or
+an already completed resume. This supports your limited attribution-only
+classification, without repeating the27-module traversal, redefining critical34,
+validating installed packages or granting dispatch. Recheck the additional
+module bytes before dispatch as your compact receipt requires.
+
+Evidence: runs/reviewer/continuation-import-provenance-review-20261020-01.
+receipt.json SHA 2dfbffcbc8ef8fbebd90b592d3f00507ca5a8107ba82a0ea39810123ca4611cd;
+artifact-index.json SHA
+147f5cad622d84739b4d75bea50d2fcf2d30066f688a7e031f096bcec011a3af
+indexes7 files/45,914 bytes. Static check and Ruff pass. No imports were executed,
+checking outcomes opened or physical/model calls made.
+
+**R38 source clarification accepted and verified, 14:16 UTC.** I misread the
+ambiguous cost_snapshot_source_sha256 label as a dated cost JSON. The cited
+a19bd152 hash actually matches experiments/helpers/maniguard_latent_status.py,
+the Python producer. I independently compared current bytes to both full Git
+commits fe090c4e9739baf2139a4c8f06c52853957a3fb9 and
+445cc8e0cb8a7e09408e8c8f0e8d0127e232c90a; both are byte-identical. The original
+coverage record remains44a17e5d9489e40c67007119730c0c76b404f82dcbdffd6345d11566448be778.
+There is no missing source-input finding. The numerical ledger/CPU reconciliation
+stands; my dated-snapshot interpretation below is superseded. The original
+c14770bb receipt and b376369f index remain unchanged for provenance.
+
+Append-only source-clarification-receipt-v2.json in the R38 evidence directory
+has SHA031cf90ad4df27c1d11907a57355e2cd43c102f98c049d02ec0a8ffd657c35eb.
+artifact-index-v2.json SHA
+f76a25089399dfb8aea7925b55b2377ff3e6ce6731dc4ae43e8605904ccb465d
+indexes65 files/167,682 bytes, including the earlier index, correction verifier,
+actual producer and owner clarification. The verifier and Ruff pass. R36 final
+terminal accounting remains pending; the correction changes no measured result.
 
 **R38 nonchecking cost coverage review, 14:11 UTC.** All50 source identities
 match the original nonchecking queue plus the four root engineering directories;

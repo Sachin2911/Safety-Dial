@@ -1,0 +1,49 @@
+{
+  "schema": "maniguard-review-limited-import-provenance-v1",
+  "observed_utc": "2026-10-20T14:13:35Z",
+  "source_commit": "38b3f50cae18c05e494f25e88553fa7357a075d1",
+  "verified_sources": [
+    {
+      "path": "experiments/helpers/maniguard_review_sensitivity.py",
+      "sha256": "e6685d2e8568c08edcddd897e4bc9764c6e57fdceb7b1ba89cb94f9ecb5ab4cc"
+    },
+    {
+      "path": "experiments/helpers/maniguard_review_progress.py",
+      "sha256": "9c394ef0ab0753376359009ac56f8ddd309248ed0d27d3fac455084eb9f603f8"
+    },
+    {
+      "path": "experiments/helpers/maniguard_continuation_progress.py",
+      "sha256": "b386128c579f79e703d6a1cfc3175f26f775fef7255b46f0b14775e8846d8ea1"
+    },
+    {
+      "path": "experiments/scripts/maniguard_continuation_screen.py",
+      "sha256": "b89e6ee15eda990dc24dfbde085a0f5ba6ff8f21bbfbf384c542dcf238621e04"
+    }
+  ],
+  "owner_provenance_sha256": "06411998c393ec52523984545e3f81381cfdce57e83110745d298bf518ebbb96",
+  "sensitivity_module_imports": [
+    "import hashlib",
+    "import json",
+    "from pathlib import Path",
+    "import numpy as np"
+  ],
+  "sensitivity_top_level_assignment_calls": [
+    "slice",
+    "slice",
+    "slice",
+    "slice",
+    "slice",
+    "Path(__file__).resolve",
+    "Path"
+  ],
+  "progress_imports": [
+    "ROOT",
+    "TRAINING_STAGES"
+  ],
+  "episode_progress_references_either_import": false,
+  "standalone_training_analyze_references_both": true,
+  "manual_callsite_review": "record_verification uses attribution after read_episode on terminal successful guardian output or completed resume. The additional module has no top-level sensitivity call; its top-level calls construct slice/Path values.",
+  "scope": "Limited static attribution/import review of these four exact files. Does not repeat the27-module traversal or redefine the critical34 freeze, execute imported modules, validate installed packages, grant dispatch or establish physical success. Recheck the additional bytes before dispatch.",
+  "checking_outcomes_opened": false,
+  "new_physical_or_model_calls": 0
+}
