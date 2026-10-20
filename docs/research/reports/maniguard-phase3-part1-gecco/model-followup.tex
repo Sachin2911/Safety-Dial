@@ -1,0 +1,134 @@
+\section{Model-assisted follow-up and second experiment}
+\label{sec:model-followup}
+\textbf{Status: completed CPU preparation and audit; physical follow-up unexecuted.}
+This separate study asks whether progress-aware control and qualified short-horizon
+prediction can improve task continuation without paying for a broad physical
+search. Its CPU implementation does not change the frozen comparison above.
+
+\subsection{Implemented model and control interfaces}
+A five-member episode-bootstrap ensemble predicts the next 44 compact features
+from the current and previous features, a history-valid flag and eight known
+executed eight-dimensional commands. Its 153 inputs feed ridge regressors with
+32 fixed nonlinear random features. Separate heads estimate a new violation
+within the prefix and five task predicates: closed lid, holding, goal
+intersection, uprightness and support. A readout evaluated on actual future
+features separates perception/readout error from imagined-dynamics error.
+This compact transition prototype does not generate future RGB observations or
+simulate a complete closed-loop VLA episode. A prediction about a decoded prefix
+is a surrogate, not measured fitness.
+
+A prospective controller augments the 44 causal inputs with five learned beliefs.
+Its $5\times49$ weights produce four arm-noise coefficients and one gripper-noise
+coefficient, with coefficient persistence. Prototype settings are arm scale .35,
+gripper scale 2.0 and persistence .8; they are not physically validated magnitudes.
+Native Gaussian noise is retained. Privileged simulator predicates cannot silently
+replace the unqualified learned beliefs. A separate bounded joint-target residual
+provides a prospective representation control; its source-matched CPU clipping
+wrapper still requires actual runtime limits and physical identity validation.
+
+The action-changing filter accepts a supported low-risk prefix, substitutes an
+eligible alternative, or abstains. Proposed, filtered and actually executed
+commands remain distinct. Candidate allocation scores the surviving prefix and
+shares predictions for identical filtered prefixes at the same factual anchor.
+Absent qualification, allocation preserves abstention and cannot authorize
+execution. Decoder requests for discarded proposals remain charged.
+
+The ROSARL interface implements its practical reward/value-extrema penalty rule,
+requiring a declared external value estimator and one penalty frozen before
+candidate comparison~\cite{rosarl}. It is not a trained task policy or a complete
+ROSARL baseline. The shortest-path theory with unsafe absorbing outcomes does
+not certify this finite-horizon partially observed system. SafeDreamer already
+combines world-model planning and safety objectives~\cite{safedreamer}; this
+combination alone is not the proposed contribution.
+
+\subsection{Completed factual audit and failed gate}
+The audit protocol was frozen before fitting. Eight shared-initialization
+episodes on tasks 0019/0009 supply 1,992 fitting transitions; one development
+episode on task 0017 supplies 249 calibration transitions, and one on task 0013
+supplies 83 diagnostic transitions. Splits are by whole task, all previously
+exposed. Independent checking outcomes are excluded. Final prefixes without a
+following encoded observation are omitted, and risk fitting excludes prefixes
+starting after a latched violation. These ten existing episodes cost 18,666
+original acquisition controls, retained as reused information.
+
+\begin{table}[t]
+\caption{Separate CPU model audit on one diagnostic episode. Values are feature
+RMSE; rows are correlated measurements within that episode. The predeclared gate
+requires a model/persistence ratio at most .90 in every block. All three fail.}
+\label{tab:model-audit}
+\begin{tabular}{lrrr}
+\toprule
+Feature block & Model & Persistence & Ratio \\
+\midrule
+Robot/history & .16805 & .08516 & 1.973 \\
+Overview & .04381 & .02848 & 1.538 \\
+Wrist & .06380 & .05481 & 1.164 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Actual-feature readout MAE is .191 for closure, .209 for holding, .662 for
+uprightness and .210 for support, above the .10 gate. The fitting set contains
+positive closure and holding in only one episode each, no in-goal positive
+episode, and no safe completion. Its observed closure follows a violation.
+Calibration has one episode against the minimum 20. The conservative fallback
+therefore rejects every prefix; its 100\% negative-prefix alarm rate is not the
+false-alarm rate of a qualified classifier. Counterfactual-action coverage
+would still require justification after adequate factual calibration.
+
+The audit consumes 27,412 training-row uses and 5,395 model-head row queries,
+with zero new physical episodes, simulator controls, VLA calls or encoder images.
+Sixteen focused CPU tests validate the initial assembled interfaces; later
+allocation/residual and clipping-wrapper suites add 12 and 15 checks, respectively.
+These checks establish software behaviour, not manipulation success. The failed
+prediction/coverage gate excludes this model from physical action selection.
+
+\subsection{Proposed small continuation screen}
+Before further model-guided optimization, test whether a known closure behaviour
+can hand control back for body grasping and transport. Freeze one controller
+chosen using exposed training data, its prior-information charge, task, fresh
+seed, execution order and every switching parameter before the first outcome.
+Use four references on one development case: native only, closure only, a fixed
+clock handoff, and a privileged supported-lid-closure handoff. The privileged
+reference is an engineering feasibility control, with additional actor
+information; it cannot establish equal-information learned-method superiority.
+
+The proposed trigger requires three consecutive post-control observations with
+the jar closed and supported and no preceding violation. Initial observation
+zero does not count. Losing closure/support before the next eight-control query
+cancels qualification. Switching occurs at that query and remains latched to
+native execution, without resetting its Gaussian RNG. A new trial resets the
+phase history; partial failures are charged and cannot be resumed as valid full
+episodes. Source pins and per-query branch/RNG receipts need a new validity
+reader; the original constant-genotype verifier is insufficient. This contract
+has CPU checks, not physical RNG-continuity or continuation evidence.
+
+Start with four full episodes. Expand by four on a second case only if a
+prespecified safe ordered body-grasp or completion criterion passes. A final
+native-versus-selected-nonprivileged comparison may use four additional full
+episodes on fresh seeds: at most 12 valid episodes and two charged infrastructure
+replacements, 14 starts total. A valid timeout or adverse outcome is not replaced.
+Four full-horizon trials require at most 8,000 policy controls and 1,000 native
+policy queries; partial/invalid work remains charged in addition. Initialization,
+settling, encoders, partial failures,
+allocated time and preservation require their own numerical ceilings in the
+execution-owned protocol. No extra decoder sweep is needed for this handoff
+screen. The original study's protected sixteen checking episodes remain separate.
+
+This is a prospective reduction of the earlier 16-valid-plus-two-replacement
+capability proposal, not an additional allowance. Execution must freeze the
+complete staged protocol and verify resource/deadline capacity before launch.
+Even a successful small screen cannot supply the minimum 20 independent
+calibration episodes for the learned filter. Failure calls for diagnosis rather
+than a larger optimizer sweep and does not establish irreversibility.
+
+\subsection{Scientific comparison after capability and model repair}
+A later funded comparison must separate model-free and model-assisted evolution,
+matched random allocation/search, ordinary task-policy learning with the same
+filter, and native, filtered-native and strong fixed references. Give competitors
+the same observations, training labels, prior data, model access and total
+interaction budget. Progress-aware training must retain requested safe completion
+as the outcome and remove progress fitness after a violation. Filter, ROSARL and
+evolutionary retention each need their own ablation. Replicated optimizers,
+independent confirmation and frozen-controller family transfer remain necessary
+before asserting the intended GECCO contribution.

@@ -1,22 +1,41 @@
 # ManiGuard shared GECCO-format report
 
-Open **[draft.pdf](draft.pdf)** for the current native-noise controller paper,
+Open **[draft.pdf](draft.pdf)** for the current eight-page native-noise controller paper,
 updated on 20 October 2026. Its article source is
 [native-noise-paper.tex](native-noise-paper.tex), included by `draft.tex`.
 It describes the 176-parameter observation/instruction-conditioned adapter,
 native-sampling identity, the completed 320-call decoder audit and four full
 development episodes, and the frozen native/fixed/EA/random-search Jar comparison.
 All eight shared initialization episodes are now included: zero requested
-completions, with the nonviolating negative constant never grasping. Generation one
-is running. Independent rates and finalist results remain pending. The original cumulative
+completions, with the nonviolating negative constant never grasping. Independent
+rates and finalist results remain pending. The original cumulative
 report, its historical figures and numerical results remain in `main.tex`/`named.pdf`.
+
+Section 7, sourced from [model-followup.tex](model-followup.tex), adds the separate
+world-model, action-changing filter and ROSARL preparation. It reports the
+completed CPU audit, including its failed prediction/calibration gate, and the
+proposed second physical experiment. That experiment starts with four reference
+episodes and expands only after a predefined progress criterion, up to a proposed
+12 valid episodes plus two infrastructure replacements. It has not been physically
+launched. This smaller staged proposal replaces no part of the running comparison
+and does not add an allowance to the earlier deferred 16-plus-two proposal.
+
+The physical numerical evidence in Sections 5 and 6 retains the earlier
+07:11:14 UTC diagnostic cutoff, including its statement that offspring were still
+pending then. The new Section 7 uses the separately preserved CPU audit and later
+CPU source checks. Generation one has since completed; its dated summary is in
+the current study records, pending the execution session's next physical-results
+paper update. Independent checking is still pending. The CPU evidence is not
+reported as a physical result or an evolutionary advantage.
 
 The new [protocol](../../../../configs/maniguard/latent-evolution/capacity-20261020-v2.json),
 [development summary](../../../../configs/maniguard/latent-evolution/development-summary-20261019.json),
 [study report](../ManiGuard%20latent%20evolution%20pilot.md) and
 [study README](../../../../configs/maniguard/latent-evolution/README.md) supply exact
 task/seed lists, costs, source pins and restoration instructions. The current build
-receipt is `latent-build-20261020-diagnostic.json`; `latent-build-20261020-initial.json`
+receipt is `latent-build-20261020-model-followup.json`;
+`latent-build-20261020-diagnostic.json` retains the earlier six-page diagnostic
+build, and `latent-build-20261020-initial.json`
 retains the earlier build after initialization, and `latent-build-20261020.json` retains
 the earlier five-page build at commit `82c885a`. The paper distinguishes implemented paths,
 decoder responses, physical development evidence and pending comparisons. Ordinary

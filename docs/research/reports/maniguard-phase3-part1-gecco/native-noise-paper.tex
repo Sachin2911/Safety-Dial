@@ -18,7 +18,7 @@
 \begin{document}
 \raggedbottom
 \title{Evolving Native-Noise Controllers for Safe Completion with Frozen Manipulation Policies}
-\subtitle{Implemented method, completed development evidence and a frozen Jar comparison}
+\subtitle{Frozen Jar comparison and separately audited model-assisted preparation}
 \author{Sachin Mohan}
 \affiliation{\institution{University of the Witwatersrand}\city{Johannesburg}\country{South Africa}}
 \email{2699183@students.wits.ac.za}
@@ -41,7 +41,10 @@ checks of native, fixed, evolved and random-search controllers. All eight shared
 initial episodes end unfinished; the highest-utility constant never grasps. Search
 is running and independent comparison results are pending. A separate 48-call
 diagnostic finds gripper-coordinate influence at a stronger noise offset, with
-arm coupling and no physical benefit tested. Native-noise
+arm coupling and no physical benefit tested. A separate CPU model-assisted
+prototype's recorded-data
+audit fails prediction and calibration gates; a small second physical experiment
+is proposed rather than reported as completed. Native-noise
 steering and evolutionary VLA steering have precedents. The contribution sought
 is an explained safe-completion benefit per total interaction, with competent
 learning comparisons, replication and transfer still required.
@@ -67,7 +70,10 @@ The adapter steers the generator's native noise before decoding an action chunk,
 conditioning on current observations, the actual instruction and causal executed
 action history. Evolution optimizes a small parameter matrix from complete
 physical simulator outcomes. The VLA, feature encoder and native execution contract
-remain fixed. There is no learned safety filter, world model or online action veto.
+remain fixed. This physical comparison deploys no learned safety filter, world
+model or online action veto. Section~\ref{sec:model-followup} separately presents
+implemented CPU preparation, its failed factual audit and the proposed second
+experiment; those components do not alter the running comparison.
 
 Earlier restraint and feedback pilots~\cite{priorpilot} motivate this change without validating it.
 The earlier full-strength finalist achieved 4/8 safe completions with two violations,
@@ -345,6 +351,8 @@ implies an approximate 95\% upper rate bound of $3/n$, not zero; four episodes
 are particularly weak evidence.
 
 \section{Completed development evidence}
+This section retains the 20 October 07:11 UTC diagnostic evidence cutoff.
+Later training results remain separate from this paper update's CPU follow-up.
 \subsection{Identity and decoder influence}
 Eight saved observations per family, from two development tasks, each use two native
 noise draws. Each draw receives two same-noise baselines and positive/negative
@@ -517,6 +525,8 @@ No EA/random-search finalist is selected at this evidence cutoff. Training
 observations will not substitute for the protected sixteen-episode final check,
 and no optimizer advantage or transfer benefit is claimed.
 
+\input{model-followup.tex}
+
 \section{Limitations and remaining evidence}
 This interface can consume several family checkpoints, but the pilot fits only
 within Jar. A random four-direction basis may miss useful behaviour. A bounded
@@ -572,6 +582,9 @@ a tuned constant, evolution and matched random search while protecting independe
 checking and retaining unsuccessful candidates. Its result must determine the
 strength of the contribution, including a null or adverse finding. Ordinary
 learning, replication and transfer remain necessary for the broader claim.
+The separate model-assisted prototype fails its factual qualification gate.
+Its staged continuation experiment must establish measured task progress before
+larger model-guided search or action-changing filtering is justified.
 
 \begin{acks}
 This BSc Honours research at the University of the Witwatersrand is supervised by
