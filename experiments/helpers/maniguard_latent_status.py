@@ -68,9 +68,15 @@ def snapshot(run):
             "full_attempts_started": len(full), "full_attempts_remaining": 64 - len(full),
             "full_valid_completed": sum(row["status"] == "completed" for row in full),
             "full_invalid": sum(row["status"] == "invalid" for row in full),
-            "allocation_wall_hours": wall_hours, "allocated_gpu_hours": 2 * wall_hours,
+            "allocation_wall_hours": wall_hours, "provider_elapsed_wall_hours": wall_hours,
+            "allocated_gpu_hours": 2 * wall_hours,
+            "allocated_gpu_hours_is_upper_bound": True,
+            "provider_runtime_billing_verified": False,
+            "stopped_interval_credit_hours": 0,
+            "rental_usd_upper_bound_at_observed_rate": wall_hours * rental["pricing"]["observed_hourly_usd_with_disk"],
             "rental_usd_accrued_at_observed_rate": wall_hours * rental["pricing"]["observed_hourly_usd_with_disk"],
-            "limitations": "Partial ledgers are lower bounds. Physics before callback attachment is unknown. No missing counter is evidence of zero work. Both allocated GPUs, setup, idle time and preservation count from the original provider start; transfer and stopped-storage billing are separate."}
+            "cost_estimate_scope": "GPU-hours and both cost-estimate fields are upper bounds over elapsed rental wall time, not verified billed runtime. The provider API has no time_running/total_cost value. A container restart does not prove an unbilled interval; no off-time credit is inferred. See configs/maniguard/latent-evolution/rental-accounting-20261020.json.",
+            "limitations": "Partial ledgers are lower bounds. Physics before callback attachment is unknown. No missing counter is evidence of zero work. Both GPUs, setup, idle time and preservation count from the original provider start. Allocation/cost estimates are elapsed-wall upper bounds; transfer and stopped-storage billing are separate."}
 
 
 def refresh(run):

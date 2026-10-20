@@ -127,7 +127,9 @@ or completion of the full research objective.
 --output RUN/analysis` independently reconstructs initial matrices, both optimizers'
 offspring and RNG transitions, recorded fitness, fixed/finalist selection, exact
 physical cases and seeds, native query intervals, actual camera/robot receipts,
-comparison GPU placement and attempt ceilings. It writes `design-verification.json`.
+comparison GPU placement and attempt ceilings. It also checks the declared wave
+order, method interleaving, prospective selection time and nonoverlapping retries.
+It writes `design-verification.json`.
 Its default exit status is two when required work is pending or contradictory;
 `--allow-incomplete` permits a partial report with no contradictions and starts no
 physics or model queries. It does not certify remote preservation or the scientific
@@ -135,6 +137,14 @@ interpretation. Early Jar development records planned GPU mapping rather than th
 per-process UUID receipts introduced before Clutter and the comparative allocation;
 the verification report explicitly retains this limitation. All comparative episodes
 require actual simulator and policy GPU receipts.
+
+The read-only accounting monitor retains the original provider start and both GPUs.
+GPU-hour and running-cost fields are explicitly elapsed-wall upper bounds because
+the own-instance API exposes no verified billed runtime or total cost. A container
+restart does not establish an unbilled interval, so no stopped time is credited.
+`rental-accounting-20261020.json` records the current rate and evidence scope; stopped
+storage and transfer billing remain separate. Neither accounting refresh nor its
+service restart changes research workers or counters.
 
 `helpers.maniguard_latent_learning.ParameterReinforce` supplies the requested
 ordinary-learning interface for a separately budgeted comparison. It learns a

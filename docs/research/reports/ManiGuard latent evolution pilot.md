@@ -92,11 +92,15 @@ Clutter and comparative execution; the verifier records that limitation.
 The [next verification snapshot](../../../configs/maniguard/latent-evolution/design-verification-20261020-half.json)
 checks all eight valid full episodes then available, including the positive pair.
 
-Nine targeted CPU checks pass for completion verification and cost reporting,
+Ten targeted CPU checks pass for completion verification and cost reporting,
 including adverse cases with a changed finalist, case, device, offspring, source,
 early audit or excess replacements. Per-method curves now include known controls
 and queries from failed attempts before replacements and count unknown counters
 explicitly. This software work adds no physics, decoder queries or encoder calls.
+The [execution-prefix receipt](../../../configs/maniguard/latent-evolution/execution-prefix-verification-20261020.json)
+also checks prospective freeze time, declared wave order, method interleaving and
+nonoverlapping replacements for every started comparison job. It certifies the
+observed prefix, not the missing later generations or independent checking.
 
 The five-page [current GECCO draft](maniguard-phase3-part1-gecco/draft.pdf) was
 built, visually checked and pushed to `main` at `82c885a`. It presents the new
@@ -161,7 +165,11 @@ decoder and server timing are recorded separately. Physics before callback attac
 is unknown. Partial ledgers are lower bounds, not evidence of zero unobserved work.
 Both GPUs count from the original provider start, including setup, failures, idle
 time and preservation. `cost-snapshot.json` continues to record wall time, twice that
-number in allocated GPU-hours and running cost at $0.6125925926/hour. Stopped storage
+number in GPU-hours and running cost at $0.6125925926/hour as upper bounds. The
+[accounting scope](../../../configs/maniguard/latent-evolution/rental-accounting-20261020.json)
+records the current own-instance readback: rate unchanged, but `time_running` and
+`total_cost` unavailable. A supervisor restart at 04:17 UTC does not prove an
+unbilled provider stop, so no stopped interval is deducted. Stopped storage
 and transfer are separate from this running-cost calculation.
 
 Clutter worker zero incurred a cold shared-cache startup: first query after 574.6

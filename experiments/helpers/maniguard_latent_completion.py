@@ -6,10 +6,13 @@ a completion flag. Remote preservation and scientific interpretation remain
 separate completion requirements.
 """
 
+import calendar
 import hashlib
 import json
 import subprocess
+import time
 from collections import Counter
+from itertools import pairwise
 from pathlib import Path
 
 import numpy as np
@@ -42,6 +45,40 @@ def proposals(method, generation, parents, rng):
         cohort.append({"id": f"{method}-g{generation}-{slot}", "weights": weights.tolist(),
                        "parent": parent["id"] if slot == 0 or method == "ea" else None})
     return cohort
+
+
+def execution_errors(protocol, queue):
+    """Check declared wave order and prevent overlapping same-job replacements."""
+    waves = [[f"initial-{i}-case{case}" for case in (0, 1)] for i in range(4)]
+    for generation in (1, 2):
+        for slot in range(4):
+            methods = ("ea", "random") if slot % 2 == 0 else ("random", "ea")
+            waves.extend([[f"{method}-g{generation}-{slot}-case{case}" for case in (0, 1)]
+                          for method in methods])
+    for block, panel in enumerate(protocol["audit_blocks"]):
+        names = [f"audit-b{block}-{condition}" for condition in panel["order"]]
+        waves.extend([names[:2], names[2:]])
+    errors = []
+    previous_finished = calendar.timegm(time.strptime(protocol["selected_utc"], "%Y-%m-%dT%H:%M:%SZ"))
+    previous_complete = True
+    for wave in waves:
+        attempts = [a for a in queue["attempts"] if a["job_id"] in wave]
+        if not attempts:
+            previous_complete = False
+            continue
+        first_start = min(a["started_epoch"] for a in attempts)
+        if not previous_complete or first_start < previous_finished:
+            errors.append("Frozen wave order or prior-wave completion differs: " + ", ".join(wave))
+        for name in wave:
+            retries = sorted((a for a in attempts if a["job_id"] == name),
+                             key=lambda a: a["started_epoch"])
+            for before, after in pairwise(retries):
+                if after["started_epoch"] < before.get("finished_epoch", float("inf")):
+                    errors.append("Same-job physical attempts overlap: " + name)
+        previous_complete = all(queue["jobs"].get(name, {}).get("status") == "completed"
+                                for name in wave)
+        previous_finished = max(a.get("finished_epoch", float("inf")) for a in attempts)
+    return errors
 
 
 def verify_design(protocol, protocol_hash, state, seal, queue, report, episode_jobs):
@@ -216,6 +253,10 @@ def verify_design(protocol, protocol_hash, state, seal, queue, report, episode_j
                       "Executed GPU allocation differs: " + name)
 
     full = [a for a in queue["attempts"] if not a["engineering"]]
+    timing_errors = execution_errors(protocol, queue)
+    errors.extend(timing_errors)
+    if any(a["status"] not in ("completed", "invalid") for a in full):
+        pending.append("Classify every full attempt and finish all physical workers")
     check(all(a["job_id"] in expected for a in full), "Undeclared full physical attempt")
     check(len(full) <= 64 and sum(a["status"] == "invalid" for a in full) <= 4,
           "Full-attempt or replacement ceiling exceeded")
@@ -242,6 +283,7 @@ def verify_design(protocol, protocol_hash, state, seal, queue, report, episode_j
     return {"schema": "maniguard-latent-design-verification-v1",
             "protocol_sha256": protocol_hash, "report_observed_epoch": cost.get("observed_epoch"),
             "physical_design_complete": not errors and not pending,
+            "started_attempts_follow_frozen_wave_order": not timing_errors,
             "errors": errors, "pending": pending, "verified_full_jobs": len(completed),
             "expected_full_jobs": 60, "full_attempts": len(full),
             "scope": "Frozen physical design and optimizer-selection reconstruction. Independently verify remote preservation and final scientific claims before declaring the goal complete."}

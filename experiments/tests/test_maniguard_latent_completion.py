@@ -6,7 +6,12 @@ import json
 from pathlib import Path
 
 from helpers.maniguard_latent import CandidateSearch, LatentController, initial_weights
-from helpers.maniguard_latent_completion import runtime_errors, source_errors, verify_design
+from helpers.maniguard_latent_completion import (
+    execution_errors,
+    runtime_errors,
+    source_errors,
+    verify_design,
+)
 from helpers.maniguard_latent_hardware import GPU_UUIDS
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -15,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[2]
 def complete_record():
     protocol = json.loads((ROOT / "configs/maniguard/latent-evolution/capacity-20261020-v2.json").read_text())
     protocol_hash = "frozen-protocol"
+    protocol["selected_utc"] = "1970-01-01T00:00:00Z"
     state = {"protocol_sha256": protocol_hash, "cohorts": {}, "optimizers": {},
              "completed_milestones": ["shared-initial", "generation-1", "generation-2",
                                       "sealed-finalists", "independent-audit"]}
@@ -33,8 +39,8 @@ def complete_record():
         audit = definition["stage"] == "independent_audit"
         queue["attempts"].append({"id": attempt_id, "job_id": name, "status": "completed",
                                   "stage": definition["stage"], "engineering": False,
-                                  "started_epoch": 1001 if audit else 100,
-                                  "finished_epoch": 1002 if audit else 200})
+                                  "started_epoch": (1001 if audit else 100) + len(queue["attempts"]),
+                                  "finished_epoch": (1001 if audit else 100) + len(queue["attempts"]) + .5})
         report["attempts"].append({"attempt": attempt_id, "valid_full_episode": True,
                                    "score": score, "stage": definition["stage"],
                                    "worker": definition.get("worker"),
@@ -69,7 +75,10 @@ def complete_record():
         for method, search in searches.items():
             cohort = search.propose()
             state["cohorts"][f"{method}-g{generation}"] = cohort
-            for i, candidate in enumerate(cohort):
+        for i in range(4):
+            for method in (["ea", "random"] if i % 2 == 0 else ["random", "ea"]):
+                search = searches[method]
+                candidate = state["cohorts"][f"{method}-g{generation}"][i]
                 scores = ([[0, 0], [1, 0], [-2, 1], [1, 1]] if generation == 1 else
                           [[-2, -2], [0, 0], [1, 1], [0, 1]])[i]
                 evaluate(candidate, generation, scores)
@@ -172,3 +181,18 @@ def test_source_checks_reject_changed_weights_interface_and_checkpoint():
     assert not source_errors(job, {"actor.py": "declared"}, {"revision": "pinned"})
     errors = source_errors(job, {"actor.py": "changed"}, {"revision": "another-checkpoint"})
     assert len(errors) == 2
+
+
+def test_wave_order_and_overlapping_replacements_are_rejected():
+    protocol, _, _, _, queue, _, _ = complete_record()
+    assert not execution_errors(protocol, queue)
+    first = queue["attempts"][0]
+    first["status"] = "invalid"
+    duplicate = {**first, "id": "overlapping-replacement", "status": "completed",
+                 "started_epoch": first["started_epoch"] + .25}
+    queue["attempts"].append(duplicate)
+    assert any("attempts overlap" in error for error in execution_errors(protocol, queue))
+    queue["attempts"].pop()
+    later = next(a for a in queue["attempts"] if a["job_id"] == "initial-1-case0")
+    later["started_epoch"] = first["started_epoch"]
+    assert any("wave order" in error for error in execution_errors(protocol, queue))

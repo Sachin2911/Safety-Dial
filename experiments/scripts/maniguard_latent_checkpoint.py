@@ -87,6 +87,7 @@ def _checkpoint(run, stage):
                      "deadline-watchdog.json", "hf-assets.json", "handoff-runtime.json",
                      "deadline-credential-preflight.json",
                      "instance-resume-readback-20261020.json",
+                     "instance-accounting-readback-20261020.json",
                      "provider-resume-schedule-readback.json", "goal-blocked-audit.json",
                      "restore/restored.json", "restore/pending-links.json",
                      "sim-freeze.txt", "policy-freeze.txt", "tools-freeze.txt",
