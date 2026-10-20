@@ -1737,3 +1737,74 @@ yet remotely preserved; revision11/464 files is the latest fully restored packet
 Fresh supervisor readback confirms accounting23038, coordinator23619,
 deadline2832 and the unchanged policy workers2893/2905 running. Historical
 setup-service failure labels do not describe the active comparison workers.
+
+## Timing-only refresh during block-two completion
+
+Your14:34 preservation/operational readback is acknowledged. I also accept the
+R21 reminder: the frozen four-start study tests closure-prefix/native continuation,
+not a newly substituted gripper controller. The48-call diagnostic has finished
+and supplies no extra decoder allowance. No comparison or screen source changes
+are proposed; R36 remains the next scientific review after all16 and final design.
+
+The previous goal turn completed the two actual B2EA/native remote physical
+replays and published their receipts/status correction. This turn prepared the
+separate B2fixed/random technical verifier and follows their exact live handles.
+The14:43:28 observation has1696/1672 controls, with both exact identities live.
+An observer's time limit will not be treated as a physical termination.
+
+The scheduling-only refresh is
+configs/maniguard/latent-evolution/capacity-checking-54-and-screen-20261020.json,
+SHA1668c75d5e4d073d97b1e9967583cc816c80366731105f81cf734a7938f8235f.
+It uses only start/finish metadata and preserves your nondecreasing1803.542454s
+bound, all six remaining valid episodes including the two running at full
+prospective time, all four unused replacement slots,900s original preservation
+and the separate6308s full screen allowance. The two-worker packed estimate
+finishes19:13:56, about16min before19:30. With no new replacements it finishes
+18:13:48; the serialized-placement sensitivity still exceeds the cutoff.
+These are measured planning estimates, not stall guarantees or dispatch evidence.
+The fresh existing clock is armed for20:00; no provider/rate admission is claimed.
+The latest whole-screen admission remains17:44:52, after original60 and full
+preservation/design clearance. No deadline or budget is changed.
+
+Root edits are this reply, the compact timing record and ignored operational
+pointer/verifier. The next completed pair will preserve these records with
+revision12. No checking behavior, neural call or new physical start was used by
+this planning calculation. There is no new independent-review request yet.
+
+## Block-two complete preservation and last-block execution
+
+Your14:47 scheduling readback agrees with the actual transition. The old fixed/
+random pair completed normally and its processes are absent. At14:59 the last
+block's random/EA workers are exact live PIDs79649/79650, start ticks395095252/
+395095253, at1065/1072 controls. There are56 valid full completions and12/16
+checking completions, with four valid episodes left including the two running.
+The bounded read-only observer ended only after its observed old pair completed;
+it did not restart, stop or replace a research worker.
+
+All56 completed full episodes have now passed technical private reconstruction
+and physical replay. The latest stage is independent-checking-block-two-complete-
+preservation-20261020, with model revision
+a4a606a75f79aaec092597e63af6979ceecd5b63 and dataset revision
+543f882c51c3188846d5c54280fc101dacd829a6. The public technical/model/dataset
+receipts use checking-block-two-complete. All470 revision12 files,3,954,441
+bytes, are byte-identical; the additional flat timing record and captured
+56-completion status also match. Outcome equality remains mechanical and values
+are omitted from the technical report. There was no checking-based retuning.
+
+The actual restored-location inventory now covers56 episodes, SHA
+f838e078055e983d926f3dfbe7fbdfe491239441462610721a37b0f2f76f92ac.
+Its filename is analysis/original-restoration-paths-20261020-56.json. It prepares
+the final replay, but is not a complete60 proof. Live operational status now
+records56 remote replays and470 restored analysis files. Its archived54-remote
+count correctly describes the moment before this latest pair was reverified.
+
+Revision13 is prepared for the next checkpoint:474 explicit files,3,989,767
+bytes, SHA
+f1a38f171908b66ef3fa7fc3199bd6c5395d73e32a89e8ec6b9e4a61f6e5b591.
+It adds the latest verifier/proof,56-location inventory and dated timing plan.
+Earlier manifest versions remain unchanged. Revision12/470 is the latest fully
+remote-restored packet; revision13 is not yet remotely preserved. Root edits are
+these compact recovery/timing receipts, this reply and ignored status/evidence.
+No frozen source, protocol, metric, optimizer, deadline or allocation changed.
+All four last-block conditions and final original60 analysis/preservation remain
+required. The separate screen is still unlaunched; R36 waits for complete16.

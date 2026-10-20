@@ -24,6 +24,13 @@ allowances or instructions to override an existing user-directed hold.
 <!-- BEGIN REVIEW STATUS INDEX -->
 **Current review index.** Detailed evidence and exact receipts follow below.
 
+- **R21 next physical test:** the separately frozen four-total-start closure/
+  native-continuation screen follows original60 completion, physical preservation
+  and fresh resource admission. The existing48-call gripper diagnostic already
+  shows no executed-command flips at amplitude0.5 and directional flips at2.0,
+  including opening on held Clutter inputs. Phase timing remains untested; the
+  screen tests native continuation after a closure prefix. The CPU world-model
+  audit failed its frozen gate and remains preparation only.
 - **R24:** complete and integrated into the screen recorder. The two source files
   remain stable;18 CPU cases and the actual reader/attribution/recorder interface
   check pass. This is preparation, with no physical hybrid result.
@@ -74,12 +81,36 @@ allowances or instructions to override an existing user-directed hold.
   sensitivity module matches frozen38b3f50 exactly; its two constants are used
   by standalone training analysis, not episode_progress. The inspected screen
   path uses progress attribution after terminal verification. No source edit.
-- Last verified original snapshot at14:24 UTC:54/60 valid full episodes;40
+- Last verified original snapshot at14:47 UTC:56/60 valid full episodes;40
   comparison-training episodes have0 requested completions,16 violations and24
-  safe unfinished. Ten protected checking episodes are complete; the block-two
-  fixed/random wrappers remain live. No checking outcome has been opened for review.
+  safe unfinished. Twelve protected checking episodes are complete; the block-three
+  random/EA wrappers remain live. No checking outcome has been opened for review.
   Revalidate identities before operational decisions. R21 choices stay fixed.
 <!-- END REVIEW STATUS INDEX -->
+
+**Scheduling-only watch, 14:47 UTC.** Both audit-b2-fixed-a0 and
+audit-b2-random-a0 are terminal completed in the queue, bringing the original
+study to56 valid full completions and12/16 checking completions. Their exact
+old processes are absent. The new live handles are audit-b3-random-a0,
+PID79649/start395095252, and audit-b3-ea-a0, PID79650/start395095253; both
+identities match `/proc`. Four planned valid episodes remain: these two running
+and two pending. There is no invalid full attempt. Observer12485 ended because
+the observed old pair terminated, without changing experimental processes.
+No checking behavior was opened or interpreted. Your dated54-episode scheduling
+refresh retains its explicit earlier scope; actual screen admission still awaits
+original60, complete design/preservation and fresh live resource clearance.
+R36 remains queued for the complete export and successful final design proof.
+
+**Preservation readback, 14:34 UTC.** Your latest reply reports54 completed
+full episodes technically restored/replayed, with revision11's464-file analysis
+packet fully restored and revision12's470-file packet prepared only. I retain
+that distinction. The54-episode preservation statement is owner-reported; this
+review did not reopen checking behavior or repeat the remote physical replay.
+My14:33 operational probe independently confirms54/60 completed,10/16 checking
+completed and both exact block-two fixed/random wrapper identities still live.
+Observer47388 finished its bounded read-only watch with the workers live at
+696/688 controls; its observation limit is not an episode terminal condition.
+There is no intervention or additional source repair requested at this boundary.
 
 **Scheduling-only watch, 14:24 UTC.** The queue records54 valid full episodes
 and10/16 checking episodes complete. Both audit-b2-ea-a0 and audit-b2-native-a0
