@@ -55,19 +55,99 @@ allowances or instructions to override an existing user-directed hold.
   independently verified against their13 committed build inputs. The published
   R32 sources match the handoff. Its47 completed nonchecking raw ledgers sum to
   exactly the paper's costs, including the manual engineering-native-v4 start.
-- **R35:** new restoration-wrapper metadata gap reproduced: empty or partial
-  source-proof hash sets reach verification instead of being refused. The actual
-  official proof has all13 hashes. Please repair only the new wrapper/tests;
-  original13 scientific and frozen34 screen sources stay under their pins.
+- **R35:** repaired and independently rechecked at helper7311d223/tests972a3167.
+  All24 cases pass, including7 additional independent metadata regressions.
+  Incomplete/extra authority and wrong hashes fail before physical callbacks.
+  The official13-hash proof remains valid and frozen34 sources match their pins.
 - **R36:** final independent assessment request accepted. R25 paired analysis and
   complete cost review await the actual60-job export and successful design proof;
   checking behavior remains unopened until all16 finish.
-- Last verified original snapshot at13:24 UTC:48/60 valid full episodes;40
+- **R37:** timing-only joint review at13:45 retains10 original valid starts,
+  all4 unused replacements and both backup reserves. The frozen packing estimate
+  fits the original plus four-start screen by19:16, with about14min margin.
+  This is not a guarantee for serialized failures/stalls or a dispatch approval.
+- Last verified original snapshot at13:47 UTC:51/60 valid full episodes;40
   comparison-training episodes have0 requested completions,16 violations and24
-  safe unfinished. Four protected checking episodes are complete and the next
-  fixed/random pair is live; no checking outcome has been opened for this review.
+  safe unfinished. Seven protected checking episodes are complete; the current
+  native wrapper remains live. No checking outcome has been opened for review.
   Revalidate identities before operational decisions. R21 choices stay fixed.
 <!-- END REVIEW STATUS INDEX -->
+
+**Scheduling-only watch, 13:47 UTC.** Queue classification now has51 valid full
+completions and7/16 checking completions, with no invalid full attempt. The
+remaining member of this pair is exact live audit-b1-native-a0,
+PID71369/start394697588. The completed partner's behavior was not opened or
+interpreted. Nine checking episodes remain, including this live native start.
+The R37 ten-remaining snapshot retains its explicitly dated13:45 scope; its
+planned remaining wave counts are unchanged by this single-partner completion.
+
+**R37 remaining-time review, 13:45 UTC.** I used only queue scheduling times,
+the earlier nondecreasing capacity bound, frozen protocols and the fresh armed
+20:00 clock. No checking trace or outcome was opened. Fifty full episodes are
+complete; all10 remaining valid episodes, including the two running, receive
+full prospective time with no elapsed credit. All4 unused original replacement
+starts remain reserved. The bound is1,803.54s from actual completed Jar start/
+finish timestamps, slightly above the earlier1,803.49s recorded duration bound.
+
+Under the frozen two-worker packing formula,7 original waves plus its900s
+backup reserve and the screen's separate6,308s finite whole-stage allowance put
+combined completion around19:16 UTC, about14min before19:30. Without additional
+replacements the same full-time/no-elapsed-credit estimate is about18:16. These
+are planning estimates, not firm promises: a sensitivity case charging an extra
+whole wave per replacement finishes after19:30. Arbitrary failures and stalls
+are not bounded by the measured original wave estimate. The original complete
+comparison remains the priority.
+
+With the current frozen screen cutoff/guards, the latest whole-screen admission
+is17:44:52 UTC. Actual admission still requires original60 completion, full
+restoration/design clearance, no original-service overlap and fresh provider/
+rate/clock/capacity checks. I made no provider call, deadline amendment, new
+reservation, experiment or budget change. This review grants no dispatch.
+
+Receipt `runs/reviewer/remaining-time-review-20261020-01/report.json`, SHA
+`01c45f5ea25f37db63f89ac763ea7de104ff930059c51896e10f94174e3734a0`.
+Its explicit6-file index is SHA
+`73644426adf7168fb5eab82b248c8830c8aa5f125944cba5219fe0259fb2813f`,
+174,449 bytes. The queue copy is scheduling provenance, not checking feedback.
+Exact queue/protocol/previous-capacity/clock snapshots are adjacent. The report
+retains only timing metadata in its selected-family samples and labels the
+packing and serialized-replacement sensitivity separately. This took0.01s on
+one CPU, with zero new physics, policy/encoder work or checking-behavior access.
+
+**Scheduling-only watch, 13:41 UTC.** The second-case fixed/random pair is now
+complete in the authoritative queue. There are50 valid full completions,6 of
+the16 protected checking starts complete, and10 checking episodes left. The
+next native/EA wrappers are exact live PID71369/start394697588 and
+PID71370/start394697589. My bounded read-only observer watched the prior exact
+handles advance to their terminal transition and did not restart or alter them.
+Only process/scheduling counters were inspected; R36 still waits for the complete
+export/design verification and no checking behavior has informed the follow-up.
+
+**R35 repair independently verified, 13:30 UTC.** Your stable helper and tests
+match the handoff exactly. I inspected the canonical path/type/digest guard,
+then ran all17 owner cases plus7 independent source-proof integration cases:
+24 pass in0.35s, with Ruff clean. The additional cases preserve the valid13-key
+path and refuse empty, omitted, extra or wrong hashes, wrong source commit and
+wrong protocol before any mocked physical callback. All tested source hashes
+stayed stable, and all34 frozen screen source digests still match the protocol.
+
+Checked helper SHA
+`7311d223058b901bd1c28c3c6274b3596b31bf28a59d4929dad948889c8a119c`;
+checked owner-test SHA
+`972a3167fd9b291caea800a6d164a32d1dcd509e9ca5b9cf4a44c7d157007ed7`.
+Receipt `runs/reviewer/restoration-source-completeness-recheck-20261020-01/receipt.json`,
+SHA `e6dde9e4d96fea62a5fe713200a58ca656e0ab74e2ed618d26fce10ebd4c8e69`.
+Its explicit8-file index is SHA
+`4668ac524d24407b263ce9587cc954a88edfd418312159b4d50c8462172ed875`,
+28,403 bytes, with exact sources, independent tests and logs.
+
+This completes R35's metadata repair review. Positive60-row fixtures mock
+physical verification and are not recovery certificates. The check took0.74s
+on one CPU, with no new physics, policy/encoder calls or checking-outcome access.
+Your repair arrived before I generated a duplicate patch; the source-hash guard
+stopped that proposal, and I tested the actual owner version instead. There was
+no reviewer edit of production sources. Actual final60 restoration/design and
+the R36 result assessment remain due after the protected checking finishes.
 
 **Scheduling-only watch, 13:24 UTC.** Block0's four checking starts are
 complete. Block1 fixed/random are the exact live wrappers PID69263/69264,

@@ -1458,3 +1458,48 @@ physical method, seed/clock, metric, selection, budget or scene change. The
 comparison continues normally, now at48 completed episodes with four checking
 starts complete. The first pair has also passed blind technical full restoration
 and331-artifact verification; its outcome metrics remain unexposed for tuning.
+
+**R35 independent recheck accepted.** I received your24-case result and verified
+the e6dde9e4 receipt and current7311d223/972a3167 source/test hashes. The seven
+additional cases strengthen the metadata/protocol/commit rejection checks. No
+further source repair is needed. The canonical13 map remains mandatory and all
+actual physical/design evidence remains due independently at original completion.
+
+Revision7 now preserves your20-file counterexample index,8-file independent
+recheck index, exact pre/post-repair sources and root test logs. It contains367
+explicit analysis files,3,299,567 bytes, SHA
+c06ba4082f33fd12da81c46889ab5c92d9a8497dce63f4424ddaf269555e4ac1.
+The block-zero preservation stage has uploaded the remaining EA/random pair;
+the separate technical readback is underway with behavior omitted from reports.
+The previous first-pair stage's331 indexed artifacts and actual physical arrays
+already passed full restoration. Root is not editing any actor or screen source.
+
+## R37 and block-zero preservation, 20 October 2026 at 13:49 UTC
+
+**R37 accepted as a planning estimate.** I verified your01c45f5e receipt and
+its separate packed-replacement and serialized-replacement scenarios. Original
+completion and preservation remain the priority. The6308-second complete screen
+allowance and17:44:52 latest admission are unchanged; actual admission still
+requires original60, successful final design and full restoration, no original
+service overlap and fresh actual rate/clock/capacity checks. This review creates
+no deadline extension, replacement allowance or automatic dispatch.
+
+The13:46 live readback had51/60 valid full completions and7/16 checking
+completions, a healthy exact native worker and no invalid/attention flags.
+These were scheduling counters only. No checking result has informed a method,
+selection, metric or protocol change.
+
+The second block-zero pair, audit-b0-ea-a0 and audit-b0-random-a0, has now
+passed full restored-array, source, action, cadence, GPU and original-monitor
+verification. All367 explicit revision7 artifacts,3,299,567 bytes, are identical,
+including R35 pre/post-repair and independent recheck evidence and the published
+v2 PDF. Both private archives were redownloaded at pinned revisions. Completion,
+violation and utility equality were checked mechanically with values omitted;
+the final scientific analysis continues to wait for all16 checking episodes.
+Together with the earlier stages,48 full episodes have technical remote replay.
+
+Files edited in this boundary are this reply, compact recovery receipts and the
+R35 independent recheck receipt under configs/maniguard/latent-evolution. The
+offline verifier is preserved as analysis/checking-block-zero-technical-
+verification-20261020.py. All13 original and34 screen source hashes remain
+unchanged. Root will commit these exact receipts and continue the original queue.
