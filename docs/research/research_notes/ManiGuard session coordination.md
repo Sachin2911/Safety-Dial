@@ -34,9 +34,9 @@ allowances or instructions to override an existing user-directed hold.
 - **R24:** complete and integrated into the screen recorder. The two source files
   remain stable;18 CPU cases and the actual reader/attribution/recorder interface
   check pass. This is preparation, with no physical hybrid result.
-- **R25:** three final-summary files are stable with15 checks. Use them only after
-  the full original checking/export/design verification finishes. The actual
-  four-controller seal and its pre-checking timestamp are independently checked.
+- **R25:** applied to the actual complete original60 export after successful
+  design verification. All16 checking rows and all six contrasts pass. My separate
+  dated export gives exactly the same outcomes as your canonical final export.
 - **R26:** canonical four-start authority is repaired and independently verified.
   Alternate destinations, duplicate coordinators and fresh charges on resume fail.
 - **R27/R28:** corrected gripper interpretation: the three audited earlier closure
@@ -66,9 +66,11 @@ allowances or instructions to override an existing user-directed hold.
   All24 cases pass, including7 additional independent metadata regressions.
   Incomplete/extra authority and wrong hashes fail before physical callbacks.
   The official13-hash proof remains valid and frozen34 sources match their pins.
-- **R36:** final independent assessment request accepted. R25 paired analysis and
-  complete cost review await the actual60-job export and successful design proof;
-  checking behavior remains unopened until all16 finish.
+- **R36:** actual final assessment complete. All four conditions have0/4 requested
+  completions; EA/native each have3 violations and fixed/random each have2. No
+  evolutionary advantage is demonstrated. All66 ledgers reconcile, and all14,019
+  physical client/server receipts match individually. Alias/lineage, all six
+  contrasts, saved initial-view magnitudes and allocation limits are documented.
 - **R37:** timing-only joint review at13:45 retains10 original valid starts,
   all4 unused replacements and both backup reserves. The frozen packing estimate
   fits the original plus four-start screen by19:16, with about14min margin.
@@ -81,12 +83,232 @@ allowances or instructions to override an existing user-directed hold.
   sensitivity module matches frozen38b3f50 exactly; its two constants are used
   by standalone training analysis, not episode_progress. The inspected screen
   path uses progress attribution after terminal verification. No source edit.
-- Last verified original snapshot at15:16 UTC:59/60 valid full episodes;40
-  comparison-training episodes have0 requested completions,16 violations and24
-  safe unfinished. Fifteen protected checking episodes are complete; the last
-  fixed wrapper remains live. No checking outcome has been opened for review.
-  Revalidate identities before operational decisions. R21 choices stay fixed.
+- **R40:** completed training-only fitness-information audit. EA generation two
+  ties three candidates at utility0; the chosen incumbent has stages[0,0], while
+  the existing ea-g2-2 has[1,0] with no violation in either case. A diagnostic
+  progress tie-break distinguishes that safe closure, without establishing full
+  completion or an optimizer gain. No current fitness or screen choice changes.
+- Last verified original evidence at15:53 UTC:60/60 full completions and all16
+  checking outcomes pass complete design verification. The complete owner remote-
+  restoration proof now exists and matches my original-record export on all60
+  identities/outcomes/counters and the13-source authority. I did not repeat the
+  owner's remote download/replay. The separate screen directory is still absent;
+  actual admission remains with fresh live resource and preservation clearance.
+  R21 choices stay fixed and cannot use checking feedback for tuning.
 <!-- END REVIEW STATUS INDEX -->
+
+**R40 factual fitness-information audit.** I tested the sparse-fitness explanation
+against all40 completed comparison-training episodes, with all16 checking outputs
+excluded before opening any episode path. The existing factual progress reader
+reconstructed20 distinct two-case panels. Their trace hashes all match R36's
+physical RPC audit. The new one-off script passes Ruff; the analysis took6.65s
+on one CPU with zero new controls, neural-policy/encoder calls or model training.
+
+There is a concrete selection limitation in EA generation two. Three candidates
+tie on[0,0] utility. The declared identifier tie-break selects ea-g2-0, whose
+two factual ordered stages are[0,0]. The existing ea-g2-2 has stages[1,0]: it
+closes safely and supported at1157 on task0019/seed6101930, remains nonviolating
+in both cases, but never holds. It is not promoted because stage progress is not
+part of the frozen score. A diagnostic secondary key for summed terminal ordered
+stage, with primary summed utility first, would select this already-observed
+child from this cohort. This diagnoses a factual tie; it does not demonstrate
+that changing the search would produce safe completion or better checking results.
+
+The corresponding random generation-one tie has all four candidates at[0,-2].
+Its selected random-g1-0 has stages[0,0], while random-g1-2 has[1,0] and safe
+supported closure at482 on task0019/seed6101920. Both still violate on the second
+case. This diagnostic changes the preferred factual panel in2 of5 distinct
+cohorts, counting the shared initial physical cohort only once. Shared initial,
+EA generation one and random generation two retain their current first choice.
+It is therefore a shared fitness-design issue, not an observed EA-only advantage.
+
+All40 training episodes still have0 requested completions,16 violations and24
+safe unfinished. Of those24,20 have no ordered milestone and4 reach closure
+only. No safe ordered holding/lift/transport was established. The diagnostic
+sets secondary progress to0 for any episode with a violation, then uses it only
+after the unchanged primary utility. These are privileged training labels, not
+new actor observations. Different seed panels and future search histories are
+not reconstructed. Current original results, sealed finalists and frozen R21
+choices remain authoritative. A future fitness change needs a separate prospective
+protocol, matched random/learning comparisons and fresh checking evidence.
+
+Evidence: `runs/reviewer/fitness-information-audit-20261020-01/` contains the
+script, full factual training audit, five-cohort diagnostic and receipt. Report
+`within-cohort-tie-audit-v1.json` SHA
+`2eed8aab0a5cbb0ac5799a81ad13edadabcd3bb8e17c4e492d5335d5c7ad855a`;
+receipt SHA
+`541c17cd8ff6df8d1ffb62d4639b89e7b5052fcc1773c5e8730a1d47cfa0d658`;
+explicit index SHA
+`ddee70465c2256f6921df5bf1e5201a889db0e7da4037b02c24fb0f82f40b078`,
+4 files /85,333 bytes. This is a nonblocking interpretation/future-method note;
+please do not delay the four-start physical screen for it. Your16:04 R36
+acceptance and planned immutable analysis round-trip are read back and accepted.
+
+**Checkpoint clarification prompted by the user.** The active Jar experiment
+uses the family-specific fine-tuned pi0.5 LoRA checkpoint, not vanilla zero-shot
+pi0.5. I checked the final native episode's actual `policy_metadata`: serve config
+`pi05-base_datagen_v1_jar_joint_2cam_lora`, checkpoint revision
+`1d84eda070313a202a595e449fcf41a1a1e8a546`, with verified checkpoint provenance.
+Its actual job names `IDEAS-Lab-Northwestern/pi05-base-datagen-v1-jar-joint-2cam-lora`
+at step7400. Please make this explicit in the final paper: native is the same
+family-fine-tuned policy without steering; our experiment freezes its weights
+and evolves the external controller. No new supervised fine-tuning or zero-shot
+foundation-policy comparison was performed in this pilot. This is clarification
+of recorded provenance, not a checkpoint change or a new comparison request.
+
+**Original clearance now passes the actual screen readiness command.** I ran
+the frozen entry point with `--check`, using only saved evidence and live process
+identity reads. It returns `original_clearance_ready: true`,
+`resource_preflight_required: true`, `reserved_starts: 0`,
+`physical_dispatch: false`. The11 immutable final-original export copies match
+their recorded sizes/hashes. All nine preserved original server prefixes match
+R36's hashes and14,387 returned requests; the new accounting boundary matches
+every R36 physical counter and the separate CPU work. The public accounting
+boundary is byte-identical to the analysis copy, SHA
+`92bbc87da13dfb418f2d95732676dfbc7f5ace145f77855a80b4b427c19799c0`.
+
+R36 is complete and creates no further review hold. I recommend prioritizing the
+already frozen four-start screen once your actual fresh provider/rate/watchdog,
+source and service-lease gates pass. The paper update can proceed on CPU during
+the physical test; the frozen prerequisite does not require its PDF publication
+before dispatch. That uses the available physical window while retaining the
+unchanged four-start cap and17:44:52 latest whole-screen admission. Actual launch
+and its admission record remain with the execution owner. There is no new test,
+budget amendment, decoder probe, replacement or method-selection request here.
+
+**Future EA improvement guidance following the user's question.** The completed
+pilot does not demonstrate an evolutionary gain, but it does not establish that
+EA cannot improve this problem. The frozen implementation exposes a specific
+candidate bottleneck: `outcome_score` gives every safe unfinished episode0,
+regardless of ordered task progress; `CandidateSearch.ranked` breaks tied cohort
+sums by identifier. With no requested completion in the40 comparison-training
+episodes, there is no positive completion signal to select on. This is a plausible
+limitation, not a proven explanation of the physical failures. Sparse objectives
+can still be solved by exploration, and a changed fitness alone does not create
+missing reachable behavior.
+
+The frozen four-start screen appropriately tests representational feasibility:
+can a closure prefix followed by native execution add safe later progress? Its
+closure controller is random-g1-2, so even a positive result would first support
+composition, not an EA advantage. Any subsequent evolutionary claim needs a
+separately frozen test against random search in the same controller space, with
+the same prior information, all paid interactions and actual requested completion,
+violations and unfinished outcomes. A future ordered-progress secondary signal
+could distinguish safe partial behaviors, but it must retain the primary safety/
+completion objective and explicit controls against inactivity or milestone gaming.
+This suggests a future design to evaluate after the screen, not an amendment to
+the original fitness, frozen four-start choices, budget or launch gates.
+
+For the general possibility only, the primary
+[Salimans et al. study](https://arxiv.org/abs/1703.03864) reports successful
+evolution-strategy policy optimization on MuJoCo and Atari. I rechecked its
+abstract directly. It supplies no ManiGuard safety, small-budget efficiency or
+novelty claim for our method. The current defensible position remains conditional:
+first demonstrate useful safe behavior in this representation, then demonstrate
+an optimizer benefit under matched budgets.
+
+**R36 actual final assessment, 15:53 UTC.** Your complete original60 handoff is
+read and independently assessed. I generated a separate full export/design under
+`runs/reviewer/final-comparison-review-20261020-01/export-v1/` after all16 checking
+episodes and the independent-audit milestone completed. It passes60/60 with no
+errors or pending items. R25 then accepts all16 rows against the exact seal and
+protocol. Its conditions, all six contrasts and all16 factual rows equal your
+canonical `analysis/final-paired-original60-20261020.json` exactly. Canonical
+exports, paper paths, execution sources and frozen choices were left unchanged.
+
+The checking result is a negative exploratory pilot:
+
+| Condition | Safe requested completion | Unsafe requested completion | Safe unfinished | Unsafe unfinished | Raw benchmark goals | Mean utility |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Native | 0 | 0 | 1 | 3 | 1 | -1.5 |
+| Fixed | 0 | 0 | 2 | 2 | 0 | -1.0 |
+| EA | 0 | 0 | 1 | 3 | 1 | -1.5 |
+| Random | 0 | 0 | 2 | 2 | 0 | -1.0 |
+
+Each denominator is4. All16 requested completions are false. The native/EA raw
+goals are unsafe and requested-unfinished, not unsafe requested completions.
+All six candidate-minus-reference mean utility contrasts are: fixed/native+0.5,
+EA/native0, random/native+0.5, EA/fixed-0.5, random/fixed0, random/EA+0.5. Every
+safe-completion difference is0. The nonzero utility contrasts arise solely from
+the violation difference on block2. Four nominally paired case/seed blocks and
+one optimizer run do not establish a winner, safety guarantee or transfer.
+
+The alias is genuine retained lineage: random-g2-0 carries random-g1-0, which
+carries initial-2 unchanged. Its genotype is exactly the fixed initial-2 genotype.
+EA-g2-0 carries EA-g1-3 unchanged, descended from initial-2. Different candidate
+names are not independent discoveries. The complete design reconstruction passed;
+training seed-panel changes remain a limit on interpreting a learning curve.
+
+**Costs.** I independently summed all66 original raw ledgers, retaining all six
+engineering starts and the manual-v4 start exactly once. The50 earlier pinned
+nonchecking ledger hashes still match. Totals are112,131 recorded controls,
+14,019 physical requests,678,393 known physics ticks,112,761 returned Env.step
+calls,28,038 encoder images,14,019 image-encoder calls and63 text calls. These
+equal your canonical export exactly. An additional identity-level check joins
+all14,019 physical client receipts to server terminations by episode/query index
+with full receipt equality, zero duplicates and zero unmatched records. All nine
+server journals match their pinned hashes and have no incomplete tail or failure.
+The368 other server returns retain320+48 decoder admissions separately; the48
+supplemental receipts have no unresolved/duplicate ID. This physical identity join
+does not claim a separate identity audit of every decoder-only request.
+
+Unknown pre-attachment physics remains unknown. The CPU model audit's27,412
+training-row uses and5,395 head queries, and74 synthetic sampler calls, retain
+their separate accounting. Reused18,666 acquisition controls are not added again.
+My15:41 cost snapshot has20.321293 provider-elapsed hours,40.642587 allocated
+GPU-hours and$12.448674 at the observed rate. Your earlier dated export has its
+own earlier allocation values. Both are upper-bound estimates, not verified
+billing or final rental closure. Setup, both GPUs, idle and preservation count;
+transfer, stopped storage and later follow-up time keep their explicit scopes.
+
+**Requested saved-view diagnosis.** All16 eight-value robot states match within
+blocks. For10 of12 non-native comparisons, both cameras' channel-difference
+p99 is at most1/255. The two larger cases are block1 random, wrist p99=9/255,
+and block3 EA, overview6/255 and wrist7/255. Every non-native camera comparison
+has mean absolute channel difference below1/255. I inspected both16-panel saved
+initial-view sheets: object layout and camera placement appear consistent within
+blocks, with no visible relocation established. This supports retaining the
+nominal pairing with an explicit RGB-inequality limitation. It does not identify
+DLAA as the cause, prove full simulator-state equality or measure policy sensitivity.
+No new encoder, neural policy or simulator call was made.
+
+Your now-emitted `original-60-physical-recovery-proof.json`, SHA
+`5716e37a9d869b6838595352217b7383431451479c4cb787853925a7cb8b4f32`,
+binds the stable queue and all60 distinct episodes. I checked its outcomes,
+controllers, scenes, seeds and control/query counts against my independently
+verified original export; all match. The complete13-path source authority and
+current source/verification hashes match too. This is a readback of your full
+remote proof, not another remote download or full restored replay by me.
+
+The immutable review packet is
+`runs/reviewer/final-comparison-review-20261020-01/`. Receipt
+`scientific-assessment-v1.json` SHA
+`8569a7f15f89f888052cd5a7c3013b391c9a8c82fc6e72d38616d2778f6801c1`;
+explicit index `preservation-artifacts-v1.json` SHA
+`21ab804a66fee14bcebce9f8fcb492b18841dcb5d5051199f26c9148a43339b0`,
+15 files /2,674,278 bytes. It includes both saved-view sheets, their full-resolution
+numeric analysis and the exact physical RPC join. Both new one-off CPU audit
+scripts pass Ruff. Please preserve the selected explicit packet with the next
+analysis checkpoint. My scientific assessment is complete within the above scope.
+R21 remains the unchanged four-total-start engineering screen after your actual
+fresh resource/preservation clearance; this review does not authorize dispatch,
+retuning on checking cases, extra decoder work or a larger physical allocation.
+
+**Original physical queue complete, 15:32 UTC.** All60 planned full episodes and
+all16 checking episodes are marked completed; there is no running attempt or
+invalid full attempt. Both final wrapper processes are absent. Observer87369
+ended on their termination. The15:32:35 metadata snapshot still lacks the
+independent-audit search milestone, so the canonical final export/design stage
+is not presumed complete. R25's three source/test hashes still match the accepted
+preparation. I have not opened checking behavior and will consume the complete
+dated export/design proof when provided. Meanwhile I am reconciling terminal
+raw ledger counters for R36, without changing canonical outputs or source.
+
+Your latest preservation reply is read back:59 episodes are technically restored,
+revision14's483-file packet is fully round-tripped, and revision15's486-file
+packet is prepared only. Final60 still requires the last fixed episode's actual
+private reconstruction and a fresh stable queue binding. Screen clearance remains
+with those original completion/design/preservation and fresh resource requirements.
 
 **Scheduling-only watch, 15:16 UTC.** The queue now records59 valid full
 completions and15/16 checking completions. audit-b3-native-a0 is terminal

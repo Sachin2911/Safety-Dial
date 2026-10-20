@@ -18,7 +18,7 @@
 \begin{document}
 \raggedbottom
 \title{Evolving Native-Noise Controllers for Safe Completion with Frozen Manipulation Policies}
-\subtitle{Frozen Jar comparison and separately audited model-assisted preparation}
+\subtitle{Completed frozen Jar pilot and separately audited continuation preparation}
 \author{Sachin Mohan}
 \affiliation{\institution{University of the Witwatersrand}\city{Johannesburg}\country{South Africa}}
 \email{2699183@students.wits.ac.za}
@@ -32,20 +32,20 @@ contract remain fixed. A 320-call decoder audit on ManiGuard Jar and Clutter
 passes all 32 same-noise identities and verifies action-prefix influence. Four
 full development episodes establish integration and timing. A frozen 60-episode
 study includes matched evolutionary and random-search adaptation and sixteen
-protected independent checks. All forty comparison-training episodes remain
-requested-unfinished. Both methods have four violations in eight first-generation
-episodes and two in eight second-generation episodes. Four trials close the lid
-without a violation or subsequent holding, all on one task across two seed panels.
-One random child reaches a raw goal after violating safety, without lid closure.
-The retained EA controller does not repeat closure on its new seed panel;
-random search retains the fixed reference's identical weights. Finalists are
-sealed and independent checking is running. A separate 48-call
+protected independent checks. All sixty episodes are complete and independently
+validated. All forty comparison-training trials remain requested-unfinished;
+four nonviolating lid closures never extend to holding. In the four checking
+cases per condition, every method has zero safe requested completions. Native and
+EA each have three violations, versus two for fixed and random search. Their
+raw goals occur only after violations and fail the requested sequence. Fixed and
+random finalists have identical retained weights. This pilot establishes no
+evolutionary safe-completion advantage. A separate 48-call
 decoder diagnostic finds stronger-offset gripper influence with arm coupling,
 without measured physical benefit. A CPU model-assisted prototype fails its
 prediction/calibration audit. A separate four-start engineering handoff screen
 is frozen on an exposed closure-producing seed, with no physical hybrid result
-claimed. Native-noise and evolutionary VLA steering have precedents. The sought
-contribution remains explained safe completion per total interaction; competent
+claimed. Native-noise and evolutionary VLA steering have precedents. Explained
+safe completion per total interaction remains a contribution to establish; competent
 learning comparisons, replication and transfer are still required.
 \end{abstract}
 \begin{CCSXML}
@@ -72,7 +72,7 @@ physical simulator outcomes. The VLA, feature encoder and native execution contr
 remain fixed. This physical comparison deploys no learned safety filter, world
 model or online action veto. Section~\ref{sec:model-followup} separately presents
 implemented CPU preparation, its failed factual audit and the proposed second
-experiment; those components do not alter the running comparison.
+experiment; those components do not alter the completed comparison.
 
 Earlier restraint/feedback pilots found limited trigger opportunities and no
 safe-completion benefit~\cite{priorpilot}. Their different controllers and legacy
@@ -81,10 +81,10 @@ rendering profile are historical motivation, not controls for this experiment.
 We separate four questions: does adaptation help native execution; does
 conditioning help a fixed bias; does evolutionary retention and mutation help
 relative to other adaptation methods; and do fitted weights transfer? Integration,
-decoder influence and two unsuccessful adaptation generations are complete.
-The matched Jar comparison follows a protocol frozen before comparative feedback.
-Its small sample provides descriptive leads, not optimizer-superiority or
-cross-family-transfer evidence.
+decoder influence, two adaptation generations and protected checking are complete.
+The matched Jar comparison followed a protocol frozen before comparative feedback.
+Its small sample gives a negative exploratory result, without optimizer-superiority
+or cross-family-transfer evidence.
 
 \section{Related work and contribution boundary}
 DSRL learns in the latent-noise space of a frozen diffusion policy, including
@@ -116,7 +116,10 @@ At query time $\tau$, the frozen family policy decodes native Gaussian noise
 $\epsilon_\tau\in\mathbb R^{16\times32}$ from two RGB views, robot input and
 the prompt. Native output transforms produce physical joint-target/gripper
 commands. The first eight are executed unless native termination occurs sooner.
-The adapter changes noise rather than action horizon.
+The adapter changes noise rather than action horizon. Native is the same
+family-fine-tuned policy with steering disabled. For Jar, both conditions use
+the released LoRA checkpoint at step 7400; this pilot performs no new supervised
+fine-tuning or zero-shot foundation-policy comparison.
 
 Let $V$ be raw native \texttt{ltl\_violated}, without engagement gating. Requested
 completion $\complete$ requires native success and the pinned family checklist.
@@ -331,7 +334,7 @@ and independent local stop 20:00 UTC on 20 October. Horizons/rendering were not
 reduced to fit.
 
 \subsection{Analysis and uncertainty}
-The final comparison will retain all four requested completion and safety categories
+The final comparison retains all four requested completion and safety categories
 and raw benchmark completion per condition, with paired differences by checking
 block. Initial robot/image hashes are checked: common seeds do not prove identical
 camera observations. Contact/grasp indicators contextualize noncompletion.
@@ -350,9 +353,10 @@ implies an approximate 95\% upper rate bound of $3/n$, not zero; four episodes
 are particularly weak evidence.
 
 \section{Completed physical and decoder evidence}
-The completed-training summary is dated 20 October 12:41 UTC. All forty training
-trials and four development trials are complete. Independent checking is running;
-its behavioral outcomes are excluded from this update.
+The complete original60 export is dated 20 October, after all forty training,
+four development and sixteen protected checking trials completed. Its full design
+verification and private-archive physical replay pass. The separately frozen
+four-start engineering screen is now underway; no screen outcome is claimed here.
 \subsection{Identity and decoder influence}
 Eight saved observations per family, from two development tasks, each use two native
 noise draws. Each draw receives two same-noise baselines and positive/negative
@@ -414,7 +418,7 @@ Development closeout contains ten starts, 4,394 controls, 4,464 environment step
 and 26,987 known physics ticks. There are 551 physical-policy calls and 320 decoder
 calls. Encoding records 1,102 images, seven text calls, 23.519 s extraction and
 38.443 s loading; physical-policy request wall time is 293.776 s. These totals
-precede the running comparison and are not final study costs. Callback-unobserved
+precede the comparison and are not final study costs. Callback-unobserved
 initialization physics remains unknown.
 
 Clutter native has a 574.6 s cold startup versus its partner's 99.9 s. Logs identify
@@ -578,13 +582,63 @@ Across all forty comparison-training trials, sixteen violate and twenty-four
 are safe unfinished; none completes the requested sequence. The sealed EA
 finalist retains its first-generation winner; random retains the negative
 constant, identical to the fixed reference. Selection uses only the frozen
-utility and identifier tie rule. The sixteen-episode independent check is underway.
+utility and identifier tie rule. All sixteen independent checks are now complete.
 
-Completed development, engineering and training cost 83,424 policy controls,
-10,430 physical-policy requests and 504,727 known physics ticks. The separately
-charged 368 decoder requests bring these VLA requests to 10,798. These totals
-exclude running checking and future follow-up; pre-callback initialization
-physics remains unknown. Recorded-data CPU model costs remain separate below.
+\subsection{Completed independent checking}
+Table~\ref{tab:checking} reports the sealed finalists on four nominally paired
+Jar task/seed blocks, tasks 0016, 0012, 0011 and 0003. These cases were protected
+from this optimizer's training, but retain the programme's earlier exposure;
+they are not the untouched main-study test set. Every requested completion is
+false. Native's raw goal on task 0003 and EA's on task 0012 follow violations
+and remain requested-unfinished.
+
+\begin{table}[t]
+\caption{Independent checking, four episodes per condition. SC/UC and SU/UU
+retain requested completion/safety categories. $V$ counts violating episodes,
+$B$ raw benchmark goals and $G$ episodes satisfying the native holding predicate,
+without an independent body-link grasp witness.}
+\label{tab:checking}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Condition & SC & UC & SU & UU & $V$ & $B$ & $G$ & Mean $U$ \\
+\midrule
+Native & 0 & 0 & 1 & 3 & 3 & 1 & 1 & $-1.5$ \\
+Fixed & 0 & 0 & 2 & 2 & 2 & 0 & 0 & $-1.0$ \\
+EA & 0 & 0 & 1 & 3 & 3 & 1 & 1 & $-1.5$ \\
+Random & 0 & 0 & 2 & 2 & 2 & 0 & 0 & $-1.0$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The six candidate-minus-reference mean utility differences are fixed/native
+$+0.5$, EA/native $0$, random/native $+0.5$, EA/fixed $-0.5$, random/fixed $0$
+and random/EA $+0.5$. Every safe-completion difference is zero. Nonzero utility
+differences arise solely from the violation difference on task 0011. Native and
+fixed contact the target in all four cases, EA and random in three. This does
+not establish why the differing failures occur. Fixed and random are the same
+genotype: random retains the initial fixed controller through both generations;
+EA retains its first-generation child unchanged in generation two. These are
+retained lineages, not independent discoveries. Four blocks and one optimizer
+run establish no evolutionary benefit or safety-rate guarantee.
+
+The eight-value initial robot inputs match within every block. All non-native
+initial camera pairs differ at some pixels, but each camera's mean absolute
+channel difference is below $1/255$. Ten of twelve case comparisons have both
+camera 99th-percentile differences at most $1/255$. Saved-view inspection finds
+no visible object or camera relocation. Full simulator-state equality, the
+cause of pixel variation and its policy sensitivity remain unestablished.
+
+All sixty valid episodes plus six engineering starts, including failures,
+cost 112,131 policy controls, 14,019 physical-policy requests, 112,761 returned
+environment steps and 678,393 known physics ticks. The separate 368 decoder
+requests bring neural policy returns to 14,387, with no failed or incomplete
+server return. Feature extraction records 28,038 images and 63 text encodings.
+The manual short engineering start is counted once; pre-callback initialization
+physics remains unknown. At the original accounting boundary, elapsed rental
+time gives 41.091 allocated GPU-hours over both GPUs and a \$12.586 upper-bound
+estimate at the observed rate, including setup, idle time and preservation.
+This is not verified billing or final rental closure. Later analysis and the
+separate follow-up retain their own allocation accounting. CPU work is separate.
 
 \input{model-followup.tex}
 
@@ -631,20 +685,24 @@ Code, compact evidence and frozen protocols are preserved in
 \path{configs/maniguard/latent-evolution/capacity-20261020-v2.json}; its study README
 documents reconstruction. Separate private Hugging Face model/dataset repositories
 store immutable stage archives with remote revision, privacy, size and SHA-256
-verification. Remote restoration re-verifies all 44 development/training episodes,
-the four sealed finalist matrices, all 32 original identity pairs and eight
-supplemental pairs without new physics or model calls. Raw runs, licensed assets, credentials
+verification. Fresh private-archive restoration re-verifies all 60 episodes,
+including 112,095 exact native monitor entries and 13 authoritative source paths.
+The four sealed finalist matrices, all 32 original identity pairs and eight
+supplemental pairs also replay without new physics or model calls. Independent
+review reproduces all outcomes and joins all 14,019 physical client/server
+receipts exactly. Its decoder-only accounting has a separate scope. Raw runs, licensed assets, credentials
 and base-policy weights are excluded from public Git.
 
 \section{Conclusion}
-Native-noise steering is verified in two family policies, but all forty Jar
-comparison-training trials remain requested-unfinished, with sixteen violations.
-Four nonviolating lid closures never extend to holding. A raw goal follows an
-earlier violation; second-generation utilities tie and random/fixed finalists
-share weights. Independent checking is running. The failed model remains excluded;
-an exposed-seed four-start handoff screen is frozen but unexecuted. Evolutionary
-advantage, learned-filter performance and transfer remain unestablished. Competent
-matched learning, explained completion gains and replication are still required.
+Native-noise steering is verified in two family policies, but the completed
+Jar pilot establishes no evolutionary safe-completion advantage. Forty training
+trials remain requested-unfinished; four nonviolating lid closures never extend
+to holding. Every condition has zero safe requested completions in four protected
+checking cases; raw goals do not satisfy the safe requested sequence. Random
+retains the fixed controller's weights. The failed model remains excluded, and
+a separate exposed-seed handoff screen has no result claimed here. These findings
+concern this representation and budget, not all noise-space adaptation. Competent
+matched learning, explained completion gains and replication remain required.
 
 \begin{acks}
 This BSc Honours research at the University of the Witwatersrand is supervised by

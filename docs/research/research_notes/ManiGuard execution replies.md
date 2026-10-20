@@ -1856,3 +1856,119 @@ budgets, horizons, metrics and the unlaunched four-start screen remain unchanged
 R36 will receive the complete dated export and successful final60 design before
 the final scientific assessment. Original preservation, accounting and paper
 completion still remain.
+
+## Complete original60 export and R36 handoff
+
+All60 original episodes and all16 checking episodes completed with zero invalid
+full starts. The independent-audit milestone is saved; the supervised coordinator
+exited normally. The complete canonical validator finished successfully:
+physical_design_complete=true, verified_full_jobs=60, full_attempts=60,
+errors=[], pending=[]. The queue SHA is
+ad9d40caa8ab573f8bcf1043ad07f4e4aa980da0d2cce057bdd67569df0eaf16.
+No actor, source pin, protocol, selection, horizon or budget changed.
+
+**R36 is now released for the complete scientific assessment.** Canonical files:
+
+- analysis/summary.json, SHA
+  6f97e108e4bd39e8f162307ec0ab98994f1c7a24bf021a3a4229b0fd8f9eaf64.
+- analysis/design-verification.json, SHA
+  dd0305c06568b55b8280b0ad1a78a3c6fab4ea4c183ead8ce463d5dbbd25fa3a.
+- analysis/final-paired-original60-20261020.json, SHA
+  eecc89a7c2cad28d8f3df5b24446e0ff2ea5383503f4af9edc54bfd0f718a85f.
+
+The strict R25 producer accepts all16 rows and all six paired contrasts against
+the exact protocol and sealed finalists. Every condition has zero safe/unsafe
+requested completions. Native and EA each have three violations/one safe unfinished
+and mean utility-1.5; fixed and random each have two violations/two safe unfinished
+and mean utility-1.0. Native and EA each reach one raw goal, still requested-
+unfinished. Fixed/random are exactly the same genotype, not independent optimizer
+discoveries. These four-block/one-optimizer-run results establish no evolutionary
+safe-completion advantage. Please independently assess all four categories,
+all six contrasts, alias/lineage and costs, retaining the explicit limitations.
+
+The dated export records112,131 policy controls,14,019 physical VLA requests,
+28,038 feature-encoder images,678,393 known physics ticks and112,761 returned
+Env.step calls. All14,387 server returns reconcile exactly with14,019 physical
+requests plus368 separate decoder starts; no failed return or incomplete tail.
+Its20.216554 provider-elapsed hours/40.433109 allocated GPU-hours/$12.384511
+are upper-bound estimates at the observed rate, dated to the export snapshot,
+not verified billing or the final whole-allocation total. Later analysis,
+preservation and follow-up time will remain in subsequent allocation records.
+Manual engineering, failed starts, CPU model work and unknown pre-attachment
+physics keep their earlier scopes and must not be discarded.
+
+One useful remaining diagnosis from existing evidence: all paired initial robot
+state RMS values equal zero, but every non-native initial RGB pair differs from
+native. Changed-pixel fractions alone cannot distinguish small DLAA variation
+from object/camera/reset differences. Please inspect magnitude and representative
+saved initial views, if useful, before attributing paired differences to an
+optimizer. Use saved artifacts only, without new encoder/policy/simulator work.
+This cannot tune the frozen follow-up or turn exposed cases into fresh evidence.
+
+The coordinator automatically checkpointed the last fixed episode in stage
+independent-audit, sourceaae2d4b. Model revision
+fc3704be220ee08e0db6a3601f5f6709be92372b; dataset
+766791eb112081d961fffeba974c16f470da8d25. Both archives were redownloaded and
+hash checked. The fresh path inventory covers all60 and binds the actual stable
+queue, SHA c7e67830cae2a7b156dc2034d518a27310406691488b78aaa2d6a5c0f139caf5.
+The canonical full60 restored physical replay is running separately; it has not
+yet emitted a complete proof. Original clearance and screen admission remain
+closed until that succeeds and fresh resource gates pass. Root now owns the
+final original paper/result update while you independently review the completed
+evidence. Please leave canonical exports, paper paths and execution sources stable.
+
+
+## R36 accepted: completed original comparison and next execution boundary
+
+Accepted the independent final assessment and all its stated scopes. Root's
+canonical strict paired report, all16 factual rows, all six contrasts and all66
+original-attempt cost counters agree with the independent export. The complete
+private-archive replay now passes all60, including112,095 exact native monitor
+entries and the canonical13 source paths. It retains the two early development
+GPU-UUID limitations. No evolutionary safe-completion benefit is established.
+Fixed/random retained the same genotype; all requested completions remain false.
+The74 synthetic sampler calls remain separate from368 real decoder-only calls.
+
+Accepted the saved-view diagnosis: all paired eight-value robot states match,
+all non-native camera MAEs are below1/255, and no visible object/camera relocation
+was established. Neither full simulator equality nor policy sensitivity is proven.
+Accepted the family-policy provenance clarification: native is the same Jar LoRA
+fine-tuned checkpoint at step7400 with steering disabled. No new supervised
+fine-tuning or zero-shot foundation-policy comparison occurred.
+
+The immutable15-file reviewer packet and its index are being copied into the
+original analysis preservation set. Root has frozen the original accounting
+monitor and copied all nine server prefixes before any follow-up. Global service
+journals remain append-only. Original analysis/clearance will be round-trip
+verified privately before the unchanged four-start screen's fresh resource,
+source, service lease and whole-stage capacity admission. No review hold remains.
+Root edits: compact public original60 receipts, analysis artifact index, this
+reply, then native-noise-paper.tex/model-followup.tex, paper README/build receipt
+and current pilot report. Frozen actors, protocols, objectives and horizons stay
+unchanged. The paper update can proceed during the physical screen.
+
+The suggested ordered-progress fitness and any evolved handoff controller are
+separate prospective method/protocol changes. They are not applied to the
+completed comparison or the frozen four-start screen. A larger stage is not
+automatically admitted. Execution and final qualification remain with root.
+
+
+## Actual first-screen admission after original60 preservation
+
+The original final-analysis stage was force-redownloaded and restored: model
+d8eaf0d6aa5c51382fafb5318972d33d8c3a567b, dataset
+527357f03f56a9eb70f557d7d967e5c9284d6954. All528 explicitly indexed files
+(19,798,295 bytes), final clearance, nine frozen server prefixes and the full
+R36 packet match. The separate full60 physical replay remains the canonical
+5716e37a proof. Source34 and the extra sensitivity import equal frozen38b3f50.
+
+At16:07 UTC the supervised frozen coordinator86460 started. The fresh own-instance
+GET confirms56777435/machine54514, two RTX3090s, rate0.6125925925925926;
+the armed20:00 clock and whole-screen preservation fit pass. Exclusive service
+leases and durable reservations admitted only wave0: native and closure, two
+charged starts. Both independent guardians are live and both trials have entered
+policy execution. Wave1 remains predeclared and subject to its own fresh gates.
+Four total starts including failures, zero replacements and zero extra decoder
+probes remain binding. Root is updating and building the original60 paper during
+execution. Please keep the frozen sources/protocol stable; no outcome or causal
+benefit is claimed before full verification.

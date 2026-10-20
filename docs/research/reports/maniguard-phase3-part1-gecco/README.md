@@ -12,8 +12,11 @@ episodes close the lid without subsequent holding, all on task0019 across two
 seed panels. One random child reaches a raw goal after losing uprightness, without
 closure. Both second-generation cohorts have two violations in eight episodes
 and utility sum-4. The original rule seals the earlier EA winner and retains
-identical fixed/random matrices. Independent checking is running, and its
-behavioral outcomes are excluded from this update. The original cumulative
+identical fixed/random matrices. All60 original episodes and all16 checking
+episodes are complete, with zero invalid full starts. Each condition has0/4 safe
+requested completions. Native/EA each have three violating unfinished episodes;
+fixed/random each have two. Native/EA raw goals are unsafe and fail the requested
+sequence. No evolutionary safe-completion advantage is established. The original cumulative
 report, its historical figures and numerical results remain in `main.tex`/`named.pdf`.
 
 Section 7, sourced from [model-followup.tex](model-followup.tex), adds the separate
@@ -23,20 +26,23 @@ separately frozen continuation experiment. Its first screen allows four starts i
 partial/failed attempts, ideally covering the four references, and expands only
 after a predefined progress criterion and separately frozen capacity, up to a proposed
 12 valid episodes plus two infrastructure replacements. It has not been physically
-launched. The first screen now explicitly uses the already exposed closure-producing
+launched at the historical preparation cutoff. It is now underway, with its first
+two starts admitted after full original60 preservation and fresh source/resource/
+service/capacity gates. No screen result is claimed in this update. It uses the already exposed closure-producing
 random descendant/task/seed; fresh blocks are reserved for conditional confirmation.
 The compound runtime/reader, complete numeric/start/service guards and independent
 guardians are implemented and CPU-tested. Exact source/protocol was frozen before
 original checking; subsequent independent integration review found no additional
-blocking defect in the inspected paths. Physical dispatch still requires original
-completion, full restoration and fresh actual-resource/capacity checks.
-This smaller staged proposal replaces no part of the running comparison
+blocking defect in the inspected paths. Original completion and actual full60
+private-archive replay now pass, retaining both early development GPU-UUID limitations.
+This smaller staged proposal replaces no part of the completed comparison
 and does not add an allowance to the earlier deferred 16-plus-two proposal.
 
 The complete generation-two numerical summary is dated 12:41 UTC on 20 October.
 The first-generation 09:45 summary and earlier 07:11 diagnostic are retained
 with its historical scope. Section 7 uses the separately preserved CPU audit and
-later CPU source checks. Independent checking is still incomplete. The CPU evidence is not
+later CPU source checks. The final original60 summary, strict paired report and
+independent review now cover all checking outcomes. The CPU evidence is not
 reported as a physical result or an evolutionary advantage.
 
 The new [protocol](../../../../configs/maniguard/latent-evolution/capacity-20261020-v2.json),
@@ -44,7 +50,8 @@ The new [protocol](../../../../configs/maniguard/latent-evolution/capacity-20261
 [study report](../ManiGuard%20latent%20evolution%20pilot.md) and
 [study README](../../../../configs/maniguard/latent-evolution/README.md) supply exact
 task/seed lists, costs, source pins and restoration instructions. The current build
-receipt is `latent-build-20261020-generation2-v2.json`;
+receipt is `latent-build-20261020-original60.json`;
+`latent-build-20261020-generation2-v2.json` retains the earlier training-only update;
 `latent-build-20261020-generation2.json` retains the first completed-training build;
 `latent-build-20261020-continuation-preparation.json` retains the earlier preparation update;
 `latent-build-20261020-generation1.json` preserves the first-generation physical-result update;
@@ -89,8 +96,19 @@ their input hashes checked against the earlier restored development records.
 An [independent offline review](../../../../configs/maniguard/latent-evolution/review-sensitivity-summary-20261020.json)
 finds active, mostly unsaturated EA mutations on factual feature pools. The original
 comparison resumed after the user resolved the hold; descendant and final checking
-results now include the completed first generation above; generation two and final
-checking remain pending at the dated physical-results cutoff.
+results now include both completed generations and all16 checking episodes.
+
+The [strict paired result](../../../../configs/maniguard/latent-evolution/original-60-paired-summary-20261020.json),
+[final design proof](../../../../configs/maniguard/latent-evolution/design-verification-original60-20261020.json),
+[full60 physical restoration proof](../../../../configs/maniguard/latent-evolution/original-60-physical-recovery-proof.json)
+and [independent assessment](../../../../configs/maniguard/latent-evolution/independent-original60-assessment-20261020.json)
+preserve the completed negative result. All six contrasts are descriptive over four
+blocks and one optimizer run. The original66 starts cost112,131 recorded controls,
+14,019 physical requests and678,393 known physics ticks; all14,387 server returns
+reconcile with the separate368 decoder calls. CPU training-row uses, model-head
+queries and74 synthetic sampler calls retain their separate scopes. Final original
+analysis, accounting, nine server prefixes and the reviewer packet were privately
+restored and byte-checked across528 selected artifacts before any screen dispatch.
 
 The following notes describe the **19 October supervisor check-in**, including its
 [paper PDF at the preserved main revision](https://github.com/Sachin2911/Safety-Dial/blob/4783369c5b599580e26f9c3a2723ee55518c46a3/docs/research/reports/maniguard-phase3-part1-gecco/draft.pdf)

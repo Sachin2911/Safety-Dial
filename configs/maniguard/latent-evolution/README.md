@@ -6,6 +6,26 @@ code and asset identifiers. Its coordinator and earlier studies are not launched
 `platform-v3.json` preserve the measured infrastructure repairs and their costs.
 A capacity-selected pilot protocol is required before physical search can start.
 
+The original frozen pilot is now complete:60 full episodes,16 protected checking
+episodes, zero invalid full starts. Every checking condition has0/4 safe requested
+completions. Native/EA have three violations each; fixed/random have two each and
+share the identical retained genotype. This is a negative exploratory result,
+without demonstrated evolutionary advantage or transfer. See
+`original-60-paired-summary-20261020.json`,
+`design-verification-original60-20261020.json` and
+`independent-original60-assessment-20261020.json` for all categories, contrasts,
+lineage, limitations and independent cost reconciliation.
+
+`original-60-physical-recovery-proof.json` records actual verification of all60
+episodes from pinned private archives, including112,095 exact native monitor
+entries and13 source paths. Two early Jar development GPU-UUID limitations remain.
+`original60-analysis-clearance-recovery-20261020.json` additionally binds restored
+final exports, clearance, nine server prefixes, original accounting and the
+reviewer packet:528 immutable indexed artifacts, all restored and byte-checked.
+The separately frozen four-total-start continuation screen is underway only after
+these original prerequisites and fresh physical resource/service gates pass. It
+has its own run/ledger and cannot replace or amend the completed comparison.
+
 The authorized instance is 56777435. On 20 October the user explicitly authorized
 the full comparison and prioritized the contribution/result. The current deadline
 is 20:00 UTC, with a 19:30 physical cutoff, at the unchanged hourly rate and episode

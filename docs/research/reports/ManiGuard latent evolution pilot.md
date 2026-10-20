@@ -1,16 +1,36 @@
 # ManiGuard native-noise pilot, 19-20 October 2026
 
-The controller, physical integration and bounded decoder audit work. The complete
-Jar comparison is **running** after the user authorized the full comparison on
-20 October. Shared initialization began at 04:28 UTC with two native episodes.
-The fixed protocol specifies eight shared initialization episodes, sixteen
-descendant episodes per optimizer, sealed finalists and sixteen independent
-checking episodes. At the dated 09:13 UTC training snapshot, four development
-and twenty-two comparison episodes are verified, and the last generation-one EA
-offspring pair is running. The comparison episodes have zero requested or raw completions,
-twelve violations and one recorded grasp. These are training observations,
-not a completed optimizer comparison. No evolutionary or transfer benefit is
-claimed while that comparison remains incomplete.
+The complete frozen comparison is finished:60/60 full episodes pass independent
+physical/design validation, including all16 protected checking episodes, with zero
+invalid full starts. The controller and decoder integration work, but the pilot
+establishes no evolutionary safe-completion advantage. Every checking condition
+has0/4 safe or unsafe requested completions. Native/EA each have one safe unfinished
+and three unsafe unfinished episodes; fixed/random each have two of each. Native
+and EA each reach one unsafe raw benchmark goal that fails the requested sequence.
+Fixed/random retain exactly the same genotype. All six paired contrasts and one
+optimizer run are descriptive, without a superiority, safety-rate or transfer claim.
+
+All40 comparison-training trials remain requested-unfinished, with16 violations.
+Four safe supported lid closures never extend to native holding. This supplies a
+continuation lead, not an evolutionary contribution. A separate, prospectively frozen
+four-total-start screen is now underway on an exposed training case, after full
+original preservation and fresh resource/source/service admission. Its four modes
+and limits are unchanged; no screen result is claimed at this cutoff. The failed
+CPU model remains excluded from physical action selection.
+
+The final [paired report](../../../configs/maniguard/latent-evolution/original-60-paired-summary-20261020.json),
+[design verification](../../../configs/maniguard/latent-evolution/design-verification-original60-20261020.json),
+[full private physical replay](../../../configs/maniguard/latent-evolution/original-60-physical-recovery-proof.json)
+and [independent scientific assessment](../../../configs/maniguard/latent-evolution/independent-original60-assessment-20261020.json)
+agree on outcomes and costs. Across66 original starts, including all engineering
+failures, recorded totals are112,131 controls,14,019 physical requests,112,761 returned
+environment steps and678,393 known physics ticks. Decoder-only368 calls are separate;
+all14,387 server returns reconcile with zero failed/incomplete returns. Unknown
+pre-attachment physics remains unknown. The separate CPU work is27,412 training-row
+uses,5,395 model-head queries and74 synthetic sampler calls, reusing rather than
+reacquiring18,666 controls. Original boundary allocation is41.091 GPU-hours and
+$12.586 upper-bound estimated cost, counting both GPUs since the provider start;
+later analysis/screen allocation remains additional, and billing is unverified.
 
 The [new capacity record](../../../configs/maniguard/latent-evolution/capacity-20261020-v2.json)
 selects Jar using the original timing rule, before comparative feedback. The user
