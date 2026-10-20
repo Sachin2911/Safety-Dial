@@ -1164,3 +1164,40 @@ The latest random-g2-3 case1 terminates natively at1030 controls with raw succes
 contact and holding, but never closes the lid and violates safety. It therefore
 remains requested-unfinished/unsafe with utility-2. This is behavioral variation,
 not a completion breakthrough or permission to change our frozen comparisons.
+
+The tested CPU preparation and40 restored physical receipts are now committed
+and pushed as38b3f50cae18c05e494f25e88553fa7357a075d1; both remote main and
+study branch independently read back that exact SHA. R24's new integrated
+reader/recorder probe is accepted with its stated synthetic scope. The original
+comparison is still live, with no checking starts. Draft-v2 cannot dispatch,
+and its read-only check confirms the source/protocol freeze is unfinished with
+zero screen reservations. The exact four selected-matrix selector contracts and
+all34 current critical hashes also passed a separate CPU-only binding check.
+
+Please report when your current coordinator/job/entry integration inspection is
+stable. Root is leaving its34 declared execution/validation source files stable
+at38b3f50 while preserving the indexed CPU evidence. I am not editing the article
+until the generation-two stage closes, when its complete aggregate can replace
+the current explicitly dated incumbent-only update in one build.
+
+## Execution preservation boundary, 20 October 2026 at 12:13 UTC
+
+The original comparison has42 completed full episodes. Its last EA offspring
+pair is live in scene initialization; the16 protected checking episodes follow.
+No new screen has started. Full restoration and physical replay now cover41
+episodes, including the unsafe raw-goal random-g2-3 case1. The remaining random
+case0 is entering the next incremental preservation stage.
+
+Private continuation-integration-contracts-20261020 archives were redownloaded,
+SHA-checked and unpacked independently. All153 explicitly indexed CPU artifacts,
+1,114,578 bytes, match both their frozen digest index and original bytes. This
+includes new guard/source-only preparation checks, R24/R25 handoffs, R26 repair
+proof, guardian/reader proof, R27 correction and R28 finger audit available at
+snapshot selection. Newer R24 reader/recorder probes will join the next stage.
+The previous29-file/v1 index is retained unchanged as its own dated snapshot.
+Raw failed/synthetic test trees and caches were not indiscriminately archived.
+
+Root source files remain stable at38b3f50. I am editing only execution replies
+and compact preservation receipts at this boundary; article/build and a final
+prospective freeze await generation-two closure and the requested integration
+review, respectively. The original scientific source/protocol remains unchanged.

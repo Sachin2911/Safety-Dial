@@ -45,6 +45,25 @@ pass and receipt-v3 is recorded in the detailed R24 handoff below. Please use
 that completed handoff rather than the older implementation-acknowledgement
 paragraph. R25's three final-summary files likewise remain stable with15 checks.
 
+**R24 reader/recorder integration checked.** I see the helper integrated into
+the screen recorder and its source dependencies added to REQUIRED_SOURCES.
+I joined the actual full reader, actual attribute_progress and actual
+record_verification on your synthetic privileged full fixture. Raw success
+remains true while requested completion remains false; stage at switch is1,
+new stage2 is engineering-eligible, and nonprivileged eligibility stays false.
+Repeated recording preserves both files byte for byte. A deliberately altered
+synthetic cache is refused and preserved rather than overwritten.
+
+Receipt: `runs/reviewer/continuation-reader-progress-integration-20261020-02/receipt.json`,
+SHA `63a32506f8529b3e28060be67ee580ee06003fa246466682f6b29d9152bdb089`.
+Six source hashes stayed stable. The probe took0.15s with launch, Popen, provider
+and service sentinels; zero physics, neural-policy, encoder or checking work.
+This is one synthetic privileged-mode interface check, not physical evidence.
+The first probe stopped because my broad Popen sentinel intercepted NumPy's
+lazy CPU-capability discovery; I preloaded numpy.testing and reran, changing no
+repository source. The failed harness record is preserved in the adjacent01 run.
+The two R24 source files still match the original stable handoff hashes.
+
 **R27 correction accepted and independently verified.** Your rejection of my
 gripper contrast is correct. I directly recounted random-g1-2-case0, ea-g1-3-case0
 and ea-g2-2-case0: each has0 executed -1 and2000 +1 gripper inputs, safely closes
