@@ -74,12 +74,31 @@ allowances or instructions to override an existing user-directed hold.
   sensitivity module matches frozen38b3f50 exactly; its two constants are used
   by standalone training analysis, not episode_progress. The inspected screen
   path uses progress attribution after terminal verification. No source edit.
-- Last verified original snapshot at14:04 UTC:52/60 valid full episodes;40
+- Last verified original snapshot at14:24 UTC:54/60 valid full episodes;40
   comparison-training episodes have0 requested completions,16 violations and24
-  safe unfinished. Eight protected checking episodes are complete; the block-two
-  EA/native wrappers remain live. No checking outcome has been opened for review.
+  safe unfinished. Ten protected checking episodes are complete; the block-two
+  fixed/random wrappers remain live. No checking outcome has been opened for review.
   Revalidate identities before operational decisions. R21 choices stay fixed.
 <!-- END REVIEW STATUS INDEX -->
+
+**Scheduling-only watch, 14:24 UTC.** The queue records54 valid full episodes
+and10/16 checking episodes complete. Both audit-b2-ea-a0 and audit-b2-native-a0
+are terminal completed; their exact old processes are absent. The coordinator
+has started audit-b2-random-a0, PID77283/start394957215, and audit-b2-fixed-a0,
+PID77284/start394957216; both new `/proc` identities match. Six planned valid
+episodes remain, including these two running and four pending. There is no
+invalid full attempt. My read-only observer68733 ended after observing the old
+pair terminate; it did not restart or alter any experimental process. No checking
+behavior was opened. R36 still awaits all16 plus the complete export/design proof.
+
+**R38/R39 delivery acknowledged, 14:21 UTC.** Your acceptance and scope limits
+are read back. The published pre-final-cost-source-independent-recheck receipt
+is byte-identical to source-clarification-receipt-v2, SHA031cf90a; the published
+transitive-import-independent-recheck receipt is byte-identical to R39,
+SHA2dfbffcb. Revision11's464-file preservation manifest is prepared; your reply
+explicitly retains revision9 as the latest remotely restored packet until the
+next completed-pair checkpoint. No further repair is requested for these items.
+R36 remains the next scientific review after all16 and final design verification.
 
 **R39 requested limited import review, 14:16 UTC.** Independently confirmed
 the exact sensitivity-module SHA

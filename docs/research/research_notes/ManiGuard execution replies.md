@@ -1677,3 +1677,63 @@ This turn's work preserves the independent closure evidence. No original source,
 screen source, protocol, optimizer, metric or budget is edited. Root edits are
 these two compact peer receipts and this reply. R36 is the next independent
 scientific review after all16 checking episodes and successful final design.
+
+## Block-two first pair restored and durable status refreshed
+
+**Scheduling watch accepted.** The EA/native pair completed normally and the
+coordinator started block-two random/fixed, exact PIDs77283/77284 with start
+ticks394957215/394957216. The14:28 readback has54 valid full completions,
+10/16 checking completions and both new workers live at280/285 controls.
+There are six planned valid episodes left, including these two. No full
+infrastructure replacement has been spent and no checking outcome was opened.
+
+The new pair has passed full restored physical-array, action, cadence, GPU,
+frozen-source and exact original-monitor verification. All54 completed full
+episodes now have technical remote replay. The new pinned model revision is
+d4819d77ad5767b770cb78347976d324bd2fa92d; dataset revision is
+06d20bc99871c8ad120ce2b5d3d8165c70a2a2c9. The three compact receipts use
+checking-block-two-first. Outcome equality was checked mechanically and omitted
+from the technical report; it supplied no method/selection feedback.
+
+All464 revision11 artifacts,3,901,022 bytes, are byte-identical after fresh
+reconstruction. This includes the R38 correction and R39 evidence, previous
+review records and all earlier explicit-index artifacts. Revision11 is now the
+latest fully remote-restored packet, superseding the dated revision9 boundary.
+The new archive also preserves the flat52-episode restoration-path inventory.
+A separate54-episode inventory now extends it for the final60 replay; neither
+partial path inventory is a full60 recovery certificate.
+
+**Operational fix accepted and applied within existing execution authority.**
+The durable status.json still mixed generation-two instructions, an older paper
+and earlier counts with newer fields. No active coordinator writes that file;
+the supervised accounting monitor updates cost-snapshot.json separately. I
+preserved the exact old status under analysis/status-before-checking-refresh-
+20261020.json, then refreshed the status from the actual queue, live process
+identities, published eight-page paper and verified preservation. No actor,
+protocol, budget, horizon, metric, seed or service was changed. Readback checks
+confirm54 completed/10 checking,56 full starts, six remaining valid episodes,
+inactive resolved diagnostic hold, unlaunched four-start follow-up and unchanged
+19:30 cutoff/20:00 stop. The refreshed archived status and exact predecessor
+also passed private round-trip equality checks. Its captured52 remotely replayed
+episodes correctly describes the moment before the new pair's technical replay;
+the live mutable status now records54 remote replays and464 analysis files.
+status-refresh-recovery-receipt-20261020.json records this chronology and its
+limited operational scope. The objective remains incomplete.
+
+The portable52 catalogue's29 distinct source commits, including the separate
+CPU audit source, are all ancestors of verified pushed183d2eeb. It has no
+unpublished source dependency. The catalogue still describes its original35
+stages; the new block-two stage is explicit in current status and public receipts.
+Final60 will receive a new complete catalogue. Root edits here are the four
+compact recovery receipts, this reply and ignored operational status/evidence.
+R36 remains pending all16 outcomes and successful complete design verification.
+
+Revision12 is prepared for the next physical checkpoint:470 explicit files,
+3,954,441 bytes, SHA
+7c0214575543fa5e6a854662a13d9ffa7cb3238748188a2e106bd49ed8130e9f.
+It adds the latest offline verifier/proof, status history/recovery record and
+the52/54-location inventories. Versions1 through11 remain unchanged. It is not
+yet remotely preserved; revision11/464 files is the latest fully restored packet.
+Fresh supervisor readback confirms accounting23038, coordinator23619,
+deadline2832 and the unchanged policy workers2893/2905 running. Historical
+setup-service failure labels do not describe the active comparison workers.
