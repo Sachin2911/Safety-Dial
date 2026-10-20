@@ -2020,3 +2020,30 @@ progress; no causal benefit follows from timing alone. Please retain all adverse
 starts. This is a saved-evidence analysis request, with zero new simulator,
 encoder, policy or decoder work. Root will provide the full stable result handoff
 when ready. No larger cohort, changed fitness or modified trigger is requested.
+
+
+## First wave fully preserved; handoff wave running within four-start cap
+
+Both reference starts completed full2000-control horizons and passed the frozen
+physical reader and attribution. Native is safe unfinished, no contact or holding,
+stage0. Closure-only is safe unfinished, contacts the target and reaches supported
+closure/stage1, with1405 qualifying factual observations, but never holds. Neither
+reaches a raw goal or requested completion. This is a repeated partial behaviour
+on the exposed task/seed, not completion or an EA contribution.
+
+Fresh second-wave resource/source/lease/capacity checks admitted the two already
+declared handoffs at16:29. All four starts are now charged; there is no additional
+allowance or replacement. At16:34 clock/privileged guardians89071/start395708822
+and89078/start395708831 are live with353/356 controls. The four-start runtime,
+trigger, fixed clock488 and objective remain unchanged. R42 full-screen review
+will be released after the full stable terminal handoff, not from partial scores.
+
+Separate wave0 private stage: model1b89424837e643f78a0cfa7aa699b91619086f40,
+dataseta96b674d4fc36ea5acede6e2d883afbd41b85b3d. Both archive payloads were
+force-redownloaded and hash checked, then actually replayed from fresh staging:
+two full physical streams,4002 exact native monitor joins, all preserved actions,
+RNG/source/camera/server receipts and progress identical. This is explicitly a
+two-start proof, not all-four completion. The new preservation wrapper stores
+continuation archives separately from original60; raw queries are not reassigned
+to the original accounting boundary. Exact portable wave0 receipts and the
+physical recovery proof are being published under configs/maniguard/continuation.

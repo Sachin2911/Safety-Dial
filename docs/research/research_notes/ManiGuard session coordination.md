@@ -27,8 +27,8 @@ allowances or instructions to override an existing user-directed hold.
 - **R21 current physical test:** the separately frozen four-total-start closure/
   native-continuation screen started at16:07 after original60 completion,
   physical/analysis preservation and fresh resource admission. Its first native/
-  closure reference pair is live; handoff conditions are the predeclared second
-  wave. The existing48-call gripper diagnostic already
+  closure pair is complete and fully validated; the two predeclared handoff
+  conditions are now live. The existing48-call gripper diagnostic already
   shows no executed-command flips at amplitude0.5 and directional flips at2.0,
   including opening on held Clutter inputs. Phase timing remains untested; the
   screen tests native continuation after a closure prefix. The CPU world-model
@@ -96,6 +96,11 @@ allowances or instructions to override an existing user-directed hold.
   the published Git objects; the historical files also match launch4783369.
   The external decoder figure matches the source-parent and publication. All
   nine owner-rendered pages were inspected, without a new build or render.
+- **R42:** requested complete-screen saved-evidence review accepted. It awaits
+  all four terminal starts and successful full reader/attribution verification.
+  R32 will inspect executed commands and measured query finger positions; R24/
+  R33 will separate new post-switch stages from late goal confirmation. Current
+  observations now track the two exact live handoff guardians.
 - Last verified original evidence at15:53 UTC:60/60 full completions and all16
   checking outcomes pass complete design verification. The complete owner remote-
   restoration proof now exists and matches my original-record export on all60
@@ -103,12 +108,53 @@ allowances or instructions to override an existing user-directed hold.
   owner's remote download/replay. The separate screen directory is still absent;
   actual admission remains with fresh live resource and preservation clearance.
   R21 choices stay fixed and cannot use checking feedback for tuning.
-- Current screen observation at16:12 UTC: exactly2 charged starts, both wave0
-  references. Native guardian86506/start395576222 and closure guardian86513/
-  start395576231 match live `/proc` identities, at384/370 controls. The owner
-  accepted R36/R40 and reports complete528-file private original-analysis recovery.
-  No physical handoff result is available; revalidate handles before decisions.
+- Current screen observation at16:30 UTC: all4 starts charged. Both references
+  are completed/full-valid at2,000 controls, with complete native RNG chains.
+  Clock guardian89071/start395708822 and privileged guardian89078/start395708831
+  match live `/proc` identities; the handoff trials are initializing. Wave1 has
+  its own fresh16:29 instance/rate/armed-clock receipt. No handoff outcome is
+  available; revalidate handles before operational decisions.
 <!-- END REVIEW STATUS INDEX -->
+
+**Wave0 validated and wave1 admitted, 16:30 UTC.** Both first-wave trials finished
+normally at2,000 controls. Their saved receipts explicitly have valid/full_episode
+true,2,000 verified environment inputs and complete native RNG chains. Their old
+guardian processes are absent. The coordinator has reserved and started only the
+two predeclared handoff trials, bringing total charged starts to4. Clock guardian
+89071/start395708822 and privileged guardian89078/start395708831 match their
+actual live process identities. The fresh second-wave resource receipt is dated
+16:29:18, retains the same instance/machine/two GPUs/rate and armed20:00 stop.
+At16:30:14 both new trials were in scene initialization. No full-screen behavior
+analysis or qualification is inferred from this operational transition. R42
+awaits their completion and your stable verified handoff. Observer47168 reached
+its own bound before the old jobs ended; later explicit checks established the
+real completion and new process identities. No experimental worker was restarted
+or changed by this reviewer.
+
+**R42 complete-screen review accepted.** I read your new saved-evidence request
+and the private547-file paper/R40 preservation readback. After the complete stable
+four-start handoff and successful reader/attribution checks, I will run the
+unchanged R32 analysis at a fresh reviewer output path and independently compare
+all conditions. The review will retain every start and all four requested outcome
+categories, whole-episode violations, actual branch/switch, closure-prefix and
+native post-switch control counts, remaining horizon, ordered stage at/before/
+after the switch, executed -1/+1 commands and measured query finger positions.
+
+R33's alternative will be checked separately: first confirmed safe requested
+completion after a positive-length closure prefix and actual native continuation
+can meet the frozen completion condition even when no new R24 milestone follows
+the switch. Late native ten-step confirmation is not evidence of new grasp/lift/
+transport. Native target holding retains its missing independent body-link grasp
+witness. Timing alone and an exposed-case engineering result cannot establish
+causal or evolutionary advantage. No new simulation, neural inference, decoder
+probe or changed fitness/trigger is needed for this review.
+
+At16:19 both original first-wave guardian identities remain live, native86506/
+start395576222 and closure86513/start395576231, at1,072/1,044 controls. There are
+exactly two charged starts and no terminal full-screen result yet. My bounded
+read-only observer follows these same handles; its own observation limit is
+not an experimental termination or a restart condition. No source changes or
+additional review hold are requested while the frozen screen proceeds.
 
 **R41 original60 paper publication review.** Fresh public `git ls-remote` confirms
 main and `maniguard/latent-evolution-20261019` both at
