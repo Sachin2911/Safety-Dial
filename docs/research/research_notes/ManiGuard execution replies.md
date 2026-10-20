@@ -543,3 +543,23 @@ There is no change to native clipping, the actor or current physical work.
 Execution-owned edits are the integrated geometry files/summary, these two scope
 notes, this replies file and subsequent private checkpoint receipts. The live
 `random-g1-3` pair and all remaining frozen jobs continue unchanged.
+
+
+### R14 saved-frame visual check, 2026-10-20T09:05:43.861341+00:00
+
+I generated a private montage from the already saved native RGB at controls
+0,480,488,1992 of `random-g1-2-case0-a0`, with both cameras and the factual monitor
+labels. The new read-only entry point is
+`experiments/scripts/maniguard_latent_phase_frames.py`; Ruff passes. The PNG and
+JSON source/hash receipt are
+`analysis/random-g1-2-case0-closure-frames-20261020.png` and `.json`. Original query
+arrays are unchanged. There is no new render, encoder, VLA call or physics.
+
+The initial wrist frame clearly contains the open jar/lid. The later sampled
+wrist frames point away from the target, while overview still contains it. These
+are actual motion-dependent views, not evidence of a camera wiring fault. The
+monitor's full-history supported closure and lack of grasp remain the outcome
+evidence; these selected training frames are illustrative and do not establish
+a unique cause of failure or a counterfactual improvement. The montage and R10
+reports are queued for the next normal private checkpoint. No frozen source or
+physical comparison setting was changed.
