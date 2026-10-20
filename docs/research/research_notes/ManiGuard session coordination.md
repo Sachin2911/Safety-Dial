@@ -21,6 +21,14 @@ allowances or instructions to override an existing user-directed hold.
 
 ## Current handoff: user continuation instruction
 
+R13 work boundary, 20 October 08:34 UTC: R12's handed-off files stay stable during
+execution's intake. Review is adding separate `maniguard_continuation_*` helpers
+and `test_maniguard_continuation.py` for post-filter candidate priorities and the
+bounded residual comparator. These new files are in progress and are not part of
+the R12 integration list. They will receive a separate stable handoff. The user
+reaffirmed continued improvement/review of both studies. This work uses synthetic
+CPU checks and source inspection, with no service, encoder or physics requests.
+
 Review follow-up handoff, 20 October 08:31 UTC: the separately authorized CPU
 prototype is stable and ready for execution to inspect and integrate. R12 below
 lists the files, checks and exact preservation bundle. All 16 software tests pass,

@@ -171,6 +171,31 @@ benefits require their own ablations if claimed. Replicated optimizer runs,
 independent confirmation and the same-controller family-transfer test remain
 separately budgeted requirements for the GECCO contribution.
 
+## Private preservation
+
+The preparation bundle is privately preserved in
+`Sachioster/maniguard-latent-evolution-controllers` at immutable revision
+`96ef6ab0de0d44d653683c5f40ad20fdb883294d`, prefix
+`20261020/model-assisted-preparation-v2/`. Its source commit is
+`e2538e692ab1dfd30de9a314850b7cb3b8b9e847`. This separate preparation prefix is
+outside the native-noise comparison's artifact and scientific-work ledgers.
+
+The [preservation receipt](../../../configs/maniguard/model-assisted/model-preparation-preservation-receipt-v2.json)
+pins the exact bundle bytes, manifest and private revision. The
+[remote reconstruction receipt](../../../configs/maniguard/model-assisted/remote-recovery-receipt-v1.json)
+verifies fresh download and extraction of all 21 members, the six frozen source
+hashes and their AST agreement with the recorded Git commit. All ten referenced
+physical input episodes were hash-checked against earlier private remote
+reconstructions. Model loading and ledger verification added no fitting,
+prediction, policy request, encoder call or physical interaction.
+
+The first immutable upload manifest contains an incorrect manually expanded Git
+hash. Its record is retained, and the
+[provenance correction](../../../configs/maniguard/model-assisted/preparation-preservation-correction-v1.json)
+identifies the corrected v2 manifest above. Bundle bytes are identical. Use v2
+for source provenance. The upload helper now rejects abbreviated, unknown and
+noncommit Git references before any remote access, with four passing CPU checks.
+
 ## Reproduction
 
 Use the explicit prepared tools interpreter. The tests require no research

@@ -411,3 +411,33 @@ budget. The original passive-monitor cohort remains unchanged and running.
 Execution-owned edits now include integration/preservation of the handed-off
 preparation files and its remote receipt, plus this replies file. No changes
 to critical frozen sources or current research services are being made.
+
+
+### R12 remote preservation and provenance repair, 2026-10-20T08:41:53.595115+00:00
+
+The separate preparation source is integrated at
+`e2538e692ab1dfd30de9a314850b7cb3b8b9e847`, read back from main and the study branch.
+The bundle is privately preserved in the controller repository at revision
+`96ef6ab0de0d44d653683c5f40ad20fdb883294d`, prefix
+`20261020/model-assisted-preparation-v2/`. Its SHA-256 remains
+f4cda837cdb2357494530c3f94fbe5cf068d55c56aef8ff61aa1c9905924c16d.
+The public remote recovery receipt verifies fresh download, all21 extracted
+members, six frozen source hashes/ASTs, report/model/manifest/ledger consistency,
+and all10 corpus input episodes against previously remote-restored physical
+evidence. The model was loaded without prediction. No factual refit, scientific
+model-head query, encoder, VLA request or simulator interaction was added.
+
+Execution initially supplied an incorrect expanded Git hash to the v1 upload
+manifest. That immutable record is retained; the v2 upload reads its exact source
+commit directly from Git. `preparation-preservation-correction-v1.json` records
+both revisions, the error and unchanged bundle bytes. I fixed the general upload
+helper to reject abbreviated, unknown or noncommit source references before any
+remote access. All four targeted provenance checks and Ruff pass. This helper is
+not part of the13 frozen scientific source files and no live service was restarted.
+
+The continuation draft now links the corrected private receipt and independent
+remote reconstruction. R12's factual gate remains failed and physical development
+remains deferred. I also copied R10's exact feature-geometry report into the main
+run's analysis directory for the next private checkpoint; its broader source
+reproduction remains pending your handoff. The current original wave is still
+`random-g1-2-case0/1` under the unchanged protocol.

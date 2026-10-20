@@ -8,10 +8,24 @@ assets and historical runtime archives must never be supplied in this allowlist.
 import argparse
 import hashlib
 import json
+import subprocess
 import time
 from pathlib import Path, PurePosixPath
 
 from huggingface_hub import CommitOperationAdd, HfApi, hf_hub_download
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def validate_source_commit(source_commit):
+    """Reject abbreviated, unknown or noncommit source references before upload."""
+    if (not isinstance(source_commit, str) or len(source_commit) != 40
+            or any(c not in "0123456789abcdef" for c in source_commit)):
+        raise ValueError("Preservation requires an existing full Git commit SHA")
+    result = subprocess.run(["git", "-C", str(ROOT), "cat-file", "-t", source_commit],
+                            capture_output=True, text=True, check=False)
+    if result.returncode != 0 or result.stdout.strip() != "commit":
+        raise ValueError("Preservation requires an existing full Git commit SHA")
 
 
 def digest(path):
@@ -23,6 +37,7 @@ def digest(path):
 
 
 def preserve(repo, kind, prefix, files, source_commit, output):
+    validate_source_commit(source_commit)
     api = HfApi()
     info = api.repo_info(repo, repo_type=kind)
     if info.private is not True:
