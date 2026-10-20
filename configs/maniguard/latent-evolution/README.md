@@ -26,17 +26,26 @@ The separately frozen four-total-start continuation screen completed only after
 these original prerequisites and fresh physical resource/service gates passed. It
 has its own run/ledger and cannot replace or amend the completed comparison.
 
-The completed original study's portable catalog is
-`preservation-catalog-20261020-original60.json`. It embeds all84 exact preservation
-receipts across42 immutable stages, including the final analysis and paper. All33
-preservation source commits are ancestors of the published source. The materialization
-receipt records actual byte-for-byte reconstruction of all84 receipts. This is
-additional to the separately completed physical replay; it does not claim another
-full download/replay. `original60-paper-review-recovery-20261020.json` records the
-latest private round trip:547 selected artifacts, including the nine-page published
-paper and the training-only fitness audit. Original accounting uses the frozen
-pre-screen server prefixes. Later global service snapshots may also contain
-separately charged screen requests.
+The final portable catalog is `preservation-catalog-final-20261020.json`. It embeds
+90 exact verified receipts: 86 across 43 original-run, analysis and paper stages,
+plus four across the two separate continuation-screen waves. All 36 preservation
+source commits are ancestors of the published source. Its separate materialization
+receipt records actual byte-for-byte reconstruction of all 90 receipts. This is
+additional to the separately completed archive downloads and physical replay.
+
+`../continuation/final-paper-analysis-recovery-20261020.json` records the final
+private round trip: 639 indexed artifacts, including the published 10-page paper,
+its 33 bound inputs, build log, figures and independent review packets. The final
+model revision is 5b87ca52358280f75fa2582d8249e65f036d1542; the dataset revision
+is ca5f6d7a1a89e4dc3853ecf25eb2e23f0d217afc. Exact repositories, archive hashes,
+prefixes and selected-file manifests are retained in the catalog receipts.
+
+The earlier `preservation-catalog-20261020-original60.json` retains its 42 stages
+and 84 receipts unchanged. `original60-paper-review-recovery-20261020.json` records
+that earlier 547-artifact round trip and nine-page paper. Original accounting uses
+the frozen pre-screen server prefixes. Later global service snapshots also contain
+separately charged screen requests. `pilot-closeout-20261020.json` records the final
+scope, results, exhausted diagnostic/screen budgets and remaining research needs.
 
 To reconstruct receipts from Git alone, use a fresh directory and the tools Python:
 
@@ -46,7 +55,7 @@ import json
 from pathlib import Path
 
 catalog = json.loads(Path(
-    "configs/maniguard/latent-evolution/preservation-catalog-20261020-original60.json"
+    "configs/maniguard/latent-evolution/preservation-catalog-final-20261020.json"
 ).read_text())
 destination = Path("NEW_RECEIPT_DIRECTORY")
 destination.mkdir()
@@ -66,6 +75,13 @@ in the environment. The recovery script verifies privacy, pinned revisions,
 manifests and archive hashes before extraction. It starts no service or simulator.
 The separate failed CPU model is a zip referenced by the catalog, not a tar-stage
 receipt to pass to this command.
+
+Materialize `ordered_continuation_screen_stages` into a separate fresh directory
+using the same loop, preserving wave0 then wave1 order. Pass only those four paths
+to the separate screen recovery command below. Do not pass all 90 receipts to the
+original recovery tool. `preservation-catalog-final-materialization-20261020.json`
+records both actual argument lists; replace its local receipt/output paths with
+the fresh paths on the reconstruction host.
 
 `original60-canonical-layout-20261020.json` maps all66 archived episode directories
 to their original canonical destinations. On a fresh host at `/workspace/Safety-Dial`,

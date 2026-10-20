@@ -2168,3 +2168,64 @@ inspected. There are no layout overflows/unresolved references, and all eight
 historical files match launch4783369. Its source-bound receipt is
 latent-build-20261020-screen4.json. Root is publishing this exact result and then
 round-trip checking its final private analysis/paper capsule and portable catalog.
+
+
+## R48 accepted; paper published and bounded final preservation
+
+R48's independent10-page decode/render/layout and33-input check is accepted.
+Its selected packet is copied for the final analysis set. The exact final paper
+is actually pushed to both branches atb1c99f1e83dc68a657fe7c213aa9dc8050e70ad1;
+fresh remote readback and all33 published Git objects match. The PDF remains
+e37af77e28c3393caabf35690b1dde47f98868a78856c5667102624cde8f1108.
+The earlier publication-pending review line is historical; no current hold remains.
+
+Automatic review rejected a combined local-preparation/checkpoint command because
+the payload and destinations were insufficiently explicit. No part of that command
+ran. Root verified the execution goal's two exact private destinations and current
+authenticated ownerSachioster/private status. Root is preparing the immutable local
+capsule, exact file selection and two archive hashes without any upload, then
+will request the bounded existing checkpoint action with those concrete artifacts.
+This is an authorization/payload check, with no experiment or method change.
+Please keep accepted source/report files stable through this closeout.
+
+## Final preservation and execution handoff, 20 October 18:12 UTC
+
+The rejected broad checkpoint request is resolved through the narrower authorized
+publisher. Both exact private archives and their selected-file manifests were
+uploaded, remotely verified, force-redownloaded and restored. All 639 indexed files
+match. The model revision is 5b87ca52358280f75fa2582d8249e65f036d1542; the dataset
+revision is ca5f6d7a1a89e4dc3853ecf25eb2e23f0d217afc. No approval or credential
+block remains. The public final-paper-analysis recovery receipt records the exact
+payload checks, hashes and successful round trip.
+
+The final portable catalog embeds 90 exact receipts across 43 original-run/analysis
+stages and two separate screen waves. All 90 have actually been materialized and
+compared with the verified originals; all 36 source commits are published ancestors.
+Original and screen recovery use separate commands, as documented in the updated
+latent-evolution README. The old original-only catalog remains unchanged.
+
+R48's later exact-publication check is accepted and agrees with root's independent
+readback. R49's five selected preparation files pass size/hash checks. Accepted as
+future diagnostic preparation only: zero new calls are authorized, four correlated
+saved inputs are not four safe trials, and the optional five-coordinate/176-call
+recipe requires a separate protocol and explicit budget. Its late local preparation
+packet is outside the completed v18 private capsule; its source frame records are
+already preserved in the screen archives. It does not reopen the final paper,
+preservation or either completed physical study.
+
+All 60 original and four screen full episodes are complete, with six earlier
+engineering starts separately charged. All nine service journals still match the
+completed-screen accounting snapshot. No physical worker is live. The independent
+20:00 UTC watchdog remains live and armed, retaining the disk. The dated allocation
+handoff records 45.4608 allocated GPU-hours and a $13.9245 rate-based upper estimate
+at 18:06 UTC; these are not final billing or provider-stop confirmation.
+
+Root is editing only the final portable catalog/materialization, publication and
+recovery receipts, allocation/pilot handoff, this reply and the reconstruction
+README. Reviewer mailbox changes are retained. No frozen method, score, checking
+case, physical record, paper input or objective is changed. The tested future
+fitness helper remains unintegrated. No physical work is left under either selected
+protocol, and no next screen stage qualifies. The completed negative pilot does not
+establish a defensible GECCO contribution. Competent safe grasping, a separately
+frozen controller/objective, matched ordinary-learning controls, replication and
+transfer remain future research requirements, with new budgets before execution.

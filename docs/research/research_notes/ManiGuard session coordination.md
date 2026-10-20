@@ -131,8 +131,14 @@ allowances or instructions to override an existing user-directed hold.
 - **R48:** the complete10-page paper passes independent current-artifact and
   layout review. All33 build-map files match; eight historical files match
   launch. I independently rasterized the bound PDF and inspected every page;
-  all10 PNGs also equal the owner's renders. Final public push remains pending
-  at this review boundary; no paper content/layout hold remains.
+  all10 PNGs also equal the owner's renders. Exact publication is now verified
+  on both branches atb1c99f1, including all33 build objects,34 frozen sources and
+  the two unchanged prospective fitness files. No paper review hold remains.
+- **R49:** four actual closed/support/upright query inputs and a five-coordinate
+  basis are prepared for a possible later decoder-only diagnostic. Hash-bound
+  steps are closure600/1992 and privileged448/464. The optional176-call recipe
+  is unexecuted and currently authorized new calls remain zero. No current
+  publication, recovery or physical-stage hold is added.
 - Last verified original evidence at15:53 UTC:60/60 full completions and all16
   checking outcomes pass complete design verification. The complete owner remote-
   restoration proof now exists and matches my original-record export on all60
@@ -147,6 +153,67 @@ allowances or instructions to override an existing user-directed hold.
   pass R46. The final paper/publication and analysis preservation remain with the
   execution owner. No new physical stage is admitted.
 <!-- END REVIEW STATUS INDEX -->
+
+**R48 exact publication verified.** Fresh public readback finds both `main` and
+`maniguard/latent-evolution-20261019` at
+`b1c99f1e83dc68a657fe7c213aa9dc8050e70ad1`. I checked the actual Git objects at
+that SHA: all33 build-map files and the exact build receipt match the reviewed
+PDF/source hashes; eight historical files equal launch; all34 screen-critical
+sources equal the frozen protocol. The two new prospective fitness files also
+equal their accepted R47 hashes. The frozen source commit remains an ancestor.
+This verifies publication of the reviewed10-page negative-result draft, with
+no changed empirical claim or active objective.
+
+The later receipt is
+`runs/reviewer/screen4-paper-review-20261020-01/publication-review-v1.json`, SHA
+`430897d0bda6c2fac581d59ab4a03fb00a3840421f1a76910d4d36ca28fc3a74`.
+The immutable earlier review is retained. A v2 selected-artifact index,
+`preservation-artifacts-v2.json`, SHA
+`92f8574f690f5c774be692c74ba0508bb8c6846974c39a5f62da7151e28e8505`,
+selects five receipts/indices totaling21,116 bytes and excludes itself. All
+selected sizes/hashes pass. This adds the publication check to the earlier
+layout review. It requires no new build or physical/archive replay. Final private
+capsule recovery/catalog readback remains with the execution owner; no new
+experimental or release hold is added by this review.
+
+**R49 optional later authority-check inputs prepared.** This makes the R47
+representation suggestion concrete without spending any new allowance. Under a
+saved selection plan, I selected the first/last qualifying saved closure-only
+queries600/1992 and native-handoff queries448/464. Each factual observation has
+closed/support/upright true and no prior violation. Privileged448 remains the
+prefix observation before its first native action, not evidence of native
+progress. That source episode later violates, which the manifest preserves.
+These are four correlated inputs from two seen-case episodes, not four safe
+trials or held-out evaluation. No checking case was opened.
+
+The packet pins raw NPZ/trace/receipt hashes, actual native RNG-before/noise
+witnesses and factual steering identities. It reconstructs the unchanged four
+arm columns and adds one unit column on model coordinate7; the five-column Gram
+error is5.96e-8. No native Gaussian draw or decoder call was made. A fully paired
+possible recipe would use two draws, duplicate zero-offset baselines and both
+signs of five axes at.35 and2.0:176 decoder calls total. Magnitude2 arm probes
+exceed the current deployed domain and are labelled hypothetical decoder-only
+inputs. Decoded grip/arm changes would not prove physical safety or grasping.
+
+**No execution is authorized:** the currently allowed new-call count is zero,
+matching your R47 reply. Source/service ownership, comparisons, allowance and
+interpretation still require a separate frozen protocol. This preparation does
+not reopen the current paper build or either completed study. Preserve it at a
+normal later checkpoint; it adds no new release or publication requirement.
+
+Packet: `runs/reviewer/postclosure-authority-preparation-20261020-01/`.
+
+- `prepared-inputs-v1.json`, SHA
+  `3b7685b2acfe2cd9b88fb5bd57753cba8e45033d29d4950f03b3b86a9ff8fad6`.
+- `receipt-v1.json`, SHA
+  `6a6fb77bc698786200112b07dc921264b7b53ca103c8aff6dc79bcbd942d1a92`.
+- `preservation-artifacts-v1.json`, SHA
+  `769d5eb46831592ffd9051d468d4775c54157b3a9c2bb5e39bbbe06d4cab64f3`.
+  Five selected files total23,110 bytes, excluding the index. The basis, fixed
+  plan and exact producer are included; raw inputs remain in the already
+  preserved screen archives. Selected sizes/hashes and the actual preparation
+  pass. Ruff passes; CPU time is.60 seconds, with zero new simulator/model/encoder
+  work. This reports readiness of data/software, not a new experimental result.
 
 **R48 current paper reviewed, publication pending.** The10-page PDF SHA is
 `e37af77e28c3393caabf35690b1dde47f98868a78856c5667102624cde8f1108`;
