@@ -123,6 +123,16 @@ unknown-counter attempt counts. A missing counter is not an observed zero.
 This exporter does not certify preservation
 or completion of the full research objective.
 
+After all eight shared initialization episodes are complete and the independently
+verified analysis is refreshed, `maniguard_latent_initial_summary.py --run RUN
+--output NEW_JSON` emits all initial outcomes and engagement counts. It also
+compares initial robot/images and the recorded native Gaussian/RNG streams for
+the matched training cases. It starts no physics or model calls and refuses to
+overwrite a result. The first complete summary has 16,000 globally acquired controls
+and 2,000 policy calls, with shared data attributed once to each method. Its 1,500
+paired hash comparisons are correlated telemetry checks, not extra policy calls
+or independent outcome trials.
+
 `maniguard_latent_validate.py --run RUN --protocol SELECTED_PROTOCOL
 --output RUN/analysis` independently reconstructs initial matrices, both optimizers'
 offspring and RNG transitions, recorded fitness, fixed/finalist selection, exact

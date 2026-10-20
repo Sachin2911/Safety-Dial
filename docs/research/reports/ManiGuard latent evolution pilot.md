@@ -94,6 +94,23 @@ still supported, with no recorded grasp. Both start supported, upright and open.
 These are observed failure descriptions, not physical counterfactuals or grounds
 for changing the frozen comparison.
 
+Shared initialization is now complete and remotely preserved. The
+[complete summary](../../../configs/maniguard/latent-evolution/shared-initial-summary-20261020.json)
+has zero requested or raw benchmark completions in all eight episodes. Native,
+positive, negative and random-conditional controllers record 1/2, 1/2, 0/2 and 2/2
+violations, respectively. All eight reach 2,000 controls, acquiring 16,000 controls
+and 2,000 policy calls globally. Both methods receive the same initial data.
+Under the frozen selection rule, negative supplies the fixed reference and initial
+incumbent; EA's other initial parent is native after stable tie-breaking.
+
+Initial robot input matches native in all six other-controller comparisons on the
+same case, but overview and wrist images each differ in all six. Recorded native
+noise hashes and RNG transitions agree at all 1,500 paired query indices. This
+confirms matched recorded Gaussian streams without asserting identical initial
+observations or a physical counterfactual. The two training cases remain correlated
+development evidence. Generation one has started on its new predeclared seeds;
+both methods' offspring are persisted and the protected final checking is unstarted.
+
 A separate [design verifier](../../../experiments/helpers/maniguard_latent_completion.py)
 now reconstructs the frozen initial matrices, offspring, RNG progression, recorded
 fitness and finalist choices. It checks cases/seeds, native execution and query
@@ -117,11 +134,12 @@ also checks prospective freeze time, declared wave order, method interleaving an
 nonoverlapping replacements for every started comparison job. It certifies the
 observed prefix, not the missing later generations or independent checking.
 
-The five-page [current GECCO draft](maniguard-phase3-part1-gecco/draft.pdf) was
-built, visually checked and pushed to `main` at `82c885a`. It presents the new
-method, frozen comparison, completed development evidence and primary related
-work. Comparative results remain pending. Its historical cumulative report and
-recorded figures/results are unchanged.
+The [current GECCO draft](maniguard-phase3-part1-gecco/draft.pdf) presents the new
+method, frozen comparison, completed development and shared initialization, and
+primary related work. The earlier five-page build is pinned at `82c885a`; the
+updated build receipt records the new PDF and source hashes. Independent comparative
+results remain pending. The historical cumulative report and figures/results are
+unchanged.
 
 ## Full development episodes
 

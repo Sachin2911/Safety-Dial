@@ -6,8 +6,9 @@ updated on 20 October 2026. Its article source is
 It describes the 176-parameter observation/instruction-conditioned adapter,
 native-sampling identity, the completed 320-call decoder audit and four full
 development episodes, and the frozen native/fixed/EA/random-search Jar comparison.
-The optimizer comparison is running. Comparative rates and finalist results are
-pending and are not inferred from development outcomes. The original cumulative
+All eight shared initialization episodes are now included: zero requested
+completions, with the nonviolating negative constant never grasping. Generation one
+is running. Independent rates and finalist results remain pending. The original cumulative
 report, its historical figures and numerical results remain in `main.tex`/`named.pdf`.
 
 The new [protocol](../../../../configs/maniguard/latent-evolution/capacity-20261020-v2.json),
@@ -15,7 +16,8 @@ The new [protocol](../../../../configs/maniguard/latent-evolution/capacity-20261
 [study report](../ManiGuard%20latent%20evolution%20pilot.md) and
 [study README](../../../../configs/maniguard/latent-evolution/README.md) supply exact
 task/seed lists, costs, source pins and restoration instructions. The current build
-receipt is `latent-build-20261020.json`. The paper distinguishes implemented paths,
+receipt is `latent-build-20261020-initial.json`; `latent-build-20261020.json` retains
+the earlier five-page build at commit `82c885a`. The paper distinguishes implemented paths,
 decoder responses, physical development evidence and pending comparisons. Ordinary
 learning, optimizer replication and cross-family adapter transfer remain untested.
 
@@ -33,6 +35,15 @@ Run the figure command at the repository root. The plotting dependencies are iso
 from the simulation/policy environments. Its new figure and source/hash receipt live
 under `docs/research/figures/ManiGuard/latent-evolution/`. Closest primary sources are
 recorded separately in `latent-references.bib`; the historical bibliography is retained.
+
+The [complete initial summary](../../../../configs/maniguard/latent-evolution/shared-initial-summary-20261020.json)
+includes all eight outcomes, contact/grasp counts, robot/camera reset comparisons
+and 1,500 stored native-noise/RNG comparisons. It reuses actual records, with no
+new inference. After refreshing the study's independently verified analysis,
+`maniguard_latent_initial_summary.py --run RUN --output NEW_JSON` reproduces this
+summary. The command refuses to overwrite a recorded result. This is shared training
+evidence on two cases, with identical native streams but different initial camera
+pixels; it is not the independent four-block comparison.
 
 The following notes describe the **19 October supervisor check-in**, including its
 [paper PDF at the preserved main revision](https://github.com/Sachin2911/Safety-Dial/blob/4783369c5b599580e26f9c3a2723ee55518c46a3/docs/research/reports/maniguard-phase3-part1-gecco/draft.pdf)

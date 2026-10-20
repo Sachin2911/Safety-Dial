@@ -1,5 +1,5 @@
 % Current article. main.tex/named.pdf preserve the earlier cumulative report.
-\documentclass[sigconf,dvipsnames]{acmart}
+\documentclass[sigconf,dvipsnames,balance=false]{acmart}
 \setcopyright{none}
 \settopmatter{printacmref=false,printfolios=true}
 \acmDOI{}
@@ -37,8 +37,9 @@ respectively. Four full development episodes establish integration and timing,
 without a matched estimate of physical benefit. We freeze a 60-valid-episode
 allocation: four development episodes, eight shared initial episodes, sixteen
 descendant episodes each for evolution and random search, and sixteen independent
-checks of native, fixed, evolved and random-search controllers. The Jar comparison
-is running; optimizer and final comparison results are pending. Native-noise
+checks of native, fixed, evolved and random-search controllers. All eight shared
+initial episodes end unfinished; the highest-utility constant never grasps. Search
+is running and independent comparison results are pending. Native-noise
 steering and evolutionary VLA steering have precedents. The contribution sought
 is an explained safe-completion benefit per total interaction, with competent
 learning comparisons, replication and transfer still required.
@@ -79,7 +80,8 @@ relative to other adaptation methods; and do fitted weights transfer? Our comple
 evidence establishes integration and decoder influence. A matched Jar comparison
 is in progress under a protocol frozen before comparative feedback. Its small
 sample can provide effect-size leads, not establish optimizer superiority or
-cross-family transfer.
+cross-family transfer. Shared initialization now supplies eight valid full
+episodes without safe completion on its two cases.
 
 \section{Related work and contribution boundary}
 DSRL learns in the latent-noise space of a frozen diffusion policy, including
@@ -329,9 +331,10 @@ failures and discarded candidates. Model calls, encoder work, elapsed time and
 allocated GPU-hours are separate counters. Shared episodes count once physically
 and once within each method's information budget.
 
-Setup, decoder calls, idle allocation and preservation are charged. Rental-wall
-estimates retain the original provider start; any stopped interval needs separate
-billing reconciliation rather than resetting the clock. Four checking episodes
+Setup, decoder calls, idle allocation and preservation are charged. GPU-hour and
+running-cost estimates are upper bounds over elapsed wall time from the original
+provider start, counting both GPUs. The own-instance API does not expose verified
+billed runtime; a container restart is not credited as unbilled time. Four checking episodes
 per condition and one optimizer seed provide descriptive effect sizes, not a
 superiority or safety guarantee. Zero violations in $n$ independent episodes
 implies an approximate 95\% upper rate bound of $3/n$, not zero; four episodes
@@ -407,12 +410,52 @@ a locked shared Kit cache and shader compilation. The episode then completes
 normally and retains its cost in capacity selection. This technical delay is
 distinct from its valid adverse physical outcome.
 
-\subsection{Comparison in progress}
-\textbf{Optimizer and independent comparison results are pending.} Jar shared
-initialization began at 04:28 UTC on 20 October with two concurrent native episodes.
-At this draft's evidence cutoff no EA/random-search finalist is selected. We leave
-comparative rates, optimizer differences and transfer results unreported. Training
-observations will not substitute for the protected sixteen-episode final check.
+\subsection{Completed shared initialization}
+All eight shared initialization episodes reach the full 2,000-control horizon
+without requested or raw benchmark completion (Table~\ref{tab:initial}). Each
+controller receives the same two nominal task/seed cases, costing 4,000 controls
+and 500 policy calls. Shared acquisition therefore costs 16,000 controls and 2,000
+policy calls globally, attributed once within each optimizer's information budget.
+
+\begin{table}[t]
+\caption{Shared training initialization, two episodes per controller. SC/UC are
+safe/unsafe requested completion; SU/UU are safe/unsafe unfinished episodes.
+$V$ counts violations and $G$ episodes with a recorded grasp. Random here is
+the shared untrained conditional initializer, not a selected random-search finalist.}
+\label{tab:initial}
+\begin{tabular}{lrrrrrr}
+\toprule
+Controller & SC & UC & SU & UU & $V$ & $G$ \\
+\midrule
+Native & 0 & 0 & 1 & 1 & 1 & 1 \\
+Positive constant & 0 & 0 & 1 & 1 & 1 & 0 \\
+Negative constant & 0 & 0 & 2 & 0 & 0 & 0 \\
+Random conditional & 0 & 0 & 0 & 2 & 2 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The negative constant's utility sum zero leads native and positive at $-2$ and the
+random initializer at $-4$. It never grasps and contacts the target in only one
+of its two episodes. This lead concerns nonviolating unfinished execution, not
+improved safe completion. The frozen rule selects it as the fixed reference and
+initial incumbent of both searches. Native task 0019 goes off support while open
+at action 537; closure first becomes true at 638. Positive task 0009 instead loses
+uprightness at 1116 while still supported, with no recorded grasp. These are
+factual failure descriptions, not counterfactual explanations of a steering effect.
+
+The initial robot input matches native in all six comparisons of a different
+controller on the same case. Both RGB views differ in every pair. Stored native-noise hashes and RNG
+transitions agree at all 1,500 paired query indices across those six streams.
+The common random stream is realized while observations remain different. These
+are correlated consistency checks over two cases, not independent outcome trials.
+
+\subsection{Search and independent comparison in progress}
+\textbf{Optimizer and independent comparison results are pending.} The initial
+data are preserved and generation one is running on its new predeclared seeds.
+No EA/random-search finalist is selected at this evidence cutoff. Training
+observations will not substitute for the protected sixteen-episode final check,
+and no optimizer advantage or transfer benefit is claimed.
 
 \section{Limitations and remaining evidence}
 This interface can consume several family checkpoints, but the pilot fits only
@@ -443,7 +486,7 @@ The launch revision is \texttt{4783369c5b59}. Upstream pins are ManiGuard
 \texttt{6bf4c61a1f16}, BEHAVIOR \texttt{88454bd04f75} and openpi
 \texttt{215abfb217db}~\cite{openpi}. Separate uv-managed environments serve
 simulation (Python 3.10, Torch 2.6/CUDA 12.4), policy (Python 3.11, JAX .5.3) and
-CPU tooling. Receipts retain actual GPU UUIDs, source hashes, causal features,
+CPU tooling. Comparative receipts retain actual GPU UUIDs, source hashes, causal features,
 decoded chunks, executed inputs and raw/requested outcome evidence. An independent
 reader verifies physical records before assigning fitness.
 
@@ -458,8 +501,9 @@ and base-policy weights are excluded from public Git.
 
 \section{Conclusion}
 Native-noise steering is implemented with conditional inputs and verified decoder
-influence in two family policies. These checks justify a physical test without
-establishing safer completion. The frozen Jar comparison tests native execution,
+influence in two family policies. Shared initialization yields no safe-completion
+gain; its highest-utility controller remains unfinished without grasping. The
+continuing frozen Jar comparison tests native execution,
 a tuned constant, evolution and matched random search while protecting independent
 checking and retaining unsuccessful candidates. Its result must determine the
 strength of the contribution, including a null or adverse finding. Ordinary
