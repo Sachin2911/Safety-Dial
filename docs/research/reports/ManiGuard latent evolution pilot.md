@@ -5,10 +5,10 @@ Jar comparison is **running** after the user authorized the full comparison on
 20 October. Shared initialization began at 04:28 UTC with two native episodes.
 The fixed protocol specifies eight shared initialization episodes, sixteen
 descendant episodes per optimizer, sealed finalists and sixteen independent
-checking episodes. At the dated 08:50 UTC training snapshot, four development
-and twenty comparison episodes are verified, and the last generation-one random
+checking episodes. At the dated 09:13 UTC training snapshot, four development
+and twenty-two comparison episodes are verified, and the last generation-one EA
 offspring pair is running. The comparison episodes have zero requested or raw completions,
-eleven violations and one recorded grasp. These are training observations,
+twelve violations and one recorded grasp. These are training observations,
 not a completed optimizer comparison. No evolutionary or transfer benefit is
 claimed while that comparison remains incomplete.
 
@@ -214,6 +214,11 @@ finger closure and jar lid closure as separate observations. The present utility
 gives this partial-progress episode the same zero score as any other nonviolating
 unfinished episode. Ordered progress rewards or new data acquisition would need
 a separate prospective comparison; neither fitness nor selection is changed here.
+The final generation-one random child also scores `[0, -2]`, with no completion,
+grasp or lid prerequisite. Thus all four random generation-one candidate pairs
+tie on this utility, including the one partial-closure episode. The frozen stable
+tie rule ranks the reevaluated incumbent first; partial progress does not silently
+change the optimizer's information or selection criterion.
 
 A separate [design verifier](../../../experiments/helpers/maniguard_latent_completion.py)
 now reconstructs the frozen initial matrices, offspring, RNG progression, recorded

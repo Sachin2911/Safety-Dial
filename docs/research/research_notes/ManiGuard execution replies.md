@@ -563,3 +563,71 @@ evidence; these selected training frames are illustrative and do not establish
 a unique cause of failure or a counterfactual improvement. The montage and R10
 reports are queued for the next normal private checkpoint. No frozen source or
 physical comparison setting was changed.
+
+
+### Final random candidate of generation one, 2026-10-20T09:14:23.823178+00:00
+
+`random-g1-3` completed both2,000-control/250-query episodes with scores `[0,-2]`.
+Both requested/raw completion flags are false, both record contact, neither
+records a grasp or lid prerequisite; case1 violates. Controller hash is
+b30f9ac8c3e2d50377c25370d509079e9924b73655a2e306f590e13ee3b35846.
+All four random generation-one evaluations now have `[0,-2]`; the existing tie
+rule will govern selection after the frozen schedule, without preferring the
+post hoc partial-closure observation. I am preserving both complete trajectories.
+
+There are26 verified full episodes and28 full starts, including the live last
+EA generation-one pair `ea-g1-3-case0/1`. All22 completed comparison episodes
+remain requested/raw unfinished;12 violate and one records a grasp. Thirty-four
+planned valid episodes remain, including18 descendants and16 checking. No invalid
+full replacement or new diagnostic call was used. After this EA pair, I will
+reverify the complete first-generation design and recorded RNG/selection before
+continuing the already running schedule.
+
+**R15 received for inspection.** I will inspect and test the two stable adapter
+files as CPU preparation only. Source-defined target canonicalization may be
+implemented independently of actual runtime-bound capture and physical identity;
+the latter remain unvalidated and unfunded in the current cohort. I also see the
+new review-progress sources and will wait for their handoff before integration.
+Current edits are execution status, private preservation and this replies file.
+The live native controller, actor and protocol remain unchanged.
+
+
+### R15 CPU adapter acceptance, 2026-10-20T09:15:55.478060+00:00
+
+**Accepted as separate CPU source-contract preparation.** I inspected both files
+and all15 focused tests pass; Ruff passes. The AST check compares the supported
+raw absolute-position/no-scaling/no-impedance preset with the primary checkout
+without importing simulator libraries. The wrapper addresses the clipping dead
+zone using canonical effective targets, preserving unchanged original command
+coordinates and exact zero-residual input identity. It retains both effective
+target deltas and raw-input deltas; the latter can exceed the residual bound when
+undoing native saturation. Its runtime/source/limit and memory contracts are
+explicitly declared, with no independent live-verification claim.
+
+This CPU implementation does not capture actual runtime bounds or establish
+physical identity. Those remain a separate gate requiring the future frozen
+protocol and allowance. I updated the continuation draft's earlier unimplemented-
+adapter wording to distinguish this new pure CPU wrapper from missing physical
+integration. The R12 frozen model, R13 sources, current native controller, actor
+and physical queue are unchanged. I am integrating only the two handed-off files
+and their documentation, with no factual model, VLA, encoder or physics work.
+
+
+### Third random-descendant reconstruction, 2026-10-20T09:18:50.951803+00:00
+
+Both new episodes were recovered and independently reverified from private
+model revision92dfa40195c90adac47e38b091e06b1866bbbd05 and dataset revision
+fe5130aafd5e949d97b0ef22a6ed7a713a7d7b0d. All4,000 controls,500 native policy
+query receipts and source/checkpoint/runtime contracts match. The same recovery
+byte-verifies the original and reproduced R10 geometry reports plus the saved
+closure-frame montage and its source/hash receipt. This adds no physics, new
+render, VLA/encoder request or scientific model computation. All26 completed
+full episodes now have verified remote reconstruction. The public proof is
+`third-random-descendant-recovery-receipt.json`.
+
+I am publishing the new receipts, the accepted R15 CPU source/tests and its
+separate preparation scope. The study report's dated09:13 snapshot now includes
+the completed random generation-one tie and the running last EA pair. The paper
+PDF still has its declared earlier diagnostic cutoff; the full-result update
+remains pending. Current live workers are39017/39018 on `ea-g1-3-case0/1`.
+The newly visible progress helper/script/tests remain review-owned pending handoff.

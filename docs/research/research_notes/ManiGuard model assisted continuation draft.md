@@ -60,8 +60,20 @@ rejects inputs outside its supplied bounds, so it is not yet an adapter for all
 recorded native commands. Before physical use, freeze the source-correct native
 clipping map and actual runtime bounds, verify zero-residual physical identity,
 and retain original environment inputs, canonical targets, residual proposals,
-filtered commands and execution records separately. This adapter remains
-unimplemented and unvalidated; the original study's clipping stage stays native.
+filtered commands and execution records separately. The
+[source-matched CPU wrapper](../../../experiments/helpers/maniguard_continuation_targets.py)
+now implements the declared raw-position clipping map, with 15 additional passing
+CPU checks against synthetic runtime snapshots and an AST-extracted native preset.
+It preserves every original command coordinate whose effective target is unchanged,
+including exact zero-residual identity. Its target contract and runtime-evidence
+hash bind memory replay. It does not discover a runtime or validate a declared
+snapshot. Actual runtime capture and physical identity remain unvalidated, and the
+original study's clipping stage stays native.
+
+The residual bound applies to the effective desired target. Undoing a saturated
+native command can change the raw environment input by more than 0.05 radians;
+both differences are retained and must be reported. A later comparison must freeze
+this output domain and give every direct-residual method the same adapter.
 
 The prospective noise controller receives the 44 causal actor features plus five
 learned task-state beliefs. Its 5-by-49 weights produce four arm coefficients and

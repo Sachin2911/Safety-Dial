@@ -21,13 +21,24 @@ allowances or instructions to override an existing user-directed hold.
 
 ## Current handoff: user continuation instruction
 
-R15 preparation boundary: review is adding a separate native target adapter under
-`experiments/helpers/maniguard_continuation_targets.py` and its focused test file.
-These are in progress, outside R13's stable integration list. The adapter will
-apply residuals to the source-defined clipped joint targets, preserve native
-environment commands at zero correction and retain both representations. Runtime
-joint limits and a native-controller snapshot will still need prospective
-validation. No live source, process, queue or inference request is involved.
+R16 stable handoff: the ordered-progress helper, script and tests listed below
+are ready for inspection/integration. All seven focused cases, Ruff and the
+100-column check pass. The pinned report covers 24 completed Jar episodes,
+including 22 comparison episodes. Ten comparison episodes are safe unfinished:
+nine have stage zero and one has stage one. Nine comparison episodes contain
+executed close commands, but none issues them after a safe supported closure.
+All four random-g1 panels tie at [0,-2]; only random-g1-2 contains a safe lid-
+closure milestone. Keep the frozen tie rule and selection. R16 proposes the
+next cohort's phase-aware training and a privileged handoff feasibility control,
+without claiming completion, sufficient calibration or a new physical allocation.
+
+R15 stable handoff, 20 October 09:06 UTC: the new target adapter and its focused
+test file, listed in R15 below, are ready for inspection/integration. All 15 new
+CPU cases and Ruff pass. The source-matched preset is checked without importing
+simulation. Runtime joint limits, controller snapshot and physical identity
+remain prospectively validated launch requirements. No existing R12/R13 or live
+source was changed. Current random-g1-3 workers 36097/36098 are independently live
+with exact start ticks 392954443, at 1,376/1,408 controls in this readback.
 
 Confirmation for execution's 08:53 reply: the geometry handoff is stable and ready
 now. Please inspect/integrate `experiments/scripts/maniguard_review_geometry.py`
@@ -1013,3 +1024,140 @@ data/maniguard/envs/tools/bin/python experiments/scripts/maniguard_review_geomet
 
 Use a fresh output path. Please preserve the new source and reproduction report
 at a normal checkpoint boundary; no additional physical dispatch is requested.
+
+## R15: Apply direct residuals to the effective native joint target
+
+Status: separate CPU adapter complete and ready for source inspection. The files
+are `experiments/helpers/maniguard_continuation_targets.py` and
+`experiments/tests/test_maniguard_continuation_targets.py`. They extend the R13
+prototype through a wrapper; its accepted source and the R12 audit are unchanged.
+
+The native `joint_position_raw` preset sets absolute position commands, no
+normalization, no command input/output scaling and no impedance control. Its
+`JointController` passes the desired positions to `BaseController.clip_control`,
+which clips position joints marked limited. Correcting the original environment
+input can have no effect while it remains beyond a limit. For example, with a
+declared upper bound 2 and native environment target 3, subtracting 0.05 still
+produces effective target 2. A 0.05-bounded inward correction from effective
+target 2 produces a target below 2. This is a source-defined engineering issue,
+not a diagnosis that it caused any current episode's failure.
+
+`NativeJointResidualAdapter` validates a caller-supplied snapshot of the supported
+native controller/mapping, seven finite runtime position bounds, limit mask,
+binary gripper convention and exact source/runtime evidence hashes. It rejects
+delta/velocity/impedance controllers, command scaling, normalized/reordered
+commands and unlimited joints. The adapter derives canonical desired targets,
+uses R13's bounded residual on those targets, and translates back to environment
+commands. Every coordinate whose effective target is unchanged preserves the
+original command, including exact zero-residual native identity.
+
+The output retains native environment inputs, canonical native targets, residual
+targets and proposed environment commands separately. Filtered/executed commands
+and achieved joint positions remain unobserved. Both target and residual contract
+hashes bind memory replay. A new runtime-evidence hash invalidates memory even if
+numerical bounds match. The adapter never discovers or contacts a runtime and
+never grants physical dispatch. A declared snapshot, including one labelled as
+captured, is not independently verified by this CPU component.
+
+The effective joint-target change is bounded by the residual setting. The raw
+environment-command change can be larger when undoing an already saturated native
+command. Report both and define this output domain explicitly before comparison.
+Give ordinary-learning and fixed residual comparisons the same adapter; do not
+change only one method's representation or claim raw-input deltas are bounded by
+0.05 radians. These numerical settings remain prototypes.
+
+**Checks:** 15 focused CPU cases pass in 0.20 seconds. The primary native preset
+is extracted with Python AST and compared directly without importing simulator
+libraries. Synthetic cases cover the clipping dead zone, exact zero identity,
+unchanged saturated commands, mapping/controller rejection, required limits and
+provenance, bound agreement and replay tied to runtime evidence. Ruff and the
+100-column check pass. All runtime snapshots in those tests are explicitly
+synthetic. There are no new factual model queries, fits, encoder/VLA calls or
+physical interactions. Actual runtime-bound capture and physical identity checks
+still require the separately frozen later protocol, not an active-run mutation.
+
+## R16: Ordered progress is hidden by the current terminal-score ties
+
+Status: factual completed-data audit and prospective follow-up recommendation.
+The stable new files are:
+
+- `experiments/helpers/maniguard_review_progress.py`
+- `experiments/scripts/maniguard_review_progress.py`
+- `experiments/tests/test_maniguard_review_progress.py`
+
+The report is `runs/reviewer/ordered-progress-20261020-01.json`, SHA-256
+`36c5e358a05fec82b9699d02492ba1c633e2a04c847e8304a6fe0ca242097d97`.
+Its exact queue snapshot fixes membership before opening outputs; it pins source,
+trace, job, receipt and controller identities. It reads completed development and
+training only, excludes checking before opening any output and checks complete
+ordered executed/observed/goal histories. The original terminal utility must
+agree with the receipt. It does not reverify the complete physical source stack.
+
+**Factual result:** 24 Jar episodes are included: two development and 22 comparison.
+The comparison has zero requested/raw completion, 12 violating episodes and ten
+safe unfinished episodes. Among the latter, nine have ordered stage zero and
+one has stage one, supported lid closure. None reaches a safe ordered body grasp,
+lift or transport. Nine comparison episodes issue closing gripper commands, but
+none does so after a safe supported lid closure. The model's missing positive
+continuation data is therefore not fixed merely by adding a lid-closure prefix.
+
+The native initial case0 first records holding at observation 518, before its lid
+prerequisite and later violation. Development native also holds before satisfying
+the requested safe sequence. The random-g1-2 case0 instead closes safely at 482
+but issues no close command throughout. This is evidence of complementary partial
+behaviours on exposed tasks. It does not establish that they can be composed,
+that grasping is the unique cause of failure, or that either controller improves
+safe completion. The wrist montage's later views face away from the target;
+overview still contains it. Camera motion, information and policy competence
+remain distinct hypotheses rather than a diagnosed wiring fault.
+
+**Why the current search cannot distinguish this milestone:** all four completed
+random-g1 candidates score [0,-2], sum -2. Only random-g1-2 has diagnostic ordered
+stages [1,0]; the other three have [0,0]. `CandidateSearch.ranked()` correctly uses
+the frozen sum and identifier tie rule, so this partial gain does not influence
+the current ranking. Random search retains only its best as an elite and draws
+its remaining proposals uniformly. The EA has its own ancestry/data. Do not
+share this random descendant into EA, change tie handling, reward progress,
+reweight cases or retune either method in the current comparison.
+
+**Prospective selection test:** freeze a new common training signal that retains
+the terminal objective and uses safe ordered milestones for declared tie handling
+or a separately tested progress archive. The existing secondary evaluator removes
+progress fitness after a physical violation and does not count closing after
+lifting as correct order. Share this signal, any privilege and its tuning budget
+with EA, random search and competent ordinary learning. Full requested safe
+completion remains the outcome. An archive or extra progress objective is an
+experimental change, not a demonstrated improvement or an originality claim.
+Any warm start from the closure controller must be shared and charged as prior
+development information, rather than granted only to EA or counted as a new win.
+
+**Practical feasibility control before more world-model search:** a new privileged
+engineering reference could execute the preserved closure controller until the
+factual lid prerequisite has remained closed on support, then switch at a native
+query boundary to the contemporaneous native controller without resetting the
+policy's Gaussian RNG. Compare it with closure-only and native execution on the
+same development cases/fresh seeds. Specify the debounce, latch/reset and first
+query using the new branch before execution. This requires no assumption that
+cuRobo or demonstration assets are installed. It tests whether a stage handoff
+can yield a valid grasp/transport from the achieved state. The monitor-derived
+switch is privileged actor information and must remain labelled as an engineering
+positive control, not an equal-information learned method or a deployed filter.
+Failure would not establish irreversibility or uniquely identify perception versus
+control error. Any physical run needs its own frozen implementation and budget.
+
+For the model-free capability screen, the existing 44 causal actor inputs can be
+used while belief columns remain explicitly disabled. A failed world model need
+not block that separately declared control test. Supplying simulator predicates
+as if they were learned beliefs is unacceptable. Learned phase detection, the
+action-changing filter and model-assisted allocation retain their own factual
+qualification requirements. The provisional 16-episode screen still cannot
+qualify the minimum 20 independent calibration episodes or provide the currently
+missing safe completion/ordered-grasp training coverage by assumption.
+
+**Checks and costs:** seven focused CPU tests pass. They protect actual commands
+against proposed-command substitution, temporal ordering, violation-latched
+secondary fitness, missing histories, receipt disagreement and checking exclusion.
+Ruff and 100-column checks pass. There is no simulator, VLA/encoder request or
+learned-model fitting/prediction. This is a post hoc report and training-design
+recommendation. Please preserve the report and integrate these three source/test
+files at a normal checkpoint boundary; no live setting or allocation is changed.
