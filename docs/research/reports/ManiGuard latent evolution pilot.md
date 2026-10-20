@@ -70,6 +70,15 @@ preserves the individual cases, source/controller hashes and evidence timestamp.
 These remain shared training observations; they do not supply an independent
 comparison or an estimate of a bias benefit.
 
+The positive-bias pair subsequently reached both 2,000-control horizons, also with
+zero requested completions and one violation across the two cases. Native and
+positive therefore tie at utility sum -2 in this initial panel. The
+[half-initialization snapshot](../../../configs/maniguard/latent-evolution/shared-initial-half-summary-20261020.json)
+retains four of eight shared episodes and all four completion/safety categories.
+Negative bias and the random conditional initialization are pending in this dated
+snapshot. Matching nominal cases/seeds does not imply identical camera images or
+establish the cause of a single episode's changed behaviour.
+
 A separate [design verifier](../../../experiments/helpers/maniguard_latent_completion.py)
 now reconstructs the frozen initial matrices, offspring, RNG progression, recorded
 fitness and finalist choices. It checks cases/seeds, native execution and query
@@ -80,6 +89,8 @@ verifies six valid full episodes with no contradictions and explicitly retains
 the pending comparison. The two earlier Jar development episodes have planned
 device mapping rather than the per-process UUID receipts introduced before
 Clutter and comparative execution; the verifier records that limitation.
+The [next verification snapshot](../../../configs/maniguard/latent-evolution/design-verification-20261020-half.json)
+checks all eight valid full episodes then available, including the positive pair.
 
 Nine targeted CPU checks pass for completion verification and cost reporting,
 including adverse cases with a changed finalist, case, device, offspring, source,
@@ -136,13 +147,13 @@ and receipts are in the private dataset archives.
 
 ## Interaction, timing and resource accounting
 
-Ten unique physical starts were charged: six engineering starts and four full
+At development closeout, ten unique physical starts were charged: six engineering starts and four full
 development episodes. The first three engineering starts failed during technical
 preparation; three later checks used 32 controls each. Engineering allowance remaining
-is zero. No invalid full attempt was consumed. The complete study still needs 56
-valid comparison episodes, with four protected infrastructure replacement slots.
+is zero. No invalid full attempt was consumed. The post-development comparison
+contains 56 valid episodes, with four protected infrastructure replacement slots.
 
-Recorded totals are 4,394 policy controls, 4,464 environment steps, 26,987 physics
+Development-closeout totals are 4,394 policy controls, 4,464 environment steps, 26,987 physics
 ticks, 551 physical-policy calls and 320 decoder-audit calls, or 871 model calls.
 Encoder accounting records 1,102 images, seven text calls, 23.519 seconds of extraction
 and 38.443 seconds of loading. Physical-policy request wall time is 293.776 seconds;
@@ -184,6 +195,15 @@ same-noise identity pairs, without new model calls or physics. Recovery receipts
 [Jar](../../../configs/maniguard/latent-evolution/full-jar-recovery-receipt.json) and
 [Clutter](../../../configs/maniguard/latent-evolution/clutter-recovery-receipt.json).
 Controllers are untrained initialization weights, not selected finalists.
+The first native and positive initialization pairs have separate verified private
+stage archives. The native pair was fully downloaded, hash-checked, reconstructed
+and independently reverified: 4,000 controls and 500 native-query receipts, with
+zero new physical controls or model calls. Its
+[recovery receipt](../../../configs/maniguard/latent-evolution/native-initial-recovery-receipt.json)
+pins both remote revisions and archive hashes. The positive pair has verified
+[model](../../../configs/maniguard/latent-evolution/model-comparison-positive-initial-receipt.json)
+and [dataset](../../../configs/maniguard/latent-evolution/dataset-comparison-positive-initial-receipt.json)
+receipts. These archives contain initialization data, not evolved finalists.
 The [complete reconstruction receipt](../../../configs/maniguard/latent-evolution/complete-development-recovery-receipt.json)
 checks all ten stage archives together, all seven completed physical receipts,
 all ten attempt rows and the 871-call accounting total. Analysis-stage model and
@@ -217,7 +237,7 @@ data/maniguard/envs/tools/bin/python experiments/scripts/maniguard_latent_pilot.
   --protocol configs/maniguard/latent-evolution/capacity-20261020-v2.json
 ```
 
-The next scientific work remains eight shared initialization episodes, sixteen
+The funded comparison comprises eight shared initialization episodes, sixteen
 descendant episodes per optimizer, sealing four finalists and sixteen independent
 comparison episodes. Ordinary-learning comparisons, optimizer replication, proposed
 latent extensions and the separately budgeted cross-family bridge remain untested.
