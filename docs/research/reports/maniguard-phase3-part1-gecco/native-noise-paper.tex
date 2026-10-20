@@ -39,7 +39,9 @@ allocation: four development episodes, eight shared initial episodes, sixteen
 descendant episodes each for evolution and random search, and sixteen independent
 checks of native, fixed, evolved and random-search controllers. All eight shared
 initial episodes end unfinished; the highest-utility constant never grasps. Search
-is running and independent comparison results are pending. Native-noise
+is running and independent comparison results are pending. A separate 48-call
+diagnostic finds gripper-coordinate influence at a stronger noise offset, with
+arm coupling and no physical benefit tested. Native-noise
 steering and evolutionary VLA steering have precedents. The contribution sought
 is an explained safe-completion benefit per total interaction, with competent
 learning comparisons, replication and transfer still required.
@@ -282,7 +284,9 @@ ceiling. Every partial/invalid attempt and discarded candidate is charged. Valid
 timeouts and adverse scores cannot be replaced. Separate engineering used six
 starts: three failed during preparation and three reached 32 controls each.
 The 96-control engineering allowance is exhausted. Physics before callback
-attachment is unknown, not zero. No further decoder probes are allowed.
+attachment is unknown, not zero. The original 320-call decoder allowance is
+exhausted. A separately authorized 48-call follow-up, reported below, changes
+neither this physical allocation nor the controller used in the frozen comparison.
 
 \begin{table}[t]
 \caption{Frozen full-episode allocation. Shared initialization is acquired once.
@@ -450,9 +454,65 @@ transitions agree at all 1,500 paired query indices across those six streams.
 The common random stream is realized while observations remain different. These
 are correlated consistency checks over two cases, not independent outcome trials.
 
+\subsection{Exploratory gripper-coordinate diagnostic}
+Four generation-one incumbent rechecks subsequently evaluate the same negative
+constant on the new training seed panel. Each method scores $[0,-2]$: no requested
+or raw completion and one violation per pair. At this diagnostic cutoff, all
+twelve comparison episodes are unfinished, six violate, and only one ever grasps.
+Eight never command gripper closure; the other four each show actual finger
+closure. None of their arm proposals changes at the outer environment bounds.
+These observations do not identify a unique failure cause. In particular, actual
+offspring have not yet received a completed physical evaluation.
+
+The frozen basis excludes direct support on the gripper-noise coordinate. During
+a diagnostic pause, a separately frozen 48-call follow-up tests coordinate seven
+(zero-based) on eight saved middle/last development frames, four per family from
+two episodes. Each input receives a native draw, an explicit same-noise repeat
+and offsets $\pm0.5$ and $\pm2.0$ on that coordinate at all sixteen chunk positions.
+No simulator or encoder runs. This raises total decoder requests to 368 while
+retaining the original audit and physical cohort unchanged. All eight additional
+same-noise identities pass at the original $10^{-5}$ tolerance.
+
+\begin{table}[t]
+\caption{Supplemental gripper-noise influence. Entries count saved observations
+with at least one binarized gripper-command flip in the first eight decoded
+actions under either sign. The last column is the largest arm-target difference
+across those positions and the $\pm2.0$ probes. These are correlated decoder inputs,
+not physical outcome trials.}
+\label{tab:gripper}
+\begin{tabular}{lrrr}
+\toprule
+Family & Magnitude 0.5 & Magnitude 2.0 & Max arm (rad) \\
+\midrule
+Jar & 0/4 & 3/4 & .05875 \\
+Clutter & 0/4 & 4/4 & .01773 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The stronger offset changes gripper commands in both families
+(Table~\ref{tab:gripper}), with accompanying arm changes. Its positive sign opens
+the gripper in all four Clutter frames, including two factual held-target frames;
+its negative sign closes it in the two unfinished Jar-bias frames. Conditional
+timing and physical benefit remain untested. Three inputs already lie on violating
+factual trajectories, and no Jar input demonstrates a successful closure
+transition. A flip there cannot establish prospective violation prevention. This
+is influence in a candidate new representation, with no repair applied to the
+frozen physical controller.
+
+An independent offline sensitivity analysis uses 3,334 factual Jar query rows and
+205 Clutter rows from completed development/training episodes. The three persisted
+EA mutations change their parent codes by RMS .5410/.5825/.4130 on the Jar pool;
+only .990\%/1.110\%/.127\% of their code components have magnitude at least .95.
+Inactive mutation or general tanh saturation is therefore unsupported as the
+current explanation. These are noise-space sensitivities on correlated factual
+inputs, with longer trajectories weighted more. They do not measure decoded
+actions, semantic competence or physical counterfactual benefit.
+
 \subsection{Search and independent comparison in progress}
-\textbf{Optimizer and independent comparison results are pending.} The initial
-data are preserved and generation one is running on its new predeclared seeds.
+\textbf{Optimizer and independent comparison results are pending.} The completed
+records are preserved, and the original comparison resumed after the diagnostic
+under its unchanged protocol. Generation one is running on its predeclared seeds.
 No EA/random-search finalist is selected at this evidence cutoff. Training
 observations will not substitute for the protected sixteen-episode final check,
 and no optimizer advantage or transfer benefit is claimed.
@@ -465,6 +525,10 @@ large relative to two-case candidate feedback. Noisy selection, adverse behaviou
 and identity finalists are valid outcomes. If a constant explains an improvement,
 conditioning is unestablished; if random search matches EA, evolutionary advantage
 is unestablished.
+An EA lead over uniform random search combines parental reuse with a local
+Gaussian proposal distribution. Attributing it to evolutionary reuse additionally
+needs a fixed-parent Gaussian-search ablation and a matched local-search comparison
+under separate, prospectively funded evaluations.
 
 An episodic parameter-REINFORCE interface over the same bounded matrix is implemented
 and CPU-checked, including interrupted-batch recovery. It has zero physical

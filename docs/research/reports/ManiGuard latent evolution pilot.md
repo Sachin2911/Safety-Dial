@@ -132,6 +132,25 @@ ceiling from320 to368 and adds no physical episodes. It does not modify the froz
 physical method or authorize a new comparison. Decoder influence, if found, would
 still require a prospectively designed physical test.
 
+The supplemental diagnostic is complete: all 48 requests returned, eight native
+identity pairs pass, amplitude 0.5 changes no gripper command in either family,
+and amplitude 2 changes commands on 3/4 Jar and 4/4 Clutter observations. Maximum
+prefix arm-target differences are 0.05875 and 0.01773 rad, respectively. Three saved
+frames already lie on violating factual trajectories, and none shows a successful
+Jar closure transition. These limitations prevent interpreting the response as a
+physical safety repair. The [remote recovery receipt](../../../configs/maniguard/latent-evolution/gripper-authority-recovery-receipt.json)
+verifies all 48 restored chunks, native RNG/offset/action hashes and input frames
+from prior restored development records, with no new model calls.
+
+The user subsequently selected **Resume original comparison**. The
+[resume receipt](../../../configs/maniguard/latent-evolution/resume-after-diagnostic-20261020.json)
+records the unchanged source checks, budgets and conservative capacity at 07:18 UTC.
+The same supervised coordinator now continues the original generations and
+protected checking. The separately probed gripper support has not entered its actor.
+An [independent sensitivity review](../../../configs/maniguard/latent-evolution/review-sensitivity-summary-20261020.json)
+confirms that persisted EA mutations change their parents' codes and are generally
+unsaturated on factual training features. Physical effects remain to be evaluated.
+
 A separate [design verifier](../../../experiments/helpers/maniguard_latent_completion.py)
 now reconstructs the frozen initial matrices, offspring, RNG progression, recorded
 fitness and finalist choices. It checks cases/seeds, native execution and query

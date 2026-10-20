@@ -16,7 +16,8 @@ The new [protocol](../../../../configs/maniguard/latent-evolution/capacity-20261
 [study report](../ManiGuard%20latent%20evolution%20pilot.md) and
 [study README](../../../../configs/maniguard/latent-evolution/README.md) supply exact
 task/seed lists, costs, source pins and restoration instructions. The current build
-receipt is `latent-build-20261020-initial.json`; `latent-build-20261020.json` retains
+receipt is `latent-build-20261020-diagnostic.json`; `latent-build-20261020-initial.json`
+retains the earlier build after initialization, and `latent-build-20261020.json` retains
 the earlier five-page build at commit `82c885a`. The paper distinguishes implemented paths,
 decoder responses, physical development evidence and pending comparisons. Ordinary
 learning, optimizer replication and cross-family adapter transfer remain untested.
@@ -44,6 +45,17 @@ new inference. After refreshing the study's independently verified analysis,
 summary. The command refuses to overwrite a recorded result. This is shared training
 evidence on two cases, with identical native streams but different initial camera
 pixels; it is not the independent four-block comparison.
+
+The current draft additionally reports the four incumbent rechecks and the
+[48-call gripper diagnostic](../../../../configs/maniguard/latent-evolution/gripper-authority-summary-20261020.json).
+Its eight middle/last development frames show stronger-offset gripper influence
+with accompanying arm changes. No physical method change or benefit is inferred.
+The diagnostic archives and all 48 chunks have passed a remote round trip, including
+their input hashes checked against the earlier restored development records.
+An [independent offline review](../../../../configs/maniguard/latent-evolution/review-sensitivity-summary-20261020.json)
+finds active, mostly unsaturated EA mutations on factual feature pools. The original
+comparison resumed after the user resolved the hold; descendant and final checking
+results remain pending at this paper's diagnostic evidence cutoff.
 
 The following notes describe the **19 October supervisor check-in**, including its
 [paper PDF at the preserved main revision](https://github.com/Sachin2911/Safety-Dial/blob/4783369c5b599580e26f9c3a2723ee55518c46a3/docs/research/reports/maniguard-phase3-part1-gecco/draft.pdf)
