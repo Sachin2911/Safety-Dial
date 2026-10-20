@@ -1,0 +1,162 @@
+{
+  "schema": "maniguard-gripper-authority-diagnostic-v1",
+  "status": "prospective_pending_budget_authorization",
+  "prepared_utc": "2026-10-20T06:54:55.938220+00:00",
+  "source_parent_commit": "3fb90db812b9d52b06497a280aace12e1026cb26",
+  "script": "experiments/scripts/maniguard_gripper_authority.py",
+  "script_sha256": "4216d8525fc37d0913a88bea05c086070c7e14b3a4ead13b8144dd9a3158a808",
+  "authorization": {
+    "status": "pending",
+    "reason": "The original 320 decoder probes are exhausted; this is a separately proposed supplemental allowance, not an uncharged repeat."
+  },
+  "maximum_new_decoder_calls": 48,
+  "prior_decoder_calls": 320,
+  "proposed_cumulative_decoder_ceiling": 368,
+  "new_physical_episodes": 0,
+  "new_physical_controls": 0,
+  "new_encoder_calls": 0,
+  "additional_rental": false,
+  "deadline_utc": "2026-10-20T20:00:00Z",
+  "noise_seed": 610202000,
+  "native_noise_shape": [
+    1,
+    16,
+    32
+  ],
+  "offset_coordinate": 7,
+  "offset_support": "Only model coordinate7, repeated across all16 chunk positions; other noise coordinates unchanged.",
+  "amplitudes": [
+    0.5,
+    2.0
+  ],
+  "signs": [
+    -1,
+    1
+  ],
+  "calls_per_observation": [
+    "native",
+    "same-noise",
+    "a0.5-s-1",
+    "a0.5-s+1",
+    "a2-s-1",
+    "a2-s+1"
+  ],
+  "selection_rule": "Record all responses. A magnitude has provisional shared gripper influence if at least2/4 observations per family change a binarized command in the first8 decoded actions, with every same-noise identity pair passing atol=rtol=1e-5. If both magnitudes pass, prefer0.5 for a separately frozen next-method proposal. Failure does not authorize more probes.",
+  "metrics": [
+    "prefix gripper command flips",
+    "prefix arm RMS and maximum difference",
+    "full raw gripper maximum difference"
+  ],
+  "scope": "Saved physical development observations only, four per family from two prior development episodes. This decoder-only test measures influence, not physical task progress, safety, optimizer benefit or transfer. It does not authorize a changed physical comparison.",
+  "preservation": "Separate new immutable stage, preserving every started and returned request and all48 maximum calls. No original authority outputs or frozen protocol are overwritten.",
+  "actor_source_hashes": {
+    "experiments/helpers/maniguard_latent.py": "40507f8a6251b7e701318648c4fc81d5e472bdd577b46bd18c59044b5eafe2ef",
+    "experiments/helpers/maniguard_latent_policy.py": "aaac8d17a3c16b058e3fd4a2fb641abb1ab654ccb68d31cf38f92c1ece6b926c"
+  },
+  "policies": {
+    "jar": {
+      "repo": "IDEAS-Lab-Northwestern/pi05-base-datagen-v1-jar-joint-2cam-lora",
+      "revision": "1d84eda070313a202a595e449fcf41a1a1e8a546",
+      "step": "7400",
+      "config": "pi05-base_datagen_v1_jar_joint_2cam_lora"
+    },
+    "clutter": {
+      "repo": "IDEAS-Lab-Northwestern/pi05-base-datagen-v1-clutter-joint-2cam-lora",
+      "revision": "f572e33bdb498a8d9992a72312ee849be868a2b6",
+      "step": "7100",
+      "config": "pi05-base_datagen_v1_clutter_joint_2cam_lora",
+      "public": true,
+      "available_steps": [
+        "1775",
+        "3550",
+        "5325",
+        "7100"
+      ],
+      "checkpoint_bytes": 6335575342,
+      "checkpoint_files": 17,
+      "metadata_inventory_sha256": "4a2810bfb0f1c4ba6cf2a8c34b3561a3d25e6837a4936abad0f965ea223c9030"
+    }
+  },
+  "observations": [
+    {
+      "family": "jar",
+      "development_attempt": "dev-jar-native-a0",
+      "scene": "task_0013/base",
+      "phase": "middle",
+      "query_step": 336,
+      "path": "runs/latent-evolution-20261019/episodes/dev-jar-native-a0/query_observations/000336.npz",
+      "sha256": "4f7fbf01a8d4916725b78d730e9617a5703f017a1f057071ad2c34c0875b89cd",
+      "source_job_sha256": "3e1254df047182fad855b70edaf9abec5de0052f8c198a09e572e53426877749"
+    },
+    {
+      "family": "jar",
+      "development_attempt": "dev-jar-native-a0",
+      "scene": "task_0013/base",
+      "phase": "last",
+      "query_step": 664,
+      "path": "runs/latent-evolution-20261019/episodes/dev-jar-native-a0/query_observations/000664.npz",
+      "sha256": "9af161b7fae6012894f2fc2c737ff8a21ca389d4ec2da0518e4f3726b400c9e1",
+      "source_job_sha256": "3e1254df047182fad855b70edaf9abec5de0052f8c198a09e572e53426877749"
+    },
+    {
+      "family": "jar",
+      "development_attempt": "dev-jar-bias-a0",
+      "scene": "task_0017/base",
+      "phase": "middle",
+      "query_step": 1000,
+      "path": "runs/latent-evolution-20261019/episodes/dev-jar-bias-a0/query_observations/001000.npz",
+      "sha256": "46dae2a27b400805abdb4d6e8a9ebd3bf4acb1b49df0dbad9c010773ad80ebea",
+      "source_job_sha256": "5c885f976a410fc39a36fe79bfb4ab47f92ca85f5cc6501050f474d770934c8f"
+    },
+    {
+      "family": "jar",
+      "development_attempt": "dev-jar-bias-a0",
+      "scene": "task_0017/base",
+      "phase": "last",
+      "query_step": 1992,
+      "path": "runs/latent-evolution-20261019/episodes/dev-jar-bias-a0/query_observations/001992.npz",
+      "sha256": "fe4c24d80276f8529e6ad75b9edb9fe5465ac16e198646217acecf474b42b9a8",
+      "source_job_sha256": "5c885f976a410fc39a36fe79bfb4ab47f92ca85f5cc6501050f474d770934c8f"
+    },
+    {
+      "family": "clutter",
+      "development_attempt": "dev-clutter-native-a0",
+      "scene": "task_0039/base",
+      "phase": "middle",
+      "query_step": 552,
+      "path": "runs/latent-evolution-20261019/episodes/dev-clutter-native-a0/query_observations/000552.npz",
+      "sha256": "c22df4d93be6df01a6ff3c8f7ea146c7a2c7ebe261128d0305afc1db60763bbc",
+      "source_job_sha256": "c73c2a2cba3bb3e89f19e5e681b24d2fda5b2011edc7e700eb460641d10c71a7"
+    },
+    {
+      "family": "clutter",
+      "development_attempt": "dev-clutter-native-a0",
+      "scene": "task_0039/base",
+      "phase": "last",
+      "query_step": 1096,
+      "path": "runs/latent-evolution-20261019/episodes/dev-clutter-native-a0/query_observations/001096.npz",
+      "sha256": "de8ff10079159f7750e4fa78f9dc092404b440f9a02c16ee7396cada548aa6c6",
+      "source_job_sha256": "c73c2a2cba3bb3e89f19e5e681b24d2fda5b2011edc7e700eb460641d10c71a7"
+    },
+    {
+      "family": "clutter",
+      "development_attempt": "dev-clutter-bias-a0",
+      "scene": "task_0010/base",
+      "phase": "middle",
+      "query_step": 264,
+      "path": "runs/latent-evolution-20261019/episodes/dev-clutter-bias-a0/query_observations/000264.npz",
+      "sha256": "bd57eb37cbab0a2528b7b169677951b8c3af5612272a460efce8cfa1ec6e1ceb",
+      "source_job_sha256": "edb4336e1be68d543a3d946312dd95e9a91ed03969f2b51a9196004a9c60d3a1"
+    },
+    {
+      "family": "clutter",
+      "development_attempt": "dev-clutter-bias-a0",
+      "scene": "task_0010/base",
+      "phase": "last",
+      "query_step": 528,
+      "path": "runs/latent-evolution-20261019/episodes/dev-clutter-bias-a0/query_observations/000528.npz",
+      "sha256": "025580308379ab2349c5469314a375925df6aface11685d4e67160d4861442ee",
+      "source_job_sha256": "edb4336e1be68d543a3d946312dd95e9a91ed03969f2b51a9196004a9c60d3a1"
+    }
+  ]
+}

@@ -111,6 +111,27 @@ observations or a physical counterfactual. The two training cases remain correla
 development evidence. Generation one has started on its new predeclared seeds;
 both methods' offspring are persisted and the protected final checking is unstarted.
 
+At the user's request, new physical admissions are held after the two generation-one
+incumbent pairs. Both methods reevaluate the same negative constant on seeds
+6101920/6101921 and each scores `[0, -2]`. All twelve comparison episodes remain
+unfinished, six violate, and only one ever grasps. Eight never command the gripper
+to close; the four that do each show finger closure. No arm action changes at the
+outer environment bounds. The
+[diagnostic summary](../../../configs/maniguard/latent-evolution/diagnostic-hold-summary-20261020.json)
+retains every episode. There is no confirmed interface defect and no physically
+evaluated EA offspring, so these results establish neither an optimizer failure
+nor a validated repair.
+
+The arm-supported steering basis leaves the gripper's noise coordinate untouched
+by design. A separate, user-authorized
+[48-call decoder diagnostic](../../../configs/maniguard/latent-evolution/gripper-authority-20261020-v2.json)
+tests that coordinate on saved middle/last development frames from Jar and Clutter.
+It includes eight native/same-noise identity pairs and two signed offset strengths,
+with all responses retained. This raises the separately recorded cumulative decoder
+ceiling from320 to368 and adds no physical episodes. It does not modify the frozen
+physical method or authorize a new comparison. Decoder influence, if found, would
+still require a prospectively designed physical test.
+
 A separate [design verifier](../../../experiments/helpers/maniguard_latent_completion.py)
 now reconstructs the frozen initial matrices, offspring, RNG progression, recorded
 fitness and finalist choices. It checks cases/seeds, native execution and query
