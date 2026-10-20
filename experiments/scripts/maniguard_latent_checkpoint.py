@@ -59,7 +59,8 @@ def _checkpoint(run, stage):
         episodes = sorted({p for p in episodes if p.name not in backed})
         backed_auxiliary = {name for item in index["stages"].values()
                             for name in item.get("auxiliary", [])}
-        auxiliary = [run / name for name in ["authority-jar", "authority-clutter"]
+        auxiliary = [run / name for name in ["authority-jar", "authority-clutter",
+                                           "gripper-authority-20261020"]
                      if name not in backed_auxiliary and (run / name / "summary.json").exists()]
         source_commit = subprocess.check_output(["git", "-C", str(ROOT), "rev-parse", "HEAD"],
                                                 text=True).strip()
@@ -93,6 +94,7 @@ def _checkpoint(run, stage):
                      "sim-freeze.txt", "policy-freeze.txt", "tools-freeze.txt",
                      "backups/index.json", "development-driver.json", "active-policy.json",
                      "active-worker-policies.json", "cost-snapshot.json",
+                     "diagnostic-admission-hold-20261020.json",
                      "paired-recovery-before.json", "paired-recovery-verified.json",
                      "provider-extension-readback.json", "provider-extension-update.json",
                      "provider-extension-confirmation.json"]:

@@ -7,6 +7,32 @@ from pathlib import Path
 from helpers.maniguard_latent_queue import ROOT, atomic
 
 
+def supplemental_decoder_accounting(run):
+    directory = Path(run) / "gripper-authority-20261020"
+    ledger = directory / "requests.jsonl"
+    contents = ledger.read_text() if ledger.exists() else ""
+    lines = contents.splitlines()
+    pending_tail = bool(contents and not contents.endswith("\n"))
+    requests = [json.loads(line) for line in (lines[:-1] if pending_tail else lines)]
+    returned = set()
+    for row in requests:
+        path = Path(row.get("output", directory)) / (row["id"] + ".json")
+        if path.exists():
+            receipt = json.loads(path.read_text())
+            if receipt.get("id") == row["id"] and receipt.get("server_receipt", {}).get("status") == "returned":
+                returned.add(row["id"])
+    identifiers = [row["id"] for row in requests]
+    return {"diagnostic": "gripper-authority-20261020", "authorized_ceiling": 48,
+            "started_requests": len(requests), "remaining_requests": 48 - len(requests),
+            "returned_receipts": len(returned),
+            "by_family": {family: sum(row["family"] == family for row in requests)
+                          for family in ("jar", "clutter")},
+            "unresolved_request_ids": [name for name in identifiers if name not in returned],
+            "duplicate_request_ids": sorted({name for name in identifiers if identifiers.count(name) > 1}),
+            "incomplete_request_tail": pending_tail,
+            "scope": "Separate user-authorized decoder-only extension; started/unreturned calls remain charged. Original320-call audit and physical counters are unchanged."}
+
+
 def snapshot(run):
     run = Path(run).resolve()
     attempts = {}
@@ -59,9 +85,14 @@ def snapshot(run):
     rental = json.loads((ROOT / "configs/vast/maniguard-rental-20261019.json").read_text())
     now = time.time()
     wall_hours = (now - rental["provider_started_epoch"]) / 3600
+    supplemental = supplemental_decoder_accounting(run)
     return {"schema": "maniguard-latent-cost-snapshot-v1", "observed_epoch": now,
             "attempts": rows, "unique_attempts": len(attempts), "recorded_totals": totals,
             "decoder_calls": decoder_calls, "decoder_calls_remaining": 320 - sum(decoder_calls.values()),
+            "supplemental_decoder": supplemental,
+            "total_recorded_decoder_requests": sum(decoder_calls.values()) + supplemental["started_requests"],
+            "returned_server_model_calls": sum(row["returned"] for row in servers),
+            "failed_server_model_calls": sum(row["failed"] for row in servers),
             "server_model_calls": servers,
             "engineering_starts": engineering, "engineering_starts_remaining": 6 - engineering,
             "engineering_controls": engineering_controls, "engineering_controls_remaining": 96 - engineering_controls,

@@ -1,8 +1,10 @@
 """Test gripper-noise authority on saved development observations, without physics."""
 
 import argparse
+import fcntl
 import hashlib
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -63,6 +65,65 @@ def assert_admission(ledger, request_id, maximum=48):
         raise RuntimeError("Supplemental decoder allowance exhausted")
 
 
+def admit_request(protocol, request_id, output, family, protocol_hash):
+    """One locked, durable allowance shared by all outputs and family clients."""
+    ledger = ROOT / protocol["admission_ledger"]
+    ledger.parent.mkdir(parents=True, exist_ok=True)
+    with ledger.with_suffix(".lock").open("a") as lock:
+        fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
+        if ledger.exists() and not ledger.read_bytes().endswith(b"\n"):
+            raise RuntimeError("Incomplete admission tail requires explicit reconciliation")
+        prefix = protocol.get("prior_ledger_prefix")
+        if prefix and hashlib.sha256(ledger.read_bytes()[:prefix["bytes"]]).hexdigest() != prefix["sha256"]:
+            raise ValueError("Already charged request history changed")
+        assert_admission(ledger, request_id)
+        row = {"id": request_id, "family": family, "started_epoch": time.time(),
+               "output": str(output.resolve()), "protocol_sha256": protocol_hash}
+        with ledger.open("a") as stream:
+            stream.write(json.dumps(row) + "\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+
+
+def reconcile(protocol, request_id, output, server_ledger):
+    """Recover saved action bytes or classify a charged return without querying."""
+    ledger = ROOT / protocol["admission_ledger"]
+    admitted = [json.loads(line) for line in ledger.read_text().splitlines()
+                if json.loads(line)["id"] == request_id]
+    if len(admitted) != 1 or Path(admitted[0].get("output", ledger.parent)).resolve() != output.resolve():
+        raise ValueError("Reconciliation needs one admission for this exact output")
+    planned = next(row for row in plan(protocol) if row["id"] == request_id)
+    expected_server = ROOT / protocol["server_ledgers"][planned["family"]]
+    if server_ledger.resolve() != expected_server.resolve():
+        raise ValueError("Use the declared family server ledger")
+    episode = str(output.resolve() / request_id)
+    matches = [json.loads(line) for line in server_ledger.read_text().splitlines()
+               if json.loads(line).get("episode") == episode]
+    if len(matches) != 1:
+        raise ValueError("Need exactly one attributable server return")
+    server = matches[0]
+    result = {"id": request_id, "charged": True, "replay_allowed": False,
+              "server_ledger_sha256": hashlib.sha256(server_ledger.read_bytes()).hexdigest(),
+              "status": "returned_without_action_bytes" if server["status"] == "returned"
+              else "failed_and_charged"}
+    actions_path = output / (request_id + ".npz")
+    if server["status"] == "returned" and actions_path.exists():
+        with np.load(actions_path, allow_pickle=False) as saved:
+            if array_hash(saved["actions"]) != server["actions_sha256"]:
+                raise ValueError("Interrupted client action bytes differ from server receipt")
+        receipt = {**planned, "protocol_sha256": admitted[0]["protocol_sha256"],
+                   "server_receipt": server,
+                   "metadata": json.loads((ledger.parent / (planned["family"] + "-metadata.json")).read_text()),
+                   "reconciliation": result}
+        target = output / (request_id + ".json")
+        with target.open("x") as stream:
+            stream.write(json.dumps(receipt, indent=2) + "\n")
+        result["status"] = "client_artifact_recovered_without_inference"
+    with (ledger.parent / "reconciliation.jsonl").open("a") as stream:
+        stream.write(json.dumps(result) + "\n")
+    return result
+
+
 def run(protocol, protocol_hash, family, output, port):
     if protocol["status"] != "authorized_frozen":
         raise RuntimeError("The exhausted original decoder allowance needs explicit new authorization")
@@ -83,6 +144,12 @@ def run(protocol, protocol_hash, family, output, port):
         if any(metadata.get("source_hashes", {}).get(name) != value
                for name, value in protocol["actor_source_hashes"].items()):
             raise ValueError("The diagnostic sampler differs from the verified native-noise hook")
+        canonical = (ROOT / protocol["admission_ledger"]).parent
+        canonical.mkdir(parents=True, exist_ok=True)
+        metadata_path = canonical / (family + "-metadata.json")
+        if metadata_path.exists() and json.loads(metadata_path.read_text()) != metadata:
+            raise ValueError("The saved diagnostic service metadata changed")
+        metadata_path.write_text(json.dumps(metadata, indent=2) + "\n")
         for row in rows:
             name = row["id"]
             receipt_path, actions_path = output / (name + ".json"), output / (name + ".npz")
@@ -90,12 +157,10 @@ def run(protocol, protocol_hash, family, output, port):
                 receipt = json.loads(receipt_path.read_text())
                 with np.load(actions_path, allow_pickle=False) as data:
                     actions = data["actions"]
-                if (receipt["protocol_sha256"] != protocol_hash
+                if (receipt["protocol_sha256"] not in [protocol_hash, *protocol.get("accepted_prior_protocol_sha256", [])]
                         or array_hash(actions) != receipt["server_receipt"]["actions_sha256"]):
                     raise ValueError("Existing diagnostic evidence differs")
                 continue
-            ledger = output / "requests.jsonl"
-            assert_admission(ledger, name)
             with np.load(ROOT / row["observation"]["path"], allow_pickle=False) as data:
                 payload = {"observation/image_left": data["overview"],
                            "observation/wrist_image": data["wrist"],
@@ -107,9 +172,7 @@ def run(protocol, protocol_hash, family, output, port):
             offset = dict(offsets())[row["label"]]
             if offset is not None:
                 payload["latent_audit_offset"] = offset
-            with ledger.open("a") as stream:
-                stream.write(json.dumps({"id": name, "family": family,
-                                         "started_epoch": time.time()}) + "\n")
+            admit_request(protocol, name, output, family, protocol_hash)
             response = client.infer(payload)
             actions = np.asarray(response["actions"])
             server = response["latent_receipt"]
@@ -176,6 +239,8 @@ def main():
     parser.add_argument("--family", choices=("jar", "clutter"))
     parser.add_argument("--output", type=Path)
     parser.add_argument("--port", type=int, default=18002)
+    parser.add_argument("--reconcile-request")
+    parser.add_argument("--server-ledger", type=Path)
     args = parser.parse_args()
     raw = args.protocol.read_bytes()
     protocol = json.loads(raw)
@@ -183,6 +248,11 @@ def main():
     if args.plan_only:
         print(json.dumps({"planned_decoder_calls": len(rows), "new_physical_controls": 0,
                           "executed_decoder_calls": 0, "status": protocol["status"]}))
+        return
+    if args.reconcile_request:
+        if args.output is None or args.server_ledger is None:
+            parser.error("reconciliation requires --output and --server-ledger")
+        print(json.dumps(reconcile(protocol, args.reconcile_request, args.output, args.server_ledger)))
         return
     if args.family is None or args.output is None:
         parser.error("execution requires --family and --output")
