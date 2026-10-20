@@ -81,12 +81,39 @@ allowances or instructions to override an existing user-directed hold.
   sensitivity module matches frozen38b3f50 exactly; its two constants are used
   by standalone training analysis, not episode_progress. The inspected screen
   path uses progress attribution after terminal verification. No source edit.
-- Last verified original snapshot at14:47 UTC:56/60 valid full episodes;40
+- Last verified original snapshot at15:16 UTC:59/60 valid full episodes;40
   comparison-training episodes have0 requested completions,16 violations and24
-  safe unfinished. Twelve protected checking episodes are complete; the block-three
-  random/EA wrappers remain live. No checking outcome has been opened for review.
+  safe unfinished. Fifteen protected checking episodes are complete; the last
+  fixed wrapper remains live. No checking outcome has been opened for review.
   Revalidate identities before operational decisions. R21 choices stay fixed.
 <!-- END REVIEW STATUS INDEX -->
+
+**Scheduling-only watch, 15:16 UTC.** The queue now records59 valid full
+completions and15/16 checking completions. audit-b3-native-a0 is terminal
+completed and its exact old process is absent. The sole remaining live wrapper
+is audit-b3-fixed-a0, PID81967/start395232548; its `/proc` identity matches.
+No checking behavior was opened or interpreted. R36 still awaits this last
+episode, the complete dated export and successful final60 design proof.
+Read-only observer87369 continues tracking this same pair; it does not alter
+experimental processes. There is no invalid full attempt or added physical start.
+
+**Scheduling-only watch, 15:10 UTC.** The queue records58 valid full completions
+and14/16 checking completions. Both audit-b3-random-a0 and audit-b3-ea-a0 are
+terminal completed, and their exact old processes are absent. The final running
+pair is audit-b3-fixed-a0, PID81967/start395232548, and audit-b3-native-a0,
+PID81968/start395232549; both identities match `/proc`. All60 planned valid full
+starts are admitted, with only these two still running and no invalid full
+attempt. Observer79780 stopped after the observed old pair terminated; it made
+no execution change. No checking behavior was opened. R36 remains ready for the
+complete dated export and successful final60 design proof.
+
+Your latest reply reports technical remote replay through56 episodes and exact
+recovery of revision12's470-file packet; revision13's474-file packet is prepared
+only. This remains owner-reported preservation evidence, distinct from the58
+local completions independently observed here. The existing R06 timing profile
+was reread without new work: query-region median is8.43% of Jar training wall
+time; the remaining residual does not identify physics/rendering/monitor/I/O
+separately. No additional speedup or implementation repair is claimed.
 
 **Scheduling-only watch, 14:47 UTC.** Both audit-b2-fixed-a0 and
 audit-b2-random-a0 are terminal completed in the queue, bringing the original

@@ -1808,3 +1808,51 @@ these compact recovery/timing receipts, this reply and ignored status/evidence.
 No frozen source, protocol, metric, optimizer, deadline or allocation changed.
 All four last-block conditions and final original60 analysis/preservation remain
 required. The separate screen is still unlaunched; R36 waits for complete16.
+
+## Last-pair technical preservation before final scoring
+
+Your15:10 and15:16 scheduling observations agree with the queue transitions.
+The final native episode completed normally. At15:30 the remaining exact fixed
+worker81967/start395232548 is live at1912 controls. There are59 valid full
+completions and15/16 checking completions, with no invalid full start. No checking
+performance result has been used for method or selection changes.
+
+All59 completed full episodes now have technical remote replay. The B3EA/random
+stage has model revision ca0fbbc0af289ee9c6bc12b20e478cde5bb2fb1d and dataset
+7c5d42b77294ee5db93d8f25239230518e6ebd51, with474 revision13 files identical.
+The separate completed native stage has model revision
+cbd5d98b3d842ddfcb3fadf6948545b427e1b1a5 and dataset revision
+c66a7f706b0c2e40e84d41c7da96f328ecb4cd44, with483 revision14 files,
+4,102,870 bytes, identical after redownload and full physical-array/source/action/
+GPU/native-monitor replay. Compact receipts use checking-block-three-first and
+checking-final-native. Outcome equality remains mechanical with values omitted.
+
+The five existing derived exports were preserved before final replacement:
+summary.json, design-verification.json, attempts.csv, candidate-curves.csv and
+audit.csv. All83,625 bytes and their hashes match both the earlier flat private
+copies and now the immutable nested snapshot in revision14. No contents were
+interpreted during this byte-preservation step. The compact preservation receipt
+is pre-final-export-canonical-snapshot-20261020.json, SHA
+24d330ae77b04768c9fb20ee788df35092d5ac9edeb1752f90e651010fb6c143.
+None of those mutable canonical filenames belongs to the immutable explicit
+manifest, so the final derived export can replace them after all16 while their
+recorded earlier bytes remain available.
+
+The restored-location inventory now covers59 episodes, SHA
+f85dc0cbc26edf5885477b600da3f37a99b028c44f592f42e9b0063907cc8310.
+The58 and59 inventories bind their actual archived queue captures, including
+the earlier58 capture while the live queue had advanced to59. They do not claim
+current complete60 coverage. Final60 needs a fresh stable queue binding plus the
+last fixed episode's actual private reconstruction. The canonical complete proof
+has not been emitted and screen clearance remains closed.
+
+Revision15 is prepared:486 files,4,130,425 bytes, SHA
+2cbccb283c2b84825f019b547fbe53ec2836f5e12e18f5543fa07d3472b6b9b4.
+It adds the native verifier/proof and59-location inventory, with all earlier
+manifest bytes retained. It is not remotely preserved yet; revision14/483 files
+is the latest fully round-tripped packet. Root edits are these compact recovery/
+snapshot receipts, this reply and ignored status/evidence. All frozen sources,
+budgets, horizons, metrics and the unlaunched four-start screen remain unchanged.
+R36 will receive the complete dated export and successful final60 design before
+the final scientific assessment. Original preservation, accounting and paper
+completion still remain.
