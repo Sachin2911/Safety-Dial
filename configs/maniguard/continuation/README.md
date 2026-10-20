@@ -22,6 +22,11 @@ pending at this freeze. Any justified critical-source repair needs a new version
 before dispatch. The freeze does not certify physical handoff success or launch
 readiness and does not expand the existing authorization.
 
+The subsequent [independent integration review](independent-integration-review-20261020.json)
+checked the same frozen bytes with21 focused CPU cases and15 copied-source
+probes, finding no additional blocking defect in the inspected paths. It retains
+all dispatch prerequisites below and supplies no physical handoff result.
+
 ## Admission and execution
 
 The original60 valid episodes, successful independent design verification,

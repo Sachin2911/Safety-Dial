@@ -21,6 +21,179 @@ allowances or instructions to override an existing user-directed hold.
 
 ## Current handoff: user continuation instruction
 
+<!-- BEGIN REVIEW STATUS INDEX -->
+**Current review index.** Detailed evidence and exact receipts follow below.
+
+- **R24:** complete and integrated into the screen recorder. The two source files
+  remain stable;18 CPU cases and the actual reader/attribution/recorder interface
+  check pass. This is preparation, with no physical hybrid result.
+- **R25:** three final-summary files are stable with15 checks. Use them only after
+  the full original checking/export/design verification finishes. The actual
+  four-controller seal and its pre-checking timestamp are independently checked.
+- **R26:** canonical four-start authority is repaired and independently verified.
+  Alternate destinations, duplicate coordinators and fresh charges on resume fail.
+- **R27/R28:** corrected gripper interpretation: the three audited earlier closure
+  examples each command opening throughout, with query finger positions near.04m.
+- **R29:**500 old native/shifted server-client returns pass the new capture path
+  on copies. No live RPC or new model query was used.
+- **R30:** the latest random child reaches a raw goal unsafely on task0009 and
+  closes without holding on task0019. Its first violation is loss of uprightness
+  before holding/lift. These different cases do not prove safe phase composition.
+- **R31:** requested coordinator/job/entry integration review is complete at the
+  frozen34-source version.21 focused cases and15 extra copied-source probes pass;
+  no additional blocking defect was found in the inspected integration paths.
+  This does not waive original completion, preservation or actual resource gates.
+- **R32:** requested saved-trace gripper audit is prepared as three new analysis
+  files, with15 passing synthetic cases and clean Ruff. No actual screen exists
+  yet. The tool requires all four completed starts and fresh full verification.
+- Last verified original snapshot at12:37 UTC:44/60 valid full episodes;40
+  comparison-training episodes have0 requested completions,16 violations and24
+  safe unfinished. The final EA pair is complete. The first two protected
+  checking episodes are live; their outcomes have not been opened for review.
+  Revalidate identities before operational decisions. R21 choices stay fixed.
+<!-- END REVIEW STATUS INDEX -->
+
+**R25 actual seal checked, 12:48 UTC.** I read the actual seal and controller
+arrays, then compared its timestamp and the frozen follow-up timestamp to the
+earliest actual checking reservation. Both precede checking. All four matrices
+match their sealed genotype hashes; fixed and random are indeed the same
+genotype. This checks temporal/identity evidence only. I have not run the final
+summary or opened a checking trace/outcome for method feedback.
+
+Receipt `runs/reviewer/final-seal-review-20261020-01/receipt.json`, SHA
+`899d47ddb0619b6f8dc57e0272435c9b31e74fa5dc2a96ca6d2c612f3a42a9be`.
+Exact seal, queue scheduling metadata, original protocol and follow-up freeze
+snapshots are adjacent. The check took0.01s on one CPU, with no new physical,
+policy or encoder work. Final60 export/design/paired verification is still due.
+
+**R32 saved-trace gripper audit ready, 12:46 UTC.** The requested small
+independent analysis is prepared in three new files, separate from all34
+execution/reader sources and from R24/R25:
+
+- `experiments/helpers/maniguard_review_handoff_gripper.py`, SHA
+  `b33333d657e67e8404cdf40e5a97791fc4bcc9bd11fdc5c0d76301fe08c99a76`.
+- `experiments/scripts/maniguard_review_handoff_gripper.py`, SHA
+  `30cd907f26472017dd4c2a97de6c3ad64d17eb3baaa4a9d0a50282b74c06a40b`.
+- `experiments/tests/test_maniguard_review_handoff_gripper.py`, SHA
+  `191078be850c5fb742bba894470a3f118cb4eb77faf72faedefdc926067f638a`.
+
+The complete-screen entry refuses incomplete or misbound ledgers before opening
+episode results, repeats the actual full physical reader, compares cached
+receipts and R24 attribution rather than overwriting them, and reports all four
+declared references. It partitions executed +/-1 inputs into whole episode,
+closure prefix, native-only reference and actual native post-switch controls.
+Measured two-finger joint positions remain a separate query-time quantity.
+At-switch positions are measured before the first native action, so they have a
+distinct boundary group and never enter strictly-after position statistics.
+Raw holding/closure and first violation observations are retained beside the
+unchanged ordered attribution, including unsafe holding without credit.
+
+All15 synthetic cases pass in0.59s, with Ruff clean. Tests cover all references,
+zero/missing clock triggers, command/measurement boundary attribution, invalid
+finger samples, whole-episode violations, incomplete-ledger refusal, a complete
+four-reference report and preserved corrupt-cache rejection. Positive screen
+tests explicitly mock the physical reader; they are software preparation, not
+evidence that any handoff has succeeded. All40 snapshotted analysis, frozen
+runtime and fixture source hashes remained stable. The process took1.02s on one
+CPU, with zero physical starts, policy/encoder calls or checking-outcome access.
+
+Receipt `runs/reviewer/handoff-gripper-analysis-preparation-20261020-01/receipt-v2.json`,
+SHA `d4c0414c65a0990841688a1b100f2c2e79845f72f29fc2c01bb8cf3821b2a98a`.
+The explicit50-file preservation index in the same directory has SHA
+`c12ca122238b4956d0b4b43198a402ae74b0b1ab62249b71b10b683610abfbfb`,
+359,065 bytes. It retains the initial import-order lint finding and source-v1,
+the corrected passing v2, exact fixture dependencies and unchanged frozen34.
+The three source files and selected evidence are stable for your inspection and
+subsequent ownership. The actual four-start screen has not been analyzed.
+
+When all four are complete, the explicit tools-interpreter entry is:
+
+```bash
+CUDA_VISIBLE_DEVICES='' OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
+data/maniguard/envs/tools/bin/python experiments/scripts/maniguard_review_handoff_gripper.py \
+  --run runs/maniguard-continuation-screen-20261020-v1 \
+  --protocol configs/maniguard/continuation/handoff-screen-frozen-v1.json \
+  --output runs/reviewer/handoff-gripper-physical-20261020-01/report.json
+```
+
+Select a new output path for a new analysis receipt. This command reads completed
+evidence only and conveys no launch, replacement, expansion or qualification
+authority. No original checking episode is an input. Existing physical limits,
+the chosen closure matrix/seed/clock and all runtime sources remain unchanged.
+
+**R31 coordinator/job/entry review complete, 12:37 UTC.** I inspected the
+frozen screen coordinator, source-only preparation, physical entry checks and
+guardian interaction, focusing on the requested interruption windows, canonical
+service exclusion and refusal after source or scene changes. I found no
+additional blocking defect in these inspected paths. All34 declared source
+hashes match frozen-v1, SHA
+`2ff6d2e7c1d511face3f1128f56606fa32ef334a8bdc304ed07b328172410a35`.
+The inspected execution bytes remain those of commit38b3f50. No production
+source, original job, service or runtime configuration was edited.
+
+The three focused screen/admission/service files pass21 cases in1.00s on one
+CPU. An additional15-case probe uses copies of all34 real sources and of the
+actual native YAML and selected scene. The actual job preparer and entry
+verifier accept a matching synthetic reservation, then refuse altered current
+source, archived source, native/archived YAML, runtime copy and scene bytes;
+they also refuse a different lease descriptor, recheck original clearance and
+reject terminal reservations. The actual entry claims its guardian exclusively,
+refusing a second claim before any second child call. This claim check mocks
+the guardian and executes no child command.
+
+For coordinator loss, a charged reservation without preparation becomes invalid
+without a relaunch. A simulated inherited lease before guardian-PID publication
+keeps reconciliation waiting until that lease becomes available, after which
+capture precedes validation. Original clearance, PID/lease timing and physical
+outcomes are explicitly simulated in this probe; actual descriptor matching and
+copied-byte refusal use the production functions. The earlier independent
+guardian/FD/parent-loss and full-reader checks remain their own separate evidence.
+
+Evidence under `runs/reviewer/continuation-integration-review-20261020-01/`:
+`receipt.json` SHA
+`5033685d913b097440c6e444270823116f2b7840dd901373662dffc5726440ae`;
+`focused-tests.json` SHA
+`771b3dbde6324b65c1e7b3cf21fe28d69729fe8312696ca66437dd37f6a5f250`.
+Exact probe, test log, frozen protocol and source-v1 snapshot are adjacent.
+The explicit `preservation-artifacts.json` selects42 files,320,041 bytes,
+SHA `aa4527fb664210e3e5ff522e93f14ed432b736f11b3163fb16aee7dfbef665f4`.
+It includes the exact three checked test files and excludes the disposable
+shadow-root and synthetic protocol. The selected bytes are stable for handoff.
+The extra probe took0.39s; the focused test process took1.69s. These are CPU
+checks with zero physical starts, policy/encoder calls or checking-outcome access.
+Please preserve the compact receipts, probe, test files/log and source-v1 index
+at the next ordinary evidence boundary, excluding disposable synthetic trees.
+
+This completes the requested independent integration inspection, not a physical
+handoff certificate or permission to bypass dispatch checks. The four-start
+ceiling, exhausted extra-decoder allowance, exact selected controller/seed,
+original60 completion and full preservation, no original-service overlap and
+fresh rate/clock/whole-screen-capacity requirements all remain binding.
+R24/R25 handed-over sources remain stable under your ownership.
+
+**R30 raw-goal and ordering diagnosis.** I audited random-g2-3's two completed
+training cases, with exact native/copied monitor joins. Task0019 closes safely
+at1115, remains closed/supported for886 observations and never holds or requests
+gripper closure. On task0009 the first -1 command is761. The monitor is already
+doomed at788 because jar_upright is false while jar_on_support is still true,
+jar_closed is false and jar_dropped is false. First holding is833, first lift837,
+first raw goal1021 and native termination1030. Closure never occurs. The primary
+outcome is therefore unsafe-unfinished, score-2, despite raw benchmark success.
+The first violation must not be described solely as lifting before closure.
+
+This case issues237 closing and793 opening commands and does hold/reach the
+native goal after the earlier violation. It demonstrates target-holding capability
+in that factual unsafe context, not safe body grasping or continuation from a
+closed jar on the other task. Both ordering and uprightness need assessment.
+The earlier four-reference R21 matrix/seed/clock choice stays unchanged; no
+unsafe progress is promoted into the original fitness or new qualification.
+
+Report `runs/reviewer/random-g2-3-sequence-audit-20261020-01/report.json`, SHA
+`060b1bd557a8b9ff3a7aea597ed7bdd6484f85441fb350dc9a33e66e07ee3a93`,
+pins both native logs, traces, jobs/receipts and the saved queue snapshot. The
+read-only audit took0.65s on one CPU, reusing3030 charged controls, with zero
+new physics, encoder or neural-policy work and no checking access.
+
 **Guardian/full-reader preparation independently checked.** I inspected the
 new lifecycle guards and updated reader, then ran their complete two focused
 test files on one CPU:32 passed in1.71s,2.10s process time. This exercises startup,

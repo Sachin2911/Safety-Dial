@@ -83,7 +83,7 @@ allocation/residual and clipping-wrapper suites add 12 and 15 checks, respective
 These checks establish software behaviour, not manipulation success. The failed
 prediction/coverage gate excludes this model from physical action selection.
 
-\subsection{Proposed small continuation screen}
+\subsection{Frozen small continuation screen}
 Before model-guided search, test whether known closure behaviour can hand control
 to native grasping and transport. The four engineering references are native only,
 closure only, fixed-clock handoff and privileged supported-closure handoff. Freeze
@@ -106,8 +106,11 @@ grasping after closure, and remains valid and charged.
 The initial ceiling is four starts, including partial/failed starts, ideally one
 per reference: at most 8,000 policy controls and 1,000 policy requests. Preserve
 native termination and the 2,000-control horizon. Expand to four references on a
-second case only if a handoff reaches ordered supported closed body grasp and
-ends nonviolating, or achieves requested safe completion. After that criterion
+second case only if an actual handoff adds ordered target holding, lift or
+transport strictly after switching and ends nonviolating, or first achieves
+requested safe completion after switching. The boundary observation belongs to
+the closure prefix. Target holding uses the native predicate without a separate
+jar-body-link witness. After that criterion
 also passes on the second case, four fresh native-versus-nonprivileged checks are
 conditional on the selected nonprivileged reference itself progressing. Privileged-
 only progress instead motivates phase-detector diagnosis. The larger proposal is
@@ -119,8 +122,12 @@ A separate compound runtime/reader joins copied monitor entries exactly to origi
 native logs and binds the frozen job table, branch and per-query RNG receipts.
 Synthetic source-contract checks and their reproduction make 74 sampler calls,
 with no VLA weights, neural-policy, encoder or physics calls. These are software
-checks, not a live hybrid certificate. The physical entry point, numeric startup/
-wall-time/start-count guards and executable source/protocol freeze remain required.
+checks, not a live hybrid certificate. Durable start limits, service exclusion,
+independent startup/full-wall guardians and complete physical evidence validation
+are implemented and CPU-tested. Exact source/protocol was frozen before original
+checking. Independent copied-source integration review found no further blocking
+defect. Physical dispatch still requires original completion and restoration,
+actual rate/clock checks and whole-screen capacity through preservation.
 The screen has no extra decoder sweep, cannot qualify the failed learned filter,
 and preserves the original sixteen checking episodes. It supersedes no funded
 allocation and is not additive to the older 16-plus-two proposal.

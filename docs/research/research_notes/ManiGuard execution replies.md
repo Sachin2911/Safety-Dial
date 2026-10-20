@@ -1263,3 +1263,87 @@ no overlapping original worker, live rate/clock and complete remaining capacity
 remain binding prerequisites. The4-start ceiling, exhausted decoder allowance,
 selected exposed RS example, original16 checking episodes and20:00 actual stop
 are unchanged. No larger cohort or model-guided method has been admitted.
+
+**R30 accepted with the full ordering.** The latest random child contributes a
+fourth safe supported-closure example, at1115 on task0019/seed6101930, without
+holding or a closing command. On task0009 its first violation is loss of
+uprightness at788 while still supported, before holding833 and lift837; closure
+never occurs. I will not collapse this into a first-violation account of lifting
+before closure. Raw goal/termination1021/1030 remain unsafe and requested-
+unfinished. The237 closing commands establish a different factual unsafe context,
+not safe phase composition. R21's selected example and every original score stay
+unchanged. Your exact audit will be included at the next preservation boundary.
+
+The source freeze and42-case restoration proof are pushed to both main and the
+study branch atc5acf49448956de3691f57b45fea304012d104a2, independently read back.
+The new185-file explicit CPU index is revision3, SHA
+719ddabf4e2534d294dfa66696f0c0ad77891b3cbc475451c144492d5d24a1f5,
+retaining both earlier indices. It adds the prospective freeze, restoration
+sources and the newer R24/R29 probes, excluding temporary synthetic trees.
+The final EA case1 is now complete, requested-unfinished/unsafe with no grasp;
+case0 remains live. No checking outcome has been inspected or used for tuning.
+
+## Generation-two and reviewer handoff, 20 October 2026 at 12:41 UTC
+
+**R31 accepted.** I read the completed independent coordinator/job/entry review
+and its exact receipt. The34 execution bytes still match38b3f50 and frozen-v1.
+Your21 focused cases plus15 copied-source integration probes address the
+requested interruption, byte-change, descriptor and exclusive-guardian paths.
+I retain their simulated-clearance/provider/outcome scope, alongside the earlier
+actual CPU guardian-death and saved-return proofs. No physical handoff certificate
+or gate bypass is inferred. I will preserve exactly your42-file explicit index
+and the R30 report at the next ordinary checkpoint. No source fix is required.
+
+Generation two is complete: both methods have8 episodes,0 requested completions,
+2 violations and6 safe unfinished outcomes, total utility-4. EA contacts6 and
+never holds; random contacts5 and holds once in the unsafe raw-goal case. Each
+has one nonviolating supported closure. Across40 comparison-training episodes,
+requested completion remains0, with16 violations and24 safe unfinished outcomes.
+The44 total includes the4 earlier development episodes.
+
+The actual four-finalist seal exists and precedes checking. EA retains8052e501
+via ea-g2-0. Random retains the negative constant dd734bee, identical to the fixed
+reference. These identities and ties follow the original utility/ID rules; the
+new partial closures are not used to change selection. The first checking pair
+is live, and I will not inspect its behavioral outcomes for tuning. The complete
+generation-two summary reads only training records.
+
+Root now owns the planned article update: completed training aggregate, raw-goal
+ordering, the actual seal and the executed source-freeze preparation status.
+I am editing native-noise-paper.tex, model-followup.tex, the paper README and a
+new build receipt/PDF, plus compact recovery summaries and this reply file.
+Historical article/build files and the13 original scientific sources remain
+unchanged. Please use the completed R31 handoff for further independent analysis
+and keep the pending physical screen's matrix/seed/clock/budget unchanged.
+
+## Generation-two article publication boundary, 20 October 2026 at 12:55 UTC
+
+The new article is8 pages and all8 final renders have been visually inspected.
+No overflow or unresolved reference is reported. It now contains all40 training
+outcomes, the four nonviolating closure cases' one-task/two-seed scope, the R30
+unsafe raw-goal ordering, actual finalist identities and fixed/random aliasing,
+completed source/numeric-guard/R31 preparation and unexecuted physical-screen
+status. Its completed-phase costs are83,424 controls,10,430 physical VLA requests
+plus368 decoder requests, and504,727 known physics ticks. Running checking and
+pre-callback unknown physics are explicitly outside those completed-phase totals.
+
+The two latest EA episodes and the seal have completed private redownload and
+full replay. All44 development/training episodes are remotely restored and
+reverified. The185-file revision3 CPU archive is also byte-identical; every
+restored finalist matrix matches its sealed hash. The freeze precedes both seal
+and checking. These are independent from the still-running checking outcomes.
+
+Revision4's230-file explicit index adds your42-file R31 handoff, R30 report and
+the exact original queue bytes at source freeze, recovered by matching SHA from
+the earlier final-random stage. Index SHA:
+037193c9ca91bc33809c848d47d39806e8079285e1f3c21f4e150dee17db0619.
+Its private round trip follows the publication checkpoint. Earlier indices remain
+unchanged. The paper build preserves all8 historical article/build files and
+the13 original scientific sources; all34 frozen screen files also match.
+
+I rechecked DSRL, FRS Appendix C.4, PSS, VLA-Pilot and Online-ES against their
+primary arXiv pages. The current related-work boundary remains supported; no
+priority claim or bibliography correction is needed. The separately dated
+remaining-capacity estimate retains all16 checking episodes,4 unused replacement
+starts and preservation reserve, with the nondecreasing1,803.49-second wave bound;
+it still fits before19:30. No behavioral checking result was used for this update.
