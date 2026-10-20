@@ -1,31 +1,33 @@
 # ManiGuard shared GECCO-format report
 
-Open **[draft.pdf](draft.pdf)** for the current eight-page native-noise controller paper,
+Open **[draft.pdf](draft.pdf)** for the current native-noise controller paper,
 updated on 20 October 2026. Its article source is
 [native-noise-paper.tex](native-noise-paper.tex), included by `draft.tex`.
 It describes the 176-parameter observation/instruction-conditioned adapter,
 native-sampling identity, the completed 320-call decoder audit and four full
 development episodes, and the frozen native/fixed/EA/random-search Jar comparison.
-All eight shared initialization episodes are now included: zero requested
-completions, with the nonviolating negative constant never grasping. Independent
-rates and finalist results remain pending. The original cumulative
+All eight shared initialization and sixteen first-generation episodes are included:
+zero requested/raw completions. Each method's first-generation eight episodes
+include four violations, seven contacts and no grasp. Two training episodes close
+the lid safely without subsequent grasp or transport. The best EA training utility
+includes one uncontacted case. Its next two-seed elite recheck also remains
+unfinished, with no repeated closure. Independent rates and finalists remain pending. The original cumulative
 report, its historical figures and numerical results remain in `main.tex`/`named.pdf`.
 
 Section 7, sourced from [model-followup.tex](model-followup.tex), adds the separate
 world-model, action-changing filter and ROSARL preparation. It reports the
 completed CPU audit, including its failed prediction/calibration gate, and the
-proposed second physical experiment. That experiment starts with four reference
-episodes and expands only after a predefined progress criterion, up to a proposed
+proposed second physical experiment. Its first screen allows four starts including
+partial/failed attempts, ideally covering the four references, and expands only
+after a predefined progress criterion and separately frozen capacity, up to a proposed
 12 valid episodes plus two infrastructure replacements. It has not been physically
 launched. This smaller staged proposal replaces no part of the running comparison
 and does not add an allowance to the earlier deferred 16-plus-two proposal.
 
-The physical numerical evidence in Sections 5 and 6 retains the earlier
-07:11:14 UTC diagnostic cutoff, including its statement that offspring were still
-pending then. The new Section 7 uses the separately preserved CPU audit and later
-CPU source checks. Generation one has since completed; its dated summary is in
-the current study records, pending the execution session's next physical-results
-paper update. Independent checking is still pending. The CPU evidence is not
+The first-generation numerical summary is dated 09:45 UTC; its subsequent elite
+recheck is dated 10:05 UTC on 20 October. The earlier 07:11 diagnostic is retained
+with its historical scope. Section 7 uses the separately preserved CPU audit and
+later CPU source checks. Independent checking is still pending. The CPU evidence is not
 reported as a physical result or an evolutionary advantage.
 
 The new [protocol](../../../../configs/maniguard/latent-evolution/capacity-20261020-v2.json),
@@ -33,7 +35,8 @@ The new [protocol](../../../../configs/maniguard/latent-evolution/capacity-20261
 [study report](../ManiGuard%20latent%20evolution%20pilot.md) and
 [study README](../../../../configs/maniguard/latent-evolution/README.md) supply exact
 task/seed lists, costs, source pins and restoration instructions. The current build
-receipt is `latent-build-20261020-model-followup.json`;
+receipt is `latent-build-20261020-generation1.json`;
+`latent-build-20261020-model-followup.json` preserves the first eight-page CPU-follow-up publication;
 `latent-build-20261020-diagnostic.json` retains the earlier six-page diagnostic
 build, and `latent-build-20261020-initial.json`
 retains the earlier build after initialization, and `latent-build-20261020.json` retains
@@ -74,7 +77,8 @@ their input hashes checked against the earlier restored development records.
 An [independent offline review](../../../../configs/maniguard/latent-evolution/review-sensitivity-summary-20261020.json)
 finds active, mostly unsaturated EA mutations on factual feature pools. The original
 comparison resumed after the user resolved the hold; descendant and final checking
-results remain pending at this paper's diagnostic evidence cutoff.
+results now include the completed first generation above; generation two and final
+checking remain pending at the dated physical-results cutoff.
 
 The following notes describe the **19 October supervisor check-in**, including its
 [paper PDF at the preserved main revision](https://github.com/Sachin2911/Safety-Dial/blob/4783369c5b599580e26f9c3a2723ee55518c46a3/docs/research/reports/maniguard-phase3-part1-gecco/draft.pdf)

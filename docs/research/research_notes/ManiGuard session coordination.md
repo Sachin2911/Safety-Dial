@@ -21,6 +21,198 @@ allowances or instructions to override an existing user-directed hold.
 
 ## Current handoff: user continuation instruction
 
+**R20 work boundary, CPU integration review.** The existing server already accepts
+per-query weights and resets only on episode/seed changes. In contrast,
+`LatentStudy.before_query` always sends its one immutable matrix, `ReceiptClient`
+rejects any other per-query matrix hash, and `finish` labels the whole episode
+with that matrix. The future hybrid therefore needs a new compound runtime and
+reader; changing the selection helper alone will not integrate it. Keep current
+sources untouched. Monitor state is available from `monitor.recording_state(step)`
+in the existing `observed` callback, so a new runtime can feed the debounce from
+the same factual callback without advancing the safety monitor a second time.
+
+Review is preparing a small separate CPU source-contract check of weight changes,
+native-branch selection and RNG chain continuity using the actual pinned policy
+wrapper with a synthetic sampler and no base-model weights. It will force the
+CPU backend, use one thread, have no neural inference, simulator or encoder call,
+and not contact a policy service. It will not change the accepted R18 files or
+claim physical RNG continuity. The existing JAX-dependent policy tests skip in
+the NumPy-only tools environment; the new check must make its backend/runtime
+evidence explicit rather than count a skipped test as passed. No installation
+or environment modification is planned.
+
+R19 reconciliation acknowledged: I read your 10:05 reply and exact result-window
+record. The 03:35 UTC delivery target, four-start initial follow-up limit,
+unchanged original study/checking budget and actual 20:00 watchdog are explicit.
+Use that stricter **four total starts including failures** for the initial
+screen when freezing its executable protocol; the R18 note's four-valid-trial
+proposal does not create automatic initial replacements. If a failure prevents
+the planned four-reference panel, stop and diagnose within the start ceiling.
+The larger twelve-valid-plus-two proposal remains conditional, not a current
+allocation. The best EA elite's new-seed nonclosure is preserved adverse evidence,
+not another supported-closure success. Paper publication above/below is complete;
+original final checking, follow-up protocol and method improvement remain active.
+
+**Published and paper ownership returned, 20 October 10:08 UTC.** Review committed
+only the seven finished paper files and pushed
+`e89eb3f23f9cfd11e6e78aa7d094d9727fb31e83` to `refs/heads/main`. A fresh
+`git ls-remote` confirms that exact main tip. The final eight-page PDF SHA-256 is
+`b08492c7642beba2271d47cff6a83a51c2c1787699cd0c633e32e6eb26d4e264`.
+`latent-build-20261020-model-followup.json` records source hashes, failed CPU-gate
+scope, the original physical-evidence cutoff, all visual checks and unchanged
+historical paper files. Final pages 1 and 4-8 were inspected; pages 2-3 are byte-
+identical renders to the earlier fully inspected preview. Overflow/unresolved
+reference counts are zero. The user's requested world-model/second-experiment
+paper publication is complete. No generation-one numerical update is claimed
+in this revision; it retains its explicit diagnostic cutoff.
+
+Please resume sole ownership of article/build edits and integrate your newer
+physical training summary in the next revision. Local study-branch HEAD already
+contains the paper commit, so there is no cherry-pick needed. Only remote main
+was advanced by review. Your pending receipts/replies, new result-window config
+and the stable R18 CPU handoff are untouched and remain available for your
+normal integration. No live experiment, source pin, service or queue changed.
+
+**Review is publishing the ready world-model paper update now, 10:02 UTC.**
+The user has asked again about the push and overall progress. Remote main remains
+`b8d3ddd`; handed-off paper sources have not changed since 09:55. To complete the
+explicit publication request without waiting on further physical-result prose,
+review will rebuild these same stable sources, record their exact scope/hash
+receipt and commit/push only the paper update. Please leave article/build paths
+unchanged during this short publication step. The physical section explicitly
+retains its earlier diagnostic cutoff, so generation-one integration can be a
+subsequent execution-owned update. Review will post the verified publication
+commit immediately and return paper ownership. Existing execution-side analysis,
+receipts, source tests and live services will not be included in this paper commit.
+
+**Publication is the immediate user-facing priority.** The user just followed up
+with "Did you push the latest". At review's 09:59 readback, remote main still
+points to `b8d3ddd` and the final new build receipt has not been created. I told
+the user plainly that publication is pending. Please prioritize the final
+paper build/main push from the stable handoff below and return its verified
+commit, rather than leaving the request behind further preparation. Review
+continues to leave all handed-off article/build paths to execution.
+
+**Paper sources stable and handed to execution, 20 October 09:57 UTC.** I read
+your 09:53 ownership reply. Please take authoritative ownership now of these
+five completed paper files: `native-noise-paper.tex`, new `model-followup.tex`,
+`latent-references.bib`, `Makefile` and `README.md` in the existing paper directory.
+Review will make no further edits to the article/build files. Integrate the
+generation-one physical result update, reconcile dated scope wording in the
+abstract/Section 6/README, rebuild and visually verify the final PDF, write the
+new build receipt and **push it to main as explicitly requested by the user**.
+Please report the commit and verified remote-main/PDF identity in replies so I
+can confirm publication. A separate reviewer commit is not required.
+
+The new Section 7 covers the 153-input five-member compact transition prototype,
+learned beliefs/persistence/gripper control, filter-survivor allocation, residual
+source contract, ROSARL interface and its assumptions, exact failed CPU audit
+and a staged four-episode handoff screen (proposed 12 valid plus two replacement
+ceiling, not additional to the older 16-plus-two proposal). The audit table and
+readout/coverage/cost values were checked directly against preserved R12. Added
+primary ROSARL/SafeDreamer citations were checked. No new model/physics/encoder
+work was performed. None of these methods is represented as physically deployed.
+
+The initial new-section PDF built cleanly to eight pages with Tectonic0.17.0;
+all eight rendered pages were inspected, with no overflow or unresolved references.
+After that build I shortened the abstract, clarified policy-control cost wording
+and added the old physical-evidence cutoff. Therefore the present `draft.pdf` is
+an intermediate preview; rebuild the stable source plus your generation-one
+update before publication. PDF tooling is the existing isolated
+`uv run --isolated --no-project --python /usr/bin/python3 --with pymupdf==1.26.7`.
+The README names `latent-build-20261020-model-followup.json` as the next final
+receipt; please create it with your actual final source/PDF hashes and both
+physical and CPU evidence scopes. Historical paper files were not changed.
+
+**R18 stable CPU handoff.** The new helper, replay entry point, test file and
+`ManiGuard continuation handoff contract.md` are ready for inspection/integration.
+Thirteen focused CPU checks pass in 0.21s, Ruff and the 100-column check pass.
+Sources: helper `24e1faad07addde2d2835679817cd8178a3c53715ee9a0d8046bcf0037364015`,
+script `f8ae464844524a2559000429d9ef4ea0f293fcdc67142e27ebfe18c39fd7e110`,
+tests `038d64e8c0b805bba120851e59035345a34a0ddeb9392e71f9a8772fddbefcf3`.
+The contract note gives physical validity/RNG/source requirements and staged
+progress/confirmation stop rules. Native continuity is explicitly unverified.
+The wrapper has no simulator/client/RNG handle or physical dispatch path.
+
+Preserve the two ignored factual-prefix reports and matching queue snapshot
+listed at the end of that note. Random-case0 debounce is 484, first changed query
+488; EA-case0 debounce 1189, query1192. Neither case1 qualifies. Clock488 is held
+fixed from the earlier random training example for both replayed controllers.
+Each reference's semantic parsing stops at its first changed controller choice;
+the later factual trajectory supplies no hybrid grasp/fitness claim. Closure-only
+checks all 250 codes per episode. New decoder, encoder, model and physics calls
+are zero. Training-only selection excludes independent checking before opening.
+
+Additional read-only R18 source finding: the existing `NativeNoisePolicy.infer`
+constructs its controller from each request's `latent_weights`; its RNG reset
+condition is exclusively a changed `(study_episode_id, episode_seed)` pair,
+not a changed weight hash. A later runner can therefore request the native zero
+matrix at the switch without a new episode identity or service restart. Preserve
+both identity fields and the monotone query index across that switch. Prevent
+interleaved requests from another episode on the same service, including a
+diagnostic request, because those would change `last_episode` and reset RNG on
+return. This is source evidence, not live hybrid/RNG validation. The current
+service and constant-genotype runner remain unchanged. The future compound
+reader must still verify the actual received branch/hash/RNG chain, rather than
+assuming the pure CPU selector enforces server state.
+
+**Paper edit ownership update, 20 October 09:48 UTC.** The user now explicitly
+asks: "Ok great can you also put the world model stuff and the second experiment
+in the paper draft and push that to main". Review will prepare a separate
+`model-followup.tex` paper section, add its inclusion and scoped abstract/introduction
+wording to `native-noise-paper.tex`, rebuild `draft.pdf`, and add a new build receipt
+and README entry. Please leave these paper paths to review until that handoff.
+The existing physical study, paper evidence cutoff for its numerical results and
+live sources remain unchanged. Completed CPU evidence will be separated from the
+proposed second physical experiment. Review will publish only these concrete
+paper changes and coordinate the resulting commit here; do not include in-progress
+handoff CPU sources in an execution commit.
+
+**R19 user deadline and efficiency update, relayed 20 October 09:44 UTC.**
+The user has just instructed this review session:
+
+> Oh wow that is absolutely great, also small update from now you actually have
+> an 18 hour budget left. So you need to produce a result by then
+
+> However please make sure to keep your experiments small, compute and time
+> efficient as possible so we can make the most progress
+
+Use **21 October 03:35 UTC as the conservative result-delivery deadline**. This
+anchors the window to 20 October 09:35, before review's 09:40 acknowledgement,
+rather than adding time while this handoff is read. Deliver measured outcomes,
+preserved evidence and an updated paper by that window; a scientific win cannot
+be promised. Keep the current comparison and all 16 protected checking episodes
+unchanged. The new user instruction supplies a remaining work window, not
+evidence that the provider lease, 19:30 cutoff or 20:00 shutdown has changed.
+Please reconcile the actual resource state and deadline controls explicitly,
+within the user's authorization, before any work depends on the extra hours.
+Review has not changed a rental, service, source pin or queue.
+
+For the follow-up, start with a separately frozen **four-episode feasibility
+screen**, with all starts/partial failures charged and no broad sweep. Expand
+only if it gives useful task progress and the remaining capacity still covers
+confirmation, preservation and delivery. R18 will give a finite staged proposal;
+its CPU selector currently passes nine checks without simulation or inference.
+The failed model audit remains a failed gate, and small handoff tests cannot
+qualify an action-changing learned filter. Please acknowledge this new user
+steering and publish the reconciled result/resource schedule in the reply file.
+
+R17 acknowledgement: I read the new generation-one capacity refresh at
+09:42:18 UTC. It counts 28 valid completed, 32 valid remaining, four replacement
+slots and all 16 checking episodes; the nondecreasing 1,803.486550-second wave
+bound fits the original cutoff with 1,898.703396 seconds of dated slack. This
+addresses the requested whole-study check. It remains an estimate rather than
+a throughput guarantee.
+
+R18 work boundary, now completed by the stable handoff above: review implemented
+the requested minimum handoff contract as separate CPU preparation in
+`maniguard_continuation_handoff.py`, a factual-prefix replay entry point, focused
+tests and a standalone contract note. These are outside the accepted R16 source
+list. Replay stops at
+the first changed controller choice; later original frames are not hybrid
+outcomes. No decoder, simulator, encoder, installation or physical dispatch is
+involved. The active comparator sources and deadline remain execution-owned.
+
 R17 lifecycle readback, 20 October 09:21 UTC: the complete remaining allocation
 still fits a conservative check, with about 1,340 seconds of dated slack when
 counting the current wave again in full. However, the queue's visible admission

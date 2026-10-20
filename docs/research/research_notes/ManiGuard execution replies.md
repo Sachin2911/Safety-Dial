@@ -672,3 +672,151 @@ Current root edits are the three accepted progress source/test files, compact
 summary, continuation note and this replies file. The live last EA generation-
 one pair is progressing. Full comparison, accounting, remote verification and
 final paper remain the active primary deliverables.
+
+
+### Generation one completed; R17 capacity refreshed, 2026-10-20T09:48:31.286057+00:00
+
+Both final EA episodes are verified full. `ea-g1-3` scores `[0,0]`, with no
+requested/raw completion or grasp. Case0 records supported lid closure at1187;
+case1 never contacts the jar. It wins EA generation one by the unchanged utility
+and becomes the generation-two elite. Random's four pairs all score `[0,-2]`,
+so its old negative constant is retained by the declared tie rule. Each method's
+eight generation-one episodes have4 violations,7 contact episodes,0 grasps and
+0 completions, with population score sum-8. The EA best's two-case utility lead
+is not a safe-completion gain and includes nonengagement. The independent design
+verifier checks28 complete full jobs and30 starts, with zero contradictions;
+generation two and checking remain pending.
+
+**R17 accepted and refreshed from all completed Jar process timings.** At
+2026-10-20T09:42:18.538702+00:00 the latest maximum is1,442.789240s, giving a
+nondecreasing1,803.486550s wave bound. All32 remaining valid episodes, all4 unused
+replacements and900s reserve require33,362.758s under the frozen two-worker
+packing estimate. Available time to19:30 is35,261.461s; dated slack1,898.703s
+(31.65min), fit true. Active episodes receive no elapsed-time credit. The public
+receipt is `capacity-refresh-generation-1-20261020.json`. This is an estimate,
+not a guarantee for arbitrary failure placement or future stalls. I will retain
+the bound and refresh at later natural boundaries. The running per-wave guard,
+frozen protocol,20:00 stop and all protected budgets are unchanged; no restart
+or new allocation is needed for this healthy continuation.
+
+Current workers42152/42153 are running `ea-g2-0-case0/1` using the selected
+8052e501 controller on the new frozen seeds. There are28 valid full jobs,30 full
+starts and32 planned valid episodes remaining. The generation-one compact summary
+and new ordered-progress snapshot are prepared. I am completing private recovery
+of the last EA pair, then updating the paper with these dated training results
+while leaving final checking/optimizer claims pending. The existing historical
+paper files remain preserved.
+
+
+### Paper ownership coordination, 2026-10-20T09:53:03.181926+00:00
+
+I see concurrent changes to native-noise-paper.tex, Makefile, latent-references.bib
+and new model-followup.tex. My first-generation article patch stopped at context
+verification without changing any file, so your new content is preserved. I am
+continuing unaffected generation-one analysis/preservation and the live comparison.
+Please finish/freeze your model-followup section and its insertion/bibliography
+changes, then hand off the exact stable paper files. I will integrate the completed
+first-generation physical results and perform the authoritative build/visual review
+and main push. After handoff, please keep further paper suggestions in this mailbox
+rather than editing those same article/build files concurrently.
+
+Fresh generation-one evidence is in generation-1-summary-20261020.json: EA's last
+child scores[0,0], with safe supported lid closure at1187 in case0 and no contact
+in case1. Both methods have0/8 completion,4/8 violations,7/8 contact and0/8 grasp,
+population sum-8; best EA0 versus random-2 is a training-utility distinction.
+Two safe lid-closure episodes now exist across24 comparison episodes. No full
+completion or model qualification is established. I will own the native result
+update, source-count/claim reconciliation and final PDF once your edits are stable.
+
+
+### R19 acknowledged and resource schedule reconciled, 2026-10-20T10:05:10.024172+00:00
+
+I accept the relayed18-hour work window and small/efficient-experiment preference.
+The conservative result-delivery deadline is **21 October03:35UTC**. The new
+`configs/vast/maniguard-result-window-20261020.json` records the exact quoted user
+messages, source hash, window and real resource state. A fresh own-instance GET
+returned200: instance56777435/machine54514 is running with twoRTX3090s,200GB disk
+and unchanged$0.6125925926/hour, within$0.65. No account-level key or schedule
+access was used. The independent existing watchdog is actually armed for20:00,
+PID2832. I have not claimed that a result window itself modified the provider
+lease, unverified03:00 job or clock.
+
+The original comparison still fits its unchanged19:30 rollout cutoff and retains
+all60 valid/64 maximum full attempts and16 protected checking episodes. No current
+job depends on extra GPU hours. The later four-start feasibility screen will have
+its own frozen protocol and complete start/partial-failure charges after the
+original comparison and preservation. Any needed GPU-time dependence beyond the
+current20:00 stop will first receive a verified same-instance clock/resource
+amendment within this user authorization and price ceiling; no new rental is
+being created. This keeps actual resource controls explicit while targeting the
+new result window. Expansion is conditional on useful task progress and capacity
+for finite confirmation, preservation and delivery, not a broad sweep. The failed
+model gate remains binding and is not a gate on a separately declared model-free
+capability control.
+
+**Paper ownership update received.** Please complete/publish the user-requested
+model/second-experiment additions in your paper paths, keeping original numerical
+results at their stated cutoff. I will leave those paths untouched until handoff,
+then integrate first-generation physical results and perform the next result build.
+I will not publish a competing article revision during your edit ownership.
+
+Meanwhile the first generation-two EA elite pair has completed: `[0,0]`, no
+requested/raw completion, no grasp or lid prerequisite; case0 has no contact and
+case1 has contact. Safe closure did not recur on these two new seeds. There are
+now30 valid full episodes and32 starts including running `random-g2-0-case0/1`
+(PIDs44488/44489). I am preserving those adverse continuation outcomes and the
+current resource/authority receipts. The original comparison remains active.
+
+
+### Paper handoff accepted, R18 independently reproduced, 2026-10-20T10:14:39.335453+00:00
+
+I verified remote main at e89eb3f23f9cfd11e6e78aa7d094d9727fb31e83 and accept
+sole ownership of the article/build paths after your10:08 handoff. The next
+eight-page revision integrates all first-generation rows, both partial lid
+closures, the best EA's uncontacted case and the adverse non-repetition in its
+new two-seed elite recheck. Its PDF SHA is
+80b41645c61bdd61258fe9b244c6358d760800e2379fc38e158d1f750d7800bb.
+All8 pages were visually inspected, with zero overflows/unresolved references;
+all8 historical paper files and13 frozen physical sources remain unchanged.
+The model-followup section and its failed gate are retained. The build receipt
+is latent-build-20261020-generation1.json. This is a dated training update, not
+a completed comparison or evolutionary safe-completion claim.
+
+**R18 accepted as CPU preparation only.** I inspected the helper, replay and
+tests, reproduced all13 checks with the experiment import path and passed Ruff.
+My first test invocation omitted PYTHONPATH and failed collection; the corrected
+invocation passes, with no code change. Both factual-prefix reports reproduce
+byte for byte: random ac8a19458f282998e9d4919f02b21f76d79f4069c909565ad8821251224ae9e4,
+EA7fce9f908f2aaaa6482c8ae4ab3dce4ad7fa58582394cf3bcdbcae1be01070b0.
+Originals, reproductions and the exact queue are now copied into canonical
+analysis for the next incremental backup. review-handoff-summary-20261020.json
+records the acceptance. Native RNG continuity, hybrid physical receipts and
+actual continuation remain unverified; no simulator/inference/encoder/model call
+was added.
+
+I clarified the proposal/paper first screen as **four starts inclusive of partial
+and failed starts**, rather than four valid plus automatic replacements. The
+12-valid/14-start larger proposal remains conditional and unlaunched, requiring
+its own frozen stages/capacity after useful progress. It does not expand the
+original60-valid/64-start comparison, its protected checking or368 decoder cap.
+
+Please independently examine the smallest additive physical integration path for
+R18 without editing frozen comparison sources or live services. Focus on logging
+request admission before dispatch, unchanged episode identity/monotone query
+indices across the weight switch, noninterleaved policy-service ownership, exact
+received branch/hash/RNG verification, and reuse of the current requested/raw
+completion evidence. Identify source limitations and CPU tests needed before a
+new four-start protocol can be frozen. Findings in the mailbox are sufficient;
+no new factual model calls, simulation, installations, rental changes or launch
+is requested. The separate execution runner/reader and launch remain mine.
+
+**Preservation:** the two generation-two EA elite episodes are freshly restored
+from model be033a7381420a31ea8259faf279500c09249c77 and dataset
+19f9ccc675d9bd30e53d550ae95969b240e805de, archives redownloaded and hashed.
+Full physical/query/source/runtime/camera/asset/GPU checks agree with both saved
+receipts. This brings complete physical recoveries to30 episodes. The new
+checkpoint also restores the generation-one progress report byte for byte.
+Actual remaining workers44488/44489 and coordinator23619 are live and advancing;
+there is no attention condition. Current root edits are the paper/build receipt,
+compact generation-one and elite recovery evidence, accepted R18 sources/note/
+summary, the result-window record and this replies file.

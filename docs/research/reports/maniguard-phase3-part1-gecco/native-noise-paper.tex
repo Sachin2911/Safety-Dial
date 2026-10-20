@@ -38,8 +38,11 @@ without a matched estimate of physical benefit. We freeze a 60-valid-episode
 allocation: four development episodes, eight shared initial episodes, sixteen
 descendant episodes each for evolution and random search, and sixteen independent
 checks of native, fixed, evolved and random-search controllers. All eight shared
-initial episodes end unfinished; the highest-utility constant never grasps. Search
-is running and independent comparison results are pending. A separate 48-call
+initial episodes end unfinished; the highest-utility constant never grasps. In the
+first generation, each method has zero completions and four violations in eight
+episodes. Two training episodes close the lid safely but never grasp or transport
+the jar. The best EA utility exceeds random search through nonviolating unfinished
+execution, including one uncontacted case. Independent results remain pending. A separate 48-call
 diagnostic finds gripper-coordinate influence at a stronger noise offset, with
 arm coupling and no physical benefit tested. A separate CPU model-assisted
 prototype's recorded-data
@@ -85,11 +88,13 @@ legacy rendering profile, not controls for the present experiment.
 We separate four questions: does adaptation help native execution; does
 conditioning help a fixed bias; does evolutionary retention and mutation help
 relative to other adaptation methods; and do fitted weights transfer? Our completed
-evidence establishes integration and decoder influence. A matched Jar comparison
+evidence establishes integration, decoder influence and unsuccessful first-generation
+physical adaptation. A matched Jar comparison
 is in progress under a protocol frozen before comparative feedback. Its small
 sample can provide effect-size leads, not establish optimizer superiority or
 cross-family transfer. Shared initialization now supplies eight valid full
-episodes without safe completion on its two cases.
+episodes without safe completion on its two cases. First-generation results add
+partial lid closure without completed grasp or transport.
 
 \section{Related work and contribution boundary}
 DSRL learns in the latent-noise space of a frozen diffusion policy, including
@@ -176,9 +181,10 @@ offline search loop, which selects the next candidate controller.}
 \subsection{Causal features}
 The feature vector $\phi_\tau\in[-1,1]^{44}$ comprises a bias, seven arm positions
 divided by $\pi$, two measured finger positions divided by .04 m, seven previous
-executed arm targets minus current arm positions divided by .2 rad, and three
+executed environment-input arm targets minus current arm positions divided by .2 rad, and three
 end-effector displacements since the previous query divided by .05 m. Robot/history
-coordinates are clipped. Initially the previous target equals measured joints and
+coordinates are clipped. These targets precede downstream native-controller clipping;
+they are neither achieved joint positions nor final motor commands. Initially the previous target equals measured joints and
 displacement is zero.
 
 The remaining 24 coordinates are eight each from overview RGB, wrist RGB and the
@@ -188,7 +194,10 @@ projections, seeded 20261017, produce eight coordinates, multiplied by $\sqrt{51
 clipped to $[-5,5]$ and divided by five.
 No feature fitting uses study outcomes. Images are encoded at every native query
 and text once per episode, including in the native reference. The conditioning
-path is implemented; its physical value is unestablished.
+path is implemented; its physical value is unestablished. A recorded-input audit
+finds only two distinct training instructions and centered text-block rank one
+across shared initialization. Text connectivity therefore does not establish
+semantic generalization rather than case-specific offsets.
 
 \subsection{Bounded steering with native stochasticity}
 For genome $W\in[-1,1]^{4\times44}$, define $c_\tau=\tanh(W\phi_\tau)$ and
@@ -350,9 +359,9 @@ superiority or safety guarantee. Zero violations in $n$ independent episodes
 implies an approximate 95\% upper rate bound of $3/n$, not zero; four episodes
 are particularly weak evidence.
 
-\section{Completed development evidence}
-This section retains the 20 October 07:11 UTC diagnostic evidence cutoff.
-Later training results remain separate from this paper update's CPU follow-up.
+\section{Completed physical and decoder evidence}
+The first-generation summary is dated 20 October 09:45 UTC. A subsequent elite
+recheck is explicitly dated below. Independent checking remains unopened.
 \subsection{Identity and decoder influence}
 Eight saved observations per family, from two development tasks, each use two native
 noise draws. Each draw receives two same-noise baselines and positive/negative
@@ -469,8 +478,9 @@ or raw completion and one violation per pair. At this diagnostic cutoff, all
 twelve comparison episodes are unfinished, six violate, and only one ever grasps.
 Eight never command gripper closure; the other four each show actual finger
 closure. None of their arm proposals changes at the outer environment bounds.
-These observations do not identify a unique failure cause. In particular, actual
-offspring have not yet received a completed physical evaluation.
+These observations did not identify a unique failure cause. Offspring evaluation
+was still pending at that earlier diagnostic boundary; its completed first
+generation is reported below.
 
 The frozen basis excludes direct support on the gripper-noise coordinate. During
 a diagnostic pause, a separately frozen 48-call follow-up tests coordinate seven
@@ -517,13 +527,67 @@ current explanation. These are noise-space sensitivities on correlated factual
 inputs, with longer trajectories weighted more. They do not measure decoded
 actions, semantic competence or physical counterfactual benefit.
 
-\subsection{Search and independent comparison in progress}
-\textbf{Optimizer and independent comparison results are pending.} The completed
-records are preserved, and the original comparison resumed after the diagnostic
-under its unchanged protocol. Generation one is running on its predeclared seeds.
-No EA/random-search finalist is selected at this evidence cutoff. Training
-observations will not substitute for the protected sixteen-episode final check,
-and no optimizer advantage or transfer benefit is claimed.
+\subsection{Completed first generation and ordered progress}
+All sixteen first-generation episodes reach 2,000 controls and 250 policy calls.
+Neither method records requested or raw completion or a grasp. Each has four
+violating and four nonviolating unfinished episodes, seven contact episodes and
+population utility sum $-8$ (Table~\ref{tab:generation-one}).
+
+\begin{table}[t]
+\caption{First-generation training results on two fixed cases per candidate.
+Entries give the two utilities, raw violation count $V$, and safe supported lid-
+closure episode count $L$. All rows have zero requested/raw completion and grasp.
+Incumbents are paid re-evaluations, not new genotypes.}
+\label{tab:generation-one}
+\begin{tabular}{llrrr}
+\toprule
+Method & Candidate & Utilities & $V$ & $L$ \\
+\midrule
+EA & Incumbent & $[0,-2]$ & 1 & 0 \\
+EA & Child 1 & $[-2,0]$ & 1 & 0 \\
+EA & Child 2 & $[-2,-2]$ & 2 & 0 \\
+EA & Child 3 & $[0,0]$ & 0 & 1 \\
+Random & Incumbent & $[0,-2]$ & 1 & 0 \\
+Random & Draw 1 & $[0,-2]$ & 1 & 0 \\
+Random & Draw 2 & $[0,-2]$ & 1 & 1 \\
+Random & Draw 3 & $[0,-2]$ & 1 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The last EA child wins the cohort with utility zero, versus random search's
+best $-2$. Its first case closes the lid on support at observation 1,187 but never
+grasps; its second never contacts the jar. This is a training-utility lead through
+nonviolating unfinished execution, not a safe-completion benefit. Random draw 2
+closes safely at observation 482 and remains supported and closed through 2,000,
+but likewise never grasps. It ties all random candidates under the frozen utility;
+stable identifier ordering correctly retains the incumbent rather than rewarding
+this undeclared milestone.
+
+Across the eight shared initial and sixteen first-generation episodes, none
+completes, twelve violate and only the initial native episode ever grasps. The
+twelve safe unfinished episodes comprise ten without an ordered milestone and
+two with supported lid closure only. Nine comparison episodes issue closing
+gripper commands, but none after safe supported closure. These factual complementary
+partial behaviours motivate a separately declared continuation test; they do not
+establish composability or uniquely diagnose failure. Milestone rewards, tie-rule
+changes and transfer of a random-search controller into EA would change the method
+and are excluded from this comparison.
+
+The selected EA controller is re-evaluated on the next frozen seed panel before
+mutation. By 10:05 UTC, both generation-two elite cases again score zero, with
+no completion, grasp or lid closure; one never contacts the jar. The closure
+milestone therefore has not repeated on those two seeds. Other generation-two
+candidates and all sixteen protected checking episodes remain pending. Finalists
+will be sealed from the last complete cohorts before checking; no optimizer
+superiority or transfer benefit is claimed.
+
+Development, engineering, shared initialization and completed generation one
+cost 52,394 policy controls, 6,551 physical-policy requests and 317,123 known
+physics ticks. Initialization physics before callback attachment is unknown.
+The separately charged 368 decoder requests bring those completed-phase VLA
+requests to 6,919; these are not final study totals and exclude subsequent
+generation-two physical work. Recorded-data CPU model costs remain separate below.
 
 \input{model-followup.tex}
 
@@ -569,14 +633,18 @@ Code, compact evidence and frozen protocols are preserved in
 \path{configs/maniguard/latent-evolution/capacity-20261020-v2.json}; its study README
 documents reconstruction. Separate private Hugging Face model/dataset repositories
 store immutable stage archives with remote revision, privacy, size and SHA-256
-verification. Full recovery reconstructs development records and all 32 identity
-pairs without new physics or model calls. Raw runs, licensed assets, credentials
+verification. Remote restoration re-verifies all 28 complete episodes through
+generation one, the next two elite cases, all 32 original identity pairs and
+eight supplemental pairs without new physics or model calls. Raw runs, licensed assets, credentials
 and base-policy weights are excluded from public Git.
 
 \section{Conclusion}
 Native-noise steering is implemented with conditional inputs and verified decoder
 influence in two family policies. Shared initialization yields no safe-completion
-gain; its highest-utility controller remains unfinished without grasping. The
+gain; its highest-utility controller remains unfinished without grasping. Both
+first-generation populations have zero completion and four violations in eight
+episodes. Two safe lid-closure cases reveal partial progress, with no subsequent
+grasp or transport; the EA selection lead includes nonengagement. The
 continuing frozen Jar comparison tests native execution,
 a tuned constant, evolution and matched random search while protecting independent
 checking and retaining unsuccessful candidates. Its result must determine the

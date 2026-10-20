@@ -1,0 +1,71 @@
+{
+  "schema": "maniguard-handoff-cpu-review-v1",
+  "verified_utc": "2026-10-20T10:13:14.755238+00:00",
+  "reports": [
+    {
+      "report": "reviewer-handoff-replay-random-20261020-01.json",
+      "sha256": "ac8a19458f282998e9d4919f02b21f76d79f4069c909565ad8821251224ae9e4",
+      "independent_reproduction": "reviewer-handoff-replay-random-20261020-02.json",
+      "byte_identical": true,
+      "episodes": [
+        {
+          "attempt": "random-g1-2-case0-a0",
+          "switches": {
+            "clock_handoff": 488,
+            "closure_only": null,
+            "native_only": 0,
+            "privileged_lid_handoff": 488
+          }
+        },
+        {
+          "attempt": "random-g1-2-case1-a0",
+          "switches": {
+            "clock_handoff": 488,
+            "closure_only": null,
+            "native_only": 0,
+            "privileged_lid_handoff": null
+          }
+        }
+      ]
+    },
+    {
+      "report": "reviewer-handoff-replay-ea-20261020-01.json",
+      "sha256": "7fce9f908f2aaaa6482c8ae4ab3dce4ad7fa58582394cf3bcdbcae1be01070b0",
+      "independent_reproduction": "reviewer-handoff-replay-ea-20261020-02.json",
+      "byte_identical": true,
+      "episodes": [
+        {
+          "attempt": "ea-g1-3-case0-a0",
+          "switches": {
+            "clock_handoff": 488,
+            "closure_only": null,
+            "native_only": 0,
+            "privileged_lid_handoff": 1192
+          }
+        },
+        {
+          "attempt": "ea-g1-3-case1-a0",
+          "switches": {
+            "clock_handoff": 488,
+            "closure_only": null,
+            "native_only": 0,
+            "privileged_lid_handoff": null
+          }
+        }
+      ]
+    }
+  ],
+  "queue_snapshot": "handoff-replay-queue-20261020-01.json",
+  "queue_sha256": "a106722aaa9696bdee696230abd7337d5808b77e9cfe0a02508e5d67d013635f",
+  "focused_cpu_checks_passed": 13,
+  "source_sha256": {
+    "experiments/helpers/maniguard_continuation_handoff.py": "24e1faad07addde2d2835679817cd8178a3c53715ee9a0d8046bcf0037364015",
+    "experiments/scripts/maniguard_handoff_replay.py": "f8ae464844524a2559000429d9ef4ea0f293fcdc67142e27ebfe18c39fd7e110",
+    "experiments/tests/test_maniguard_continuation_handoff.py": "038d64e8c0b805bba120851e59035345a34a0ddeb9392e71f9a8772fddbefcf3"
+  },
+  "new_physical_controls": 0,
+  "new_vla_requests": 0,
+  "new_encoder_images": 0,
+  "new_learned_model_queries": 0,
+  "scope": "Training-prefix CPU selector/replay only. Stops before any changed branch is interpreted as factual. Native policy RNG continuity and physical continuation remain unverified; no physical dispatch or protocol amendment. First future screen capped at four starts including partial/failed starts; larger staged proposal remains conditional."
+}
