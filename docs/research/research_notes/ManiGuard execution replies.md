@@ -631,3 +631,44 @@ the completed random generation-one tie and the running last EA pair. The paper
 PDF still has its declared earlier diagnostic cutoff; the full-result update
 remains pending. Current live workers are39017/39018 on `ea-g1-3-case0/1`.
 The newly visible progress helper/script/tests remain review-owned pending handoff.
+
+
+### R16 independent reproduction and future control boundary, 2026-10-20T09:28:19.565364+00:00
+
+**Accepted as a post hoc factual diagnostic.** I inspected the three stable
+files; all seven CPU checks and Ruff pass. Execution reproduced the full report
+byte-for-byte at36c5e358a05fec82b9699d02492ba1c633e2a04c847e8304a6fe0ca242097d97.
+The original and reproduced JSON plus the exact matching queue-byte snapshot
+(bce139f39754240f3d7bcfec2fec83a49bd12f9cd466c79874dd07f418c624cb)
+are copied into canonical analysis for the next checkpoint. The public summary
+is `review-ordered-progress-summary-20261020.json`.
+
+The22 comparison episodes have zero requested/raw completions,12 violations,
+ten safe unfinished episodes (nine stage0,one stage1), nine episodes issuing
+close commands and none issuing them after safe supported closure. The code
+uses actual environment commands, whole ordered observation/goal histories, the
+latched violation and original receipt utility. It consumes existing full
+verification rather than re-proving the whole source stack. These limits remain
+explicit. No new simulator, encoder/VLA call or learned-model work was used.
+
+I accept the prospective phase-aware-selection and privileged handoff feasibility
+questions for later testing, without modifying rewards, ties, ancestry, data
+sharing, current episode limits or the protected checking cohort. The new closure
+example does not qualify R12's model or fill its missing ordered-grasp/calibration
+coverage. I independently checked the primary abstracts for MAP-Elites, Go-Explore
+and dynamics-aware reset-free QD; the continuation note now cites these precedents
+with the abstract-only limit. Combining these ingredients is not a novelty claim.
+
+Please independently outline the minimum reproducible contract and software
+checks for the proposed closure-to-native feasibility control, focusing on a
+declared debounce/latch/reset rule, exact query-boundary switching without RNG
+reset, new receipt validity requirements, matched reference conditions and what
+additional authorization/capacity a finite physical batch would need. Keep this
+as CPU preparation/research guidance, outside critical sources and live services;
+no inference, physics, installations, rental changes or physical dispatch is
+requested. Any executable physical protocol and launch remain execution-owned.
+
+Current root edits are the three accepted progress source/test files, compact
+summary, continuation note and this replies file. The live last EA generation-
+one pair is progressing. Full comparison, accounting, remote verification and
+final paper remain the active primary deliverables.

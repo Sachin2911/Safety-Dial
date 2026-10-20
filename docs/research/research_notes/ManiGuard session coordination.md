@@ -21,6 +21,15 @@ allowances or instructions to override an existing user-directed hold.
 
 ## Current handoff: user continuation instruction
 
+R17 lifecycle readback, 20 October 09:21 UTC: the complete remaining allocation
+still fits a conservative check, with about 1,340 seconds of dated slack when
+counting the current wave again in full. However, the queue's visible admission
+guard checks one wave against cutoff using the frozen episode estimate. Please
+refresh the whole remaining-study fit at the upcoming generation-one checkpoint,
+using latest completed timings and preserving all 16 checking episodes and four
+unused replacement slots. R17 below records the source/number evidence. This is
+a lifecycle review recommendation, not a research-source or queue amendment.
+
 R16 stable handoff: the ordered-progress helper, script and tests listed below
 are ready for inspection/integration. All seven focused cases, Ruff and the
 100-column check pass. The pinned report covers 24 completed Jar episodes,
@@ -1161,3 +1170,66 @@ Ruff and 100-column checks pass. There is no simulator, VLA/encoder request or
 learned-model fitting/prediction. This is a post hoc report and training-design
 recommendation. Please preserve the report and integrate these three source/test
 files at a normal checkpoint boundary; no live setting or allocation is changed.
+
+**Primary prior-art check for this recommendation:** I checked the primary
+abstracts, not a full implementation/evaluation audit. MAP-Elites already retains
+elites across behavioural niches, and Go-Explore explicitly preserves promising
+states and returns before further exploration, including a sparse-reward robotic
+pick-and-place demonstration. These are relevant controls if a progress archive
+or continuation mechanism is adopted.
+[MAP-Elites](https://arxiv.org/abs/1504.04909),
+[First return, then explore](https://arxiv.org/abs/2004.12919).
+
+The particularly close robotics precedent is Smith et al.'s dynamics-aware
+reset-free QD: it learns a dynamics model, screens behaviours predicted unsafe or
+uninteresting, and uses recovery, with physical quadruped experiments. Its record
+identifies a GECCO 2023 Companion contribution. Combining a model, safety-related
+selection and evolutionary repertoires therefore cannot itself support a new
+contribution claim. Its behaviour screening should not be relabelled as the same
+per-action filter proposed here without reading the full methods.
+[Primary paper](https://arxiv.org/abs/2304.12080).
+
+My inference is that the useful research question remains whether a small shared
+frozen-VLA controller can retain and extend safe partial behaviour under a matched
+physical budget, and which component explains any measured completion gain.
+Progress retention, model allocation, controller representation and ordinary
+learning require separate matched controls. The new audit supplies a concrete
+failure mode to test; it does not establish either novelty or a method win.
+
+## R17: Refresh complete-study capacity at the generation boundary
+
+Status: read-only resource review, no current insufficiency established.
+At 09:21:33 UTC there are 26 completed valid full episodes, zero invalid full
+attempts, two active attempts, 34 planned valid episodes remaining including those
+active attempts, and four unused invalid-attempt replacement slots. The 16
+protected checking episodes remain in that valid allocation. The cutoff is still
+19:30 UTC, followed by the separate 20:00 rental stop.
+
+The slowest completed Jar process is `ea-g1-2-case0-a0`, 1,442.789240 seconds.
+The frozen capacity estimate is 1,770.951011 seconds per wave. Taking the larger
+of that floor and 1.25 times the latest measured maximum yields 1,803.486550
+seconds. With two workers, the remaining 38 possible starts occupy 19 waves.
+Those waves plus the existing 900-second lifecycle/preservation reserve require
+35,166.244453 seconds. There are 36,506.648679 seconds until rollout cutoff at
+that observation, leaving 1,340.404226 seconds of dated slack. This deliberately
+counts the already-running wave as if none of it had elapsed. It is not saved
+wall time, a billing estimate or a guarantee about future throughput.
+
+I inspected the actual PID23619 entry point, `maniguard_latent_pilot.py`, its
+`Pilot.evaluate`/audit calls and the paired queue guard. The visible path passes
+the frozen `capacity.episode_seconds`; `PairedPhysicalQueue.evaluate_batch`
+rejects if one prospective wave crosses cutoff, checks global attempt limits
+and prevents overlapping workers. Its visible condition does not recompute all
+remaining generations, checking and replacement reserve against latest timings.
+The milestone callback performs preservation. Manual execution-session checks
+can still provide the whole-study guard; I am not claiming they are absent.
+
+Please rerun the full remaining fit at the upcoming completed generation-one
+checkpoint and later normal boundaries. Use all newly completed relevant timing
+metadata, not just the original development sample or the R16 report's fixed
+membership; keep the latest slowest bound from decreasing. Count all remaining
+valid work, unused replacement slots, preservation and the actual resource
+deadline. If the fit changes, handle it through the established lifecycle and
+preservation process rather than consuming the protected checking allocation,
+shortening valid episodes or silently adding rental time. Review has not changed
+any live source, stopped a process, altered the queue or requested extra work.

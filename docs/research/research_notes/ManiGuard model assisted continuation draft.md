@@ -164,6 +164,44 @@ A subsequent 100-column formatting cleanup has identical Python ASTs; it does no
 change the recorded audit, model or corpus. Replaying the old manifest requires
 its pinned snapshot. Current sources can freeze a new version for future work.
 
+## Later ordered-progress diagnostic
+
+The [completed-data progress audit](../../../configs/maniguard/latent-evolution/review-ordered-progress-summary-20261020.json)
+uses 24 Jar episodes: two development and 22 comparison episodes. Among the ten
+safe unfinished comparison episodes, nine have ordered stage zero and one has
+supported lid closure. None reaches a safe ordered body grasp, lift or transport.
+Nine comparison episodes command gripper closure, but none commands it after a
+safe supported lid closure. Native initialization instead records holding before
+the lid prerequisite; the closure controller never commands a grasp. These are
+complementary factual partial behaviours, with no demonstrated composability.
+The frozen R12 fit and failed qualification remain unchanged.
+
+All four completed random generation-one panels have utility `[0, -2]`. The
+existing selection correctly follows its frozen score and identifier tie rule.
+Any new progress-based tie handling or archive needs a separate common training
+signal, shared warm-start information and matched comparisons with ordinary
+learning. It cannot be introduced into the current cohort after seeing this lead.
+
+A prospective privileged engineering control could switch from the preserved
+closure controller to native execution after a declared supported-closure trigger,
+at a native query boundary and without resetting the sampling RNG. It needs
+explicit debounce/latch/reset semantics, a new validity reader, matched native
+and closure-only controls, fresh seeds and a separately frozen finite budget.
+The monitor-triggered switch supplies privileged actor information and would be
+a feasibility/data control. It is not a nonprivileged learned method or a safety
+filter. Its failure would not establish physical irreversibility. No such
+controller has been physically integrated or launched here.
+
+Progress retention and exploration already have close precedents in
+[MAP-Elites](https://arxiv.org/abs/1504.04909) and
+[Go-Explore](https://arxiv.org/abs/2004.12919). A model-assisted robotics precedent
+uses learned dynamics and predicted-behaviour screening with recovery on a
+physical quadruped, in a GECCO 2023 Companion contribution.
+[Dynamics-aware reset-free QD](https://arxiv.org/abs/2304.12080)
+These primary abstract checks guide later comparisons; they do not establish a
+new mechanism or equivalence to the prospective per-action filter. Full-method
+review and measured component ablations remain necessary.
+
 ## Deferred physical development
 
 The [dependency schedule](../../../configs/maniguard/model-assisted/schedule-v1.json)
