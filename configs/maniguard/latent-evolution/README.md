@@ -22,8 +22,8 @@ entries and13 source paths. Two early Jar development GPU-UUID limitations remai
 `original60-analysis-clearance-recovery-20261020.json` additionally binds restored
 final exports, clearance, nine server prefixes, original accounting and the
 reviewer packet:528 immutable indexed artifacts, all restored and byte-checked.
-The separately frozen four-total-start continuation screen is underway only after
-these original prerequisites and fresh physical resource/service gates pass. It
+The separately frozen four-total-start continuation screen completed only after
+these original prerequisites and fresh physical resource/service gates passed. It
 has its own run/ledger and cannot replace or amend the completed comparison.
 
 The completed original study's portable catalog is
@@ -73,12 +73,54 @@ copy `merged/run` metadata into a new canonical run, then place each merged epis
 directory at that mapping, preserving all job/queue bytes. Restore `search`,
 `initial-controllers` and `analysis` from the matching merged directories. Copy the
 original clearance from its explicitly recorded analysis snapshot into the run root.
+Before original-only accounting or validation, restore its nine server journals
+from `analysis/original-server-boundaries-20261020/` into that new canonical run.
+Keep later global service history separately. This fresh-host reconstruction must
+never truncate the current live append-only journals. The four screen readers use
+their captured per-start service tails. Use the preserved dated accounting for
+rental estimates; verification-host elapsed time is not historical billed runtime.
 Materialized receipts can populate `backups/STAGE/{model,dataset}-receipt.json`;
 rebuild the backup index from the catalog's ordered stages and their episode lists.
 Copied PIDs, watchdogs and historical commands remain evidence, not live processes
 or instructions to resume. The existing validator and restored-physical verifier
 can then check the original comparison without neural inference or new physics.
 Environment, upstream source and separately licensed asset setup are described below.
+
+## Separate completed continuation screen
+
+The four modes and2ff6d2e7 protocol remain frozen under `../continuation/`.
+`screen-summary-20261020.json`, `screen-gripper-audit-20261020.json` and
+`screen-accounting-20261020.json` retain the complete result: no requested/raw
+completion or native holding, two safe unfinished references and two violating
+unfinished handoffs. Neither progress alternative qualifies; no larger stage is
+admitted. All four charged starts are full-valid, without replacements.
+
+`wave0-preservation-20261020.json` embeds the exact first-wave private receipts.
+The final catalog additionally embeds both wave1 receipts. Materialize these in
+wave0 model/dataset, wave1 model/dataset order, then run:
+
+```bash
+data/maniguard/envs/tools/bin/python experiments/scripts/maniguard_continuation_recover.py \
+  --receipts WAVE0_MODEL WAVE0_DATASET WAVE1_MODEL WAVE1_DATASET \
+  --output NEW_SCREEN_STAGING
+```
+
+This recovers each wave independently with the unchanged original tool, then
+layers only `screen/screen.json` and the named coordinator log. It preserves both
+original trees and rejects differing episode records or frozen sources. The
+generic original tool deliberately rejects cross-wave screen-ledger replacement;
+do not broaden its immutable-evidence guard or bypass that failure manually.
+`screen-four-physical-recovery-20261020.json` records actual replay of all four
+episodes and8004 exact native monitor entries from the resulting `merged/screen`.
+Its archived CPU replay script is in the second wave's `screen/analysis/`.
+No replay/plot command starts a simulator, policy service or new neural query.
+
+The separate `experiments/helpers/maniguard_progress_fitness.py` is prospective
+CPU software. Its bounded secondary term breaks observed primary-utility ties
+while matching future per-episode learning returns. It changes no current score,
+finalist, actor or protocol. Seventeen objective cases pass; actual physical
+benefit, expected-risk behaviour and optimizer advantage remain untested. A new
+protocol and matched information/budget are required before experimental adoption.
 
 The authorized instance is 56777435. On 20 October the user explicitly authorized
 the full comparison and prioritized the contribution/result. The current deadline

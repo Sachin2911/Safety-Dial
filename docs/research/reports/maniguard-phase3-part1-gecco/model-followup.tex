@@ -1,60 +1,138 @@
-\section{Model-assisted follow-up and second experiment}
+\section{Continuation screen and model-assisted preparation}
 \label{sec:model-followup}
-\textbf{Status: CPU audit complete and failed; separate four-start physical screen underway.}
-This separate study asks whether progress-aware control and qualified short-horizon
-prediction can improve task continuation without paying for a broad physical
-search. Its CPU implementation does not change the frozen comparison above.
+\textbf{Status: four physical engineering trials complete; CPU model fails qualification.}
+These separate investigations change no original candidate, objective or checking
+result. The physical screen tests a composition hypothesis on one exposed case;
+the learned model and action-changing filter remain undeployed.
 
-\subsection{Implemented model and control interfaces}
-A five-member episode-bootstrap ensemble predicts the next 44 compact features
-from the current and previous features, a history-valid flag and eight known
-executed eight-dimensional commands. Its 153 inputs feed ridge regressors with
-32 fixed nonlinear random features. Separate heads estimate a new violation
-within the prefix and five task predicates: closed lid, holding, goal
-intersection, uprightness and support. A readout evaluated on actual future
-features separates perception/readout error from imagined-dynamics error.
-This compact transition prototype does not generate future RGB observations or
-simulate a complete closed-loop VLA episode. A prediction about a decoded prefix
-is a surrogate, not measured fitness.
+\subsection{Prospectively frozen continuation method}
+Before original independent checking, we froze random-search draw 2 from generation
+one, task 0019/base and exposed seed 6101920. Its earlier factual closure at 482
+motivates this engineering case. All four references share that selected matrix
+and development information: native only, closure only, fixed-clock handoff and
+privileged supported-closure handoff. This tests feasibility, without a fresh-seed
+generalization or EA claim. The clock adds elapsed-query information beyond the
+original 44 actor coordinates; privileged gating additionally uses monitor labels.
 
-A prospective controller augments the 44 causal inputs with five learned beliefs.
-Its $5\times49$ weights produce four arm-noise coefficients and one gripper-noise
-coefficient, with coefficient persistence. Prototype settings are arm scale .35,
-gripper scale 2.0 and persistence .8; they are not physically validated magnitudes.
-Native Gaussian noise is retained. Privileged simulator predicates cannot silently
-replace the unqualified learned beliefs. A separate bounded joint-target residual
-provides a prospective representation control; its source-matched CPU clipping
-wrapper still requires actual runtime limits and physical identity validation.
+The privileged trigger requires three consecutive post-control observations with
+closed lid, support and no preceding violation. Observation zero is excluded.
+Loss of qualification before the next eight-control query cancels the trigger.
+Switch there and latch native execution, preserving the policy Gaussian stream,
+episode identity and seed. The fixed clock is 488 from the exposed example.
+Native and closure-only references make no switch. Every condition retains the
+same encoder schedule, native termination and full 2,000-control horizon.
 
-The action-changing filter accepts a supported low-risk prefix, substitutes an
-eligible alternative, or abstains. Proposed, filtered and actually executed
-commands remain distinct. Candidate allocation scores the surviving prefix and
-shares predictions for identical filtered prefixes at the same factual anchor.
-Absent qualification, allocation preserves abstention and cannot authorize
-execution. Decoder requests for discarded proposals remain charged.
+The four-total-start cap includes partial failures, with no automatic replacement
+or extra decoder probe. Each start has independent startup/full-wall guardians,
+durable admission and exclusive policy-service ownership. Original60 completion,
+full restoration, unchanged source and fresh machine/rate/armed-clock/capacity
+checks passed before dispatch. The compound reader verifies actual components,
+RNG continuity, executed commands, exact native monitor entries and captured
+server returns. Software preparation used 74 synthetic sampler calls, separately
+from the 368 neural decoder-only calls.
 
-The ROSARL interface implements its practical reward/value-extrema penalty rule,
-requiring a declared external value estimator and one penalty frozen before
-candidate comparison~\cite{rosarl}. It is not a trained task policy or a complete
-ROSARL baseline. The shortest-path theory with unsafe absorbing outcomes does
-not certify this finite-horizon partially observed system. SafeDreamer already
-combines world-model planning and safety objectives~\cite{safedreamer}; this
-combination alone is not the proposed contribution.
+A later stage requires a positive closure prefix and actual native continuation,
+no whole-episode violation, and a new ordered holding/lift/transport milestone
+strictly after switching or first safe requested completion after switching.
+At-switch observations belong to the prefix. Holding uses the native predicate
+without an independent body-link grasp witness. This criterion authorizes no
+automatic extra starts; none of the actual references meets it.
 
-\subsection{Completed factual audit and failed gate}
-The audit protocol was frozen before fitting. Eight shared-initialization
-episodes on tasks 0019/0009 supply 1,992 fitting transitions; one development
-episode on task 0017 supplies 249 calibration transitions, and one on task 0013
-supplies 83 diagnostic transitions. Splits are by whole task, all previously
-exposed. Independent checking outcomes are excluded. Final prefixes without a
-following encoded observation are omitted, and risk fitting excludes prefixes
-starting after a latched violation. These ten existing episodes cost 18,666
-original acquisition controls, retained as reused information.
+\subsection{Completed physical screen}
+All four starts reach 2,000 controls and pass full verification, with no invalid
+start (Table~\ref{tab:screen}). No requested/raw goal or native holding occurs.
+Native never contacts the target. Closure-only contacts it and first closes at
+observation 596, remaining nonviolating with 1,405 closed observations, without
+holding. This repeats partial closure on the selected exposed seed.
+
+\begin{table*}[t]
+\caption{Separate engineering screen: one full trial per mode, on the same exposed
+task/seed. SC/UC and SU/UU are requested completion/safety categories; $V$ is the
+whole-episode violation. Stage is the highest ordered milestone before any
+violation; stage 1 is supported closure. $A_{\rm post}$ counts actual native
+controls after a switch; native-only has no switch and executes 2,000 native
+controls. $t_V$ is the first violating observation; $N_{\rm close}$ counts executed
+closing inputs. These four cases establish no rate, causal effect or transfer.}
+\label{tab:screen}
+\begin{tabular}{lrrrrrrrrrr}
+\toprule
+Mode & SC & UC & SU & UU & $V$ & Stage & Switch & $A_{\rm post}$ & $t_V$ & $N_{\rm close}$ \\
+\midrule
+Native & 0 & 0 & 1 & 0 & 0 & 0 & n/a & 0 & n/a & 0 \\
+Closure-only & 0 & 0 & 1 & 0 & 0 & 1 & n/a & 0 & n/a & 0 \\
+Clock handoff & 0 & 0 & 0 & 1 & 1 & 0 & 488 & 1512 & 475 & 40 \\
+Privileged handoff & 0 & 0 & 0 & 1 & 1 & 1 & 448 & 1552 & 471 & 142 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Clock execution loses uprightness while still supported and open at observation
+475, before switching at 488. Its later first closure at 531 follows that
+violation and earns no safe ordered credit. Privileged execution closes at 445,
+debounces at 447 and switches at 448. It loses uprightness at observation 471,
+23 native controls later, while still closed and supported. These timings do
+not identify an action-specific cause; clock's first violation cannot be
+attributed to its later handoff. Neither trial adds ordered holding, lift or
+transport. There is no late native-goal confirmation to satisfy the alternative
+completion-after-switch criterion. The screen is not expanded.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{../../figures/ManiGuard/continuation-screen-20261020/gripper-trajectories.pdf}
+\caption{Actual gripper inputs and measured query-time finger joints in the four
+completed engineering trials. Dashed lines mark actual switches; tan regions
+show native continuation. At-switch positions precede the first native action.
+Points are two-joint means and blue bands span the two joints, without implying
+uncertainty, fingertip aperture or a body-link grasp. A closing input does not
+prove holding. Every plotted trace is bound to the completed physical audit.}
+\Description{Native and closure-only command opening throughout. Both handoffs
+later command closing and reach near-zero finger joints, without native holding.}
+\label{fig:screen-gripper}
+\end{figure*}
+
+Native and closure-only command opening throughout, with finger joints near
+.04 m. The handoffs issue 40/142 closing inputs, first at control 1456/642,
+respectively, after their first violations. Measured joints later reach
+approximately zero, and native holding remains absent
+(Figure~\ref{fig:screen-gripper}). The observed failures therefore require more
+than an account of uniformly opening commands. Closure timing also differs
+across nominally matched streams. Unequal initial camera images and the single
+selected case limit causal interpretation; full reset-state identity is unproven.
+A timeout does not establish
+irreversibility or a unique perception, dynamics or controller defect.
+
+This screen adds 8,000 controls, 1,000 physical policy requests, 8,040 returned
+environment steps, 48,356 known physics ticks and 2,000 encoder images. Across
+both protocols and all engineering attempts, totals are 120,131 controls,
+15,019 physical policy requests plus 368 decoder-only requests, 726,749 known
+physics ticks and 30,038 encoder images. All 15,387 neural-policy returns
+reconcile exactly; all nine original service prefixes remain unchanged. At the
+dated 16:57 UTC allocation snapshot, both GPUs account for 43.179 allocated
+GPU-hours and a \$13.226 upper-bound estimate, without verified billing or final
+rental closure. Later preservation time remains additional.
+
+\subsection{CPU model audit and rejected deployment}
+A five-member episode-bootstrap ridge ensemble predicts the next 44 compact
+features from 153 inputs: current/previous features, a history-valid flag and
+eight executed eight-dimensional commands. It uses 32 fixed nonlinear random
+features and separate heads for a new violation and five task predicates.
+Actual-future-feature readouts distinguish readout error from imagined-dynamics
+error. The model generates no future RGB or complete closed-loop VLA episode.
+Prepared residual/filter, candidate-allocation and ROSARL interfaces are CPU
+prototypes. ROSARL needs a declared external value estimator and frozen practical
+penalty~\cite{rosarl}; there is no trained ROSARL task-policy baseline here.
+World-model safety planning already has precedents~\cite{safedreamer}.
+
+The audit was frozen before fitting. Eight shared-initial episodes on tasks
+0019/0009 supply 1,992 fitting transitions; development tasks 0017/0013 supply
+249 calibration and 83 diagnostic transitions. Splits are by whole exposed task,
+without checking outcomes. Their 18,666 original acquisition controls are reused,
+without being charged again. Risk fitting excludes already-doomed prefixes.
 
 \begin{table}[t]
-\caption{Separate CPU model audit on one diagnostic episode. Values are feature
-RMSE; rows are correlated measurements within that episode. The predeclared gate
-requires a model/persistence ratio at most .90 in every block. All three fail.}
+\caption{CPU prediction audit on one diagnostic episode. RMSE rows are correlated
+within that episode. The frozen model/persistence ratio gate is at most .90 in
+every block; all three fail.}
 \label{tab:model-audit}
 \begin{tabular}{lrrr}
 \toprule
@@ -68,80 +146,12 @@ Wrist & .06380 & .05481 & 1.164 \\
 \end{table}
 
 Actual-feature readout MAE is .191 for closure, .209 for holding, .662 for
-uprightness and .210 for support, above the .10 gate. The fitting set contains
-positive closure and holding in only one episode each, no in-goal positive
-episode, and no safe completion. Its observed closure follows a violation.
-Calibration has one episode against the minimum 20. The conservative fallback
-therefore rejects every prefix; its 100\% negative-prefix alarm rate is not the
-false-alarm rate of a qualified classifier. Counterfactual-action coverage
-would still require justification after adequate factual calibration.
-
-The audit consumes 27,412 training-row uses and 5,395 model-head row queries,
-with zero new physical episodes, simulator controls, VLA calls or encoder images.
-Sixteen focused CPU tests validate the initial assembled interfaces; later
-allocation/residual and clipping-wrapper suites add 12 and 15 checks, respectively.
-These checks establish software behaviour, not manipulation success. The failed
-prediction/coverage gate excludes this model from physical action selection.
-
-\subsection{Frozen small continuation screen}
-Before model-guided search, test whether known closure behaviour can hand control
-to native grasping and transport. The four engineering references are native only,
-closure only, fixed-clock handoff and privileged supported-closure handoff. Freeze
-random-search draw 2 from generation one, task 0019 and exposed seed 6101920,
-chosen for its factual closure at 482. All references share this selected matrix
-and development information. Repeated closure is unguaranteed, particularly when
-reset images differ. This is feasibility, not fresh-seed generalization or an EA
-contribution. The clock adds an elapsed-query input beyond the original 44 actor
-coordinates; privileged gating additionally uses factual monitor labels.
-
-The privileged trigger needs three consecutive post-control observations with
-closed lid, support and no preceding violation. Observation zero does not count.
-Loss of closure/support before the next eight-control query cancels qualification.
-Switch there, latch native execution and preserve the policy Gaussian stream
-without resetting episode identity or seed. The fixed clock is 488 from the exposed
-example, leaving 1,512 nominal controls. Log actual debounce/switch times, remaining
-horizon and post-switch controls. A nonswitching timeout does not test native
-grasping after closure, and remains valid and charged.
-
-The initial ceiling is four starts, including partial/failed starts, ideally one
-per reference: at most 8,000 policy controls and 1,000 policy requests. Preserve
-native termination and the 2,000-control horizon. Expand to four references on a
-second case only if an actual handoff adds ordered target holding, lift or
-transport strictly after switching and ends nonviolating, or first achieves
-requested safe completion after switching. The boundary observation belongs to
-the closure prefix. Target holding uses the native predicate without a separate
-jar-body-link witness. After that criterion
-also passes on the second case, four fresh native-versus-nonprivileged checks are
-conditional on the selected nonprivileged reference itself progressing. Privileged-
-only progress instead motivates phase-detector diagnosis. The larger proposal is
-at most twelve valid episodes plus two infrastructure replacements, fourteen
-starts total; it is conditional, not an automatic initial replacement allowance.
-Adverse outcomes and valid timeouts cannot be replaced.
-
-A separate compound runtime/reader joins copied monitor entries exactly to original
-native logs and binds the frozen job table, branch and per-query RNG receipts.
-Synthetic source-contract checks and their reproduction make 74 sampler calls,
-with no VLA weights, neural-policy, encoder or physics calls. These are software
-checks, not a live hybrid certificate. Durable start limits, service exclusion,
-independent startup/full-wall guardians and complete physical evidence validation
-are implemented and CPU-tested. Exact source/protocol was frozen before original
-checking. Independent copied-source integration review found no further blocking
-defect. Original completion and full restoration now pass. The first two screen
-starts were admitted after fresh instance/rate/armed-clock checks, unchanged
-source verification, exclusive service leases and whole-screen capacity through
-preservation. The four-start screen is underway, with no physical result claimed
-at this paper cutoff. Neither the failed learned model nor a learned filter is deployed.
-The screen has no extra decoder sweep, cannot qualify the failed learned filter,
-and preserves the original sixteen checking episodes. It supersedes no funded
-allocation and is not additive to the older 16-plus-two proposal.
-
-\subsection{Scientific comparison after capability and model repair}
-A later funded comparison must separate model-free and model-assisted evolution,
-matched random allocation/search, ordinary task-policy learning with the same
-filter, and native, filtered-native and strong fixed references. Give competitors
-the same observations, training labels, prior data, model access and total
-interaction budget. Progress-aware training must retain requested safe completion
-as the outcome and remove progress fitness after a violation. Filter, ROSARL and
-evolutionary retention each need their own ablation. Replicated optimizers,
-independent confirmation and frozen-controller family transfer remain necessary
-before asserting the intended GECCO contribution.
+uprightness and .210 for support, above the .10 gate. Fitting has positive
+closure/holding in only one episode each, no in-goal positive episode or safe
+completion; its observed closure follows a violation. Calibration has one episode
+against the required minimum 20. Conservative abstention rejects every prefix;
+its 100\% negative-prefix alarm rate is not a qualified classifier's false-alarm
+rate. Counterfactual-action coverage remains unsupported. The audit costs 27,412
+training-row uses and 5,395 model-head row queries, with no new physical controls,
+VLA calls or encoder images. It is not refitted on the four new screen trials.
+The failed model remains excluded from physical action selection.

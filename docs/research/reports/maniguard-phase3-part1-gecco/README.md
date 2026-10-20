@@ -1,114 +1,86 @@
 # ManiGuard shared GECCO-format report
 
-Open **[draft.pdf](draft.pdf)** for the current native-noise controller paper,
-updated on 20 October 2026. Its article source is
-[native-noise-paper.tex](native-noise-paper.tex), included by `draft.tex`.
-It describes the 176-parameter observation/instruction-conditioned adapter,
-native-sampling identity, the completed 320-call decoder audit and four full
-development episodes, and the frozen native/fixed/EA/random-search Jar comparison.
-All forty comparison-training episodes are included: zero requested completions,
-sixteen violations and twenty-four safe unfinished episodes. Four nonviolating
-episodes close the lid without subsequent holding, all on task0019 across two
-seed panels. One random child reaches a raw goal after losing uprightness, without
-closure. Both second-generation cohorts have two violations in eight episodes
-and utility sum-4. The original rule seals the earlier EA winner and retains
-identical fixed/random matrices. All60 original episodes and all16 checking
-episodes are complete, with zero invalid full starts. Each condition has0/4 safe
-requested completions. Native/EA each have three violating unfinished episodes;
-fixed/random each have two. Native/EA raw goals are unsafe and fail the requested
-sequence. No evolutionary safe-completion advantage is established. The original cumulative
-report, its historical figures and numerical results remain in `main.tex`/`named.pdf`.
+Open **[draft.pdf](draft.pdf)** for the current native-noise controller paper.
+Its source is [native-noise-paper.tex](native-noise-paper.tex), included by
+`draft.tex`. The completed original study has60 valid full episodes: four
+physical development trials,40 comparison-training trials and16 protected
+checking trials. All16 checking episodes are requested-unfinished. Each condition
+has0/4 safe requested completions; native/EA each have three violations and
+fixed/random each have two. Fixed/random retain identical weights. No evolutionary
+safe-completion advantage, optimizer superiority or transfer is established.
 
-Section 7, sourced from [model-followup.tex](model-followup.tex), adds the separate
-world-model, action-changing filter and ROSARL preparation. It reports the
-completed CPU audit, including its failed prediction/calibration gate, and the
-separately frozen continuation experiment. Its first screen allows four starts including
-partial/failed attempts, ideally covering the four references, and expands only
-after a predefined progress criterion and separately frozen capacity, up to a proposed
-12 valid episodes plus two infrastructure replacements. It has not been physically
-launched at the historical preparation cutoff. It is now underway, with its first
-two starts admitted after full original60 preservation and fresh source/resource/
-service/capacity gates. No screen result is claimed in this update. It uses the already exposed closure-producing
-random descendant/task/seed; fresh blocks are reserved for conditional confirmation.
-The compound runtime/reader, complete numeric/start/service guards and independent
-guardians are implemented and CPU-tested. Exact source/protocol was frozen before
-original checking; subsequent independent integration review found no additional
-blocking defect in the inspected paths. Original completion and actual full60
-private-archive replay now pass, retaining both early development GPU-UUID limitations.
-This smaller staged proposal replaces no part of the completed comparison
-and does not add an allowance to the earlier deferred 16-plus-two proposal.
+All40 training trials also remain requested-unfinished. Four nonviolating supported
+lid closures never extend to holding. A training-only retrospective audit finds
+that the declared utility ties safe partial progress with safe inactivity; a
+secondary progress key changes the preferred factual panel in2/5 observed cohorts.
+It does not reconstruct a changed search history or establish a completion gain.
 
-The complete generation-two numerical summary is dated 12:41 UTC on 20 October.
-The first-generation 09:45 summary and earlier 07:11 diagnostic are retained
-with its historical scope. Section 7 uses the separately preserved CPU audit and
-later CPU source checks. The final original60 summary, strict paired report and
-independent review now cover all checking outcomes. The CPU evidence is not
-reported as a physical result or an evolutionary advantage.
+The separate, prospectively frozen four-total-start continuation screen is also
+complete. Each mode executes2000 controls on the selected exposed task/seed.
+Native and closure-only are safe unfinished; clock and privileged handoffs are
+unsafe unfinished. All requested/raw goals and native holding counts are zero.
+Clock switches488 after its first violation475. Privileged closes445, debounces447
+and switches448, then violates uprightness471. Both later issue closing commands
+and achieve finger-joint motion without native holding. No ordered post-switch
+holding/lift/transport occurs. Neither progression alternative qualifies; the
+screen is not expanded. This is feasibility evidence on one exposed case, with
+one trial per mode, not an evolutionary, causal or generalization result.
 
-The new [protocol](../../../../configs/maniguard/latent-evolution/capacity-20261020-v2.json),
-[development summary](../../../../configs/maniguard/latent-evolution/development-summary-20261019.json),
-[study report](../ManiGuard%20latent%20evolution%20pilot.md) and
-[study README](../../../../configs/maniguard/latent-evolution/README.md) supply exact
-task/seed lists, costs, source pins and restoration instructions. The current build
-receipt is `latent-build-20261020-original60.json`;
-`latent-build-20261020-generation2-v2.json` retains the earlier training-only update;
-`latent-build-20261020-generation2.json` retains the first completed-training build;
-`latent-build-20261020-continuation-preparation.json` retains the earlier preparation update;
-`latent-build-20261020-generation1.json` preserves the first-generation physical-result update;
-`latent-build-20261020-model-followup.json` preserves the first eight-page CPU-follow-up publication;
-`latent-build-20261020-diagnostic.json` retains the earlier six-page diagnostic
-build, and `latent-build-20261020-initial.json`
-retains the earlier build after initialization, and `latent-build-20261020.json` retains
-the earlier five-page build at commit `82c885a`. The paper distinguishes implemented paths,
-decoder responses, physical development evidence and pending comparisons. Ordinary
-learning, optimizer replication and cross-family adapter transfer remain untested.
+[model-followup.tex](model-followup.tex) now reports the completed screen, its
+actual gripper traces and the rejected CPU model audit. The model still fails
+prediction/readout/calibration gates and remains undeployed. Residual/filter and
+ROSARL interfaces remain CPU prototypes, without a trained ROSARL task policy.
+The two investigations alter no original objective, finalist or checking result.
 
-Build the current paper with `make paper TECTONIC=/path/to/tectonic` (`make` also
-selects it). Tectonic 0.17.0 is pinned by the build receipt. The added figure uses
-only the committed numerical development summary, with zero new physics/model calls:
+The [original paired report](../../../../configs/maniguard/latent-evolution/original-60-paired-summary-20261020.json),
+[original design proof](../../../../configs/maniguard/latent-evolution/design-verification-original60-20261020.json),
+[screen summary](../../../../configs/maniguard/continuation/screen-summary-20261020.json),
+[gripper audit](../../../../configs/maniguard/continuation/screen-gripper-audit-20261020.json)
+and [combined accounting](../../../../configs/maniguard/continuation/screen-accounting-20261020.json)
+retain all categories, denominators, actual switches and adverse outcomes. Across
+70 physical starts, including six earlier engineering starts, there are64 valid
+full episodes,120131 recorded controls,15019 physical policy requests,726749 known
+physics ticks,120801 returned environment steps and30038 encoder images. The368
+decoder-only calls,27412 CPU training-row uses,5395 model-head queries and74
+synthetic sampler calls retain their separate scopes. Unknown pre-attachment
+physics remains unknown; rental estimates count both GPUs, setup, idle, analysis
+and preservation, without verified billing or inferred off-time credit.
+
+The [original60 physical restoration proof](../../../../configs/maniguard/latent-evolution/original-60-physical-recovery-proof.json)
+and [separate four-start restoration proof](../../../../configs/maniguard/continuation/screen-four-physical-recovery-20261020.json)
+record actual replay from pinned private archives:112095 and8004 exact native
+monitor entries, respectively. Both early Jar-development GPU-UUID limitations
+remain. Continuation archives are separate from original60. A dedicated recovery
+entry point permits only the evolving screen ledger and coordinator log to layer;
+physical records and frozen sources cannot differ. Per-wave archive trees remain
+intact. All original service prefixes and all1000 added physical returns reconcile.
+
+The current build receipt is `latent-build-20261020-screen4.json`.
+`latent-build-20261020-original60.json` preserves the earlier nine-page original60
+publication; the generation-two, model-preparation, diagnostic and initial build
+receipts retain their dated scopes. The current article reports negative outcomes,
+implemented paths and remaining comparisons separately. The historical cumulative
+report and supervisor check-in files remain unchanged.
+
+Build with `make paper TECTONIC=/path/to/tectonic` using the pinned Tectonic0.17.0.
+The current gripper figure comes from an already verified full audit, with no new
+inference or physics. From the repository root, use the plotting environment:
 
 ```bash
 uv run --isolated --no-project --python /usr/bin/python3 \
-  --with matplotlib==3.10.7 --with pymupdf==1.26.7 \
-  python experiments/scripts/maniguard_latent_paper_assets.py
+  --with matplotlib==3.10.7 --with numpy==2.2.6 \
+  python experiments/scripts/maniguard_continuation_paper_assets.py \
+  --run RESTORED_SCREEN_DIRECTORY \
+  --audit configs/maniguard/continuation/screen-gripper-audit-20261020.json \
+  --output NEW_FIGURE_DIRECTORY
 ```
 
-Run the figure command at the repository root. The plotting dependencies are isolated
-from the simulation/policy environments. Its new figure and source/hash receipt live
-under `docs/research/figures/ManiGuard/latent-evolution/`. Closest primary sources are
-recorded separately in `latent-references.bib`; the historical bibliography is retained.
-
-The [complete initial summary](../../../../configs/maniguard/latent-evolution/shared-initial-summary-20261020.json)
-includes all eight outcomes, contact/grasp counts, robot/camera reset comparisons
-and 1,500 stored native-noise/RNG comparisons. It reuses actual records, with no
-new inference. After refreshing the study's independently verified analysis,
-`maniguard_latent_initial_summary.py --run RUN --output NEW_JSON` reproduces this
-summary. The command refuses to overwrite a recorded result. This is shared training
-evidence on two cases, with identical native streams but different initial camera
-pixels; it is not the independent four-block comparison.
-
-The current draft additionally reports the four incumbent rechecks and the
-[48-call gripper diagnostic](../../../../configs/maniguard/latent-evolution/gripper-authority-summary-20261020.json).
-Its eight middle/last development frames show stronger-offset gripper influence
-with accompanying arm changes. No physical method change or benefit is inferred.
-The diagnostic archives and all 48 chunks have passed a remote round trip, including
-their input hashes checked against the earlier restored development records.
-An [independent offline review](../../../../configs/maniguard/latent-evolution/review-sensitivity-summary-20261020.json)
-finds active, mostly unsaturated EA mutations on factual feature pools. The original
-comparison resumed after the user resolved the hold; descendant and final checking
-results now include both completed generations and all16 checking episodes.
-
-The [strict paired result](../../../../configs/maniguard/latent-evolution/original-60-paired-summary-20261020.json),
-[final design proof](../../../../configs/maniguard/latent-evolution/design-verification-original60-20261020.json),
-[full60 physical restoration proof](../../../../configs/maniguard/latent-evolution/original-60-physical-recovery-proof.json)
-and [independent assessment](../../../../configs/maniguard/latent-evolution/independent-original60-assessment-20261020.json)
-preserve the completed negative result. All six contrasts are descriptive over four
-blocks and one optimizer run. The original66 starts cost112,131 recorded controls,
-14,019 physical requests and678,393 known physics ticks; all14,387 server returns
-reconcile with the separate368 decoder calls. CPU training-row uses, model-head
-queries and74 synthetic sampler calls retain their separate scopes. Final original
-analysis, accounting, nine server prefixes and the reviewer packet were privately
-restored and byte-checked across528 selected artifacts before any screen dispatch.
+Its package versions, source/audit/trace hashes and PDF/PNG hashes are in
+`docs/research/figures/ManiGuard/continuation-screen-20261020/provenance.json`.
+The decoder figure and earlier numerical assets remain unchanged. Source/checkpoint
+pins and environment/asset setup are in the [study README](../../../../configs/maniguard/latent-evolution/README.md).
+Use the private catalogs and recovery instructions there, with credentials in the
+environment. No copied historical process identity authorizes resuming a job.
 
 The following notes describe the **19 October supervisor check-in**, including its
 [paper PDF at the preserved main revision](https://github.com/Sachin2911/Safety-Dial/blob/4783369c5b599580e26f9c3a2723ee55518c46a3/docs/research/reports/maniguard-phase3-part1-gecco/draft.pdf)

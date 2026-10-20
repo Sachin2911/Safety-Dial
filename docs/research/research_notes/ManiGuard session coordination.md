@@ -27,8 +27,9 @@ allowances or instructions to override an existing user-directed hold.
 - **R21 current physical test:** the separately frozen four-total-start closure/
   native-continuation screen started at16:07 after original60 completion,
   physical/analysis preservation and fresh resource admission. Its first native/
-  closure pair is complete and fully validated; the two predeclared handoff
-  conditions are now live. The existing48-call gripper diagnostic already
+  closure pair and both handoffs are now complete and fully validated. No run
+  completes the requested task; both handoffs violate and add no ordered holding.
+  The existing48-call gripper diagnostic already
   shows no executed-command flips at amplitude0.5 and directional flips at2.0,
   including opening on held Clutter inputs. Phase timing remains untested; the
   screen tests native continuation after a closure prefix. The CPU world-model
@@ -55,8 +56,8 @@ allowances or instructions to override an existing user-directed hold.
 - **R32:** requested saved-trace gripper audit is prepared as three new analysis
   files, with15 passing synthetic cases and clean Ruff. Accepted and independently
   reproduced by the execution owner, who now owns the three stable files. The
-  physical screen has started; all four complete verified starts are required
-  before running this full-screen audit.
+  actual four-start audit now passes after fresh full physical verification,
+  with8,000 reused controls and zero new neural/physical work.
 - **R33:** nonblocking attribution clarification: R24 eligibility flags concern
   new ordered milestones. The frozen alternative of first confirmed requested
   completion after switching needs separate interpretation, including native
@@ -96,11 +97,42 @@ allowances or instructions to override an existing user-directed hold.
   the published Git objects; the historical files also match launch4783369.
   The external decoder figure matches the source-parent and publication. All
   nine owner-rendered pages were inspected, without a new build or render.
-- **R42:** requested complete-screen saved-evidence review accepted. It awaits
-  all four terminal starts and successful full reader/attribution verification.
-  R32 will inspect executed commands and measured query finger positions; R24/
-  R33 will separate new post-switch stages from late goal confirmation. Current
-  observations now track the two exact live handoff guardians.
+- **R42:** actual complete-screen audit passes. Native/closure are safe unfinished;
+  clock/privileged are unsafe unfinished. No holding or completion occurs. Both
+  violations are loss of uprightness while supported; clock's precedes its switch.
+  Later closing commands and near-zero measured finger positions are present.
+  Neither frozen advancement alternative qualifies. Recommend repair before a
+  new physical protocol; no larger continuation cohort is supported by this screen.
+- **R43:** primary baseline context rechecked. ManiGuard reports Jar pi0.5-SFT
+  safe success26.92% (21/78 ID rollouts); our0/4 does not establish general SFT
+  incapability. Published observations are256 pixels, our frozen saved views640.
+  This is a comparability question for later audit, not a diagnosed current bug,
+  a protocol amendment or an extra rollout/launch request.
+- **R44:** actual CPU remapping/resize audit passes on all four saved initial
+  screen observations. Pinned Jar SFT camera/state selection matches; both source
+  views resize640 to224, with the third image zero and masked. Current upstream
+  defaults also select640 source pixels. No image-shape defect was found within
+  this scope. Rendering/training-domain equivalence remains unproven.
+- **R45:** complete accounting boundary independently reconciled. All nine
+  original service prefixes match R36; all1,000 new client/server receipts join
+  exactly, without duplicates, unmatched records or extra decoder requests.
+  Original66 starts plus four screen starts total120,131 recorded controls and
+  15,387 returned physical/decoder calls. Dated allocation arithmetic agrees.
+- **R46:** the complete four-start private-restoration proof is cross-checked
+  against independent R42 outcomes and current/restored trace, receipt, service
+  and progress bytes. All34 frozen sources and five verification sources match.
+  Three copied-source merge CPU cases pass. Remote download/full replay remain
+  the owner's actual execution, not a repeated reviewer run.
+- **R47:** separate progress-objective software is ready for a future protocol.
+  Seventeen CPU checks pass, including exhaustive two-case ordering and matched
+  per-episode learning returns. All40 saved training receipts reproduce R40's
+  five diagnostic cohort choices. No current search, score or physical source
+  changes; transition/control authority remains unresolved.
+- **R48:** the complete10-page paper passes independent current-artifact and
+  layout review. All33 build-map files match; eight historical files match
+  launch. I independently rasterized the bound PDF and inspected every page;
+  all10 PNGs also equal the owner's renders. Final public push remains pending
+  at this review boundary; no paper content/layout hold remains.
 - Last verified original evidence at15:53 UTC:60/60 full completions and all16
   checking outcomes pass complete design verification. The complete owner remote-
   restoration proof now exists and matches my original-record export on all60
@@ -108,13 +140,324 @@ allowances or instructions to override an existing user-directed hold.
   owner's remote download/replay. The separate screen directory is still absent;
   actual admission remains with fresh live resource and preservation clearance.
   R21 choices stay fixed and cannot use checking feedback for tuning.
-- Current screen observation at16:30 UTC: all4 starts charged. Both references
-  are completed/full-valid at2,000 controls, with complete native RNG chains.
-  Clock guardian89071/start395708822 and privileged guardian89078/start395708831
-  match live `/proc` identities; the handoff trials are initializing. Wave1 has
-  its own fresh16:29 instance/rate/armed-clock receipt. No handoff outcome is
-  available; revalidate handles before operational decisions.
+- Current screen evidence at17:24 UTC: all4 charged starts are completed/full-valid
+  at2,000 controls each. All receipts and attribution pass the independent full
+  R32 read. Both final guardian processes are absent. The complete four-start
+  private-restoration proof now exists and its source/receipt/outcome bindings
+  pass R46. The final paper/publication and analysis preservation remain with the
+  execution owner. No new physical stage is admitted.
 <!-- END REVIEW STATUS INDEX -->
+
+**R48 current paper reviewed, publication pending.** The10-page PDF SHA is
+`e37af77e28c3393caabf35690b1dde47f98868a78856c5667102624cde8f1108`;
+the screen4 build receipt SHA is
+`c5aff34bb59762793adc22851deb1ec05ed52aef95b60b7377be5a6c22139cc2`.
+All33 declared current artifacts match their build pins. All eight historical
+files also match both the current tree and launch4783369. Using the existing
+paper environment's PyMuPDF1.26.7 on one CPU, I independently decoded and rendered
+the actual bound PDF, then personally inspected all10 pages. Each PNG is byte-
+identical to the corresponding owner render. The new table and gripper figure
+are readable, with no visible clipping; the build log has no overflow or
+unresolved-reference line. This was not a LaTeX rebuild.
+
+The actual PDF preserves original60's negative comparison, the two safe/two unsafe
+unfinished screen trials, zero holding/completion, correct first violations and
+switches, later closing commands, rejected model and SFT/input-audit scopes. It
+retains missing competent learning, replication and transfer and separates all
+cost denominators. I found no new factual or layout defect in the inspected draft.
+There is no content/layout review hold. The most recent public readback still
+has both branches at77d1a4c; this review does not claim the final paper was pushed.
+I will check the actual publication objects/readback when available.
+
+Packet: `runs/reviewer/screen4-paper-review-20261020-01/`.
+
+- `review-v1.json`, SHA
+  `e9abd556a8fd0ac276fc7d32aef3c7aa9a1a4602c6d0438703a23ab0433d549f`.
+- `preservation-artifacts-v1.json`, SHA
+  `8545f589d00b0abeff7b09ab1ef59d270d6465dac440a4976b0426a63ca19b6b`.
+  Three selected receipts total18,638 bytes, excluding the index itself. This
+  includes exact build and independent render receipts; PNGs remain reproducible
+  from the hash-bound PDF in temporary storage. New simulator/model/encoder work
+  is zero. Private analysis preservation and publication remain execution work.
+
+**R47 concrete fitness repair prepared, 17:32 UTC.** I added two separate,
+reviewer-owned files for later protocol consideration:
+
+- `experiments/helpers/maniguard_progress_fitness.py`, SHA
+  `8144d676612b8fdb3bdbf41911dbca84bde88ff28d7b00752b1fa8994db29188`.
+- `experiments/tests/test_maniguard_progress_fitness.py`, SHA
+  `204d8403f1c48c4414940a1b8c90a48fb390848209f0e8154b8d36021b60e5a8`.
+
+The component takes complete factual outcomes and the existing ordered stage.
+For N fixed cases it scores `F=(4N+1)*sum(U)+sum(S)`, with the original terminal
+utility U and S zero after any whole-episode violation. Since `sum(S)<=4N`, this
+exact integer scalar preserves the primary ordering of complete same-size
+factual panels and uses progress only for primary ties. With two cases its
+primary multiplier is9. The same component supplies ordinary learning's per-
+episode returns, summing to exactly the same candidate score. Fixed case IDs,
+complete panels, Boolean labels and bounded integer stages are required.
+
+All17 actual CPU cases pass in.15 seconds, including exhaustive ordering over121
+two-case panels, later-violation credit removal, incomplete-panel rejection and
+equal learning/candidate returns. Ruff passes. A separate actual software check
+opens the40 complete training receipts only and reproduces all five R40
+diagnostic choices, including EA-g2-2 and random-g1-2 in the two changed factual
+cohorts. This is compatibility with the existing retrospective diagnosis. No
+search history, selected finalist or physical result is revised. The existing34
+physical sources remain unchanged; neither new module is imported by them.
+
+This preserves an ordering on observed integer panels, not a lexicographic
+guarantee about unknown expected returns or violation probabilities. It supplies
+no new completion capability, optimizer advantage or novelty claim. It is not an
+implemented competent latent-RL baseline. Adoption still needs a new frozen
+protocol and matched random/ordinary-learning supervision and tuning allowance.
+
+Packet: `runs/reviewer/progress-fitness-prototype-20261020-01/`.
+
+- `report-v1.json`, SHA
+  `c0017c9c4b1571ed8df4696afe611ce2a19fef284bc41590121c69e3638380c7`.
+- `receipt-v1.json`, SHA
+  `3149e13c0d233872adeec15f2c084e142b3e7ea205623874b20a1e72e0505ddc`.
+- `preservation-artifacts-v1.json`, SHA
+  `d8a61cae58c4d4c6634f3ee6bf5022b93284fdebf297cb998f64ad9020ae90db`.
+  Six selected files total34,055 bytes, excluding the index. All selected sizes/
+  hashes are verified. The packet includes exact source snapshots and actual
+  unit-test output. Software compatibility costs.01 seconds; new physical,
+  model, encoder and decoder calls are zero. Please preserve it separately as
+  future-method preparation; no activation, new cohort or paper result is asked.
+
+**Next representation check to consider separately:** R42 shows that correctly
+ending closure steering does not supply safe grasp continuation. Before any new
+physics, a bounded, newly frozen decoder-only check could compare the existing
+four-arm-coordinate controller with the already prepared five-coordinate
+`PersistentNoiseController`, using belief columns explicitly disabled. Use the
+same saved safe post-closure observations and Gaussian draws; measure the first
+eight decoded commands' gripper decisions and coupled arm changes after native
+transforms. The earlier initial-view response is not qualification at a closure
+transition. This tests an explicit control-authority hypothesis, without assuming
+that forced closing achieves grasping or that decoded motion is physically safe.
+Persistent/phase-conditioned continuation then needs its own bounded physical
+test and matched comparisons. No added probe or rollout budget is assumed here.
+
+**R46 complete-screen recovery review, 17:24 UTC.** The new canonical all-four proof,
+SHA `435ab8f6a742347adde3c3d6c5f3b3fe9715343bff6b402f486c1d5a25a92d5f`,
+passes the independent cross-check. Every outcome, score, switch, saved physical
+receipt, trace, captured service tail and progress attribution agrees with R42.
+The corresponding current and actually restored selected files match too. All34
+critical sources equal the frozen38b3f50 Git objects; the five extra verification
+source hashes and exact actual replay producer match the proof. The underlying
+recovery receipt is `f2743dcdec968d7e0c2758f3abb1375b4885e31929e21a8ec915b7225bf0684d`.
+
+This completes the prior two-start preservation scope: the owner's full replay
+covers four terminal physical streams and8,004 native monitor entries, across
+both privately restored waves. I did not repeat remote downloads or the full
+physical reader. I reviewed the new merge helper/entry point and ran the three
+existing CPU cases using copied sources: all pass in.04 seconds, including both
+immutable-evidence conflict rejections. Only the screen ledger and coordinator
+log are permitted to change between preserved waves. No new physical-stage
+authorization, model qualification or causal/EA benefit follows.
+
+Packet: `runs/reviewer/continuation-restoration-review-20261020-01/`.
+
+- `review-v1.json`, SHA
+  `6e5c81db85f755ea3d86f7a21274eea37c54a175c8130eee3bc6da6e38d5de67`.
+- `receipt-v1.json`, SHA
+  `9edc944f2d4634e6b7ae9463b32f8ecc907ff3b7da08d7de7ff54edcd546d34b`.
+- `preservation-artifacts-v1.json`, SHA
+  `10528d40d0ba4c26d24ca710dea2bc78e3394d3b869b465724e342f05b227bd2`.
+  Ten selected files total48,763 bytes and exclude the index itself. All selected
+  sizes/hashes are verified. The packet includes an exact copy of the actual
+  temporary replay producer, the two owner receipts and all three reviewed source
+  files, so these do not depend on retaining `/tmp`. Ruff and the actual binding
+  assessment pass; new simulator/model/encoder work is zero. No recovery review
+  hold remains. Final paper/publication and private analysis preservation can
+  proceed while retaining all unsuccessful results and the current stage boundary.
+
+**R45 combined accounting check, 17:15 UTC.** The actual saved-record audit passes.
+Every original service prefix matches the independently frozen R36 hash. The
+complete tails of all nine journals contain exactly the four trials'1,000 new
+returned physical requests, joined by episode/query index and entire receipt
+against both client traces and captured per-start server streams. There are zero
+duplicates or unmatched requests and no new decoder-only request. Original66
+counter totals equal the R36 snapshot exactly; each of the four new ledgers and
+every combined counter agree with `screen-accounting-20261020.json`.
+
+The resulting scope is70 physical starts,64 full valid episodes,120,131 recorded
+policy controls,15,019 physical policy queries,726,749 known physics ticks and
+15,387 returned physical-plus-decoder calls. The368 original decoder-only calls
+remain separate. There are30,038 encoder images,15,019 image calls and67 text
+calls. Known physics remains a lower bound where pre-attachment work is unknown.
+The owner's dated allocation calculation also agrees arithmetically, without a
+new provider lookup, billing verification or rental-stop claim from this reviewer.
+
+Packet: `runs/reviewer/combined-accounting-audit-20261020-01/`.
+
+- `report-v1.json`, SHA
+  `4a49d1d63471c82293801608cd1cf3c53e486f10cbe3dc0dcfa6a45f0c2dc407`.
+- `receipt-v1.json`, SHA
+  `eb7d2b923256ebaaed6b4fe81119b0f3e5f9c08772647d0357e7891f9f9717f9`.
+- `preservation-artifacts-v1.json`, SHA
+  `b45e01bbe37dd02843768bec6643bdeb7d44df73884d50ae6d83b14e2386300b`.
+  Three selected files total19,279 bytes and exclude the index itself. All selected
+  sizes/hashes were checked. Ruff passes; the real audit took1.12 seconds, with
+  zero new physics, model or encoder work. No private recovery was repeated.
+
+**R44 actual policy-input contract check, 17:12 UTC.** The bounded CPU audit passes
+on the four saved initial screen observations. It imports and actually calls the
+pinned `Sim2CamInputs`, `ResizeImages` and PIL resize implementation, using the
+unchanged benchmark remapping function extracted from its AST to avoid importing
+the simulator. Every reviewed source file equals its clean, pinned upstream Git
+object. The recorded physical-service metadata agrees with the Jar SFT recipe,
+revision and non-audit service configuration in all four traces.
+
+Both real640x640 views become224x224 model-transform images. The third camera is
+zero and masked. The selected left overview agrees with the SFT training recipe;
+the saved eight-value state equals seven recorded arm joints plus mean finger
+position. Prompt/state pass through this image transform unchanged. The pinned
+upstream evaluator and high-fidelity profile themselves default to640 source
+pixels, consistent with the frozen screen. These checks narrow R43: the published
+256-pixel observation description does not establish a wrong input tensor size
+in our implementation or justify resizing the completed protocol.
+
+Packet: `runs/reviewer/policy-input-contract-audit-20261020-01/`.
+
+- `report-v1.json`, SHA
+  `4f2f3af26d3531cb4ea5285cc879c625edc134da8d44e96f69cbe4a4a1335999`.
+- `receipt-v1.json`, SHA
+  `306be89f9782e6b0cce7a6fdcb346f2184755c5842376cfab432615da29ffdf6`.
+- `preservation-artifacts-v1.json`, SHA
+  `00f280aea8eb13309b941e5f6a9a311317c1b4b6b32efe5dcc2deb41c3f49979`.
+  Three selected files total28,223 bytes, excluding the index itself. All selected
+  sizes/hashes were rechecked. Ruff and actual execution pass. The run took seven
+  seconds on one CPU with GPUs hidden, zero model/encoder/simulator calls.
+
+Scope remains four saved initial examples and source/transform execution. I did
+not inspect the loaded live transform object or execute normalization, tokenizer,
+sampling, model weights or rendering. Equal image shape does not prove equal
+pixels, training-domain equivalence or explain the observed failures. The paper
+versus pinned-release rendering difference can remain a reproducibility caveat;
+no checkpoint swap, new physical reproduction or protocol change is requested.
+
+**Paper integration note:** I read the current, still-edited screen section. Its
+four outcomes, switches, violation onsets, finger-command statements and combined
+counters agree with R42/R45. This is a source-text check, not a final build/layout
+or publication review. The camera paragraph can now mention the completed R44
+scope: pinned preprocessing maps the declared640 views to224 model-transform
+images with the SFT camera/state selection. A broader published-versus-release
+rendering comparison remains open. The current direction already records the
+upstream640 default; this audit verifies the actual saved input mapping rather
+than discovering a new renderer defect. No extra physical audit is requested.
+
+**R42 formal complete-screen delivery, 17:04 UTC.** The independent assessment is
+now complete at `runs/reviewer/handoff-gripper-physical-20261020-01/`:
+
+- `assessment-v1.json`, SHA
+  `080109865a5a2b5f1a2aca243e0dc854c58e0c3cdcae629334654a5c50dc00f3`.
+- `receipt-v1.json`, SHA
+  `3f2e4a0669bca348925c1cd428f347be5f594ddeaedf19b0e7933f1803ca5e05`.
+- `preservation-artifacts-v1.json`, SHA
+  `4a43f2c27e51690bddf5b7736184979ed4d684b3c66f6fd1d82c6e0c2c7ad4fe`.
+  Its four selected files total87,980 bytes and exclude the index itself. Every
+  selected file size/hash was independently checked after actual execution.
+
+The packet includes the unchanged full R32 result and the assessment producer.
+Ruff and the actual assessment run pass. Your canonical gripper audit is byte-
+identical to the independent R32 output. The screen totals8,000 recorded policy
+controls,1,000 physical policy queries,48,356 known physics ticks,8,040 returned
+environment calls,2,000 encoded images,1,000 image calls and four text calls.
+Callback-unobserved physics remains unknown. This review adds zero simulator,
+model, encoder or decoder calls and does not repeat your private recovery.
+
+The explicit research recommendation is repair before any newly frozen physical
+protocol. Neither progression alternative qualifies, so this screen supplies no
+gate for expanding its cohort. R40 supports retaining safe partial progress in a
+new fitness rule; R42 also requires an approach/grasp-transition capability that
+closure followed by native continuation did not supply. A new trigger or longer
+timeout alone is not an evidenced remedy. Keep the failed model unqualified and
+retain matched random and ordinary-learning comparisons for any later EA claim.
+
+For any onset annotations, use whole-episode first violations475/471. Clock's
+first already-doomed sample after switching489 is not its onset. The privileged
+first closure is445, not its first closed sample after switching449. I checked the new plot
+helper: it plots actual commands, measured query joints and actual switches,
+without introducing either of these onset substitutions. Final all-four private
+recovery and the complete-screen paper update remain owner verification work.
+
+**R42 actual screen result, immediate factual handoff.** All four starts are
+terminal/full-valid, with matching full attribution and complete native RNG chains.
+The unchanged R32 helper/script/test match their accepted pins, and the real R32
+CLI now passes on all four saved episodes with zero new starts/queries. Output:
+`runs/reviewer/handoff-gripper-physical-20261020-01/report.json`, SHA
+`ec1a4f43a8fe2c287bc75f688e6abb3ac747cffb4d322077f80697a8e2211480`.
+This is available for your committed trace-bound plotting helper. The completed
+assessment/receipt are delivered above; canonical files and frozen sources are untouched.
+
+The result fails both alternatives of the frozen progression criterion:0 requested
+or raw completions, no native holding in any episode, and no new ordered stage2/3/4.
+Native-only and closure-only are safe unfinished; both handoffs are unsafe unfinished.
+
+| Condition | Switch | Native controls after switch | First whole-episode violation | Executed closing inputs | First closing control | Stage before any violation |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Native-only | none | 0 | none | 0 | none | 0 |
+| Closure-only | none | 0 | none | 0 | none | 1 |
+| Clock | 488 | 1512 | 475 | 40 | 1456 | 0 |
+| Privileged lid | 448 | 1552 | 471 | 142 | 642 | 1 |
+
+Both first violations are loss of uprightness while still supported, with no drop.
+Clock is already doomed13 observations before switching and first closes at531,
+so its first violation cannot be attributed to the later handoff. Privileged
+closes at445, debounces at447 and switches safely at448; it first loses uprightness
+at471,23 native controls later, while the lid remains closed. That occurs before
+its first gripper-closing command at642. Neither first violation is an observed
+lift-before-closure or caused by a later closing command. These are temporal/
+predicate facts, not identified action-specific causes.
+
+Both handoffs subsequently issue closing commands, and post-switch query finger
+positions reach approximately zero. A generally stuck-open gripper is not a
+supported diagnosis. No native holding is observed even then. Query positions
+remain discrete two-joint measurements, not a body-link grasp witness. The R33
+late-confirmation alternative also fails: there is no confirmed native goal in
+any episode, so no requested completion can be credited after a switch.
+
+**Research guidance:** these results do not support a larger continuation cohort
+under the frozen progress rule. Complete preservation and the paper update, then
+repair the controller/fitness and audit the baseline interface before freezing
+any new physical protocol. R40 supports a progress-sensitive secondary objective;
+the current screen also shows that releasing steering after correct closure does
+not by itself provide a safe approach/grasp transition. A new representation needs
+to address that transition and control authority, rather than assuming a new clock
+or additional timeout will solve it. The failed world model remains unqualified.
+Any later comparison must preserve matched random/ordinary-learning information
+and paid budgets. This advises repair first; it does not admit extra physics,
+change any current score or establish an optimizer benefit.
+
+**R43 published SFT context and a future comparability check.** Directly checked
+[ManiGuard v1](https://arxiv.org/html/2608.17386v1), Tables3/20 and AppendixC.
+Its pi0.5-SFT Jar ID safe-success rate is26.92%, with21 safe successes in78
+rollouts across26 base tasks and three sampling seeds. The zero-shot Jar entry
+is0%. It uses family-specific SFT checkpoints. AppendixC describes256x256
+observations, eight executed actions per query, Jar horizon2000 and ten-step goal
+confirmation. These published measurements show some safe Jar competence under
+that protocol; they do not give an expected rate for our selected cases.
+
+Our frozen protocol explicitly selects native640x640 DLAA, and the completed
+screen-native initial archive actually contains640x640x3 overview/wrist arrays.
+The received policy features and subsequent model preprocessing must also be
+considered before interpreting the raw resolution difference. Our stricter
+requested-completion/raw-violation definition and case/seed selection are further
+reasons not to treat the published percentage as a matched local reproduction.
+The existing original60 comparison and four-start screen retain their prospectively
+declared profile and controls. No image resize, checkpoint swap or new experiment
+is requested during execution. This observation does not establish the cause of
+our failures or invalidate the within-protocol comparison.
+
+For a later funded protocol, I recommend checking the published and pinned-release
+camera/model-input/metric contracts before attributing broad failure to the frozen
+policy or spending more optimizer evaluations. In particular,0/4 checking safe
+completions cannot establish that family SFT cannot perform safe Jar completion.
+This source comparison used saved arrays and the primary paper only, with no new
+simulator, encoder, policy or decoder call. The complete R42 result is delivered
+above; its frozen choices and interpretation remain authoritative.
 
 **Wave0 validated and wave1 admitted, 16:30 UTC.** Both first-wave trials finished
 normally at2,000 controls. Their saved receipts explicitly have valid/full_episode

@@ -13,9 +13,9 @@ optimizer run are descriptive, without a superiority, safety-rate or transfer cl
 All40 comparison-training trials remain requested-unfinished, with16 violations.
 Four safe supported lid closures never extend to native holding. This supplies a
 continuation lead, not an evolutionary contribution. A separate, prospectively frozen
-four-total-start screen is now underway on an exposed training case, after full
-original preservation and fresh resource/source/service admission. Its four modes
-and limits are unchanged; no screen result is claimed at this cutoff. The failed
+four-total-start screen is complete on an exposed training case, after full
+original preservation and fresh resource/source/service admission. All four modes
+retain their frozen limits and reach2000 controls. The failed
 CPU model remains excluded from physical action selection.
 
 The final [paired report](../../../configs/maniguard/latent-evolution/original-60-paired-summary-20261020.json),
@@ -31,6 +31,55 @@ uses,5,395 model-head queries and74 synthetic sampler calls, reusing rather than
 reacquiring18,666 controls. Original boundary allocation is41.091 GPU-hours and
 $12.586 upper-bound estimated cost, counting both GPUs since the provider start;
 later analysis/screen allocation remains additional, and billing is unverified.
+
+## Completed continuation screen and current conclusion
+
+The four separate starts cost8000 controls and1000 physical policy requests.
+Native and closure-only are safe unfinished. Clock and privileged handoffs are
+unsafe unfinished. Every requested/raw completion and native holding count is
+zero. Closure-only first closes596 and remains nonviolating without holding.
+Clock first violates uprightness475 before switching488; privileged closes445,
+debounces447, switches448 and first violates uprightness471. Both first violations
+occur while still supported. Clock/privileged later issue40/142 closing inputs
+and move the finger joints, without native holding. Neither ordered post-switch
+progress nor the alternative completion-after-switch condition qualifies.
+
+The screen is not expanded. The independent reviewer recommends controller and
+fitness repair before another physical protocol. Retaining safe partial progress
+is a justified future fitness question, while the current closure/native
+composition supplies no safe approach/grasp transition. These facts do not prove
+a unique physical cause, irreversibility or general family-policy incapability.
+The bounded source/transform audit confirms the expected camera/state mapping and
+224-pixel model-transform outputs from the recorded640-pixel images. It does not
+test live normalization/tokenization/model weights or resolve training-domain
+equivalence with the paper's256-pixel description. The completed protocols stay
+unchanged.
+
+Combined recorded totals are120131 controls,15019 physical VLA requests,
+120801 returned environment steps,726749 known physics ticks,30038 encoder images
+and67 text calls. All15387 returned physical-plus-decoder requests reconcile,
+with the368 decoder-only calls separate and every original service prefix intact.
+There are70 unique physical starts:64 valid full episodes and six earlier
+engineering starts. The dated16:57 allocation snapshot has43.179 GPU-hours and
+$13.226 upper-bound estimated rental cost. Both GPUs and all elapsed allocation
+count; later preservation and final rental closure keep their separate scopes.
+
+All60 original episodes and the four new starts have actual separate private-
+archive physical replay, including112095 and8004 exact native monitor entries.
+The screen uses its dedicated two-wave recovery entry point. It permits only two
+named mutable metadata records to layer and rejects differing physical/frozen
+source records. All original wave trees remain preserved. The original recovery
+tool and every frozen original/screen critical source remain unchanged.
+
+Separate prospective software now implements a progress secondary objective on
+complete fixed-size factual panels: `F=(4N+1)*sum(U)+sum(S)`, with `S=0` after
+any whole-episode violation. Root's20 focused checks pass, including17 objective
+checks and three restoration checks. Its episode returns sum to the same score
+for future ordinary learning. This preserves ordering of observed integer panels,
+without a guarantee about expected returns or violation probabilities. The new
+module is not connected to any completed search or physical actor. Activating it,
+adding a gripper/persistent controller or performing the proposed saved-closure
+decoder check requires a separate frozen protocol and budget. No new call is made.
 
 The [new capacity record](../../../configs/maniguard/latent-evolution/capacity-20261020-v2.json)
 selects Jar using the original timing rule, before comparative feedback. The user

@@ -2047,3 +2047,124 @@ two-start proof, not all-four completion. The new preservation wrapper stores
 continuation archives separately from original60; raw queries are not reassigned
 to the original accounting boundary. Exact portable wave0 receipts and the
 physical recovery proof are being published under configs/maniguard/continuation.
+
+## Final screen boundary and R42 research guidance
+
+Both handoffs have actually switched while preserving episode identity: clock488,
+privileged448 after first debounce447. At16:49 both remain live near1780 controls.
+These are branch telemetry, not final safe-completion or causal-benefit claims.
+The exact four-start cap is exhausted, with no replacement or extra decoder call.
+A trace-bound plotting helper/entry point is now committed at77d1a4c; Ruff passes,
+and all13 original plus34 screen critical sources remain byte-identical. It will
+consume the completed R32 audit, not open partial trials for a paper figure.
+
+Alongside R42's final factual assessment, please advise whether the observed
+continuation supports any next physics, or whether representation/fitness repair
+should precede a new protocol. Distinguish command/position facts from causal
+hypotheses and retain the matched-random/ordinary-learning requirements for an EA
+claim. No advice automatically admits a larger cohort or changes current methods.
+Root will finish current verification, preservation and the paper update first.
+
+
+## R42 released: complete stable four-start screen
+
+All four starts are completed/full-valid at2000 controls each, with zero invalid
+starts. The coordinator exited normally. The actual R32 full-screen producer
+finished successfully at configs/maniguard/continuation/
+screen-gripper-audit-20261020.json, SHA ec1a4f43a8fe2c287bc75f688e6abb3ac747cffb4d322077f80697a8e2211480.
+The stable screen ledger SHA is eb4fed33f20458fd2a89eb3b793756d279fd1e08355e00854f9c0c3e08cbd84a.
+
+Please begin the requested independent complete-screen assessment now. All four
+requested/raw completions are false and every native holding count is zero.
+Native and closure-only are safe unfinished; clock and privileged are violating
+unfinished. Clock switches488 and privileged448 (first debounce447), leaving
+1512/1552 actual native controls. Neither has a new ordered post-switch stage;
+both have whole-episode violations. Literal R33 completion-after-switch is also
+false. No progressing reference exists and the frozen screen is not expanded.
+
+Closure-only first closes596, with1405 closed observations and no holding. The
+privileged first closure445 triggers actual native switching; its first violation
+is471. The detailed command/position report is authoritative: do not infer that
+the gripper never closes from the older examples. Root is reading these details
+and preparing factual plots and complete costs, then separately preserving wave1
+and replaying both private waves. Frozen methods and all adverse evidence remain.
+
+
+Clock clarification for R42: first violation475 occurs before its switch488,
+while still in the closure prefix, so it cannot be attributed to the handoff.
+Both first violations record jar_upright=false while jar_on_support=true; privileged
+is closed, clock is still open. Native/closure command opening throughout. Clock
+later issues40 closing inputs from1456; privileged142 from642. Their measured
+finger joints later reach zero, yet native target holding remains absent. This
+rejects a blanket "gripper never closes" diagnosis and does not locate a unique
+physical cause. The complete screen-summary-20261020.json retains these facts.
+
+
+## R42-R45 accepted and full-four private replay completed
+
+R42 is accepted in full. Its R32 result is byte-identical to the owner'sec1a4f43
+audit; all four full starts and both progression alternatives fail as stated.
+No larger cohort is admitted. R43's published256-pixel/SFT context is accepted,
+and root independently rechecked the primary paper's protocol and outcome table.
+R44 narrows the interpretation: pinned-release640 inputs become224 model images
+with the expected state/view mapping in four saved examples. This is not a live
+normalization/tokenization/model-weight audit or a cause of failure. R45's actual
+1000-request identity join and all70-start counters agree with root accounting.
+The R42/R44/R45 selected packets and indices are copied for the final private
+paper checkpoint, with exact public assessment/audit copies under continuation.
+
+Full screen preservation is now complete: both immutable private waves were
+recovered into fresh per-wave trees and actually replayed across all four full
+physical streams, including8004 exact native monitor entries. The second wave
+is modelaf9239951854157ba51df9ec97ce3a45143f8939 / dataset
+cb79bd0c904c4c59ae20bf4d281eb9f04bfdad29. Full proof is
+configs/maniguard/continuation/screen-four-physical-recovery-20261020.json.
+
+The generic original recovery tool properly refused cross-wave replacement of
+the mutable screen ledger. It remains byte-identical to the original catalog's
+7a9833ab entry. A separate continuation recovery CLI layers only two named
+metadata records after independently recovering each wave. All physical and
+frozen-source bytes remain immutable; three targeted tests and Ruff pass. The
+actual four-archive recovery applies exactly two metadata replacements. This is
+a preservation-layout repair, with no actor, objective, protocol, budget or
+physical interaction change. The failed attempt/log and new exact sources are
+retained separately for the final preservation set.
+
+The manuscript now reports all screen outcomes, actual closing commands, first
+violations, preserved cost scopes and the training-only fitness diagnosis. It
+retains the failed model and the R44 audit's limits. Root is finishing the PDF
+layout check, final private paper checkpoint, portable catalog and exact Git
+readbacks. The original60 result remains frozen and negative; no GECCO novelty
+or accepted contribution is claimed from the present evidence.
+
+
+## R46/R47 accepted within their separate scopes
+
+R46's binding/readback and copied-source merge checks are accepted. The selected
+ten-file packet plus index are copied for the final analysis checkpoint. It
+correctly distinguishes root's actual remote downloads/full physical replay from
+the reviewer's independent metadata/source/outcome check. No review hold remains.
+
+R47's two new reviewer-owned files are accepted as isolated prospective software
+preparation. Root inspected both and ran the two focused suites:20 passes in.24s
+(3 restoration plus17 progress-objective cases). The finite-panel scalar retains
+the original terminal utility ordering and offers the same terminal learning
+returns to future competitors. It is not a lexicographic claim about unknown
+expected returns or a safety guarantee. Root will commit and preserve the exact
+new source/test bytes and six-file evidence packet, without wiring them into any
+completed search, metric, actor, selector or protocol. The existing current score
+and every frozen result remain authoritative.
+
+The suggested five-coordinate saved-closure decoder check is a reasonable future
+control-authority hypothesis with learned belief columns disabled. It is not run:
+all368 decoder admissions and the four physical screen starts are exhausted.
+Any such new probe, persistence/gating change or physical cohort needs its own
+prospectively frozen protocol, source, fair comparisons and explicit budget. No
+new budget is inferred here. Safe approach/grasp capability and a competent
+matched ordinary-learning baseline remain separate unresolved requirements.
+
+The final current draft has10 pages; every page was individually rendered and
+inspected. There are no layout overflows/unresolved references, and all eight
+historical files match launch4783369. Its source-bound receipt is
+latent-build-20261020-screen4.json. Root is publishing this exact result and then
+round-trip checking its final private analysis/paper capsule and portable catalog.

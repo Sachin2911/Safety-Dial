@@ -1,0 +1,74 @@
+{
+  "additional_verification_sources_verified": 5,
+  "episodes": [
+    {
+      "attempt": "screen-native-a0",
+      "controls": 2000,
+      "queries": 250,
+      "saved_receipt_sha256": "1b95ac92ac77b23c84b176083e553c251dee95ba9b1884e9504c61753a271baf",
+      "switch": null,
+      "trace_sha256": "f2c404704519836bca89eab436f4ff4918bf568664a41381500a1213e497a48a",
+      "violation": false
+    },
+    {
+      "attempt": "screen-closure-a0",
+      "controls": 2000,
+      "queries": 250,
+      "saved_receipt_sha256": "b6aa644f367de222592f6cf42baa81a7dbe6738540f0bade0ba90572a9a17242",
+      "switch": null,
+      "trace_sha256": "c2b95f4fd9db321afcd290d897d8522be23429a8b931c5318aca35ae26db1555",
+      "violation": false
+    },
+    {
+      "attempt": "screen-clock-a0",
+      "controls": 2000,
+      "queries": 250,
+      "saved_receipt_sha256": "de7b05d222a22aa4afb0f7d2fe0b5c026eded92338170f7b6dae744edbb14dfb",
+      "switch": 488,
+      "trace_sha256": "861ab0c594f828c1b2450331a6ced9037a40448e19f2786ed88dbeaf502f7955",
+      "violation": true
+    },
+    {
+      "attempt": "screen-privileged-a0",
+      "controls": 2000,
+      "queries": 250,
+      "saved_receipt_sha256": "eba10bb90a2c8f7e841c640f84b10a53d21441b67352dcb6076c54fe6423f13a",
+      "switch": 448,
+      "trace_sha256": "095e655f22426d85576b08704ff20e46d4ce85a9f7c74f62e36dcf97e1a25b5d",
+      "violation": true
+    }
+  ],
+  "frozen_critical_sources_verified": 34,
+  "independent_R42_assessment_sha256": "080109865a5a2b5f1a2aca243e0dc854c58e0c3cdcae629334654a5c50dc00f3",
+  "new_model_or_encoder_calls": 0,
+  "new_physical_controls": 0,
+  "observed_utc": "2026-10-20T17:23:41Z",
+  "owner_proof_sha256": "435ab8f6a742347adde3c3d6c5f3b3fe9715343bff6b402f486c1d5a25a92d5f",
+  "owner_recovery_receipt_sha256": "f2743dcdec968d7e0c2758f3abb1375b4885e31929e21a8ec915b7225bf0684d",
+  "owner_replay_source_sha256": "7c185097692359d1feb12db0b4b765c2c8c4ce4ade74058d41991fc3292ac540",
+  "schema": "maniguard-independent-four-start-restoration-review-v1",
+  "scope": "Cross-check of the owner's completed full four-start private-restoration proof against independent R42 outcomes, local and restored trace/receipt/service/progress bytes, frozen source authority and the actual replay producer. Existing merge CPU cases pass. The reviewer did not repeat the remote download or full restored physical reader. Only the screen ledger and coordinator log can differ between preserved wave trees. Full-array replay and8004 exact monitor joins remain the owner's actually executed verification; this cross-check does not establish new physical improvement or expansion authority.",
+  "source_pins": [
+    {
+      "path": "experiments/helpers/maniguard_continuation_restoration.py",
+      "sha256": "30d397e773b4494ee064259715fb404f6bd17bdd948d984ee4d3ad7a1fd8ad8d",
+      "snapshot_sha256": "30d397e773b4494ee064259715fb404f6bd17bdd948d984ee4d3ad7a1fd8ad8d"
+    },
+    {
+      "path": "experiments/scripts/maniguard_continuation_recover.py",
+      "sha256": "af005a1c2474d5151ba8301be960242bb1147016dcaa2f43f68571caae11e688",
+      "snapshot_sha256": "af005a1c2474d5151ba8301be960242bb1147016dcaa2f43f68571caae11e688"
+    },
+    {
+      "path": "experiments/tests/test_maniguard_continuation_restoration.py",
+      "sha256": "6518db01d5994165c558bf33706da211ea8b58928089462c7eea954b6f7faa04",
+      "snapshot_sha256": "6518db01d5994165c558bf33706da211ea8b58928089462c7eea954b6f7faa04"
+    }
+  ],
+  "unit_tests": {
+    "command": "python -m pytest -q --basetemp <review>/pytest-tmp <review>/source-v1/experiments/tests/test_maniguard_continuation_restoration.py",
+    "exit_code_observed": 0,
+    "output_observed": "3 passed in 0.04s",
+    "scope": "Existing three cases run in this reviewer turn with the copied helper on PYTHONPATH; one successful allowed overlay and two immutable-conflict rejections."
+  }
+}
