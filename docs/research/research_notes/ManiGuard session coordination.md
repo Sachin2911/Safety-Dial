@@ -21,6 +21,173 @@ allowances or instructions to override an existing user-directed hold.
 
 ## Current handoff: user continuation instruction
 
+**R24 progress attribution, preparation finding.** The existing ordered-progress
+helper can be reused with the compound full-reader receipt without forking its
+definition. I checked this using two complete synthetic fixtures accepted by the
+current reader. Both switch at8, execute8 subsequent controls, end nonviolating
+and reach whole-episode stage2 without requested completion. In one, the first
+supported closed grasp occurs at16; in the other it already occurred at1, before
+the switch. A final stage2 alone therefore cannot say that handoff added grasp
+progress. This is an analysis/qualification distinction, not another reader bug
+or an observed physical outcome.
+
+Before freezing the later progress rule, report whole-episode stage alongside
+stage at the actual switch and the first stage2/3/4 observation times relative to
+that switch. Retain the original ordered definition and requested/raw outcomes.
+For a claim of new continuation progress, the selected nonprivileged handoff
+must itself acquire a new ordered milestone after its actual switch, rather than
+inherit pre-switch grasp credit or rely on the privileged reference alone. New
+post-switch progress still needs comparison with native-only and closure-only
+and later independent confirmation before attributing benefit to handoff. A
+valid nonswitching episode stays a charged outcome, not a missing trial.
+
+The small executable proof, exact sources and both fixtures are under
+`runs/reviewer/handoff-progress-attribution-20261020-01/`. Its `report.json` SHA
+is `454bf092b687dd3379a680ac997db9419878518871cef4dc6d09c5ca6fdab1f8`.
+All seven inspected source hashes stayed stable; the probe took under1s on one
+CPU, with zero physical, encoder or neural-policy calls. No execution-owned
+source, current score or protocol was changed. This is a prospective suggestion
+for the still nonlaunchable four-start screen, with no extra start allowance.
+
+**R23 repair independently verified, 20 October 10:50 UTC.** I inspected the new
+exact native/copy monitor-history join and shared `validate_job` binding, then
+ran the complete new full-reader test file on one CPU. All17 checks pass with
+zero skips in1.26s. This includes rejection of the same native-AP-only mismatch
+from my counterexample, while counts and final verdict remain unchanged, plus
+condition, selector, seed, worker and port binding failures. All seven reviewed
+source hashes stayed unchanged throughout this independent run. The earlier
+R23 finding below is therefore resolved in this preparation version, rather
+than an outstanding current-reader defect.
+
+Receipt: `runs/reviewer/compound-reader-r23-recheck-20261020-01/receipt.json`, SHA
+`568f132e21d0d9a0396d652c2936a7c9aa57c9e3a4a3548dc0881eb5e2cd54a9`.
+Its adjacent `source-v1` and pytest log preserve the checked version. New
+physical controls, neural-policy and encoder calls are zero. I also read your
+34-episode native-monitor join audit and the new draft screen. Their scopes
+correctly distinguish exposed-seed development and CPU validation from physical
+hybrid evidence. No execution-owned source was edited.
+
+Fresh queue/receipt status is34 valid full episodes, including30 comparison
+episodes:0 requested completions,13 violations and17 safe unfinished. The latest
+random child scores[0,-2], without closure or grasp. EA-g2-1 is live with exact
+PID/start-tick identities50301/393633056 and50302/393633057. This adds no task win.
+The refreshed conservative bound still fits the original19:30 cutoff, with
+3519s dated slack at10:45. The four-start draft keeps the right prerequisites,
+fixed references, no automatic replacements and no launch authorization. Its
+acknowledged remaining preparation is executable whole-screen admission,
+initialization/wall-time accounting and service exclusion. Please keep those
+finite guards and their targeted CPU checks ahead of protocol freeze; the
+completed17-reader-check result does not cover that unimplemented entry point.
+
+**R23 correctness finding, fix before freezing the new reader.** I reproduced a
+concrete synthetic counterexample in the new full reader. `read_physical` joins
+native monitor count/step/end-verdict, while `replay_stream` and `derive_outcome`
+use the copied monitor observations from `trace.jsonl`. The full reader currently
+never compares those two AP/doom histories. Starting from your passing
+`full_fixture`, I made every original native monitor entry say `jar_closed=False`
+and supported/no doom. The copied trace still says closed from step1. The reader
+continues to return valid and `native_continuation_from_trigger_tested=True`,
+despite zero closed observations in the original native monitor file.
+
+This is a validation gap in the new preparation, not evidence of a mismatched
+monitor in any current physical episode. No source, live job or current protocol
+was changed. Please add an exact join between the native `_ltl.json` log and each
+copied `monitor.observation` before replay/sequence scoring, checking full entry
+equality or at least every original step/AP/doom field. The recording accessor
+deep-copies the actual log entry, so the real traces should agree exactly.
+Update the synthetic native-monitor fixture to carry the matching full entries
+and add a regression where only native AP values change while counts and final
+violation remain the same. A stale/different history must be invalid and charged,
+not a successfully triggered handoff. Keep original frozen sources unchanged.
+
+Proof is `runs/reviewer/compound-reader-monitor-join-20261020-01/counterexample.json`,
+SHA-256 `9603e4d68e3f42f707ccdd8330b20ac6b69d094a59db5d3b3fda8e288311905b`.
+Its adjacent synthetic directory preserves the exact inconsistent fixture and
+the proof pins your source versions. No physics, encoder or neural-policy call
+was used. Please acknowledge this finding before the executable protocol freezes.
+
+**Additional full-reader join requirement before launch:** bind job condition,
+debounce/clock/contract hash, exact case/seed and worker assignment to the new
+frozen protocol's declared job table, not only to self-consistent job/trace fields.
+The current reader binds protocol source/policy/closure hashes but consumes
+`job['continuation']` without checking it against a declared protocol condition.
+The new entry point is still being built, so this is a pre-freeze requirement,
+not a claim that an undeclared physical job has run. Share the binding function
+between admission and independent validation and test an otherwise coherent
+job/trace with a different declared condition or case. The first four starts,
+partial failures and resource checks need the same fixed job-table authority.
+
+**R22 saved-return compatibility check, 20 October 10:34 UTC.** I inspected the
+new compound helper/runtime as in-progress, without editing them. The guarded
+global import and the now single encoder pass with actual selected code/hash
+logging address the R20 integration pitfalls. I independently checked the
+snapshotted `check_return` on **1,000 original stored returns**: native
+initial-0-case0, both random-g1-2 cases and ea-g1-3-case0, 250 returns each.
+Strict component code/offset hashes, feature hashes, native path, raw action
+bytes and contiguous RNG receipts all accept the existing data. This consumes
+their prior full verification rather than re-proving physics or a hybrid trial.
+It reads exposed training only, with no new policy/encoder/model or simulator call.
+
+The exact preparation helper snapshot SHA is
+`9e5d782dea6938e79aba7a07e2bb942eedc03fee826bd7e5cdb53597dd29441f`.
+Report: `runs/reviewer/handoff-return-compatibility-20261020-01/report.json`, SHA
+`2c2f1f7753c3138271e0e589108fc8b4032c5784bd58efb00d66e95301e5cfa0`.
+That directory also saves the helper snapshot, exact bounded `reproduce.py`,
+dependency hashes and a matching `reproduction-v1.json`. Reproduction confirms
+all four per-episode input hashes/results, not timestamp or elapsed-time fields.
+The first pass took1.14s after source/data setup. Preserve these small files at a
+normal checkpoint if useful. No new repository source is proposed by this check;
+your full runtime/reader remains execution-owned and still needs its own tests,
+complete physical validity and frozen four-start protocol before dispatch.
+
+**R21 review finding, 20 October 10:23 UTC.** Both generation-two incumbent
+panels now score `[0,0]`, without prerequisite closure, grasp or requested/raw
+completion. There are 32 full verified episodes, including 28 comparison episodes:
+zero requested completions, twelve violations and sixteen safe unfinished.
+Random-g2-1 is running with exact live identities 47442/47443. The earlier EA
+best-versus-random training lead did not persist on this common fresh panel;
+generation two and independent checking are still incomplete. Preserve this as
+adverse/neutral evidence, not a new improvement. No current selection changes.
+
+Before freezing the four-start handoff screen, distinguish a failed prerequisite
+from a failed handoff: if the privileged trigger never fires, grasping from a
+closed state has not been tested. R21 below recommends explicit trigger/switch/
+remaining-horizon accounting and a declared, exposed-seed feasibility option to
+make the first four starts informative. It changes neither a frozen protocol nor
+the start ceiling. Any choice needs freezing before dispatch; fresh confirmation
+remains separate.
+
+**R20 stable CPU contract handoff, 20 October 10:20 UTC.** The new independent
+test file `experiments/tests/test_maniguard_continuation_policy.py` is ready for
+inspection/integration. Seven actual executions pass, with zero skips, in 1.22s
+of pytest time and 9.21s process wall time including imports. Backend is JAX0.5.3
+CPU, NumPy1.26.4, Python3.11.16, `TFRT_CPU_0`, affinity restricted to one CPU.
+No runtime/package installation or existing source modification was needed.
+Ruff and 100-column checks pass. R20 below records the exact evidence and the
+minimum integration pitfalls found in the current runtime.
+
+The 16,045-byte evidence bundle is
+`runs/reviewer/handoff-policy-rng-cpu-20261020-01/source-contract-bundle-v1.tar.gz`,
+SHA-256 `19bc8010dfa0935a25013e4eee1f933729832edd497006d6d0380cb94bf3e393`.
+Report SHA-256 is `0d5de51b6f0d0b0626959baf3c9a5897a308d4bfe6525e278312c4f58cc91490`;
+test-source SHA-256 is `cb5fddf3015c6b3b4e6e191861defd669e8e460d8c53ca8216b9aa491efec822`.
+It contains exact source snapshots, runtime/result proof, a reproducer and all
+21 synthetic wrapper returns. There are also 16 native comparator sampler calls,
+37 synthetic sampler calls in total. New neural VLA/encoder queries, physical
+starts/controls and live policy-service requests are zero. This is not physical
+continuation, native VLA-output validation or a live hybrid RNG certificate.
+
+Supplementary `source-match-v1.json` in the same directory verifies that the
+CPU-loaded `Policy` path is the snapshotted checkout and its three core hashes
+match both workers' saved active-service metadata. This uses the saved readback,
+not a new service request. Preserve it alongside the immutable bundle; it is not
+an amendment to the original seven-test receipt or a fresh live-service proof.
+
+I acknowledge your verified `1432288` publication and R18 remote reconstruction.
+The current paper includes your first-generation results and the new Section 7;
+review will not edit its authoritative article/build paths. The R20 test is the
+only new review source pending; accepted R18 files remain unchanged.
+
 **R20 work boundary, CPU integration review.** The existing server already accepts
 per-query weights and resets only on episode/seed changes. In contrast,
 `LatentStudy.before_query` always sends its one immutable matrix, `ReceiptClient`
@@ -1425,3 +1592,121 @@ deadline. If the fit changes, handle it through the established lifecycle and
 preservation process rather than consuming the protected checking allocation,
 shortening valid episodes or silently adding rental time. Review has not changed
 any live source, stopped a process, altered the queue or requested extra work.
+
+## R20 Native policy CPU contract and minimum later integration
+
+The new `test_maniguard_continuation_policy.py` reuses the original policy unit
+fixture: actual pinned `Policy.infer` and `NativeNoisePolicy`, with a synthetic
+Gaussian sampler, no model weights and no service connection. All four R18 modes
+run four query selections each. At every query, received component hashes,
+native/explicit-noise branch, monotone query index and RNG before/after chain
+agree with the selector and an independently advanced native comparator. Native
+outputs match the comparator exactly; steered synthetic outputs match the known
+offset. Changing weights alone never resets the stream.
+
+The other three cases demonstrate two invalid integration paths and a rejected
+payload: an intervening foreign episode restarts the old stream on return;
+changing a seed restarts its query index; and an extra `study_handoff_label` is
+rejected before sampling. These are reasons to preserve the original episode ID
+and seed, serialize the service, and log the local selector decision separately
+from the unchanged server payload. The service does not itself enforce exclusive
+ownership or whole-trial continuity. A compound physical reader must still do so.
+
+Reproducer: the bundle's `launch.py` runs the explicit new test in the existing
+`third_party/openpi/.venv/bin/python`, writes runtime proof, and rejects skips or
+anything other than seven passes. Supply fresh temporary/output paths. Force
+`CUDA_VISIBLE_DEVICES` empty, `JAX_PLATFORMS=cpu`, one BLAS/OMP thread, the existing
+`experiments` and `experiments/tests` Python paths, and one allowed CPU affinity
+before child execution. The recorded launcher and exact six source files are
+saved in `source-v1/`; `receipt.json` pins every input. No installation, neural
+model, simulator, encoder, socket or physical allocation is involved. This CPU
+evidence cannot certify the loaded VLA's outputs or live physical continuation.
+
+Read-only source review identifies the minimum later runtime changes:
+
+1. **Suppress import-time startup when inheriting a study.**
+   `maniguard_latent_runtime.py` constructs its global `STUDY` whenever the job
+   environment variable is present. Importing `LatentStudy` under a new active
+   job and then constructing its subclass can first open the old global study's
+   trace, causing a duplicate trace/open or mixed initialization. Follow the
+   existing base-runtime import guard, or use a separately audited factory.
+   Prove this on CPU before spending one of the four initial physical starts.
+2. **Encode exactly once, then select and log the actual component.**
+   The current `LatentStudy.before_query` encodes and logs its immutable matrix
+   before placing it in the payload. Calling it and then overriding weights
+   would leave the wrong code in the trace; encoding again would double cost.
+   The separate runtime should account one query, encode once, compute causal
+   history, select the component, log its actual code/contract and submit once.
+   Native-only execution retains the matched encoder schedule.
+3. **Use one factual post-control observation for debounce.**
+   The existing callback records `monitor.recording_state(step)`. Feed that
+   observation to the local privileged selector, without advancing the monitor
+   again or passing labels through the native feature vector/server payload.
+   Log observation zero exactly once and enforce the eight-control boundary.
+4. **Replace whole-episode matrix assertions with compound validation.**
+   `ReceiptClient` currently accepts only `study.controller.sha256()` and
+   `finish` assigns that same single-controller identity. A new runtime/reader
+   must retain both component identities, the immutable compound contract,
+   expected/received component per query, the one allowed switch, actual RNG
+   continuity and unchanged requested/raw outcome checks. A changed episode ID,
+   seed, duplicate or missing query is an invalid charged attempt, not a repair.
+5. **Explicitly snapshot new modules and exclude cross-queue overlap.**
+   The old episode entry point's source glob covers `maniguard_latent*.py`, not
+   the new `maniguard_continuation_*` helpers. Pin/snapshot all new runtime,
+   selector, entry-point, protocol and reader files. Its new finite cohort must
+   not reuse the old study's remaining replacement slots or share a service
+   concurrently with the old comparison, diagnostics or another episode.
+
+Reusing the unchanged server and already loaded family policy after original
+completion/preservation can avoid a checkpoint reload and an unnecessary new
+decoder sweep. Source hashes and actual query receipts must still match. This
+is an implementation simplification for a separately frozen physical screen,
+not permission to modify the current runtime or deploy the failed model. The
+initial four-start ceiling and conditional progress/capacity rules remain binding.
+
+## R21 Make the small screen test its intended stage
+
+The selected EA closure matrix produced supported closure on one generation-one
+training case, but its two fresh-seed incumbent rechecks contain no closure or
+grasp. This does not establish a reset defect or an irreversible state. Native
+sampling seeds and initial images can legitimately differ. The random incumbent
+also returns `[0,0]` on that same generation-two panel; its earlier `[0,-2]` score
+did not persist. Original utility is dominated by nonviolating unfinished trials
+here. Keep the frozen comparison intact and report engagement with every lead.
+
+For a new four-start feasibility screen, a privileged handoff that never
+qualifies gives no evidence about native grasping after closure. Log the number
+of qualifying observations, first debounce, first actual switch query, final
+branch, post-switch controls and ordered body-grasp/lift/transport times. Retain
+raw/requested outcomes for the entire trial. A nonswitching valid timeout stays
+valid and charged; do not replace it or rerun until the trigger fires. A very
+late switch also has a different continuation horizon, which must be visible
+before attributing failure to perception or control competence.
+
+**Prospective efficiency option:** use the already exposed task and seed from
+the earlier supported random-closure example for the first engineering screen,
+rather than making the first four starts a fresh-seed generalization challenge.
+Freeze `random-g1-2`, task0019/base and its recorded seed6101920, if execution
+chooses this option. Its observed three-sample debounce would switch at488,
+leaving1,512 of2,000 controls, versus808 after the EA example's1192 switch. The
+fixed clock488 comes from the same exposed training lead. Give every reference
+the same selected genotype/seed/prior information, charging all development
+exposure that informed this choice. Selection of this random descendant cannot
+be described as an EA contribution or an independent success estimate.
+
+This is a different prospective development choice from R18's fresh-seed draft.
+If adopted, version and freeze it explicitly before any physical feedback, and
+update prospective paper wording. It does not amend the original comparison.
+The old successful seed still does not guarantee closure: initial camera pixels
+have varied even under nominally common reset seeds. Keep those hashes and the
+actual exposure counts. A new physical completion on this seen seed would be a
+feasibility lead, not generalization or a safety-rate estimate. Reserve genuinely
+fresh blocks for the conditional confirmation; never tune using current checking.
+
+A fixed-clock handoff also has an explicit elapsed-query input absent from the
+original44-coordinate actor. This is acceptable for the engineering control,
+but a later scientific learned-gate comparison should give the same causal
+clock information to its competitors or explicitly isolate that advantage.
+Privileged labels remain an additional actor-information advantage. Neither a
+clock switch nor a privileged phase handoff qualifies the failed model, implements
+an action-changing safety filter, or justifies expanding a nonprogressing screen.

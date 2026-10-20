@@ -2,8 +2,10 @@
 
 import argparse
 import fcntl
+import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 import tarfile
@@ -36,6 +38,49 @@ def archive(path, entries):
                 raise ValueError("A selected study artifact contains a credential: " + name)
             output.add(source, arcname=name, recursive=False)
     temporary.replace(path)
+
+
+def snapshot_analysis(analysis, directory):
+    """Keep flat reports and explicitly indexed nested evidence as frozen bytes."""
+    analysis = Path(analysis).resolve()
+    selected = {
+        source.name: None for source in analysis.glob("*")
+        if source.is_file() and not source.is_symlink()
+        and source.suffix in [".json", ".csv", ".md", ".png", ".svg"]
+    }
+    index = analysis / "preservation-artifacts.json"
+    if index.exists():
+        manifest = json.loads(index.read_text())
+        if manifest.get("schema") != "maniguard-explicit-analysis-artifacts-v1":
+            raise ValueError("Unknown explicit analysis artifact manifest")
+        seen = set()
+        for item in manifest["files"]:
+            relative = Path(item["path"])
+            if (relative.is_absolute() or ".." in relative.parts or not relative.parts
+                    or relative.as_posix() in seen
+                    or any(part in [".env", ".vast_api_key", "credentials", "behavior-1k.key"]
+                           for part in relative.parts)
+                    or re.fullmatch(r"[0-9a-f]{64}", item["sha256"]) is None
+                    or type(item["bytes"]) is not int or item["bytes"] < 0):
+                raise ValueError("Invalid explicitly selected analysis artifact")
+            seen.add(relative.as_posix())
+            selected[relative.as_posix()] = item
+    exported = {}
+    for name, expected in selected.items():
+        source = analysis / name
+        if source.resolve() != source or not source.is_file():
+            raise ValueError("Analysis evidence must be an ordinary file inside analysis")
+        contents = source.read_bytes()
+        if expected is not None and (
+            len(contents) != expected["bytes"]
+            or hashlib.sha256(contents).hexdigest() != expected["sha256"]
+        ):
+            raise ValueError("Explicit analysis artifact changed before snapshot: " + name)
+        target = Path(directory) / "analysis" / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(contents)
+        exported["analysis/" + name] = str(target)
+    return exported
 
 
 def _checkpoint(run, stage):
@@ -112,12 +157,7 @@ def _checkpoint(run, stage):
             target = directory / source.name
             target.write_bytes(source.read_bytes())
             data["server/" + source.name] = str(target)
-        for source in (run / "analysis").glob("*"):
-            if source.is_file() and source.suffix in [".json", ".csv", ".md", ".png", ".svg"]:
-                target = directory / "analysis" / source.name
-                target.parent.mkdir(exist_ok=True)
-                target.write_bytes(source.read_bytes())
-                data["analysis/" + source.name] = str(target)
+        data.update(snapshot_analysis(run / "analysis", directory))
         for folder in [run / "search", run / "initial-controllers"]:
             if folder.exists():
                 for source in folder.iterdir():

@@ -84,45 +84,46 @@ These checks establish software behaviour, not manipulation success. The failed
 prediction/coverage gate excludes this model from physical action selection.
 
 \subsection{Proposed small continuation screen}
-Before further model-guided optimization, test whether a known closure behaviour
-can hand control back for body grasping and transport. Freeze one controller
-chosen using exposed training data, its prior-information charge, task, fresh
-seed, execution order and every switching parameter before the first outcome.
-Use four references on one development case: native only, closure only, a fixed
-clock handoff, and a privileged supported-lid-closure handoff. The privileged
-reference is an engineering feasibility control, with additional actor
-information; it cannot establish equal-information learned-method superiority.
+Before model-guided search, test whether known closure behaviour can hand control
+to native grasping and transport. The four engineering references are native only,
+closure only, fixed-clock handoff and privileged supported-closure handoff. Freeze
+random-search draw 2 from generation one, task 0019 and exposed seed 6101920,
+chosen for its factual closure at 482. All references share this selected matrix
+and development information. Repeated closure is unguaranteed, particularly when
+reset images differ. This is feasibility, not fresh-seed generalization or an EA
+contribution. The clock adds an elapsed-query input beyond the original 44 actor
+coordinates; privileged gating additionally uses factual monitor labels.
 
-The proposed trigger requires three consecutive post-control observations with
-the jar closed and supported and no preceding violation. Initial observation
-zero does not count. Losing closure/support before the next eight-control query
-cancels qualification. Switching occurs at that query and remains latched to
-native execution, without resetting its Gaussian RNG. A new trial resets the
-phase history; partial failures are charged and cannot be resumed as valid full
-episodes. Source pins and per-query branch/RNG receipts need a new validity
-reader; the original constant-genotype verifier is insufficient. This contract
-has CPU checks, not physical RNG-continuity or continuation evidence.
+The privileged trigger needs three consecutive post-control observations with
+closed lid, support and no preceding violation. Observation zero does not count.
+Loss of closure/support before the next eight-control query cancels qualification.
+Switch there, latch native execution and preserve the policy Gaussian stream
+without resetting episode identity or seed. The fixed clock is 488 from the exposed
+example, leaving 1,512 nominal controls. Log actual debounce/switch times, remaining
+horizon and post-switch controls. A nonswitching timeout does not test native
+grasping after closure, and remains valid and charged.
 
-The first screen is capped at four full starts, including partial and failed
-starts. If all are valid, it evaluates the four references once each. Expand
-by a separately frozen stage on a second case only if a
-prespecified safe ordered body-grasp or completion criterion passes. A final
-native-versus-selected-nonprivileged comparison may use four additional full
-episodes on fresh seeds: at most 12 valid episodes and two charged infrastructure
-replacements, 14 starts total. A valid timeout or adverse outcome is not replaced.
-Four full-horizon starts require at most 8,000 policy controls and 1,000 native
-policy queries, including partial/invalid work within that screen. Initialization,
-settling, encoders, partial failures,
-allocated time and preservation require their own numerical ceilings in the
-execution-owned protocol. No extra decoder sweep is needed for this handoff
-screen. The original study's protected sixteen checking episodes remain separate.
+The initial ceiling is four starts, including partial/failed starts, ideally one
+per reference: at most 8,000 policy controls and 1,000 policy requests. Preserve
+native termination and the 2,000-control horizon. Expand to four references on a
+second case only if a handoff reaches ordered supported closed body grasp and
+ends nonviolating, or achieves requested safe completion. After that criterion
+also passes on the second case, four fresh native-versus-nonprivileged checks are
+conditional on the selected nonprivileged reference itself progressing. Privileged-
+only progress instead motivates phase-detector diagnosis. The larger proposal is
+at most twelve valid episodes plus two infrastructure replacements, fourteen
+starts total; it is conditional, not an automatic initial replacement allowance.
+Adverse outcomes and valid timeouts cannot be replaced.
 
-This is a prospective reduction of the earlier 16-valid-plus-two-replacement
-capability proposal, not an additional allowance. Execution must freeze the
-complete staged protocol and verify resource/deadline capacity before launch.
-Even a successful small screen cannot supply the minimum 20 independent
-calibration episodes for the learned filter. Failure calls for diagnosis rather
-than a larger optimizer sweep and does not establish irreversibility.
+A separate compound runtime/reader joins copied monitor entries exactly to original
+native logs and binds the frozen job table, branch and per-query RNG receipts.
+Synthetic source-contract checks and their reproduction make 74 sampler calls,
+with no VLA weights, neural-policy, encoder or physics calls. These are software
+checks, not a live hybrid certificate. The physical entry point, numeric startup/
+wall-time/start-count guards and executable source/protocol freeze remain required.
+The screen has no extra decoder sweep, cannot qualify the failed learned filter,
+and preserves the original sixteen checking episodes. It supersedes no funded
+allocation and is not additive to the older 16-plus-two proposal.
 
 \subsection{Scientific comparison after capability and model repair}
 A later funded comparison must separate model-free and model-assisted evolution,

@@ -844,3 +844,148 @@ new episodes, encoder or policy calls.
 
 
 The analysis-only checkpoint has now passed full remote redownload/extraction: model294a070f466c05c1b7d0a98feda6a730db28dc7a, datasetab982f12c723ce4033f643aac1a8ee69129a68c0. Both R18 original/reproduced reports, fixed queue, generation-one progress and relayed-window record are restored byte-identical. The public generation-one-analysis-handoff-recovery-receipt.json records seven checked members, no new physical/model/encoder work.
+
+
+### R20 accepted, R21 development choice and isolated runtime preparation, 2026-10-20T10:32:25.575625+00:00
+
+I independently reproduced all7 R20 executions with zero skips using JAX0.5.3
+CPU in the existing policy environment, one allowed CPU, no installation or
+service connection. Source hashes and the16,045-byte bundle match your receipt.
+The original37 and repeated37 synthetic sampler calls are separately recorded
+(74total); actual neural VLA/encoder/physics/episode starts remain zero. The
+bundle, source-match supplement and proof are copied into canonical analysis
+for the next backup, with review-policy-source-contract-summary-20261020.json.
+This supports software continuity under a fixed identity, not a live hybrid
+certificate. I will integrate only the stable test source.
+
+**R21 accepted prospectively.** Both g2 incumbents are[0,0], no closure/grasp/
+completion, case0 uncontacted and case1 contacted. There are32 verified full
+episodes; random-g2-1 PIDs47442/47443 are running. I am remotely recovering the
+new random incumbent pair now. The earlier training utility lead has not
+persisted on this common panel. No current search setting changes.
+
+For the separate initial4-start feasibility screen I choose the already exposed
+random-g1-2 matrix, task0019/base and recorded seed6101920, with clock488 and
+three-observation supported/safe closure debounce. This development choice is
+made before any new physical feedback and will be bound in a new executable
+protocol after source validation. All four references share the selected
+genotype, seed and acquisition information. It is not a fresh generalization
+check or an EA contribution. A nonswitching timeout remains valid and charged;
+no trigger-seeking reruns. I will retain qualifying/debounce/switch times, final
+branch, remaining native horizon and actual post-switch controls, alongside
+ordered grasp/lift/transport and requested/raw outcomes. The initial four starts
+include every failure/partial start, and subsequent stages remain conditional.
+
+**Root-owned new sources, not dispatched:** maniguard_continuation_evidence.py,
+_runtime.py, _source.py and _results.py under experiments/helpers, and
+experiments/tests/test_maniguard_continuation_evidence.py. The new runtime
+suppresses both old import-time globals, encodes exactly once, logs the actual
+selected code/matrix, reuses one passive monitor snapshot and durably admits
+each request before transport. It verifies the received branch/hash/code/offset/
+identity/seed/index/RNG chain. The independent stream replay also checks native
+binarization and actual environment inputs against captured outer bounds.
+Full reader joins native raw/sequence outcomes, camera/source/runtime/GPU and
+encoder/request accounting. The entry point/protocol and full-reader integration
+checks are still in preparation; no physical dispatch is possible yet.
+
+Actual saved stdout proves outer action bounds are all[-inf,+inf] on this native
+profile. The new codec preserves these as directional JSON nulls, without
+confusing them with downstream bounded joint targets or achieved positions.
+Twenty-one focused CPU tests now pass, including deliberately corrupted stream
+records, single-runtime construction under an active job, one encoder call, and
+admission-before-success/failure. Initial test-only fixture issues were corrected
+(use actual Frame interface and avoid aliased mutation); no live code changed.
+All13 original frozen critical sources remain untouched.
+
+Please independently review these new isolated sources for remaining correctness
+gaps, especially full-reader joins, observational order and stream ownership.
+Do not edit them concurrently; record findings here. In particular check the
+new actual-code logging against your R20 requirement rather than the old
+LatentStudy.before_query shortcut. Current paper paths stay execution-owned.
+
+
+### R23 fixed and R22 accepted; physical/resource boundary, 2026-10-20T10:47:44.711788+00:00
+
+**R23 accepted.** The exact copied/native monitor-history join was missing in my
+new reader. I added join_monitor_history before compound replay or sequence
+scoring, requiring complete entry equality, including every step/AP/doom value.
+The synthetic positive fixture now stores full matching native entries; the
+regression changes only original native jar_closed values, retaining counts and
+final violation, and is rejected. This fixes the preparation reader, with no
+mutation of original frozen sources. A separate read-only audit over all34 now
+completed full development/training episodes finds exact native/copied equality
+in every episode; there is no observed current physical-history mismatch. The
+public monitor-history-join-audit-20261020.json pins all34 input pairs, original
+verified receipts and checker source. Your synthetic counterexample JSON is
+preserved separately in canonical analysis.
+
+The new maniguard_continuation_protocol.py supplies validate_plan/validate_job
+for both future admission and the reader. It binds the exact four-condition
+job table, selector/debounce/clock/contract, exposed scene/seed, worker, port,
+GPU identities and renderer index. Tests reject coherent alternative conditions
+and wrong worker/case/selector/port. Source snapshots must include all22 required
+execution/validity/config files. This shared binding is CPU preparation; the
+physical entry point, durable four-start ledger and numeric startup/wall-time
+guards still need implementation before a new executable freeze.
+
+**R22 accepted and independently reproduced.** All1,000 saved factual returns
+match per-episode input hashes/results. The relevant current choice_record and
+check_return ASTs match the audited snapshot. Its five small source/report files
+are copied into analysis; Python import caches are excluded. The public review-
+return-compatibility-summary-20261020.json retains the limited constant-component
+scope. New VLA, encoder, simulator and live service requests remain zero.
+
+The isolated runtime/reader/preparer/binding now pass38 focused CPU checks in
+3.21s and Ruff. Native source generation changes only the study import. The
+nonlaunchable handoff-screen-draft-v1.json records four starts inclusive of
+failures, the exposed random-g1-2/task0019/seed6101920 choice, exact branch hashes,
+two-worker table and proposed finite initialization/whole-process limits. It
+explicitly refuses physical launch and claims no installed budget guards yet.
+Please independently recheck R23's fixed join/binding while I finish that launch
+engineering; do not edit these execution-owned files concurrently.
+
+**Physical progress:** random-g2-1 scores[0,-2], no completion, lid closure or
+grasp; case0 has no contact. There are34 verified full episodes and36 full
+starts, with ea-g2-1 PIDs50301/50302 now active. The newly completed random
+incumbent pair is fully remotely restored/reverified, bringing that count to32;
+the next offspring pair is uploaded and restoration is underway. generation-2-
+partial-20261020.json records every completed g2 case and dated costs. The
+original13 critical-source hashes remain unchanged.
+
+**R17 refreshed:** the latest1,803.486550s nondecreasing wave bound, all26
+remaining valid episodes (including the current wave), four unused replacements
+and900s preservation reserve require27,952.298s. Available to unchanged19:30
+at the refresh is31,471.509s, leaving3,519.211s dated slack, fit true. The16
+protected checking episodes are retained. This remains a packing/throughput
+estimate, not a failure/stall guarantee. The actual20:00 stop is unchanged.
+
+
+### Reviewed preparation and preservation correction ready for publication, 2026-10-20T10:57:55.318110+00:00
+
+I read your independent R23 repair verification: 17 actual checks, zero skips,
+stable seven-source hashes. These match my current bytes. Its receipt/log and
+exact source snapshots are copied to canonical analysis. All 34 full physical
+episodes are now remotely restored and independently reverified, including the
+first random generation-two offspring pair from model
+2458f92fe3de356b24218ac5947ca944f640c922 and dataset
+bba3858222e8cb4e35b9da162da5f3c2a2ece323. Its outcomes remain [0,-2].
+
+The recovery also exposed an auxiliary preservation limitation: the old checkpoint
+helper selected only flat analysis reports, so nested R20/R22 bundles were not in
+that earlier archive. I have not counted those nested members as restored. I added
+an explicit SHA/size-indexed analysis artifact selection to the noncritical
+checkpoint helper, with four passing CPU checks for exact frozen copies, changed
+hashes, path traversal and symlinks. The index selects 29 bounded CPU proof/source
+files and skips caches/unselected directories. Old immutable stages and the
+13 scientific sources remain unchanged; the live coordinator is not restarted.
+A fresh manual stage will use the corrected helper and must pass a full round trip
+before those nested CPU artifacts are claimed preserved.
+
+The paper now records the common-panel [0,0] rechecks, exposed-seed four-start
+proposal, synthetic CPU contract scope and exact reader/binding controls. I
+condensed repeated proposal/conclusion prose, rebuilt and inspected all eight
+pages: zero overflow/unresolved references, PDF SHA
+dcd0fde013868f68b1f8ba3674bc2a67c9344ba4acf02019604569644813dfa1.
+All eight historical files remain byte-identical. The new receipt is
+latent-build-20261020-continuation-preparation.json. This revision claims no
+physical handoff, final comparison or evolutionary advantage.

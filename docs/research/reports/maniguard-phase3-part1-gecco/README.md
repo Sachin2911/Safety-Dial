@@ -10,8 +10,9 @@ All eight shared initialization and sixteen first-generation episodes are includ
 zero requested/raw completions. Each method's first-generation eight episodes
 include four violations, seven contacts and no grasp. Two training episodes close
 the lid safely without subsequent grasp or transport. The best EA training utility
-includes one uncontacted case. Its next two-seed elite recheck also remains
-unfinished, with no repeated closure. Independent rates and finalists remain pending. The original cumulative
+includes one uncontacted case. Both incumbents' next two-seed rechecks remain
+unfinished without repeated closure; the earlier utility lead does not persist
+on that common panel. Independent rates and finalists remain pending. The original cumulative
 report, its historical figures and numerical results remain in `main.tex`/`named.pdf`.
 
 Section 7, sourced from [model-followup.tex](model-followup.tex), adds the separate
@@ -21,11 +22,15 @@ proposed second physical experiment. Its first screen allows four starts includi
 partial/failed attempts, ideally covering the four references, and expands only
 after a predefined progress criterion and separately frozen capacity, up to a proposed
 12 valid episodes plus two infrastructure replacements. It has not been physically
-launched. This smaller staged proposal replaces no part of the running comparison
+launched. The first screen now explicitly uses the already exposed closure-producing
+random descendant/task/seed; fresh blocks are reserved for conditional confirmation.
+The new compound runtime/reader is CPU-tested, including the repaired exact native
+monitor-history join. Physical admission, complete budget guards and freeze are
+still pending. This smaller staged proposal replaces no part of the running comparison
 and does not add an allowance to the earlier deferred 16-plus-two proposal.
 
 The first-generation numerical summary is dated 09:45 UTC; its subsequent elite
-recheck is dated 10:05 UTC on 20 October. The earlier 07:11 diagnostic is retained
+rechecks are dated 10:05 and 10:23 UTC on 20 October. The earlier 07:11 diagnostic is retained
 with its historical scope. Section 7 uses the separately preserved CPU audit and
 later CPU source checks. Independent checking is still pending. The CPU evidence is not
 reported as a physical result or an evolutionary advantage.
@@ -35,7 +40,8 @@ The new [protocol](../../../../configs/maniguard/latent-evolution/capacity-20261
 [study report](../ManiGuard%20latent%20evolution%20pilot.md) and
 [study README](../../../../configs/maniguard/latent-evolution/README.md) supply exact
 task/seed lists, costs, source pins and restoration instructions. The current build
-receipt is `latent-build-20261020-generation1.json`;
+receipt is `latent-build-20261020-continuation-preparation.json`;
+`latent-build-20261020-generation1.json` preserves the first-generation physical-result update;
 `latent-build-20261020-model-followup.json` preserves the first eight-page CPU-follow-up publication;
 `latent-build-20261020-diagnostic.json` retains the earlier six-page diagnostic
 build, and `latent-build-20261020-initial.json`

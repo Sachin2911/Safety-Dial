@@ -1,0 +1,129 @@
+{
+  "schema": "maniguard-continuation-feasibility-draft-v1",
+  "status": "cpu_preparation_not_authorized_for_launch",
+  "recorded_utc": "2026-10-20T10:37:25.761898+00:00",
+  "scientific_scope": "Development feasibility, on an exposed training task and seed. Test whether a preserved closure behaviour can hand control to native grasp/transport. No EA, learned-filter, transfer or fresh-generalization claim.",
+  "original_protocol": "configs/maniguard/latent-evolution/capacity-20261020-v2.json",
+  "original_protocol_sha256": "f54d46711a0712d7ddb840cc08e0c7eed431a0e6012d0238489242cae7beb083",
+  "prerequisite": "Complete the original 60-valid-episode comparison, independent final verification, and its remote preservation before any screen admission. No service overlap.",
+  "source_parent_commit": "24f7d917fc6dfd85a8eb1a696b11a961d847e9b8",
+  "source_freeze_complete": false,
+  "entry_point_complete": false,
+  "physical_starts": 0,
+  "family": "jar",
+  "scene": "task_0019/base",
+  "seed": 6101920,
+  "seed_exposure": "Already used for original generation-one training, chosen before this new physical screen because random-g1-2 closed safely there. Every reference shares that prior information. Camera identity and repeated closure remain unguaranteed.",
+  "closure_controller_id": "random-g1-2",
+  "closure_controller_sha256": "72cf19deb23bf2122c93ec8159ef9872218c20aef3227e7a558a8b09b33f9f50",
+  "selection_rule": "Earlier supported safe-closure training example, with first closure482 and prospective debounce484/query488; provides more continuation horizon than the EA closure example. Not an optimizer-derived contribution.",
+  "prior_acquisition": "Charge all original development/training information inspected to choose the example, including negative candidates and reviewer diagnostics; report separately from new starts.",
+  "selector_parameters": {
+    "native_only": {
+      "mode": "native_only",
+      "debounce": 3,
+      "clock_switch_step": 488
+    },
+    "closure_only": {
+      "mode": "closure_only",
+      "debounce": 3,
+      "clock_switch_step": 488
+    },
+    "clock_handoff": {
+      "mode": "clock_handoff",
+      "debounce": 3,
+      "clock_switch_step": 488
+    },
+    "privileged_lid_handoff": {
+      "mode": "privileged_lid_handoff",
+      "debounce": 3,
+      "clock_switch_step": 488
+    }
+  },
+  "selector_contract_sha256": {
+    "native_only": "832aa719d89b18dc6d38c49f2a8c30b4c006e97f3037e80c2fbfe76e660bf0a6",
+    "closure_only": "48994129e663bb9adc87904e8e321ef4b4f50fd170849ba15871b7e0572e55f7",
+    "clock_handoff": "d05e9c5ff4d436fadf6093b64ebc62b35771190073b8032f00f51c77f50653f5",
+    "privileged_lid_handoff": "ba68e05f97c2bc15e84297677d6255a66e8e7237d537d663175bb639875d524b"
+  },
+  "episodes": [
+    {
+      "id": "screen-native",
+      "condition": "native_only",
+      "worker": 0,
+      "wave": 0
+    },
+    {
+      "id": "screen-closure",
+      "condition": "closure_only",
+      "worker": 1,
+      "wave": 0
+    },
+    {
+      "id": "screen-clock",
+      "condition": "clock_handoff",
+      "worker": 1,
+      "wave": 1
+    },
+    {
+      "id": "screen-privileged",
+      "condition": "privileged_lid_handoff",
+      "worker": 0,
+      "wave": 1
+    }
+  ],
+  "first_screen_budget": {
+    "maximum_full_starts_including_partial_failures": 4,
+    "automatic_replacements": 0,
+    "policy_controls_each": 2000,
+    "total_policy_controls": 8000,
+    "policy_requests_admitted_each": 250,
+    "total_policy_requests_admitted": 1000,
+    "encoder_image_batches_each": 250,
+    "total_encoder_images": 2000,
+    "total_text_encodings": 4,
+    "proposed_initialization_environment_step_attempts_each": 64,
+    "proposed_total_environment_step_attempts_each": 2064,
+    "proposed_observed_initialization_physics_ticks_each": 3840,
+    "physics_before_accounting_attachment": "Unknown, not zero or covered by a falsely claimed total tick ceiling. Retain actual measured ticks and initialization wall time.",
+    "proposed_initialization_wall_seconds_each": 600,
+    "proposed_full_process_wall_seconds_each": 2700,
+    "proposed_preservation_reserve_seconds": 900,
+    "budget_guard_implementation_status": "Preparation only. Numeric initialization, wall-time, whole-screen admission and start-ledger enforcement still require implementation and tests before freezing."
+  },
+  "failure_rule": "All partial/failed starts remain charged within four. Finish any healthy already admitted partner, diagnose the invalid trial, and do not automatically launch the later wave or a replacement. A nonswitching valid timeout is a valid outcome and is not replaced.",
+  "observations": "Same native two640 RGB views, frozen44 causal features/encoder schedule, checkpoint/horizon/grasp/physics contract. Clock handoff also has an explicit query-clock input; privileged handoff receives actual passive monitor state. These engineering advantages must be declared.",
+  "outcomes": [
+    "requested/raw completion and four completion/violation categories",
+    "contact/grasp counts",
+    "qualifying observations, first debounce, first actual switch, final branch",
+    "remaining native horizon and actual post-switch controls",
+    "ordered supported closed body grasp, later closed lift and transport, with raw violations retained"
+  ],
+  "progress_rule": "Consider a separately frozen next stage only if a handoff reaches ordered supported closed body grasp and finishes nonviolating, or requested safe completion. Require the selected nonprivileged method itself to progress before fresh native-versus-method confirmation. No implicit larger start allowance.",
+  "later_stages_status": "No larger stage frozen or launched. The older twelve-valid/fourteen-total proposal is conditional and not additive to any allocation.",
+  "resource_record": "configs/vast/maniguard-result-window-20261020.json",
+  "actual_current_clock_stop_utc": "2026-10-20T20:00:00Z",
+  "result_delivery_deadline_utc": "2026-10-21T03:35:00Z",
+  "admission_rule": "Before dependent work, verify current instance/rate, actual armed deadline, absence of live original workers, finite whole-screen timeout bound plus preservation reserve, immutable protocol/source and all start caps. No current dependence on extra GPU hours.",
+  "failed_world_model_deployed": false,
+  "physical_launch_authorized_by_this_draft": false,
+  "workers": {
+    "0": {
+      "simulation_physical_device": 0,
+      "policy_physical_device": 0,
+      "port": 18000,
+      "renderer_vulkan_index": 0,
+      "simulation_gpu_uuid": "GPU-0bfb3ed5-af55-472e-3199-058727ff80a7",
+      "policy_gpu_uuid": "GPU-0bfb3ed5-af55-472e-3199-058727ff80a7"
+    },
+    "1": {
+      "simulation_physical_device": 1,
+      "policy_physical_device": 1,
+      "port": 18001,
+      "renderer_vulkan_index": 1,
+      "simulation_gpu_uuid": "GPU-4f452774-6f8b-6fcc-4ce1-2d4d190e6d07",
+      "policy_gpu_uuid": "GPU-4f452774-6f8b-6fcc-4ce1-2d4d190e6d07"
+    }
+  }
+}
