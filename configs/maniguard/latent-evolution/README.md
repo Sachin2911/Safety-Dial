@@ -192,6 +192,15 @@ no jobs. The first full Jar episode passed the complete independent physical ver
 after this remote round trip. Copied process handles are historical; reconcile them
 and any incomplete attempt before an authorized physical resume.
 
+All eight shared initialization episodes have also completed this round trip. The
+[recovery receipt](shared-initial-recovery-receipt.json) records all eight immutable
+model/dataset archives and the rechecked 16,000 controls and 2,000 native policy
+queries. Verification explicitly reads restored episode directories, rather than
+the original absolute paths retained in historical queues. Saved controller replay,
+source/checkpoint pins, native query schedules, camera/asset contracts and actual
+GPU receipts all pass without new physics, inference or encoder calls. Later
+generations and independent checking still require their own preservation checks.
+
 Checks use explicit interpreters and `PYTHONPATH=experiments`. The tools interpreter
 runs the core, queue and pilot tests; the policy interpreter runs
 `test_maniguard_latent_policy.py` with `JAX_PLATFORMS=cpu`. Ruff checks the new latent
