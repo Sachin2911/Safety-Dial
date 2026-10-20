@@ -46,12 +46,52 @@ allowances or instructions to override an existing user-directed hold.
 - **R32:** requested saved-trace gripper audit is prepared as three new analysis
   files, with15 passing synthetic cases and clean Ruff. No actual screen exists
   yet. The tool requires all four completed starts and fresh full verification.
+- **R33:** nonblocking attribution clarification: R24 eligibility flags concern
+  new ordered milestones. The frozen alternative of first confirmed requested
+  completion after switching needs separate interpretation, including native
+  ten-step goal confirmation. No runtime fix or physical result is asserted.
 - Last verified original snapshot at12:37 UTC:44/60 valid full episodes;40
   comparison-training episodes have0 requested completions,16 violations and24
   safe unfinished. The final EA pair is complete. The first two protected
   checking episodes are live; their outcomes have not been opened for review.
   Revalidate identities before operational decisions. R21 choices stay fixed.
 <!-- END REVIEW STATUS INDEX -->
+
+**R33 completion-confirmation boundary, 12:56 UTC.** R24's two eligibility
+flags specifically describe new ordered milestones. They are not the whole
+frozen qualification rule, which also allows first safe requested completion
+after an actual positive-prefix handoff. Please keep that separate primary-
+completion alternative explicit when interpreting the eventual four results.
+
+A synthetic clock example closes/holds, lifts and enters the goal before its
+switch at8; stage4 first occurs at7. The native ten-consecutive-goal rule first
+confirms success at16, after8 native controls. C_req/S_req are true but neither
+milestone flag is true, correctly, since no new ordered milestone follows the
+switch. Late confirmation is not newly achieved transport or proof of benefit.
+The full native confirmation time, at-switch stage and exact first goal all
+need to remain distinguishable. No code change is required if this separate
+alternative is already assessed explicitly; neither flag authorizes expansion.
+
+The corresponding privileged example correctly does not switch after early
+support loss, and cannot qualify as a handoff. My first probe incorrectly
+expected that privileged case to switch; that harness assertion is preserved
+and corrected, with no production edit. The final two examples use declared
+synthetic receipts, not actual physical verification or checking feedback.
+
+Report `runs/reviewer/handoff-completion-boundary-review-20261020-02/report.json`,
+SHA `f81537b63ec65c14429152b04bc6c2952700e3a3a02d3dd067cee2e8736b8f6e`.
+The exact probe, traces, attribution, fixture sources and native source/YAML
+are adjacent. This took0.06s on one CPU, with all9 input hashes stable and no
+new physical, policy or encoder work. Original scores, R21 choices, the frozen
+qualification wording, current runtime and actual start allowances are unchanged.
+
+**Paper update read-through.** The new completed-training text matches the
+generation-two aggregate and R30 ordering. It preserves the failed model gate,
+exposed-seed engineering scope, identical fixed/random finalists and absence of
+a demonstrated evolutionary benefit. One small wording correction for the
+current build: say that the sixteen checking episodes are underway, rather
+than literally all sixteen are running; the queue currently runs one pair.
+I have left all execution-owned article/build files untouched.
 
 **R25 actual seal checked, 12:48 UTC.** I read the actual seal and controller
 arrays, then compared its timestamp and the frozen follow-up timestamp to the

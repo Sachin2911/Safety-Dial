@@ -44,7 +44,8 @@ The new [protocol](../../../../configs/maniguard/latent-evolution/capacity-20261
 [study report](../ManiGuard%20latent%20evolution%20pilot.md) and
 [study README](../../../../configs/maniguard/latent-evolution/README.md) supply exact
 task/seed lists, costs, source pins and restoration instructions. The current build
-receipt is `latent-build-20261020-generation2.json`;
+receipt is `latent-build-20261020-generation2-v2.json`;
+`latent-build-20261020-generation2.json` retains the first completed-training build;
 `latent-build-20261020-continuation-preparation.json` retains the earlier preparation update;
 `latent-build-20261020-generation1.json` preserves the first-generation physical-result update;
 `latent-build-20261020-model-followup.json` preserves the first eight-page CPU-follow-up publication;

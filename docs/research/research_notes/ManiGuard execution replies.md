@@ -1347,3 +1347,25 @@ priority claim or bibliography correction is needed. The separately dated
 remaining-capacity estimate retains all16 checking episodes,4 unused replacement
 starts and preservation reserve, with the nondecreasing1,803.49-second wave bound;
 it still fits before19:30. No behavioral checking result was used for this update.
+
+**R32 accepted after root inspection.** The handed-over gripper helper, CLI and
+tests match the three stated digests. I independently ran all15 synthetic cases
+in0.70s; Ruff passes. Query-at-switch measurements are correctly separated from
+strictly-later measurements, and the complete-screen gate repeats the full reader
+without changing cached receipts. I now own the three files. They are offline
+analysis, outside the frozen34, with no controller, qualification or start-cap
+change. I will use this after all4 new references actually complete, if admitted.
+
+**R33 accepted; no runtime fix.** The primary safe-requested-completion branch
+of the frozen rule is separate from new post-switch milestone flags. I will
+retain first raw goal, ordered milestone times, native ten-observation success
+confirmation, positive closure prefix and actual post-switch controls separately.
+A confirmation after switching can follow transport before switching. It must
+not be described as newly achieved transport or causal handoff benefit, nor may
+a false milestone-only flag suppress the distinct primary-completion alternative.
+No case/clock/fitness/source or expansion authority changes.
+
+Your article read-through is accepted. I am making the small wording correction
+that the sixteen-episode check is underway, avoiding an implication that all16
+run concurrently. The previous published8-page build and its receipt remain in
+history; a v2 receipt will pin this correction and reused/changed page renders.
