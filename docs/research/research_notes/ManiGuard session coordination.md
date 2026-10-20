@@ -21,13 +21,35 @@ allowances or instructions to override an existing user-directed hold.
 
 ## Current handoff: user continuation instruction
 
-R13 work boundary, 20 October 08:34 UTC: R12's handed-off files stay stable during
-execution's intake. Review is adding separate `maniguard_continuation_*` helpers
-and `test_maniguard_continuation.py` for post-filter candidate priorities and the
-bounded residual comparator. These new files are in progress and are not part of
-the R12 integration list. They will receive a separate stable handoff. The user
-reaffirmed continued improvement/review of both studies. This work uses synthetic
-CPU checks and source inspection, with no service, encoder or physics requests.
+Confirmation for execution's 08:53 reply: the geometry handoff is stable and ready
+now. Please inspect/integrate `experiments/scripts/maniguard_review_geometry.py`
+and `experiments/tests/test_maniguard_review_geometry.py`; the R10 reproduction
+section below gives the final source/report hashes and exact command. The
+authoritative reproduction is `feature-geometry-reproduced-20261020-02.json`.
+Review also acknowledges R14's completed 1,519 closed observations with open
+fingers and no grasp. R13's pure CPU sources remain unchanged during intake;
+its documented native controller-clipping adapter remains a physical-run gate.
+
+Review update, 20 October 08:52 UTC: 24 full episodes are verified complete, zero
+invalid full attempts. The new random-g1-2 pair scores [0, -2], with no requested
+or raw completion and no grasp. Case0 closes the lid at 482 and finishes supported,
+closed and without violation; case1 violates without closure. The next random-g1-3
+pair is running. R14's earlier live-prefix observation is now confirmed by these
+completed receipts. The 20 comparison episodes still have zero completion and
+11 violations. Review's next source handoff is the R10 reproduction below; it
+reads the original 12 pinned development/initialization traces only. The combined
+follow-up and geometry checks total 31 passing CPU cases. All changes are separate
+from the frozen live experiment and its checking allocation.
+
+R13/R14 handoff, 20 October 08:48 UTC: the three separate continuation source/test
+files listed in R13 are stable for inspection and integration. All 28 combined
+CPU checks pass, Ruff passes and all new Python lines fit 100 columns. R12's
+source was unchanged. R13 scores the action surviving the filter and supplies
+the bounded absolute-joint/gripper residual comparator. R14 identifies the
+upstream Jar expert's open-finger lid phase and its unverified prerequisites.
+The live random-g1-2 case0 prefix records supported lid closure before violation,
+but neither active episode is a completed result at this review cutoff. Do not
+retune or interrupt the current comparison. No physical or inference work was added.
 
 Review follow-up handoff, 20 October 08:31 UTC: the separately authorized CPU
 prototype is stable and ready for execution to inspect and integrate. R12 below
@@ -811,3 +833,175 @@ perception/dynamics checks before influencing physical actions. A larger failure
 penalty cannot create missing task behaviour. The final design must include
 ordinary learning with the same filter, a native-with-filter reference, matched
 allocation controls, protected confirmation and optimizer replication.
+
+## R13: Post-filter candidate priorities and bounded direct-action comparator
+
+Status: separate CPU implementation complete, ready for execution's inspection.
+The stable new files are:
+
+- `experiments/helpers/maniguard_continuation_allocation.py`
+- `experiments/helpers/maniguard_continuation_residual.py`
+- `experiments/tests/test_maniguard_continuation.py`
+
+The R12 screen ranks raw candidate predictions while also returning a filter
+decision. Those are explicitly only priorities, but future filtered-policy
+allocation should rank the selected filtered prefix. A high-progress proposal
+can become an unproductive alternative. The new `FilteredCandidateAllocator`
+applies the same declared alternative set to each candidate, records proposal
+and filtered pool indexes, and ranks the predicted selected action. Its ranking
+reversal test demonstrates the consequence. This is a one-anchor surrogate, not
+a model of a full future filtered-policy episode or physical fitness.
+
+Identical decoded prefixes at that factual observation share one charged model
+prediction. Distinct controller identities still receive separate screening
+charges and retain full physical-evaluation requirements. The interface reports
+prefix equivalence groups; one identical prefix does not imply identical full
+policies. Qualification failure skips model queries entirely. Unsupported or
+unqualified actions retain abstention, even if the declared model-free allocation
+fallback selects their identifiers. No fallback authorizes execution. Screening
+admission precedes prediction, and failed requests retain both work charges.
+
+`BoundedActionResidual` supplies the deferred comparator's pure CPU action map:
+eight bounded outputs from the same 44 causal features plus five learned beliefs,
+temporally persistent arm deltas and an explicit binary gripper decision. Inputs
+must be the native seven absolute joint targets and +1 open/-1 close command.
+Runtime lower/upper joint bounds are mandatory. Zero weights reproduce native
+actions exactly; neutral gripper correction preserves each native command.
+Invalid native targets fail rather than being silently repaired. Joint clipping
+cannot exceed the declared residual size. Memory checkpoints pin weights, joint
+bounds and numerical settings and reject another controller's state. Nothing
+here identifies an all-zero absolute joint vector with holding the arm still.
+Its 0.05-radian delta, 0.8 persistence and 0.5 gripper threshold are prototype
+defaults requiring a later physical protocol, not validated safe settings.
+
+**Checks:** all 28 combined R12/R13 tests pass in 0.60 seconds in the tools
+interpreter. The 12 new cases cover post-filter ranking reversal, exact prefix
+query reuse, separate identities, unqualified-model query avoidance, support
+abstention, admission before work, failed-query charging, absolute-joint identity,
+bounded residuals, open-finger preservation, memory replay/reset and invalid
+targets/checkpoints. Ruff and a separate 100-column check pass. These are
+synthetic engineering checks. No factual refit, scientific prediction, simulator,
+encoder or VLA request was used, and no R12 or live source was modified.
+
+One physical-integration detail remains explicit: recorded native actions are
+environment inputs before controller output clipping. `BaseController.clip_control`
+in the pinned OmniGibson source clips limited position joints after computing
+control. The completed random-g1-2 case0 log, for example, contains a joint0
+environment target of 3.032847166 radians at control 1,431. This is a commanded
+target, not proof of an achieved joint angle. Do not treat environment-input
+bounds as physical joint limits. The new residual deliberately rejects inputs
+outside its supplied bounds. Before physical use, freeze a source-correct adapter
+for the native clipping stage, recover actual runtime joint limits and verify
+zero-residual physical identity. That adapter is not implemented or validated by
+the CPU helper. Keep the original environment input, canonical target, residual
+proposal, filtered command and actual execution distinguishable.
+
+Please integrate these three files only after inspection. They have no physical
+entry point, queue change or new allocation. The failed factual R12 gate still
+binds. Neither learned beliefs nor the action-changing filter may be deployed
+until a new implementation/protocol/budget and adequate data qualify them.
+
+## R14: Lid closure uses coordinated open-finger arm motion
+
+Status: primary local source finding, not a validated expert-run result.
+The pinned ManiGuard checkout is `6bf4c61a1f168cc46e02eb22c41bcb51815e9726`.
+Its `maniguard/data/datagen/families/jar.py` derives two distinct phases:
+
+1. `lid_under`, `lid_slip`, `lid_ride`, `lid_back`: an open finger bar moves under
+   the lid with fixed orientation, translates past its tipping point, and retraces
+   the path. The source deliberately avoids closing on the lid, which can couple
+   the fingers to the jar and drag it.
+2. `side_pre_grasp`, `descend`, `lift`, `transport`, `to_goal`: approach the body,
+   close the gripper, confirm attachment and then carry the closed jar.
+
+The upstream `tests/datagen/test_jar_skeleton.py` explicitly checks this ordering
+and the absence of a close command in the first four segments. This explains why
+an always-close gripper change is poorly motivated. The follow-up needs phase-
+appropriate arm contact, persistence and body-grasp timing. Finger closure alone
+does not establish the lid prerequisite. Conversely, open fingers do not establish
+that lid-closing authority is absent.
+
+**Useful current lead, not a final result:** at the 08:45 UTC live-prefix read,
+`random-g1-2-case0-a0` first records `jar_closed` and `jar_on_support` together at
+control 482, before any monitor doom. It remains without recorded doom through
+1,608 observations, with no recorded grasp. Case1 has no recorded closure or
+grasp and first doom at 1,235 through 1,630 observations. Both lack a completed
+verified receipt at this cutoff. Preserve the full trajectories and evaluate the
+final outcomes without altering selection. If verified, the case0 prefix is a
+candidate source of pre-violation closure examples for a separately frozen later
+dataset. It is not a safe-completion gain, repeatability result or current-model
+qualification. R12's previously frozen split/report remains unchanged.
+
+**Reference readiness:** the expert uses privileged hinge geometry, collision
+meshes, target/support poses and annotated grasps, with IK/cuRobo planning. Its
+default scene uses the raw joint controller, assisted grasping and extended-finger
+patch, which are relevant shared conventions. However, `driver.py` allows up to
+4,500 execution steps, repeated planning and rejected variants, and its gate
+stops unsafe attempts while its collector retains accepted demonstrations. A
+default datagen success is not a matched 2,000-control benchmark success.
+
+Neither canonical `outputs/grasp_annotation/grasp_annotations.json` path exists
+in this workspace. No cuRobo package directory was found in the prepared simulator
+site-packages. Those filesystem checks do not exhaust alternative package paths
+or establish runtime compatibility. No planner, simulator, dependency installer,
+asset downloader or upstream test was invoked by this source review.
+
+**Recommended next development gate:** prepare and budget a privileged scripted
+positive control on the same designated development scene, robot/controller,
+rendering, monitor and requested-completion/horizon contract. Charge all starts,
+settling, resets, retries, discarded trajectories and planning separately. Its
+role is to test physical feasibility and obtain positive training coverage; it
+must not be presented as an equal-information actor baseline. If demonstrations
+or privileged supervision train the method, share that information endowment with
+ordinary-learning comparisons or label the advantage explicitly. Confirm stage
+readouts on actual observations before fitting imagined transitions. Keep final
+checking tasks untouched. The present deferred 16-episode engineering screen is
+not sufficient by itself to satisfy the model's 20-episode calibration minimum.
+Freeze any added reference/data allocation before execution. This recommendation
+does not request changes to the running frozen study or book new resources.
+
+## R10 reproduction source handoff, 20 October 08:52 UTC
+
+The requested geometry source is now preserved as
+`experiments/scripts/maniguard_review_geometry.py`, with three focused checks in
+`experiments/tests/test_maniguard_review_geometry.py`. Both are stable for
+inspection and integration alongside the three R13 files. The script fixes
+membership to the original R10 report's 12 inputs, validates all roles before
+opening any episode output, checks exact trace hashes, feature counts and prompt
+hashes, and consumes full verification receipts. It does not add the subsequently
+completed training episodes or open independent checking outputs. A changed live
+queue is recorded separately from the original queue hash rather than described
+as the source snapshot.
+
+The reproduction report is
+`runs/reviewer/feature-geometry-reproduced-20261020-02.json`, SHA-256
+`19d37e9370f23df4f82d0c63db99ba13dd109df4aa3717f2b78ef32ec0dc7d0f`.
+It reproduces every original family geometry field within rtol 1e-10 and atol
+1e-12, and pins the original report hash plus the analysis and loader sources.
+The current analysis source hash is
+`ca545ecc075836b9101bb324bcadbf1b99b3830234db9e2980fb087859f4796d`.
+The first reproduction and its exact pre-formatting source are retained under
+`runs/reviewer/feature-geometry-reproduced-20261020-01.json` and
+`runs/reviewer/feature-geometry-reproduction-source-v1.py`. The original R10
+artifact was not modified.
+
+An explicit initialization-only view confirms two projected instruction vectors
+across eight episodes from base tasks 0009 and 0019, with centered instruction
+rank one at relative threshold 1e-6. These repeated instruction rows cannot
+demonstrate semantic transfer. The source's correlated-frame weighting and the
+distinction between feature rank and physical controllability remain explicit.
+All three new checks pass, including excluded membership before output access
+and rejection of a mutated source trace. Ruff and the 100-column check pass.
+Reproduction used no simulator, encoder, VLA or learned-model training/prediction.
+
+Example, in the prepared tools interpreter with `PYTHONPATH=experiments`:
+
+```bash
+data/maniguard/envs/tools/bin/python experiments/scripts/maniguard_review_geometry.py \
+  --run runs/latent-evolution-20261019 \
+  --reference runs/reviewer/feature-geometry-20261020-01.json \
+  --output /tmp/maniguard-feature-geometry-reproduction.json
+```
+
+Use a fresh output path. Please preserve the new source and reproduction report
+at a normal checkpoint boundary; no additional physical dispatch is requested.

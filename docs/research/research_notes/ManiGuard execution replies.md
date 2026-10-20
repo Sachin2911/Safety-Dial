@@ -441,3 +441,73 @@ remains deferred. I also copied R10's exact feature-geometry report into the mai
 run's analysis directory for the next private checkpoint; its broader source
 reproduction remains pending your handoff. The current original wave is still
 `random-g1-2-case0/1` under the unchanged protocol.
+
+
+### R14 completed closure lead and R13 intake, 2026-10-20T08:53:32.877695+00:00
+
+`random-g1-2` has completed both full horizons with scores `[0,-2]`, no requested
+or raw completion, contact in both cases and no recorded grasp. Case0 is safely
+unfinished: first lid closure at482, all1,519 observations from482 through2000
+remain closed, all2,001 observations remain supported and none is doomed. There
+are0 closing commands before closure and0 across the full episode.
+Case1 violates and has no lid prerequisite. The compact milestone receipt is
+`second-random-descendant-progress-20261020.json`; the pair is privately backed up.
+
+**R14 accepted with the completed evidence above.** I checked the pinned upstream
+Jar source and skeleton assertions: the first four lid segments use open fingers,
+followed by body grasp/lift/transport. Driver source permits4,500 execution steps
+and planning retries, so its expert is a prospective privileged feasibility/data
+control, not a validated matched native benchmark reference. I will not launch
+it, install its dependencies, collect demonstrations or expand budgets here.
+The new closure trajectory may enter a separately frozen later dataset. It does
+not alter R12's frozen failed audit, optimizer utility, finalist selection or the
+protected checking cohort. Open fingers alone do not imply absent lid authority.
+
+There are24 verified full episodes,26 full starts and36 planned valid episodes
+remaining (20 descendants and16 checking). All20 comparison episodes are
+requested/raw unfinished;11 violate and one records a grasp. The next frozen
+`random-g1-3` pair is running. **R13 received for inspection:** I will read the
+three stable continuation files and run their synthetic checks without a factual
+refit or inference. The geometry source/test files are also visible; please
+confirm their handoff when stable. Execution owns current preservation, this
+replies file and the handed-off source integration. No live actor is changed.
+
+
+### R13 software acceptance, 2026-10-20T08:56:07.244052+00:00
+
+**Accepted as separate prospective CPU components.** I inspected both new helpers
+and their tests. All28 combined R12/R13 tests pass with one CPU thread; Ruff
+passes. The ranking-reversal case checks a real distinction: candidate priorities
+follow the selected filtered action at the factual anchor, with separate raw
+proposal diagnostics. Exact-prefix reuse preserves separate controller/screening
+identities and cannot establish full-policy equivalence. The unqualified model
+skips predictions and retains action abstention; fallback identifier allocation
+never grants dispatch. The residual requires absolute-target conventions and
+runtime joint bounds, preserves native commands at zero weights and binds memory
+to the controller contract. These are synthetic engineering properties.
+
+There is no factual refit or model-head request, VLA/encoder call, new physical
+episode, actor change or new allowance. I am integrating only the three handed-off
+source/test files and their preparation note. The original R12 failed gate and
+its exact archived sources remain unchanged. The study report now records the
+full second-EA adverse pair and second-random partial lid-closure episode, keeping
+all completion/violation/unfinished counts and the frozen utility intact.
+
+
+### Second random-descendant recovery complete, 2026-10-20T08:57:36.246772+00:00
+
+The pair is remotely reconstructed from model revision
+39f289f79b51989bef7bd17c3e02b494b02dce0d and dataset revision
+567d58c8638487b7d486fd4ba9ef0ab2ca25205b. Independent verification checks all
+4,000 controls,500 query receipts and frozen source/checkpoint/runtime contracts
+from the restored episode directories. The restored case0 trace has the exact
+compact progress-receipt hash, with2,001 observations, closure at482 and all
+1,519 subsequent observations closed and nonviolating. No physics, VLA/encoder
+request or scientific model computation was added. All24 completed full episodes
+now have verified remote reconstruction. The public recovery receipt is
+`second-random-descendant-recovery-receipt.json`.
+
+I am publishing this proof, the post hoc partial-progress summary, updated study
+report and the inspected R13 CPU files. The paper's final-result update remains
+pending completion of the original comparison. The actual current pair is
+`random-g1-3-case0/1`, PIDs36097/36098. No setting or selected fitness was changed.

@@ -38,6 +38,21 @@ The components are:
   request IDs and retains failed or interrupted work as charged. A new output
   directory cannot reset the canonical ledger's allowance.
 
+Two later CPU components retain the original audited prototype unchanged.
+[Filtered allocation](../../../experiments/helpers/maniguard_continuation_allocation.py)
+ranks the prefix selected by the filter, using the same declared alternatives for
+every candidate. A synthetic example reverses raw-proposal rankings after
+filtering. Identical prefixes at one factual anchor share a model prediction,
+while controller identities retain separate screening and physical-evaluation
+requirements. An unqualified model makes no prediction and preserves abstention;
+identifier allocation cannot authorize action execution.
+[Bounded residuals](../../../experiments/helpers/maniguard_continuation_residual.py)
+require runtime joint bounds and native absolute joint targets with binary gripper
+commands. Zero weights preserve those commands, neutral gripper correction retains
+the native command, and persistent memory is bound to the controller's checkpoint.
+The 12 additional synthetic checks pass, giving 28 combined preparation checks.
+These additions have no physical entry point, factual refit or deployment evidence.
+
 The prospective noise controller receives the 44 causal actor features plus five
 learned task-state beliefs. Its 5-by-49 weights produce four arm coefficients and
 one explicit gripper-noise coefficient. Defaults are arm scale 0.35, gripper scale

@@ -5,10 +5,10 @@ Jar comparison is **running** after the user authorized the full comparison on
 20 October. Shared initialization began at 04:28 UTC with two native episodes.
 The fixed protocol specifies eight shared initialization episodes, sixteen
 descendant episodes per optimizer, sealed finalists and sixteen independent
-checking episodes. At the dated 08:04 UTC training snapshot, four development
-and sixteen comparison episodes are verified, and the second evolved offspring
-pair is running. The comparison episodes have zero requested or raw completions,
-eight violations and one recorded grasp. These are training observations,
+checking episodes. At the dated 08:50 UTC training snapshot, four development
+and twenty comparison episodes are verified, and the last generation-one random
+offspring pair is running. The comparison episodes have zero requested or raw completions,
+eleven violations and one recorded grasp. These are training observations,
 not a completed optimizer comparison. No evolutionary or transfer benefit is
 claimed while that comparison remains incomplete.
 
@@ -182,6 +182,26 @@ training episodes. The remaining frozen offspring and protected checking continu
 Both evolved episodes also passed a
 [remote reconstruction and physical replay](../../../configs/maniguard/latent-evolution/first-evolved-descendant-recovery-receipt.json)
 of all 4,000 controls and 500 query receipts, with zero new inference or physics.
+
+The second EA mutation scores `[-2, -2]`, with no completion or grasp and two
+violations. Its complete
+[remote verification](../../../configs/maniguard/latent-evolution/second-evolved-descendant-recovery-receipt.json)
+preserves this adverse result. The second random-search child then scores
+`[0, -2]`. Its safely unfinished case records a useful prerequisite: lid closure
+at control 482, maintained through all 1,519 observations to the full horizon.
+All 2,001 observations remain supported and nonviolating. The gripper is commanded
+open throughout, and the episode never records a grasp or off-support transport.
+The other case violates without the lid prerequisite. The
+[milestone receipt](../../../configs/maniguard/latent-evolution/second-random-descendant-progress-20261020.json)
+pins both outcomes and the full trajectory hash. This is partial factual task
+progress, without a safe-completion or independent adapter benefit claim.
+
+The pinned upstream Jar demonstration code distinguishes open-finger arm motion
+for lid closure from a later body grasp and transport. This supports treating
+finger closure and jar lid closure as separate observations. The present utility
+gives this partial-progress episode the same zero score as any other nonviolating
+unfinished episode. Ordered progress rewards or new data acquisition would need
+a separate prospective comparison; neither fitness nor selection is changed here.
 
 A separate [design verifier](../../../experiments/helpers/maniguard_latent_completion.py)
 now reconstructs the frozen initial matrices, offspring, RNG progression, recorded
