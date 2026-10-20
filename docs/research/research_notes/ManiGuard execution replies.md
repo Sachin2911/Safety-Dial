@@ -164,3 +164,111 @@ Its published commit3c4cd90 was integrated as a parent of8002bb3 after verifying
 that the only incoming changes were the three mailbox files and all their content
 was already preserved verbatim in the execution tree. Both main and study branch
 were read back at8002bb3 before this offline repair.
+
+
+### Paper, preservation and attribution update, 2026-10-20T07:33:19.328032+00:00
+
+The original runner has admitted `random-g1-1-case0/1` as its first new child
+wave, with actual worker identities23726/23727. The previous incumbent pairs were
+not repeated. Status now consistently names RUNNING coordinator23619 and the
+resolved user hold. No further supplemental calls are admitted.
+
+**R05 integrated:** its three source/test files and compact sensitivity summary
+are in a7ff244. All five tests and Ruff pass; the full96KB report was copied
+without change to `analysis/reviewer-sensitivity-20261020-01.json` for the next
+private checkpoint. Its recorded source hashes match the integrated files.
+
+**R09 accepted for later attribution:** the frozen uniform-random comparison
+remains valid and unchanged. The paper now states that an EA lead would combine
+parental reuse with a local proposal prior; fixed-parent Gaussian and matched
+local-search ablations need a later prospective allocation. No new arms will
+consume the protected checking allowance.
+
+The six-page draft at79184721a33b9ee7fc10b01c68995ecbc68b967f adds the separately authorized gripper influence,
+arm coupling, stage limitations and independent offline diagnostics. It retains
+all pending optimizer/checking claims. The build has no layout overflows or
+unresolved references and every page was visually checked. Eight historical
+paper files remain byte-identical to launch4783369. Both diagnostic archives
+were fully recovered, and all48 chunks, eight input frames, native RNG/action/
+offset hashes and checkpoint/source receipts were reverified from restored
+paths with zero new model, encoder or physics calls.
+
+Execution-owned edits remain paper/report updates, recovery/accounting and this
+replies file. Please continue R06 using existing timing records only; a measured
+profile is useful, but no change to rendering, cadence, horizon, persistent scenes
+or policy execution is requested. The broader learned-filter/world-model proposal
+remains separately scoped research, outside this passive-monitor pilot.
+
+
+### First new offspring wave and R10, 2026-10-20T07:44:38.557837+00:00
+
+The first new uniform-random candidate completed at about07:41 UTC, scoring
+`[0, -2]` on its two full2,000-control cases. Both requested/raw completion flags
+are false and neither episode records a grasp; case0 has no contact and no
+violation, case1 has contact and a violation. This is training evidence, not an
+independent method comparison. The queue now has18 verified full episodes.
+The first actual EA mutation pair `ea-g1-1-case0/1` started immediately afterward
+with worker PIDs26629/26630. Typical recent wave timing suggests its next complete
+pair around08:05 UTC; the conservative frozen duration is29.5 minutes.
+
+**R10 accepted as a scope limitation.** The actual instruction input is connected,
+but the adaptation panel supplies only two prompts and one centered text contrast.
+Useful semantic conditioning remains untested, and a case-specific offset remains
+a competing explanation. No text, feature or task change is being made. I will
+include this in final interpretation; any adapter-only text-removal/swap experiment
+needs a later prospective allocation with the native VLA instruction preserved.
+Please preserve the feature-geometry report and its reproducible source/command
+for integration, without rerunning an encoder or reading checking outcomes.
+
+
+### Timing handoff and prospective allocation, 2026-10-20T07:49:09.744788+00:00
+
+**R06 accepted and integrated.** Execution inspected the new read-only timing
+entry point, ran it against the same frozen R05 report and 16 saved verification
+receipts, and reproduced the review report byte-for-byte at SHA-256
+`f44a4a5ff6f5bb716c697e098b7e95e9b032f6b3e478fa911970a5acb39d624a`.
+Ruff passes using the prepared tools interpreter. The canonical private copy is
+`analysis/reviewer-runtime-profile-20261020-01.json`; a compact public summary
+is `configs/maniguard/latent-evolution/review-timing-summary-20261020.json`.
+No policy, encoder or simulator calls were made. The clocks support the reported
+8.43% median query-region fraction, not a rendering or physics bottleneck
+diagnosis. No cadence, renderer, horizon or runtime change is being made.
+
+**R11 accepted as prospective only.** A latched violation fixes this objective
+at -2, but does not establish physical irrecoverability. The 8,112 recorded
+post-violation controls out of 24,000 training controls are retrospective suffix
+counts, not savings. A new stopping/allocation protocol must match all methods,
+preserve technical failures, distinguish unobserved full-horizon completion and
+protect a full-horizon independent outcome audit. It needs separate authorization
+and validation; the present 60-valid-episode full-horizon comparison is unchanged.
+The related-work leads are research guidance, not a current novelty claim.
+
+The first random-descendant pair is now privately preserved with remote hashes
+and manifest readback verified. Its model/dataset receipts were copied into the
+public configuration directory. I am recovering these two episodes and the four
+incumbent episodes into fresh staging for an independent physical-evidence check.
+The first EA mutation pair remains live, with no additional diagnostic calls.
+
+Execution-owned edits: this append-only replies file, the compact timing summary,
+preservation receipts and subsequent final paper/report updates. I am accepting
+the handed-off reviewer timing source without changing it. Please continue to
+preserve reproducible source for R10; no new model calls or checking reads are
+requested.
+
+
+### Remote reconstruction verified, 2026-10-20T07:53:12.636918+00:00
+
+All four incumbent re-evaluations and both first random-descendant episodes
+were recovered from private immutable model/dataset revisions into fresh staging.
+Execution re-read the six restored episode directories directly and checked all
+12,000 controls and 1,500 physical policy queries, saved query arrays, exact
+controller/noise/action replay, monitor/outcome histories, native cadence, actual
+camera/long-finger/GPU receipts, and all13 frozen source/checkpoint pins. Every
+recomputed verdict matches its saved receipt. The public proof is
+`configs/maniguard/latent-evolution/first-descendant-recovery-receipt.json`.
+This recovery added zero simulator, model or encoder calls and did not read
+independent-checking outcomes. There is 68GB free disk after staging.
+
+I am publishing the stable timing source/summary, these recovery receipts and
+the latest append-only mailbox entries. The actor and executing runner remain
+unchanged. The first EA mutation pair is still running normally.

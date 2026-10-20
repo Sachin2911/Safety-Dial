@@ -1,0 +1,279 @@
+{
+  "schema": "maniguard-review-timing-v1",
+  "sensitivity_sha256": "6b3d846bc8e03c43a5203c58129f0a29b46bfb495c67822a2b9edb8a6a042dd3",
+  "source_sha256": {
+    "experiments/scripts/maniguard_review_timing.py": "cafc31f9e5f7069675e44fb8814f79e046b7adec93846b22e3c2a536b169142b",
+    "experiments/helpers/maniguard_runtime.py": "a9e3fd09ccd9f0a66bba6c2c84efdb813c664bf05cdeea60ba4f52ba341ed0f2",
+    "experiments/helpers/maniguard_latent_runtime.py": "77ebba7e5bf4b9061023eccbae7f8a7242759819691bb19a25361e0d3b9be201",
+    "experiments/helpers/maniguard_phase2_features.py": "6c693651d4d533edad070a54dcfd3d8d8d577bb1f6c249e3324ae9d89fbe5580",
+    "experiments/helpers/maniguard_latent.py": "40507f8a6251b7e701318648c4fc81d5e472bdd577b46bd18c59044b5eafe2ef",
+    "third_party/ManiGuard/maniguard/utils/safety_monitor.py": "51fe8c4435b57de8869644313a27a41e29878995957e6e07a474931ea8b54de6",
+    "third_party/ManiGuard/maniguard/eval/benchmark.py": "0991d5fdf5f65b4d70f113fa57bbff33190f4d65d5eb32683e87b44968ccae29"
+  },
+  "groups": {
+    "jar_all": {
+      "episodes": 14,
+      "distribution": {
+        "controls": {
+          "min": 666,
+          "median": 2000.0,
+          "max": 2000
+        },
+        "process_wall_seconds": {
+          "min": 526.3644082546234,
+          "median": 1339.13050532341,
+          "max": 1439.8831145763397
+        },
+        "internal_ledger_wall_seconds": {
+          "min": 521.4819879536517,
+          "median": 1335.713192502968,
+          "max": 1436.34832574334
+        },
+        "query_region_wall_seconds": {
+          "min": 36.80916250124574,
+          "median": 112.37624894757755,
+          "max": 124.19398324238136
+        },
+        "encoder_load_wall_seconds": {
+          "min": 5.31838964112103,
+          "median": 5.709691643482074,
+          "max": 5.831523010972887
+        },
+        "encoder_work_wall_seconds_overlaps_query": {
+          "min": 3.506049819290638,
+          "median": 10.005790229188278,
+          "max": 10.374494848307222
+        },
+        "outside_internal_ledger_wall_seconds": {
+          "min": 3.3836984005756676,
+          "median": 3.4782809738535434,
+          "max": 4.882420300971717
+        },
+        "unattributed_internal_wall_seconds": {
+          "min": 479.35443581128493,
+          "median": 1221.5878844894469,
+          "max": 1315.392827059608
+        },
+        "query_fraction_of_process": {
+          "min": 0.06993094883315074,
+          "median": 0.08385036350581077,
+          "max": 0.09077619903828595
+        },
+        "encoder_work_fraction_of_process": {
+          "min": 0.006660879353367339,
+          "median": 0.007324517498266365,
+          "max": 0.00790348699802748
+        },
+        "encoder_load_fraction_of_process": {
+          "min": 0.003967050499555967,
+          "median": 0.004233113130006136,
+          "max": 0.010104006953578657
+        },
+        "hypothetical_speedup_if_query_region_cost_zero": {
+          "min": 1.0751889859633719,
+          "median": 1.0915247621854198,
+          "max": 1.0998392243386823
+        },
+        "physics_simulated_seconds_not_wall": {
+          "min": 34.041668442077935,
+          "median": 100.74167192075402,
+          "max": 100.74167192075402
+        }
+      }
+    },
+    "jar_training": {
+      "episodes": 12,
+      "distribution": {
+        "controls": {
+          "min": 2000,
+          "median": 2000.0,
+          "max": 2000
+        },
+        "process_wall_seconds": {
+          "min": 1312.6478035449982,
+          "median": 1351.497362613678,
+          "max": 1439.8831145763397
+        },
+        "internal_ledger_wall_seconds": {
+          "min": 1309.2301166779362,
+          "median": 1348.0942251400556,
+          "max": 1436.34832574334
+        },
+        "query_region_wall_seconds": {
+          "min": 110.59896487696096,
+          "median": 113.53879090677947,
+          "max": 124.19398324238136
+        },
+        "encoder_load_wall_seconds": {
+          "min": 5.63432732783258,
+          "median": 5.712193425977603,
+          "max": 5.831523010972887
+        },
+        "encoder_work_wall_seconds_overlaps_query": {
+          "min": 9.692126256879419,
+          "median": 10.005790229188278,
+          "max": 10.374494848307222
+        },
+        "outside_internal_ledger_wall_seconds": {
+          "min": 3.3836984005756676,
+          "median": 3.4782809738535434,
+          "max": 3.720214653760195
+        },
+        "unattributed_internal_wall_seconds": {
+          "min": 1192.067274783738,
+          "median": 1228.8740275155287,
+          "max": 1315.392827059608
+        },
+        "query_fraction_of_process": {
+          "min": 0.07956455378081784,
+          "median": 0.08426560697087006,
+          "max": 0.09077619903828595
+        },
+        "encoder_work_fraction_of_process": {
+          "min": 0.006973803632160854,
+          "median": 0.007324517498266365,
+          "max": 0.00790348699802748
+        },
+        "encoder_load_fraction_of_process": {
+          "min": 0.003967050499555967,
+          "median": 0.004233113130006136,
+          "max": 0.004355853518659953
+        },
+        "hypothetical_speedup_if_query_region_cost_zero": {
+          "min": 1.0864422965321907,
+          "median": 1.0920198254055653,
+          "max": 1.0998392243386823
+        },
+        "physics_simulated_seconds_not_wall": {
+          "min": 100.74167192075402,
+          "median": 100.74167192075402,
+          "max": 100.74167192075402
+        }
+      }
+    },
+    "clutter_development": {
+      "episodes": 2,
+      "distribution": {
+        "controls": {
+          "min": 532,
+          "median": 816.0,
+          "max": 1100
+        },
+        "process_wall_seconds": {
+          "min": 441.5519127845764,
+          "median": 938.3547307252884,
+          "max": 1435.1575486660004
+        },
+        "internal_ledger_wall_seconds": {
+          "min": 438.6159802470356,
+          "median": 934.8514767086599,
+          "max": 1431.0869731702842
+        },
+        "query_region_wall_seconds": {
+          "min": 34.50882149906829,
+          "median": 48.44989079120569,
+          "max": 62.39096008334309
+        },
+        "encoder_load_wall_seconds": {
+          "min": 5.047662382014096,
+          "median": 5.6934858846943825,
+          "max": 6.339309387374669
+        },
+        "encoder_work_wall_seconds_overlaps_query": {
+          "min": 2.9961528880521655,
+          "median": 4.254554281942546,
+          "max": 5.512955675832927
+        },
+        "outside_internal_ledger_wall_seconds": {
+          "min": 2.9359325375407934,
+          "median": 3.503254016628489,
+          "max": 4.070575495716184
+        },
+        "unattributed_internal_wall_seconds": {
+          "min": 397.76784936059266,
+          "median": 880.7081000327598,
+          "max": 1363.648350704927
+        },
+        "query_fraction_of_process": {
+          "min": 0.04347324803561559,
+          "median": 0.06081336731786954,
+          "max": 0.07815348660012349
+        },
+        "encoder_work_fraction_of_process": {
+          "min": 0.0038413592158974457,
+          "median": 0.005313432307350937,
+          "max": 0.0067855053988044286
+        },
+        "encoder_load_fraction_of_process": {
+          "min": 0.003517148613199973,
+          "median": 0.00893701607508518,
+          "max": 0.014356883536970387
+        },
+        "hypothetical_speedup_if_query_region_cost_zero": {
+          "min": 1.0454490665800367,
+          "median": 1.0651141748757333,
+          "max": 1.08477928317143
+        },
+        "physics_simulated_seconds_not_wall": {
+          "min": 27.341668092645705,
+          "median": 41.541668833233416,
+          "max": 55.74166957382113
+        }
+      }
+    }
+  },
+  "retrospective_training_suffix": {
+    "episodes": [
+      {
+        "attempt": "initial-0-case0-a0",
+        "first_doomed_monitor_step": 537,
+        "controls_after_first_doomed": 1463
+      },
+      {
+        "attempt": "initial-1-case1-a0",
+        "first_doomed_monitor_step": 1116,
+        "controls_after_first_doomed": 884
+      },
+      {
+        "attempt": "initial-3-case0-a0",
+        "first_doomed_monitor_step": 700,
+        "controls_after_first_doomed": 1300
+      },
+      {
+        "attempt": "initial-3-case1-a0",
+        "first_doomed_monitor_step": 167,
+        "controls_after_first_doomed": 1833
+      },
+      {
+        "attempt": "ea-g1-0-case1-a0",
+        "first_doomed_monitor_step": 620,
+        "controls_after_first_doomed": 1380
+      },
+      {
+        "attempt": "random-g1-0-case1-a0",
+        "first_doomed_monitor_step": 748,
+        "controls_after_first_doomed": 1252
+      }
+    ],
+    "training_controls": 24000,
+    "controls_after_first_doomed": 8112,
+    "fraction_of_recorded_training_controls": 0.338
+  },
+  "interpretation": [
+    "physics_seconds integrates simulation dt and is not wall-clock timing.",
+    "The query timer includes image encoding, feature work, query NPZ writing and RPC.",
+    "Encoder work overlaps the query timer except for episode text encoding.",
+    "The unattributed residual does not separate physics, rendering, monitoring or I/O.",
+    "Per-process intervals run concurrently and must not be summed as rental wall time.",
+    "Hypothetical elimination of a measured region is not a measured optimization.",
+    "Post-doom suffix counts are retrospective, not saved controls or saved wall time.",
+    "Early stopping would require a new protocol and valid-prefix receipts.",
+    "The current frozen full-horizon protocol and evaluation categories are unchanged."
+  ],
+  "new_simulator_controls": 0,
+  "new_policy_queries": 0,
+  "new_encoder_calls": 0,
+  "full_report_sha256": "f44a4a5ff6f5bb716c697e098b7e95e9b032f6b3e478fa911970a5acb39d624a",
+  "full_report_private_preservation_path": "analysis/reviewer-runtime-profile-20261020-01.json",
+  "validation": "Execution inspected the read-only source, reproduced the reviewer report byte-for-byte, checked saved receipt agreement, and passed Ruff. No runtime change."
+}

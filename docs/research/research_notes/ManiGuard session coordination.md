@@ -21,6 +21,15 @@ allowances or instructions to override an existing user-directed hold.
 
 ## Current handoff: user continuation instruction
 
+Update at 07:43:13 UTC: 18 full episodes are verified complete, with no invalid
+full attempts. `random-g1-1-case0/1-a0` returned scores 0 and -2: neither requested
+nor native task completion, one raw violation and no recorded grasps in either.
+The first actual EA mutant, `ea-g1-1-case0/1-a0`, is now running. Both recorded
+worker identities were independently live at 72 controls. The new isolated R06
+timing entry point and report are ready for execution to inspect and integrate;
+R11 describes a separately scoped future efficiency control. No current method,
+service, protocol, queue or original evidence was changed by review.
+
 Update at 07:20:42 UTC: execution reports an explicit **Resume original comparison**
 instruction in its own session and resumed the original service at 07:18:02 UTC.
 The reviewer independently verified live coordinator PID 23619, and live workers
@@ -538,3 +547,151 @@ or repeated by this verification.
 The original physical comparison is now confirmed live. Review can continue on
 offline diagnosis, attribution and reporting while the two new candidate episodes
 run. Execution's ownership and the frozen comparison conditions remain intact.
+
+## R09: Separate evolutionary reuse from a favorable proposal distribution
+
+Priority: paper-level attribution after the current cohort; no current protocol
+change. Status: new recommendation based on the completed offline analysis.
+
+On the same 3,334 factual Jar feature rows, the three EA offspring differ from the
+common negative incumbent by code RMS 0.541, 0.466 and 0.413. The three uniform
+random offspring differ from that same reference by 0.635, 0.675 and 0.577. Their
+absolute-code saturation fractions at 0.95 are about 0.99%, 1.11%, 0.13% for EA,
+versus 5.21%, 49.79%, 15.16% for uniform random. These are proposed-controller
+sensitivities, not physical offspring results or an optimizer effect estimate.
+
+The frozen uniform-random baseline is a valid pilot comparator. However, a future
+EA win against it would combine parent reuse/selection with a more local and less
+saturated sampling distribution. For an explained GECCO claim about evolutionary
+reuse, add a matched local-search ablation: use the same initial incumbent and
+Gaussian mutation kernel, but do not promote offspring into future parents.
+Keep information, evaluations, replication, finalist checking and every attempt
+charged identically. A separate best-so-far local search can then distinguish
+simple incumbent improvement from benefits of the two-parent/population scheme.
+
+If response-space normalization or an informed basis becomes the contribution,
+share that representation with the ordinary-learning and random-search comparisons.
+Do not credit an optimizer for an information or representation advantage. Do not
+add these arms to the already frozen pilot or spend its protected checking budget.
+
+## R10: What the present panel tests about instruction conditioning
+
+Priority: interpretation now, broader training design in the next allocation.
+Status: offline evidence available; no physical or source change requested.
+
+I tested whether the instruction input was constant across the family. It is not:
+the ten completed Jar development/initialization episodes contain four distinct
+prompt hashes and four distinct projected instruction vectors; the two Clutter
+development episodes contain two. Thus removing instruction features can do more
+than removing one universal family bias.
+
+However, the eight shared initialization episodes contain only two distinct
+instructions, one per training task. Their centered eight-dimensional text block
+has rank one. The subsequent current generation uses the same tasks with new
+seeds, so this cohort offers one independent instruction contrast. A text-dependent
+response can consequently act as a case-specific offset; the current evidence
+does not establish semantic understanding or eight independently learned text
+directions. This is a scope limitation, not an implementation error.
+
+The broader saved-feature diagnostic is
+`runs/reviewer/feature-geometry-20261020-01.json`, SHA-256
+`575c89b8bda7714d2e1e2a9de70ff30df72a3526267ea979a84b08af4cdf24a9`.
+It reads original development/shared-initialization data only: 2,334 Jar and 205
+Clutter query rows, with trace and prompt hashes. No encoder, decoder, physics or
+independent-checking data is used. The one-contrast check separately reads only
+the eight already saved initial query NPZ files.
+
+For the paper, retain the structural claim that the actor receives actual
+instructions, while describing useful semantic conditioning as untested. In a
+later comparison, vary tasks/instructions enough to identify a reusable response,
+and test removing or swapping only the adapter's text while retaining the native
+VLA's correct instruction and matched extraction costs. Keep those conditions
+prospective and separately budgeted. Avoid changing the present features or task
+panel in response to this diagnosis.
+
+## R06 update: Measured timing profile, 20 October 07:41 UTC
+
+Status: offline profile available. No execution change requested.
+
+The reproducible entry point is
+`experiments/scripts/maniguard_review_timing.py`. It reads the frozen R05 report
+and the same 16 completed development/training verification receipts, checks their
+counts and timing agreement, and writes a new report without importing a model,
+encoder or simulator. Ruff passes. The result is
+`runs/reviewer/runtime-profile-20261020-01.json`, SHA-256
+`f44a4a5ff6f5bb716c697e098b7e95e9b032f6b3e478fa911970a5acb39d624a`.
+It contains receipt/source hashes and per-episode values. Independent checking
+outputs were not opened. This analysis adds zero simulator, decoder or encoder
+calls. The new reviewer script is ready for execution to inspect and integrate;
+no shared runner or R05 source was modified.
+
+For the 12 full Jar training episodes, median process time is 1,351.50 seconds;
+the query region is 113.54 seconds and a median 8.43% of each process. Encoder
+work is a median 10.01 seconds or 0.73%, and encoder loading takes 5.71 seconds.
+The wrapper interval outside the internal ledger is only 3.48 seconds. These
+are separate medians, not an additive breakdown of one representative episode.
+
+Two definitions matter. `physics_seconds` accumulates simulation `dt` in a
+PhysX callback, so it is simulated duration, not measured physics wall time.
+Also, `policy_query_seconds` begins before image encoding, feature assembly,
+compressed query-NPZ writing and RPC, so it is a combined query region, not pure
+decoder latency. Image encoding overlaps that region; the encoder's one text
+call is outside it. Do not add the encoder and query totals as independent costs.
+
+The median internal residual after excluding the disjoint query and encoder-load
+regions is 1,228.87 seconds. Existing clocks do not separate scene startup,
+physics, rendering, state/monitor extraction and other I/O inside this residual.
+Thus neither rendering nor physics has been established as the bottleneck.
+Even hypothetically eliminating the whole query region would reduce median
+per-process time by 8.43%, corresponding to about 1.092x throughput under unchanged
+other costs. This is a cost bound, not a measured optimization. Simultaneous
+process times must not be summed as rental elapsed time.
+
+Recommendation: keep this cohort unchanged. In a later separately frozen
+engineering run, use disjoint wall timers around scene preparation, source
+capture, environment stepping, monitor/state extraction and evidence writes;
+retain physical ticks, frame delivery, observations, actions and accounting.
+Optimize the measured dominant region only after that profile. The current
+receipts do not justify changing renderer, cadence, horizon or persistent scenes.
+
+## R11: Prospective fixed-score stopping and evaluation allocation
+
+Priority: a later compute-efficiency comparison. No current stopping instruction.
+
+The current objective is `1(C_req and not V) - 2V`. The monitor latches its first
+violation until reset, and the benchmark reports that latch as `ltl_violated`.
+Consequently, after a valid recorded first violation this objective is fixed at
+-2 regardless of later task completion. This is an objective bound. It says
+nothing about physical recoverability, and the native benchmark deliberately
+continues to completion or its horizon.
+
+In the 12 already completed training episodes used by R05/R06, six have such a
+first violation. Their remaining suffixes contain 8,112 of the 24,000 recorded
+controls, or 33.8%. These are retrospective suffix counts, not saved interactions,
+measured wall-time savings or a result from an early-termination experiment.
+The individual first-violation steps and suffix counts are in the R06 report.
+
+A future protocol could end a training evaluation once this bound is certified,
+retain its violating prefix with a new valid-prefix receipt, and spend the saved
+interaction allowance on more candidate evaluation. Apply the same stopping rule
+and information access to all optimizers. A technical failure must remain an
+invalid attempt rather than being relabelled from an unchecked prefix. Keep the
+independent outcome audit at the native full horizon, and report prefix-stopped
+training separately: full-horizon raw completion and unfinished status would be
+unobserved for those prefixes. Do not change the present full-episode validation,
+planned wave count or protected checking budget.
+
+Across cases, further pruning is possible only when the maximum remaining score
+cannot cross the actual selection threshold, including tie and parent-selection
+rules. For example, one -2 score plus one remaining score bounded by 1 yields
+a sum at most -1. Do not fill unobserved cases with invented point scores or treat
+this finite-panel bound as an expected-performance guarantee.
+
+Early termination and evolutionary evaluation allocation already have substantial
+prior work, including [Sun et al., Safe Exploration by Solving Early Terminated
+MDP](https://arxiv.org/abs/2107.04200) and [Arza et al., Generalized Early Stopping
+in Evolutionary Direct Policy Search](https://arxiv.org/abs/2308.03574). I checked
+these primary paper records. Their methods and assumptions are not automatically
+equivalent to this monitor-latch bound. Use this as a prospective efficiency
+baseline or allocation control, not an originality claim or a substitute for
+demonstrating useful safe task completion.
