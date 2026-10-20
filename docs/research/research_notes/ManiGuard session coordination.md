@@ -21,6 +21,14 @@ allowances or instructions to override an existing user-directed hold.
 
 ## Current handoff: user continuation instruction
 
+Review follow-up handoff, 20 October 08:31 UTC: the separately authorized CPU
+prototype is stable and ready for execution to inspect and integrate. R12 below
+lists the files, checks and exact preservation bundle. All 16 software tests pass,
+but the factual model fails its prediction/coverage gate. It must not be used by
+the current physical run. Its next physical development batch remains a deferred
+draft with its own protocol and budget. No active runtime, service or queue was
+changed; new VLA/encoder/physics work is zero.
+
 New review-side authorization, 20 October: the user asked me to draft and build
 the world-model, action-changing filter and ROSARL follow-up while this comparison
 runs, for scheduling later. Review will own new `maniguard_model_*` helpers,
@@ -707,3 +715,91 @@ these primary paper records. Their methods and assumptions are not automatically
 equivalent to this monitor-latch bound. Use this as a prospective efficiency
 baseline or allocation control, not an originality claim or a substitute for
 demonstrating useful safe task completion.
+
+## R12: Authorized follow-up prototype, factual audit and stable handoff
+
+Status: CPU preparation complete; model gate failed; physical development deferred.
+The user asked review to draft/build the world-model, action-changing filter and
+ROSARL idea while the original comparison runs, then asked that it address real
+task improvement. Subsequent user messages reaffirmed that preparation and review
+of both studies should continue. This is a separate cohort, not an amendment to
+the executing comparison or a claim that its passive monitor changes actions.
+
+The stable new files, ready for execution's review and source integration, are:
+
+- `experiments/helpers/maniguard_model_budget.py`
+- `experiments/helpers/maniguard_model_data.py`
+- `experiments/helpers/maniguard_model_transition.py`
+- `experiments/helpers/maniguard_model_control.py`
+- `experiments/scripts/maniguard_model_followup.py`
+- `experiments/tests/test_maniguard_model_followup.py`
+- `configs/maniguard/model-assisted/`
+- `docs/research/research_notes/ManiGuard model assisted continuation draft.md`
+
+These implement an executed-action transition ensemble, separate task readouts,
+explicit gripper-noise support with temporal persistence, ordered training progress,
+the practical ROSARL penalty interface, a filter preserving proposed/filtered/
+executed commands, and candidate allocation from short-prefix predictions. The
+assembled interface never invents future VLA observations or physical fitness.
+The filter abstains if the model is unqualified. The source does not import or
+discover a simulator, GPU encoder or live policy service. Decoder access requires
+an explicit supplied callback and charged admission; the actual offline contract
+sets all decoder, encoder and physical allowances to zero.
+
+**Verification:** all 16 focused CPU tests pass in about half a second; Ruff and
+the new Python 100-column check pass. The tests exercise causal executed-action
+effects with an identifiable synthetic model, global and concurrent final-slot
+admission, interrupted/failed charges, forbidden service calls, checkpoint replay,
+whole-episode calibration counts, separate readout/dynamics errors, ordered
+milestones, frozen penalties, filtering, abstention and combined allocation. The
+deferred schedule's 16 valid episodes plus two replacement slots validate without
+dispatch. Synthetic checks are not physical manipulation evidence.
+
+**Factual audit:** a versioned source/data manifest was written before fitting.
+Only the eight completed shared initialization episodes fit the model; task 0017's
+development episode calibrates and task 0013's diagnoses it. Task groups are
+disjoint, all previously exposed, and independent checking outputs are excluded
+before opening. Transition counts are 1,992/249/83. The report is
+`runs/reviewer/model-assisted-offline-20261020-01/audit-v1/report.json`, SHA-256
+`c74f001d302ea148326a438ee67a7c1ea7ec90703a2bc32b3014d4d9730faffd`.
+
+Prediction RMSE/persistence ratios are 1.97 robot/history, 1.54 overview and 1.16
+wrist. Actual-state readouts fail for closure, holding, uprightness and support,
+so dynamics error alone does not explain the failure. Fitting has positive closure
+and grasp labels in only one episode, no in-goal positive episode and no safe
+completion. Its closure follows a raw violation. Calibration has one episode
+against the frozen minimum of 20, so the fallback upper score is one everywhere.
+Its resulting all-alarm behaviour is not a calibrated classifier result. Do not
+present the single positive risk prefix's zero false-negative count as a safety
+result. Thresholds and split membership were not adjusted after this audit.
+
+The separate factual work ledger records 27,412 training-row uses and 5,395
+model-head row queries, with no unresolved requests and zero new physical starts,
+controls, decoder requests or encoder images. It identifies the 18,666 original
+acquisition controls as reused information. Do not merge this new model work into
+the current comparison or describe it as zero total model computation.
+
+**Preservation:** all six exact audited sources are copied under `source-v1/`.
+The subsequent line-length cleanup has identical Python ASTs; there was no refit.
+The source/corpus/report/model/ledger bundle is
+`runs/reviewer/model-assisted-offline-20261020-01/preparation-bundle-v1.zip`,
+895,997 bytes, SHA-256
+`f4cda837cdb2357494530c3f94fbe5cf068d55c56aef8ff61aa1c9905924c16d`.
+All 21 members and the frozen sources/model hash were verified after fresh local
+extraction. The public receipt is
+`configs/maniguard/model-assisted/offline-recovery-receipt-v1.json`. Please preserve
+this small bundle privately at a convenient boundary and report a remote revision
+and reconstruction when available. This local proof does not claim remote recovery;
+original physical input files remain in the already preserved run, referenced by
+exact hashes. No checkpoint or generated run directory should be staged in git.
+
+**Next action:** retain the original valid comparison. The proposed later batch
+first diagnoses useful lid-closure/grasp authority with bounded scale/persistence,
+arm-and-gripper steering and a separately specified residual, then confirms the
+selected setting on fresh seeds. Parameters, implementation, task/seed choices,
+validity rules and the finite allocation still need to be frozen. The separate
+model must obtain demonstrable positive transition coverage and pass factual
+perception/dynamics checks before influencing physical actions. A larger failure
+penalty cannot create missing task behaviour. The final design must include
+ordinary learning with the same filter, a native-with-filter reference, matched
+allocation controls, protected confirmation and optimizer replication.

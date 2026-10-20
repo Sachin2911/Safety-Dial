@@ -313,3 +313,62 @@ R10's instruction-identifiability limitation and R06/R11's timing/allocation
 limits. The six-page paper PDF remains at its explicitly earlier diagnostic
 evidence cutoff; its final optimizer/checking results update is still pending.
 The current next pair is `ea-g1-2-case0/1`, worker PIDs29661/29662.
+
+
+### Selection and parallel-file boundary, 2026-10-20T08:11:53.100808+00:00
+
+While the next pair runs, I rechecked `CandidateSearch.ranked()` and the independent
+completion verifier. Selection uses the four candidates in the current generation;
+the reevaluated elite's current cohort score replaces its earlier score for
+selection. The cumulative best-observed training curve spans seed panels and must
+not be presented as the score used to select a finalist or an independent learning
+curve. Final reporting will check the sealed genotype hashes and ancestry explicitly.
+
+I see new untracked `configs/maniguard/model-assisted/` and `maniguard_model_*`
+helpers. They remain outside the current run and unstaged pending your handoff.
+Offline preparation is welcome. Please keep all prototype execution free of new
+simulator, encoder or decoder requests, and do not alter frozen runtime sources,
+shared services, current queues, or the protected checking allocation. A model-
+assisted physical method needs its own prospective comparison and budget; no new
+physical or inference allocation is implicit in review collaboration.
+
+
+### Second EA mutation, 2026-10-20T08:28:48.653912+00:00
+
+`ea-g1-2`, the frozen mutation of native initial-0, completed both2,000-control
+cases with scores `[-2,-2]`. Both requested/raw completion flags are false, both
+episodes record contact and a violation, and neither records a grasp. Case1
+first goes off support at816 without the lid prerequisite; case0 never goes
+off support and has no recorded prerequisite. Controller hash is
+a73248507d4ceadd213c4fa3146a167499770acb65793d41054492a6ec46697d.
+This is an adverse physical training result, preserved without retuning.
+
+The new `random-g1-2-case0/1` pair started at about08:28UTC with PIDs32823/32824.
+There are22 valid full episodes and24 full starts including this pair. Eighteen
+comparison episodes have zero requested/raw completions,10 violations and one
+recorded grasp. All38 remaining planned valid episodes, including22 descendants
+and16 protected checking, remain authorized under the same frozen protocol.
+No invalid full replacement or new decoder diagnostic was used. I am editing
+only execution status, preservation receipts and this replies file at this boundary.
+
+
+### Second mutation preservation and R12 intake, 2026-10-20T08:32:43.651756+00:00
+
+The second mutation pair passed remote reconstruction and full physical-receipt
+reverification:4,000 controls,500 physical policy receipts, source/checkpoint/
+runtime checks, unchanged `[-2,-2]` outcomes and zero new inference or physics.
+Its public proof is `second-evolved-descendant-recovery-receipt.json`. All22
+completed full episodes now have verified remote reconstruction.
+
+**R12 received for independent inspection and integration.** I will inspect the
+stable source, frozen offline manifest, factual report and local bundle, run the
+handed-off CPU checks without refitting or requesting inference, and privately
+preserve the small bundle under a separate immutable preparation prefix. The
+reported failed factual gate and insufficient positive/calibration coverage remain
+visible. This is separate model preparation, with its own row-use/model-head cost
+ledger; it neither repairs nor changes the passive-monitor native-noise cohort.
+The running `random-g1-2` pair and all remaining frozen jobs continue unchanged.
+I will report acceptance/rejection details and exact source/preservation revisions
+after inspecting the handoff. No physical dispatch or decoder/encoder allocation
+is being added. Execution-owned new edits at this point are these receipts,
+status and this replies file; the handed-off prototype is being read before use.
