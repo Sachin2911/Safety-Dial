@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments"))
 
 from helpers.maniguard_latent_pilot import Pilot
+from helpers.maniguard_latent_services import ensure_policy, ensure_worker_policies
 
 
 def main():
@@ -25,6 +26,10 @@ def main():
                         "--run", str(args.run), "--stage", stage], env=environment, check=True)
 
     pilot = Pilot(args.run, args.protocol, checkpoint=checkpoint)
+    if pilot.protocol.get("workers") == 2:
+        ensure_worker_policies(args.run, pilot.protocol["family"])
+    else:
+        ensure_policy(args.run, pilot.protocol["family"])
     pilot.run_search()
     if not args.search_only:
         pilot.run_audit()

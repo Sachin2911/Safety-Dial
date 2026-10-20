@@ -27,3 +27,20 @@ def test_original_and_authorized_extension_have_fixed_absolute_clocks():
     rental["stop"]["deadline_utc"] = "2026-10-20T06:00:00Z"
     with pytest.raises(ValueError, match="without authorization"):
         deadline.deadline_configuration(rental, "56777435")
+
+
+def test_explicit_full_comparison_authorization_has_one_fixed_deadline_and_episode_limit():
+    rental = {"instance_id": 56777435, "stop": {"deadline_utc": "2026-10-20T20:00:00Z"}}
+    with pytest.raises(ValueError, match="recorded authorization"):
+        deadline.deadline_configuration(rental, "56777435")
+    rental["deadline_extension"] = {
+        "previous_deadline_utc": "2026-10-20T05:00:00Z",
+        "new_deadline_utc": "2026-10-20T20:00:00Z",
+        "user_messages": ["Go ahead I give you authorisation",
+                          ("You can run the full comparison, you need to get the contribution and "
+                           "result, that is most important")],
+        "planned_valid_episodes": 60, "maximum_full_attempts": 64}
+    assert deadline.deadline_configuration(rental, "56777435") == (56777435, 1792526400)
+    rental["deadline_extension"]["maximum_full_attempts"] = 65
+    with pytest.raises(ValueError, match="recorded authorization"):
+        deadline.deadline_configuration(rental, "56777435")

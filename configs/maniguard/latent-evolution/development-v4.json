@@ -1,0 +1,260 @@
+{
+  "schema": "maniguard-latent-development-v4",
+  "status": "prospective_development_protocol",
+  "launch_commit": "4783369c5b599580e26f9c3a2723ee55518c46a3",
+  "instance_id": 56777435,
+  "deadline_utc": "2026-10-20T20:00:00Z",
+  "physical_cutoff_utc": "2026-10-20T19:30:00Z",
+  "gpus_allocated": 2,
+  "device_assignment": {
+    "worker0": {
+      "simulation_physical_gpu": 0,
+      "policy_physical_gpu": 0,
+      "port": 18000,
+      "renderer_vulkan_index": 0
+    },
+    "worker1": {
+      "simulation_physical_gpu": 1,
+      "policy_physical_gpu": 1,
+      "port": 18001,
+      "renderer_vulkan_index": 1
+    }
+  },
+  "workers": 2,
+  "source_pins": "configs/maniguard/phase2/sources.json",
+  "source_pins_usage": "Code, public checkpoint and asset identifiers only. Earlier protocols and services are not resumed.",
+  "development_families": [
+    "jar",
+    "clutter"
+  ],
+  "reserved_families": [
+    "cabinet",
+    "dusty"
+  ],
+  "other_exposed_families": [
+    "stack",
+    "lid"
+  ],
+  "exposure": "Jar, Stack, Lid and Clutter have programme-level development history. Cabinet and Dusty have source/API metadata checks only. This study makes no foundation-policy training-data exclusion claim.",
+  "actor": {
+    "formula": "epsilon + .35 * B * tanh(W * phi)",
+    "features": 44,
+    "feature_order": [
+      "bias",
+      "7 measured arm positions / pi",
+      "2 measured fingers / .04",
+      "7 previous executed arm targets minus current measured positions / .2",
+      "3 end-effector displacement since previous query / .05",
+      "8 frozen CLIP overview",
+      "8 frozen CLIP wrist",
+      "8 frozen CLIP actual instruction"
+    ],
+    "robot_clipping": [
+      -1,
+      1
+    ],
+    "context_encoder": "configs/maniguard/phase2/encoder.json",
+    "context_schedule": "text once per episode; both images once per native policy query; all conditions pay the same extraction cost",
+    "weights_shape": [
+      4,
+      44
+    ],
+    "weight_bounds": [
+      -1,
+      1
+    ],
+    "basis": "NumPy PCG64 seed 20261019; reduced QR of standard-normal 7x4; zero-pad to model width; repeat at all 16 positions",
+    "gripper_steering": false,
+    "coupling": "The decoder may change gripper outputs through model coupling. Record these changes.",
+    "persistence": 0,
+    "noise_scale": 1,
+    "forbidden_inputs": [
+      "family",
+      "task identity",
+      "checkpoint identity",
+      "object poses",
+      "goal state",
+      "monitor state",
+      "violation labels"
+    ],
+    "zero_path": "Call unchanged Policy.infer without explicit noise; preserve native RNG and numerical path",
+    "deployment": "Frozen family VLA, preprocessing, output transforms, execute_horizon=8 and native hard task horizons"
+  },
+  "benchmark": {
+    "source_profile": "high_fidelity",
+    "camera_resolution": 640,
+    "renderer": "native 640x640 DLAA",
+    "jar_horizon": 2000,
+    "clutter_horizon": 1100,
+    "grasping": "native assisted",
+    "monitor": "passive physical labels; never action vetoes",
+    "robot": "verified extended-finger Franka",
+    "requested_completion": "configs/maniguard/phase2/completion.json; raw benchmark verdict retained separately"
+  },
+  "development_episodes": [
+    {
+      "id": "dev-jar-native",
+      "family": "jar",
+      "scene": "task_0013/base",
+      "seed": 6101900,
+      "initial_controller": 0
+    },
+    {
+      "id": "dev-jar-bias",
+      "family": "jar",
+      "scene": "task_0017/base",
+      "seed": 6101901,
+      "initial_controller": 1
+    },
+    {
+      "id": "dev-clutter-native",
+      "family": "clutter",
+      "scene": "task_0039/base",
+      "seed": 6101902,
+      "initial_controller": 0
+    },
+    {
+      "id": "dev-clutter-bias",
+      "family": "clutter",
+      "scene": "task_0010/base",
+      "seed": 6101903,
+      "initial_controller": 2
+    }
+  ],
+  "authority_audit": {
+    "observations": "First four actual prequery observations of each of the four development episodes. No extra render or privileged state as actor input.",
+    "count": 16,
+    "noise_draws_each": 2,
+    "directions": 4,
+    "perturbations": [
+      -0.35,
+      0.35
+    ],
+    "baseline_calls_per_draw": 2,
+    "decoder_call_ceiling": 320,
+    "baseline_identity_check": "Same input and native noise: unchanged native path versus explicit same-noise baseline. Also compare paired native observations and seeds where available.",
+    "records": [
+      "full physical chunks",
+      "executed-prefix deltas",
+      "native resampling difference",
+      "saturation",
+      "gripper changes",
+      "noise hashes",
+      "observation hashes",
+      "RNG advancement",
+      "model shape and output mapping"
+    ],
+    "minimum_authority": "Finite eight-action physical prefix; RMS arm-target change >= .001 radians on at least half of observations for at least two directions in each development family; report full distribution and native-resampling scale.",
+    "identity_tolerance": {
+      "absolute": 1e-05,
+      "relative": 1e-05
+    },
+    "interpretation": "Influence and reproducibility only; no safety, benefit or transfer conclusion"
+  },
+  "engineering_allowance": {
+    "short_attempts": 3,
+    "policy_controls_each": 32,
+    "full_development_episodes": 4,
+    "additional_decoder_calls": 0,
+    "technical_preparation_target_minutes": 60,
+    "bounded_options": "The primary additive representation is selected now. Bias/scale, persistence, response-informed coordinates and direct residual require a separate prospective amendment within remaining allowance; no use of final audit to tune.",
+    "recovery": "Capture receipts and costs; diagnose smallest case; repair, validate, resume; never replace valid timeouts or poor outcomes"
+  },
+  "capacity_decision": {
+    "primary": "jar",
+    "fallback": "clutter",
+    "before_comparative_scores": true,
+    "seconds_per_episode": "max(180, 1.25 * slowest full development episode for candidate family); raise for startup/horizon evidence",
+    "requirements": "Complete shared initialization, both two-generation optimizers, sixteen independent audit episodes, four invalid-attempt replacements and all preservation before cutoff. If Jar does not fit, apply same test to Clutter; otherwise do not launch an incomplete optimizer comparison.",
+    "maximum_full_attempts": 64,
+    "planned_valid_episodes": 60,
+    "invalid_replacements": 4,
+    "control_ceiling_jar": 128000,
+    "initialization_and_engineering": "All extra physics and actions charged separately, including failures and asset/camera smoke tests"
+  },
+  "comparison_template": {
+    "shared_initial": {
+      "controllers": [
+        "identity",
+        "constant-positive",
+        "constant-negative",
+        "uniform-random-conditional"
+      ],
+      "cases": 2,
+      "episodes": 8
+    },
+    "objective": "int(requested_completion and not raw_ltl_violation) - 2 * int(raw_ltl_violation)",
+    "fixed_selection": "Highest summed score of the two constant controllers on shared initialization; tie positive",
+    "optimizers": [
+      "ea",
+      "random"
+    ],
+    "descendant_episodes_each": 16,
+    "generations": 2,
+    "population": 4,
+    "cases_per_candidate": 2,
+    "elite": "Copy best of previous evaluated cohort and pay both case reevaluations in each method",
+    "ea": "Other three offspring mutate alternating top-two parents with iid Gaussian sigma .25, then clip to [-1,1]",
+    "random": "Other three offspring sampled iid uniform [-1,1] in the same 176-dimensional domain",
+    "initial_seed": 20261019,
+    "optimizer_seed": 20261020,
+    "ties": "Stable candidate identifier",
+    "finalists": "Best of final evaluated cohort, immutable before audit; identity finalists remain valid outcomes",
+    "audit": {
+      "conditions": [
+        "native",
+        "fixed",
+        "ea",
+        "random"
+      ],
+      "common_blocks": 4,
+      "episodes": 16,
+      "rule": "Previously unexposed non-main-test tasks where supported by exposure inventory; otherwise disclose programme exposure. Freeze exact tasks and seeds in the capacity-selected pilot protocol before search."
+    },
+    "ordinary_learning": "Not funded by this minimum pilot; common controller/feature interfaces implemented. No evolutionary superiority claim without competent matched learning and replication.",
+    "learning_curves": "Common cumulative policy-control counts; retain all discarded candidates, partial episodes, VLA queries, encoder costs, elapsed time and two-GPU allocation"
+  },
+  "preservation": {
+    "github_branch": "maniguard/latent-evolution-20261019",
+    "dataset_repo": "Sachioster/maniguard-latent-evolution-runs",
+    "model_repo": "Sachioster/maniguard-latent-evolution-controllers",
+    "private": true,
+    "append_only_prefix": "20261019/",
+    "verification": "Record immutable remote revision, per-file bytes and SHA256; download small receipts and verify remote SHA256 or download large files"
+  },
+  "deadline_extension": {
+    "recorded_utc": "2026-10-19T20:59:03Z",
+    "previous_deadline_utc": "2026-10-20T03:00:00Z",
+    "new_deadline_utc": "2026-10-20T05:00:00Z",
+    "user_message": "Ok great, Also you can extend the time to 5 UTC",
+    "physical_cutoff_utc": "2026-10-20T04:30:00Z",
+    "scope": "Time extension on the existing instance only. Preserve the hourly price ceiling and all interaction, candidate and episode ceilings. Charge all time from the original provider start."
+  },
+  "supersedes": "configs/maniguard/latent-evolution/development-v2.json",
+  "superseded_protocol_sha256": "64ffedb23329bfa20971af9451630a8d4f6698de17afa925af5f96858393bf06",
+  "rental_record": "configs/vast/maniguard-rental-20261019-extension.json",
+  "execution_amendment": {
+    "recorded_utc": "2026-10-19T21:09:55Z",
+    "status": "prospective_before_all_Clutter_behavior_and_comparative_scores",
+    "reason": "Serial Jar timing cannot protect the full comparison; the two allocated GPUs permit testing co-resident simulator and frozen policy per device. Observed Jar simulator memory about6GiB and policy about8.5GiB against24GiB per GPU. This is a feasibility hypothesis until the last short check and concurrent Clutter development verify it.",
+    "preconditions": "Both Jar full episodes and all160 decoder calls are complete and preserved. No Clutter physical step or comparative episode has run.",
+    "engineering_assignment": "The existing final 32-control Clutter initial-3 conditional check runs on worker0 with colocated policy. No extra engineering start or control allowance.",
+    "development_assignment": "dev-clutter-native runs on worker0; dev-clutter-bias on worker1 concurrently, after the short check passes. Their exact tasks, seeds and controllers stay as prospectively assigned.",
+    "training_assignment": "The two common cases for every candidate run as one concurrent wave. Case i uses worker(i+generation)%2, identically for shared initialization, EA and random search; candidate order and evolutionary dependencies are unchanged.",
+    "audit_assignment": "Within each predeclared four-condition checking block, run adjacent condition pairs concurrently. Listed positions0,2 use worker0 and1,3 worker1. The balanced four-block order puts every condition on each GPU twice. No selection outcome enters this order.",
+    "failure_and_recovery": "One global immutable queue and64-full-attempt gate govern both workers. At most one physical job per device. Reconcile each saved PID/start-tick handle; do not relaunch a surviving process or kill its partner after a failure. Every invalid and partial attempt remains charged.",
+    "capacity": "Use measured concurrent Clutter episode/control throughput and exact wave packing. Protect56 remaining valid episodes, up to4 full infrastructure replacements, lifecycle/backups and the independent16-episode comparison. Jar retains its measured conservative bound. Stop if the complete comparison does not fit.",
+    "unchanged_scientific_contract": "Same176-parameter controller, frozen features/checkpoints/native640 rendering and horizons, four initial controllers, shared8 initial episodes,16 descendant episodes per optimizer, fixed/finalist selection and16 independent audit episodes. Ordinary learning and156-episode transfer bridge remain separately unfunded.",
+    "rental": "Two allocated GPU-hours per wall-clock hour from original provider start. Authorized stop05UTC and physical cutoff04:30UTC. Earlier provider job4986 update remains pending and must be resolved before relying on time after03UTC."
+  },
+  "rental_authorization": "configs/vast/maniguard-rental-20261020-comparison.json",
+  "deadline_authorization": {
+    "messages": [
+      "Go ahead I give you authorisation",
+      "You can run the full comparison, you need to get the contribution and result, that is most important"
+    ],
+    "recorded_epoch": 1792470183.432472,
+    "reason": "Current04:19 UTC time is later than the original proposal. User explicitly authorizes the full comparison and prioritizes the contribution/result. Preserve the scientific design and all episode limits."
+  },
+  "deadline_protection": "Authorized independent internal clock; original known provider03:00 stop is already past and next daily03:00 would be after this20:00 deadline. Provider schedule API readback remains unavailable; do not claim provider modification."
+}

@@ -4,6 +4,7 @@ import pytest
 
 from helpers.maniguard_latent_capacity import (
     comparison_design,
+    internal_clock_window_ready,
     planning_bound,
     provider_window_confirmed,
 )
@@ -46,3 +47,24 @@ def test_earlier_provider_confirmation_cannot_cover_a_later_extension():
     assert provider_window_confirmed("2026-10-20T14:00:00Z", confirmation)
     confirmation["instance_id"] = 1
     assert not provider_window_confirmed("2026-10-20T14:00:00Z", confirmation)
+
+
+def test_authorized_internal_clock_needs_live_evidence_after_the_known_provider_stop():
+    now = 1792470000
+    confirmation = {
+        "protection_mode": "authorized_internal_clock_after_elapsed_stop",
+        "instance_id": 56777435, "known_provider_job_id": 4986,
+        "known_provider_stop_utc": "2026-10-20T03:00:00Z",
+        "authorization_messages": ["Go ahead I give you authorisation",
+                                   ("You can run the full comparison, you need to get the "
+                                    "contribution and result, that is most important")],
+        "instance_http_status": 200, "instance_actual_status": "running",
+        "instance_checked_epoch": now - 10,
+        "watchdog_status": "armed", "watchdog_deadline_utc": "2026-10-20T20:00:00Z",
+        "watchdog_checked_epoch": now - 10}
+    assert internal_clock_window_ready("2026-10-20T20:00:00Z", confirmation, now=now)
+    assert not provider_window_confirmed("2026-10-20T20:00:00Z", confirmation)
+    assert not internal_clock_window_ready("2026-10-21T04:00:00Z", confirmation, now=now)
+    assert not internal_clock_window_ready("2026-10-20T20:00:00Z", confirmation, now=now + 61)
+    confirmation["authorization_messages"] = []
+    assert not internal_clock_window_ready("2026-10-20T20:00:00Z", confirmation, now=now)

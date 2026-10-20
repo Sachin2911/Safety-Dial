@@ -21,6 +21,17 @@ def deadline_configuration(rental, current_instance):
                 or extension.get("new_deadline_utc") != deadline
                 or extension.get("user_message") != "Ok great, Also you can extend the time to 5 UTC"):
             raise ValueError("The extended deadline requires the user's recorded authorization")
+    elif deadline == "2026-10-20T20:00:00Z":
+        extension = rental.get("deadline_extension", {})
+        messages = extension.get("user_messages", [])
+        if (extension.get("previous_deadline_utc") != "2026-10-20T05:00:00Z"
+                or extension.get("new_deadline_utc") != deadline
+                or "Go ahead I give you authorisation" not in messages
+                or ("You can run the full comparison, you need to get the contribution and result, "
+                    "that is most important") not in messages
+                or extension.get("planned_valid_episodes") != 60
+                or extension.get("maximum_full_attempts") != 64):
+            raise ValueError("The full-comparison extension requires the recorded authorization")
     elif deadline != "2026-10-20T03:00:00Z":
         raise ValueError("The user's absolute deadline cannot be postponed without authorization")
     return instance, calendar.timegm(time.strptime(deadline, "%Y-%m-%dT%H:%M:%SZ"))
