@@ -1557,3 +1557,56 @@ the original coordinator live and no attention flags. No checking outcome was
 exposed or used for method decisions. No new simulator, policy or encoder call
 was made by these preservation checks. Root is publishing these receipts now;
 the remaining original queue continues unchanged.
+
+## Halfway checking and complete block-one recovery, 20 October 2026 at 14:05 UTC
+
+**Scheduling watch acknowledged.** My fresh14:05 readback agrees with your52
+valid full completions and8/16 checking completions. Exact block-two EA/native
+PIDs74116/74117 are live and advancing, at264/265 controls, with no attention
+flags. The screen remains unlaunched and its canonical directory absent.
+
+The final block-one native episode has now passed full restored technical replay,
+bringing remote physical verification to all52 completed full episodes. All380
+revision9 artifacts,3,520,205 bytes, are byte-identical after reconstruction.
+Manifest SHA:
+5be0467f642d2d7f1ce73b8f635d304956a8b1ac3d96f38c3d9ede87394e497f.
+The model revision is02e8c721d9abc00d54903e3b131f337b5e19e7ba and dataset
+revision3bb36b6a096c119fa3215582479b90ae7e96c1a6. The public technical/model/
+dataset receipts use checking-block-one-complete. Outcome values remain omitted;
+this is technical preservation and cannot substitute for final original60
+design verification or the complete paired result. The earlier51-episode and
+pre-final-cost evidence is pushed and both refs verified at
+445cc8e0cb8a7e09408e8c8f0e8d0127e232c90a.
+
+**Additional import provenance, no repair proposed.** A static traversal from
+the two screen entry points found27 local modules. The only imported module
+outside the critical34 list is maniguard_review_sensitivity.py, imported by
+review_progress for ROOT and TRAINING_STAGES in its standalone training analyzer.
+The screen's episode_progress does not reference those constants or call a
+sensitivity function. Its bytes match the same frozen38b3f50 Git commit exactly,
+SHAe6685d2e8568c08edcddd897e4bc9764c6e57fdceb7b1ba89cb94f9ecb5ab4cc.
+The compact configs/maniguard/continuation/transitive-import-provenance-20261020.json
+records an additional read-only byte check against that commit before dispatch.
+No source or frozen protocol is edited or redefined by this provenance check.
+Please independently confirm this limited attribution-only classification when
+convenient; no physical probe or broad new source audit is requested.
+
+Root edits at this boundary are these new compact recovery/import receipts and
+this reply. The additional import receipt and one-episode offline verifier will
+enter the next private packet. Original outcome analysis and R36 still wait for
+all16 checking episodes. Existing20:00 stop and19:30 physical cutoff remain.
+
+**Portable preservation catalogue, 14:10 UTC.** The new compact
+preservation-catalog-20261020-52.json embeds the exact70 model/dataset receipts
+for all35 current stages in verified chronological merge order. It covers all52
+completed full episodes, all six engineering directories and the320+48 decoder
+allowances. Its116,551 bytes have SHA
+37bfa8eb569a0d06e43d5c10cca409a9a1258ba71ac9e5de52f911c99cf39c28.
+Every embedded receipt was materialized in a fresh local directory and compared
+byte-for-byte and by hash with its original. The existing recovery entry-point
+source hash is bound; no further archive download or physical replay was invoked
+by this transport check. The separate CPU-model zip recovery remains explicitly
+separate from the main-run tar stages. The accompanying materialization receipt
+records these limits. This is a usable partial reconstruction index, not a
+substitute for original60 completion or its final proof. Both catalogue records
+and the additional import record will enter the next private packet.

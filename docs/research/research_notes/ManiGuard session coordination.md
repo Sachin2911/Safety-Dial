@@ -66,12 +66,59 @@ allowances or instructions to override an existing user-directed hold.
   all4 unused replacements and both backup reserves. The frozen packing estimate
   fits the original plus four-start screen by19:16, with about14min margin.
   This is not a guarantee for serialized failures/stalls or a dispatch approval.
-- Last verified original snapshot at13:47 UTC:51/60 valid full episodes;40
+- **R38:** independently reconciled all50 pinned nonchecking ledgers and all
+  seven counter sums, including manual-v4 exactly once. CPU work matches its
+  pinned audit. The dated cost-snapshot hash is not found locally; check its
+  private preservation before treating that dated source as restored evidence.
+- Last verified original snapshot at14:04 UTC:52/60 valid full episodes;40
   comparison-training episodes have0 requested completions,16 violations and24
-  safe unfinished. Seven protected checking episodes are complete; the current
-  native wrapper remains live. No checking outcome has been opened for review.
+  safe unfinished. Eight protected checking episodes are complete; the block-two
+  EA/native wrappers remain live. No checking outcome has been opened for review.
   Revalidate identities before operational decisions. R21 choices stay fixed.
 <!-- END REVIEW STATUS INDEX -->
+
+**R38 nonchecking cost coverage review, 14:11 UTC.** All50 source identities
+match the original nonchecking queue plus the four root engineering directories;
+all50 ledger hashes match, and the seven recorded sums independently equal
+83,424 controls,10,430 policy requests,504,727 known physics ticks,83,894
+Env.step attempts,20,860 images,10,430 image calls and47 text calls. Manual
+engineering-native-v4 contributes32/4/281 to the first three counters exactly
+once. All seven separate CPU work counters match the preserved actual audit,
+including27,412 training-row uses and5,395 model-head row queries. The original
+368 decoder starts remain separate, as previously recorded. No checking behavior
+was opened and this review made no physical or neural-policy/encoder call.
+
+One nonblocking provenance item remains: the pre-final coverage record cites
+cost-snapshot SHA a19bd15205381a1efcfc98415ebfbb08d2494ae9b511ddc55684901d01e7b234.
+None of the37 local cost JSON files under runs/configs matches it. This does not
+contradict the independently matched ledger sums. Please locate the exact dated
+source in the private packet if it survives there. If it does not, preserve the
+original coverage record and append an explicit correction describing the
+unavailable source and binding recoverable immutable inputs. A later allocation
+snapshot cannot retrospectively verify those earlier bytes. R36 still requires
+terminal client/server reconciliation and provider allocation/billing review.
+
+Evidence directory: runs/reviewer/pre-final-cost-coverage-review-20261020-01.
+receipt.json SHA c14770bb7f132a9e5b5c027912fcdf360c70250133c686810e38029ee27db78f;
+report.json SHA a2e8a85f083e2a75eecc41c6ea9d3a93526e578b85dce17808608056e39ce68c;
+artifact-index.json SHA
+b376369f4929d108584ba3ad989e6a9c8479573e74658dc91687eedfc2be4f16
+indexes60 files/142,644 bytes. The final audit script passes Ruff. The initial
+harness assumed the dated snapshot would be locally present and stopped after
+all50 ledger/counter checks passed; its source and observation are retained.
+Historical failure status labels are retained from your record; this focused
+review does not repeat physical replay or establish final60 accounting.
+
+**Scheduling-only watch, 14:04 UTC.** The original queue now has52 valid full
+completions and8/16 checking completions, with two checking starts running and
+six still pending. Exact live identities are audit-b2-ea-a0,
+PID74116/start394821421, and audit-b2-native-a0, PID74117/start394821422;
+both `/proc` identities match. No checking behavior was opened. The canonical
+four-start continuation-screen directory remains absent. Your13:58 reply reports
+technical remote replay for51 completed full episodes and byte-identical recovery
+of all377 revision8 artifacts; this is owner-reported preservation evidence,
+separate from the reviewer's independently observed52 local completions.
+R36 still awaits all16 checking episodes and the complete export/design proof.
 
 **Scheduling-only watch, 13:47 UTC.** Queue classification now has51 valid full
 completions and7/16 checking completions, with no invalid full attempt. The

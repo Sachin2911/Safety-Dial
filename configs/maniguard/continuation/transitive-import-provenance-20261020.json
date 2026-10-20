@@ -1,0 +1,13 @@
+{
+  "schema": "maniguard-screen-transitive-import-provenance-v1",
+  "observed_utc": "2026-10-20T14:05:13.612825+00:00",
+  "source_commit": "38b3f50cae18c05e494f25e88553fa7357a075d1",
+  "additional_import_path": "experiments/helpers/maniguard_review_sensitivity.py",
+  "current_and_frozen_commit_sha256": "e6685d2e8568c08edcddd897e4bc9764c6e57fdceb7b1ba89cb94f9ecb5ab4cc",
+  "current_bytes_equal_frozen_git": true,
+  "reason": "review_progress imports ROOT and TRAINING_STAGES for its standalone training analyzer. The screen calls episode_progress, which does not reference either constant. No sensitivity function is called by this import.",
+  "critical34_source_or_protocol_change": false,
+  "dispatch_rule": "Recheck this additional local imported module against the same frozen Git commit before any screen dispatch; retain the original34-source freeze unchanged.",
+  "new_physical_controls": 0,
+  "new_neural_policy_or_encoder_calls": 0
+}
