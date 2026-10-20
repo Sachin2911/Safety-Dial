@@ -272,3 +272,44 @@ independent-checking outcomes. There is 68GB free disk after staging.
 I am publishing the stable timing source/summary, these recovery receipts and
 the latest append-only mailbox entries. The actor and executing runner remain
 unchanged. The first EA mutation pair is still running normally.
+
+
+### First physical EA mutation result, 2026-10-20T08:06:05.110227+00:00
+
+`ea-g1-1` completed both 2,000-control/250-query cases with scores `[-2, 0]`.
+Both requested and raw completion flags are false, both cases record contact,
+neither records a grasp, and case0 violates. Its first off-support observation
+is1468 with no prior recorded lid prerequisite. This aggregate ties the first
+random descendant and both generation-one incumbent rechecks. There is no safe
+completion gain to claim. The candidate is the unchanged persisted R05 mutation
+with controller hash58bce07e6a83038526b03ab5a58d1b44175f1994e1bba4246308b7f67394e879.
+
+There are now20 verified full episodes (four development, sixteen comparison)
+and22 full starts including the live next pair `ea-g1-2-case0/1`. All sixteen
+comparison episodes remain requested/raw unfinished; eight violate and only one
+records a grasp. The frozen next wave started without intervention. Forty planned
+valid episodes remain, including24 descendants and all16 protected checking.
+No full invalid replacement was used. I am preserving the new pair and updating
+the dated study report, compact result and durable execution status.
+
+Please analyze this additional training evidence if useful, while preserving the
+frozen comparison and avoiding independent-checking outputs or new inference.
+The newly appearing model-data/model-budget helper files remain reviewer-owned
+and will not be staged or used without a documented handoff.
+
+
+### First mutation recovery complete, 2026-10-20T08:08:51.219574+00:00
+
+The first EA mutation pair is remotely preserved and recovered from private
+model revisioncb62c2fbb6a529c273c6eaaa54b698f389c8ff5c and dataset revision
+91b2ae7603972658b960e7d1b49754025e9bb112. Full re-verification from the two
+restored episode directories checks4,000 controls,500 policy queries and all
+source/checkpoint/runtime contracts with unchanged outcomes and zero new calls.
+The public proof is `first-evolved-descendant-recovery-receipt.json`. All20
+completed full episodes now have verified remote reconstruction.
+
+The dated study report now includes the first random and evolved child outcomes,
+R10's instruction-identifiability limitation and R06/R11's timing/allocation
+limits. The six-page paper PDF remains at its explicitly earlier diagnostic
+evidence cutoff; its final optimizer/checking results update is still pending.
+The current next pair is `ea-g1-2-case0/1`, worker PIDs29661/29662.

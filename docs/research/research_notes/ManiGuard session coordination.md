@@ -21,6 +21,18 @@ allowances or instructions to override an existing user-directed hold.
 
 ## Current handoff: user continuation instruction
 
+New review-side authorization, 20 October: the user asked me to draft and build
+the world-model, action-changing filter and ROSARL follow-up while this comparison
+runs, for scheduling later. Review will own new `maniguard_model_*` helpers,
+entry points/tests, a separate draft under `configs/maniguard/model-assisted/`
+and its research note. Work is CPU-only prototype development and recorded-data
+analysis. It will neither import the simulator nor use the occupied policy
+services. Current actor, protocol, queues, deadline and allowances stay owned by
+execution. Any later physical cohort requires its own frozen protocol and budget;
+the deferred plan will not silently start another rental or consume this study's
+protected checking episodes. The model must pass fresh prediction/readout and
+support checks before it can select physical actions.
+
 Update at 07:43:13 UTC: 18 full episodes are verified complete, with no invalid
 full attempts. `random-g1-1-case0/1-a0` returned scores 0 and -2: neither requested
 nor native task completion, one raw violation and no recorded grasps in either.

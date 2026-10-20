@@ -2,10 +2,13 @@
 
 The controller, physical integration and bounded decoder audit work. The complete
 Jar comparison is **running** after the user authorized the full comparison on
-20 October. Shared initialization began at 04:28 UTC with two live native episodes.
-The fixed protocol then acquires eight shared initialization episodes, sixteen
+20 October. Shared initialization began at 04:28 UTC with two native episodes.
+The fixed protocol specifies eight shared initialization episodes, sixteen
 descendant episodes per optimizer, sealed finalists and sixteen independent
-checking episodes. The results below currently describe completed development,
+checking episodes. At the dated 08:04 UTC training snapshot, four development
+and sixteen comparison episodes are verified, and the second evolved offspring
+pair is running. The comparison episodes have zero requested or raw completions,
+eight violations and one recorded grasp. These are training observations,
 not a completed optimizer comparison. No evolutionary or transfer benefit is
 claimed while that comparison remains incomplete.
 
@@ -31,6 +34,13 @@ include measured robot state, executed-action history and frozen CLIP projection
 of the two actual camera images and actual instruction. Family, task identity,
 goal and monitor state are excluded. The frozen family VLA, 640-pixel rendering,
 eight-action execution prefix, native task horizons and passive monitor are retained.
+
+The adaptation panel has only two task instructions. Its centered instruction
+features therefore supply at most one independent contrast, even though the actor
+accepts eight text coordinates. A case-specific offset can explain their numerical
+effect; useful semantic conditioning is untested. Adapter-only text removal or
+swapping, while retaining the native VLA's correct instruction, needs a later
+prospective comparison. The current task panel and features remain frozen.
 
 The zero controller calls the unchanged native `Policy.infer` path without explicit
 noise. Independent verification replays causal features, native RNG chains, source
@@ -111,10 +121,10 @@ observations or a physical counterfactual. The two training cases remain correla
 development evidence. Generation one has started on its new predeclared seeds;
 both methods' offspring are persisted and the protected final checking is unstarted.
 
-At the user's request, new physical admissions are held after the two generation-one
+At the user's request, new physical admissions were held after the two generation-one
 incumbent pairs. Both methods reevaluate the same negative constant on seeds
-6101920/6101921 and each scores `[0, -2]`. All twelve comparison episodes remain
-unfinished, six violate, and only one ever grasps. Eight never command the gripper
+6101920/6101921 and each scores `[0, -2]`. At that hold cutoff, all twelve comparison
+episodes were unfinished, six violated, and only one recorded a grasp. Eight never command the gripper
 to close; the four that do each show finger closure. No arm action changes at the
 outer environment bounds. The
 [diagnostic summary](../../../configs/maniguard/latent-evolution/diagnostic-hold-summary-20261020.json)
@@ -149,7 +159,29 @@ The same supervised coordinator now continues the original generations and
 protected checking. The separately probed gripper support has not entered its actor.
 An [independent sensitivity review](../../../configs/maniguard/latent-evolution/review-sensitivity-summary-20261020.json)
 confirms that persisted EA mutations change their parents' codes and are generally
-unsaturated on factual training features. Physical effects remain to be evaluated.
+unsaturated on factual training features. Those offline results alone do not
+establish a physical benefit.
+
+The first new uniform-random descendant subsequently completed both full horizons
+with utility `[0, -2]`, no requested or raw completion, and no grasp. Case zero
+had neither contact nor a violation; case one had contact and a violation. All four
+incumbent rechecks and these two descendant episodes passed a remote reconstruction
+and independent replay of 12,000 controls and 1,500 policy queries. Their
+[recovery receipt](../../../configs/maniguard/latent-evolution/first-descendant-recovery-receipt.json)
+uses restored episode paths and preserves the adverse outcomes. These training
+scores do not supply an independent optimizer result.
+
+The first actual EA mutation then completed both full cases with utility `[-2, 0]`,
+no requested or raw completion, contact in both cases and no grasp. Case zero
+violated; case one remained safely unfinished. Its total utility ties the first
+random-search child and both incumbent rechecks. The
+[compact result](../../../configs/maniguard/latent-evolution/first-evolved-descendant-summary-20261020.json)
+pins both physical receipts. This candidate's active, mostly unsaturated offline
+response has therefore not produced improved safe completion in its first two
+training episodes. The remaining frozen offspring and protected checking continue.
+Both evolved episodes also passed a
+[remote reconstruction and physical replay](../../../configs/maniguard/latent-evolution/first-evolved-descendant-recovery-receipt.json)
+of all 4,000 controls and 500 query receipts, with zero new inference or physics.
 
 A separate [design verifier](../../../experiments/helpers/maniguard_latent_completion.py)
 now reconstructs the frozen initial matrices, offspring, RNG progression, recorded
@@ -245,6 +277,25 @@ records the current own-instance readback: rate unchanged, but `time_running` an
 unbilled provider stop, so no stopped interval is deducted. Stopped storage
 and transfer are separate from this running-cost calculation.
 
+An independent review profiled the saved timings of the four development and twelve
+initial/incumbent training episodes. Execution reproduced its report byte-for-byte
+without new model, encoder or simulator calls. For the twelve full Jar training
+episodes, median process time is 1,351.50 seconds and the median query-region
+fraction is 8.43%. That region includes encoding, feature assembly, compressed
+query evidence and RPC. Encoder work overlaps it. The recorded `physics_seconds`
+integrates simulation time, not wall time. Existing clocks do not establish whether
+physics, rendering, monitoring or evidence I/O dominates the residual. The
+[timing summary](../../../configs/maniguard/latent-evolution/review-timing-summary-20261020.json)
+retains distributions and those limits; it supports no change to this cohort.
+
+The same review identifies 8,112 of 24,000 recorded training controls after a first
+latched violation, when the current utility is already fixed at -2. These are
+retrospective suffixes, not saved interactions or measured time savings, and they
+do not establish physical irrecoverability. Score-bound stopping or adaptive
+evaluation allocation would require a new matched protocol, prefix validity rules
+and a protected full-horizon outcome audit. The present evaluations still run to
+native completion or the full horizon.
+
 Clutter worker zero incurred a cold shared-cache startup: first query after 574.6
 seconds, compared with 99.9 seconds on its partner. Logs identify a locked Kit key-value
 cache followed by shader compilation. The episode progressed and completed normally;
@@ -296,7 +347,7 @@ order: integration, native Jar, completed Jar, completed Clutter, then analysis.
 Restore into new staging, verify archives, reconstruct the canonical run layout and
 reconcile historical handles before any physical resume. Do not restart archived
 services. The analysis exporter supplies attempts, candidate curves and independent
-audit CSVs; comparative files currently have no data rows.
+audit CSVs. At this training snapshot, independent audit CSVs have no checking rows.
 
 Thirty-six study tests have passed using the separate intended interpreters. These
 include the real pinned OpenPI sampling interface, physical receipt replay, global
