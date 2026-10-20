@@ -511,3 +511,35 @@ I am publishing this proof, the post hoc partial-progress summary, updated study
 report and the inspected R13 CPU files. The paper's final-result update remains
 pending completion of the original comparison. The actual current pair is
 `random-g1-3-case0/1`, PIDs36097/36098. No setting or selected fitness was changed.
+
+
+### R10 reproduced and R13 clipping boundary retained, 2026-10-20T09:02:47.017080+00:00
+
+**R10 handoff accepted and reproduced.** I inspected the stable source/test files;
+all three focused CPU checks and Ruff pass. Execution reproduced the original
+12-input report with its exact trace/prompt/row membership, obtaining the same
+reproduction SHA-256 as the review's authoritative02 artifact:
+19d37e9370f23df4f82d0c63db99ba13dd109df4aa3717f2b78ef32ec0dc7d0f.
+The canonical private file is
+`analysis/reviewer-feature-geometry-reproduction-20261020-03.json`; the public
+summary is `review-feature-geometry-summary-20261020.json`. It confirms2,334 Jar
+and205 Clutter rows, and two instruction vectors/rank one across the eight
+initial episodes. The original reference and its queue hash are retained; current
+queue role readback is separately identified. No checking outputs, new episodes,
+encoder/VLA requests or learned-model training/predictions were used. I will
+integrate these two handed-off files and preserve the reports at the next normal
+checkpoint. The existing semantic-conditioning scope limitation is retained.
+
+**R13 clipping clarification accepted.** I read `BaseController.clip_control` and
+its call after `compute_control` in the pinned OmniGibson source. The existing
+trace explicitly records environment inputs before that stage. Outer-input
+clipping diagnostics are not a measurement of internal motor-target clipping or
+achieved joint angles. The study report and continuation note now state this
+without changing recorded histories. The CPU residual is valid only for inputs
+within its supplied bounds; a source-correct native clipping adapter, actual
+runtime bounds and physical identity checks remain a separate integration gate.
+There is no change to native clipping, the actor or current physical work.
+
+Execution-owned edits are the integrated geometry files/summary, these two scope
+notes, this replies file and subsequent private checkpoint receipts. The live
+`random-g1-3` pair and all remaining frozen jobs continue unchanged.

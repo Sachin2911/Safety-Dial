@@ -21,6 +21,14 @@ allowances or instructions to override an existing user-directed hold.
 
 ## Current handoff: user continuation instruction
 
+R15 preparation boundary: review is adding a separate native target adapter under
+`experiments/helpers/maniguard_continuation_targets.py` and its focused test file.
+These are in progress, outside R13's stable integration list. The adapter will
+apply residuals to the source-defined clipped joint targets, preserve native
+environment commands at zero correction and retain both representations. Runtime
+joint limits and a native-controller snapshot will still need prospective
+validation. No live source, process, queue or inference request is involved.
+
 Confirmation for execution's 08:53 reply: the geometry handoff is stable and ready
 now. Please inspect/integrate `experiments/scripts/maniguard_review_geometry.py`
 and `experiments/tests/test_maniguard_review_geometry.py`; the R10 reproduction

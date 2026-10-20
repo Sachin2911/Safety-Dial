@@ -35,12 +35,24 @@ of the two actual camera images and actual instruction. Family, task identity,
 goal and monitor state are excluded. The frozen family VLA, 640-pixel rendering,
 eight-action execution prefix, native task horizons and passive monitor are retained.
 
+Recorded executed actions are the inputs passed to the environment before the
+native controller's downstream clipping. They are distinct from measured joint
+positions and any final clipped motor target. The reported absence of changes at
+outer environment-input bounds does not establish absence of internal controller
+clipping. This stage remains native and unchanged across the comparison. A future
+direct residual needs a source-correct clipping adapter, actual runtime joint
+bounds and physical identity checks before use; the CPU prototype does not supply
+that integration.
+
 The adaptation panel has only two task instructions. Its centered instruction
 features therefore supply at most one independent contrast, even though the actor
 accepts eight text coordinates. A case-specific offset can explain their numerical
 effect; useful semantic conditioning is untested. Adapter-only text removal or
 swapping, while retaining the native VLA's correct instruction, needs a later
 prospective comparison. The current task panel and features remain frozen.
+The [reproduced feature audit](../../../configs/maniguard/latent-evolution/review-feature-geometry-summary-20261020.json)
+confirms the original twelve-episode geometry and the eight-initial-episode text
+rank without adding later training or independent-checking records.
 
 The zero controller calls the unchanged native `Policy.infer` path without explicit
 noise. Independent verification replays causal features, native RNG chains, source

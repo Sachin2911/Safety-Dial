@@ -53,6 +53,16 @@ the native command, and persistent memory is bound to the controller's checkpoin
 The 12 additional synthetic checks pass, giving 28 combined preparation checks.
 These additions have no physical entry point, factual refit or deployment evidence.
 
+The residual's supplied joint bounds must not be confused with outer
+environment-input limits. The recorded native commands precede downstream
+controller clipping and can exceed a position joint's physical range. The helper
+rejects inputs outside its supplied bounds, so it is not yet an adapter for all
+recorded native commands. Before physical use, freeze the source-correct native
+clipping map and actual runtime bounds, verify zero-residual physical identity,
+and retain original environment inputs, canonical targets, residual proposals,
+filtered commands and execution records separately. This adapter remains
+unimplemented and unvalidated; the original study's clipping stage stays native.
+
 The prospective noise controller receives the 44 causal actor features plus five
 learned task-state beliefs. Its 5-by-49 weights produce four arm coefficients and
 one explicit gripper-noise coefficient. Defaults are arm scale 0.35, gripper scale
