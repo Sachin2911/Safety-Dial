@@ -14,9 +14,15 @@ def main() -> int:
     parser.add_argument(
         "--include-local", action="store_true", help="Also check ignored local build artifacts."
     )
+    parser.add_argument(
+        "--manifest",
+        default="manifest.json",
+        help="Manifest relative to archive/ (default: the 2026-10-08 legacy manifest; "
+        "use 20261022/manifest.json for the 2026-10-22 archive).",
+    )
     args = parser.parse_args()
     archive = Path(__file__).resolve().parent
-    manifest = json.loads((archive / "manifest.json").read_text())
+    manifest = json.loads((archive / args.manifest).read_text())
     entries = list(manifest["files"])
     if args.include_local:
         entries.extend(manifest["local_only_files"])

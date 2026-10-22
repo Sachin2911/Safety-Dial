@@ -121,3 +121,31 @@ uv run python archive/verify.py
 ```
 
 See [verification.md](verification.md) for relocation checks and the test-suite results.
+
+## 22 October 2026 archive
+
+[20261022/](20261022/) preserves everything completed between 8 and 22 October 2026,
+moved unchanged with [its manifest](20261022/manifest.json) and checked by
+`python archive/verify.py --manifest 20261022/manifest.json`. The root now holds only
+the first-principles plan, the allocated topic, GECCO notes, the ManiGuard base rates
+and shared infrastructure.
+
+- [Previous direction](20261022/Evolutionary%20improvement%20on%20ManiGuard.md),
+  [plan history](20261022/docs/research/history/README.md) and
+  [progress audit](20261022/reports/Recent%20ManiGuard%20progress%20audit.md).
+- ManiGuard studies: [Part 1 failure investigation](20261022/docs/research/reports/ManiGuard%20Part1%20failure%20investigation.md),
+  [Part 2](20261022/docs/research/reports/ManiGuard%20Part2%20correction%20triggered%20feedback.md),
+  [Part 3](20261022/docs/research/reports/ManiGuard%20Part3%20model%20assisted%20evolution.md),
+  [Part 4](20261022/docs/research/reports/ManiGuard%20Part4%20counterexample%20premise.md),
+  [six-hypothesis study](20261022/docs/research/reports/ManiGuard%20six-hypothesis%20study.md),
+  [latent-evolution pilot](20261022/docs/research/reports/ManiGuard%20latent%20evolution%20pilot.md)
+  and the [GECCO negative-result draft](20261022/docs/research/reports/maniguard-phase3-part1-gecco/named.pdf).
+- UNISafe: [baseline pilot](20261022/docs/research/reports/UNISafe%20baseline%20pilot.md)
+  and [release and switching diagnosis](20261022/docs/research/reports/UNISafe%20release%20and%20switching%20diagnosis.md).
+- Code, configs, tests and run receipts: [experiments](20261022/experiments/),
+  [configs/maniguard](20261022/configs/maniguard/), [configs/unisafe](20261022/configs/unisafe/),
+  [scripts/maniguard](20261022/scripts/maniguard/).
+
+The legacy shared symlinks under `legacy/docs/research/` were retargeted to the moved
+files; `manifest.json` records the new targets. Ignored run directories and the
+uncompressed ManiGuard paper were moved on disk only and are listed as local-only files.

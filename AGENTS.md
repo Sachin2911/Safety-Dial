@@ -2,141 +2,83 @@
 
 ## Current direction and authority
 
-Read [Evolutionary improvement on ManiGuard](Evolutionary%20improvement%20on%20ManiGuard.md),
-the current research direction. The target is a shared observation- and
-instruction-conditioned controller that improves safe completion across ManiGuard's
-family-specific frozen policies under matched interaction budgets. Native-noise steering
-is the primary research bet; sampling distribution, persistence, response-informed
-coordinates and internal activation gates are prospective extensions. Their physical
-benefits, evolutionary advantage and transfer remain untested. A new protocol, comparison
-design and budget must be frozen before execution.
+Read [firstPrinciples.md](firstPrinciples.md). The goal is unchanged: a compact
+evolved controller that raises safe task completion of frozen ManiGuard policies under
+matched interaction budgets. The plan now establishes four preconditions in order,
+variance, a lever, stable evaluation, then an optimizer comparison, and each stage is
+frozen before it runs. Jar is the chosen family; Stack is the backup. The published
+base rates and the reasons are in
+[ManiGuard base rates](docs/research/research_notes/ManiGuard%20base%20rates.md).
 
-The core study is safe execution adaptation in ManiGuard. Its monitor labels violations
-but does not change actions. Continuation under a learned safety filter, a new world
-model and ROSARL integration are not assumed components of the current implementation.
-Earlier task-continuation decisions and the UNISafe evidence are preserved in the
-[plan history](docs/research/history/README.md). Do not inherit old Walker methods,
-timelines or run gates as the new implementation plan. The archived Phase 3 plans and
-recovery prompt record earlier directions, not current launch instructions.
+Everything completed before 22 October 2026 lives under `archive/` and is historical
+evidence, not a launch instruction. Do not resume archived pilots, screens or managed
+jobs. Do not inherit their protocols, gates or budgets.
 
 - **Student:** Sachin Mohan (2699183), BSc Honours CS, University of the Witwatersrand.
 - **Supervisor:** Geraud Nangue Tasse.
-- **Research context:** latent world models, safe RL, evolutionary algorithms and ROSARL.
-- **Target venue/context:** [GECCO notes](docs/gecco2027.md) and
-  [allocated topic](docs/allocatedTopic.md). The exploration is not restricted to the old
-  November thesis schedule.
-- **Evidence:** [comparative review](docs/research/reports/Safe%20manipulation%20progress%20and%20robustness.md)
-  and [UNISafe compute audit](docs/research/reports/UNISafe%20inference%20and%20training%20compute.md).
+- **Target venue:** [GECCO notes](docs/gecco2027.md) and [allocated topic](docs/allocatedTopic.md).
 
 ## Repository map
 
-1. `Evolutionary improvement on ManiGuard.md`: current research direction, latent
-   extensions, comparisons and staged generalization tests. `docs/research/history/`
-   preserves earlier directions. The six Phase 3 root plans are under `20261019/`,
-   unchanged and hash-recorded; the paused phase-two protocol is under `20261018/`.
-2. `docs/research/`: current literature reviews, supporting notes and asset audits.
-3. `docs/templates/`: reusable document source templates.
-4. `experiments/`: workspace for new implementation; add reusable Python under `helpers/`
-   and entry points under `scripts/`. There is no `src/` package.
-5. `scripts/`, `configs/download/`, `pyproject.toml`, `uv.lock`: shared setup and downloads.
-6. `archive/README.md`: navigation for preserved Push-T, Hopper, Walker and earlier studies.
-7. `archive/legacy/`: original relative layout of historical code, configs, tests, notes,
-   reports, figures, videos and deliverables. Its plans are historical context.
+1. `firstPrinciples.md`: the current plan.
+2. `docs/research/research_notes/`: current notes. `docs/papers/`: reference papers,
+   compressed with Ghostscript `/ebook` before committing.
+3. `docs/allocatedTopic.md`, `docs/gecco2027.md`, `docs/researchConceptNote/`,
+   `docs/templates/`: topic, venue, concept note and document templates.
+4. `configs/vast/`, `configs/download/`, `scripts/`: host templates, pinned downloads
+   and setup. New Hydra configs go in `configs/<group>/`.
+5. `experiments/` does not exist yet. New reusable code goes in `experiments/helpers/`,
+   entry points in `experiments/scripts/`, tests in `experiments/tests/`. No `src/`.
+6. `archive/20261022/`: the ManiGuard and UNISafe studies, previous direction, plan
+   history, reports, code, configs and tests, moved unchanged on 22 October 2026 with
+   `archive/20261022/manifest.json`. Check with
+   `python archive/verify.py --manifest 20261022/manifest.json`.
+7. `archive/legacy/`: Push-T, Hopper, Walker and LeWM studies from 8 October 2026,
+   checked by `python archive/verify.py`.
 
-The user explicitly authorized this archive reorganisation on 8 October 2026. Archived
-source and evidence were moved without changing their contents. `archive/manifest.json`
-records their original paths and hashes; `uv run python archive/verify.py` checks them.
-Caches were moved but are excluded from the manifest. Shared symlinks retain access to
-root data, upstream checkouts, downloads and current reference material.
-Ignored local build artifacts can be checked with `archive/verify.py --include-local`.
+## Research controls
 
-Original root guidance is preserved as
-[AGENTS.md.txt](archive/legacy/provenance/AGENTS.md.txt). Read it for historical interfaces
-and study-specific interpretation rules when reusing old work, not as a current plan.
-
-## Research and preservation controls
-
-- Keep archived experiment code, notebook outputs and recorded results unchanged. New
-  experiments use new files and output paths. Do not regenerate results as part of tidying.
-- Do not restart old S5 stages, gated studies or managed jobs from archived plans. Legacy
-  supervisor scripts include original absolute paths and are historical run records.
-- Distinguish poor task continuation from a restrictive filter, prediction error, missing
-  information or an insufficient horizon. A timeout alone does not diagnose the cause.
-- Ordinary task-policy learning with the same filter present is an essential comparison.
-  A standard EA can support a contribution, but an optimizer substitution is not novelty
-  by itself. Recheck primary literature before making novelty claims.
-- Report safe completion, physical violations and unfinished episodes together. Fewer
-  interventions can reflect inactivity. Never report imagined safety as measured safety.
-- Count all simulator interactions, including adaptation, discarded candidates and model
-  training when relevant. Report model queries and elapsed time separately.
-- Keep proposed, filtered and executed actions distinguishable. Physical dynamics need
-  executed-action histories; a task critic can intentionally model proposals to a filtered
-  environment. Match information advantages and budgets across comparisons.
-- With zero violations in n independent episodes, the approximate 95% upper rate bound is
-  3/n, not zero. Preserve counts, denominators and the scope of every empirical claim.
-- Preserve historical corrections: the first Push-T penalty collapse was confounded by
-  the starting position; use the corrected Safe-CEM provenance. Benchmark termination
-  and unsuccessful finite recovery search do not establish irreversibility.
-- When reusing LeWM results, retain their trajectory splits, frozen scalers/readouts,
-  interaction accounting and distinction between readout and imagined-dynamics errors.
-  Detailed controls remain with the archived studies.
+- Reproduce the published baseline before building on it. The ManiGuard paper's
+  protocol is 20 Hz control, 8 executed actions per 16-step chunk, 256 by 256
+  observations from collection-time cameras, family horizons (Jar 2,000), goal held for
+  10 steps, three policy seeds. Match it and record any deviation.
+- Score every episode under both the benchmark monitor and the requested-sequence rule
+  (Jar closure before carry). Report safe completion, violations and unfinished episodes
+  together, with denominators. Zero violations in n episodes bounds the rate at about
+  3/n, not zero.
+- Fewer interventions can mean inactivity. Report engagement alongside safety.
+- Count every simulator interaction, including sweeps, discarded candidates and failed
+  starts. Report model queries and elapsed time separately.
+- The ManiGuard monitor labels violations and never vetoes actions. Keep proposed,
+  filtered and executed actions distinguishable.
+- Ordinary learning with the same information is an essential comparison before any
+  evolutionary claim. Compare native, a tuned fixed setting and random search first.
+- Freeze each stage's protocol before running it. Choose panels and seeds before reading
+  outcomes. Keep held-out tasks untouched until the final comparison.
+- Archived results stay as recorded. New experiments use new files and output paths.
 
 ## Environment and engineering
 
-- Current Vast template: ManiGuard preparation base with Ubuntu 22.04, Python 3.10
-  in `/venv/main` and CUDA 12.4.1. See `configs/vast/README.md`. Startup installs no
-  research packages. ManiGuard simulation and policy environments require separate
-  manual preparation; the template is not an installed or validated ManiGuard stack.
-- The preserved UNISafe platform uses Python 3.12, CUDA 13 and
-  `configs/vast/requirements-linux-py312.txt` plus `uv-overrides.txt`; see
-  `configs/vast/UNISAFE.md` and `unisafe-platform.json` in that directory.
-  `bash scripts/vast/setup.sh` installs that platform; `--dry-run` preflights and
-  `--check` validates. Root `scripts/setup.sh` dispatches there on Vast. The installer
-  refuses `SAFETY_DIAL_PLATFORM=maniguard` before installation.
-- `.python-version` is 3.12. Root `pyproject.toml`/`uv.lock` still specify earlier research
-  dependencies and do not own either Vast platform. Do not root-sync them into `/venv/main`
-  or a ManiGuard environment. Use the intended environment's explicit Python executable.
-  The legacy reproduction commands below apply to an explicitly prepared legacy environment.
-- Use `uv run python ...`, `uv run python -m pytest`, and `uv run ruff check .`.
-  Using `python -m pytest` keeps tests in the project interpreter.
-- Run legacy entry points/tests with `bash archive/run.sh python ...`. It changes to
-  `archive/legacy/` and explicitly uses the root environment with `--no-sync`. Run setup
-  at the repository root first if needed. Do not create a second project environment.
-- Archived `pyproject.toml` and `uv.lock` preserve the original environment specification.
-  The launcher deliberately selects the maintained root environment instead.
-- Preserve the narrow historical exception for `safety-gymnasium` and `omnisafe`: their
-  incompatible pins require ephemeral `uv run --isolated --no-project --python 3.10`
-  tooling. It may emit small reference artefacts, not datasets or reported measurements.
-  The complete original command and restrictions are in the archived guidance.
-- New reusable code goes in `experiments/helpers/`; Hydra configs go in `configs/<group>/`.
-  Keep notebooks alongside their study and launch kernels with the correct working directory.
-- Ruff line length is 100. Fix new Python lint errors instead of broadening ignores.
-- Commit `uv.lock` when dependencies change. Do not install with `pip` or bypass `uv`.
-- Do not commit datasets, checkpoints, credentials, `wandb/` or generated run directories.
-  Model checkpoints belong in private Hugging Face repositories pinned by revision.
-- Existing assets must be checked on the run machine. The old Vast volume is gone;
-  [historical infrastructure notes](archive/legacy/docs/mainPlan/infrastructure.md) and
-  [checkpoint audit](archive/legacy/docs/research/checkpoints.md) describe reconstruction.
-- Read relevant archived environment gotchas before reusing MuJoCo code, especially EGL
-  ownership, render dimensions, replay solver state and action normalization.
+- Vast template: `configs/vast/README.md`, Ubuntu 22.04, Python 3.10 in `/venv/main`,
+  CUDA 12.4.1. ManiGuard and OpenPI are separate manual preparation steps.
+- Root `pyproject.toml` and `uv.lock` describe the legacy local environment, not a
+  ManiGuard environment. Do not sync them into `/venv/main`. Use the intended
+  interpreter explicitly. Locally, run tests with the venv's own Python, not `uv run`.
+- Ruff line length is 100. Fix new lint errors instead of broadening ignores.
+- Do not commit datasets, checkpoints, credentials, `wandb/`, `runs/` or generated run
+  directories. Checkpoints belong in private Hugging Face repositories pinned by revision.
+- Read archived environment notes before reusing MuJoCo or ManiGuard code, especially
+  EGL ownership, renderer profile, chunk execution and action normalization.
 
 ## Secrets
 
-Secrets stay in the ignored root `.env` or the remote account environment. Never print
-values, commit them, or place them in configs, manifests or command arguments. The existing
-setup helpers and downloader load the root `.env`.
+Secrets stay in the ignored root `.env` or the remote account environment. Never print,
+commit or pass them in configs, manifests or command arguments. Recognized keys:
+`WANDB_API_KEY`, `GITHUB_TOKEN`, `HF_TOKEN`, `HF_NAMESPACE`, `GIT_AUTHOR_NAME`,
+`GIT_AUTHOR_EMAIL`.
 
-Recognized keys remain `WANDB_API_KEY`, `GITHUB_TOKEN`, `HF_TOKEN`, `HF_NAMESPACE`,
-`GIT_AUTHOR_NAME`, `GIT_AUTHOR_EMAIL`, `STABLEWM_HOME`, `LEWM_REPO_URL` and `LEWM_GIT_REF`.
-There is no tracked `.env.example`; document new keys here if needed. Never repurpose
-`HOME` or `CODEX_HOME` for task-specific paths.
+## Writing
 
-## Writing and reference files
-
-Use plain prose and no em or en dashes as clause breaks. For compound modifiers use a
-plain hyphen. Current deep-research output belongs under `docs/research/`; earlier
-research remains in the archive. Do not create competing top-level research-plan folders.
-
-Compress newly added paper PDFs under `docs/papers/` with Ghostscript `/ebook` before
-committing, replacing only when smaller. Preserve archived PDFs and notebook outputs as
-recorded; moving them is not a reason to recompress or rebuild them.
+Plain prose, no em or en dashes as clause breaks, plain hyphens in compound modifiers.
+Current research notes go under `docs/research/`. Do not create competing top-level plan
+folders.
