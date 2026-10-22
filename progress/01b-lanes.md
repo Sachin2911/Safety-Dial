@@ -36,7 +36,10 @@ Host: Vast instance 57271835, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
       [receipts/01-jar-eval.yaml](receipts/01-jar-eval.yaml), tagged `smoke`. Both must
       reach a verdict with 256 by 256 videos. Record wall time and peak GPU memory per
       lane in `receipts/01b-smoke.md`. Count these episodes.
-- [ ] **3. Lane wrapper.** Copy upstream `scripts/eval_family.sh` to
+- [x] **3. Lane wrapper.** Done 2026-10-22: `scripts/todo1/eval_family_lane.sh`, upstream
+      `eval_family.sh` at 6bf4c61 plus `PORT` and `TASKS` (11 added lines, 1 changed line);
+      symlinked into the clone's `scripts/` so its relative paths resolve unchanged.
+      Receipt: `receipts/01b-lane-wrapper.diff`. Copy upstream `scripts/eval_family.sh` to
       `scripts/todo1/eval_family_lane.sh` with exactly two additions: a `PORT`
       environment variable replacing the hard-coded `--port 8000`, and a `TASKS`
       environment variable restricting the plan to a listed subset of task directories.

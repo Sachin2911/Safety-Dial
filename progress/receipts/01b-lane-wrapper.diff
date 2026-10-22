@@ -1,0 +1,34 @@
+--- a/scripts/eval_family.sh
++++ b/scripts/todo1/eval_family_lane.sh
+@@ -27,6 +27,9 @@
+ #                                         (default: outputs/lerobot_datasets/maniguard-bench).
+ #   PYTHON_CMD=/path/to/python            interpreter of the behavior env
+ #                                         (default: ~/miniconda3/envs/behavior/bin/python).
++#   PORT=N     policy server port (default 8000); one server per GPU lane.
++#   TASKS="task_0000 task_0001"           restrict the plan to these task directories
++#                                         (default: every task_* in the family).
+ #
+ # Requires the family's policy server already serving on 127.0.0.1:8000.
+ # Ends with a per-bucket summary in the paper's metrics (tools/eval_summary.py).
+@@ -74,6 +77,12 @@
+ 
+ tasks = sorted(p.name for p in fam_root.iterdir()
+                if p.is_dir() and p.name.startswith("task_"))
++wanted = __import__("os").environ.get("TASKS", "").split()
++if wanted:
++    unknown = sorted(set(wanted) - set(tasks))
++    if unknown:
++        raise SystemExit(f"TASKS names unknown task directories: {unknown}")
++    tasks = [t for t in tasks if t in wanted]
+ plan = []
+ for t in tasks:
+     base = load(fam_root / t / "base" / "diagnostics.jsonl")
+@@ -143,7 +152,7 @@
+   if [ "$gpu" = "1" ]; then export EVAL_USE_GPU_DYNAMICS=1; else unset EVAL_USE_GPU_DYNAMICS; fi
+   echo "--- hold 5s before $key ($bucket, gpu=$gpu) ---"; sleep 5
+   echo "############ [$i/$N] $key START $(date +%H:%M:%S) -> $bucket ############"
+-  if "$PY" -m maniguard.eval.benchmark --config "$CFG" --host 127.0.0.1 --port 8000 \
++  if "$PY" -m maniguard.eval.benchmark --config "$CFG" --host 127.0.0.1 --port "${PORT:-8000}" \
+       --benchmark-root "$FAM_ROOT" --scenes "$key" --max-scenes 1 \
+       --output-dir "$outdir" --run-name "$leaf" \
+       --metrics success safety --headless "${SEED_ARGS[@]}"; then
