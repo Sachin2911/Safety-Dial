@@ -51,12 +51,15 @@ to move earlier.
       legacy`, `camera_resolution: 256`, `execute_horizon: 8`, `max_steps: 2000`,
       `success_hold_steps: 10`, left overview plus wrist cameras, `LEVELS=base` only.
       Confirm on the first frame that the policy server receives 256 by 256 images.
-      Copy the final YAML to `progress/receipts/01-jar-eval.yaml`.
+      Enable video saving for every rollout (the runner's `--save-video` option, or the
+      equivalent setting in `eval_family.sh`) so each task's episode is recorded as an
+      mp4 named by task and seed. Copy the final YAML to `progress/receipts/01-jar-eval.yaml`.
 - [ ] **4. Smoke test.** One Jar episode through the official runner with the policy
       server up. Confirm `results.jsonl` has `success`, `ltl_violated`,
       `counted_violation`, `safety_evaluated`, `first_contact_step` and a non-null
       `status`, and that the episode ran to a verdict rather than crashing. Record
-      wall time per episode. Save the row to `progress/receipts/01-smoke.jsonl`.
+      wall time per episode and confirm a video file was written for the episode.
+      Save the row to `progress/receipts/01-smoke.jsonl`.
 - [ ] **5. Seed one: all 26 Jar base tasks.** `LEVELS=base SEED=<s1> bash
       scripts/eval_family.sh jar_transport`. Expect roughly 7 safe successes and 10
       violations. **Stop rule:** 0 or 1 safe successes means stop, do not run more
@@ -69,9 +72,12 @@ to move earlier.
       table, engagement rate and per-seed counts in `progress/receipts/01-results.md`,
       with the three `results.jsonl` files copied under `progress/receipts/01-runs/`.
 - [ ] **8. Preserve and hand off.** Commit all receipts and push. Upload the full
-      `outputs/eval_logs` tree for the three seeds to a private Hugging Face dataset
-      under the account's namespace and record the repo and revision in
-      `01-results.md`. Then stop: todo 2 starts only after review.
+      `outputs/eval_logs` tree for the three seeds, including every rollout video, to a
+      private Hugging Face dataset under the account's namespace, laid out as
+      `jar/seed<s>/task_<nnnn>/` with the video and the `results.jsonl` row beside it.
+      Add a README in the dataset listing each video with its task, seed and
+      four-class outcome so episodes can be browsed without downloading. Record the
+      repo and revision in `01-results.md`. Then stop: todo 2 starts only after review.
 
 ## Rules
 
