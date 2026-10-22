@@ -75,3 +75,22 @@ first safe success seen on C. Peak GPU memory per lane with server and simulator
 12.3 GB of 24 GB. The pre-launch check could not see B's seed 0 rows because B pushes only
 on item completion; the reviewer's direct read of B at that time showed 1 safe success in
 9 episodes, so the stop rule was not met and the launch was correct.
+
+## Seed 0 and instance B retirement (reviewed after commit `f7c4ed6`)
+
+Seed 0 is 2 safe success, 1 unsafe success, 8 safe unsuccess, 15 unsafe unsuccess over
+26 tasks with 100% engagement. Against the paper's per-seed expectation of about 7 safe
+successes and 10 violations this single seed is low: under the published rates the
+chance of 2 or fewer safe successes is about 1.6% and of 16 or more violations about
+1.4%. The receipt's own two-sided Fisher tests against the pooled published row give
+0.055 and 0.067. Judgment is deferred to the pooled 78, as the frozen protocol requires;
+at the time of this note seeds 1 and 2 on instance C were halfway through at roughly
+25% safe success and 33% violations, close to the paper, so seed-to-seed variance or a
+host effect (different driver patch, non-deterministic renderer) are both live
+explanations alongside the receipt's list.
+
+The agent's mid-run input checks (long-finger asset loaded, rendering matched to the
+training frames, all scenes and monitors initialized) and its handling of the aborted
+seed 1 start are accepted. The dataset upload was verified from the workstation:
+private, revision `ccafd65a`, 138 files, 26 complete seed 0 task folders, 54 videos
+none truncated. Instance B was destroyed afterwards per the user's instruction.
