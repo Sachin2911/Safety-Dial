@@ -38,14 +38,13 @@ Everything completed before 22 October 2026 is preserved unchanged under
 
 ## Setup
 
-The [Vast template](configs/vast/README.md) is a ManiGuard preparation base with
-Python 3.10 and CUDA 12.4.1. ManiGuard simulation, assets and policy serving are separate
-manual steps described there. Clone after connecting:
+No host template is defined for the current plan yet. The stage 1 protocol will specify
+the ManiGuard host. The previous Vast templates, rental records, platform specs and setup
+scripts are preserved under [archive/20261022/configs/vast](archive/20261022/configs/vast/)
+and [archive/20261022/scripts](archive/20261022/scripts/). Root `pyproject.toml` and
+`uv.lock` describe the local legacy environment used by `archive/run.sh`.
 
 ```bash
 git clone https://github.com/Sachin2911/Safety-Dial.git
 cd Safety-Dial
 ```
-
-Archived studies document their own environments; see the archive manifests and the
-preserved `configs/` and `scripts/` under each archive root.

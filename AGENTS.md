@@ -25,8 +25,10 @@ jobs. Do not inherit their protocols, gates or budgets.
    compressed with Ghostscript `/ebook` before committing.
 3. `docs/allocatedTopic.md`, `docs/gecco2027.md`, `docs/researchConceptNote/`,
    `docs/templates/`: topic, venue, concept note and document templates.
-4. `configs/vast/`, `configs/download/`, `scripts/`: host templates, pinned downloads
-   and setup. New Hydra configs go in `configs/<group>/`.
+4. `configs/` and `scripts/` do not exist yet. New Hydra configs go in
+   `configs/<group>/`; shared setup goes in `scripts/`. The previous Vast templates,
+   rental records and setup scripts are under `archive/20261022/configs/vast/` and
+   `archive/20261022/scripts/`.
 5. `experiments/` does not exist yet. New reusable code goes in `experiments/helpers/`,
    entry points in `experiments/scripts/`, tests in `experiments/tests/`. No `src/`.
 6. `archive/20261022/`: the ManiGuard and UNISafe studies, previous direction, plan
@@ -59,8 +61,9 @@ jobs. Do not inherit their protocols, gates or budgets.
 
 ## Environment and engineering
 
-- Vast template: `configs/vast/README.md`, Ubuntu 22.04, Python 3.10 in `/venv/main`,
-  CUDA 12.4.1. ManiGuard and OpenPI are separate manual preparation steps.
+- No current host template. The stage 1 protocol defines the ManiGuard host; the
+  archived Vast template (`archive/20261022/configs/vast/README.md`) records what the
+  previous preparation base contained.
 - Root `pyproject.toml` and `uv.lock` describe the legacy local environment, not a
   ManiGuard environment. Do not sync them into `/venv/main`. Use the intended
   interpreter explicitly. Locally, run tests with the venv's own Python, not `uv run`.

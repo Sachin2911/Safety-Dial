@@ -142,7 +142,8 @@ and shared infrastructure.
   and the [GECCO negative-result draft](20261022/docs/research/reports/maniguard-phase3-part1-gecco/named.pdf).
 - UNISafe: [baseline pilot](20261022/docs/research/reports/UNISafe%20baseline%20pilot.md)
   and [release and switching diagnosis](20261022/docs/research/reports/UNISafe%20release%20and%20switching%20diagnosis.md).
-- Code, configs, tests and run receipts: [experiments](20261022/experiments/),
+- Code, configs, tests, run receipts and infrastructure: [experiments](20261022/experiments/),
+  [configs/vast](20261022/configs/vast/), [configs/download](20261022/configs/download/), [scripts](20261022/scripts/),
   [configs/maniguard](20261022/configs/maniguard/), [configs/unisafe](20261022/configs/unisafe/),
   [scripts/maniguard](20261022/scripts/maniguard/).
 
