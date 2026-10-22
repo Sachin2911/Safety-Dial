@@ -9,5 +9,6 @@ Tick items as they are done and add a one-line note with the date and evidence p
 
 ## Rentals
 
-- [rental-20261022.json](rental-20261022.json): one RTX 3090 on driver 580.173.02 for
-  todo 1, created 22 October 2026. Check `vastai show instance 57260671` before use.
+- [rental-20261022.json](rental-20261022.json): two RTX 3090 instances rented as a race
+  for todo 1 on 22 October 2026 (A: 57260671 Utah, B: 57261620 Norway). Use whichever
+  comes up first and destroy the other. Check `vastai show instances-v1` before use.

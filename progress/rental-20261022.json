@@ -1,47 +1,62 @@
 {
-  "schema": "jar-replication-rental-v1",
+  "schema": "jar-replication-rental-v2",
   "recorded_utc": "2026-10-22T19:18:45+00:00",
   "purpose": "progress/01-replication.md: reproduce the published pi0.5-SFT Jar in-distribution row",
-  "instance_id": 57260671,
-  "label": "jar-replication",
-  "offer_id": 54055683,
-  "machine_id": 6762,
-  "host_id": 34742,
   "cloud_tier": "verified",
-  "geolocation": "Utah, US",
   "template": {
     "id": 771273,
     "hash_id": "62414e8fca6befba085051de7ed36190",
     "name": "ManiGuard latent evolution",
     "image": "vastai/base-image:cuda-12.4.1-cudnn-devel-ubuntu22.04-py310-2026-09-07"
   },
-  "hardware": {
-    "num_gpus": 1,
-    "gpu_name": "RTX 3090",
-    "vram_mib": 24576,
-    "driver_version": "580.173.02",
-    "cpu_ram_mb_reported": 128758,
-    "effective_cpu_cores": 16.0,
-    "disk_gb": 200,
-    "cpu_name": "AMD EPYC 7D12 32-Core Processor"
-  },
-  "pricing": {
-    "offer_dph_usd_listed": 0.202,
-    "instance_dph_usd_with_disk": 0.2741,
-    "storage_usd_per_gb_month": 0.2667,
-    "transfer_charges_separate": true
-  },
-  "provider_started_utc": "2026-10-22T19:18:11+00:00",
-  "ssh": {
-    "host": "ssh2.vast.ai",
-    "port": 11263,
-    "user": "root"
-  },
   "stop_schedule": null,
   "notes": [
     "Driver patch 580.173.02 is the one validated on the 19 October 2026 rental (archive/20261022/configs/vast/maniguard-rental-20261019.json).",
     "Template filter requires 580.178.04 exactly; the template was applied to this offer by hash via the CLI, so the filter did not apply.",
     "The instance API key returned at creation is not recorded anywhere in this repository.",
-    "No stop schedule yet. Set one before leaving the instance unattended."
+    "No stop schedule yet. Set one before leaving the instance unattended.",
+    "Second instance B rented when A stayed in 'Preparing GPUs'. Destroy the loser; both bill while running."
+  ],
+  "instances": [
+    {
+      "role": "A",
+      "instance_id": 57260671,
+      "label": "jar-replication",
+      "offer_id": 54055683,
+      "machine_id": 6762,
+      "host_id": 34742,
+      "geolocation": "Utah, US",
+      "gpu": "RTX 3090",
+      "driver_version": "580.173.02",
+      "cpu_ram_mb_reported": 128758,
+      "instance_dph_usd_with_disk": 0.2741,
+      "ssh": {
+        "host": "ssh2.vast.ai",
+        "port": 11263,
+        "user": "root"
+      },
+      "provider_started_utc": "2026-10-22T19:18:11+00:00",
+      "status_note": "Stuck at 'Preparing GPUs' for over six minutes after creation."
+    },
+    {
+      "role": "B",
+      "instance_id": 57261620,
+      "label": "jar-replication-b",
+      "offer_id": 56087852,
+      "machine_id": 56094,
+      "host_id": 1276,
+      "geolocation": "Norway, NO",
+      "gpu": "RTX 3090",
+      "driver_version": "580.178.04",
+      "cpu_ram_mb_reported": 64015,
+      "instance_dph_usd_with_disk": 0.4727,
+      "ssh": {
+        "host": "ssh7.vast.ai",
+        "port": 25641,
+        "user": "root"
+      },
+      "provider_started_utc": "2026-10-22T19:24:51+00:00",
+      "status_note": "Rented as a race against A; whichever accepts SSH first is used and the other is destroyed."
+    }
   ]
 }
