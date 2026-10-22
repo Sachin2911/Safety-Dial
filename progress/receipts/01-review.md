@@ -60,3 +60,18 @@ Timing note for the budget: 780 s wall per episode, of which 332 s was a cold Is
 startup. `eval_family.sh` launches a fresh simulator process per task, so startup repeats
 for every episode. Expect 9 to 13 min per episode, 4 to 5.5 h per seed and 12 to 16 h
 for all three seeds, rather than the 5 min per episode assumed in the todo budget.
+
+## Todo 1b items 1 to 4 on instance C (reviewed after commit `bac278f`)
+
+Accepted. The install replay reached the same pins; the OpenPI freeze is byte-identical to
+B's and the behavior freeze differs only in the temporary directory names of the Isaac Sim
+wheel paths, with identical wheel hashes. The lane wrapper diff against upstream
+`eval_family.sh` adds exactly a `PORT` variable and a `TASKS` subset filter; the evaluator
+command is otherwise unchanged. C needed one host-specific repair beyond B: GLVND was
+dispatching EGL to Mesa, so the NVIDIA EGL vendor file had to be selected explicitly, the
+same fix the October rental on this machine recorded. Both lane smoke episodes reached
+verdicts at 256 by 256; the seed 2 smoke on task_0000 was a safe success at step 982, the
+first safe success seen on C. Peak GPU memory per lane with server and simulator was about
+12.3 GB of 24 GB. The pre-launch check could not see B's seed 0 rows because B pushes only
+on item completion; the reviewer's direct read of B at that time showed 1 safe success in
+9 episodes, so the stop rule was not met and the launch was correct.
