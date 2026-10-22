@@ -47,7 +47,9 @@ Host: Vast instance 57271835, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
       `--max-scenes 1`, `--output-dir`, `--run-name`, `--metrics success safety`,
       `--headless`, `--seed`. Commit the diff against upstream as
       `receipts/01b-lane-wrapper.diff`.
-- [ ] **4. Check instance B's seed 0 before launching.** `git pull` and read any
+- [x] **4. Check instance B's seed 0 before launching.** Done 2026-10-22 22:10 UTC: B has
+      pushed no seed 0 rows yet (item 5 unticked upstream), so the stop rule is not met;
+      lane 1's own smoke at seed 2 was a safe success. Receipt: `receipts/01b-precheck.md`. `git pull` and read any
       seed 0 progress B has pushed, or ask the user. If B has six or more completed
       episodes with zero safe successes, stop here and wait for review. Otherwise go on.
 - [ ] **5. Run seed 1 and seed 2 concurrently.** Lane 0 runs all 26 base tasks at
