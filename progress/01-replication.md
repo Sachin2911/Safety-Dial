@@ -41,7 +41,9 @@ to move earlier.
       checkpoints were last updated 20 August 2026). Record the chosen hash and why in
       `progress/receipts/01-sources.json`, together with the other six revisions above
       as actually used.
-- [ ] **2. Install.** Follow the upstream installation guide at the chosen revision:
+- [x] **2. Install.** Done 2026-10-22: upstream installer (curobo pre-built against the
+      env's torch, Spot and openpi-client added), all downloads hash-verified. Receipt:
+      `receipts/01-install.md`. Follow the upstream installation guide at the chosen revision:
       `git clone --recursive`, BEHAVIOR-1K `setup.sh` with the omnigibson, bddl,
       dataset, eval and primitives options, then `pip install -e ".[serve]"` in the
       behavior environment, plus the OpenPI serving environment for pi0.5. Download the
