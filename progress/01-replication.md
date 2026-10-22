@@ -69,7 +69,9 @@ to move earlier.
       `status`, and that the episode ran to a verdict rather than crashing. Record
       wall time per episode and confirm a video file was written for the episode.
       Save the row to `progress/receipts/01-smoke.jsonl`.
-- [ ] **5. Seed one: all 26 Jar base tasks.** `LEVELS=base SEED=<s1> bash
+- [x] **5. Seed one: all 26 Jar base tasks.** Done 2026-10-22 (SEED=0): 2 / 1 / 8 / 15,
+      26/26 engaged, 0 failures, 8333 s; stop rule not triggered (2 safe successes).
+      `receipts/01-seed-one.md`, `receipts/01-runs/seed0/`. `LEVELS=base SEED=<s1> bash
       scripts/eval_family.sh jar_transport`. Expect roughly 7 safe successes and 10
       violations. **Stop rule:** 0 or 1 safe successes means stop, do not run more
       seeds, write what was checked in `progress/receipts/01-seed1-stop.md`, commit,
