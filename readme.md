@@ -36,15 +36,32 @@ Everything completed before 22 October 2026 is preserved unchanged under
 - [Legacy archive](archive/legacy/): Push-T Safe CEM, Hopper and Walker locomotion,
   LeWM experience study and Walker evolutionary studies.
 
-## Setup
+## Setup on Vast
 
-No host template is defined for the current plan yet. The stage 1 protocol will specify
-the ManiGuard host. The previous Vast templates, rental records, platform specs and setup
-scripts are preserved under [archive/20261022/configs/vast](archive/20261022/configs/vast/)
-and [archive/20261022/scripts](archive/20261022/scripts/). Root `pyproject.toml` and
-`uv.lock` describe the local legacy environment used by `archive/run.sh`.
+Rent an RTX 3090 or 4090 host on NVIDIA driver 580.x with the private **ManiGuard latent
+evolution** template (hash `62414e8fca6befba085051de7ed36190`; see
+[progress/rental-20261022.json](progress/rental-20261022.json) for the current
+instance). The template provides Ubuntu 22.04, Python 3.10 in `/venv/main`, CUDA 12.4.1,
+tmux, git and uv, and installs no research packages. `HF_TOKEN` and `GITHUB_TOKEN` are
+set in the instance environment; never print them.
+
+Connect, install Claude Code, clone and start the agent inside tmux so it survives
+disconnects (`Ctrl-b d` detaches, `tmux attach -t jar` reconnects):
 
 ```bash
-git clone https://github.com/Sachin2911/Safety-Dial.git
-cd Safety-Dial
+ssh -p 25641 root@ssh7.vast.ai
+source /opt/nvm/nvm.sh && npm install -g @anthropic-ai/claude-code
+cd /workspace && git clone https://github.com/Sachin2911/Safety-Dial.git && cd Safety-Dial
+tmux new -s jar
+claude
 ```
+
+Sign in when prompted, then paste the contents of
+[progress/goal-prompt-01.md](progress/goal-prompt-01.md). It works through
+[progress/01-replication.md](progress/01-replication.md) and commits evidence under
+`progress/`.
+
+Earlier Vast templates, rental records and setup scripts are preserved under
+[archive/20261022/configs/vast](archive/20261022/configs/vast/) and
+[archive/20261022/scripts](archive/20261022/scripts/). Root `pyproject.toml` and
+`uv.lock` describe the local legacy environment used by `archive/run.sh`.
