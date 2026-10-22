@@ -12,7 +12,10 @@ Host: Vast instance 57271835, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
 
 ## Checklist
 
-- [ ] **1. Install by replaying instance B's recipe.** Follow
+- [x] **1. Install by replaying instance B's recipe.** Done 2026-10-22 21:41 UTC:
+      same pins, freezes identical to B's, all downloads hash-verified; the installer's
+      new-env block was run by hand so the known curobo failure was not repeated.
+      Receipt: `receipts/01b-install.md`. Follow
       [receipts/01-sources.json](receipts/01-sources.json) for every revision and
       [receipts/01-install.md](receipts/01-install.md) for the commands, including the
       `CONDA_ENVS_PATH` workaround, the pre-built curobo, Spot and `openpi-client`, and
