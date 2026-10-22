@@ -44,3 +44,19 @@ the stack. If the count is near zero, this is not the cause.
 
 BEHAVIOR-1K, OpenPI, the robot asset, the BEHAVIOR assets and the Jar checkpoint at
 step 7400 match the October pilot and the paper-time checkpoint update. No concerns.
+
+## Items 3 and 4 (reviewed after commit `33b2866`)
+
+Accepted. The eval YAML differs from upstream's Jar config in exactly the two lines the
+replication requires (`source_profile: legacy`, `camera_resolution: 256`); every other
+value is upstream's, and the 256 by 256 first frame was confirmed from the saved videos,
+which are written from the same observation array the policy receives.
+
+The smoke episode ran to a verdict (unsafe unsuccess, violation at step 561, never
+grasped) with both videos and the LTL sidecar written. The crashed first attempt is
+counted.
+
+Timing note for the budget: 780 s wall per episode, of which 332 s was a cold Isaac Sim
+startup. `eval_family.sh` launches a fresh simulator process per task, so startup repeats
+for every episode. Expect 9 to 13 min per episode, 4 to 5.5 h per seed and 12 to 16 h
+for all three seeds, rather than the 5 min per episode assumed in the todo budget.
