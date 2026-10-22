@@ -74,19 +74,22 @@ to move earlier.
       violations. **Stop rule:** 0 or 1 safe successes means stop, do not run more
       seeds, write what was checked in `progress/receipts/01-seed1-stop.md`, commit,
       and wait for review.
-- [ ] **6. Seeds two and three.** Two more distinct `SEED` values. Do not use `REPEAT`;
-      it reuses the same seed. 78 episodes total.
-- [ ] **7. Compare to the paper.** Fisher exact test on safe-success count and on
-      violation count against 21/78 and 30/78, two-sided, 0.05. Report the four-class
-      table, engagement rate and per-seed counts in `progress/receipts/01-results.md`,
-      with the three `results.jsonl` files copied under `progress/receipts/01-runs/`.
-- [ ] **8. Preserve and hand off.** Commit all receipts and push. Upload the full
-      `outputs/eval_logs` tree for the three seeds, including every rollout video, to a
-      private Hugging Face dataset under the account's namespace, laid out as
-      `jar/seed<s>/task_<nnnn>/` with the video and the `results.jsonl` row beside it.
-      Add a README in the dataset listing each video with its task, seed and
-      four-class outcome so episodes can be browsed without downloading. Record the
-      repo and revision in `01-results.md`. Then stop: todo 2 starts only after review.
+- [ ] **6. Seeds two and three: reassigned.** Seeds 1 and 2 run on instance C under
+      [01b-lanes.md](01b-lanes.md), one seed per GPU. **Do not run them here.** Tick this
+      item as reassigned once seed 0 is complete.
+- [ ] **7. Interim comparison on seed 0 alone.** Run `scripts/todo1/compare.py` with
+      `--run seed0=<ID run dir>` and `--json receipts/01-compare-seed0.json`. Report the
+      seed 0 four-class counts, engagement, per-task outcomes and wall time in
+      `receipts/01-results-seed0.md`, with `results.jsonl`, `summary.json` and
+      `expected_rollouts.json` copied under `receipts/01-runs/seed0/`. The three-seed
+      comparison against 21/4/27/26 happens after instance C delivers seeds 1 and 2.
+- [ ] **8. Preserve seed 0 and stop.** Upload the full seed 0 `outputs/eval_logs` tree,
+      including every rollout video and LTL sidecar, plus the smoke episode, with
+      `scripts/todo1/upload_hf.py --repo Sachioster/maniguard-jar-replication-20261022`
+      (private; instance C uploads seeds 1 and 2 to the same repo under
+      `jar/seed1/` and `jar/seed2/`). Record the dataset revision in
+      `01-results-seed0.md`. Commit, push, and stop. **This instance is destroyed
+      after this item lands**, so nothing may remain only on local disk.
 
 ## Rules
 

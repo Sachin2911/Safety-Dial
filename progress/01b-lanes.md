@@ -52,9 +52,10 @@ Host: Vast instance 57271835, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
       per-seed four-class counts, engagement and wall time into `receipts/01b-results.md`.
 - [ ] **7. Preserve.** Upload both seeds' full `outputs/eval_logs` trees, including every
       video and LTL sidecar, to the same private Hugging Face dataset layout as item 8 of
-      01-replication.md (`jar/seed<s>/task_<nnnn>/`), coordinating the dataset name with
-      the user so B's seed 0 lands in the same repo. Record repo and revision. Push and
-      stop. The three-seed comparison (item 7 of 01-replication.md) is done after review.
+      01-replication.md (`jar/seed<s>/task_<nnnn>/`) using
+      `scripts/todo1/upload_hf.py --repo Sachioster/maniguard-jar-replication-20261022`,
+      the same private dataset instance B uses for seed 0. Record repo and revision.
+      Push and stop. The three-seed comparison (item 7 of 01-replication.md) is done after review.
 
 ## Rules
 
