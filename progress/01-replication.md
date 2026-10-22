@@ -50,7 +50,9 @@ to move earlier.
       benchmark scenes, the long-finger robot asset and the Jar checkpoint at the pinned
       revisions with `HF_TOKEN`. Verify file hashes against the Hugging Face manifests.
       Record install commands, durations and disk use in `progress/receipts/01-install.md`.
-- [ ] **3. Configure the Jar eval exactly as the paper.** In the Jar eval YAML
+- [x] **3. Configure the Jar eval exactly as the paper.** Done 2026-10-22: legacy 256 px
+      YAML in `receipts/01-jar-eval.yaml`; first frame 256 x 256 confirmed from the saved
+      smoke videos (`receipts/01-smoke.md`). In the Jar eval YAML
       (`configs/eval/jar_transport_joint.yaml` or its equivalent): `source_profile:
       legacy`, `camera_resolution: 256`, `execute_horizon: 8`, `max_steps: 2000`,
       `success_hold_steps: 10`, left overview plus wrist cameras, `LEVELS=base` only.
@@ -58,7 +60,10 @@ to move earlier.
       Enable video saving for every rollout (the runner's `--save-video` option, or the
       equivalent setting in `eval_family.sh`) so each task's episode is recorded as an
       mp4 named by task and seed. Copy the final YAML to `progress/receipts/01-jar-eval.yaml`.
-- [ ] **4. Smoke test.** One Jar episode through the official runner with the policy
+- [x] **4. Smoke test.** Done 2026-10-22: task_0000/base seed 0 ran to a verdict
+      (unsafe unsuccess, 2000 steps, 780 s wall, videos written); one earlier attempt
+      crashed at Kit startup on missing X11/GL libs. `receipts/01-smoke.jsonl`,
+      `receipts/01-smoke.md`. One Jar episode through the official runner with the policy
       server up. Confirm `results.jsonl` has `success`, `ltl_violated`,
       `counted_violation`, `safety_evaluated`, `first_contact_step` and a non-null
       `status`, and that the episode ran to a verdict rather than crashing. Record

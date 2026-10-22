@@ -14,6 +14,7 @@ export PYTHON_CMD="${PYTHON_CMD:-/opt/miniforge3/envs/behavior/bin/python}"
 export LEVELS=base
 export SEED
 export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
+export VK_ICD_FILENAMES=/etc/vulkan/icd.d/nvidia_icd.json   # image puts the NVIDIA ICD here
 cd "${ROOT}/ManiGuard"
 echo "START seed=${SEED} leaf=${LEAF} $(date -u +%FT%TZ)"; SECONDS=0
 bash scripts/eval_family.sh jar_transport "${LEAF}" configs/eval/jar_transport_joint_legacy256.yaml
