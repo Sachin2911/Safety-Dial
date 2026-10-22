@@ -1,0 +1,98 @@
+{
+  "schema": "todo1-sources-v1",
+  "recorded_utc": "2026-10-22T20:05:00+00:00",
+  "host": {
+    "instance_id": 57261620,
+    "gpu": "NVIDIA GeForce RTX 3090 24576 MiB",
+    "driver": "580.178.04",
+    "cuda_toolkit": "12.4",
+    "render_libraries": {"gl": true, "optix": true, "vulkan": true},
+    "workspace_is_volume": false,
+    "clone_root": "/workspace/Safety-Dial/third_party (gitignored)"
+  },
+  "decision": {
+    "maniguard_revision": "6bf4c61a1f168cc46e02eb22c41bcb51815e9726",
+    "summary": "Keep 6bf4c61 (merge of PR #21, 2026-10-15). It is the newest revision that still accepts source_profile: legacy with camera_resolution: 256 and renders 256 by 256 through the pre-visual-update code path. HEAD (91d88aac, 2026-10-19) removes the legacy profile and raises on it, so it cannot replicate the paper's rendering.",
+    "checks": [
+      "maniguard/visual/profile.py@6bf4c61: resolve_profile_selection('legacy') returns None; resolve_source_resolution(None, 256) returns 256 (and defaults to 256 when unset).",
+      "maniguard/eval/eval_config.py@6bf4c61: resolve_source_config returns early for the legacy (None) profile, so rendering_frequency and the DLAA time contract are untouched.",
+      "maniguard/eval/benchmark.py@6bf4c61: with profile None it sets gm.ENABLE_HQ_RENDERING=False (OmniGibson's own default at 88454bd is False), builds only the policy's single overview camera, resizes external and wrist cameras to cfg.camera_resolution, reads frames via env.get_obs() and steps via env.step(). This is the same observation path as the last pre-visual main revision a1b6444b (PR #19, 2026-09-30); the only legacy-path differences are streaming mp4 writing (StreamingVideoWriter at action_frequency fps instead of imageio at 30 fps) and the optional recording observer, which is off.",
+      "git diff a1b6444b..6bf4c61 on maniguard/utils/safety_monitor.py only changes the spill-baseline check (liquid predicates; Clutter/Dusty), not Jar's ordering spec.",
+      "docs/evaluation/run_benchmark.md@6bf4c61 and docs/data_collection/source_recording.md@6bf4c61 document --source-profile legacy / source_profile: legacy as the previous visual condition and state old YAMLs with camera_resolution: 256 must select it.",
+      "git diff 6bf4c61..HEAD: maniguard/visual/profile.py raises ValueError('The legacy profile has been removed') and requires >= 640 px; eval_config no longer short-circuits for legacy."
+    ],
+    "alternatives_not_taken": [
+      {"revision": "91d88aac", "label": "HEAD (PR #22, 2026-10-19)", "why_not": "legacy profile removed; 640 DLAA only."},
+      {"revision": "a1b6444b", "label": "PR #19 (2026-09-30), newest main commit before the visual pipeline merge", "why_not": "not needed: 6bf4c61's legacy path is the same code; keeping 6bf4c61 also matches the October pilot's pin and its passing install."},
+      {"revision": "b85c7555", "label": "PR #17 (2026-08-19), the revision contemporaneous with the paper and the 20 August 2026 checkpoint update", "why_not": "the checklist rule prefers the pinned revision when it supports legacy rendering. Note the deviation below: eval code changed between b85c7555 and 6bf4c61 (0dca9663 fix(safety), fede9dec fix(bench), eval_family.sh and benchmark.py rewrites)."}
+    ]
+  },
+  "sources": [
+    {
+      "component": "ManiGuard",
+      "kind": "git",
+      "url": "https://github.com/NU-IDEAS-Lab/ManiGuard.git",
+      "revision": "6bf4c61a1f168cc46e02eb22c41bcb51815e9726",
+      "revision_date": "2026-10-15",
+      "local_path": "third_party/ManiGuard",
+      "note": "checked out detached; behavior-1k submodule initialised at the pin below"
+    },
+    {
+      "component": "BEHAVIOR-1K",
+      "kind": "git submodule",
+      "url": "https://github.com/StanfordVL/BEHAVIOR-1K.git",
+      "revision": "88454bd04f75dc57c00ab1f1a00bcde1ff505950",
+      "local_path": "third_party/ManiGuard/behavior-1k",
+      "note": "the submodule pin is identical at b85c7555, a1b6444b, 6bf4c61 and HEAD. OmniGibson 3.7.2, Isaac Sim 4.5.0 wheels, torch 2.6.0 cu124 per setup.sh."
+    },
+    {
+      "component": "OpenPI",
+      "kind": "git",
+      "url": "https://github.com/Physical-Intelligence/openpi.git",
+      "revision": "215abfb217dbac7d5f1273282331b9b1866c0479",
+      "revision_date": "2026-08-25",
+      "local_path": "third_party/openpi",
+      "note": "ManiGuard does not pin an openpi commit (docs say a pristine side-by-side clone). This is the October pilot's pin, verified then to serve the Jar checkpoint; requires-python >= 3.11, jax[cuda12]==0.5.3."
+    },
+    {
+      "component": "Benchmark scenes",
+      "kind": "hf dataset",
+      "repo": "IDEAS-Lab-Northwestern/ManiGuard-Bench",
+      "revision": "af09438cebcd8f532e82cb5302701173ebb59f6e",
+      "revision_date": "2026-09-30",
+      "subset": "jar_transport/* plus README and LICENSE",
+      "note": "Newer commit 4e79a251 (2026-10-20) only refreshes previews. Checked against 46e840ee (2026-08-20, paper time): all 947 jar_transport files identical except 21 under */env/* (OOD condition); every */base/* file used here is byte-identical. 26 base tasks."
+    },
+    {
+      "component": "Long-finger robot",
+      "kind": "hf dataset",
+      "repo": "IDEAS-Lab-Northwestern/franka-panda-longfinger",
+      "revision": "5f65ec0a715bc88ea865c2c69133b08b395c66bc",
+      "revision_date": "2026-09-23",
+      "note": "latest commit; docs-only change after the 2026-08-19 citation commit. Installed after setup.sh so the stock robot-assets bundle is not skipped."
+    },
+    {
+      "component": "BEHAVIOR assets",
+      "kind": "hf dataset",
+      "repo": "behavior-1k/zipped-datasets",
+      "revision": "9f0d57d465726976ed98138d3f8b8ca3e2186775",
+      "archives": ["behavior-1k-assets-3.7.2rc1.zip", "omnigibson-robot-assets.zip"],
+      "note": "setup.sh --dataset calls omnigibson.utils.asset_utils, which fetches behavior-1k-assets-3.7.2rc1.zip and omnigibson-robot-assets.zip from this repo's default branch (unpinned upstream). 9f0d57d4 is the repo head and the pilot's pin; the sha256 of the archives actually downloaded is recorded in 01-install.md."
+    },
+    {
+      "component": "Jar checkpoint",
+      "kind": "hf model",
+      "repo": "IDEAS-Lab-Northwestern/pi05-base-datagen-v1-jar-joint-2cam-lora",
+      "revision": "1d84eda070313a202a595e449fcf41a1a1e8a546",
+      "revision_date": "2026-08-20",
+      "step": "7400",
+      "serve_config": "pi05-base_datagen_v1_jar_joint_2cam_lora",
+      "note": "latest commit (license metadata). Steps present: 1850, 3700, 5550, 7400; 7400 is the final ladder step and the one the pilot served."
+    }
+  ],
+  "deviations_from_paper_noted": [
+    "Evaluator code is 6bf4c61 (2026-10-15), not the 2026-08-17 finalize_eval code the paper ran; upstream fixed benchmark construction and safety monitoring on 2026-09-29/30 before the visual pipeline. The legacy render path itself is unchanged by the visual merge.",
+    "ManiGuard-Bench is read at af09438c; base-condition Jar files are identical to the paper-time revision.",
+    "OpenPI 215abfb (2026-08-25) postdates the paper's submission (2026-08-18); ManiGuard pins no openpi commit."
+  ]
+}

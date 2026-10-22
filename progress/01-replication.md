@@ -30,7 +30,9 @@ to move earlier.
 
 ## Checklist
 
-- [ ] **1. Pin the ManiGuard revision that supports the paper's rendering.** The paper
+- [x] **1. Pin the ManiGuard revision that supports the paper's rendering.** Done
+      2026-10-22: kept `6bf4c61` (legacy profile resolves to the pre-visual 256 px path;
+      HEAD `91d88aac` removes it). Receipt: `receipts/01-sources.json`. The paper
       evaluated 256 by 256 renders; the docs say historical eval YAMLs carried
       `source_profile: legacy` and `camera_resolution: 256`, and that newer runs use
       640 DLAA and are "not directly comparable". Check whether revision `6bf4c61`
