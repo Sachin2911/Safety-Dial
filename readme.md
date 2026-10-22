@@ -57,7 +57,9 @@ claude
 ```
 
 Sign in when prompted, then paste the contents of
-[progress/goal-prompt-01.md](progress/goal-prompt-01.md). It works through
+[progress/goal-prompt-01.md](progress/goal-prompt-01.md) (instance B, seed 0) or
+[progress/goal-prompt-01b.md](progress/goal-prompt-01b.md) (instance C, `ssh -p 32871
+root@ssh3.vast.ai`, seeds 1 and 2 on two GPUs). It works through
 [progress/01-replication.md](progress/01-replication.md) and commits evidence under
 `progress/`.
 
