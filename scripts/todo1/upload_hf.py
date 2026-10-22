@@ -7,9 +7,10 @@ Layout in the dataset:
     jar/seed<s>/task_<nnnn>/base_ltl.json     per-step LTL sidecar
     jar/seed<s>/task_<nnnn>/row.json          that episode's results.jsonl row
     jar/seed<s>/{results.jsonl,summary.json,eval_config.json,expected_rollouts.json}
-    smoke/task_0000/...                        the smoke episode, same layout
-    receipts/                                  copies of the progress receipts
-    README.md                                  index: one line per video with task, seed, outcome
+    smoke/seed0/task_0000/...                  the smoke episode, same layout
+    receipts/01/                               copies of this instance's 01-* receipts
+    README.md                                  index: one line per video with task, seed, outcome,
+                                               including seeds another instance already uploaded
 
     python -I scripts/todo1/upload_hf.py --repo <namespace>/<name> \
         --seed 0=<ID run dir> --seed 1=... --smoke <smoke run dir> \
@@ -54,6 +55,39 @@ def stage_run(run_dir: Path, dest: Path, rows_by_scene: dict) -> list:
     return staged
 
 
+def four_class(row):
+    if row.get("status") != "completed" or not row.get("safety_evaluated"):
+        return "invalid"
+    s, v = bool(row.get("success")), bool(row.get("counted_violation"))
+    return {(True, False): "safe_success", (True, True): "unsafe_success",
+            (False, False): "safe_unsuccess", (False, True): "unsafe_unsuccess"}[(s, v)]
+
+
+def existing_rows(repo: str, staged_runs: set, dry_run: bool) -> list:
+    """Index rows for jar/seed*/results.jsonl files another instance already uploaded."""
+    if dry_run:
+        return []
+    from huggingface_hub import HfApi, hf_hub_download
+    from huggingface_hub.utils import RepositoryNotFoundError
+    api = HfApi()
+    try:
+        files = api.list_repo_files(repo, repo_type="dataset")
+    except RepositoryNotFoundError:
+        return []
+    rows = []
+    for path in sorted(files):
+        parts = path.split("/")
+        if len(parts) == 3 and parts[0] == "jar" and parts[2] == "results.jsonl" and parts[1] not in staged_runs:
+            local = hf_hub_download(repo, path, repo_type="dataset")
+            for line in Path(local).read_text().splitlines():
+                if line.strip():
+                    row = json.loads(line)
+                    task, level = row["scene_name"].split("/")
+                    rows.append((parts[1], {"task": task, "level": level, "row": row, "has_video": True},
+                                 {"four_class": four_class(row)}))
+    return rows
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", required=True)
@@ -79,11 +113,21 @@ def main() -> int:
             e = outcome.get((f"seed{seed}", item["row"]["scene_name"]), {})
             index_rows.append((f"seed{seed}", item, e))
     if args.smoke:
-        for item in stage_run(args.smoke, stage / "smoke", {}):
+        # Instance C's lane uploader puts its smoke episodes at smoke/seed1 and smoke/seed2.
+        for item in stage_run(args.smoke, stage / "smoke" / "seed0", {}):
             e = outcome.get(("smoke", item["row"]["scene_name"]), {})
             index_rows.append(("smoke", item, e))
     if args.receipts and args.receipts.is_dir():
-        shutil.copytree(args.receipts, stage / "receipts", ignore=shutil.ignore_patterns(".gitkeep"))
+        # Only this instance's receipts (01-*); instance C writes receipts/01b/.
+        dest = stage / "receipts" / "01"
+        dest.mkdir(parents=True)
+        for p in sorted(args.receipts.glob("01-*")):
+            if p.is_dir():
+                shutil.copytree(p, dest / p.name)
+            else:
+                shutil.copy2(p, dest / p.name)
+    # Rows another instance already uploaded to the same repo stay in the index.
+    index_rows.extend(existing_rows(args.repo, {run for run, _, _ in index_rows}, args.dry_run))
 
     total, per_seed, fisher = compare["total"], compare["per_seed"], compare["fisher"]
     lines = [
@@ -115,7 +159,7 @@ def main() -> int:
     for run, item, e in index_rows:
         row = item["row"]
         task = item["task"]
-        base = f"jar/{run}/{task}" if run != "smoke" else f"smoke/{task}"
+        base = f"jar/{run}/{task}" if run != "smoke" else f"smoke/seed0/{task}"
         rs = e.get("requested_sequence") or {}
         lines.append(
             f"| {run} | {task} | {CLASS_LABEL.get(e.get('four_class', 'invalid'))} | {row.get('success')} | "

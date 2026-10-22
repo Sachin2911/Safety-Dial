@@ -1,0 +1,1938 @@
+START 2026-10-22T19:55:26Z env=behavior python=/opt/miniforge3/envs/behavior/bin/python
+Collecting ninja
+  Using cached ninja-1.13.2-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (5.4 kB)
+Requirement already satisfied: wheel in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (0.48.0)
+Requirement already satisfied: packaging>=24.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from wheel) (26.3)
+Using cached ninja-1.13.2-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (183 kB)
+Installing collected packages: ninja
+Successfully installed ninja-1.13.2
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+Collecting nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73
+  Cloning https://github.com/StanfordVL/curobo (to revision cbaf7d32436160956dad190a9465360fad6aba73) to /tmp/pip-install-g0sjgt07/nvidia-curobo_03b1b3121ab544ee8d6fcd6a0f8ca2ff
+  Running command git clone --filter=blob:none --quiet https://github.com/StanfordVL/curobo /tmp/pip-install-g0sjgt07/nvidia-curobo_03b1b3121ab544ee8d6fcd6a0f8ca2ff
+  Running command git rev-parse -q --verify 'cbaf7d32436160956dad190a9465360fad6aba73^{commit}'
+  cbaf7d32436160956dad190a9465360fad6aba73
+  Running command git checkout -q cbaf7d32436160956dad190a9465360fad6aba73
+  Resolved https://github.com/StanfordVL/curobo to commit cbaf7d32436160956dad190a9465360fad6aba73
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting pybind11 (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached pybind11-3.1.0-py3-none-any.whl.metadata (10 kB)
+Requirement already satisfied: networkx in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (3.4.2)
+Requirement already satisfied: numpy in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (1.26.4)
+Collecting numpy-quaternion (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached numpy_quaternion-2024.0.13-cp310-cp310-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (14 kB)
+Requirement already satisfied: pyyaml in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (6.0.3)
+Collecting setuptools_scm>=6.2 (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached setuptools_scm-10.3.4-py3-none-any.whl.metadata (6.7 kB)
+Requirement already satisfied: torch>=1.10 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (2.6.0+cu124)
+Collecting trimesh (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached trimesh-5.1.1-py3-none-any.whl.metadata (13 kB)
+Collecting yourdfpy>=0.0.53 (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached yourdfpy-0.0.60-py3-none-any.whl.metadata (9.0 kB)
+Collecting warp-lang>=0.9.0 (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached warp_lang-1.18.0-py3-none-manylinux_2_28_x86_64.whl.metadata (26 kB)
+Collecting scipy>=1.7.0 (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached scipy-1.15.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (61 kB)
+Requirement already satisfied: tqdm in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (4.70.1)
+Requirement already satisfied: wheel in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (0.48.0)
+Collecting importlib_resources (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached importlib_resources-7.1.0-py3-none-any.whl.metadata (4.0 kB)
+Collecting scikit-image (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached scikit_image-0.25.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (14 kB)
+Collecting vcs-versioning<3,>=2.5.0.dev0 (from setuptools_scm>=6.2->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached vcs_versioning-2.6.0-py3-none-any.whl.metadata (1.7 kB)
+Requirement already satisfied: packaging>=20 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from setuptools_scm>=6.2->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (26.3)
+Requirement already satisfied: setuptools in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from setuptools_scm>=6.2->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (79.0.0)
+Requirement already satisfied: tomli>=1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from setuptools_scm>=6.2->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (2.5.0)
+Requirement already satisfied: typing-extensions>=4.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from setuptools_scm>=6.2->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (4.16.0)
+Requirement already satisfied: filelock in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (3.32.3)
+Requirement already satisfied: jinja2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (3.1.6)
+Requirement already satisfied: fsspec in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (2026.7.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (12.4.127)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (12.4.127)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (12.4.127)
+Requirement already satisfied: nvidia-cudnn-cu12==9.1.0.70 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (9.1.0.70)
+Requirement already satisfied: nvidia-cublas-cu12==12.4.5.8 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (12.4.5.8)
+Requirement already satisfied: nvidia-cufft-cu12==11.2.1.3 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (11.2.1.3)
+Requirement already satisfied: nvidia-curand-cu12==10.3.5.147 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (10.3.5.147)
+Requirement already satisfied: nvidia-cusolver-cu12==11.6.1.9 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (11.6.1.9)
+Requirement already satisfied: nvidia-cusparse-cu12==12.3.1.170 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (12.3.1.170)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.6.2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (0.6.2)
+Requirement already satisfied: nvidia-nccl-cu12==2.21.5 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (2.21.5)
+Requirement already satisfied: nvidia-nvtx-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (12.4.127)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (12.4.127)
+Requirement already satisfied: triton==3.2.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (3.2.0)
+Requirement already satisfied: sympy==1.13.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (1.13.1)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from sympy==1.13.1->torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (1.3.0)
+Collecting lxml (from yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached lxml-6.1.3-cp310-cp310-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl.metadata (3.3 kB)
+Collecting six (from yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting colorlog (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached colorlog-6.12.0-py3-none-any.whl.metadata (11 kB)
+Collecting manifold3d>=2.3.0 (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached manifold3d-3.5.4-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (20 kB)
+Collecting charset-normalizer (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached charset_normalizer-3.5.2-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+Requirement already satisfied: jsonschema in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (4.26.0)
+Collecting svg.path (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached svg_path-7.1-py2.py3-none-any.whl.metadata (14 kB)
+Collecting pycollada (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached pycollada-0.9.3-py3-none-any.whl.metadata (1.7 kB)
+Collecting shapely (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached shapely-2.1.2-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (6.8 kB)
+Collecting xxhash (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached xxhash-4.0.2-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (17 kB)
+Collecting rtree (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached rtree-1.4.1-py3-none-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (2.1 kB)
+Collecting httpx (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting embreex (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached embreex-4.4.0.post1-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (3.0 kB)
+Requirement already satisfied: pillow in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (12.3.0)
+Collecting vhacdx (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached vhacdx-0.1.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (1.1 kB)
+Collecting mapbox_earcut>=1.0.2 (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached mapbox_earcut-2.1.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (2.5 kB)
+Collecting anyio (from httpx->trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+Collecting certifi (from httpx->trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached certifi-2026.10.19-py3-none-any.whl.metadata (2.5 kB)
+Collecting httpcore==1.* (from httpx->trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Collecting idna (from httpx->trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx->trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Requirement already satisfied: exceptiongroup>=1.0.2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from anyio->httpx->trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (1.3.1)
+Requirement already satisfied: MarkupSafe>=2.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jinja2->torch>=1.10->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (3.0.3)
+Requirement already satisfied: attrs>=22.2.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jsonschema->trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (26.1.0)
+Requirement already satisfied: jsonschema-specifications>=2023.03.6 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jsonschema->trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (2025.9.1)
+Requirement already satisfied: referencing>=0.28.4 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jsonschema->trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (0.37.0)
+Requirement already satisfied: rpds-py>=0.25.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jsonschema->trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73) (0.30.0)
+Collecting python-dateutil (from pycollada->trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached python_dateutil-3.0.0-py2.py3-none-any.whl.metadata (8.2 kB)
+Collecting tzdata (from python-dateutil->pycollada->trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached tzdata-2026.5-py2.py3-none-any.whl.metadata (1.4 kB)
+Collecting imageio!=2.35.0,>=2.33 (from scikit-image->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached imageio-2.38.0-py3-none-any.whl.metadata (9.7 kB)
+Collecting tifffile>=2022.8.12 (from scikit-image->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached tifffile-2025.5.10-py3-none-any.whl.metadata (31 kB)
+Collecting lazy-loader>=0.4 (from scikit-image->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73)
+  Using cached lazy_loader-0.6-py3-none-any.whl.metadata (6.0 kB)
+Using cached scipy-1.15.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (37.7 MB)
+Using cached setuptools_scm-10.3.4-py3-none-any.whl (33 kB)
+Using cached vcs_versioning-2.6.0-py3-none-any.whl (123 kB)
+Using cached warp_lang-1.18.0-py3-none-manylinux_2_28_x86_64.whl (148.8 MB)
+Using cached yourdfpy-0.0.60-py3-none-any.whl (22 kB)
+Using cached trimesh-5.1.1-py3-none-any.whl (750 kB)
+Using cached manifold3d-3.5.4-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (1.4 MB)
+Using cached mapbox_earcut-2.1.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (77 kB)
+Using cached charset_normalizer-3.5.2-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (271 kB)
+Using cached colorlog-6.12.0-py3-none-any.whl (12 kB)
+Using cached embreex-4.4.0.post1-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (14.5 MB)
+Using cached httpx-0.28.1-py3-none-any.whl (73 kB)
+Using cached httpcore-1.0.9-py3-none-any.whl (78 kB)
+Using cached h11-0.16.0-py3-none-any.whl (37 kB)
+Using cached anyio-4.15.1-py3-none-any.whl (132 kB)
+Using cached idna-3.20-py3-none-any.whl (69 kB)
+Using cached certifi-2026.10.19-py3-none-any.whl (136 kB)
+Using cached importlib_resources-7.1.0-py3-none-any.whl (37 kB)
+Using cached lxml-6.1.3-cp310-cp310-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl (5.3 MB)
+Using cached numpy_quaternion-2024.0.13-cp310-cp310-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (187 kB)
+Using cached pybind11-3.1.0-py3-none-any.whl (319 kB)
+Using cached pycollada-0.9.3-py3-none-any.whl (129 kB)
+Using cached python_dateutil-3.0.0-py2.py3-none-any.whl (94 kB)
+Using cached six-1.17.0-py2.py3-none-any.whl (11 kB)
+Using cached rtree-1.4.1-py3-none-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (507 kB)
+Using cached scikit_image-0.25.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (14.8 MB)
+Using cached imageio-2.38.0-py3-none-any.whl (328 kB)
+Using cached lazy_loader-0.6-py3-none-any.whl (8.8 kB)
+Using cached tifffile-2025.5.10-py3-none-any.whl (226 kB)
+Using cached shapely-2.1.2-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (3.1 MB)
+Using cached svg_path-7.1-py2.py3-none-any.whl (18 kB)
+Using cached tzdata-2026.5-py2.py3-none-any.whl (347 kB)
+Using cached vhacdx-0.1.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (258 kB)
+Using cached xxhash-4.0.2-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (249 kB)
+Building wheels for collected packages: nvidia-curobo
+  Building wheel for nvidia-curobo (pyproject.toml): started
+  Building wheel for nvidia-curobo (pyproject.toml): still running...
+  Building wheel for nvidia-curobo (pyproject.toml): still running...
+  Building wheel for nvidia-curobo (pyproject.toml): still running...
+  Building wheel for nvidia-curobo (pyproject.toml): still running...
+  Building wheel for nvidia-curobo (pyproject.toml): finished with status 'done'
+  Created wheel for nvidia-curobo: filename=nvidia_curobo-0.0.0-cp310-cp310-linux_x86_64.whl size=54302827 sha256=ddfa5b60a266ad806fc5cd3c9ea0b6a81ca2b0ec06ba517d4e5587d5004bbf06
+  Stored in directory: /root/.cache/pip/wheels/21/b3/ce/dd96ea6073802661ab6eeb2865033b9ec6c3d5c96abb0d7f10
+Successfully built nvidia-curobo
+Installing collected packages: xxhash, warp-lang, vhacdx, vcs-versioning, tzdata, trimesh, tifffile, svg.path, six, shapely, scipy, rtree, pybind11, mapbox_earcut, manifold3d, lxml, lazy-loader, importlib_resources, imageio, idna, h11, embreex, colorlog, charset-normalizer, certifi, setuptools_scm, scikit-image, python-dateutil, numpy-quaternion, httpcore, anyio, pycollada, httpx, yourdfpy, nvidia-curobo
+
+Successfully installed anyio-4.15.1 certifi-2026.10.19 charset-normalizer-3.5.2 colorlog-6.12.0 embreex-4.4.0.post1 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 idna-3.20 imageio-2.38.0 importlib_resources-7.1.0 lazy-loader-0.6 lxml-6.1.3 manifold3d-3.5.4 mapbox_earcut-2.1.0 numpy-quaternion-2024.0.13 nvidia-curobo-0.0.0 pybind11-3.1.0 pycollada-0.9.3 python-dateutil-3.0.0 rtree-1.4.1 scikit-image-0.25.2 scipy-1.15.3 setuptools_scm-10.3.4 shapely-2.1.2 six-1.17.0 svg.path-7.1 tifffile-2025.5.10 trimesh-5.1.1 tzdata-2026.5 vcs-versioning-2.6.0 vhacdx-0.1.0 warp-lang-1.18.0 xxhash-4.0.2 yourdfpy-0.0.60
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+curobo installed after 417s
+
+=== TERMS OF SERVICE AND LICENSING AGREEMENTS ===
+
+Installing BDDL...
+Obtaining file:///workspace/Safety-Dial/third_party/ManiGuard/behavior-1k/bddl3
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: pytest in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from bddl==3.7.0) (9.1.1)
+Requirement already satisfied: numpy in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from bddl==3.7.0) (1.26.4)
+Requirement already satisfied: networkx in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from bddl==3.7.0) (3.4.2)
+Requirement already satisfied: jupytext in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from bddl==3.7.0) (1.19.6)
+Requirement already satisfied: future in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from bddl==3.7.0) (1.0.0)
+Requirement already satisfied: nltk~=3.7 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from bddl==3.7.0) (3.10.4)
+Requirement already satisfied: defusedxml in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nltk~=3.7->bddl==3.7.0) (0.7.1)
+Requirement already satisfied: click in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nltk~=3.7->bddl==3.7.0) (8.5.0)
+Requirement already satisfied: joblib in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nltk~=3.7->bddl==3.7.0) (1.6.0)
+Requirement already satisfied: regex>=2021.8.3 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nltk~=3.7->bddl==3.7.0) (2026.9.29)
+Requirement already satisfied: tqdm in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nltk~=3.7->bddl==3.7.0) (4.70.1)
+Requirement already satisfied: cloudpickle>=3.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from joblib->nltk~=3.7->bddl==3.7.0) (3.1.2)
+Requirement already satisfied: markdown-it-py>=1.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jupytext->bddl==3.7.0) (4.2.0)
+Requirement already satisfied: mdit-py-plugins in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jupytext->bddl==3.7.0) (0.6.1)
+Requirement already satisfied: nbformat in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jupytext->bddl==3.7.0) (5.11.1)
+Requirement already satisfied: packaging in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jupytext->bddl==3.7.0) (26.3)
+Requirement already satisfied: pyyaml in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jupytext->bddl==3.7.0) (6.0.3)
+Requirement already satisfied: tomli in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jupytext->bddl==3.7.0) (2.5.0)
+Requirement already satisfied: mdurl~=0.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from markdown-it-py>=1.0->jupytext->bddl==3.7.0) (0.1.2)
+Requirement already satisfied: fastjsonschema>=2.15 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nbformat->jupytext->bddl==3.7.0) (2.22.2)
+Requirement already satisfied: jsonschema>=2.6 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nbformat->jupytext->bddl==3.7.0) (4.26.0)
+Requirement already satisfied: jupyter-core!=5.0.*,>=4.12 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nbformat->jupytext->bddl==3.7.0) (5.9.1)
+Requirement already satisfied: traitlets>=5.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nbformat->jupytext->bddl==3.7.0) (5.16.1)
+Requirement already satisfied: attrs>=22.2.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jsonschema>=2.6->nbformat->jupytext->bddl==3.7.0) (26.1.0)
+Requirement already satisfied: jsonschema-specifications>=2023.03.6 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jsonschema>=2.6->nbformat->jupytext->bddl==3.7.0) (2025.9.1)
+Requirement already satisfied: referencing>=0.28.4 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jsonschema>=2.6->nbformat->jupytext->bddl==3.7.0) (0.37.0)
+Requirement already satisfied: rpds-py>=0.25.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jsonschema>=2.6->nbformat->jupytext->bddl==3.7.0) (0.30.0)
+Requirement already satisfied: platformdirs>=2.5 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jupyter-core!=5.0.*,>=4.12->nbformat->jupytext->bddl==3.7.0) (4.12.4)
+Requirement already satisfied: typing-extensions>=4.4.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from referencing>=0.28.4->jsonschema>=2.6->nbformat->jupytext->bddl==3.7.0) (4.16.0)
+Requirement already satisfied: exceptiongroup>=1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from pytest->bddl==3.7.0) (1.3.1)
+Requirement already satisfied: iniconfig>=1.0.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from pytest->bddl==3.7.0) (2.3.1)
+Requirement already satisfied: pluggy<2,>=1.5 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from pytest->bddl==3.7.0) (1.7.0)
+Requirement already satisfied: pygments>=2.7.2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from pytest->bddl==3.7.0) (2.21.0)
+Building wheels for collected packages: bddl
+  Building editable for bddl (pyproject.toml): started
+  Building editable for bddl (pyproject.toml): finished with status 'done'
+  Created wheel for bddl: filename=bddl-3.7.0-0.editable-py3-none-any.whl size=7431 sha256=69170db362db6689ba7f141fa263436ca1266191282fb647f129f52d885046df
+  Stored in directory: /tmp/pip-ephem-wheel-cache-ofkkfu9q/wheels/34/84/78/cd543ba7727f200ec15e6b45ae4c702f889fa443aff45c8f5b
+Successfully built bddl
+Installing collected packages: bddl
+  Attempting uninstall: bddl
+    Found existing installation: bddl 3.7.0
+    Uninstalling bddl-3.7.0:
+      Successfully uninstalled bddl-3.7.0
+Successfully installed bddl-3.7.0
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+Installing OmniGibson...
+Obtaining file:///workspace/Safety-Dial/third_party/ManiGuard/behavior-1k/OmniGibson
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Collecting huggingface-hub>=0.34.4 (from huggingface-hub[cli]>=0.34.4->omnigibson==3.7.2)
+  Using cached huggingface_hub-2.2.0-py3-none-any.whl.metadata (16 kB)
+Collecting gymnasium>=0.28.1 (from omnigibson==3.7.2)
+  Using cached gymnasium-1.4.0-py3-none-any.whl.metadata (9.0 kB)
+Requirement already satisfied: numpy<2.0.0,>=1.23.5 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from omnigibson==3.7.2) (1.26.4)
+Requirement already satisfied: scipy>=1.10.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from omnigibson==3.7.2) (1.15.3)
+Collecting GitPython>=3.1.40 (from omnigibson==3.7.2)
+  Using cached gitpython-3.2.1-py3-none-any.whl.metadata (13 kB)
+Collecting transforms3d>=0.4.1 (from omnigibson==3.7.2)
+  Using cached transforms3d-0.4.2-py3-none-any.whl.metadata (2.8 kB)
+Requirement already satisfied: networkx>=3.2.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from omnigibson==3.7.2) (3.4.2)
+Requirement already satisfied: PyYAML>=6.0.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from omnigibson==3.7.2) (6.0.3)
+Collecting addict>=2.4.0 (from omnigibson==3.7.2)
+  Using cached addict-2.4.0-py3-none-any.whl.metadata (1.0 kB)
+Collecting ipython>=8.20.0 (from omnigibson==3.7.2)
+  Using cached ipython-8.39.0-py3-none-any.whl.metadata (5.1 kB)
+Requirement already satisfied: future>=0.18.3 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from omnigibson==3.7.2) (1.0.0)
+Requirement already satisfied: trimesh>=4.0.8 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from omnigibson==3.7.2) (5.1.1)
+Collecting h5py>=3.10.0 (from omnigibson==3.7.2)
+  Using cached h5py-3.16.0-cp310-cp310-manylinux_2_28_x86_64.whl.metadata (3.0 kB)
+Collecting cryptography>=41.0.7 (from omnigibson==3.7.2)
+  Using cached cryptography-50.0.2-cp39-abi3-manylinux_2_34_x86_64.whl.metadata (4.4 kB)
+Requirement already satisfied: bddl~=3.7.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from omnigibson==3.7.2) (3.7.0)
+Collecting opencv-python>=4.8.1 (from omnigibson==3.7.2)
+  Using cached opencv_python-5.0.0.93-cp37-abi3-manylinux_2_28_x86_64.whl.metadata (19 kB)
+Collecting nest_asyncio>=1.5.6 (from omnigibson==3.7.2)
+  Using cached nest_asyncio-1.6.0-py3-none-any.whl.metadata (2.8 kB)
+Requirement already satisfied: imageio>=2.33.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from omnigibson==3.7.2) (2.38.0)
+Collecting imageio-ffmpeg>=0.4.9 (from omnigibson==3.7.2)
+  Using cached imageio_ffmpeg-0.6.0-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting termcolor>=2.4.0 (from omnigibson==3.7.2)
+  Using cached termcolor-3.3.0-py3-none-any.whl.metadata (6.5 kB)
+Collecting progressbar>=2.5 (from omnigibson==3.7.2)
+  Using cached progressbar-2.5-py3-none-any.whl
+Collecting pymeshlab~=2022.2 (from omnigibson==3.7.2)
+  Using cached pymeshlab-2022.2.post4-cp310-cp310-manylinux_2_31_x86_64.whl.metadata (3.4 kB)
+Requirement already satisfied: click>=8.1.3 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from omnigibson==3.7.2) (8.5.0)
+Collecting aenum>=3.1.15 (from omnigibson==3.7.2)
+  Using cached aenum-3.1.17-py3-none-any.whl.metadata (3.8 kB)
+Requirement already satisfied: rtree>=1.2.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from omnigibson==3.7.2) (1.4.1)
+Collecting graphviz>=0.20 (from omnigibson==3.7.2)
+  Using cached graphviz-0.21-py3-none-any.whl.metadata (12 kB)
+Collecting matplotlib>=3.0.0 (from omnigibson==3.7.2)
+  Using cached matplotlib-3.10.9-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (52 kB)
+Requirement already satisfied: lxml>=5.2.2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from omnigibson==3.7.2) (6.1.3)
+Collecting numba>=0.59.1 (from omnigibson==3.7.2)
+  Using cached numba-0.68.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (2.8 kB)
+Collecting cffi==1.17.1 (from omnigibson==3.7.2)
+  Using cached cffi-1.17.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting pillow~=11.0.0 (from omnigibson==3.7.2)
+  Using cached pillow-11.0.0-cp310-cp310-manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+Collecting websockets>=15.0.1 (from omnigibson==3.7.2)
+  Using cached websockets-16.1.1-cp310-cp310-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (6.8 kB)
+Collecting dm_tree>=0.1.9 (from omnigibson==3.7.2)
+  Using cached dm_tree-0.1.10-cp310-cp310-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (2.6 kB)
+Collecting hydra-core>=1.3.2 (from omnigibson==3.7.2)
+  Using cached hydra_core-1.3.7-py3-none-any.whl.metadata (5.7 kB)
+Collecting msgpack>=1.1.0 (from omnigibson==3.7.2)
+  Using cached msgpack-1.2.3-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (8.3 kB)
+Collecting lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a (from omnigibson==3.7.2)
+  Using cached lerobot-0.3.4-py3-none-any.whl
+Collecting gspread>=6.2.1 (from omnigibson==3.7.2)
+  Using cached gspread-6.2.1-py3-none-any.whl.metadata (11 kB)
+Collecting open3d>=0.19.0 (from omnigibson==3.7.2)
+  Using cached open3d-0.20.0-cp310-cp310-manylinux_2_35_x86_64.whl.metadata (4.7 kB)
+Requirement already satisfied: ninja~=1.13.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from omnigibson==3.7.2) (1.13.2)
+Collecting nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73 (from omnigibson==3.7.2)
+  Using cached nvidia_curobo-0.0.0-cp310-cp310-linux_x86_64.whl
+Collecting ompl @ https://storage.googleapis.com/gibson_scenes/ompl-1.6.0-cp310-cp310-manylinux_2_28_x86_64.whl (from omnigibson==3.7.2)
+  Using cached ompl-1.6.0-cp310-cp310-manylinux_2_28_x86_64.whl (26.8 MB)
+Collecting datasets<=3.6.0,>=2.19.0 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached datasets-3.6.0-py3-none-any.whl.metadata (19 kB)
+Collecting diffusers>=0.27.2 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached diffusers-0.41.0-py3-none-any.whl.metadata (20 kB)
+Collecting cmake>=3.29.0.1 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached cmake-4.4.4-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (7.0 kB)
+Collecting einops>=0.8.0 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached einops-0.8.2-py3-none-any.whl.metadata (13 kB)
+Collecting opencv-python-headless>=4.9.0 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached opencv_python_headless-5.0.0.93-cp37-abi3-manylinux_2_28_x86_64.whl.metadata (19 kB)
+Collecting av>=14.2.0 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached av-17.1.0-cp310-cp310-manylinux_2_28_x86_64.whl.metadata (4.6 kB)
+Collecting jsonlines>=4.0.0 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached jsonlines-4.0.0-py3-none-any.whl.metadata (1.6 kB)
+Requirement already satisfied: packaging>=24.2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (26.3)
+Collecting pynput>=1.7.7 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached pynput-1.8.2-py2.py3-none-any.whl.metadata (32 kB)
+Collecting pyserial>=3.5 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached pyserial-3.5-py2.py3-none-any.whl.metadata (1.6 kB)
+Collecting wandb>=0.20.0 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached wandb-0.31.0-py3-none-manylinux_2_28_x86_64.whl.metadata (12 kB)
+Requirement already satisfied: torch<2.8.0,>=2.2.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (2.6.0+cu124)
+Collecting torchcodec<0.6.0,>=0.2.1 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached torchcodec-0.5-cp310-cp310-manylinux_2_28_x86_64.whl.metadata (10 kB)
+Requirement already satisfied: torchvision<0.23.0,>=0.21.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (0.21.0+cu124)
+Collecting draccus==0.10.0 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached draccus-0.10.0-py3-none-any.whl.metadata (24 kB)
+Collecting gymnasium>=0.28.1 (from omnigibson==3.7.2)
+  Using cached gymnasium-0.29.1-py3-none-any.whl.metadata (10 kB)
+Collecting rerun-sdk<0.23.0,>=0.21.0 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached rerun_sdk-0.22.1-cp38-abi3-manylinux_2_31_x86_64.whl.metadata (4.4 kB)
+Collecting deepdiff<9.0.0,>=7.0.1 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached deepdiff-8.6.2-py3-none-any.whl.metadata (8.8 kB)
+Collecting flask<4.0.0,>=3.0.3 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached flask-3.1.3-py3-none-any.whl.metadata (3.2 kB)
+Requirement already satisfied: pybind11 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (3.1.0)
+Requirement already satisfied: numpy-quaternion in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (2024.0.13)
+Requirement already satisfied: setuptools_scm>=6.2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (10.3.4)
+Requirement already satisfied: yourdfpy>=0.0.53 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (0.0.60)
+Requirement already satisfied: warp-lang>=0.9.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (1.18.0)
+Requirement already satisfied: tqdm in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (4.70.1)
+Requirement already satisfied: wheel in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (0.48.0)
+Requirement already satisfied: importlib_resources in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (7.1.0)
+Requirement already satisfied: scikit-image in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (0.25.2)
+Collecting pycparser (from cffi==1.17.1->omnigibson==3.7.2)
+  Using cached pycparser-3.11-py3-none-any.whl.metadata (8.2 kB)
+Collecting mergedeep~=1.3 (from draccus==0.10.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached mergedeep-1.3.4-py3-none-any.whl.metadata (4.3 kB)
+Collecting pyyaml-include~=1.4 (from draccus==0.10.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached pyyaml_include-1.4.1-py3-none-any.whl.metadata (1.3 kB)
+Collecting toml~=0.10 (from draccus==0.10.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached toml-0.10.2-py2.py3-none-any.whl.metadata (7.1 kB)
+Collecting typing-inspect~=0.9.0 (from draccus==0.10.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached typing_inspect-0.9.0-py3-none-any.whl.metadata (1.5 kB)
+Requirement already satisfied: pytest in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from bddl~=3.7.0->omnigibson==3.7.2) (9.1.1)
+Requirement already satisfied: jupytext in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from bddl~=3.7.0->omnigibson==3.7.2) (1.19.6)
+Requirement already satisfied: nltk~=3.7 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from bddl~=3.7.0->omnigibson==3.7.2) (3.10.4)
+Requirement already satisfied: filelock in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (3.32.3)
+Collecting pyarrow>=15.0.0 (from datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached pyarrow-25.0.1-cp310-cp310-manylinux_2_28_x86_64.whl.metadata (3.0 kB)
+Collecting dill<0.3.9,>=0.3.0 (from datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached dill-0.3.8-py3-none-any.whl.metadata (10 kB)
+Collecting pandas (from datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached pandas-2.3.3-cp310-cp310-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (91 kB)
+Collecting requests>=2.32.2 (from datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Requirement already satisfied: xxhash in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (4.0.2)
+Collecting multiprocess<0.70.17 (from datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached multiprocess-0.70.16-py310-none-any.whl.metadata (7.2 kB)
+Collecting fsspec<=2025.3.0,>=2023.1.0 (from fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached fsspec-2025.3.0-py3-none-any.whl.metadata (11 kB)
+Collecting orderly-set<6,>=5.4.1 (from deepdiff<9.0.0,>=7.0.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached orderly_set-5.5.0-py3-none-any.whl.metadata (6.6 kB)
+Collecting blinker>=1.9.0 (from flask<4.0.0,>=3.0.3->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+Collecting itsdangerous>=2.2.0 (from flask<4.0.0,>=3.0.3->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+Requirement already satisfied: jinja2>=3.1.2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from flask<4.0.0,>=3.0.3->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (3.1.6)
+Requirement already satisfied: markupsafe>=2.1.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from flask<4.0.0,>=3.0.3->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (3.0.3)
+Collecting werkzeug>=3.1.0 (from flask<4.0.0,>=3.0.3->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached werkzeug-3.1.9-py3-none-any.whl.metadata (4.1 kB)
+Collecting aiohttp!=4.0.0a0,!=4.0.0a1 (from fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached aiohttp-3.14.5-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (8.3 kB)
+Requirement already satisfied: cloudpickle>=1.2.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from gymnasium>=0.28.1->omnigibson==3.7.2) (3.1.2)
+Requirement already satisfied: typing-extensions>=4.3.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from gymnasium>=0.28.1->omnigibson==3.7.2) (4.16.0)
+Collecting farama-notifications>=0.0.1 (from gymnasium>=0.28.1->omnigibson==3.7.2)
+  Using cached farama_notifications-0.0.6-py3-none-any.whl.metadata (729 bytes)
+Collecting psutil (from imageio[ffmpeg]<3.0.0,>=2.34.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl.metadata (22 kB)
+Requirement already satisfied: defusedxml in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nltk~=3.7->bddl~=3.7.0->omnigibson==3.7.2) (0.7.1)
+Requirement already satisfied: joblib in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nltk~=3.7->bddl~=3.7.0->omnigibson==3.7.2) (1.6.0)
+Requirement already satisfied: regex>=2021.8.3 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nltk~=3.7->bddl~=3.7.0->omnigibson==3.7.2) (2026.9.29)
+Requirement already satisfied: attrs>=23.1.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from rerun-sdk<0.23.0,>=0.21.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (26.1.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (12.4.127)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (12.4.127)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (12.4.127)
+Requirement already satisfied: nvidia-cudnn-cu12==9.1.0.70 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (9.1.0.70)
+Requirement already satisfied: nvidia-cublas-cu12==12.4.5.8 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (12.4.5.8)
+Requirement already satisfied: nvidia-cufft-cu12==11.2.1.3 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (11.2.1.3)
+Requirement already satisfied: nvidia-curand-cu12==10.3.5.147 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (10.3.5.147)
+Requirement already satisfied: nvidia-cusolver-cu12==11.6.1.9 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (11.6.1.9)
+Requirement already satisfied: nvidia-cusparse-cu12==12.3.1.170 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (12.3.1.170)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.6.2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (0.6.2)
+Requirement already satisfied: nvidia-nccl-cu12==2.21.5 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (2.21.5)
+Requirement already satisfied: nvidia-nvtx-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (12.4.127)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (12.4.127)
+Requirement already satisfied: triton==3.2.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (3.2.0)
+Requirement already satisfied: sympy==1.13.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (1.13.1)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from sympy==1.13.1->torch<2.8.0,>=2.2.1->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (1.3.0)
+Collecting mypy-extensions>=0.3.0 (from typing-inspect~=0.9.0->draccus==0.10.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached mypy_extensions-1.1.0-py3-none-any.whl.metadata (1.1 kB)
+Collecting aiohappyeyeballs>=2.5.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached aiohappyeyeballs-2.7.1-py3-none-any.whl.metadata (5.9 kB)
+Collecting aiosignal>=1.4.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached aiosignal-1.4.0-py3-none-any.whl.metadata (3.7 kB)
+Collecting async-timeout<6.0,>=4.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached async_timeout-5.0.1-py3-none-any.whl.metadata (5.1 kB)
+Collecting frozenlist>=1.1.1 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached frozenlist-1.8.0-cp310-cp310-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (20 kB)
+Collecting multidict<8.0,>=4.5 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached multidict-7.1.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (6.2 kB)
+Collecting propcache>=0.2.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached propcache-0.5.4-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (25 kB)
+Collecting yarl<2.0,>=1.25.1 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached yarl-1.25.1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (111 kB)
+Requirement already satisfied: idna>=2.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from yarl<2.0,>=1.25.1->aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (3.20)
+INFO: pip is looking at multiple versions of cryptography to determine which version is compatible with other requirements. This could take a while.
+Collecting cryptography>=41.0.7 (from omnigibson==3.7.2)
+  Using cached cryptography-50.0.1-cp39-abi3-manylinux_2_34_x86_64.whl.metadata (4.3 kB)
+  Using cached cryptography-50.0.0-cp39-abi3-manylinux_2_34_x86_64.whl.metadata (4.3 kB)
+  Using cached cryptography-49.0.0-cp39-abi3-manylinux_2_34_x86_64.whl.metadata (4.3 kB)
+  Using cached cryptography-48.0.1-cp39-abi3-manylinux_2_34_x86_64.whl.metadata (4.3 kB)
+  Using cached cryptography-48.0.0-cp39-abi3-manylinux_2_34_x86_64.whl.metadata (4.3 kB)
+  Using cached cryptography-47.0.0-cp38-abi3-manylinux_2_34_x86_64.whl.metadata (4.5 kB)
+  Using cached cryptography-46.0.7-cp38-abi3-manylinux_2_34_x86_64.whl.metadata (5.7 kB)
+INFO: pip is still looking at multiple versions of cryptography to determine which version is compatible with other requirements. This could take a while.
+  Using cached cryptography-46.0.6-cp38-abi3-manylinux_2_34_x86_64.whl.metadata (5.7 kB)
+  Using cached cryptography-46.0.5-cp38-abi3-manylinux_2_34_x86_64.whl.metadata (5.7 kB)
+  Using cached cryptography-46.0.4-cp38-abi3-manylinux_2_34_x86_64.whl.metadata (5.7 kB)
+  Using cached cryptography-46.0.3-cp38-abi3-manylinux_2_34_x86_64.whl.metadata (5.7 kB)
+  Using cached cryptography-46.0.2-cp38-abi3-manylinux_2_34_x86_64.whl.metadata (5.7 kB)
+INFO: This is taking longer than usual. You might need to provide the dependency resolver with stricter constraints to reduce runtime. See https://pip.pypa.io/warnings/backtracking for guidance. If you want to abort this run, press Ctrl + C.
+  Using cached cryptography-46.0.1-cp38-abi3-manylinux_2_34_x86_64.whl.metadata (5.7 kB)
+  Using cached cryptography-46.0.0-cp38-abi3-manylinux_2_34_x86_64.whl.metadata (5.7 kB)
+Collecting importlib_metadata (from diffusers>=0.27.2->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached importlib_metadata-9.0.1-py3-none-any.whl.metadata (4.5 kB)
+Collecting huggingface-hub>=0.34.4 (from huggingface-hub[cli]>=0.34.4->omnigibson==3.7.2)
+  Using cached huggingface_hub-1.33.0-py3-none-any.whl.metadata (16 kB)
+Collecting safetensors>=0.8.0 (from diffusers>=0.27.2->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.2 kB)
+Collecting hf-xet<2.0.0,>=1.6.0 (from huggingface-hub>=0.34.4->huggingface-hub[cli]>=0.34.4->omnigibson==3.7.2)
+  Using cached hf_xet-1.7.0-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (4.9 kB)
+Requirement already satisfied: httpx<1,>=0.23.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from huggingface-hub>=0.34.4->huggingface-hub[cli]>=0.34.4->omnigibson==3.7.2) (0.28.1)
+Requirement already satisfied: tomli>=1.1.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from huggingface-hub>=0.34.4->huggingface-hub[cli]>=0.34.4->omnigibson==3.7.2) (2.5.0)
+Requirement already satisfied: anyio in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from httpx<1,>=0.23.0->huggingface-hub>=0.34.4->huggingface-hub[cli]>=0.34.4->omnigibson==3.7.2) (4.15.1)
+Requirement already satisfied: certifi in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from httpx<1,>=0.23.0->huggingface-hub>=0.34.4->huggingface-hub[cli]>=0.34.4->omnigibson==3.7.2) (2026.10.19)
+Requirement already satisfied: httpcore==1.* in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from httpx<1,>=0.23.0->huggingface-hub>=0.34.4->huggingface-hub[cli]>=0.34.4->omnigibson==3.7.2) (1.0.9)
+Requirement already satisfied: h11>=0.16 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from httpcore==1.*->httpx<1,>=0.23.0->huggingface-hub>=0.34.4->huggingface-hub[cli]>=0.34.4->omnigibson==3.7.2) (0.16.0)
+Collecting absl-py>=0.6.1 (from dm_tree>=0.1.9->omnigibson==3.7.2)
+  Using cached absl_py-2.5.1-py3-none-any.whl.metadata (3.3 kB)
+Collecting wrapt>=1.11.2 (from dm_tree>=0.1.9->omnigibson==3.7.2)
+  Using cached wrapt-2.5.1-cp310-cp310-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (7.6 kB)
+Collecting gitdb<5,>=4.0.1 (from GitPython>=3.1.40->omnigibson==3.7.2)
+  Using cached gitdb-4.0.12-py3-none-any.whl.metadata (1.2 kB)
+Collecting smmap<6,>=3.0.1 (from gitdb<5,>=4.0.1->GitPython>=3.1.40->omnigibson==3.7.2)
+  Using cached smmap-5.0.3-py3-none-any.whl.metadata (4.6 kB)
+Collecting google-auth>=1.12.0 (from gspread>=6.2.1->omnigibson==3.7.2)
+  Using cached google_auth-2.62.0-py3-none-any.whl.metadata (6.0 kB)
+Collecting google-auth-oauthlib>=0.4.1 (from gspread>=6.2.1->omnigibson==3.7.2)
+  Using cached google_auth_oauthlib-1.5.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting pyasn1-modules>=0.2.1 (from google-auth>=1.12.0->gspread>=6.2.1->omnigibson==3.7.2)
+  Using cached pyasn1_modules-0.4.2-py3-none-any.whl.metadata (3.5 kB)
+Collecting requests-oauthlib>=0.7.0 (from google-auth-oauthlib>=0.4.1->gspread>=6.2.1->omnigibson==3.7.2)
+  Using cached requests_oauthlib-2.0.0-py2.py3-none-any.whl.metadata (11 kB)
+INFO: pip is looking at multiple versions of huggingface-hub[cli,hf-transfer] to determine which version is compatible with other requirements. This could take a while.
+Collecting huggingface-hub[cli,hf-transfer]>=0.34.2 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached huggingface_hub-2.1.1-py3-none-any.whl.metadata (16 kB)
+  Using cached huggingface_hub-2.0.0-py3-none-any.whl.metadata (16 kB)
+WARNING: huggingface-hub 1.33.0 does not provide the extra 'cli'
+WARNING: huggingface-hub 1.33.0 does not provide the extra 'hf-transfer'
+INFO: pip is looking at multiple versions of huggingface-hub[cli] to determine which version is compatible with other requirements. This could take a while.
+WARNING: huggingface-hub 1.33.0 does not provide the extra 'cli'
+Collecting omegaconf<2.4,>=2.2 (from hydra-core>=1.3.2->omnigibson==3.7.2)
+  Using cached omegaconf-2.3.1-py3-none-any.whl.metadata (4.5 kB)
+Collecting antlr4-python3-runtime==4.9.* (from hydra-core>=1.3.2->omnigibson==3.7.2)
+  Using cached antlr4_python3_runtime-4.9.3-py3-none-any.whl
+Collecting decorator (from ipython>=8.20.0->omnigibson==3.7.2)
+  Using cached decorator-5.3.1-py3-none-any.whl.metadata (3.9 kB)
+Requirement already satisfied: exceptiongroup in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from ipython>=8.20.0->omnigibson==3.7.2) (1.3.1)
+Collecting jedi>=0.16 (from ipython>=8.20.0->omnigibson==3.7.2)
+  Using cached jedi-0.20.1-py2.py3-none-any.whl.metadata (23 kB)
+Collecting matplotlib-inline (from ipython>=8.20.0->omnigibson==3.7.2)
+  Using cached matplotlib_inline-0.2.2-py3-none-any.whl.metadata (2.4 kB)
+Collecting pexpect>4.3 (from ipython>=8.20.0->omnigibson==3.7.2)
+  Using cached pexpect-4.9.0-py2.py3-none-any.whl.metadata (2.5 kB)
+Collecting prompt_toolkit<3.1.0,>=3.0.41 (from ipython>=8.20.0->omnigibson==3.7.2)
+  Using cached prompt_toolkit-3.0.53-py3-none-any.whl.metadata (6.4 kB)
+Requirement already satisfied: pygments>=2.4.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from ipython>=8.20.0->omnigibson==3.7.2) (2.21.0)
+Collecting stack_data (from ipython>=8.20.0->omnigibson==3.7.2)
+  Using cached stack_data-0.6.3-py3-none-any.whl.metadata (18 kB)
+Requirement already satisfied: traitlets>=5.13.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from ipython>=8.20.0->omnigibson==3.7.2) (5.16.1)
+Collecting wcwidth>=0.1.4 (from prompt_toolkit<3.1.0,>=3.0.41->ipython>=8.20.0->omnigibson==3.7.2)
+  Using cached wcwidth-0.9.3-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (23 kB)
+Collecting parso<0.9.0,>=0.8.7 (from jedi>=0.16->ipython>=8.20.0->omnigibson==3.7.2)
+  Using cached parso-0.8.7-py2.py3-none-any.whl.metadata (8.2 kB)
+Collecting contourpy>=1.0.1 (from matplotlib>=3.0.0->omnigibson==3.7.2)
+  Using cached contourpy-1.3.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.5 kB)
+Collecting cycler>=0.10 (from matplotlib>=3.0.0->omnigibson==3.7.2)
+  Using cached cycler-0.12.1-py3-none-any.whl.metadata (3.8 kB)
+Collecting fonttools>=4.22.0 (from matplotlib>=3.0.0->omnigibson==3.7.2)
+  Using cached fonttools-4.65.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (125 kB)
+Collecting kiwisolver>=1.3.1 (from matplotlib>=3.0.0->omnigibson==3.7.2)
+  Using cached kiwisolver-1.5.1-cp310-cp310-manylinux_2_12_x86_64.manylinux2010_x86_64.whl.metadata (5.2 kB)
+Collecting pyparsing>=3 (from matplotlib>=3.0.0->omnigibson==3.7.2)
+  Using cached pyparsing-3.3.3-py3-none-any.whl.metadata (5.9 kB)
+Requirement already satisfied: python-dateutil>=2.7 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from matplotlib>=3.0.0->omnigibson==3.7.2) (3.0.0)
+Collecting llvmlite<0.51,>=0.50.0dev0 (from numba>=0.59.1->omnigibson==3.7.2)
+  Using cached llvmlite-0.50.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (5.1 kB)
+Collecting dash>=2.6.0 (from open3d>=0.19.0->omnigibson==3.7.2)
+  Using cached dash-4.4.1-py3-none-any.whl.metadata (11 kB)
+Requirement already satisfied: nbformat>=5.7.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from open3d>=0.19.0->omnigibson==3.7.2) (5.11.1)
+Collecting configargparse (from open3d>=0.19.0->omnigibson==3.7.2)
+  Using cached configargparse-1.8.0-py3-none-any.whl.metadata (23 kB)
+Collecting ipywidgets>=8.0.4 (from open3d>=0.19.0->omnigibson==3.7.2)
+  Using cached ipywidgets-8.1.9-py3-none-any.whl.metadata (2.4 kB)
+Collecting plotly>=5.0.0 (from dash>=2.6.0->open3d>=0.19.0->omnigibson==3.7.2)
+  Using cached plotly-7.1.0-py3-none-any.whl.metadata (8.8 kB)
+Collecting retrying (from dash>=2.6.0->open3d>=0.19.0->omnigibson==3.7.2)
+  Using cached retrying-1.4.2-py3-none-any.whl.metadata (5.5 kB)
+Requirement already satisfied: setuptools in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from dash>=2.6.0->open3d>=0.19.0->omnigibson==3.7.2) (79.0.0)
+Collecting janus>=1.0.0 (from dash>=2.6.0->open3d>=0.19.0->omnigibson==3.7.2)
+  Using cached janus-2.0.0-py3-none-any.whl.metadata (5.3 kB)
+Collecting pydantic>=2.10 (from dash>=2.6.0->open3d>=0.19.0->omnigibson==3.7.2)
+  Using cached pydantic-2.14.1-py3-none-any.whl.metadata (133 kB)
+Collecting comm (from dash>=2.6.0->open3d>=0.19.0->omnigibson==3.7.2)
+  Using cached comm-0.2.3-py3-none-any.whl.metadata (3.7 kB)
+Collecting widgetsnbextension~=4.0.16 (from ipywidgets>=8.0.4->open3d>=0.19.0->omnigibson==3.7.2)
+  Using cached widgetsnbextension-4.0.16-py3-none-any.whl.metadata (1.6 kB)
+Collecting jupyterlab_widgets~=3.0.17 (from ipywidgets>=8.0.4->open3d>=0.19.0->omnigibson==3.7.2)
+  Using cached jupyterlab_widgets-3.0.17-py3-none-any.whl.metadata (20 kB)
+Requirement already satisfied: fastjsonschema>=2.15 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nbformat>=5.7.0->open3d>=0.19.0->omnigibson==3.7.2) (2.22.2)
+Requirement already satisfied: jsonschema>=2.6 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nbformat>=5.7.0->open3d>=0.19.0->omnigibson==3.7.2) (4.26.0)
+Requirement already satisfied: jupyter-core!=5.0.*,>=4.12 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from nbformat>=5.7.0->open3d>=0.19.0->omnigibson==3.7.2) (5.9.1)
+Requirement already satisfied: jsonschema-specifications>=2023.03.6 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jsonschema>=2.6->nbformat>=5.7.0->open3d>=0.19.0->omnigibson==3.7.2) (2025.9.1)
+Requirement already satisfied: referencing>=0.28.4 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jsonschema>=2.6->nbformat>=5.7.0->open3d>=0.19.0->omnigibson==3.7.2) (0.37.0)
+Requirement already satisfied: rpds-py>=0.25.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jsonschema>=2.6->nbformat>=5.7.0->open3d>=0.19.0->omnigibson==3.7.2) (0.30.0)
+Requirement already satisfied: platformdirs>=2.5 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jupyter-core!=5.0.*,>=4.12->nbformat>=5.7.0->open3d>=0.19.0->omnigibson==3.7.2) (4.12.4)
+INFO: pip is looking at multiple versions of opencv-python to determine which version is compatible with other requirements. This could take a while.
+Collecting opencv-python>=4.8.1 (from omnigibson==3.7.2)
+  Using cached opencv_python-4.14.0.94-cp37-abi3-manylinux_2_28_x86_64.whl.metadata (19 kB)
+  Using cached opencv_python-4.13.0.92-cp37-abi3-manylinux_2_28_x86_64.whl.metadata (19 kB)
+  Using cached opencv_python-4.13.0.90-cp37-abi3-manylinux_2_28_x86_64.whl.metadata (19 kB)
+  Using cached opencv_python-4.12.0.88-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (19 kB)
+  Using cached opencv_python-4.11.0.86-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (20 kB)
+INFO: pip is looking at multiple versions of opencv-python-headless to determine which version is compatible with other requirements. This could take a while.
+Collecting opencv-python-headless>=4.9.0 (from lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached opencv_python_headless-4.14.0.94-cp37-abi3-manylinux_2_28_x86_64.whl.metadata (19 kB)
+  Using cached opencv_python_headless-4.13.0.92-cp37-abi3-manylinux_2_28_x86_64.whl.metadata (19 kB)
+  Using cached opencv_python_headless-4.13.0.90-cp37-abi3-manylinux_2_28_x86_64.whl.metadata (19 kB)
+  Using cached opencv_python_headless-4.12.0.88-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (19 kB)
+  Using cached opencv_python_headless-4.11.0.86-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (20 kB)
+Collecting ptyprocess>=0.5 (from pexpect>4.3->ipython>=8.20.0->omnigibson==3.7.2)
+  Using cached ptyprocess-0.7.0-py2.py3-none-any.whl.metadata (1.3 kB)
+Collecting narwhals>=1.15.1 (from plotly>=5.0.0->dash>=2.6.0->open3d>=0.19.0->omnigibson==3.7.2)
+  Using cached narwhals-2.27.1-py3-none-any.whl.metadata (15 kB)
+Collecting pyasn1<0.7.0,>=0.6.1 (from pyasn1-modules>=0.2.1->google-auth>=1.12.0->gspread>=6.2.1->omnigibson==3.7.2)
+  Using cached pyasn1-0.6.4-py3-none-any.whl.metadata (8.4 kB)
+Collecting annotated-types>=0.6.0 (from pydantic>=2.10->dash>=2.6.0->open3d>=0.19.0->omnigibson==3.7.2)
+  Using cached annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.50.1 (from pydantic>=2.10->dash>=2.6.0->open3d>=0.19.0->omnigibson==3.7.2)
+  Using cached pydantic_core-2.50.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
+Collecting typing-inspection>=0.4.4 (from pydantic>=2.10->dash>=2.6.0->open3d>=0.19.0->omnigibson==3.7.2)
+  Using cached typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+Requirement already satisfied: six in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from pynput>=1.7.7->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (1.17.0)
+Collecting evdev>=1.3 (from pynput>=1.7.7->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached evdev-1.9.3-cp310-cp310-linux_x86_64.whl
+Collecting python-xlib>=0.17 (from pynput>=1.7.7->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached python_xlib-0.33-py2.py3-none-any.whl.metadata (6.2 kB)
+Requirement already satisfied: tzdata in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from python-dateutil>=2.7->matplotlib>=3.0.0->omnigibson==3.7.2) (2026.5)
+Requirement already satisfied: charset_normalizer<4,>=2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from requests>=2.32.2->datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2) (3.5.2)
+Collecting urllib3<3,>=1.26 (from requests>=2.32.2->datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting oauthlib>=3.0.0 (from requests-oauthlib>=0.7.0->google-auth-oauthlib>=0.4.1->gspread>=6.2.1->omnigibson==3.7.2)
+  Using cached oauthlib-4.0.0-py3-none-any.whl.metadata (8.6 kB)
+Requirement already satisfied: vcs-versioning<3,>=2.5.0.dev0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from setuptools_scm>=6.2->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (2.6.0)
+Collecting cwevals==0.0.1b1 (from wandb>=0.20.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached cwevals-0.0.1b1-py3-none-any.whl.metadata (13 kB)
+Collecting opentelemetry-api>=1.43.0 (from wandb>=0.20.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached opentelemetry_api-1.45.1-py3-none-any.whl.metadata (1.4 kB)
+Collecting opentelemetry-exporter-otlp-proto-http>=1.43.0 (from wandb>=0.20.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached opentelemetry_exporter_otlp_proto_http-1.45.1-py3-none-any.whl.metadata (3.0 kB)
+Collecting opentelemetry-sdk>=1.43.0 (from wandb>=0.20.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached opentelemetry_sdk-1.45.1-py3-none-any.whl.metadata (1.6 kB)
+Collecting protobuf!=5.28.0,!=5.29.0,<8,>=5 (from wandb>=0.20.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl.metadata (595 bytes)
+Collecting distro<2,>=1.7.0 (from cwevals==0.0.1b1->wandb>=0.20.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached distro-1.9.0-py3-none-any.whl.metadata (6.8 kB)
+Collecting sniffio (from cwevals==0.0.1b1->wandb>=0.20.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached sniffio-1.3.1-py3-none-any.whl.metadata (3.9 kB)
+Collecting googleapis-common-protos~=1.52 (from opentelemetry-exporter-otlp-proto-http>=1.43.0->wandb>=0.20.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached googleapis_common_protos-1.75.5-py3-none-any.whl.metadata (8.5 kB)
+Collecting opentelemetry-exporter-http-transport==0.66b1 (from opentelemetry-exporter-http-transport[requests]==0.66b1->opentelemetry-exporter-otlp-proto-http>=1.43.0->wandb>=0.20.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached opentelemetry_exporter_http_transport-0.66b1-py3-none-any.whl.metadata (2.3 kB)
+Collecting opentelemetry-exporter-otlp-common==0.66b1 (from opentelemetry-exporter-otlp-proto-http>=1.43.0->wandb>=0.20.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached opentelemetry_exporter_otlp_common-0.66b1-py3-none-any.whl.metadata (1.9 kB)
+Collecting opentelemetry-exporter-otlp-proto-common==1.45.1 (from opentelemetry-exporter-otlp-proto-http>=1.43.0->wandb>=0.20.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached opentelemetry_exporter_otlp_proto_common-1.45.1-py3-none-any.whl.metadata (1.8 kB)
+Collecting opentelemetry-proto==1.45.1 (from opentelemetry-exporter-otlp-proto-http>=1.43.0->wandb>=0.20.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached opentelemetry_proto-1.45.1-py3-none-any.whl.metadata (2.3 kB)
+Collecting opentelemetry-semantic-conventions==0.66b1 (from opentelemetry-sdk>=1.43.0->wandb>=0.20.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached opentelemetry_semantic_conventions-0.66b1-py3-none-any.whl.metadata (2.4 kB)
+Requirement already satisfied: colorlog in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (6.12.0)
+Requirement already satisfied: manifold3d>=2.3.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (3.5.4)
+Requirement already satisfied: svg.path in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (7.1)
+Requirement already satisfied: pycollada in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (0.9.3)
+Requirement already satisfied: shapely in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (2.1.2)
+Requirement already satisfied: embreex in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (4.4.0.post1)
+Requirement already satisfied: vhacdx in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (0.1.0)
+Requirement already satisfied: mapbox_earcut>=1.0.2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from trimesh[easy]>=3.11.2->yourdfpy>=0.0.53->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (2.1.0)
+Collecting zipp>=3.20 (from importlib_metadata->diffusers>=0.27.2->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached zipp-4.1.2-py3-none-any.whl.metadata (3.6 kB)
+Requirement already satisfied: markdown-it-py>=1.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jupytext->bddl~=3.7.0->omnigibson==3.7.2) (4.2.0)
+Requirement already satisfied: mdit-py-plugins in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jupytext->bddl~=3.7.0->omnigibson==3.7.2) (0.6.1)
+Requirement already satisfied: mdurl~=0.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from markdown-it-py>=1.0->jupytext->bddl~=3.7.0->omnigibson==3.7.2) (0.1.2)
+Collecting pytz>=2020.1 (from pandas->datasets<=3.6.0,>=2.19.0->lerobot @ git+https://github.com/huggingface/lerobot@577cd10974b84bea1f06b6472eb9e5e74e07f77a->omnigibson==3.7.2)
+  Using cached pytz-2026.5-py2.py3-none-any.whl.metadata (22 kB)
+Requirement already satisfied: iniconfig>=1.0.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from pytest->bddl~=3.7.0->omnigibson==3.7.2) (2.3.1)
+Requirement already satisfied: pluggy<2,>=1.5 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from pytest->bddl~=3.7.0->omnigibson==3.7.2) (1.7.0)
+Requirement already satisfied: tifffile>=2022.8.12 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from scikit-image->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (2025.5.10)
+Requirement already satisfied: lazy-loader>=0.4 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from scikit-image->nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73->omnigibson==3.7.2) (0.6)
+Collecting executing>=1.2.0 (from stack_data->ipython>=8.20.0->omnigibson==3.7.2)
+  Using cached executing-2.3.0-py3-none-any.whl.metadata (9.1 kB)
+Collecting asttokens>=2.1.0 (from stack_data->ipython>=8.20.0->omnigibson==3.7.2)
+  Using cached asttokens-3.0.2-py3-none-any.whl.metadata (5.7 kB)
+Collecting pure-eval (from stack_data->ipython>=8.20.0->omnigibson==3.7.2)
+  Using cached pure_eval-0.2.4-py3-none-any.whl.metadata (6.4 kB)
+Using cached cffi-1.17.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (446 kB)
+Using cached draccus-0.10.0-py3-none-any.whl (71 kB)
+Using cached datasets-3.6.0-py3-none-any.whl (491 kB)
+Using cached deepdiff-8.6.2-py3-none-any.whl (91 kB)
+Using cached dill-0.3.8-py3-none-any.whl (116 kB)
+Using cached flask-3.1.3-py3-none-any.whl (103 kB)
+Using cached fsspec-2025.3.0-py3-none-any.whl (193 kB)
+Using cached gymnasium-0.29.1-py3-none-any.whl (953 kB)
+Using cached mergedeep-1.3.4-py3-none-any.whl (6.4 kB)
+Using cached multiprocess-0.70.16-py310-none-any.whl (134 kB)
+Using cached orderly_set-5.5.0-py3-none-any.whl (13 kB)
+Using cached pillow-11.0.0-cp310-cp310-manylinux_2_28_x86_64.whl (4.4 MB)
+Using cached pymeshlab-2022.2.post4-cp310-cp310-manylinux_2_31_x86_64.whl (64.9 MB)
+Using cached pyyaml_include-1.4.1-py3-none-any.whl (19 kB)
+Using cached rerun_sdk-0.22.1-cp38-abi3-manylinux_2_31_x86_64.whl (51.4 MB)
+Using cached termcolor-3.3.0-py3-none-any.whl (7.7 kB)
+Using cached toml-0.10.2-py2.py3-none-any.whl (16 kB)
+Using cached torchcodec-0.5-cp310-cp310-manylinux_2_28_x86_64.whl (1.4 MB)
+Using cached typing_inspect-0.9.0-py3-none-any.whl (8.8 kB)
+Using cached addict-2.4.0-py3-none-any.whl (3.8 kB)
+Using cached aenum-3.1.17-py3-none-any.whl (165 kB)
+Using cached aiohttp-3.14.5-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (1.9 MB)
+Using cached async_timeout-5.0.1-py3-none-any.whl (6.2 kB)
+Using cached multidict-7.1.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (464 kB)
+Using cached yarl-1.25.1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (118 kB)
+Using cached aiohappyeyeballs-2.7.1-py3-none-any.whl (15 kB)
+Using cached aiosignal-1.4.0-py3-none-any.whl (7.5 kB)
+Using cached av-17.1.0-cp310-cp310-manylinux_2_28_x86_64.whl (36.6 MB)
+Using cached blinker-1.9.0-py3-none-any.whl (8.5 kB)
+Using cached cmake-4.4.4-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (30.2 MB)
+Using cached cryptography-46.0.0-cp38-abi3-manylinux_2_34_x86_64.whl (4.6 MB)
+Using cached diffusers-0.41.0-py3-none-any.whl (6.1 MB)
+Using cached huggingface_hub-1.33.0-py3-none-any.whl (846 kB)
+Using cached hf_xet-1.7.0-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.2 MB)
+Using cached dm_tree-0.1.10-cp310-cp310-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (183 kB)
+Using cached absl_py-2.5.1-py3-none-any.whl (137 kB)
+Using cached einops-0.8.2-py3-none-any.whl (65 kB)
+Using cached farama_notifications-0.0.6-py3-none-any.whl (2.9 kB)
+Using cached frozenlist-1.8.0-cp310-cp310-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (219 kB)
+Using cached gitpython-3.2.1-py3-none-any.whl (231 kB)
+Using cached gitdb-4.0.12-py3-none-any.whl (62 kB)
+Using cached smmap-5.0.3-py3-none-any.whl (24 kB)
+Using cached graphviz-0.21-py3-none-any.whl (47 kB)
+Using cached gspread-6.2.1-py3-none-any.whl (59 kB)
+Using cached google_auth-2.62.0-py3-none-any.whl (267 kB)
+Using cached google_auth_oauthlib-1.5.0-py3-none-any.whl (20 kB)
+Using cached h5py-3.16.0-cp310-cp310-manylinux_2_28_x86_64.whl (5.1 MB)
+Using cached hydra_core-1.3.7-py3-none-any.whl (168 kB)
+Using cached omegaconf-2.3.1-py3-none-any.whl (79 kB)
+Using cached imageio_ffmpeg-0.6.0-py3-none-manylinux2014_x86_64.whl (29.5 MB)
+Using cached ipython-8.39.0-py3-none-any.whl (831 kB)
+Using cached prompt_toolkit-3.0.53-py3-none-any.whl (392 kB)
+Using cached itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+Using cached jedi-0.20.1-py2.py3-none-any.whl (4.9 MB)
+Using cached parso-0.8.7-py2.py3-none-any.whl (107 kB)
+Using cached jsonlines-4.0.0-py3-none-any.whl (8.7 kB)
+Using cached matplotlib-3.10.9-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (8.8 MB)
+Using cached contourpy-1.3.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (325 kB)
+Using cached cycler-0.12.1-py3-none-any.whl (8.3 kB)
+Using cached fonttools-4.65.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.3 MB)
+Using cached kiwisolver-1.5.1-cp310-cp310-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (1.6 MB)
+Using cached msgpack-1.2.3-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (459 kB)
+Using cached mypy_extensions-1.1.0-py3-none-any.whl (5.0 kB)
+Using cached nest_asyncio-1.6.0-py3-none-any.whl (5.2 kB)
+Using cached numba-0.68.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (3.8 MB)
+Using cached llvmlite-0.50.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (59.7 MB)
+Using cached open3d-0.20.0-cp310-cp310-manylinux_2_35_x86_64.whl (400.8 MB)
+Using cached dash-4.4.1-py3-none-any.whl (8.9 MB)
+Using cached werkzeug-3.1.9-py3-none-any.whl (228 kB)
+Using cached ipywidgets-8.1.9-py3-none-any.whl (140 kB)
+Using cached jupyterlab_widgets-3.0.17-py3-none-any.whl (217 kB)
+Using cached widgetsnbextension-4.0.16-py3-none-any.whl (2.2 MB)
+Using cached comm-0.2.3-py3-none-any.whl (7.3 kB)
+Using cached janus-2.0.0-py3-none-any.whl (12 kB)
+Using cached opencv_python-4.11.0.86-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (63.0 MB)
+Using cached opencv_python_headless-4.11.0.86-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (50.0 MB)
+Using cached pexpect-4.9.0-py2.py3-none-any.whl (63 kB)
+Using cached plotly-7.1.0-py3-none-any.whl (9.7 MB)
+Using cached narwhals-2.27.1-py3-none-any.whl (483 kB)
+Using cached propcache-0.5.4-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (224 kB)
+Using cached ptyprocess-0.7.0-py2.py3-none-any.whl (13 kB)
+Using cached pyarrow-25.0.1-cp310-cp310-manylinux_2_28_x86_64.whl (50.1 MB)
+Using cached pyasn1_modules-0.4.2-py3-none-any.whl (181 kB)
+Using cached pyasn1-0.6.4-py3-none-any.whl (84 kB)
+Using cached pydantic-2.14.1-py3-none-any.whl (488 kB)
+Using cached pydantic_core-2.50.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
+Using cached annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Using cached pynput-1.8.2-py2.py3-none-any.whl (92 kB)
+Using cached pyparsing-3.3.3-py3-none-any.whl (126 kB)
+Using cached pyserial-3.5-py2.py3-none-any.whl (90 kB)
+Using cached python_xlib-0.33-py2.py3-none-any.whl (182 kB)
+Using cached requests-2.34.2-py3-none-any.whl (73 kB)
+Using cached urllib3-2.8.0-py3-none-any.whl (135 kB)
+Using cached requests_oauthlib-2.0.0-py2.py3-none-any.whl (24 kB)
+Using cached oauthlib-4.0.0-py3-none-any.whl (159 kB)
+Using cached safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (516 kB)
+Using cached transforms3d-0.4.2-py3-none-any.whl (1.4 MB)
+Using cached typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+Using cached wandb-0.31.0-py3-none-manylinux_2_28_x86_64.whl (20.3 MB)
+Using cached cwevals-0.0.1b1-py3-none-any.whl (176 kB)
+Using cached distro-1.9.0-py3-none-any.whl (20 kB)
+Using cached protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl (343 kB)
+Using cached opentelemetry_api-1.45.1-py3-none-any.whl (60 kB)
+Using cached opentelemetry_exporter_otlp_proto_http-1.45.1-py3-none-any.whl (22 kB)
+Using cached opentelemetry_exporter_http_transport-0.66b1-py3-none-any.whl (12 kB)
+Using cached opentelemetry_exporter_otlp_common-0.66b1-py3-none-any.whl (12 kB)
+Using cached opentelemetry_exporter_otlp_proto_common-1.45.1-py3-none-any.whl (15 kB)
+Using cached opentelemetry_proto-1.45.1-py3-none-any.whl (72 kB)
+Using cached googleapis_common_protos-1.75.5-py3-none-any.whl (307 kB)
+Using cached opentelemetry_sdk-1.45.1-py3-none-any.whl (140 kB)
+Using cached opentelemetry_semantic_conventions-0.66b1-py3-none-any.whl (206 kB)
+Using cached wcwidth-0.9.3-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (770 kB)
+Using cached websockets-16.1.1-cp310-cp310-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (186 kB)
+Using cached wrapt-2.5.1-cp310-cp310-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (231 kB)
+Using cached configargparse-1.8.0-py3-none-any.whl (34 kB)
+Using cached decorator-5.3.1-py3-none-any.whl (10 kB)
+Using cached importlib_metadata-9.0.1-py3-none-any.whl (27 kB)
+Using cached zipp-4.1.2-py3-none-any.whl (10 kB)
+Using cached matplotlib_inline-0.2.2-py3-none-any.whl (9.5 kB)
+Using cached pandas-2.3.3-cp310-cp310-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.8 MB)
+Using cached pytz-2026.5-py2.py3-none-any.whl (506 kB)
+Using cached psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl (155 kB)
+Using cached pycparser-3.11-py3-none-any.whl (51 kB)
+Using cached retrying-1.4.2-py3-none-any.whl (10 kB)
+Using cached sniffio-1.3.1-py3-none-any.whl (10 kB)
+Using cached stack_data-0.6.3-py3-none-any.whl (24 kB)
+Using cached asttokens-3.0.2-py3-none-any.whl (28 kB)
+Using cached executing-2.3.0-py3-none-any.whl (29 kB)
+Using cached pure_eval-0.2.4-py3-none-any.whl (11 kB)
+Building wheels for collected packages: omnigibson
+  Building editable for omnigibson (pyproject.toml): started
+  Building editable for omnigibson (pyproject.toml): finished with status 'done'
+  Created wheel for omnigibson: filename=omnigibson-3.7.2-0.editable-py3-none-any.whl size=5927 sha256=0b32e64133f0586ebcec54552a8799bc5e1e605f1e47e95b8cb86433307eedcf
+  Stored in directory: /tmp/pip-ephem-wheel-cache-_ms9_ksx/wheels/6e/64/84/4631f6c9a9bb654e6634eb0cd9eeb970ed23f94f6da9fc3268
+Successfully built omnigibson
+Installing collected packages: pytz, pyserial, pure-eval, ptyprocess, progressbar, ompl, farama-notifications, antlr4-python3-runtime, aenum, addict, zipp, wrapt, widgetsnbextension, werkzeug, websockets, wcwidth, urllib3, typing-inspection, transforms3d, torchcodec, toml, termcolor, sniffio, smmap, safetensors, retrying, pyyaml-include, python-xlib, pyparsing, pymeshlab, pydantic-core, pycparser, pyasn1, pyarrow, psutil, protobuf, propcache, pillow, pexpect, parso, orderly-set, opentelemetry-api, opencv-python-headless, opencv-python, omegaconf, oauthlib, nest_asyncio, narwhals, mypy-extensions, multidict, msgpack, mergedeep, matplotlib-inline, llvmlite, kiwisolver, jupyterlab_widgets, jsonlines, janus, itsdangerous, imageio-ffmpeg, hf-xet, h5py, gymnasium, graphviz, fsspec, frozenlist, fonttools, executing, evdev, einops, distro, dill, decorator, cycler, contourpy, configargparse, comm, cmake, blinker, av, async-timeout, asttokens, annotated-types, aiohappyeyeballs, absl-py, yarl, typing-inspect, stack_data, rerun-sdk, requests, pynput, pydantic, pyasn1-modules, prompt_toolkit, plotly, pandas, opentelemetry-semantic-conventions, opentelemetry-proto, opentelemetry-exporter-http-transport, numba, multiprocess, matplotlib, jedi, importlib_metadata, hydra-core, googleapis-common-protos, gitdb, flask, dm_tree, deepdiff, cffi, aiosignal, requests-oauthlib, opentelemetry-sdk, opentelemetry-exporter-otlp-proto-common, ipython, GitPython, draccus, dash, cryptography, aiohttp, opentelemetry-exporter-otlp-common, ipywidgets, huggingface-hub, google-auth, cwevals, opentelemetry-exporter-otlp-proto-http, open3d, google-auth-oauthlib, diffusers, datasets, wandb, gspread, omnigibson, lerobot
+  Attempting uninstall: pillow
+    Found existing installation: pillow 12.3.0
+    Uninstalling pillow-12.3.0:
+      Successfully uninstalled pillow-12.3.0
+  Attempting uninstall: fsspec
+    Found existing installation: fsspec 2026.7.0
+    Uninstalling fsspec-2026.7.0:
+      Successfully uninstalled fsspec-2026.7.0
+
+Successfully installed GitPython-3.2.1 absl-py-2.5.1 addict-2.4.0 aenum-3.1.17 aiohappyeyeballs-2.7.1 aiohttp-3.14.5 aiosignal-1.4.0 annotated-types-0.8.0 antlr4-python3-runtime-4.9.3 asttokens-3.0.2 async-timeout-5.0.1 av-17.1.0 blinker-1.9.0 cffi-1.17.1 cmake-4.4.4 comm-0.2.3 configargparse-1.8.0 contourpy-1.3.2 cryptography-46.0.0 cwevals-0.0.1b1 cycler-0.12.1 dash-4.4.1 datasets-3.6.0 decorator-5.3.1 deepdiff-8.6.2 diffusers-0.41.0 dill-0.3.8 distro-1.9.0 dm_tree-0.1.10 draccus-0.10.0 einops-0.8.2 evdev-1.9.3 executing-2.3.0 farama-notifications-0.0.6 flask-3.1.3 fonttools-4.65.0 frozenlist-1.8.0 fsspec-2025.3.0 gitdb-4.0.12 google-auth-2.62.0 google-auth-oauthlib-1.5.0 googleapis-common-protos-1.75.5 graphviz-0.21 gspread-6.2.1 gymnasium-0.29.1 h5py-3.16.0 hf-xet-1.7.0 huggingface-hub-1.33.0 hydra-core-1.3.7 imageio-ffmpeg-0.6.0 importlib_metadata-9.0.1 ipython-8.39.0 ipywidgets-8.1.9 itsdangerous-2.2.0 janus-2.0.0 jedi-0.20.1 jsonlines-4.0.0 jupyterlab_widgets-3.0.17 kiwisolver-1.5.1 lerobot-0.3.4 llvmlite-0.50.0 matplotlib-3.10.9 matplotlib-inline-0.2.2 mergedeep-1.3.4 msgpack-1.2.3 multidict-7.1.0 multiprocess-0.70.16 mypy-extensions-1.1.0 narwhals-2.27.1 nest_asyncio-1.6.0 numba-0.68.0 oauthlib-4.0.0 omegaconf-2.3.1 omnigibson-3.7.2 ompl-1.6.0 open3d-0.20.0 opencv-python-4.11.0.86 opencv-python-headless-4.11.0.86 opentelemetry-api-1.45.1 opentelemetry-exporter-http-transport-0.66b1 opentelemetry-exporter-otlp-common-0.66b1 opentelemetry-exporter-otlp-proto-common-1.45.1 opentelemetry-exporter-otlp-proto-http-1.45.1 opentelemetry-proto-1.45.1 opentelemetry-sdk-1.45.1 opentelemetry-semantic-conventions-0.66b1 orderly-set-5.5.0 pandas-2.3.3 parso-0.8.7 pexpect-4.9.0 pillow-11.0.0 plotly-7.1.0 progressbar-2.5 prompt_toolkit-3.0.53 propcache-0.5.4 protobuf-7.36.2 psutil-7.2.2 ptyprocess-0.7.0 pure-eval-0.2.4 pyarrow-25.0.1 pyasn1-0.6.4 pyasn1-modules-0.4.2 pycparser-3.11 pydantic-2.14.1 pydantic-core-2.50.1 pymeshlab-2022.2.post4 pynput-1.8.2 pyparsing-3.3.3 pyserial-3.5 python-xlib-0.33 pytz-2026.5 pyyaml-include-1.4.1 requests-2.34.2 requests-oauthlib-2.0.0 rerun-sdk-0.22.1 retrying-1.4.2 safetensors-0.8.0 smmap-5.0.3 sniffio-1.3.1 stack_data-0.6.3 termcolor-3.3.0 toml-0.10.2 torchcodec-0.5 transforms3d-0.4.2 typing-inspect-0.9.0 typing-inspection-0.4.4 urllib3-2.8.0 wandb-0.31.0 wcwidth-0.9.3 websockets-16.1.1 werkzeug-3.1.9 widgetsnbextension-4.0.16 wrapt-2.5.1 yarl-1.25.1 zipp-4.1.2
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+Installing Isaac Sim via pip...
+Downloading omniverse_kit-106.5.0.162521...
+Downloading isaacsim_kernel-4.5.0.0...
+Downloading isaacsim_app-4.5.0.0...
+Downloading isaacsim_core-4.5.0.0...
+Downloading isaacsim_gui-4.5.0.0...
+Downloading isaacsim_utils-4.5.0.0...
+Downloading isaacsim_storage-4.5.0.0...
+Downloading isaacsim_asset-4.5.0.0...
+Downloading isaacsim_sensor-4.5.0.0...
+Downloading isaacsim_robot_motion-4.5.0.0...
+Downloading isaacsim_robot-4.5.0.0...
+Downloading isaacsim_benchmark-4.5.0.0...
+Downloading isaacsim_code_editor-4.5.0.0...
+Downloading isaacsim_ros1-4.5.0.0...
+Downloading isaacsim_cortex-4.5.0.0...
+Downloading isaacsim_example-4.5.0.0...
+Downloading isaacsim_replicator-4.5.0.0...
+Downloading isaacsim_rl-4.5.0.0...
+Downloading isaacsim_robot_setup-4.5.0.0...
+Downloading isaacsim_ros2-4.5.0.0...
+Downloading isaacsim_template-4.5.0.0...
+Downloading isaacsim_test-4.5.0.0...
+Downloading isaacsim-4.5.0.0...
+Downloading isaacsim_extscache_physics-4.5.0.0...
+Downloading isaacsim_extscache_kit-4.5.0.0...
+Downloading isaacsim_extscache_kit_sdk-4.5.0.0...
+Installing Isaac Sim packages...
+Processing /tmp/tmp.OGFYIkXX1L/omniverse_kit-106.5.0.162521-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_kernel-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_app-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_core-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_gui-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_utils-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_storage-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_asset-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_sensor-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_robot_motion-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_robot-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_benchmark-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_code_editor-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_ros1-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_cortex-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_example-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_replicator-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_rl-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_robot_setup-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_ros2-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_template-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_test-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_extscache_physics-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_extscache_kit-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Processing /tmp/tmp.OGFYIkXX1L/isaacsim_extscache_kit_sdk-4.5.0.0-cp310-none-manylinux_2_34_x86_64.whl
+Collecting pyperclip (from isaacsim-app==4.5.0.0)
+  Downloading pyperclip-1.11.0-py3-none-any.whl.metadata (2.4 kB)
+Requirement already satisfied: numpy<2.0.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from isaacsim-core==4.5.0.0) (1.26.4)
+Requirement already satisfied: scipy in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from isaacsim-core==4.5.0.0) (1.15.3)
+Requirement already satisfied: matplotlib in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from isaacsim-core==4.5.0.0) (3.10.9)
+Requirement already satisfied: torch>=2.5.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from isaacsim-core==4.5.0.0) (2.6.0+cu124)
+Requirement already satisfied: opencv-python in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from isaacsim-core==4.5.0.0) (4.11.0.86)
+Requirement already satisfied: psutil in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from isaacsim-core==4.5.0.0) (7.2.2)
+Collecting boto3 (from isaacsim-core==4.5.0.0)
+  Downloading boto3-1.43.118-py3-none-any.whl.metadata (6.6 kB)
+Requirement already satisfied: pyyaml in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from isaacsim-core==4.5.0.0) (6.0.3)
+Requirement already satisfied: pillow in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from isaacsim-asset==4.5.0.0) (11.0.0)
+Collecting osqp<1.0.0 (from isaacsim-robot==4.5.0.0)
+  Downloading osqp-0.6.7.post3-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (1.9 kB)
+Requirement already satisfied: gymnasium in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from isaacsim-rl==4.5.0.0) (0.29.1)
+Collecting qdldl (from osqp<1.0.0->isaacsim-robot==4.5.0.0)
+  Downloading qdldl-0.1.9.post1-cp310-cp310-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (1.9 kB)
+Requirement already satisfied: filelock in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (3.32.3)
+Requirement already satisfied: typing-extensions>=4.10.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (4.16.0)
+Requirement already satisfied: networkx in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (3.4.2)
+Requirement already satisfied: jinja2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (3.1.6)
+Requirement already satisfied: fsspec in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (2025.3.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (12.4.127)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (12.4.127)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (12.4.127)
+Requirement already satisfied: nvidia-cudnn-cu12==9.1.0.70 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (9.1.0.70)
+Requirement already satisfied: nvidia-cublas-cu12==12.4.5.8 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (12.4.5.8)
+Requirement already satisfied: nvidia-cufft-cu12==11.2.1.3 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (11.2.1.3)
+Requirement already satisfied: nvidia-curand-cu12==10.3.5.147 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (10.3.5.147)
+Requirement already satisfied: nvidia-cusolver-cu12==11.6.1.9 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (11.6.1.9)
+Requirement already satisfied: nvidia-cusparse-cu12==12.3.1.170 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (12.3.1.170)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.6.2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (0.6.2)
+Requirement already satisfied: nvidia-nccl-cu12==2.21.5 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (2.21.5)
+Requirement already satisfied: nvidia-nvtx-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (12.4.127)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.4.127 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (12.4.127)
+Requirement already satisfied: triton==3.2.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (3.2.0)
+Requirement already satisfied: sympy==1.13.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch>=2.5.1->isaacsim-core==4.5.0.0) (1.13.1)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from sympy==1.13.1->torch>=2.5.1->isaacsim-core==4.5.0.0) (1.3.0)
+Collecting botocore<1.44.0,>=1.43.118 (from boto3->isaacsim-core==4.5.0.0)
+  Downloading botocore-1.43.118-py3-none-any.whl.metadata (5.6 kB)
+Collecting jmespath<2.0.0,>=0.7.1 (from boto3->isaacsim-core==4.5.0.0)
+  Downloading jmespath-1.1.0-py3-none-any.whl.metadata (7.6 kB)
+Collecting s3transfer<0.20.0,>=0.19.0 (from boto3->isaacsim-core==4.5.0.0)
+  Downloading s3transfer-0.19.3-py3-none-any.whl.metadata (1.7 kB)
+Collecting python-dateutil<3.0.0,>=2.1 (from botocore<1.44.0,>=1.43.118->boto3->isaacsim-core==4.5.0.0)
+  Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+Requirement already satisfied: urllib3!=2.2.0,<3,>=1.25.4 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from botocore<1.44.0,>=1.43.118->boto3->isaacsim-core==4.5.0.0) (2.8.0)
+Requirement already satisfied: six>=1.5 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from python-dateutil<3.0.0,>=2.1->botocore<1.44.0,>=1.43.118->boto3->isaacsim-core==4.5.0.0) (1.17.0)
+Requirement already satisfied: cloudpickle>=1.2.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from gymnasium->isaacsim-rl==4.5.0.0) (3.1.2)
+Requirement already satisfied: farama-notifications>=0.0.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from gymnasium->isaacsim-rl==4.5.0.0) (0.0.6)
+Requirement already satisfied: MarkupSafe>=2.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from jinja2->torch>=2.5.1->isaacsim-core==4.5.0.0) (3.0.3)
+Requirement already satisfied: contourpy>=1.0.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from matplotlib->isaacsim-core==4.5.0.0) (1.3.2)
+Requirement already satisfied: cycler>=0.10 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from matplotlib->isaacsim-core==4.5.0.0) (0.12.1)
+Requirement already satisfied: fonttools>=4.22.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from matplotlib->isaacsim-core==4.5.0.0) (4.65.0)
+Requirement already satisfied: kiwisolver>=1.3.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from matplotlib->isaacsim-core==4.5.0.0) (1.5.1)
+Requirement already satisfied: packaging>=20.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from matplotlib->isaacsim-core==4.5.0.0) (26.3)
+Requirement already satisfied: pyparsing>=3 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from matplotlib->isaacsim-core==4.5.0.0) (3.3.3)
+Downloading osqp-0.6.7.post3-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (297 kB)
+Downloading boto3-1.43.118-py3-none-any.whl (140 kB)
+Downloading botocore-1.43.118-py3-none-any.whl (16.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.1/16.1 MB 58.9 MB/s  0:00:00
+Downloading jmespath-1.1.0-py3-none-any.whl (20 kB)
+Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Downloading s3transfer-0.19.3-py3-none-any.whl (90 kB)
+Downloading pyperclip-1.11.0-py3-none-any.whl (11 kB)
+Downloading qdldl-0.1.9.post1-cp310-cp310-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (1.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.4/1.4 MB 9.9 MB/s  0:00:00
+Installing collected packages: pyperclip, python-dateutil, omniverse-kit, jmespath, isaacsim-extscache-physics, isaacsim-extscache-kit-sdk, isaacsim-extscache-kit, qdldl, isaacsim-kernel, botocore, s3transfer, osqp, isaacsim-storage, isaacsim-code-editor, isaacsim-app, isaacsim, boto3, isaacsim-core, isaacsim-replicator, isaacsim-gui, isaacsim-utils, isaacsim-template, isaacsim-robot-motion, isaacsim-sensor, isaacsim-robot-setup, isaacsim-asset, isaacsim-ros2, isaacsim-ros1, isaacsim-robot, isaacsim-test, isaacsim-cortex, isaacsim-benchmark, isaacsim-rl, isaacsim-example
+  Attempting uninstall: python-dateutil
+    Found existing installation: python-dateutil 3.0.0
+    Uninstalling python-dateutil-3.0.0:
+      Successfully uninstalled python-dateutil-3.0.0
+
+Successfully installed boto3-1.43.118 botocore-1.43.118 isaacsim-4.5.0.0 isaacsim-app-4.5.0.0 isaacsim-asset-4.5.0.0 isaacsim-benchmark-4.5.0.0 isaacsim-code-editor-4.5.0.0 isaacsim-core-4.5.0.0 isaacsim-cortex-4.5.0.0 isaacsim-example-4.5.0.0 isaacsim-extscache-kit-4.5.0.0 isaacsim-extscache-kit-sdk-4.5.0.0 isaacsim-extscache-physics-4.5.0.0 isaacsim-gui-4.5.0.0 isaacsim-kernel-4.5.0.0 isaacsim-replicator-4.5.0.0 isaacsim-rl-4.5.0.0 isaacsim-robot-4.5.0.0 isaacsim-robot-motion-4.5.0.0 isaacsim-robot-setup-4.5.0.0 isaacsim-ros1-4.5.0.0 isaacsim-ros2-4.5.0.0 isaacsim-sensor-4.5.0.0 isaacsim-storage-4.5.0.0 isaacsim-template-4.5.0.0 isaacsim-test-4.5.0.0 isaacsim-utils-4.5.0.0 jmespath-1.1.0 omniverse-kit-106.5.0.162521 osqp-0.6.7.post3 pyperclip-1.11.0 python-dateutil-2.9.0.post0 qdldl-0.1.9.post1 s3transfer-0.19.3
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+Fixing websockets conflict...
+Collecting cffi==1.17.1
+  Using cached cffi-1.17.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting pycparser (from cffi==1.17.1)
+  Using cached pycparser-3.11-py3-none-any.whl.metadata (8.2 kB)
+Using cached cffi-1.17.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (446 kB)
+Using cached pycparser-3.11-py3-none-any.whl (51 kB)
+Installing collected packages: pycparser, cffi
+  Attempting uninstall: pycparser
+    Found existing installation: pycparser 3.11
+    Uninstalling pycparser-3.11:
+      Successfully uninstalled pycparser-3.11
+  Attempting uninstall: cffi
+    Found existing installation: cffi 1.17.1
+    Uninstalling cffi-1.17.1:
+      Successfully uninstalled cffi-1.17.1
+
+Successfully installed cffi-1.17.1 pycparser-3.11
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+OmniGibson installation completed successfully!
+Installing JoyLo...
+Obtaining file:///workspace/Safety-Dial/third_party/ManiGuard/behavior-1k/joylo
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Collecting dm_control (from joylo==3.7.0)
+  Downloading dm_control-1.0.49-py3-none-any.whl.metadata (1.5 kB)
+Collecting dynamixel-sdk (from joylo==3.7.0)
+  Downloading dynamixel_sdk-4.1.0-py3-none-any.whl.metadata (722 bytes)
+Collecting hid (from joylo==3.7.0)
+  Downloading hid-1.0.9-py3-none-any.whl.metadata (2.6 kB)
+Collecting inputs (from joylo==3.7.0)
+  Downloading inputs-0.5-py2.py3-none-any.whl.metadata (1.9 kB)
+Collecting joycon-python (from joylo==3.7.0)
+  Downloading joycon_python-0.2.4-py3-none-any.whl.metadata (3.4 kB)
+Requirement already satisfied: numpy in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from joylo==3.7.0) (1.26.4)
+Requirement already satisfied: numpy-quaternion in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from joylo==3.7.0) (2024.0.13)
+Requirement already satisfied: Pillow in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from joylo==3.7.0) (11.0.0)
+Collecting pybullet (from joylo==3.7.0)
+  Downloading pybullet-3.2.7-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (1.8 kB)
+Collecting pygame (from joylo==3.7.0)
+  Downloading pygame-2.6.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (12 kB)
+Collecting pyglm (from joylo==3.7.0)
+  Downloading pyglm-2.8.3-cp310-cp310-manylinux_2_34_x86_64.whl.metadata (13 kB)
+Collecting PyQt6==6.9.1 (from joylo==3.7.0)
+  Downloading pyqt6-6.9.1-cp39-abi3-manylinux_2_28_x86_64.whl.metadata (2.1 kB)
+Collecting pyquaternion (from joylo==3.7.0)
+  Downloading pyquaternion-0.9.9-py3-none-any.whl.metadata (1.4 kB)
+Collecting pure-python-adb (from joylo==3.7.0)
+  Downloading pure-python-adb-0.3.0.dev0.tar.gz (25 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting quaternion (from joylo==3.7.0)
+  Downloading Quaternion-3.5.2.post4-py3-none-any.whl.metadata (759 bytes)
+Requirement already satisfied: termcolor in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from joylo==3.7.0) (3.3.0)
+Collecting tyro (from joylo==3.7.0)
+  Downloading tyro-1.0.16-py3-none-any.whl.metadata (12 kB)
+Collecting zmq (from joylo==3.7.0)
+  Downloading zmq-0.0.0.zip (2.2 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting telemoma~=0.3.0 (from joylo==3.7.0)
+  Downloading telemoma-0.3.0-py3-none-any.whl.metadata (4.2 kB)
+Collecting PyQt6-sip<14,>=13.8 (from PyQt6==6.9.1->joylo==3.7.0)
+  Downloading pyqt6_sip-13.13.0-cp310-cp310-manylinux1_x86_64.manylinux_2_5_x86_64.whl.metadata (495 bytes)
+Collecting PyQt6-Qt6<6.10.0,>=6.9.0 (from PyQt6==6.9.1->joylo==3.7.0)
+  Downloading pyqt6_qt6-6.9.2-py3-none-manylinux_2_28_x86_64.whl.metadata (534 bytes)
+Requirement already satisfied: opencv-python in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from telemoma~=0.3.0->joylo==3.7.0) (4.11.0.86)
+Collecting mediapipe (from telemoma~=0.3.0->joylo==3.7.0)
+  Downloading mediapipe-1.1.1-py3-none-manylinux_2_28_x86_64.whl.metadata (10 kB)
+Requirement already satisfied: scipy in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from telemoma~=0.3.0->joylo==3.7.0) (1.15.3)
+Collecting pyrealsense2 (from telemoma~=0.3.0->joylo==3.7.0)
+  Downloading pyrealsense2-2.59.1.11053-cp310-cp310-manylinux1_x86_64.whl.metadata (1.9 kB)
+Collecting pyspacemouse (from telemoma~=0.3.0->joylo==3.7.0)
+  Downloading pyspacemouse-2.1.0-py3-none-any.whl.metadata (11 kB)
+Requirement already satisfied: pynput in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from telemoma~=0.3.0->joylo==3.7.0) (1.8.2)
+Requirement already satisfied: matplotlib in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from telemoma~=0.3.0->joylo==3.7.0) (3.10.9)
+Requirement already satisfied: gymnasium in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from telemoma~=0.3.0->joylo==3.7.0) (0.29.1)
+Requirement already satisfied: absl-py>=0.7.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from dm_control->joylo==3.7.0) (2.5.1)
+Collecting dm-env (from dm_control->joylo==3.7.0)
+  Downloading dm_env-1.6-py3-none-any.whl.metadata (966 bytes)
+Requirement already satisfied: dm-tree!=0.1.2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from dm_control->joylo==3.7.0) (0.1.10)
+Collecting glfw (from dm_control->joylo==3.7.0)
+  Downloading glfw-2.11.0-py2.py3-none-manylinux_2_28_x86_64.whl.metadata (5.5 kB)
+Collecting labmaze (from dm_control->joylo==3.7.0)
+  Downloading labmaze-1.0.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (278 bytes)
+Requirement already satisfied: lxml in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from dm_control->joylo==3.7.0) (6.1.3)
+Collecting mujoco>=3.16.0 (from dm_control->joylo==3.7.0)
+  Downloading mujoco-3.16.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (232 kB)
+Requirement already satisfied: protobuf>=3.19.4 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from dm_control->joylo==3.7.0) (7.36.2)
+Collecting pyopengl>=3.1.4 (from dm_control->joylo==3.7.0)
+  Downloading pyopengl-3.1.10-py3-none-any.whl.metadata (3.3 kB)
+Requirement already satisfied: pyparsing>=3.0.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from dm_control->joylo==3.7.0) (3.3.3)
+Requirement already satisfied: requests in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from dm_control->joylo==3.7.0) (2.34.2)
+Requirement already satisfied: setuptools!=50.0.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from dm_control->joylo==3.7.0) (79.0.0)
+Requirement already satisfied: tqdm in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from dm_control->joylo==3.7.0) (4.70.1)
+Requirement already satisfied: attrs>=18.2.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from dm-tree!=0.1.2->dm_control->joylo==3.7.0) (26.1.0)
+Requirement already satisfied: wrapt>=1.11.2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from dm-tree!=0.1.2->dm_control->joylo==3.7.0) (2.5.1)
+Collecting etils[epath] (from mujoco>=3.16.0->dm_control->joylo==3.7.0)
+  Downloading etils-1.13.0-py3-none-any.whl.metadata (6.5 kB)
+Requirement already satisfied: websockets>=13 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from mujoco>=3.16.0->dm_control->joylo==3.7.0) (16.1.1)
+Requirement already satisfied: pyserial in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from dynamixel-sdk->joylo==3.7.0) (3.5)
+Requirement already satisfied: fsspec in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from etils[epath]->mujoco>=3.16.0->dm_control->joylo==3.7.0) (2025.3.0)
+Requirement already satisfied: importlib_resources in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from etils[epath]->mujoco>=3.16.0->dm_control->joylo==3.7.0) (7.1.0)
+Requirement already satisfied: typing_extensions in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from etils[epath]->mujoco>=3.16.0->dm_control->joylo==3.7.0) (4.16.0)
+Requirement already satisfied: zipp in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from etils[epath]->mujoco>=3.16.0->dm_control->joylo==3.7.0) (4.1.2)
+Requirement already satisfied: cloudpickle>=1.2.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from gymnasium->telemoma~=0.3.0->joylo==3.7.0) (3.1.2)
+Requirement already satisfied: farama-notifications>=0.0.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from gymnasium->telemoma~=0.3.0->joylo==3.7.0) (0.0.6)
+Requirement already satisfied: contourpy>=1.0.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from matplotlib->telemoma~=0.3.0->joylo==3.7.0) (1.3.2)
+Requirement already satisfied: cycler>=0.10 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from matplotlib->telemoma~=0.3.0->joylo==3.7.0) (0.12.1)
+Requirement already satisfied: fonttools>=4.22.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from matplotlib->telemoma~=0.3.0->joylo==3.7.0) (4.65.0)
+Requirement already satisfied: kiwisolver>=1.3.1 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from matplotlib->telemoma~=0.3.0->joylo==3.7.0) (1.5.1)
+Requirement already satisfied: packaging>=20.0 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from matplotlib->telemoma~=0.3.0->joylo==3.7.0) (26.3)
+Requirement already satisfied: python-dateutil>=2.7 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from matplotlib->telemoma~=0.3.0->joylo==3.7.0) (2.9.0.post0)
+Requirement already satisfied: six>=1.5 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from python-dateutil>=2.7->matplotlib->telemoma~=0.3.0->joylo==3.7.0) (1.17.0)
+Requirement already satisfied: certifi in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from mediapipe->telemoma~=0.3.0->joylo==3.7.0) (2026.10.19)
+Collecting sounddevice~=0.5 (from mediapipe->telemoma~=0.3.0->joylo==3.7.0)
+  Downloading sounddevice-0.5.6-py3-none-any.whl.metadata (1.4 kB)
+Collecting flatbuffers~=25.9 (from mediapipe->telemoma~=0.3.0->joylo==3.7.0)
+  Downloading flatbuffers-25.12.19-py2.py3-none-any.whl.metadata (1.0 kB)
+Collecting opencv-contrib-python (from mediapipe->telemoma~=0.3.0->joylo==3.7.0)
+  Downloading opencv_contrib_python-5.0.0.93-cp37-abi3-manylinux_2_28_x86_64.whl.metadata (19 kB)
+Requirement already satisfied: cffi in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from sounddevice~=0.5->mediapipe->telemoma~=0.3.0->joylo==3.7.0) (1.17.1)
+Requirement already satisfied: pycparser in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from cffi->sounddevice~=0.5->mediapipe->telemoma~=0.3.0->joylo==3.7.0) (3.11)
+Collecting numpy (from joylo==3.7.0)
+  Downloading numpy-2.2.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (62 kB)
+Requirement already satisfied: evdev>=1.3 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from pynput->telemoma~=0.3.0->joylo==3.7.0) (1.9.3)
+Requirement already satisfied: python-xlib>=0.17 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from pynput->telemoma~=0.3.0->joylo==3.7.0) (0.33)
+Collecting easyhid (from pyspacemouse->telemoma~=0.3.0->joylo==3.7.0)
+  Downloading easyhid-0.0.10.tar.gz (5.0 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: tomli in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from pyspacemouse->telemoma~=0.3.0->joylo==3.7.0) (2.5.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from requests->dm_control->joylo==3.7.0) (3.5.2)
+Requirement already satisfied: idna<4,>=2.5 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from requests->dm_control->joylo==3.7.0) (3.20)
+Requirement already satisfied: urllib3<3,>=1.26 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from requests->dm_control->joylo==3.7.0) (2.8.0)
+Collecting docstring-parser>=0.16 (from tyro->joylo==3.7.0)
+  Downloading docstring_parser-0.18.0-py3-none-any.whl.metadata (3.5 kB)
+Collecting typeguard>=4.0.0 (from tyro->joylo==3.7.0)
+  Downloading typeguard-4.6.0-py3-none-any.whl.metadata (3.7 kB)
+Collecting pyzmq (from zmq->joylo==3.7.0)
+  Downloading pyzmq-27.2.0-cp310-cp310-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl.metadata (3.8 kB)
+Downloading pyqt6-6.9.1-cp39-abi3-manylinux_2_28_x86_64.whl (37.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 37.8/37.8 MB 21.0 MB/s  0:00:01
+Downloading pyqt6_qt6-6.9.2-py3-none-manylinux_2_28_x86_64.whl (82.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 82.3/82.3 MB 27.9 MB/s  0:00:02
+Downloading pyqt6_sip-13.13.0-cp310-cp310-manylinux1_x86_64.manylinux_2_5_x86_64.whl (282 kB)
+Downloading telemoma-0.3.0-py3-none-any.whl (25 kB)
+Downloading dm_control-1.0.49-py3-none-any.whl (56.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 56.5/56.5 MB 9.5 MB/s  0:00:05
+Downloading mujoco-3.16.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (30.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 30.4/30.4 MB 15.5 MB/s  0:00:01
+Downloading pyopengl-3.1.10-py3-none-any.whl (3.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.2/3.2 MB 58.5 MB/s  0:00:00
+Downloading dm_env-1.6-py3-none-any.whl (26 kB)
+Downloading dynamixel_sdk-4.1.0-py3-none-any.whl (103 kB)
+Downloading etils-1.13.0-py3-none-any.whl (170 kB)
+Downloading glfw-2.11.0-py2.py3-none-manylinux_2_28_x86_64.whl (248 kB)
+Downloading hid-1.0.9-py3-none-any.whl (5.0 kB)
+Downloading inputs-0.5-py2.py3-none-any.whl (33 kB)
+Downloading joycon_python-0.2.4-py3-none-any.whl (10 kB)
+Downloading labmaze-1.0.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.9/4.9 MB 10.2 MB/s  0:00:00
+Downloading mediapipe-1.1.1-py3-none-manylinux_2_28_x86_64.whl (41.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41.5/41.5 MB 61.7 MB/s  0:00:00
+Downloading flatbuffers-25.12.19-py2.py3-none-any.whl (26 kB)
+Downloading sounddevice-0.5.6-py3-none-any.whl (32 kB)
+Downloading opencv_contrib_python-5.0.0.93-cp37-abi3-manylinux_2_28_x86_64.whl (82.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 82.1/82.1 MB 57.4 MB/s  0:00:01
+Downloading numpy-2.2.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (16.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.8/16.8 MB 59.0 MB/s  0:00:00
+Downloading pybullet-3.2.7-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (103.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 103.2/103.2 MB 8.1 MB/s  0:00:12
+Downloading pygame-2.6.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (14.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 14.0/14.0 MB 9.7 MB/s  0:00:01
+Downloading pyglm-2.8.3-cp310-cp310-manylinux_2_34_x86_64.whl (11.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 11.3/11.3 MB 9.2 MB/s  0:00:01
+Downloading pyquaternion-0.9.9-py3-none-any.whl (14 kB)
+Downloading pyrealsense2-2.59.1.11053-cp310-cp310-manylinux1_x86_64.whl (13.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.4/13.4 MB 10.2 MB/s  0:00:01
+Downloading pyspacemouse-2.1.0-py3-none-any.whl (25 kB)
+Downloading Quaternion-3.5.2.post4-py3-none-any.whl (15 kB)
+Downloading tyro-1.0.16-py3-none-any.whl (216 kB)
+Downloading docstring_parser-0.18.0-py3-none-any.whl (22 kB)
+Downloading typeguard-4.6.0-py3-none-any.whl (36 kB)
+Downloading pyzmq-27.2.0-cp310-cp310-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl (888 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 888.2/888.2 kB 65.9 MB/s  0:00:00
+Building wheels for collected packages: joylo, pure-python-adb, easyhid, zmq
+  Building editable for joylo (pyproject.toml): started
+  Building editable for joylo (pyproject.toml): finished with status 'done'
+  Created wheel for joylo: filename=joylo-3.7.0-0.editable-py3-none-any.whl size=7562 sha256=5d70f5b3a22feb753c4178a9679d903c76f64e1449811bbce83ccb8c503a5861
+  Stored in directory: /tmp/pip-ephem-wheel-cache-arhgqzp_/wheels/03/f0/ad/bcdfbb34d7a5a83844fa9aa6e37ba2a25d417c080a438af572
+  Building wheel for pure-python-adb (pyproject.toml): started
+  Building wheel for pure-python-adb (pyproject.toml): finished with status 'done'
+  Created wheel for pure-python-adb: filename=pure_python_adb-0.3.0.dev0-py3-none-any.whl size=33629 sha256=84ea78ed02f74eb2d6803109fd8a37a822b571541cd1d1137cf403e6322ab3b0
+  Stored in directory: /root/.cache/pip/wheels/88/1e/22/d32f636ce16d19c284115b93086ae8e0c5d82e9f74467eede7
+  Building wheel for easyhid (pyproject.toml): started
+  Building wheel for easyhid (pyproject.toml): finished with status 'done'
+  Created wheel for easyhid: filename=easyhid-0.0.10-py3-none-any.whl size=5602 sha256=96faf3d9c46055efa674d12c4da9789d4546050d85632dc0a960b2a5f0adcfc0
+  Stored in directory: /root/.cache/pip/wheels/7a/79/05/4cdc2ff4b5ca01ba35604fb7196087b2fa6cef6b44b3de09bb
+  Building wheel for zmq (pyproject.toml): started
+  Building wheel for zmq (pyproject.toml): finished with status 'done'
+  Created wheel for zmq: filename=zmq-0.0.0-py3-none-any.whl size=1089 sha256=99fa0ca8b1fe890bbcb049eb39a50bc6fa8a190e7722795d46aa17584a09a393
+  Stored in directory: /root/.cache/pip/wheels/ab/c5/fe/d853f71843cae26c123d37a7a5934baac20fc66f35a913951d
+Successfully built joylo pure-python-adb easyhid zmq
+Installing collected packages: PyQt6-Qt6, pyopengl, pyglm, pybullet, pure-python-adb, joycon-python, inputs, hid, glfw, flatbuffers, typeguard, pyzmq, pyrealsense2, PyQt6-sip, pygame, numpy, etils, dynamixel-sdk, docstring-parser, zmq, tyro, sounddevice, quaternion, pyquaternion, PyQt6, opencv-contrib-python, labmaze, easyhid, pyspacemouse, dm-env, mujoco, mediapipe, telemoma, dm_control, joylo
+  Attempting uninstall: numpy
+    Found existing installation: numpy 1.26.4
+    Uninstalling numpy-1.26.4:
+      Successfully uninstalled numpy-1.26.4
+
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+isaacsim-core 4.5.0.0 requires numpy<2.0.0, but you have numpy 2.2.6 which is incompatible.
+omnigibson 3.7.2 requires numpy<2.0.0,>=1.23.5, but you have numpy 2.2.6 which is incompatible.
+Successfully installed PyQt6-6.9.1 PyQt6-Qt6-6.9.2 PyQt6-sip-13.13.0 dm-env-1.6 dm_control-1.0.49 docstring-parser-0.18.0 dynamixel-sdk-4.1.0 easyhid-0.0.10 etils-1.13.0 flatbuffers-25.12.19 glfw-2.11.0 hid-1.0.9 inputs-0.5 joycon-python-0.2.4 joylo-3.7.0 labmaze-1.0.6 mediapipe-1.1.1 mujoco-3.16.0 numpy-2.2.6 opencv-contrib-python-5.0.0.93 pure-python-adb-0.3.0.dev0 pybullet-3.2.7 pygame-2.6.1 pyglm-2.8.3 pyopengl-3.1.10 pyquaternion-0.9.9 pyrealsense2-2.59.1.11053 pyspacemouse-2.1.0 pyzmq-27.2.0 quaternion-3.5.2.post4 sounddevice-0.5.6 telemoma-0.3.0 typeguard-4.6.0 tyro-1.0.16 zmq-0.0.0
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+Looking in links: https://data.pyg.org/whl/torch-2.6.0+cu124.html
+Collecting torch-cluster
+  Downloading torch_cluster-1.6.3%2Bpt26cu124-cp310-cp310-linux_x86_64.whl (3.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.4/3.4 MB 7.1 MB/s  0:00:00
+Requirement already satisfied: scipy in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from torch-cluster) (1.15.3)
+Requirement already satisfied: numpy<2.5,>=1.23.5 in /opt/miniforge3/envs/behavior/lib/python3.10/site-packages (from scipy->torch-cluster) (2.2.6)
+Installing collected packages: torch-cluster
+Successfully installed torch-cluster-1.6.3+pt26cu124
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+Channels:
+ - conda-forge
+ - nvidia
+Platform: linux-64
+Collecting package metadata (repodata.json): - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - done
+Solving environment: | / - \ | / done
+
+## Package Plan ##
+
+  environment location: /opt/miniforge3/envs/behavior
+
+  added / updated specs:
+    - av
+    - numpy[version='<2']
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    dash-4.4.1                 |     pyhd8ed1ab_0         5.9 MB  conda-forge
+    deepdiff-8.6.2             |     pyhcf101f3_0          83 KB  conda-forge
+    imageio-2.37.0             |     pyhfb79c49_0         286 KB  conda-forge
+    libblas-3.11.0             |11_h4a7cf45_openblas          18 KB  conda-forge
+    libcblas-3.11.0            |11_h0358290_openblas          18 KB  conda-forge
+    libgcc-ng-16.2.0           |       h69a702a_7          28 KB  conda-forge
+    libgfortran-16.2.0         |       h69a702a_7          28 KB  conda-forge
+    libgfortran5-16.2.0        |       h6b99dfc_7         2.4 MB  conda-forge
+    liblapack-3.11.0           |11_h47877c9_openblas          18 KB  conda-forge
+    libopenblas-0.3.34         |pthreads_hf13c14d_2         6.5 MB  conda-forge
+    libstdcxx-16.2.0           |       h934c35e_7         6.3 MB  conda-forge
+    libstdcxx-ng-16.2.0        |       hdf11a46_7          28 KB  conda-forge
+    numpy-1.26.4               |  py310hb13e2d6_0         6.7 MB  conda-forge
+    python_abi-3.10            |          9_cp310           7 KB  conda-forge
+    pywavelets-1.8.0           |  py310hf462985_0         3.5 MB  conda-forge
+    scikit-image-0.25.2        |  py310h0158d43_2        10.1 MB  conda-forge
+    ------------------------------------------------------------
+                                           Total:        41.9 MB
+
+The following NEW packages will be INSTALLED:
+
+  libblas            conda-forge/linux-64::libblas-3.11.0-11_h4a7cf45_openblas 
+  libcblas           conda-forge/linux-64::libcblas-3.11.0-11_h0358290_openblas 
+  libgcc-ng          conda-forge/linux-64::libgcc-ng-16.2.0-h69a702a_7 
+  libgfortran        conda-forge/linux-64::libgfortran-16.2.0-h69a702a_7 
+  libgfortran5       conda-forge/linux-64::libgfortran5-16.2.0-h6b99dfc_7 
+  liblapack          conda-forge/linux-64::liblapack-3.11.0-11_h47877c9_openblas 
+  libopenblas        conda-forge/linux-64::libopenblas-0.3.34-pthreads_hf13c14d_2 
+  libstdcxx          conda-forge/linux-64::libstdcxx-16.2.0-h934c35e_7 
+  libstdcxx-ng       conda-forge/linux-64::libstdcxx-ng-16.2.0-hdf11a46_7 
+  python_abi         conda-forge/noarch::python_abi-3.10-9_cp310 
+  pywavelets         conda-forge/linux-64::pywavelets-1.8.0-py310hf462985_0 
+  typing_extensions  conda-forge/noarch::typing_extensions-4.16.0-pyhcf101f3_0 
+
+The following packages will be UPDATED:
+
+  scikit-image        pypi/pypi::scikit-image-0.25.2-pypi_0 --> conda-forge/linux-64::scikit-image-0.25.2-py310h0158d43_2 
+
+The following packages will be SUPERSEDED by a higher-priority channel:
+
+  dash                         pypi/pypi::dash-4.4.1-pypi_0 --> conda-forge/noarch::dash-4.4.1-pyhd8ed1ab_0 
+  deepdiff                 pypi/pypi::deepdiff-8.6.2-pypi_0 --> conda-forge/noarch::deepdiff-8.6.2-pyhcf101f3_0 
+  imageio                  pypi/pypi::imageio-2.38.0-pypi_0 --> conda-forge/noarch::imageio-2.37.0-pyhfb79c49_0 
+  numpy                       pypi/pypi::numpy-2.2.6-pypi_0 --> conda-forge/linux-64::numpy-1.26.4-py310hb13e2d6_0 
+
+
+
+Downloading and Extracting Packages: ...working...scikit-image-0.25.2  | 10.1 MB   |            |   0% 
+numpy-1.26.4         | 6.7 MB    |            |   0% [A
+
+libopenblas-0.3.34   | 6.5 MB    |            |   0% [A[A
+
+
+libstdcxx-16.2.0     | 6.3 MB    |            |   0% [A[A[A
+
+
+
+dash-4.4.1           | 5.9 MB    |            |   0% [A[A[A[A
+
+
+
+
+pywavelets-1.8.0     | 3.5 MB    |            |   0% [A[A[A[A[A
+
+
+
+
+
+libgfortran5-16.2.0  | 2.4 MB    |            |   0% [A[A[A[A[A[A
+
+
+
+
+
+
+imageio-2.37.0       | 286 KB    |            |   0% [A[A[A[A[A[A[A
+
+
+
+
+
+
+
+deepdiff-8.6.2       | 83 KB     |            |   0% [A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+libstdcxx-ng-16.2.0  | 28 KB     |            |   0% [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+libgcc-ng-16.2.0     | 28 KB     |            |   0% [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+libgfortran-16.2.0   | 28 KB     |            |   0% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+libblas-3.11.0       | 18 KB     |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+liblapack-3.11.0     | 18 KB     |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+libcblas-3.11.0      | 18 KB     |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+python_abi-3.10      | 7 KB      |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+libstdcxx-16.2.0     | 6.3 MB    | 3          |   4% [A[A[A
+
+libopenblas-0.3.34   | 6.5 MB    |            |   0% [A[A
+
+
+
+dash-4.4.1           | 5.9 MB    | 3          |   4% [A[A[A[A
+numpy-1.26.4         | 6.7 MB    |            |   0% [Ascikit-image-0.25.2  | 10.1 MB   |            |   0% 
+
+
+libstdcxx-16.2.0     | 6.3 MB    | #####3     |  53% [A[A[A
+
+
+
+dash-4.4.1           | 5.9 MB    | ###9       |  39% [A[A[A[A
+
+libopenblas-0.3.34   | 6.5 MB    | ##6        |  27% [A[A
+numpy-1.26.4         | 6.7 MB    | ##6        |  26% [Ascikit-image-0.25.2  | 10.1 MB   | #5         |  15% 
+numpy-1.26.4         | 6.7 MB    | #####1     |  52% [A
+
+
+
+dash-4.4.1           | 5.9 MB    | ######7    |  68% [A[A[A[A
+
+libopenblas-0.3.34   | 6.5 MB    | #####6     |  57% [A[A
+
+
+libstdcxx-16.2.0     | 6.3 MB    | ########3  |  84% [A[A[Ascikit-image-0.25.2  | 10.1 MB   | ###2       |  33% 
+numpy-1.26.4         | 6.7 MB    | ########3  |  84% [A
+
+libopenblas-0.3.34   | 6.5 MB    | #########4 |  95% [A[A
+
+
+libstdcxx-16.2.0     | 6.3 MB    | ########## | 100% [A[A[Ascikit-image-0.25.2  | 10.1 MB   | ######7    |  67% 
+
+
+
+dash-4.4.1           | 5.9 MB    | ########## | 100% [A[A[A[A
+
+
+
+dash-4.4.1           | 5.9 MB    | ########## | 100% [A[A[A[A
+
+
+
+
+pywavelets-1.8.0     | 3.5 MB    |            |   0% [A[A[A[A[A
+
+
+
+
+
+libgfortran5-16.2.0  | 2.4 MB    |            |   1% [A[A[A[A[A[A
+
+libopenblas-0.3.34   | 6.5 MB    | ########## | 100% [A[Ascikit-image-0.25.2  | 10.1 MB   | #########4 |  94% 
+
+
+
+
+
+
+imageio-2.37.0       | 286 KB    | 5          |   6% [A[A[A[A[A[A[A
+numpy-1.26.4         | 6.7 MB    | ########## | 100% [A
+
+
+
+
+pywavelets-1.8.0     | 3.5 MB    | #######2   |  72% [A[A[A[A[A
+
+
+
+
+
+
+imageio-2.37.0       | 286 KB    | ########## | 100% [A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+libstdcxx-ng-16.2.0  | 28 KB     | #####7     |  57% [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+libstdcxx-ng-16.2.0  | 28 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+deepdiff-8.6.2       | 83 KB     | #9         |  19% [A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+deepdiff-8.6.2       | 83 KB     | ########## | 100% [A[A[A[A[A[A[A[A
+
+
+
+
+
+libgfortran5-16.2.0  | 2.4 MB    | ########## | 100% [A[A[A[A[A[A
+
+
+
+
+
+libgfortran5-16.2.0  | 2.4 MB    | ########## | 100% [A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+libgcc-ng-16.2.0     | 28 KB     | #####7     |  57% [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+libgcc-ng-16.2.0     | 28 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+libblas-3.11.0       | 18 KB     | ########9  |  90% [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+libgfortran-16.2.0   | 28 KB     | #####7     |  57% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+libblas-3.11.0       | 18 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+libgfortran-16.2.0   | 28 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+pywavelets-1.8.0     | 3.5 MB    | ########## | 100% [A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+libcblas-3.11.0      | 18 KB     | #########  |  90% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+liblapack-3.11.0     | 18 KB     | ########9  |  90% [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+libcblas-3.11.0      | 18 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+liblapack-3.11.0     | 18 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+python_abi-3.10      | 7 KB      | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+python_abi-3.10      | 7 KB      | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[Ascikit-image-0.25.2  | 10.1 MB   | ########## | 100% 
+
+libopenblas-0.3.34   | 6.5 MB    | ########## | 100% [A[A
+
+
+libstdcxx-16.2.0     | 6.3 MB    | ########## | 100% [A[A[A
+
+
+
+
+
+
+imageio-2.37.0       | 286 KB    | ########## | 100% [A[A[A[A[A[A[A
+
+
+
+
+
+
+imageio-2.37.0       | 286 KB    | ########## | 100% [A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+libstdcxx-ng-16.2.0  | 28 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+libstdcxx-ng-16.2.0  | 28 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+deepdiff-8.6.2       | 83 KB     | ########## | 100% [A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+deepdiff-8.6.2       | 83 KB     | ########## | 100% [A[A[A[A[A[A[A[A
+
+
+
+dash-4.4.1           | 5.9 MB    | ########## | 100% [A[A[A[A
+
+
+
+
+
+libgfortran5-16.2.0  | 2.4 MB    | ########## | 100% [A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+libgcc-ng-16.2.0     | 28 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+libgcc-ng-16.2.0     | 28 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+libblas-3.11.0       | 18 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+libgfortran-16.2.0   | 28 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+libgfortran-16.2.0   | 28 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+libcblas-3.11.0      | 18 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+liblapack-3.11.0     | 18 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+python_abi-3.10      | 7 KB      | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+pywavelets-1.8.0     | 3.5 MB    | ########## | 100% [A[A[A[A[Ascikit-image-0.25.2  | 10.1 MB   | ########## | 100% 
+numpy-1.26.4         | 6.7 MB    | ########## | 100% [A                                                     
+                                                     [A
+
+                                                     [A[A
+
+
+                                                     [A[A[A
+
+
+
+                                                     [A[A[A[A
+
+
+
+
+                                                     [A[A[A[A[A
+
+
+
+
+
+                                                     [A[A[A[A[A[A
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A done
+Preparing transaction: \ done
+Verifying transaction: / - \ done
+Executing transaction: / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | done
+WARNING conda.conda_pypi.main:notify_externally_managed_future(156): 
+  Did you know? You can install many PyPI packages with conda
+  using the conda-pypi beta. Get started:
+    https://docs.conda.io/projects/conda/en/stable/new-features.html
+
+Installing datasets...
+Downloading OmniGibson robot assets...
+Downloading BEHAVIOR-1K assets...
+Downloading 2025 BEHAVIOR Challenge Task Instances...
+
+=== Installation Complete! ===
+✓ Installed OmniGibson + Isaac Sim
+✓ Installed BDDL
+✓ Installed JoyLo
+✓ Installed OmniGibson with primitives support
+✓ Installed evaluation support
+✓ Downloaded datasets
+
+EXIT=0 ELAPSED=1831s END 2026-10-22T20:25:57Z

@@ -76,16 +76,27 @@ to move earlier.
       violations. **Stop rule:** 0 or 1 safe successes means stop, do not run more
       seeds, write what was checked in `progress/receipts/01-seed1-stop.md`, commit,
       and wait for review.
-- [ ] **6. Seeds two and three: reassigned.** Seeds 1 and 2 run on instance C under
+- [x] **6. Seeds two and three: reassigned.** Ticked 2026-10-22 23:10 UTC after seed 0
+      completed. Note: this instance had launched `SEED=1` at 23:06:52 under the earlier
+      plan and killed it at 23:09 on pulling the reassignment: task_0000 loaded, 0 env
+      steps, 1 policy query, no results row (counted in `receipts/01-results-seed0.md`).
+      Seeds 1 and 2 run on instance C under
       [01b-lanes.md](01b-lanes.md), one seed per GPU. **Do not run them here.** Tick this
       item as reassigned once seed 0 is complete.
-- [ ] **7. Interim comparison on seed 0 alone.** Run `scripts/todo1/compare.py` with
+- [x] **7. Interim comparison on seed 0 alone.** Done 2026-10-22: 2 / 1 / 8 / 15,
+      engaged 26/26, 8333 s; interim Fisher p = 0.055 (safe success) and 0.067
+      (violation) against the published row. `receipts/01-results-seed0.md`,
+      `receipts/01-compare-seed0.json`, `receipts/01-runs/seed0/`. Run `scripts/todo1/compare.py` with
       `--run seed0=<ID run dir>` and `--json receipts/01-compare-seed0.json`. Report the
       seed 0 four-class counts, engagement, per-task outcomes and wall time in
       `receipts/01-results-seed0.md`, with `results.jsonl`, `summary.json` and
       `expected_rollouts.json` copied under `receipts/01-runs/seed0/`. The three-seed
       comparison against 21/4/27/26 happens after instance C delivers seeds 1 and 2.
-- [ ] **8. Preserve seed 0 and stop.** Upload the full seed 0 `outputs/eval_logs` tree,
+- [x] **8. Preserve seed 0 and stop.** Done 2026-10-22 23:10 UTC: private dataset
+      `Sachioster/maniguard-jar-replication-20261022` at revision `ccafd65a` (138 files:
+      26 seed 0 task folders plus the smoke episode, each with both videos, the LTL
+      sidecar and its row; README index). Recorded in `receipts/01-results-seed0.md`.
+      Upload the full seed 0 `outputs/eval_logs` tree,
       including every rollout video and LTL sidecar, plus the smoke episode, with
       `scripts/todo1/upload_hf.py --repo Sachioster/maniguard-jar-replication-20261022`
       (private; instance C uploads seeds 1 and 2 to the same repo under
