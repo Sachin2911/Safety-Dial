@@ -19,6 +19,10 @@ Host: Vast instance 57271835, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
       the X11/GL apt packages from [receipts/01-smoke.md](receipts/01-smoke.md). Use
       `scripts/todo1/download_pinned.py` for the benchmark, checkpoint and robot asset
       and verify hashes. Write `receipts/01b-install.md` with any difference from B.
+      Already done on this host before handover: the image's
+      `/opt/instance-tools/bin/install-display-drivers` was run because OptiX and EGL
+      libraries were missing (as on this machine's October rental); GL, OptiX, Vulkan
+      and EGL now resolve. Verify with `ldconfig -p` before installing.
 - [ ] **2. Smoke one episode per GPU.** Start one policy server per lane:
       `CUDA_VISIBLE_DEVICES=0` on port 8000 and `CUDA_VISIBLE_DEVICES=1` on port 8001,
       each warmed with `scripts/todo1/probe_server.py`. Run `task_0000/base` with seed 1
