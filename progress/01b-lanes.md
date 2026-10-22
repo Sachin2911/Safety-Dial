@@ -26,7 +26,10 @@ Host: Vast instance 57271835, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
       `/opt/instance-tools/bin/install-display-drivers` was run because OptiX and EGL
       libraries were missing (as on this machine's October rental); GL, OptiX, Vulkan
       and EGL now resolve. Verify with `ldconfig -p` before installing.
-- [ ] **2. Smoke one episode per GPU.** Start one policy server per lane:
+- [x] **2. Smoke one episode per GPU.** Done 2026-10-22 22:07 UTC: lane 0 seed 1 unsafe
+      unsuccess (1000 s), lane 1 seed 2 safe success at step 982 (894 s), 256 x 256 videos,
+      peak 12.3 GB per GPU; both first attempts crashed on a Vulkan EGL vendor fault, repaired.
+      Receipt: `receipts/01b-smoke.md`, rows in `receipts/01b-smoke.jsonl`. Start one policy server per lane:
       `CUDA_VISIBLE_DEVICES=0` on port 8000 and `CUDA_VISIBLE_DEVICES=1` on port 8001,
       each warmed with `scripts/todo1/probe_server.py`. Run `task_0000/base` with seed 1
       on lane 0 and seed 2 on lane 1 using the config in
