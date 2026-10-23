@@ -66,7 +66,7 @@ on them until the final comparison.
       timing distributions (contact to violation, contact to closure, closure to lift,
       lift to success), and the same histogram restricted to each panel. Note any
       episode whose story the rule cannot assign.
-- [ ] **3. Frames.** Write `scripts/todo2/frames.py` (OpenCV). For every episode take
+- [x] **3. Frames.** Write `scripts/todo2/frames.py` (OpenCV). For every episode take
       the main-camera frame at step 0, first contact, first contact + 40, the key
       event (violation step, else first lift, else success step, else last) and the
       last step; label each with run, step and event. Tile one sheet per task, four
