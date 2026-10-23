@@ -42,7 +42,11 @@ Host: Vast instance 57334420, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
       reach a verdict with 256 by 256 videos. Record wall time, peak GPU memory, and the
       outcome next to B's seed 0 task_0000 (unsafe unsuccess, violation at step 1016) in
       `receipts/01c-smoke.md`, rows in `receipts/01c-smoke.jsonl`. Count these episodes.
-- [ ] **3. Run seed 0 on both lanes concurrently.** Lane 0: `GPU=0 PORT=8000 bash
+- [x] **3. Run seed 0 on both lanes concurrently.** Done 2026-10-23: lane 0 (tmux `lane0`, GPU 0,
+      port 8000, leaf `seed0_run2`) 07:51:53 to 09:47:37, lane 1 (tmux `lane1`, GPU 1, port 8001, leaf
+      `seed0_run3`) 07:51:58 to 09:42:52; 26 of 26 episodes each, no failed process, whole
+      `expected_rollouts.json` and `summary.json` per repeat. Runner logs: `receipts/01-runs/seed0_run2/runner.log.txt`,
+      `receipts/01-runs/seed0_run3/runner.log.txt`; run record in `receipts/01c-results.md`. Lane 0: `GPU=0 PORT=8000 bash
       scripts/todo1b/run_jar_seed_lane.sh 0 jar_transport_joint_legacy256/seed0_run2`.
       Lane 1: `GPU=1 PORT=8001 bash scripts/todo1b/run_jar_seed_lane.sh 0
       jar_transport_joint_legacy256/seed0_run3`. All 26 base tasks in each lane, `TASKS`
