@@ -4,7 +4,7 @@ Sachin Mohan, 22 to 23 October 2026. Stage 1 of [firstPrinciples.md](../../../fi
 reproduce the published ManiGuard Jar in-distribution row for the pi0.5-SFT checkpoint
 under the paper's own protocol, before anything is built on top of it.
 
-Evidence: the one-page [summary](../../../progress/Jar%20replication%20summary.pdf) and the
+Evidence: task 1 of [The Odyssey](../../../progress/theOdessy.pdf) and the
 receipts under `progress/receipts/` (the todo 1 checklists are in git history up to
 `c248194`); every
 rollout video, monitor sidecar and results row in the private dataset

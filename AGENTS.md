@@ -25,8 +25,9 @@ jobs. Do not inherit their protocols, gates or budgets.
    compressed with Ghostscript `/ebook` before committing.
 3. `docs/allocatedTopic.md`, `docs/gecco2027.md`, `docs/researchConceptNote/`,
    `docs/templates/`: topic, venue, concept note and document templates.
-4. `progress/`: the one-page replication summary (`Jar replication summary.pdf`, LaTeX
-   source beside it), the next checklist (`02-after-replication.md`), the rental record
+4. `progress/`: `theOdessy.pdf`, the running log of the project with one short entry per
+   finished task (LaTeX source `theOdessy.tex` beside it; add a section per task and
+   recompile with `pdflatex`), the next checklist (`02-after-replication.md`), the rental record
    and the receipts of todo 1, one instance per prefix (`01` B, `01b` C, `01c` D). The
    finished todo 1 checklists and prompts are in git history up to `c248194`. Instance
    B's seed 0 is excluded from results and kept under `progress/receipts/excluded-instance-B/`.

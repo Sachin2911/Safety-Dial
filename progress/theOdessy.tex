@@ -1,0 +1,56 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{booktabs}
+\usepackage{parskip}
+\usepackage[hidelinks]{hyperref}
+\pagestyle{plain}
+\begin{document}
+\begin{center}
+{\LARGE\bfseries The Odyssey}\\[4pt]
+{\large A running log of the Safety-Dial project, one entry per task.}\\[2pt]
+Sachin Mohan, supervised by Geraud Nangue Tasse.
+\end{center}
+
+\section*{Task 1: Replicate the ManiGuard Jar benchmark}
+\emph{22 to 23 October 2026}
+
+\textbf{Why.} Before trying to improve the Jar policy we needed to know its real base rate, and whether our setup even matches the paper. The old runs never could: they used a different render profile (640-pixel high fidelity instead of the paper's 256-pixel legacy) on two tasks.
+
+\textbf{What we did.}
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Pinned ManiGuard to the last revision that still renders the paper's profile, and ran the paper's protocol exactly: 26 Jar tasks, 2{,}000 steps, 8 of 16 actions, official evaluator.
+  \item Rented one two-GPU machine on Vast and ran seeds 1 and 2, then seed 0 twice (one per GPU) to see how much a repeated seed moves.
+  \item Dropped an earlier seed 0 run from a different machine so that everything of record comes from one host. With it the test still passed; without it the safe-success rate goes from 15\% to 23\%.
+  \item Saved every rollout video to a private Hugging Face dataset so anyone can watch what the robot did. Total cost about \$6.
+\end{itemize}
+
+\textbf{Result.} Counts over 26 tasks per run. The paper's row is for comparison.
+
+\begin{center}
+\begin{tabular}{lrrrrr}
+\toprule
+ & Safe success & Unsafe success & Safe fail & Unsafe fail & Violations \\
+\midrule
+Seed 0, repeat 1 & 7 & 0 & 9 & 10 & 10 \\
+Seed 0, repeat 2 & 7 & 5 & 7 & 7 & 12 \\
+Seed 1 & 6 & 0 & 10 & 10 & 10 \\
+Seed 2 & 4 & 2 & 11 & 9 & 11 \\
+\midrule
+Ours, 104 episodes & 24 (23\%) & 7 & 37 & 36 & 43 (41\%) \\
+Paper, 78 episodes & 21 (27\%) & 4 & 27 & 26 & 30 (38\%) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Fisher tests against the paper: $p = 0.60$ for safe success, $p = 0.76$ for violations. Our setup matches the paper.
+
+\textbf{What we learned.}
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Running the same seed twice gives the same outcome on only 13 of 26 tasks, about the same as two different seeds. The robot reaches the jar the same way every time and then the physics at contact decides. One episode is a coin flip with a per-task bias.
+  \item 13 tasks never succeed safely, 12 sit in the middle, one always succeeds. The middle 12 are where a dial could show anything.
+  \item Most violations are the jar tipping over (33 of 43); the gripper only closed on the jar in 32 of 104 episodes.
+  \item To tell a ten-point improvement from noise we will need about 200 episodes per condition. Everything after this is sized on that.
+\end{itemize}
+
+\textbf{Where it lives.} Videos and rows: \texttt{Sachioster/maniguard-jar-replication-20261022} (private). Receipts: \texttt{progress/receipts/}. Full write-up: \emph{Jar replication and noise floor} under \texttt{docs/research/research\_notes/}.
+\end{document}

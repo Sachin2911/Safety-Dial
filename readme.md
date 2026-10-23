@@ -17,10 +17,10 @@ beginning with a reproduction of the published Jar base rate, before any optimiz
   floor and the per-task structure, with the single-host decision.
 - [ManiGuard base rates](docs/research/research_notes/ManiGuard%20base%20rates.md): the
   published four-outcome counts for every family and why Jar is the testbed.
-- [Jar replication summary (PDF)](progress/Jar%20replication%20summary.pdf): the
-  one-page account with the results table. `progress/` also holds the next checklist,
-  the receipts and the rental record; the rollout dataset is
-  `Sachioster/maniguard-jar-replication-20261022` (private).
+- [The Odyssey (PDF)](progress/theOdessy.pdf): the running log of the project, one
+  short entry per task, starting with the benchmark replication and its results table.
+  `progress/` also holds the next checklist, the receipts and the rental record; the
+  rollout dataset is `Sachioster/maniguard-jar-replication-20261022` (private).
 - [ManiGuard paper](docs/papers/Maniguard.pdf): the benchmark, protocol and full results.
 - [Allocated topic](docs/allocatedTopic.md) and [GECCO notes](docs/gecco2027.md).
 - [Research concept note](docs/researchConceptNote.pdf) with
