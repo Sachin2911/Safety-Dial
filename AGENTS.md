@@ -27,9 +27,10 @@ jobs. Do not inherit their protocols, gates or budgets.
    `docs/templates/`: topic, venue, concept note and document templates.
 4. `progress/`: `theOdessy.pdf`, the running log of the project with one short entry per
    finished task (LaTeX source `theOdessy.tex` beside it; add a section per task and
-   recompile with `pdflatex`), the next checklist (`02-after-replication.md`), the rental record
-   and the receipts of todo 1, one instance per prefix (`01` B, `01b` C, `01c` D). The
-   finished todo 1 checklists and prompts are in git history up to `c248194`. Instance
+   recompile with `pdflatex`), the next checklist (`03-retry-gate.md`) and its agent prompt
+   (`goal-prompt-03.md`), the rental records, and the receipts of todo 1 (one instance per
+   prefix: `01` B, `01b` C, `01c` D) and todo 2 (`02-*`). The finished todo 1 checklists
+   and prompts are in git history up to `c248194`, todo 2's up to `b98b3cf`. Instance
    B's seed 0 is excluded from results and kept under `progress/receipts/excluded-instance-B/`.
    `scripts/todo1*/`: the pinned download, serving, lane, comparison, upload, rename
    and self-stop scripts those checklists used; the paper-protocol eval config is

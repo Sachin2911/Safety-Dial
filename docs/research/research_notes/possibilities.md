@@ -153,5 +153,8 @@ episodes, enough for one treatment against native. Proposed, not yet frozen:
   observations), smoke episode validates the recorder.
 - Cost: about 1.5 h build and smoke plus 7 h of episodes, about $5.
 
-Status: the prepared host (instance H) was destroyed unused at 16:39 UTC; work resumes
-another time. Open decision: retry or slow regrasp as the single treatment.
+Status: instance H was destroyed unused at 16:39 UTC. Later the same day the deep
+research ([report](../reports/Evolutionary%20methods%20for%20frozen%20VLA%20safety.md))
+settled the open decision: retry on stall is the single treatment, because it has the best
+published track record of any knob, and the free-space horizon and uniform slowing are
+known flat or harmful. Protocol: `progress/03-retry-gate.md`.
