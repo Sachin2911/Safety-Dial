@@ -25,9 +25,11 @@ jobs. Do not inherit their protocols, gates or budgets.
    compressed with Ghostscript `/ebook` before committing.
 3. `docs/allocatedTopic.md`, `docs/gecco2027.md`, `docs/researchConceptNote/`,
    `docs/templates/`: topic, venue, concept note and document templates.
-4. `progress/`: the working checklists, goal prompts, rental record and receipts of the
-   current plan, one instance per checklist (`01` B, `01b` C, `01c` D). Instance B's
-   seed 0 is excluded from results and kept under `progress/receipts/excluded-instance-B/`.
+4. `progress/`: the one-page replication summary (`Jar replication summary.pdf`, LaTeX
+   source beside it), the next checklist (`02-after-replication.md`), the rental record
+   and the receipts of todo 1, one instance per prefix (`01` B, `01b` C, `01c` D). The
+   finished todo 1 checklists and prompts are in git history up to `c248194`. Instance
+   B's seed 0 is excluded from results and kept under `progress/receipts/excluded-instance-B/`.
    `scripts/todo1*/`: the pinned download, serving, lane, comparison, upload, rename
    and self-stop scripts those checklists used; the paper-protocol eval config is
    `progress/receipts/01-jar-eval.yaml`. `configs/` does not exist yet; new Hydra
