@@ -134,8 +134,8 @@ together finished 52 episodes in 1 h 59 min, against B's single lane at about 5 
 
 | server | probe | smoke episode | seed run | total queries | connections |
 |---|---|---|---|---|---|
-| lane 0, port 8000 (GPU 0) | 5 | 250 | 5892 | 6147 | 4 + 2 x 26 |
-| lane 1, port 8001 (GPU 1) | 5 | 123 | 5598 | 5726 | 4 + 2 x 26 |
+| lane 0, port 8000 (GPU 0) | 5 | 250 | 5892 | 6147 | 30 (4 before the run, 1 per episode) |
+| lane 1, port 8001 (GPU 1) | 5 | 123 | 5598 | 5726 | 30 (4 before the run, 1 per episode) |
 
 Simulator interactions on this instance: 4 smoke attempts (2 crashed at Kit startup with 0 steps, 2
 completed: 2000 + 982 steps), then 52 family episodes (91,870 steps), 0 crashed family processes.

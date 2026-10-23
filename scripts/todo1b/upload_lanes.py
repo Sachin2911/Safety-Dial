@@ -143,6 +143,8 @@ def main() -> int:
     ap.add_argument("--stage", type=Path, required=True)
     ap.add_argument("--receipts", type=Path)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--readme-only", action="store_true",
+                    help="stage, rebuild README.md from every run in the repo plus the staged ones, upload only README.md")
     args = ap.parse_args()
 
     stage = args.stage
@@ -179,7 +181,7 @@ def main() -> int:
         api.create_repo(args.repo, repo_type="dataset", private=True, exist_ok=True)
         existing = api.list_repo_files(args.repo, repo_type="dataset")
         remote_runs = sorted({"/".join(f.split("/")[:2]) for f in existing
-                              if f.startswith("jar/seed") and f.split("/")[1] not in {p.split("/")[1] for p in prefixes if p.startswith("jar/")}})
+                              if f.startswith(("jar/seed", "smoke/seed")) and "/".join(f.split("/")[:2]) not in prefixes})
         cache = stage.parent / "hf-cache"
         for prefix in remote_runs:
             runs[prefix] = collect_remote(api, args.repo, prefix, cache)
@@ -193,7 +195,7 @@ def main() -> int:
         return 0
 
     sha = None
-    for prefix in prefixes:
+    for prefix in ([] if args.readme_only else prefixes):
         info = api.upload_folder(folder_path=str(stage / prefix), path_in_repo=prefix, repo_id=args.repo,
                                  repo_type="dataset", commit_message=f"todo1b: {prefix}")
         sha = info.oid
