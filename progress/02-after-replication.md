@@ -96,7 +96,7 @@ on them until the final comparison.
       Say for each pair whether the difference is visible before contact (the policy
       already has a good and a bad mode; steering between them is possible) or only
       at contact (a physics coin flip; the lever is execution or recovery).
-- [ ] **6. What the evaluator can record.** Clone ManiGuard at `6bf4c61` (code read
+- [x] **6. What the evaluator can record.** Clone ManiGuard at `6bf4c61` (code read
       only, no install yet) and list in `receipts/02-logging.md` exactly what the
       per-task evaluator writes per step today (`rollout_diagnostics`, `metrics`,
       the LTL sidecar, videos) and what it does not: the 16-step action chunk the
