@@ -5,6 +5,18 @@
 # pod. Idempotent. Secrets come from the pod environment (set at creation); nothing is printed.
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
+# RunPod puts the pod's environment on PID 1 and sources /etc/rp_environment from .bashrc,
+# but only the RUNPOD_* keys are written there. Copy the project keys across so tmux and
+# SSH shells see them. Values are never echoed.
+for k in HF_TOKEN GITHUB_TOKEN HF_NAMESPACE GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL RUNPOD_API_KEY RUNPOD_POD_ID; do
+  v=$(tr '\0' '\n' < /proc/1/environ | grep "^${k}=" | cut -d= -f2- || true)
+  if [ -n "$v" ] && ! grep -q "^export ${k}=" /etc/rp_environment 2>/dev/null; then
+    printf 'export %s=%q\n' "$k" "$v" >> /etc/rp_environment
+  fi
+  export "$k=$v"
+done
+chmod 600 /etc/rp_environment
+grep -q 'rp_environment' /root/.profile 2>/dev/null || echo '[ -f /etc/rp_environment ] && source /etc/rp_environment' >> /root/.profile
 apt-get update -qq && apt-get install -y -qq tmux git curl ca-certificates >/dev/null
 if ! command -v node >/dev/null 2>&1; then
   curl -fsSL https://deb.nodesource.com/setup_22.x | bash - >/dev/null
