@@ -7,7 +7,7 @@ Layout added (same per-task layout as scripts/todo1/upload_hf.py):
     jar/seed1/{results.jsonl,summary.json,eval_config.json,expected_rollouts.json}
     jar/seed2/...                       same
     smoke/seed1/task_0000/..., smoke/seed2/task_0000/...   the two lane smoke episodes
-    receipts/01b/                       copies of this instance's receipts
+    receipts/01b/                       copies of this instance's receipts (receipts/01<tag>/ with --tag)
     README.md                           rebuilt from every results.jsonl present in the repo
                                         (B's seed 0 included when it is there), one line per video
 
@@ -16,12 +16,16 @@ written or deleted. HF_TOKEN is read from the environment by huggingface_hub.
 
     python -I scripts/todo1b/upload_lanes.py --repo <ns>/<name> --seed 1=<ID dir> --seed 2=<ID dir> \
         --smoke 1=<smoke run dir> --smoke 2=<smoke run dir> --compare <compare.py JSON> \
-        --stage <staging dir> [--receipts <dir>] [--dry-run]
+        --stage <staging dir> [--receipts <dir>] [--tag 1c] [--dry-run]
+
+Todo 1c passes --seed 0_run2=<dir> --seed 0_run3=<dir> (prefixes jar/seed0_run2, jar/seed0_run3)
+and --tag 1c (receipts/01c/, commit messages "todo1c: ...").
 """
 
 import argparse
 import importlib.util
 import json
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -64,6 +68,14 @@ def readme(runs):
         "(`base_main.mp4`), the wrist video, the per-step LTL sidecar and the episode's `results.jsonl` row. Videos play in",
         "the file browser: open a folder and click the mp4. `smoke/` holds the single-episode smoke tests, counted separately.",
         "",
+    ]
+    if any(re.fullmatch(r"jar/seed\d+_run\d+", label) for label in runs):
+        lines += [
+            "`jar/seed0_run2` and `jar/seed0_run3` are two further repeats of seed 0, run concurrently on one RTX 3090",
+            "each on the machine that ran seeds 1 and 2 (todo 1c); `jar/seed0` is run 1. The jar total pools one run per seed.",
+            "",
+        ]
+    lines += [
         "## Totals (completed episodes)",
         "",
         "| run | safe success | unsafe success | safe unsuccess | unsafe unsuccess | invalid | engaged | n |",
@@ -77,7 +89,7 @@ def readme(runs):
             c["engaged"] += row.get("first_contact_step") is not None
             c["n"] += 1
         lines.append(f"| {label} | {c['safe_success']} | {c['unsafe_success']} | {c['safe_unsuccess']} | {c['unsafe_unsuccess']} | {c['invalid']} | {c['engaged']} | {c['n']} |")
-        if label.startswith("jar/"):
+        if re.fullmatch(r"jar/seed\d+", label):
             for k in tot:
                 tot[k] += c[k]
     lines.append(f"| **jar total** | {tot['safe_success']} | {tot['unsafe_success']} | {tot['safe_unsuccess']} | {tot['unsafe_unsuccess']} | {tot['invalid']} | {tot['engaged']} | {tot['n']} |")
@@ -142,6 +154,7 @@ def main() -> int:
     ap.add_argument("--compare", type=Path, help="compare.py JSON (copied beside the receipts)")
     ap.add_argument("--stage", type=Path, required=True)
     ap.add_argument("--receipts", type=Path)
+    ap.add_argument("--tag", default="1b", help="checklist tag: receipts/01<tag>/ and commit prefix todo<tag>")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--readme-only", action="store_true",
                     help="stage, rebuild README.md from every run in the repo plus the staged ones, upload only README.md")
@@ -161,13 +174,13 @@ def main() -> int:
         stage_run(Path(run_dir), stage / "smoke" / f"seed{seed}", {})
         prefixes.append(f"smoke/seed{seed}")
     if args.receipts and args.receipts.is_dir():
-        dest = stage / "receipts" / "01b"
+        dest = stage / "receipts" / f"01{args.tag}"
         dest.mkdir(parents=True)
-        for p in sorted(args.receipts.glob("01b-*")):
+        for p in sorted(args.receipts.glob(f"01{args.tag}-*")):
             shutil.copy2(p, dest / p.name)
         if args.compare and args.compare.is_file():
             shutil.copy2(args.compare, dest / args.compare.name)
-        prefixes.append("receipts/01b")
+        prefixes.append(f"receipts/01{args.tag}")
 
     n_files = sum(1 for p in stage.rglob("*") if p.is_file())
     n_bytes = sum(p.stat().st_size for p in stage.rglob("*") if p.is_file())
@@ -197,11 +210,11 @@ def main() -> int:
     sha = None
     for prefix in ([] if args.readme_only else prefixes):
         info = api.upload_folder(folder_path=str(stage / prefix), path_in_repo=prefix, repo_id=args.repo,
-                                 repo_type="dataset", commit_message=f"todo1b: {prefix}")
+                                 repo_type="dataset", commit_message=f"todo{args.tag}: {prefix}")
         sha = info.oid
         print(f"uploaded {prefix} -> {sha}")
     info = api.upload_file(path_or_fileobj=str(stage / "README.md"), path_in_repo="README.md", repo_id=args.repo,
-                           repo_type="dataset", commit_message="todo1b: README index rebuilt from all runs present")
+                           repo_type="dataset", commit_message=f"todo{args.tag}: README index rebuilt from all runs present")
     sha = info.oid
     private = api.repo_info(args.repo, repo_type="dataset").private
     print(f"done: repo={args.repo} private={private} revision={sha}")
