@@ -22,7 +22,8 @@
     "Instance D destroyed 2026-10-23T10:01 UTC after verification. Todo 1 closed: five runs in the dataset (seed0, seed0_run2, seed0_run3, seed1, seed2). See progress/receipts/01-review.md.",
     "Instance E rented 2026-10-23 11:16 UTC for todo 2 (description only, one recorder-check episode). Destroy after its item 9 lands.",
     "Instance F rented 2026-10-23 11:20 UTC as a race partner for E (todo 2). Destroy the loser.",
-    "Instance G (machine 54514) rented 2026-10-23 11:28 UTC as a third race entrant for todo 2; start queued by the provider. Destroy every loser."
+    "Instance G (machine 54514) rented 2026-10-23 11:28 UTC as a third race entrant for todo 2; start queued by the provider. Destroy every loser.",
+    "E, F and G destroyed 2026-10-23 11:31 UTC without booting; the user chose to try RunPod for todo 2. Nothing is renting on Vast."
   ],
   "instances": [
     {
@@ -138,8 +139,9 @@
       },
       "provider_started_utc": "2026-10-23T11:16:05+00:00",
       "purpose": "progress/02-after-replication.md: describe the 104 episodes of record, validate a per-step recorder on one episode; no results of record",
-      "status_note": "Rented 2026-10-23 11:16 UTC. Still pulling the image at 11:20, so instance F was rented as a race; the first to accept SSH runs todo 2 and the other is destroyed. The agent stops its instance from inside after item 9 (stop_instance.py --instance $CONTAINER_ID --receipt progress/receipts/02-preserve.md); the reviewer destroys it afterwards.",
-      "outcome": "live-host-for-todo-2"
+      "status_note": "Rented 2026-10-23 11:16 UTC. Still pulling the image at 11:20, so instance F was rented as a race; the first to accept SSH runs todo 2 and the other is destroyed. The agent stops its instance from inside after item 9 (stop_instance.py --instance $CONTAINER_ID --receipt progress/receipts/02-preserve.md); the reviewer destroys it afterwards. Never accepted SSH (E and F stuck pulling the image for over 10 minutes, G queued for resources); all three destroyed at 11:31 UTC on the user's instruction. Todo 2 will run elsewhere.",
+      "outcome": "destroyed-never-booted",
+      "destroyed_utc": "2026-10-23T11:31+00:00"
     },
     {
       "role": "F",
@@ -160,8 +162,9 @@
       },
       "provider_started_utc": "2026-10-23T11:20:00+00:00",
       "purpose": "race partner for instance E on todo 2; whichever accepts SSH first is used",
-      "status_note": "Rented 2026-10-23 11:20 UTC while E was still loading its image.",
-      "outcome": "live-race-for-todo-2"
+      "status_note": "Rented 2026-10-23 11:20 UTC while E was still loading its image. Never accepted SSH (E and F stuck pulling the image for over 10 minutes, G queued for resources); all three destroyed at 11:31 UTC on the user's instruction. Todo 2 will run elsewhere.",
+      "outcome": "destroyed-never-booted",
+      "destroyed_utc": "2026-10-23T11:31+00:00"
     },
     {
       "role": "G",
@@ -181,9 +184,10 @@
       },
       "provider_started_utc": "2026-10-23T11:28:00+00:00",
       "purpose": "third race entrant for todo 2 on the host of record, rented while E and F were stuck pulling the image",
-      "status_note": "Create returned success false and the instance sat in cur_state stopped; a start request was answered with 'Required resources are currently unavailable, state change queued' at 11:30 UTC.",
-      "outcome": "live-race-for-todo-2"
+      "status_note": "Create returned success false and the instance sat in cur_state stopped; a start request was answered with 'Required resources are currently unavailable, state change queued' at 11:30 UTC. Never accepted SSH (E and F stuck pulling the image for over 10 minutes, G queued for resources); all three destroyed at 11:31 UTC on the user's instruction. Todo 2 will run elsewhere.",
+      "outcome": "destroyed-never-booted",
+      "destroyed_utc": "2026-10-23T11:31+00:00"
     }
   ],
-  "active_instance_id": 57363241
+  "active_instance_id": null
 }
