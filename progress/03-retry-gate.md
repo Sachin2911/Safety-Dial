@@ -40,16 +40,18 @@ of each retreat, and the joint-change trace at each query.
 
 - [ ] 1. **Host ready.** Run the prepare script to `PREPARE DONE`; write
   `receipts/03-host.md` (driver, GPUs, pins verified, time taken).
-- [ ] 2. **Build the proxy.** `scripts/todo3/supervisor_proxy.py` with `--mode off|retry
-  --listen <port> --upstream <port> --log <jsonl>` and the defaults above as flags.
-  Start the lane 0 server (`GPU=0 PORT=8000 bash scripts/todo1b/serve_jar_lane.sh`) and
-  the proxy on 9000 in `off` mode.
+- [ ] 2. **Check the proxy.** `scripts/todo3/supervisor_proxy.py` is written and passes
+  `scripts/todo3/test_proxy_local.py` on the workstation (fake upstream, no GPU). Run that
+  test here with the openpi venv's python (`third_party/openpi/.venv/bin/python -I`), then
+  start the lane 0 server (`GPU=0 PORT=8000 bash scripts/todo1b/serve_jar_lane.sh`) and the
+  proxy on 9000 in `off` mode with `--log /workspace/logs/proxy-off-9000.jsonl`. Do not
+  change the defaults.
 - [ ] 3. **Identity check and recorder validation.** Run `task_0000/base` seed 0 twice:
   direct on 8000, then through the proxy on 9000, both with the todo 2 recorder
   (`scripts/todo2/record_rollout.py`, `--recording-factory record_rollout:create_observer`).
-  Pass: the first chunk is byte-identical and every chunk before the first finger
-  contact is byte-identical; the recorder's `.npz` loads and passes
-  `scripts/todo2/check_recording.py`. Write `receipts/03-identity.md`. The recorder stays
+  Pass: `scripts/todo3/compare_chunks.py <direct.npz> <proxied.npz>` prints PASS (every
+  chunk byte-identical up to and including the first finger contact); the recorder's `.npz`
+  loads and passes `scripts/todo2/check_recording.py`. Write `receipts/03-identity.md`. The recorder stays
   off for everything after this item.
 - [ ] 4. **Retry smoke.** One episode in `retry` mode on a development task whose native
   episodes stalled (pick from `receipts/02-timelines.md`). Watch the video: does the
