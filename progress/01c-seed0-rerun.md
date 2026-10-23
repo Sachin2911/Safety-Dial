@@ -31,7 +31,10 @@ Host: Vast instance 57334420, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
       `run_smoke_lane.sh`. Freeze both environments and diff the freezes against
       `receipts/01-env-*-freeze.txt` and C's. Write `receipts/01c-install.md` with any
       difference from C.
-- [ ] **2. Smoke one episode per GPU, both at seed 0.** One policy server per lane
+- [x] **2. Smoke one episode per GPU, both at seed 0.** Done 2026-10-23 07:49 UTC: both lanes
+      reached a verdict at the first attempt with 256 x 256 videos; same episode seed as B's task_0000
+      gave safe success (lane 0, 1138 steps) and safe unsuccess (lane 1, idle) against B's unsafe
+      unsuccess. Receipt: `receipts/01c-smoke.md`, rows `receipts/01c-smoke.jsonl`. One policy server per lane
       (`scripts/todo1b/serve_jar_lane.sh`: `CUDA_VISIBLE_DEVICES=0` port 8000,
       `CUDA_VISIBLE_DEVICES=1` port 8001), each warmed with
       `scripts/todo1/probe_server.py`. Run `task_0000/base` at `SEED=0` on each lane with
