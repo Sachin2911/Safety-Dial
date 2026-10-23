@@ -53,7 +53,7 @@ of each retreat, and the joint-change trace at each query.
   chunk byte-identical up to and including the first finger contact); the recorder's `.npz`
   loads and passes `scripts/todo2/check_recording.py`. Write `receipts/03-identity.md`. The recorder stays
   off for everything after this item.
-- [ ] 4. **Retry smoke.** One episode in `retry` mode on a development task whose native
+- [x] 4. **Retry smoke.** One episode in `retry` mode on a development task whose native
   episodes stalled (pick from `receipts/02-timelines.md`). Watch the video: does the
   retreat fire when the robot is idle, does the arm go home cleanly, does the policy
   resume? Write what you see in plain sentences in `receipts/03-smoke.md`. If the
