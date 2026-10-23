@@ -106,7 +106,7 @@ on them until the final comparison.
       those per step to one `.npz` per episode without touching scoring, and write
       `scripts/todo2/record_rollout.py` or the patch for it. Any change to upstream
       files is kept as a diff under `receipts/02-logging.diff`.
-- [ ] **7. Validate the recorder on one real episode.** First check the renderer can
+- [x] **7. Validate the recorder on one real episode.** First check the renderer can
       run in this container: `ldconfig -p | grep -E 'libnvoptix|libEGL_nvidia|libnvidia-rtcore|libGLX_nvidia'`
       and the Vulkan ICD under `/usr/share/vulkan/icd.d` or `/etc/vulkan/icd.d`. If
       OptiX or EGL are missing, write what is missing to `receipts/02-host.md`, push,
@@ -124,7 +124,7 @@ on them until the final comparison.
       the scoring is unchanged (compare the row to a normal smoke row's fields), and
       record file size per episode and the time overhead. Count the episode. Stop the
       server. Receipt: `receipts/02-logging.md` (same file, new section).
-- [ ] **8. Where the leverage is.** Write
+- [x] **8. Where the leverage is.** Write
       `docs/research/research_notes/Where the leverage is.md`. For each intervention
       family listed in the purpose, say what items 2 to 5 show about whether it has
       leverage and on which tasks, quoting the numbers, and what it would need

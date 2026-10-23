@@ -1,0 +1,33 @@
+ERROR:websockets.client:keepalive ping failed
+TimeoutError: timed out while closing connection
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/Safety-Dial/third_party/openpi/.venv/lib/python3.11/site-packages/websockets/sync/connection.py", line 777, in keepalive
+    with self.send_context():
+  File "/usr/lib/python3.11/contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "/workspace/Safety-Dial/third_party/openpi/.venv/lib/python3.11/site-packages/websockets/sync/connection.py", line 1012, in send_context
+    raise self.protocol.close_exc from original_exc
+websockets.exceptions.ConnectionClosedError: sent 1011 (internal error) keepalive ping timeout; no close frame received
+warm-up attempt 1 dropped after 50s: ConnectionClosedError
+Traceback (most recent call last):
+  File "/workspace/Safety-Dial/scripts/todo1/probe_server.py", line 72, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/workspace/Safety-Dial/scripts/todo1/probe_server.py", line 43, in main
+    client = WebsocketClientPolicy(host=args.host, port=args.port)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Safety-Dial/third_party/openpi/packages/openpi-client/src/openpi_client/websocket_client_policy.py", line 27, in __init__
+    self._ws, self._server_metadata = self._wait_for_server()
+                                      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Safety-Dial/third_party/openpi/packages/openpi-client/src/openpi_client/websocket_client_policy.py", line 37, in _wait_for_server
+    conn = websockets.sync.client.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Safety-Dial/third_party/openpi/.venv/lib/python3.11/site-packages/websockets/sync/client.py", line 378, in connect
+    connection.handshake(
+  File "/workspace/Safety-Dial/third_party/openpi/.venv/lib/python3.11/site-packages/websockets/sync/client.py", line 94, in handshake
+    raise TimeoutError("timed out while waiting for handshake response")
+TimeoutError: timed out while waiting for handshake response
+EXIT 1

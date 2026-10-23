@@ -105,3 +105,38 @@ PYTHONPATH=/workspace/Safety-Dial/scripts/todo2 python -m maniguard.eval.benchma
 
 No upstream file is changed, so there is no `02-logging.diff`. The eval config copied
 into `configs/eval/` is a new file (byte-identical to `01-jar-eval.yaml`), as in todo 1.
+
+## Item 7: validation of the recorder
+
+Not validated on a real episode. The host check passed (OptiX, EGL, the NVIDIA Vulkan
+ICD all present), the pinned install was replayed (98 minutes, two recorded deviations
+repaired) and the policy server was warmed, but the evaluator segfaulted four times inside
+Isaac Sim 4.5's RTX renderer at startup under this pod's driver 595.91.07, before any
+scene loaded; the account, backtrace and attempts are in `02-host.md`. No episode was
+started, no `.npz` exists, the scoring comparison and the size and overhead measurements
+are deferred to the next Vast rental with a driver 580.x host.
+
+What was checked instead, so the next host only has to run the episode:
+
+- `record_rollout.py` was driven through the evaluator's exact callback sequence
+  (`start`, then per chunk `proposal` and per executed action `before_action`, `applied`,
+  `transition`, `oracle`, then `finish`) with mock robot, jar, distractor and monitor
+  objects for 19 executed steps in 3 chunks. `scripts/todo2/check_recording.py` on the
+  result: every state field has 20 rows (steps + 1), 19 executed actions at the three
+  boundaries, 3 proposals of shape (16, 8), `step` is 0..19, the monitor record is valid at
+  every step, 0.1 ms per step, 0.01 MB. Exit 0.
+- `check_recording.py` also compares the result row's keys and scoring fields
+  (`success`, `success_step`, `ltl_violated`, `ltl_violation_step`, `first_contact_step`,
+  `ever_grasped`, `grasp_steps`, `outcome`, `counted_violation`, ...) with the instance C
+  smoke row in `01b-smoke.jsonl`, and the recorded propositions with the sidecar, so the
+  "scoring unchanged" check is scripted:
+  `python3 -I scripts/todo2/check_recording.py <npz> <results.jsonl> --sidecar <task>_ltl.json`.
+- The invocation on a working host is `scripts/todo2/run_smoke_pod.sh` with
+  `PY` pointed at that host's behavior env; it is the todo 1 smoke command plus
+  `--recording-factory record_rollout:create_observer --recording-output-dir <dir>` and
+  `PYTHONPATH=scripts/todo2`.
+
+Expected size: per step about 9 + 9 + 3 + 4 + 2 + 8 + 3 + 4 + 14 + 2 + 2 + 3 + 3 floats
+plus the executed actions (24 floats) and one chunk per 8 steps (16 floats), roughly 100
+float32 per step, under 1 MB per 2,000-step episode after compression. Expected overhead:
+a dozen simulator reads per step, well under the 50 ms of a 20 Hz step; to be measured.

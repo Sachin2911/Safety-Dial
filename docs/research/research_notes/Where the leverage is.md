@@ -6,7 +6,11 @@ Sachin Mohan, 23 October 2026. Todo 2, item 8. Evidence: the 104 Jar episodes of
 `02-pairs.md`, with the frame sheets under `02-frames/` and the pair strips under
 `02-pairs/`. Nothing here was run; this note maps what the episodes show onto the
 intervention families listed in `progress/02-after-replication.md` and ranks them.
-Panels are the frozen ones in `progress/panels.json`.
+Panels are the frozen ones in `progress/panels.json`. The per-step recorder of item 6
+(`scripts/todo2/record_rollout.py`) exists and passed a mock check but was not validated
+on a real episode here, because Isaac Sim's renderer crashes at startup under this pod's
+driver 595 (`progress/receipts/02-host.md`); where a family below "needs the recorder",
+that validation on a driver 580 host comes first.
 
 ## What the episodes show
 
