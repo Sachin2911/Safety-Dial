@@ -21,7 +21,8 @@
     "Instance D rented 2026-10-23 06:45 UTC for the seed 0 rerun (todo 1c); destroy after its item 6 lands and the upload is verified.",
     "Instance D destroyed 2026-10-23T10:01 UTC after verification. Todo 1 closed: five runs in the dataset (seed0, seed0_run2, seed0_run3, seed1, seed2). See progress/receipts/01-review.md.",
     "Instance E rented 2026-10-23 11:16 UTC for todo 2 (description only, one recorder-check episode). Destroy after its item 9 lands.",
-    "Instance F rented 2026-10-23 11:20 UTC as a race partner for E (todo 2). Destroy the loser."
+    "Instance F rented 2026-10-23 11:20 UTC as a race partner for E (todo 2). Destroy the loser.",
+    "Instance G (machine 54514) rented 2026-10-23 11:28 UTC as a third race entrant for todo 2; start queued by the provider. Destroy every loser."
   ],
   "instances": [
     {
@@ -160,6 +161,27 @@
       "provider_started_utc": "2026-10-23T11:20:00+00:00",
       "purpose": "race partner for instance E on todo 2; whichever accepts SSH first is used",
       "status_note": "Rented 2026-10-23 11:20 UTC while E was still loading its image.",
+      "outcome": "live-race-for-todo-2"
+    },
+    {
+      "role": "G",
+      "instance_id": 57364506,
+      "label": "jar-todo2-g",
+      "offer_id": 49900874,
+      "machine_id": 54514,
+      "host_id": 397236,
+      "geolocation": "New Zealand, NZ",
+      "gpu": "2x RTX 3090",
+      "driver_version": "580.173.02",
+      "instance_dph_usd_with_disk": 0.6126,
+      "ssh": {
+        "host": "ssh7.vast.ai",
+        "port": 28132,
+        "user": "root"
+      },
+      "provider_started_utc": "2026-10-23T11:28:00+00:00",
+      "purpose": "third race entrant for todo 2 on the host of record, rented while E and F were stuck pulling the image",
+      "status_note": "Create returned success false and the instance sat in cur_state stopped; a start request was answered with 'Required resources are currently unavailable, state change queued' at 11:30 UTC.",
       "outcome": "live-race-for-todo-2"
     }
   ],
