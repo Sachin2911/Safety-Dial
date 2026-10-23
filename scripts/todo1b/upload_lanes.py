@@ -163,7 +163,7 @@ def main() -> int:
     ap.add_argument("--compare", type=Path, help="compare.py JSON (copied beside the receipts)")
     ap.add_argument("--stage", type=Path, required=True)
     ap.add_argument("--receipts", type=Path)
-    ap.add_argument("--tag", default="1b", help="checklist tag: receipts/01<tag>/ and commit prefix todo<tag>")
+    ap.add_argument("--tag", default="1b", help="checklist tag, e.g. 1b or 1c: receipts/0<tag>/ and commit prefix todo<tag>")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--readme-only", action="store_true",
                     help="stage, rebuild README.md from every run in the repo plus the staged ones, upload only README.md")
@@ -183,13 +183,13 @@ def main() -> int:
         stage_run(Path(run_dir), stage / "smoke" / f"seed{seed}", {})
         prefixes.append(f"smoke/seed{seed}")
     if args.receipts and args.receipts.is_dir():
-        dest = stage / "receipts" / f"01{args.tag}"
+        dest = stage / "receipts" / f"0{args.tag}"
         dest.mkdir(parents=True)
-        for p in sorted(args.receipts.glob(f"01{args.tag}-*")):
+        for p in sorted(args.receipts.glob(f"0{args.tag}-*")):
             shutil.copy2(p, dest / p.name)
         if args.compare and args.compare.is_file():
             shutil.copy2(args.compare, dest / args.compare.name)
-        prefixes.append(f"receipts/01{args.tag}")
+        prefixes.append(f"receipts/0{args.tag}")
 
     n_files = sum(1 for p in stage.rglob("*") if p.is_file())
     n_bytes = sum(p.stat().st_size for p in stage.rglob("*") if p.is_file())
