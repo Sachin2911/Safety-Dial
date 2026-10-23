@@ -14,5 +14,6 @@ in tmux. After each checklist item write its receipt under progress/receipts/, t
 the box, commit with the prefix "todo2:", pull with rebase and push to main. Do not
 edit todo 1 receipts or theOdessy.tex. When item 9 is done, the last action is to
 stop this instance's GPU from inside it with scripts/todo1c/stop_instance.py
---instance 57363241 --receipt progress/receipts/02-preserve.md, after its guards
-pass; the instance is unreachable after that, so nothing may remain only on local disk.
+--instance "$CONTAINER_ID" --receipt progress/receipts/02-preserve.md, after its
+guards pass; the instance is unreachable after that, so nothing may remain only on
+local disk.

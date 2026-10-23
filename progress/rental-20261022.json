@@ -20,7 +20,8 @@
     "All three instances destroyed by 2026-10-23T00:22 UTC. Replication complete: pooled 12/3/29/34 over 78 against the published 21/4/27/26; both frozen Fisher tests pass (p = 0.116, 0.332). See progress/receipts/01-review.md.",
     "Instance D rented 2026-10-23 06:45 UTC for the seed 0 rerun (todo 1c); destroy after its item 6 lands and the upload is verified.",
     "Instance D destroyed 2026-10-23T10:01 UTC after verification. Todo 1 closed: five runs in the dataset (seed0, seed0_run2, seed0_run3, seed1, seed2). See progress/receipts/01-review.md.",
-    "Instance E rented 2026-10-23 11:16 UTC for todo 2 (description only, one recorder-check episode). Destroy after its item 9 lands."
+    "Instance E rented 2026-10-23 11:16 UTC for todo 2 (description only, one recorder-check episode). Destroy after its item 9 lands.",
+    "Instance F rented 2026-10-23 11:20 UTC as a race partner for E (todo 2). Destroy the loser."
   ],
   "instances": [
     {
@@ -136,8 +137,30 @@
       },
       "provider_started_utc": "2026-10-23T11:16:05+00:00",
       "purpose": "progress/02-after-replication.md: describe the 104 episodes of record, validate a per-step recorder on one episode; no results of record",
-      "status_note": "Rented 2026-10-23 11:16 UTC. The agent stops it from inside after item 9 (scripts/todo1c/stop_instance.py --receipt progress/receipts/02-preserve.md); the reviewer destroys it afterwards.",
+      "status_note": "Rented 2026-10-23 11:16 UTC. Still pulling the image at 11:20, so instance F was rented as a race; the first to accept SSH runs todo 2 and the other is destroyed. The agent stops its instance from inside after item 9 (stop_instance.py --instance $CONTAINER_ID --receipt progress/receipts/02-preserve.md); the reviewer destroys it afterwards.",
       "outcome": "live-host-for-todo-2"
+    },
+    {
+      "role": "F",
+      "instance_id": 57363756,
+      "label": "jar-todo2-f",
+      "offer_id": 56692208,
+      "machine_id": 150616,
+      "geolocation": "California, US",
+      "gpu": "RTX 3090",
+      "driver_version": "580.178.04",
+      "cpu_ram_mb_reported": 32222,
+      "cpu_cores_effective": 8.0,
+      "instance_dph_usd_with_disk": 0.3758,
+      "ssh": {
+        "host": "ssh6.vast.ai",
+        "port": 26632,
+        "user": "root"
+      },
+      "provider_started_utc": "2026-10-23T11:20:00+00:00",
+      "purpose": "race partner for instance E on todo 2; whichever accepts SSH first is used",
+      "status_note": "Rented 2026-10-23 11:20 UTC while E was still loading its image.",
+      "outcome": "live-race-for-todo-2"
     }
   ],
   "active_instance_id": 57363241

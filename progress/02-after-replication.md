@@ -19,8 +19,9 @@ machine), `jar/seed1`, `jar/seed2`; task folders `<n>_<outcome>` with `base_main
 `progress/receipts/01-runs/<run>/results.jsonl`. Published and measured rates:
 [Jar replication and noise floor](../docs/research/research_notes/Jar%20replication%20and%20noise%20floor.md).
 
-Host: Vast instance 57363241, one RTX 3090, driver 580.178.04, 24 cores, 110 GB RAM,
-200 GB disk ([rental record](rental-20261022.json)). Work under `/workspace`.
+Host: one RTX 3090 on driver 580.178.04 with 200 GB disk, either Vast instance 57363241
+(E) or 57363756 (F), whichever came up first ([rental record](rental-20261022.json));
+the instance's own id is `$CONTAINER_ID` in its environment. Work under `/workspace`.
 `HF_TOKEN` and `GITHUB_TOKEN` are in the environment; never print or commit them.
 Only item 7 needs the GPU and the full ManiGuard install; items 1 to 6 need Python
 with `huggingface_hub`, `opencv-python-headless`, `numpy`, `pandas`, `matplotlib` in
@@ -126,7 +127,7 @@ on them until the final comparison.
       (own `path_in_repo`, nothing else touched) and record the revision in
       `receipts/02-preserve.md`. Commit, pull with rebase, push, confirm
       `git rev-parse HEAD` equals `origin/main`, confirm `nvidia-smi` shows no compute
-      process, then run `python -I scripts/todo1c/stop_instance.py --instance 57363241
+      process, then run `python -I scripts/todo1c/stop_instance.py --instance "$CONTAINER_ID"
       --receipt progress/receipts/02-preserve.md --dry-run` and, when every guard
       passes, the same without `--dry-run`. That is the last action; the instance is
       unreachable once stopped and the reviewer destroys it afterwards.
