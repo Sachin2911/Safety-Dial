@@ -57,7 +57,10 @@ Host: Vast instance 57271835, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
       Lane 1 runs all 26 at `SEED=2` on GPU 1, port 8001, leaf `.../seed2`. Each lane
       in its own tmux session with its own log. Do not split one seed across lanes;
       keep each seed's `expected_rollouts.json` and `summary.json` whole.
-- [ ] **6. Collect.** After both lanes finish, run upstream `tools/eval_summary.py`
+- [x] **6. Collect.** Done 2026-10-23 00:25 UTC: seed 1 = 6 / 0 / 10 / 10 (engaged 26/26,
+      7143 s), seed 2 = 4 / 2 / 10 / 9 plus one never-engaged episode (engaged 25/26, 6908 s);
+      all 104 videos 256 x 256, zero crashed family processes. Receipt: `receipts/01b-results.md`,
+      inputs under `receipts/01-runs/seed1/` and `seed2/`, `receipts/01b-compare.json`. After both lanes finish, run upstream `tools/eval_summary.py`
       on each seed directory, copy both `results.jsonl` files, `summary.json` and
       `expected_rollouts.json` under `receipts/01-runs/seed1/` and `seed2/`, and write
       per-seed four-class counts, engagement and wall time into `receipts/01b-results.md`.
