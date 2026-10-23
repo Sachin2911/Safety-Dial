@@ -75,7 +75,7 @@ on them until the final comparison.
       steps under `receipts/02-frames/task_<nn>_wrist.png`. Look at every sheet and
       write one to three plain sentences per task in `receipts/02-task-notes.md`: what
       the robot does, where it goes wrong, whether the four runs look alike.
-- [ ] **4. Sensitivity map.** Write `scripts/todo2/sensitivity.py`. Per task, from the
+- [x] **4. Sensitivity map.** Write `scripts/todo2/sensitivity.py`. Per task, from the
       four runs: do the two same-seed repeats share a story; do all four; the spread
       of the violation step; and the divergence step of the same-seed pair, measured
       two ways, the first step at which the two sidecars' proposition vectors differ,
