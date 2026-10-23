@@ -71,3 +71,19 @@ Three smoke episodes, 4,733 environment steps, 592 policy queries (250 + 92 + 25
 crashed starts, zero retreats. Server 8000 queries so far 773 + 342 = 1,115; server 8001
 255 + 250 = 505. Wall 20:16 to 20:26 (episodes 2 and 3 concurrent, one per GPU). Kit startup
 on the warm cache 16 to 17 s per episode.
+
+## Addendum, 21:20 UTC: the first retreats seen in the gate (item 6)
+
+Three of the first 12 retry episodes of the gate fired one retreat each (jobs 3, 7 and 19:
+task 3 at seed 100, query 81; task 9 at seed 100, query 130; task 9 at seed 101, query 147).
+Frame sheet of job 3 (`03-smoke-frames/gate_job3_task3_seed100_retreat.png`, steps 560 to
+720, and `_strip.png` every 100 steps): at the window start (560) and at the retreat start
+(640) the gripper is pressed on top of the jar in the same posture, so the arm had been still
+for 80 steps. At +8 (648, the release chunk) the gripper is still over the jar, opened. At +16
+the arm has risen and swung back towards the right; at +24 it is nearly at the step-0 pose; at
++32 (672, retreat end) it is folded at the upper right exactly as at step 0. At +80 (720) the
+arm is descending towards the jar again with the gripper open: the policy resumed. The jar
+stayed upright and on the table (no violation); the sidecar observes the lid closed from
+step 657, during the lift. The episode then ran to 2,000 steps without a grasp (`idle`,
+safe unsuccess). The retreat did not tip the jar, the arm went home cleanly, the policy
+resumed. The gate continues as frozen.
