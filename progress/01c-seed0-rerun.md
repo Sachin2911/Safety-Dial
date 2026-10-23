@@ -16,7 +16,10 @@ Host: Vast instance 57334420, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
 
 ## Checklist
 
-- [ ] **1. Install by replaying instance C's recipe.** This is C's machine, so follow
+- [x] **1. Install by replaying instance C's recipe.** Done 2026-10-23 07:28 UTC: same pins,
+      all downloads hash-verified, display drivers and the EGL vendor file installed as on C;
+      three unpinned packages that drifted overnight were pinned back, after which both freezes
+      are identical to C's and B's. Receipt: `receipts/01c-install.md`. This is C's machine, so follow
       [receipts/01b-install.md](receipts/01b-install.md) step by step with
       `scripts/todo1b/install_behavior_replay.sh` and
       `scripts/todo1b/install_maniguard_deps.sh`, at the revisions in
