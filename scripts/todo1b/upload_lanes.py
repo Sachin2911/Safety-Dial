@@ -3,13 +3,16 @@ without touching instance B's paths.
 
 Layout added (same per-task layout as scripts/todo1/upload_hf.py):
 
-    jar/seed1/task_<nnnn>/{base_main.mp4,base_wrist.mp4,base_ltl.json,row.json}
-    jar/seed1/{results.jsonl,summary.json,eval_config.json,expected_rollouts.json}
+    jar/seed1/<n>_<outcome>/{base_main.mp4,base_wrist.mp4,base_ltl.json,row.json}
+    jar/seed1/{index.json,results.jsonl,summary.json,eval_config.json,expected_rollouts.json}
     jar/seed2/...                       same
-    smoke/seed1/task_0000/..., smoke/seed2/task_0000/...   the two lane smoke episodes
+    smoke/seed1/<n>_<outcome>/..., smoke/seed2/<n>_<outcome>/...   the two lane smoke episodes
     receipts/01b/                       copies of this instance's receipts (receipts/01<tag>/ with --tag)
     README.md                           rebuilt from every results.jsonl present in the repo
                                         (B's seed 0 included when it is there), one line per video
+
+Task folders are `<task number>_<outcome>` (scripts/todo1/upload_hf.py: task_folder), e.g.
+`8_safe_success`; `index.json` per run maps scene names to folders.
 
 Each path is uploaded with its own `path_in_repo`, so nothing outside these prefixes is
 written or deleted. HF_TOKEN is read from the environment by huggingface_hub.
@@ -34,7 +37,7 @@ HERE = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location("upload_hf", HERE.parent / "todo1" / "upload_hf.py")
 upload_hf = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(upload_hf)
-stage_run, CLASS_LABEL = upload_hf.stage_run, upload_hf.CLASS_LABEL
+stage_run, CLASS_LABEL, task_folder = upload_hf.stage_run, upload_hf.CLASS_LABEL, upload_hf.task_folder
 
 
 def four_class(row):
@@ -68,6 +71,11 @@ def readme(runs):
         "(`base_main.mp4`), the wrist video, the per-step LTL sidecar and the episode's `results.jsonl` row. Videos play in",
         "the file browser: open a folder and click the mp4. `smoke/` holds the single-episode smoke tests, counted separately.",
         "",
+        "Task folders are named `<task number>_<outcome>`, for example `8_safe_success` is benchmark task `task_0008`;",
+        "`_not_engaged` is appended when the policy never touched the jar, so its safety verdict is vacuous. Each run's",
+        "`index.json` maps task numbers and benchmark scene names to folders, outcomes and files. `scene_name` inside",
+        "`results.jsonl` and `row.json` keeps the benchmark's own `task_<nnnn>/<level>` name.",
+        "",
     ]
     if any(re.fullmatch(r"jar/seed\d+_run\d+", label) for label in runs):
         lines += [
@@ -100,7 +108,7 @@ def readme(runs):
     for label, tasks in runs.items():
         for task, (row, cbc) in sorted(tasks.items()):
             level = row["scene_name"].split("/")[1]
-            base = f"{label}/{task}"
+            base = f"{label}/{task_folder(task, row)}"
             lines.append(
                 f"| {label} | {task} | {CLASS_LABEL[four_class(row)]} | {row.get('success')} | {row.get('counted_violation')} | "
                 f"{row.get('ltl_violation_step')} | {row.get('first_contact_step')} | {row.get('steps')} | {cbc} | "
@@ -120,7 +128,7 @@ def collect_local(stage, prefix):
         if line.strip():
             row = json.loads(line)
             task, level = row["scene_name"].split("/")
-            sc = d / task / f"{level}_ltl.json"
+            sc = d / task_folder(task, row) / f"{level}_ltl.json"
             out[task] = (row, closure_before_carry(json.loads(sc.read_text()) if sc.is_file() else None))
     return out
 
@@ -138,7 +146,8 @@ def collect_remote(api, repo, prefix, cache):
             row = json.loads(line)
             task, level = row["scene_name"].split("/")
             try:
-                sc = hf_hub_download(repo, f"{prefix}/{task}/{level}_ltl.json", repo_type="dataset", cache_dir=cache)
+                sc = hf_hub_download(repo, f"{prefix}/{task_folder(task, row)}/{level}_ltl.json",
+                                     repo_type="dataset", cache_dir=cache)
                 cbc = closure_before_carry(json.loads(Path(sc).read_text()))
             except Exception:  # noqa: BLE001
                 cbc = None

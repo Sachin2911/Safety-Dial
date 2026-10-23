@@ -65,11 +65,15 @@ Host: Vast instance 57334420, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
       both smoke episodes and the 01c receipts, to the same private dataset
       `Sachioster/maniguard-jar-replication-20261022` under `jar/seed0_run2/`,
       `jar/seed0_run3/`, `smoke/seed0_run2/`, `smoke/seed0_run3/` and
-      `receipts/01c/`, in the same per-task layout as `jar/seed0/`. Extend
-      `scripts/todo1b/upload_lanes.py` only as far as those prefix names need (its
-      `--seed` and `--smoke` specs already form `jar/seed<name>`); each prefix is
-      uploaded with its own `path_in_repo` and nothing outside these prefixes is written
-      or deleted. Rebuild the README index over every run present. Verify the upload
+      `receipts/01c/`, in the same per-task layout as `jar/seed0/`. **Pull first**: as of
+      2026-10-23 the uploaders name each task folder `<task number>_<outcome>` (for
+      example `8_safe_success`, `11_safe_unsuccess_not_engaged`) and write an `index.json`
+      per run; `scripts/todo1/upload_hf.py` (`task_folder`, `write_index`) does this
+      inside `stage_run`, so `scripts/todo1b/upload_lanes.py` needs no edits beyond its
+      `--seed 0_run2=<dir> --seed 0_run3=<dir> --smoke 0_run2=... --smoke 0_run3=...`
+      specs, `--receipts` for the `01c-*` files and `--tag 1c` (receipts under
+      `receipts/01c/`, commit messages `todo1c: ...`). Each prefix is uploaded with its
+      own `path_in_repo` and nothing outside these prefixes is written or deleted. Rebuild the README index over every run present. Verify the upload
       from the instance (file counts, task folders, videos) and record the final
       revision in `receipts/01c-preserve.md`.
 - [ ] **6. Push, then stop this instance's GPU.** Commit, pull with rebase, push to

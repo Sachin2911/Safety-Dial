@@ -2,12 +2,18 @@
 
 Layout in the dataset:
 
-    jar/seed<s>/task_<nnnn>/base_main.mp4     overview video the policy saw (256 px, 20 fps)
-    jar/seed<s>/task_<nnnn>/base_wrist.mp4    wrist video
-    jar/seed<s>/task_<nnnn>/base_ltl.json     per-step LTL sidecar
-    jar/seed<s>/task_<nnnn>/row.json          that episode's results.jsonl row
+    jar/seed<s>/<n>_<outcome>/base_main.mp4   overview video the policy saw (256 px, 20 fps)
+    jar/seed<s>/<n>_<outcome>/base_wrist.mp4  wrist video
+    jar/seed<s>/<n>_<outcome>/base_ltl.json   per-step LTL sidecar
+    jar/seed<s>/<n>_<outcome>/row.json        that episode's results.jsonl row
+    jar/seed<s>/index.json                    task number -> scene name, folder, outcome, files
     jar/seed<s>/{results.jsonl,summary.json,eval_config.json,expected_rollouts.json}
-    smoke/seed0/task_0000/...                  the smoke episode, same layout
+    smoke/seed0/<n>_<outcome>/...              the smoke episode, same layout
+
+    A task folder is `<task number>_<outcome>`, e.g. `8_safe_success` for task_0008; the
+    outcome is the benchmark's four-class reading, with `_not_engaged` appended when the
+    policy never touched the jar. `scene_name` inside the rows stays the benchmark's
+    `task_<nnnn>/<level>`.
     receipts/01/                               copies of this instance's 01-* receipts
     README.md                                  index: one line per video with task, seed, outcome,
                                                including seeds another instance already uploaded
@@ -31,6 +37,51 @@ CLASS_LABEL = {
 }
 
 
+def outcome_label(row) -> str:
+    """Four-class outcome as the benchmark scores it, plus `_not_engaged` when the policy
+    never made contact (safety is then vacuous)."""
+    if row.get("status") != "completed":
+        return "incomplete"
+    s, v = bool(row.get("success")), bool(row.get("counted_violation"))
+    label = {(True, False): "safe_success", (True, True): "unsafe_success",
+             (False, False): "safe_unsuccess", (False, True): "unsafe_unsuccess"}[(s, v)]
+    if row.get("first_contact_step") is None or not row.get("safety_evaluated"):
+        label += "_not_engaged"
+    return label
+
+
+def task_number(task: str) -> int:
+    return int(task.split("_")[-1])
+
+
+def task_folder(task: str, row) -> str:
+    """Dataset folder for one episode: `<task number>_<outcome>`, e.g. `8_safe_success`."""
+    return f"{task_number(task)}_{outcome_label(row)}"
+
+
+def index_entry(task: str, level: str, row) -> dict:
+    folder = task_folder(task, row)
+    return {
+        "task": task_number(task), "scene_name": row["scene_name"], "folder": folder,
+        "outcome": outcome_label(row), "success": bool(row.get("success")),
+        "counted_violation": bool(row.get("counted_violation")),
+        "engaged": row.get("first_contact_step") is not None,
+        "violation_step": row.get("ltl_violation_step"), "first_contact_step": row.get("first_contact_step"),
+        "steps": row.get("steps"), "episode_seed": row.get("episode_seed"),
+        "files": {"main_video": f"{folder}/{level}_main.mp4", "wrist_video": f"{folder}/{level}_wrist.mp4",
+                  "ltl_sidecar": f"{folder}/{level}_ltl.json", "row": f"{folder}/row.json"},
+    }
+
+
+def write_index(dest: Path, run_label: str, entries: list) -> None:
+    (dest / "index.json").write_text(json.dumps({
+        "run": run_label, "folder_naming": "<task number>_<outcome>",
+        "outcomes": ["safe_success", "unsafe_success", "safe_unsuccess", "unsafe_unsuccess",
+                     "<class>_not_engaged (no contact; safety vacuous)"],
+        "episodes": sorted(entries, key=lambda e: e["task"]),
+    }, indent=2) + "\n")
+
+
 def stage_run(run_dir: Path, dest: Path, rows_by_scene: dict) -> list:
     dest.mkdir(parents=True, exist_ok=True)
     for name in ("results.jsonl", "summary.json", "eval_config.json"):
@@ -44,14 +95,17 @@ def stage_run(run_dir: Path, dest: Path, rows_by_scene: dict) -> list:
             continue
         row = json.loads(line)
         task, level = row["scene_name"].split("/")
-        task_dest = dest / task
+        folder = task_folder(task, row)
+        task_dest = dest / folder
         task_dest.mkdir(exist_ok=True)
         (task_dest / "row.json").write_text(json.dumps(row, indent=2) + "\n")
         for suffix in ("main.mp4", "wrist.mp4", "ltl.json"):
             src = run_dir / task / f"{level}_{suffix}"
             if src.is_file():
                 shutil.copy2(src, task_dest / src.name)
-        staged.append({"task": task, "level": level, "row": row, "has_video": (run_dir / task / f"{level}_main.mp4").is_file()})
+        staged.append({"task": task, "level": level, "folder": folder, "row": row,
+                       "has_video": (run_dir / task / f"{level}_main.mp4").is_file()})
+    write_index(dest, f"{dest.parent.name}/{dest.name}", [index_entry(i["task"], i["level"], i["row"]) for i in staged])
     return staged
 
 
@@ -83,7 +137,8 @@ def existing_rows(repo: str, staged_runs: set, dry_run: bool) -> list:
                 if line.strip():
                     row = json.loads(line)
                     task, level = row["scene_name"].split("/")
-                    rows.append((parts[1], {"task": task, "level": level, "row": row, "has_video": True},
+                    rows.append((parts[1], {"task": task, "level": level, "folder": task_folder(task, row),
+                                            "row": row, "has_video": True},
                                  {"four_class": four_class(row)}))
     return rows
 
@@ -159,7 +214,8 @@ def main() -> int:
     for run, item, e in index_rows:
         row = item["row"]
         task = item["task"]
-        base = f"jar/{run}/{task}" if run != "smoke" else f"smoke/seed0/{task}"
+        folder = item.get("folder", task)
+        base = f"jar/{run}/{folder}" if run != "smoke" else f"smoke/seed0/{folder}"
         rs = e.get("requested_sequence") or {}
         lines.append(
             f"| {run} | {task} | {CLASS_LABEL.get(e.get('four_class', 'invalid'))} | {row.get('success')} | "
