@@ -40,7 +40,7 @@ of each retreat, and the joint-change trace at each query.
 
 - [x] 1. **Host ready.** Run the prepare script to `PREPARE DONE`; write
   `receipts/03-host.md` (driver, GPUs, pins verified, time taken).
-- [ ] 2. **Check the proxy.** `scripts/todo3/supervisor_proxy.py` is written and passes
+- [x] 2. **Check the proxy.** `scripts/todo3/supervisor_proxy.py` is written and passes
   `scripts/todo3/test_proxy_local.py` on the workstation (fake upstream, no GPU). Run that
   test here with the openpi venv's python (`third_party/openpi/.venv/bin/python -I`), then
   start the lane 0 server (`GPU=0 PORT=8000 bash scripts/todo1b/serve_jar_lane.sh`) and the

@@ -64,7 +64,7 @@ def states(n_move=12, n_total=60):
 
 
 def drive(port, seq, seed=12345, seed_switch_at=None):
-    conn = _sync.connect(f"ws://127.0.0.1:{port}", compression=None, max_size=None, legacy=True)
+    conn = _sync.connect(f"ws://127.0.0.1:{port}", compression=None, max_size=None)
     meta = conn.recv()
     replies = []
     for i, st in enumerate(seq):
@@ -85,7 +85,7 @@ def start(args, log):
 def wait_port(port, t=10):
     for _ in range(int(t * 10)):
         try:
-            _sync.connect(f"ws://127.0.0.1:{port}", compression=None, max_size=None, legacy=True).close(); return
+            _sync.connect(f"ws://127.0.0.1:{port}", compression=None, max_size=None).close(); return
         except OSError:
             time.sleep(0.1)
     raise RuntimeError(f"port {port} not up")
