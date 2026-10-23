@@ -76,7 +76,7 @@ Connect, install Claude Code, clone and start the agent inside tmux so it surviv
 disconnects (`Ctrl-b d` detaches, `tmux attach -t jar` reconnects):
 
 ```bash
-ssh -p <port> root@<host>.vast.ai
+ssh -p <port> root@<host>        # the direct address from `vastai ssh-url <id>`; the ssh<n>.vast.ai proxy may refuse
 source /opt/nvm/nvm.sh && npm install -g @anthropic-ai/claude-code
 cd /workspace && git clone https://github.com/Sachin2911/Safety-Dial.git && cd Safety-Dial
 tmux new -s jar
