@@ -19,7 +19,8 @@
     "Instance C rented 22 October 2026 to run seeds 1 and 2 in parallel with B's seed 0; see progress/01b-lanes.md.",
     "All three instances destroyed by 2026-10-23T00:22 UTC. Replication complete: pooled 12/3/29/34 over 78 against the published 21/4/27/26; both frozen Fisher tests pass (p = 0.116, 0.332). See progress/receipts/01-review.md.",
     "Instance D rented 2026-10-23 06:45 UTC for the seed 0 rerun (todo 1c); destroy after its item 6 lands and the upload is verified.",
-    "Instance D destroyed 2026-10-23T10:01 UTC after verification. Todo 1 closed: five runs in the dataset (seed0, seed0_run2, seed0_run3, seed1, seed2). See progress/receipts/01-review.md."
+    "Instance D destroyed 2026-10-23T10:01 UTC after verification. Todo 1 closed: five runs in the dataset (seed0, seed0_run2, seed0_run3, seed1, seed2). See progress/receipts/01-review.md.",
+    "Instance E rented 2026-10-23 11:16 UTC for todo 2 (description only, one recorder-check episode). Destroy after its item 9 lands."
   ],
   "instances": [
     {
@@ -115,7 +116,29 @@
       "outcome": "destroyed-after-seed0-runs2-3-preserved",
       "self_stopped_utc": "2026-10-23T09:56+00:00",
       "destroyed_utc": "2026-10-23T10:01+00:00"
+    },
+    {
+      "role": "E",
+      "instance_id": 57363241,
+      "label": "jar-todo2",
+      "offer_id": 56746530,
+      "machine_id": 150519,
+      "geolocation": "California, US",
+      "gpu": "RTX 3090",
+      "driver_version": "580.178.04",
+      "cpu_ram_mb_reported": 112753,
+      "cpu_cores_effective": 24.0,
+      "instance_dph_usd_with_disk": 0.4274,
+      "ssh": {
+        "host": "ssh8.vast.ai",
+        "port": 32802,
+        "user": "root"
+      },
+      "provider_started_utc": "2026-10-23T11:16:05+00:00",
+      "purpose": "progress/02-after-replication.md: describe the 104 episodes of record, validate a per-step recorder on one episode; no results of record",
+      "status_note": "Rented 2026-10-23 11:16 UTC. The agent stops it from inside after item 9 (scripts/todo1c/stop_instance.py --receipt progress/receipts/02-preserve.md); the reviewer destroys it afterwards.",
+      "outcome": "live-host-for-todo-2"
     }
   ],
-  "active_instance_id": null
+  "active_instance_id": 57363241
 }

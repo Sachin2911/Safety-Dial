@@ -8,10 +8,11 @@ and the instance's own CONTAINER_API_KEY, which is never printed.
 Guards, all of which must pass:
   1. CONTAINER_ID is the expected instance (argument --instance).
   2. The repository has no uncommitted changes and HEAD equals origin/main after a fetch.
-  3. progress/receipts/01c-preserve.md exists and names a 40-hex dataset revision.
+  3. the preservation receipt (--receipt, default progress/receipts/01c-preserve.md)
+     exists and names a 40-hex dataset revision.
   4. No compute process is on either GPU (policy servers and simulators are gone).
 
-    python -I scripts/todo1c/stop_instance.py --instance 57334420 [--dry-run]
+    python -I scripts/todo1c/stop_instance.py --instance <id> [--receipt <path>] [--dry-run]
 """
 from __future__ import annotations
 
@@ -59,6 +60,8 @@ def request(instance: int, method: str) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--instance", type=int, required=True)
+    ap.add_argument("--receipt", default="progress/receipts/01c-preserve.md",
+                    help="preservation receipt that must name the dataset revision (repo-relative)")
     ap.add_argument("--dry-run", action="store_true", help="run the guards, do not stop")
     args = ap.parse_args()
 
@@ -74,11 +77,11 @@ def main() -> int:
     if head != remote:
         sys.exit(f"guard 2: HEAD {head[:8]} differs from origin/main {remote[:8]}; push first")
 
-    receipt = os.path.join(ROOT, "progress", "receipts", "01c-preserve.md")
+    receipt = os.path.join(ROOT, args.receipt)
     if not os.path.exists(receipt):
-        sys.exit("guard 3: progress/receipts/01c-preserve.md is missing")
+        sys.exit(f"guard 3: {args.receipt} is missing")
     if not re.search(r"\b[0-9a-f]{40}\b", open(receipt).read()):
-        sys.exit("guard 3: 01c-preserve.md names no 40-hex dataset revision")
+        sys.exit(f"guard 3: {args.receipt} names no 40-hex dataset revision")
 
     gpu = sh("nvidia-smi", "--query-compute-apps=pid,process_name", "--format=csv,noheader")
     if gpu:
