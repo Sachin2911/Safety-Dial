@@ -94,3 +94,64 @@ training frames, all scenes and monitors initialized) and its handling of the ab
 seed 1 start are accepted. The dataset upload was verified from the workstation:
 private, revision `ccafd65a`, 138 files, 26 complete seed 0 task folders, 54 videos
 none truncated. Instance B was destroyed afterwards per the user's instruction.
+
+## Seeds 1 and 2, instance C retirement and the three-seed decision (reviewed after commit `7169261`)
+
+Seeds 1 and 2 are accepted. Both lanes completed 26 of 26 episodes with no failed
+process, every `expected_rollouts.json` and `summary.json` is whole, and the lane wrapper
+left the evaluator command unchanged apart from the port. Seed 2 task_0011 never touched
+the jar; it is reported under both readings (not engaged, or safe unsuccess as upstream
+scores it) and the denominator stays 26.
+
+The dataset upload was verified from the workstation at revision `65a6d525`: private,
+377 files, 26 complete task folders and 52 videos under each of `jar/seed0`, `jar/seed1`
+and `jar/seed2`, no zero-size video, six sampled videos from seeds 1 and 2 downloaded
+and their MP4 containers intact (box sizes sum to the file size, `moov` and `mdat`
+present), and the uploaded `results.jsonl` for both seeds byte-identical to the copies
+committed under `receipts/01-runs/`. Instance C was then destroyed at 00:22 UTC on
+23 October 2026 on the user's standing instruction. No instance is running.
+
+### Frozen comparison (item 7 of the original checklist: Fisher exact, two-sided, 0.05)
+
+Counts use the upstream reading of the not-engaged episode (safe unsuccess).
+
+| | safe success | unsafe success | safe unsuccess | unsafe unsuccess | n | engaged |
+|---|---|---|---|---|---|---|
+| seed 0 (B) | 2 | 1 | 8 | 15 | 26 | 26 |
+| seed 1 (C) | 6 | 0 | 10 | 10 | 26 | 26 |
+| seed 2 (C) | 4 | 2 | 11 | 9 | 26 | 25 |
+| pooled | 12 | 3 | 29 | 34 | 78 | 77 (98.7%) |
+| published (Table 13) | 21 | 4 | 27 | 26 | 78 | 77 (98.7%) |
+
+| test | ours | published | two-sided Fisher p |
+|---|---|---|---|
+| safe success | 12/78 (15.4%) | 21/78 (26.9%) | 0.116 |
+| violations (engaged, any class) | 37/78 (47.4%) | 30/78 (38.5%) | 0.332 |
+| any success (not part of the frozen test) | 15/78 | 25/78 | 0.098 |
+
+Neither frozen test rejects at 0.05. Under the rule written before any episode ran
+("Matches: the stack is trusted, move to todo 2"), the replication passes and todo 2
+may start. Engagement matches the paper exactly (77 of 78).
+
+### What the pass does and does not say
+
+The point estimates sit below the paper on safe success and above it on violations, and
+the gap comes from seed 0 on instance B: seeds 1 and 2 alone give 10/52 safe success
+(p = 0.40) and 21/52 violations (p = 0.86). Seed 0 against seeds 1 and 2 is p = 0.32 for
+safe success and p = 0.10 for violations, so the three seeds are consistent with one
+rate, but the data cannot separate "one low draw" from "host B ran worse" (different
+driver patch, non-deterministic renderer). A Fisher test with 78 against 78 cannot detect
+a difference of 12 percentage points in safe success, so "not rejected" is weak
+evidence of equality. Two consequences for the plan:
+
+- Stage 2 and 3 sizing must use our own measured rate, about 15% safe success and 47%
+  violations, not the paper's 27% and 38%. The paper's per-task numbers were never
+  published, so ours are the only per-task rates available anyway.
+- The seed-to-seed spread in safe successes (2, 6, 4 of 26) is the first piece of the
+  variance evidence stage 1 was meant to produce. The renderer-variance test in todo 2
+  (same task, same seed, repeated) is the next thing to measure before any lever is
+  tried, since it tells us how much of that spread is noise rather than seed.
+
+Cost of the whole replication: instance B about 3 h 50 min at $0.47/h and instance C
+about 3 h 29 min at $0.61/h, roughly $4 in total, for 80 episodes (78 family plus 2
+completed smoke episodes on C, plus 1 smoke on B and 2 crashed smoke starts on C).

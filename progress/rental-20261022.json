@@ -16,7 +16,8 @@
     "The instance API key returned at creation is not recorded anywhere in this repository.",
     "No stop schedule yet. Set one before leaving the instance unattended.",
     "Second instance B rented when A stayed in 'Preparing GPUs'. Destroy the loser; both bill while running.",
-    "Instance C rented 22 October 2026 to run seeds 1 and 2 in parallel with B's seed 0; see progress/01b-lanes.md."
+    "Instance C rented 22 October 2026 to run seeds 1 and 2 in parallel with B's seed 0; see progress/01b-lanes.md.",
+    "All three instances destroyed by 2026-10-23T00:22 UTC. Replication complete: pooled 12/3/29/34 over 78 against the published 21/4/27/26; both frozen Fisher tests pass (p = 0.116, 0.332). See progress/receipts/01-review.md."
   ],
   "instances": [
     {
@@ -83,10 +84,11 @@
       },
       "provider_started_utc": "2026-10-22T20:53:18+00:00",
       "purpose": "progress/01b-lanes.md: seeds 1 and 2 as two GPU lanes while B runs seed 0",
-      "status_note": "Same machine as the 19 October 2026 rental (machine 54514). SSH up about 6 minutes after creation; 2x RTX 3090 580.173.02, 250 GB RAM, 40 threads, 200 GB free. OptiX and EGL were missing and were installed with /opt/instance-tools/bin/install-display-drivers; all render libraries verified afterwards.",
+      "status_note": "Same machine as the 19 October 2026 rental (machine 54514). SSH up about 6 minutes after creation; 2x RTX 3090 580.173.02, 250 GB RAM, 40 threads, 200 GB free. OptiX and EGL were missing and were installed with /opt/instance-tools/bin/install-display-drivers; all render libraries verified afterwards. Ran both lane smokes and all 52 seed 1 and seed 2 episodes (6/0/10/10 and 4/2/10/9 plus one not engaged), uploaded them to the private dataset at revision 65a6d5255c4afe45b9393c535b0a69a1cb11e256 (verified independently: 26 complete task folders and 52 videos per seed, sampled containers intact, results rows byte-identical to the repo copies), then was destroyed on the user's standing instruction. Approximate life 3 h 29 min at about $0.61/h.",
       "ssh_verified_utc": "2026-10-22T20:56+00:00",
-      "outcome": "live-host-for-todo-1b"
+      "outcome": "destroyed-after-seeds1-2-preserved",
+      "destroyed_utc": "2026-10-23T00:22+00:00"
     }
   ],
-  "active_instance_id": 57271835
+  "active_instance_id": null
 }

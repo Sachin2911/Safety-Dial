@@ -92,6 +92,10 @@ to move earlier.
       `receipts/01-results-seed0.md`, with `results.jsonl`, `summary.json` and
       `expected_rollouts.json` copied under `receipts/01-runs/seed0/`. The three-seed
       comparison against 21/4/27/26 happens after instance C delivers seeds 1 and 2.
+      **Three-seed result, 2026-10-23:** pooled 12 / 3 / 29 / 34 over 78, engaged 77/78;
+      two-sided Fisher against 21 / 4 / 27 / 26 gives p = 0.116 (safe success) and
+      p = 0.332 (violations). Neither rejects at 0.05: the stack is trusted and todo 2
+      may start. Review and caveats in `receipts/01-review.md`.
 - [x] **8. Preserve seed 0 and stop.** Done 2026-10-22 23:10 UTC: private dataset
       `Sachioster/maniguard-jar-replication-20261022` at revision `ccafd65a` (138 files:
       26 seed 0 task folders plus the smoke episode, each with both videos, the LTL
