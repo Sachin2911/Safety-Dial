@@ -58,7 +58,7 @@ of each retreat, and the joint-change trace at each query.
   retreat fire when the robot is idle, does the arm go home cleanly, does the policy
   resume? Write what you see in plain sentences in `receipts/03-smoke.md`. If the
   retreat itself tips the jar, say so and stop; do not change the defaults.
-- [ ] 5. **Freeze the plan.** `receipts/03-plan.json`: 6 tasks x policy seeds 100 to 115
+- [x] 5. **Freeze the plan.** `receipts/03-plan.json`: 6 tasks x policy seeds 100 to 115
   x 2 arms = 192 jobs, ordered by seed then task with the arms alternating, dealt to
   the two lanes alternately so each lane runs both arms equally. Commit it before any
   job runs; never edit it.
