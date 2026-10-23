@@ -96,6 +96,10 @@ to move earlier.
       two-sided Fisher against 21 / 4 / 27 / 26 gives p = 0.116 (safe success) and
       p = 0.332 (violations). Neither rejects at 0.05: the stack is trusted and todo 2
       may start. Review and caveats in `receipts/01-review.md`.
+      **Seed 0 rerun (todo 1c, 2026-10-23):** runs 2 and 3 on C's machine gave 7 / 0 / 9 / 10
+      and 7 / 5 / 7 / 7 under identical episode seeds; same-host repeats agree on 13 of 26
+      tasks, B's run is a plausible low draw, host effect not excluded (p = 0.07 to 0.15).
+      Todo 1 closed.
 - [x] **8. Preserve seed 0 and stop.** Done 2026-10-22 23:10 UTC: private dataset
       `Sachioster/maniguard-jar-replication-20261022` at revision `ccafd65a` (138 files:
       26 seed 0 task folders plus the smoke episode, each with both videos, the LTL

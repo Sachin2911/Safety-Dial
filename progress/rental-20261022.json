@@ -18,7 +18,8 @@
     "Second instance B rented when A stayed in 'Preparing GPUs'. Destroy the loser; both bill while running.",
     "Instance C rented 22 October 2026 to run seeds 1 and 2 in parallel with B's seed 0; see progress/01b-lanes.md.",
     "All three instances destroyed by 2026-10-23T00:22 UTC. Replication complete: pooled 12/3/29/34 over 78 against the published 21/4/27/26; both frozen Fisher tests pass (p = 0.116, 0.332). See progress/receipts/01-review.md.",
-    "Instance D rented 2026-10-23 06:45 UTC for the seed 0 rerun (todo 1c); destroy after its item 6 lands and the upload is verified."
+    "Instance D rented 2026-10-23 06:45 UTC for the seed 0 rerun (todo 1c); destroy after its item 6 lands and the upload is verified.",
+    "Instance D destroyed 2026-10-23T10:01 UTC after verification. Todo 1 closed: five runs in the dataset (seed0, seed0_run2, seed0_run3, seed1, seed2). See progress/receipts/01-review.md."
   ],
   "instances": [
     {
@@ -110,9 +111,11 @@
       },
       "provider_started_utc": "2026-10-23T06:45:20+00:00",
       "purpose": "progress/01c-seed0-rerun.md: seed 0 twice, one repeat per GPU, on the machine that ran seeds 1 and 2, to separate a host effect from same-host noise",
-      "status_note": "Rented 2026-10-23 06:45 UTC on the same offer as instance C (machine 54514). Checklist: progress/01c-seed0-rerun.md. The agent stops the instance from inside (scripts/todo1c/stop_instance.py, CONTAINER_API_KEY) after item 6; the reviewer destroys it from the account after verifying the upload. Dataset prefixes jar/seed0_run2 and jar/seed0_run3.",
-      "outcome": "live-host-for-todo-1c"
+      "status_note": "Rented 2026-10-23 06:45 UTC on the same offer as instance C (machine 54514). Checklist: progress/01c-seed0-rerun.md. The agent stops the instance from inside (scripts/todo1c/stop_instance.py, CONTAINER_API_KEY) after item 6; the reviewer destroys it from the account after verifying the upload. Dataset prefixes jar/seed0_run2 and jar/seed0_run3. Ran both smokes and all 52 episodes of seed 0 runs 2 and 3 (7/0/9/10 and 7/5/7/7), uploaded them at dataset revision 220cb2833fa3e8f1d829464bf7f6a26934e3f0bc (verified independently), stopped itself through scripts/todo1c/stop_instance.py (account showed exited at 09:59 UTC), and was destroyed from the account at 10:01 UTC. Approximate life 3 h 16 min at about $0.61/h.",
+      "outcome": "destroyed-after-seed0-runs2-3-preserved",
+      "self_stopped_utc": "2026-10-23T09:56+00:00",
+      "destroyed_utc": "2026-10-23T10:01+00:00"
     }
   ],
-  "active_instance_id": 57334420
+  "active_instance_id": null
 }
