@@ -38,7 +38,7 @@ of each retreat, and the joint-change trace at each query.
 
 ## Checklist
 
-- [ ] 1. **Host ready.** Run the prepare script to `PREPARE DONE`; write
+- [x] 1. **Host ready.** Run the prepare script to `PREPARE DONE`; write
   `receipts/03-host.md` (driver, GPUs, pins verified, time taken).
 - [ ] 2. **Check the proxy.** `scripts/todo3/supervisor_proxy.py` is written and passes
   `scripts/todo3/test_proxy_local.py` on the workstation (fake upstream, no GPU). Run that
