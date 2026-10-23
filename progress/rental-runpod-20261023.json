@@ -26,12 +26,18 @@
         "GIT_AUTHOR_EMAIL",
         "RUNPOD_API_KEY"
       ],
-      "status_note": "RTX 3090, A5000, A6000 and A40 had no stock under strict constraints; created on the secure cloud with relaxed constraints (4 vCPU, 16 GB RAM minimums, no bandwidth floor).",
-      "outcome": "live-host-for-todo-2"
+      "status_note": "RTX 3090, A5000, A6000 and A40 had no stock under strict constraints; created on the secure cloud with relaxed constraints (4 vCPU, 16 GB RAM minimums, no bandwidth floor). Items 1 to 6, 8 and 9 done; item 7's episode never ran because Isaac Sim 4.5's RTX renderer segfaults at startup under driver 595 (progress/receipts/02-host.md). Analysis uploaded at dataset revision 11b5a0f9. Stopped by the agent, terminated after verification.",
+      "outcome": "terminated-after-todo-2",
+      "stopped_by_agent_utc": "2026-10-23T13:58+00:00",
+      "terminated_utc": "2026-10-23T15:24+00:00",
+      "driver_version": "595.91.07 (open kernel module, CUDA 13.2)"
     }
   ],
   "notes": [
     "Keys live in the pod environment, set at creation; never printed or committed.",
-    "The agent stops the pod with scripts/todo2/stop_pod.py after item 9; the reviewer terminates it after verifying the upload."
-  ]
+    "The agent stops the pod with scripts/todo2/stop_pod.py after item 9; the reviewer terminates it after verifying the upload.",
+    "Lesson: RunPod gave a driver 595 host and Isaac Sim 4.5 would not start its renderer on it; keep simulator episodes on driver 580.x hosts (Vast machine 54514) or request allowed_cuda_versions <= 12.8 on RunPod."
+  ],
+  "account_balance_usd_at_end": 10.78,
+  "spend_usd": 1.49
 }

@@ -52,4 +52,21 @@ Fisher tests against the paper: $p = 0.60$ for safe success, $p = 0.76$ for viol
 \end{itemize}
 
 \textbf{Where it lives.} Videos and rows: \texttt{Sachioster/maniguard-jar-replication-20261022} (private). Receipts: \texttt{progress/receipts/}. Full write-up: \emph{Jar replication and noise floor} under \texttt{docs/research/research\_notes/}.
+\section*{Task 2: Look at what actually happened}
+
+\textbf{Why.} Before trying any fix we wanted the 104 episodes to tell us where the leverage is, without assuming the answer. One rule for this task: describe, don't intervene.
+
+\textbf{What we did.} An agent on a RunPod pod turned every episode into a timeline from the monitor logs (first contact, lid closed, lift, tip, violation), tiled frames from the videos at those moments for all 26 tasks, compared the two same-seed repeats task by task, and put successes next to failures of the same task to see where they first differ. It also wrote a per-step recorder for actions, joint state and jar pose, which the next GPU rental will switch on. The one simulator episode planned never ran: the pod's driver (595) crashes Isaac Sim's renderer at startup, so simulation stays on the 580-driver Vast hosts. Cost about \$1.50.
+
+\textbf{What we found.}
+\begin{itemize}\setlength\itemsep{1pt}
+  \item The approach is the same every time. Repeats of one seed reach the jar within half a second of each other and look identical until the fingers meet the lid. Everything that decides the outcome happens after contact.
+  \item Two moments decide it: whether the push gets the lid over, and the regrasp afterwards, when the gripper leaves the lid, descends, and lands on the body or on the rim. Seven of ten same-seed pairs split in that regrasp.
+  \item Idling is as common as crashing: 36 episodes end with nothing lifted and no violation, half of them with the lid already closed and the robot parked. The biggest crash story is tipping the jar after closing it, 19 episodes.
+  \item Only 8 tasks behave the same way every run (five always tip, two always park, one always succeeds). The other 18 are knife-edge.
+\end{itemize}
+
+\textbf{Where that points.} The lever is in execution and recovery after contact, not in the approach: a slower or shallower regrasp, a stop when a finger meets the rim, a retry when the push has stalled. The leverage note ranks three stage 2 experiments, each about 200 episodes per condition. Panels are frozen: development 0, 3, 6, 9, 15, 17; held out 2, 5, 8, 14, 16, 23, 7, 18, 12.
+
+\textbf{Where it lives.} Frame sheets and pair strips: \texttt{progress/receipts/02-frames/}, \texttt{02-pairs/} and the dataset under \texttt{analysis/02/}. Timelines, sensitivity map and task notes: \texttt{progress/receipts/02-*.md}. Leverage note: \emph{Where the leverage is} under \texttt{docs/research/research\_notes/}.
 \end{document}

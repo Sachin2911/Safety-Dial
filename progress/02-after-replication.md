@@ -1,5 +1,10 @@
 # Todo 2: look at what actually happened
 
+**Closed 23 October 2026.** Items 1 to 6, 8 and 9 done on RunPod pod `f1o65q3iygv372`;
+item 7's episode did not run (renderer crash under driver 595, `receipts/02-host.md`) and
+the recorder is validated on mocks only, to be run on the next Vast 580.x rental. Review:
+`receipts/02-review.md`. Findings: `docs/research/research_notes/Where the leverage is.md`.
+
 Purpose: before any intervention is tried, describe the 104 episodes of record so well
 that the evidence, not a prior idea, says where leverage exists. Two layers, kept
 apart. Layer 1 is pure description: what happened, when, how repeatably, and what
