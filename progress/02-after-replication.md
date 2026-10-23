@@ -48,7 +48,7 @@ on them until the final comparison.
 
 ## Checklist
 
-- [ ] **1. Fetch and index.** Download the four runs' `base_ltl.json`, `row.json`,
+- [x] **1. Fetch and index.** Download the four runs' `base_ltl.json`, `row.json`,
       `base_main.mp4`, `base_wrist.mp4` and `index.json` (about 0.9 GB) at revision
       `9300cebf` into `/workspace/episodes/`. Check 104 sidecars, 208 videos, frame
       count equals steps plus one on every main video. Write `progress/panels.json`
