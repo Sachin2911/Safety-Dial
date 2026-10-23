@@ -24,7 +24,8 @@
     "Instance F rented 2026-10-23 11:20 UTC as a race partner for E (todo 2). Destroy the loser.",
     "Instance G (machine 54514) rented 2026-10-23 11:28 UTC as a third race entrant for todo 2; start queued by the provider. Destroy every loser.",
     "E, F and G destroyed 2026-10-23 11:31 UTC without booting; the user chose to try RunPod for todo 2. Nothing is renting on Vast.",
-    "Instance H (Quebec, 2x RTX 3090, 580.178.04) rented 2026-10-23 15:33 UTC for stage 2; prepared with scripts/stage2/prepare_vast_host.sh."
+    "Instance H (Quebec, 2x RTX 3090, 580.178.04) rented 2026-10-23 15:33 UTC for stage 2; prepared with scripts/stage2/prepare_vast_host.sh.",
+    "Instance H destroyed 2026-10-23 16:39 UTC without running anything; nothing is renting. Re-preparing a fresh 580.x host takes about 30 minutes with scripts/stage2/prepare_vast_host.sh."
   ],
   "instances": [
     {
@@ -209,15 +210,16 @@
       },
       "provider_started_utc": "2026-10-23T15:33+00:00",
       "purpose": "stage 2 host: recorder check on one episode, then the stage 2 sweep once its protocol is frozen",
-      "status_note": "Rented 2026-10-23 15:33 UTC after machine 54514 was unavailable. Driver 580.178.04 is the patch instance B ran on; the render stack is checked and the install replayed by scripts/stage2/prepare_vast_host.sh before any agent starts. The proxy address (ssh6.vast.ai:25802) closes connections; the direct address 209.226.246.174:53378 works. Verified 15:57 UTC: 2x RTX 3090 580.178.04, OptiX/EGL/Vulkan present, 64 threads, 251 GB RAM, conda and /venv/main present, keys in the environment. prepare_vast_host.sh started in tmux session 'prepare' at 15:57 UTC.",
-      "outcome": "live-host-for-stage-2",
+      "status_note": "Rented 2026-10-23 15:33 UTC after machine 54514 was unavailable. Driver 580.178.04 is the patch instance B ran on; the render stack is checked and the install replayed by scripts/stage2/prepare_vast_host.sh before any agent starts. The proxy address (ssh6.vast.ai:25802) closes connections; the direct address 209.226.246.174:53378 works. Verified 15:57 UTC: 2x RTX 3090 580.178.04, OptiX/EGL/Vulkan present, 64 threads, 251 GB RAM, conda and /venv/main present, keys in the environment. prepare_vast_host.sh started in tmux session 'prepare' at 15:57 UTC. prepare_vast_host.sh finished 16:22 UTC (27 min, all phases ok, freeze matched C except five unpinned packages). No episode run; destroyed 16:39 UTC on the user's instruction to continue another time. Life about 1 h 6 min, about $0.65.",
+      "outcome": "destroyed-prepared-unused",
       "ssh_direct": {
         "host": "209.226.246.174",
         "port": 53378,
         "user": "root"
       },
-      "ssh_verified_utc": "2026-10-23T15:57+00:00"
+      "ssh_verified_utc": "2026-10-23T15:57+00:00",
+      "destroyed_utc": "2026-10-23T16:39+00:00"
     }
   ],
-  "active_instance_id": 57389741
+  "active_instance_id": null
 }

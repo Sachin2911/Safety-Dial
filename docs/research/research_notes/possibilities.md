@@ -130,3 +130,28 @@ Infrastructure facts: the todo 2 recorder is observe-only, so a dial needs an ac
 hook in the evaluator's execution loop (the archived pilot's noise hook is a starting
 point); the recorder itself is still to be validated on one real episode, as the first
 hour of the next GPU session. Host: Vast instance H, prepared 23 October 2026.
+
+## Decision of 23 October 2026 and the proposed $5 experiment
+
+The user chose item 1 (the evolved supervisor with the Pareto front as the result) and
+asked for a $5 first experiment. At $0.59/h on a two-GPU host that is about 200
+episodes, enough for one treatment against native. Proposed, not yet frozen:
+
+- Question: does retry on stall move safe completion? Alternative single treatment: the
+  slow regrasp.
+- Development panel only (0, 3, 6, 9, 15, 17). Two arms, native and native plus retry.
+  Retry fires when the joint state has not changed for a fixed number of steps after the
+  hand has descended, lifts to the starting pose by a scripted joint-space move, hands
+  back to the policy; at most three per episode; no privileged signals.
+- 16 policy seeds per task, the same 16 in both arms (paired by layout); 96 episodes per
+  arm, arms interleaved on both lanes.
+- Scoring: benchmark monitor unchanged, plus story label, retries triggered, steps to
+  success. Decision rule: paired comparison on safe success at 0.05, violations must not
+  rise. Power: sees about a 15-point change, not 10.
+- Before any arm: action hook and supervisor wrapper built, identity check passed
+  offline (native settings through the wrapper give byte-identical chunks on saved
+  observations), smoke episode validates the recorder.
+- Cost: about 1.5 h build and smoke plus 7 h of episodes, about $5.
+
+Status: the prepared host (instance H) was destroyed unused at 16:39 UTC; work resumes
+another time. Open decision: retry or slow regrasp as the single treatment.
