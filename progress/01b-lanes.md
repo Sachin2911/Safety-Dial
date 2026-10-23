@@ -52,7 +52,11 @@ Host: Vast instance 57271835, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
       lane 1's own smoke at seed 2 was a safe success. Receipt: `receipts/01b-precheck.md`. `git pull` and read any
       seed 0 progress B has pushed, or ask the user. If B has six or more completed
       episodes with zero safe successes, stop here and wait for review. Otherwise go on.
-- [ ] **5. Run seed 1 and seed 2 concurrently.** Lane 0 runs all 26 base tasks at
+- [x] **5. Run seed 1 and seed 2 concurrently.** Done 2026-10-23 00:10 UTC: lane 0 (tmux `lane0`,
+      GPU 0, port 8000, `SEED=1`) 22:11:09 to 00:10:12, lane 1 (tmux `lane1`, GPU 1, port 8001,
+      `SEED=2`) 22:11:14 to 00:06:22; 26 of 26 episodes each, no failed process, whole
+      `expected_rollouts.json` and `summary.json` per seed. Runner logs: `receipts/01-runs/seed1/runner.log`,
+      `receipts/01-runs/seed2/runner.log`; run record in `receipts/01b-results.md`. Lane 0 runs all 26 base tasks at
       `SEED=1` on GPU 0, port 8000, output leaf `jar_transport_joint_legacy256/seed1`.
       Lane 1 runs all 26 at `SEED=2` on GPU 1, port 8001, leaf `.../seed2`. Each lane
       in its own tmux session with its own log. Do not split one seed across lanes;
