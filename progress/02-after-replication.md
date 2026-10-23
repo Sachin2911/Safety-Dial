@@ -86,7 +86,7 @@ on them until the final comparison.
       `receipts/02-sensitivity.md` with the table and a short reading: which panel
       tasks are knife-edge, which are systematic, and what that implies for a small
       push versus a systematic correction.
-- [ ] **5. Success against failure on the same task.** For every task with at least one
+- [x] **5. Success against failure on the same task.** For every task with at least one
       success and one failure in the four runs (prefer the same-seed pair where it
       splits: tasks 0, 3, 8, 9, 16, 17, 20, 23), build a side-by-side strip, main and
       wrist, at matched steps from first contact minus 50 to first contact plus 250
