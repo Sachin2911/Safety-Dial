@@ -1,6 +1,9 @@
 Work through progress/03-retry-gate.md in order, following AGENTS.md. This is a Vast
-template instance with two GPUs; first run scripts/stage2/prepare_vast_host.sh to
-PREPARE DONE, which replays the pinned ManiGuard install. The task is one experiment:
+template instance with two GPUs. scripts/stage2/prepare_vast_host.sh, which replays
+the pinned ManiGuard install, may already be running in tmux session "prepare"
+(started from the workstation): if so, wait for PREPARE DONE in
+third_party/logs/prepare-*.log and do not start it again; if it is not running, run it
+to PREPARE DONE. The task is one experiment:
 does a retry-on-stall supervisor, built as a proxy between the evaluator and the policy
 server with the exact defaults in the checklist, raise safe completion on the six
 development Jar tasks without raising violations. Keep the benchmark, the checkpoint,
