@@ -53,7 +53,10 @@ Host: Vast instance 57334420, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
       unset, each lane in its own tmux session with its own log and the GPU sampler
       running. Do not split one repeat across lanes; keep each repeat's
       `expected_rollouts.json` and `summary.json` whole. Expect about 2 hours.
-- [ ] **4. Collect.** Run upstream `tools/eval_summary.py --full --json` on each repeat;
+- [x] **4. Collect.** Done 2026-10-23 10:00 UTC: run 2 = 7 / 0 / 9 / 10, run 3 = 7 / 5 / 7 / 7 (B's run 1:
+      2 / 1 / 8 / 15), all 52 engaged, identical per-task episode seeds across the three repeats; class
+      agreement 14, 14 and 13 of 26 tasks. Receipt: `receipts/01c-results.md`, `receipts/01c-compare.json`,
+      inputs under `receipts/01-runs/seed0_run2/` and `seed0_run3/`. Run upstream `tools/eval_summary.py --full --json` on each repeat;
       copy `results.jsonl`, `summary.json`, `eval_config.json`, `expected_rollouts.json`,
       `eval_summary.json`, the runner log and `lane_timing.json` under
       `receipts/01-runs/seed0_run2/` and `seed0_run3/`. Run `scripts/todo1/compare.py
