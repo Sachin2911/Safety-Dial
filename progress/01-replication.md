@@ -1,5 +1,12 @@
 # Todo 1: replicate the published Jar baseline
 
+**Closed 23 October 2026.** Results of record: the four runs on machine 54514 (seed 0
+twice on instance D, seeds 1 and 2 on instance C), 24 / 7 / 37 / 36 over 104 episodes,
+p = 0.60 and 0.76 against the published row. This instance's (B's) seed 0 is excluded by
+the user's decision of 23 October 2026 and kept under
+`receipts/excluded-instance-B/`. Story: [Jar replication and noise floor](../docs/research/research_notes/Jar%20replication%20and%20noise%20floor.md).
+The checklist below is the frozen record of how the work was run.
+
 Goal: show that the local stack reproduces the ManiGuard paper's Jar in-distribution
 result for the pi0.5 fine-tuned checkpoint before anything is built on it. Published
 target over 26 tasks and 3 seeds (78 episodes): **21 safe success, 4 unsafe success,
@@ -71,7 +78,7 @@ to move earlier.
       Save the row to `progress/receipts/01-smoke.jsonl`.
 - [x] **5. Seed one: all 26 Jar base tasks.** Done 2026-10-22 (SEED=0): 2 / 1 / 8 / 15,
       26/26 engaged, 0 failures, 8333 s; stop rule not triggered (2 safe successes).
-      `receipts/01-seed-one.md`, `receipts/01-runs/seed0/`. `LEVELS=base SEED=<s1> bash
+      `receipts/excluded-instance-B/01-seed-one.md`, `receipts/excluded-instance-B/01-runs/seed0/`. `LEVELS=base SEED=<s1> bash
       scripts/eval_family.sh jar_transport`. Expect roughly 7 safe successes and 10
       violations. **Stop rule:** 0 or 1 safe successes means stop, do not run more
       seeds, write what was checked in `progress/receipts/01-seed1-stop.md`, commit,
@@ -85,8 +92,8 @@ to move earlier.
       item as reassigned once seed 0 is complete.
 - [x] **7. Interim comparison on seed 0 alone.** Done 2026-10-22: 2 / 1 / 8 / 15,
       engaged 26/26, 8333 s; interim Fisher p = 0.055 (safe success) and 0.067
-      (violation) against the published row. `receipts/01-results-seed0.md`,
-      `receipts/01-compare-seed0.json`, `receipts/01-runs/seed0/`. Run `scripts/todo1/compare.py` with
+      (violation) against the published row. `receipts/excluded-instance-B/01-results-seed0.md`,
+      `receipts/excluded-instance-B/01-compare-seed0.json`, `receipts/excluded-instance-B/01-runs/seed0/`. Run `scripts/todo1/compare.py` with
       `--run seed0=<ID run dir>` and `--json receipts/01-compare-seed0.json`. Report the
       seed 0 four-class counts, engagement, per-task outcomes and wall time in
       `receipts/01-results-seed0.md`, with `results.jsonl`, `summary.json` and

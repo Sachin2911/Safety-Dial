@@ -25,10 +25,14 @@ jobs. Do not inherit their protocols, gates or budgets.
    compressed with Ghostscript `/ebook` before committing.
 3. `docs/allocatedTopic.md`, `docs/gecco2027.md`, `docs/researchConceptNote/`,
    `docs/templates/`: topic, venue, concept note and document templates.
-4. `configs/` and `scripts/` do not exist yet. New Hydra configs go in
-   `configs/<group>/`; shared setup goes in `scripts/`. The previous Vast templates,
-   rental records and setup scripts are under `archive/20261022/configs/vast/` and
-   `archive/20261022/scripts/`.
+4. `progress/`: the working checklists, goal prompts, rental record and receipts of the
+   current plan, one instance per checklist (`01` B, `01b` C, `01c` D). Instance B's
+   seed 0 is excluded from results and kept under `progress/receipts/excluded-instance-B/`.
+   `scripts/todo1*/`: the pinned download, serving, lane, comparison, upload, rename
+   and self-stop scripts those checklists used; the paper-protocol eval config is
+   `progress/receipts/01-jar-eval.yaml`. `configs/` does not exist yet; new Hydra
+   configs go in `configs/<group>/`. The previous Vast templates, rental records and
+   setup scripts are under `archive/20261022/configs/vast/` and `archive/20261022/scripts/`.
 5. `experiments/` does not exist yet. New reusable code goes in `experiments/helpers/`,
    entry points in `experiments/scripts/`, tests in `experiments/tests/`. No `src/`.
 6. `archive/20261022/`: the ManiGuard and UNISafe studies, previous direction, plan
@@ -61,9 +65,14 @@ jobs. Do not inherit their protocols, gates or budgets.
 
 ## Environment and engineering
 
-- No current host template. The stage 1 protocol defines the ManiGuard host; the
-  archived Vast template (`archive/20261022/configs/vast/README.md`) records what the
-  previous preparation base contained.
+- Host: the Vast template "ManiGuard latent evolution" (hash
+  `62414e8fca6befba085051de7ed36190`) on an RTX 3090 host with driver 580.x, installed
+  from `progress/receipts/01-install.md` and `01-sources.json` at the pinned revisions
+  (ManiGuard `6bf4c61` with the legacy 256 render profile). Results of record come from
+  one machine (54514); comparisons are blocked by host.
+- Rollouts, sidecars and results rows live in the private dataset
+  `Sachioster/maniguard-jar-replication-20261022`, task folders `<n>_<outcome>` with an
+  `index.json` per run.
 - Root `pyproject.toml` and `uv.lock` describe the legacy local environment, not a
   ManiGuard environment. Do not sync them into `/venv/main`. Use the intended
   interpreter explicitly. Locally, run tests with the venv's own Python, not `uv run`.

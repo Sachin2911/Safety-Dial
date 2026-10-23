@@ -226,3 +226,25 @@ against the paper's 27% and 38%.
 Todo 1 is closed. Todo 2 starts with the offline items (videos, failure histogram,
 closure-loophole count, task sort) from the dataset; the renderer-variance repeat it
 asks for is already partly answered by runs 2 and 3.
+
+## Exclusion of instance B's seed 0 (user decision, 23 October 2026)
+
+After the review above, the user decided to drop B's seed 0 entirely: the results of
+record are the four runs on machine 54514 (seed 0 twice, seeds 1 and 2), 104 episodes
+on one host. Reason: host blocking; every comparison in this project is made on one
+host, and the baseline should be too. Effect, stated for the record: with B the frozen
+three-seed test had passed at 12 / 3 / 29 / 34 (p = 0.12 and 0.33); without B the
+pooled result is 24 / 7 / 37 / 36 over 104 (safe success 23.1% against the paper's
+26.9%, p = 0.60; violations 41.3% against 38.5%, p = 0.76; engaged 103 of 104). B's
+run was the lowest of five on safe success, so the exclusion raises the estimate.
+
+Actions: B's `jar/seed0/`, `smoke/seed0/` and `receipts/01/` were deleted from the
+dataset (commit `44bdf1e7`; earlier revisions keep them), the README was rebuilt over
+the four runs (revision `9300cebf`, 486 files, 216 video links all resolving), and B's
+result files were moved unchanged to `receipts/excluded-instance-B/`. The dataset
+prefixes `seed0_run2` and `seed0_run3` keep their numbers.
+
+Per-task picture over the four runs: never a safe success on 1, 4, 7, 10, 11, 13, 18,
+19, 20, 21, 22, 24, 25; one to three of four on 0, 2, 3, 5, 6, 8, 9, 14, 15, 16, 17,
+23; four of four on 12. Violated in every run: 7, 18, 21, 24, 25. Never violated: 4, 5,
+8, 12, 16, 19. Pairwise agreement between runs: 11 to 15 of 26, the same-seed pair at 13.

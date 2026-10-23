@@ -65,9 +65,12 @@ def readme(runs):
         "",
         "Every rollout of the pi0.5-SFT Jar checkpoint (`IDEAS-Lab-Northwestern/pi05-base-datagen-v1-jar-joint-2cam-lora`,",
         "step 7400) on the 26 ManiGuard-Bench `jar_transport` base tasks, run with the official per-task evaluator at",
-        "ManiGuard `6bf4c61` under the paper's legacy 256 x 256 rendering. Seed 0 ran on one RTX 3090 (instance B, upstream",
-        "`scripts/eval_family.sh`); seeds 1 and 2 ran concurrently on one RTX 3090 each (instance C, the same runner with",
-        "only the server port and task subset made configurable). Each task folder holds the overview video the policy saw",
+        "ManiGuard `6bf4c61` under the paper's legacy 256 x 256 rendering. All runs were made on one Vast host (machine 54514,",
+        "2x RTX 3090, driver 580.173.02) with the upstream runner made configurable only in server port and task subset:",
+        "seeds 1 and 2 concurrently, one per GPU (instance C, 22 October 2026), and seed 0 twice, one repeat per GPU",
+        "(instance D, 23 October 2026). An earlier seed 0 run on a different host (instance B) was excluded from the results",
+        "on 23 October 2026, because every comparison in this project is blocked by host, and removed from this dataset.",
+        "Each task folder holds the overview video the policy saw",
         "(`base_main.mp4`), the wrist video, the per-step LTL sidecar and the episode's `results.jsonl` row. Videos play in",
         "the file browser: open a folder and click the mp4. `smoke/` holds the single-episode smoke tests, counted separately.",
         "",
@@ -79,8 +82,8 @@ def readme(runs):
     ]
     if any(re.fullmatch(r"jar/seed\d+_run\d+", label) for label in runs):
         lines += [
-            "`jar/seed0_run2` and `jar/seed0_run3` are two further repeats of seed 0, run concurrently on one RTX 3090",
-            "each on the machine that ran seeds 1 and 2 (todo 1c); `jar/seed0` is run 1. The jar total pools one run per seed.",
+            "`jar/seed0_run2` and `jar/seed0_run3` are the two seed 0 repeats, run concurrently on one RTX 3090 each,",
+            "numbered after the excluded earlier run; they measure same-seed variance. The jar total pools all four runs.",
             "",
         ]
     lines += [
@@ -97,11 +100,11 @@ def readme(runs):
             c["engaged"] += row.get("first_contact_step") is not None
             c["n"] += 1
         lines.append(f"| {label} | {c['safe_success']} | {c['unsafe_success']} | {c['safe_unsuccess']} | {c['unsafe_unsuccess']} | {c['invalid']} | {c['engaged']} | {c['n']} |")
-        if re.fullmatch(r"jar/seed\d+", label):
+        if label.startswith("jar/"):
             for k in tot:
                 tot[k] += c[k]
     lines.append(f"| **jar total** | {tot['safe_success']} | {tot['unsafe_success']} | {tot['safe_unsuccess']} | {tot['unsafe_unsuccess']} | {tot['invalid']} | {tot['engaged']} | {tot['n']} |")
-    lines.append("| published (Table 13, 3 seeds) | 21 | 4 | 27 | 26 | 0 | 77 | 78 |")
+    lines.append("| published (Table 13, 3 seeds, 78 episodes) | 21 | 4 | 27 | 26 | 0 | 77 | 78 |")
     lines += ["", "## Episode index", "",
               "| run | task | outcome | success | counted violation | violation step | first contact | steps | closure before carry | overview | wrist |",
               "|---|---|---|---|---|---|---|---|---|---|---|"]

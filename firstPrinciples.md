@@ -36,6 +36,16 @@ split and the development and held-out task panels. The frozen protocol for that
 reproduction is still to be written. The original survey text is kept below for the
 record.
 
+**Done, 23 October 2026.** The reproduction passed under the paper's protocol on one
+host (machine 54514, seeds 0, 0, 1 and 2, 104 episodes): 24 safe successes, 7 unsafe
+successes, 37 safe failures, 36 violations without success, engaged 103 of 104; safe
+success 23 percent and violations 41 percent against the paper's 27 and 38 (p = 0.60 and
+0.76). Two repeats of one seed agree on 13 of 26 tasks, so an episode is a draw from a
+per-task rate; 13 tasks never gave a safe success, 12 are in the middle, one always
+succeeds. Story and numbers:
+[Jar replication and noise floor](docs/research/research_notes/Jar%20replication%20and%20noise%20floor.md).
+Stage 2 is sized on these rates, blocked by host, and averaged over repeats.
+
 Run every ManiGuard family (Jar, Lid, Stack, Clutter, Cabinet, Dusty) with its native
 policy and no controller. Twenty episodes per family, fresh seeds, native horizons,
 matched benchmark contract. Record safe requested completion, raw goal, violations and

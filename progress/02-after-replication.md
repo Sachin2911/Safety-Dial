@@ -3,6 +3,13 @@
 Goal: find where the failures are, show that the variance is reachable by a noise dial,
 fix the task panels, and validate the harness. Starts only after todo 1 passes.
 
+**Status, 23 October 2026.** Todo 1 passed. The episodes of record are the 104 on machine
+54514 (dataset runs `jar/seed0_run2`, `jar/seed0_run3`, `jar/seed1`, `jar/seed2`), not 78.
+Already answered by todo 1 and the review: the same-seed repeat (13 of 26 tasks agree),
+the closure-loophole count among safe successes (1 of 24), and a first task sort (13 tasks
+never safe, 12 middle, task 12 always safe). See
+[Jar replication and noise floor](../docs/research/research_notes/Jar%20replication%20and%20noise%20floor.md).
+
 - [ ] **Inspect every episode.** For each of the 78: four-class outcome, whether the
       jar was actually closed at goal time, and which safety clause failed
       (left table before closed, dropped, tipped). The closure predicate and clause

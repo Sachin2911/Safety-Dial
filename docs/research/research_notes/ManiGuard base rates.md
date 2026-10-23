@@ -75,3 +75,14 @@ family.
   runs used the high-fidelity 640 profile. Match the paper's protocol before comparing.
 - The renderer is not bit-reproducible: identically seeded runs differed in 39% of
   overview pixels. Seed-level exactness applies to accounting, not physics.
+
+## Measured locally, 23 October 2026
+
+Reproduced under the paper's protocol on one host (machine 54514), seeds 0, 0, 1 and 2,
+104 episodes: safe success 23.1% (24), unsafe success 6.7% (7), safe unsuccess 35.6%
+(37), unsafe unsuccess 34.6% (36), engaged 99.0%; violations 41.3%. Against the
+published 26.9% / 5.1% / 34.6% / 33.3%: p = 0.60 (safe success) and 0.76 (violations).
+Per-task rates are now measured over four runs; 13 tasks never gave a safe success, 12
+are in the middle, task 12 always succeeded. Full account in
+[Jar replication and noise floor](Jar%20replication%20and%20noise%20floor.md). Use the
+measured rates, not the published ones, to size every later stage.

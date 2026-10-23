@@ -12,8 +12,13 @@ beginning with a reproduction of the published Jar base rate, before any optimiz
 ## Current workspace
 
 - [First-principles plan](firstPrinciples.md): the four staged preconditions and gates.
+- [Jar replication and noise floor](docs/research/research_notes/Jar%20replication%20and%20noise%20floor.md):
+  stage 1 done on 23 October 2026; the measured Jar base rate, the same-seed noise
+  floor and the per-task structure, with the single-host decision.
 - [ManiGuard base rates](docs/research/research_notes/ManiGuard%20base%20rates.md): the
   published four-outcome counts for every family and why Jar is the testbed.
+- [Progress](progress/README.md): checklists, receipts and the rental record; the
+  rollout dataset is `Sachioster/maniguard-jar-replication-20261022` (private).
 - [ManiGuard paper](docs/papers/Maniguard.pdf): the benchmark, protocol and full results.
 - [Allocated topic](docs/allocatedTopic.md) and [GECCO notes](docs/gecco2027.md).
 - [Research concept note](docs/researchConceptNote.pdf) with
@@ -38,31 +43,32 @@ Everything completed before 22 October 2026 is preserved unchanged under
 
 ## Setup on Vast
 
-Rent an RTX 3090 or 4090 host on NVIDIA driver 580.x with the private **ManiGuard latent
-evolution** template (hash `62414e8fca6befba085051de7ed36190`; see
-[progress/rental-20261022.json](progress/rental-20261022.json) for the current
-instance). The template provides Ubuntu 22.04, Python 3.10 in `/venv/main`, CUDA 12.4.1,
-tmux, git and uv, and installs no research packages. `HF_TOKEN` and `GITHUB_TOKEN` are
-set in the instance environment; never print them.
+No instance is running. To run the next checklist, rent an RTX 3090 or 4090 host on
+NVIDIA driver 580.x with the private **ManiGuard latent evolution** template (hash
+`62414e8fca6befba085051de7ed36190`); the results of record came from machine 54514
+(two RTX 3090), and comparisons must stay on one host. The template provides Ubuntu
+22.04, Python 3.10 in `/venv/main`, CUDA 12.4.1, tmux, git and uv, and installs no
+research packages. `HF_TOKEN` and `GITHUB_TOKEN` are set in the instance environment;
+never print them. Record the rental in `progress/rental-<date>.json`.
 
 Connect, install Claude Code, clone and start the agent inside tmux so it survives
 disconnects (`Ctrl-b d` detaches, `tmux attach -t jar` reconnects):
 
 ```bash
-ssh -p 27240 root@ssh4.vast.ai
+ssh -p <port> root@<host>.vast.ai
 source /opt/nvm/nvm.sh && npm install -g @anthropic-ai/claude-code
 cd /workspace && git clone https://github.com/Sachin2911/Safety-Dial.git && cd Safety-Dial
 tmux new -s jar
 claude
 ```
 
-Sign in when prompted, then paste the contents of
-[progress/goal-prompt-01c.md](progress/goal-prompt-01c.md) (instance D, seed 0 twice on
-two GPUs, checklist [progress/01c-seed0-rerun.md](progress/01c-seed0-rerun.md)). The
-earlier prompts, [goal-prompt-01.md](progress/goal-prompt-01.md) (instance B, seed 0)
-and [goal-prompt-01b.md](progress/goal-prompt-01b.md) (instance C, seeds 1 and 2), are
-kept for the record; those instances are destroyed. The agent works through its
-checklist and commits evidence under `progress/`.
+Sign in when prompted, then paste the goal prompt for the checklist at hand. The todo 1
+prompts ([goal-prompt-01.md](progress/goal-prompt-01.md),
+[goal-prompt-01b.md](progress/goal-prompt-01b.md),
+[goal-prompt-01c.md](progress/goal-prompt-01c.md)) are kept as the pattern: the agent
+replays the pinned install from `progress/receipts/01-install.md`, works through its
+checklist, commits evidence under `progress/`, uploads rollouts to the dataset and
+stops its own instance with `scripts/todo1c/stop_instance.py`.
 
 Earlier Vast templates, rental records and setup scripts are preserved under
 [archive/20261022/configs/vast](archive/20261022/configs/vast/) and
