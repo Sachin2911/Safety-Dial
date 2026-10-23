@@ -132,7 +132,7 @@ on them until the final comparison.
       shortlist of three stage 2 experiments, each with the question it answers, the
       panel, the episode count at the measured noise (about 200 per condition to see
       ten points), and the cost at 4.5 minutes per episode. Rank them; do not choose.
-- [ ] **9. Preserve, push, stop.** Upload `receipts/02-frames/`, `02-pairs/`,
+- [x] **9. Preserve, push, stop.** Upload `receipts/02-frames/`, `02-pairs/`,
       `02-timelines.jsonl` and the item 7 `.npz` to the dataset under `analysis/02/`
       (own `path_in_repo`, nothing else touched) and record the revision in
       `receipts/02-preserve.md`. Commit, pull with rebase, push, confirm
