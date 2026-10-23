@@ -71,7 +71,9 @@ Host: Vast instance 57334420, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
       values for the pooled runs 2 and 3 (52) against run 1 (26) on safe success and on
       violations, and for each run against the published row, as information only.
       The judgment is made after review, not here.
-- [ ] **5. Preserve.** Upload both repeats' full trees, every video and LTL sidecar, plus
+- [x] **5. Preserve.** Done 2026-10-23 09:54 UTC: both repeats, both smoke episodes and the 01c receipts
+      uploaded under their own prefixes, README rebuilt over all ten runs, verified from the instance;
+      final revision `220cb2833fa3e8f1d829464bf7f6a26934e3f0bc`. Receipt: `receipts/01c-preserve.md`. Upload both repeats' full trees, every video and LTL sidecar, plus
       both smoke episodes and the 01c receipts, to the same private dataset
       `Sachioster/maniguard-jar-replication-20261022` under `jar/seed0_run2/`,
       `jar/seed0_run3/`, `smoke/seed0_run2/`, `smoke/seed0_run3/` and
@@ -86,7 +88,9 @@ Host: Vast instance 57334420, 2x RTX 3090, driver 580.173.02, 256 GB RAM, 20 cor
       own `path_in_repo` and nothing outside these prefixes is written or deleted. Rebuild the README index over every run present. Verify the upload
       from the instance (file counts, task folders, videos) and record the final
       revision in `receipts/01c-preserve.md`.
-- [ ] **6. Push, then stop this instance's GPU.** Commit, pull with rebase, push to
+- [x] **6. Push, then stop this instance's GPU.** Ticked 2026-10-23 before the stop call: servers and
+      sampler stopped at 09:54 UTC, GPUs idle, every log copied into `receipts/01-runs/logs/01c-*`; the
+      dry run and the stop call follow this push (`receipts/01c-preserve.md`, item 6 section). Commit, pull with rebase, push to
       main, and confirm `git rev-parse HEAD` equals `origin/main`. Stop both policy
       servers and the GPU sampler and confirm `nvidia-smi` shows no compute process.
       Then run `python -I scripts/todo1c/stop_instance.py --instance 57334420 --dry-run`

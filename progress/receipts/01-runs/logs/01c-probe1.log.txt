@@ -1,0 +1,22 @@
+ERROR:websockets.client:keepalive ping failed
+TimeoutError: timed out while closing connection
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/Safety-Dial/third_party/openpi/.venv/lib/python3.11/site-packages/websockets/sync/connection.py", line 777, in keepalive
+    with self.send_context():
+  File "/.uv/python_install/cpython-3.11.16-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "/workspace/Safety-Dial/third_party/openpi/.venv/lib/python3.11/site-packages/websockets/sync/connection.py", line 1012, in send_context
+    raise self.protocol.close_exc from original_exc
+websockets.exceptions.ConnectionClosedError: sent 1011 (internal error) keepalive ping timeout; no close frame received
+warm-up attempt 1 dropped after 50s: ConnectionClosedError
+warm-up query answered in 0.2s
+server metadata: {'serve_config': 'pi05-base_datagen_v1_jar_joint_2cam_lora', 'checkpoint': '/workspace/Safety-Dial/third_party/checkpoints/jar/7400'}
+query 0: 209 ms, actions (16, 8) float64
+query 1: 223 ms, actions (16, 8) float64
+query 2: 220 ms, actions (16, 8) float64
+model queries made by this probe: 5
+PROBE_EXIT=0
+Fri Oct 23 07:31:12 UTC 2026
