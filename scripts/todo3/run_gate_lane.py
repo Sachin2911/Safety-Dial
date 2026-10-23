@@ -4,7 +4,11 @@ Each job of the lane, in plan order, is one episode through scripts/todo1/eval_f
 (symlinked into the ManiGuard checkout as scripts/eval_family_lane.sh) with TASKS, SEED and
 PORT from the plan and the plan's output leaf. A job is skipped when its leaf already holds a
 completed row (resume after an interruption). A job whose first attempt leaves no completed
-row is rerun once into <leaf>_rerun1; a second failure is recorded and the lane moves on.
+row is rerun once into <leaf>_rerun1; a second failure is recorded and the lane moves on. The
+server re-seeds its sampling key only when the episode seed changes (maniguard.serve.openpi_native,
+receipts/03-identity.md), so before a rerun one probe request with episode seed 0 is sent to the
+lane's server (scripts/todo1/probe_server.py --queries 0, one model query, logged) so that the
+rerun starts freshly keyed like every other episode.
 Progress goes to third_party/logs/03-gate-lane<L>.jsonl, one line per attempt.
 
     python3 -I scripts/todo3/run_gate_lane.py --lane 0 [--plan progress/receipts/03-plan.json] [--only JOB,...]
@@ -92,6 +96,11 @@ def main() -> int:
             if attempted(use_leaf):
                 record({"event": "skip_attempted", "job": job["job"], "attempt": attempt, "leaf": use_leaf})
                 continue
+            if attempt == 2:
+                rc_probe = subprocess.call([str(TP / "openpi/.venv/bin/python"), "-I", str(ROOT / "scripts/todo1/probe_server.py"),
+                                            "--port", str(job["server_port"]), "--queries", "0"],
+                                           stdout=open(log_dir / f"reseed_job{job['job']:03d}.log", "w"), stderr=subprocess.STDOUT)
+                record({"event": "reseed_probe", "job": job["job"], "server_port": job["server_port"], "rc": rc_probe, "model_queries": 1})
             t0 = time.time()
             record({"event": "start", "job": job["job"], "attempt": attempt, "leaf": use_leaf, "seed": job["seed"],
                     "task": job["task"], "arm": job["arm"], "port": job["port"]})

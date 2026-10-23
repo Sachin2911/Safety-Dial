@@ -46,7 +46,7 @@ of each retreat, and the joint-change trace at each query.
   start the lane 0 server (`GPU=0 PORT=8000 bash scripts/todo1b/serve_jar_lane.sh`) and the
   proxy on 9000 in `off` mode with `--log /workspace/logs/proxy-off-9000.jsonl`. Do not
   change the defaults.
-- [ ] 3. **Identity check and recorder validation.** Run `task_0000/base` seed 0 twice:
+- [x] 3. **Identity check and recorder validation.** Run `task_0000/base` seed 0 twice:
   direct on 8000, then through the proxy on 9000, both with the todo 2 recorder
   (`scripts/todo2/record_rollout.py`, `--recording-factory record_rollout:create_observer`).
   Pass: `scripts/todo3/compare_chunks.py <direct.npz> <proxied.npz>` prints PASS (every

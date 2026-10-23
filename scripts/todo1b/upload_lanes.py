@@ -23,6 +23,11 @@ written or deleted. HF_TOKEN is read from the environment by huggingface_hub.
 
 Todo 1c passes --seed 0_run2=<dir> --seed 0_run3=<dir> (prefixes jar/seed0_run2, jar/seed0_run3)
 and --tag 1c (receipts/01c/, commit messages "todo1c: ...").
+
+Todo 3 passes --run <prefix>=<dir> (e.g. --run gate03_native=<merged/native>): when <dir> holds a
+results.jsonl it is staged as one run at jar/<prefix>; otherwise every child directory holding a
+results.jsonl is staged at jar/<prefix>/<child> (one run per seed, each with its own index.json).
+Gate runs are listed in the README but never pooled into the replication total.
 """
 
 import argparse
@@ -80,6 +85,15 @@ def readme(runs):
         "`results.jsonl` and `row.json` keeps the benchmark's own `task_<nnnn>/<level>` name.",
         "",
     ]
+    if any(label.startswith("jar/gate03_") for label in runs):
+        lines += [
+            "`jar/gate03_native/seed<s>` and `jar/gate03_retry/seed<s>` are the todo 3 retry gate (instance I, 23 October",
+            "2026): the six development tasks (0, 3, 6, 9, 15, 17) at policy seeds 100 to 115, the native arm through a",
+            "byte-identical pass-through proxy and the retry arm through the retry-on-stall supervisor proxy",
+            "(`scripts/todo3/supervisor_proxy.py`, defaults in `receipts/03/03-plan.json`). Same checkpoint, evaluator,",
+            "config and scoring; they are not part of the replication total.",
+            "",
+        ]
     if any(re.fullmatch(r"jar/seed\d+_run\d+", label) for label in runs):
         lines += [
             "`jar/seed0_run2` and `jar/seed0_run3` are the two seed 0 repeats, run concurrently on one RTX 3090 each,",
@@ -100,7 +114,7 @@ def readme(runs):
             c["engaged"] += row.get("first_contact_step") is not None
             c["n"] += 1
         lines.append(f"| {label} | {c['safe_success']} | {c['unsafe_success']} | {c['safe_unsuccess']} | {c['unsafe_unsuccess']} | {c['invalid']} | {c['engaged']} | {c['n']} |")
-        if label.startswith("jar/"):
+        if re.fullmatch(r"jar/seed\d+", label):
             for k in tot:
                 tot[k] += c[k]
     lines.append(f"| **jar total** | {tot['safe_success']} | {tot['unsafe_success']} | {tot['safe_unsuccess']} | {tot['unsafe_unsuccess']} | {tot['invalid']} | {tot['engaged']} | {tot['n']} |")
@@ -163,6 +177,7 @@ def main() -> int:
     ap.add_argument("--repo", required=True)
     ap.add_argument("--seed", action="append", default=[], help="<seed>=<ID run dir>")
     ap.add_argument("--smoke", action="append", default=[], help="<seed>=<smoke run dir>")
+    ap.add_argument("--run", action="append", default=[], help="<prefix>=<run dir, or dir of run dirs>: staged at jar/<prefix>[/<child>]")
     ap.add_argument("--compare", type=Path, help="compare.py JSON (copied beside the receipts)")
     ap.add_argument("--stage", type=Path, required=True)
     ap.add_argument("--receipts", type=Path)
@@ -185,11 +200,24 @@ def main() -> int:
         seed, run_dir = spec_.split("=", 1)
         stage_run(Path(run_dir), stage / "smoke" / f"seed{seed}", {})
         prefixes.append(f"smoke/seed{seed}")
+    for spec_ in args.run:
+        prefix, run_dir = spec_.split("=", 1)
+        run_dir = Path(run_dir)
+        if (run_dir / "results.jsonl").is_file():
+            stage_run(run_dir, stage / "jar" / prefix, {})
+            prefixes.append(f"jar/{prefix}")
+        else:
+            for child in sorted(p for p in run_dir.iterdir() if (p / "results.jsonl").is_file()):
+                stage_run(child, stage / "jar" / prefix / child.name, {})
+                prefixes.append(f"jar/{prefix}/{child.name}")
     if args.receipts and args.receipts.is_dir():
         dest = stage / "receipts" / f"0{args.tag}"
         dest.mkdir(parents=True)
         for p in sorted(args.receipts.glob(f"0{args.tag}-*")):
-            shutil.copy2(p, dest / p.name)
+            if p.is_dir():
+                shutil.copytree(p, dest / p.name)
+            else:
+                shutil.copy2(p, dest / p.name)
         if args.compare and args.compare.is_file():
             shutil.copy2(args.compare, dest / args.compare.name)
         prefixes.append(f"receipts/0{args.tag}")
@@ -205,8 +233,9 @@ def main() -> int:
         api = HfApi()
         api.create_repo(args.repo, repo_type="dataset", private=True, exist_ok=True)
         existing = api.list_repo_files(args.repo, repo_type="dataset")
-        remote_runs = sorted({"/".join(f.split("/")[:2]) for f in existing
-                              if f.startswith(("jar/seed", "smoke/seed")) and "/".join(f.split("/")[:2]) not in prefixes})
+        remote_runs = sorted({f.rsplit("/", 1)[0] for f in existing
+                              if f.endswith("/results.jsonl") and f.startswith(("jar/", "smoke/"))
+                              and f.rsplit("/", 1)[0] not in prefixes})
         cache = stage.parent / "hf-cache"
         for prefix in remote_runs:
             runs[prefix] = collect_remote(api, args.repo, prefix, cache)
