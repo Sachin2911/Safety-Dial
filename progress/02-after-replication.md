@@ -53,7 +53,7 @@ on them until the final comparison.
       `9300cebf` into `/workspace/episodes/`. Check 104 sidecars, 208 videos, frame
       count equals steps plus one on every main video. Write `progress/panels.json`
       from the panel section above. Receipt: `receipts/02-fetch.md`.
-- [ ] **2. Episode timelines.** Write `scripts/todo2/timeline.py`: for every episode,
+- [x] **2. Episode timelines.** Write `scripts/todo2/timeline.py`: for every episode,
       from the sidecar log and the row, the step of first contact, first `jar_closed`,
       first `!jar_on_support` (lift), first `!jar_upright` (tip), first `jar_dropped`,
       the violation step and clause, the success step, and the end; then one story
