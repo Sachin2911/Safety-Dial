@@ -23,7 +23,8 @@
     "Instance E rented 2026-10-23 11:16 UTC for todo 2 (description only, one recorder-check episode). Destroy after its item 9 lands.",
     "Instance F rented 2026-10-23 11:20 UTC as a race partner for E (todo 2). Destroy the loser.",
     "Instance G (machine 54514) rented 2026-10-23 11:28 UTC as a third race entrant for todo 2; start queued by the provider. Destroy every loser.",
-    "E, F and G destroyed 2026-10-23 11:31 UTC without booting; the user chose to try RunPod for todo 2. Nothing is renting on Vast."
+    "E, F and G destroyed 2026-10-23 11:31 UTC without booting; the user chose to try RunPod for todo 2. Nothing is renting on Vast.",
+    "Instance H (Quebec, 2x RTX 3090, 580.178.04) rented 2026-10-23 15:33 UTC for stage 2; prepared with scripts/stage2/prepare_vast_host.sh."
   ],
   "instances": [
     {
@@ -187,7 +188,30 @@
       "status_note": "Create returned success false and the instance sat in cur_state stopped; a start request was answered with 'Required resources are currently unavailable, state change queued' at 11:30 UTC. Never accepted SSH (E and F stuck pulling the image for over 10 minutes, G queued for resources); all three destroyed at 11:31 UTC on the user's instruction. Todo 2 will run elsewhere.",
       "outcome": "destroyed-never-booted",
       "destroyed_utc": "2026-10-23T11:31+00:00"
+    },
+    {
+      "role": "H",
+      "instance_id": 57389741,
+      "label": "jar-stage2",
+      "offer_id": 56555128,
+      "machine_id": 123668,
+      "geolocation": "Quebec, CA",
+      "gpu": "2x RTX 3090",
+      "driver_version": "580.178.04",
+      "cpu_ram_mb_reported": 257591,
+      "cpu_cores_effective": 16.0,
+      "instance_dph_usd_with_disk": 0.5935,
+      "disk_gb": 120,
+      "ssh": {
+        "host": "ssh6.vast.ai",
+        "port": 25802,
+        "user": "root"
+      },
+      "provider_started_utc": "2026-10-23T15:33+00:00",
+      "purpose": "stage 2 host: recorder check on one episode, then the stage 2 sweep once its protocol is frozen",
+      "status_note": "Rented 2026-10-23 15:33 UTC after machine 54514 was unavailable. Driver 580.178.04 is the patch instance B ran on; the render stack is checked and the install replayed by scripts/stage2/prepare_vast_host.sh before any agent starts.",
+      "outcome": "live-host-for-stage-2"
     }
   ],
-  "active_instance_id": null
+  "active_instance_id": 57389741
 }
