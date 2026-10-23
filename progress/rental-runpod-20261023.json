@@ -1,0 +1,37 @@
+{
+  "schema": "runpod-rental-v1",
+  "recorded_utc": "2026-10-23T11:45:00+00:00",
+  "purpose": "progress/02-after-replication.md on RunPod after three Vast instances failed to boot",
+  "account_balance_usd_at_start": 12.27,
+  "pods": [
+    {
+      "role": "P",
+      "pod_id": "f1o65q3iygv372",
+      "name": "jar-todo2",
+      "cloud": "SECURE",
+      "gpu": "NVIDIA A40 48 GB",
+      "gpu_count": 1,
+      "image": "runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04",
+      "volume_gb": 150,
+      "volume_mount": "/workspace",
+      "container_disk_gb": 40,
+      "public_ip": true,
+      "listed_gpu_price_usd_per_hr": 0.59,
+      "created_utc": "2026-10-23T11:43+00:00",
+      "env_keys": [
+        "HF_TOKEN",
+        "GITHUB_TOKEN",
+        "HF_NAMESPACE",
+        "GIT_AUTHOR_NAME",
+        "GIT_AUTHOR_EMAIL",
+        "RUNPOD_API_KEY"
+      ],
+      "status_note": "RTX 3090, A5000, A6000 and A40 had no stock under strict constraints; created on the secure cloud with relaxed constraints (4 vCPU, 16 GB RAM minimums, no bandwidth floor).",
+      "outcome": "live-host-for-todo-2"
+    }
+  ],
+  "notes": [
+    "Keys live in the pod environment, set at creation; never printed or committed.",
+    "The agent stops the pod with scripts/todo2/stop_pod.py after item 9; the reviewer terminates it after verifying the upload."
+  ]
+}

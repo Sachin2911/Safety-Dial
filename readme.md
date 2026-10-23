@@ -43,6 +43,25 @@ Everything completed before 22 October 2026 is preserved unchanged under
 - [Legacy archive](archive/legacy/): Push-T Safe CEM, Hopper and Walker locomotion,
   LeWM experience study and Walker evolutionary studies.
 
+## Setup on RunPod
+
+Todo 2 runs on RunPod. Create a pod from `runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04`
+with one 24 GB or larger RTX-class GPU, a volume at `/workspace`, port 22 exposed, and
+the project keys (`HF_TOKEN`, `GITHUB_TOKEN`, `HF_NAMESPACE`, `GIT_AUTHOR_NAME`,
+`GIT_AUTHOR_EMAIL`, `RUNPOD_API_KEY`) in its environment; the workstation does this
+with the RunPod SDK and the key in the ignored `.env`, and records the pod in
+`progress/rental-runpod-<date>.json`. Then, from the workstation:
+
+```bash
+ssh -p <port> root@<pod ip> 'bash -s' < scripts/todo2/bootstrap_pod.sh
+ssh -p <port> -t root@<pod ip> tmux attach -t jar
+```
+
+The bootstrap installs Claude Code, clones this repository under `/workspace`, checks
+the GPU and render libraries, and leaves `claude` running in a `jar` tmux session.
+Attach, sign in, paste the goal prompt. The agent ends by stopping the pod with
+`scripts/todo2/stop_pod.py`; the pod is terminated from the account after review.
+
 ## Setup on Vast
 
 No instance is running. To run the next checklist, rent an RTX 3090 or 4090 host on

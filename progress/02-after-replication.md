@@ -19,13 +19,16 @@ machine), `jar/seed1`, `jar/seed2`; task folders `<n>_<outcome>` with `base_main
 `progress/receipts/01-runs/<run>/results.jsonl`. Published and measured rates:
 [Jar replication and noise floor](../docs/research/research_notes/Jar%20replication%20and%20noise%20floor.md).
 
-Host: one RTX 3090 on driver 580.178.04 with 200 GB disk, either Vast instance 57363241
-(E) or 57363756 (F), whichever came up first ([rental record](rental-20261022.json));
-the instance's own id is `$CONTAINER_ID` in its environment. Work under `/workspace`.
-`HF_TOKEN` and `GITHUB_TOKEN` are in the environment; never print or commit them.
-Only item 7 needs the GPU and the full ManiGuard install; items 1 to 6 need Python
-with `huggingface_hub`, `opencv-python-headless`, `numpy`, `pandas`, `matplotlib` in
-`/venv/main`.
+Host: RunPod pod `f1o65q3iygv372` (secure cloud, one A40 48 GB, image
+`runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04`, 150 GB volume at
+`/workspace`); its id is `$RUNPOD_POD_ID` in the environment
+([rental record](rental-runpod-20261023.json)). Work under `/workspace`. `HF_TOKEN`,
+`GITHUB_TOKEN` and `RUNPOD_API_KEY` are in the environment; never print or commit them.
+Only item 7 needs the GPU and the full ManiGuard install; items 1 to 6 need the image's
+`python3` with `huggingface_hub`, `opencv-python-headless`, `numpy`, `pandas`,
+`matplotlib` (`pip install`). This is not the Vast image: there is no `/venv/main`, no
+`/opt/miniforge3` and no `/opt/instance-tools`; install Miniforge under
+`/workspace/miniforge3` when item 7 needs conda.
 
 ## Panels (frozen now, by rule, before any further looking)
 
@@ -103,11 +106,18 @@ on them until the final comparison.
       those per step to one `.npz` per episode without touching scoring, and write
       `scripts/todo2/record_rollout.py` or the patch for it. Any change to upstream
       files is kept as a diff under `receipts/02-logging.diff`.
-- [ ] **7. Validate the recorder on one real episode.** Replay the install from
-      `receipts/01b-install.md` and `01-sources.json` at the pinned revisions (about
-      45 minutes; run `ldconfig -p` for OptiX, EGL, GL and Vulkan first and repair
-      with `/opt/instance-tools/bin/install-display-drivers` if missing; the NVIDIA
-      EGL vendor fix is in `scripts/todo1b/run_smoke_lane.sh`). Start one policy
+- [ ] **7. Validate the recorder on one real episode.** First check the renderer can
+      run in this container: `ldconfig -p | grep -E 'libnvoptix|libEGL_nvidia|libnvidia-rtcore|libGLX_nvidia'`
+      and the Vulkan ICD under `/usr/share/vulkan/icd.d` or `/etc/vulkan/icd.d`. If
+      OptiX or EGL are missing, write what is missing to `receipts/02-host.md`, push,
+      and skip to item 8 (the recorder is then validated on the next Vast rental);
+      do not try to install display drivers in the container. Otherwise replay the
+      install from `receipts/01b-install.md` and `01-sources.json` at the pinned
+      revisions (about 45 minutes) with Miniforge under `/workspace/miniforge3` and
+      `CONDA_ENVS_PATH=/workspace/miniforge3/envs`; the Vast-only steps there
+      (`/opt/instance-tools`, `/venv/main`) do not apply, and the NVIDIA EGL vendor fix
+      in `scripts/todo1b/run_smoke_lane.sh` is needed only if GLVND dispatches to Mesa.
+      Start one policy
       server, warm it with `scripts/todo1/probe_server.py`, and run `task_0000/base`
       at seed 0 once with the recorder on and the config in `receipts/01-jar-eval.yaml`,
       tagged `smoke`. Check the `.npz` has one entry per step with the fields above,
@@ -127,10 +137,10 @@ on them until the final comparison.
       (own `path_in_repo`, nothing else touched) and record the revision in
       `receipts/02-preserve.md`. Commit, pull with rebase, push, confirm
       `git rev-parse HEAD` equals `origin/main`, confirm `nvidia-smi` shows no compute
-      process, then run `python -I scripts/todo1c/stop_instance.py --instance "$CONTAINER_ID"
-      --receipt progress/receipts/02-preserve.md --dry-run` and, when every guard
-      passes, the same without `--dry-run`. That is the last action; the instance is
-      unreachable once stopped and the reviewer destroys it afterwards.
+      process, then run `python -I scripts/todo2/stop_pod.py --receipt
+      progress/receipts/02-preserve.md --dry-run` and, when every guard passes, the
+      same without `--dry-run`. That is the last action; the pod is unreachable once
+      stopped and the reviewer terminates it afterwards.
 
 ## Rules
 
@@ -142,4 +152,4 @@ on them until the final comparison.
   reviewer writes the Odyssey entry.
 - Commit small and often with the prefix `todo2:`; push after each item.
 
-Budget: about five hours of work, one 45-minute install, one or two episodes, roughly $3.
+Budget: about five hours of work, one 45-minute install, one or two episodes, roughly $4 at $0.59/h.
