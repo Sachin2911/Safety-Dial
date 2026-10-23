@@ -49,7 +49,7 @@ Connect, install Claude Code, clone and start the agent inside tmux so it surviv
 disconnects (`Ctrl-b d` detaches, `tmux attach -t jar` reconnects):
 
 ```bash
-ssh -p 25641 root@ssh7.vast.ai
+ssh -p 27240 root@ssh4.vast.ai
 source /opt/nvm/nvm.sh && npm install -g @anthropic-ai/claude-code
 cd /workspace && git clone https://github.com/Sachin2911/Safety-Dial.git && cd Safety-Dial
 tmux new -s jar
@@ -57,11 +57,12 @@ claude
 ```
 
 Sign in when prompted, then paste the contents of
-[progress/goal-prompt-01.md](progress/goal-prompt-01.md) (instance B, seed 0) or
-[progress/goal-prompt-01b.md](progress/goal-prompt-01b.md) (instance C, `ssh -p 32871
-root@ssh3.vast.ai`, seeds 1 and 2 on two GPUs). It works through
-[progress/01-replication.md](progress/01-replication.md) and commits evidence under
-`progress/`.
+[progress/goal-prompt-01c.md](progress/goal-prompt-01c.md) (instance D, seed 0 twice on
+two GPUs, checklist [progress/01c-seed0-rerun.md](progress/01c-seed0-rerun.md)). The
+earlier prompts, [goal-prompt-01.md](progress/goal-prompt-01.md) (instance B, seed 0)
+and [goal-prompt-01b.md](progress/goal-prompt-01b.md) (instance C, seeds 1 and 2), are
+kept for the record; those instances are destroyed. The agent works through its
+checklist and commits evidence under `progress/`.
 
 Earlier Vast templates, rental records and setup scripts are preserved under
 [archive/20261022/configs/vast](archive/20261022/configs/vast/) and
