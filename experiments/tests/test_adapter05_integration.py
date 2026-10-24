@@ -61,6 +61,9 @@ def fixture_recording(tmp_path, monkeypatch, mode):
     raw = chunks[np.arange(n) // 8, np.arange(n) % 8]
     corrected = []
     for step, command in enumerate(raw):
+        if step % 8 == 0:
+            runtime.emit("query_attempt", step=step)
+            runtime.emit("query_returned", step=step)
         robot.step = step
         command = command.copy()
         command[-1] = np.sign(command[-1]) if abs(command[-1]) > 0.01 else -1.0

@@ -22,7 +22,7 @@ done
 python3 - <<'PYVERIFY'
 import hashlib, json, os
 from pathlib import Path
-plan = json.loads(Path('progress/receipts/05-adapter-plan.json').read_text())
+plan = json.loads(Path('progress/receipts/05-adapter-plan-v2.json').read_text())
 rental = json.loads(Path('progress/rental-adapter05-20261024.json').read_text())
 assert os.environ.get('CONTAINER_ID') == str(rental['instance_id']), 'Wrong rental'
 for name, expected in plan['source_sha256'].items():
@@ -64,7 +64,7 @@ for path in Path('outputs/adapter05/environment').glob('*-provenance.json'):
     print(path.name, source['revision'], source['n_files'])
 PY
 tar -czf "$OUT/source/executed-source-$STAGE.tar.gz" experiments scripts \
-    progress/05-execution-adapter.md progress/receipts/05-adapter-plan.json \
+    progress/05-execution-adapter.md progress/receipts/05-adapter-plan-v2.json \
     progress/receipts/01-jar-eval.yaml progress/receipts/01-sources.json \
     progress/rental-adapter05-20261024.json
 
@@ -89,10 +89,10 @@ for port in (8000, 8001):
                 raise SystemExit('Policy server did not become ready')
             time.sleep(5)
 PY
-timeout 900 "$OPENPI" -u -I scripts/todo1/probe_server.py --port 8000 --queries 1 \
+timeout 900 "$OPENPI" -u -I experiments/scripts/probe_adapter05.py --port 8000 --queries 1 \
     > "$LOGS/probe0.log" 2>&1 & p0=$!
-timeout 900 "$OPENPI" -u -I scripts/todo1/probe_server.py --port 8001 --queries 1 \
+timeout 900 "$OPENPI" -u -I experiments/scripts/probe_adapter05.py --port 8001 --queries 1 \
     > "$LOGS/probe1.log" 2>&1 & p1=$!
 wait "$p0"
 wait "$p1"
-"$BEHAVIOR" -u experiments/scripts/run_adapter05.py --stage "$STAGE" > "$LOGS/queue.log" 2>&1
+"$BEHAVIOR" -u experiments/scripts/run_adapter05.py --stage "$STAGE" --plan progress/receipts/05-adapter-plan-v2.json > "$LOGS/queue.log" 2>&1

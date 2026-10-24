@@ -27,6 +27,14 @@ EDITS = (
         "                    action_adapter.warmup_after()\n",
     ),
     (
+        "                chunk = query_policy(policy, obs, client_type, cfg)\n",
+        "                if action_adapter is not None:\n"
+        "                    action_adapter.emit('query_attempt', step=step_idx)\n"
+        "                chunk = query_policy(policy, obs, client_type, cfg)\n"
+        "                if action_adapter is not None:\n"
+        "                    action_adapter.emit('query_returned', step=step_idx)\n",
+    ),
+    (
         '                    _record_action_finiteness(rollout_diagnostics, ctrl_action, "controller")\n',
         "                    if action_adapter is not None:\n"
         "                        ctrl_action = action_adapter.apply(step_idx, ctrl_action)\n"

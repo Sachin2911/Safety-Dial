@@ -110,7 +110,7 @@ class Check:
                 [
                     str(ROOT / "third_party/openpi/.venv/bin/python"),
                     "-I",
-                    str(ROOT / "scripts/todo1/probe_server.py"),
+                    str(ROOT / "experiments/scripts/probe_adapter05.py"),
                     "--port",
                     str(8000 + lane),
                     "--queries",

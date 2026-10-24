@@ -26,6 +26,9 @@ def validate_adapter_recording(path, row_path, sidecar_path):
     if journal[-1]["event"] != "finish" or journal[-1]["result"] != result["row"]:
         raise ValueError("Adapter journal is incomplete or scoring differs")
     data, meta = load_recording(path)
+    for event in ("query_attempt", "query_returned"):
+        if [e["step"] for e in journal if e["event"] == event] != list(range(0, n, 8)):
+            raise ValueError("Adapter journal policy query count differs from the proposals")
     for key, expected in {
         "max_steps": 2000,
         "source_profile": "legacy",

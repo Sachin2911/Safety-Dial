@@ -182,7 +182,14 @@ def accounting(root):
                 "policy_commands": counts["command"],
                 "policy_returned": counts["applied"],
                 "recorded_policy_queries": sum(e["event"] == "proposal" for e in recorder),
-                "reseed_probe_queries": int(probes[-1]) if probes else None,
+                "policy_query_attempts": counts["query_attempt"],
+                "policy_query_returns": counts["query_returned"],
+                "reseed_probe_queries": (folder / "reseed.log")
+                .read_text()
+                .count("adapter05_query_attempt")
+                if (folder / "reseed.log").exists()
+                else 0,
+                "reseed_final_report": int(probes[-1]) if probes else None,
                 "truncated_journal_lines": counts["truncated_line"],
             }
         )
@@ -191,14 +198,15 @@ def accounting(root):
     for path in root.glob("logs/**/probe*.log"):
         queries = re.findall(r"model queries made by this probe: (\d+)", path.read_text())
         if queries:
-            startup_queries += int(queries[-1])
+            startup_queries += path.read_text().count("adapter05_query_attempt")
         else:
+            startup_queries += path.read_text().count("adapter05_query_attempt")
             incomplete_probes.append(str(path.relative_to(root)))
     return {
         "attempts": attempts,
         "startup_probe_queries": startup_queries,
         "incomplete_probe_logs": incomplete_probes,
-        "query_note": "Recorded proposals count returned policy calls; inspect server logs for failed calls.",
+        "query_note": "Query attempts and returns are journaled separately; interrupted calls remain charged as attempts.",
         "controls": {
             key: sum(a[key] for a in attempts)
             for key in ("warmup_attempts", "warmup_returned", "policy_commands", "policy_returned")
