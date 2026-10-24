@@ -26,7 +26,8 @@
   "E, F and G destroyed 2026-10-23 11:31 UTC without booting; the user chose to try RunPod for todo 2. Nothing is renting on Vast.",
   "Instance H (Quebec, 2x RTX 3090, 580.178.04) rented 2026-10-23 15:33 UTC for stage 2; prepared with scripts/stage2/prepare_vast_host.sh.",
   "Instance H destroyed 2026-10-23 16:39 UTC without running anything; nothing is renting. Re-preparing a fresh 580.x host takes about 30 minutes with scripts/stage2/prepare_vast_host.sh.",
-  "Instance I rented 2026-10-23T18:56+00:00 for todo 3 (retry gate); destroy after item 8's upload is verified."
+  "Instance I rented 2026-10-23T18:56+00:00 for todo 3 (retry gate); destroy after item 8's upload is verified.",
+  "Instance I (jar-todo3) destroyed 2026-10-24 after the todo 3 upload was verified. Nothing renting."
  ],
  "instances": [
   {
@@ -241,16 +242,20 @@
    },
    "provider_started_utc": "2026-10-23T18:56+00:00",
    "purpose": "todo 3, the retry gate (progress/03-retry-gate.md): prepare with scripts/stage2/prepare_vast_host.sh, then the agent runs the checklist with progress/goal-prompt-03.md",
-   "status_note": "Rented 2026-10-23T18:56+00:00 as the cheapest two-GPU 580-driver offer with enough RAM (the only other, machine 83984, has 47 GB). Driver 580.126.09 is older than the validated 580.173.02 and 580.178.04; the prepare script's host check decides. Instance API key not recorded. Booted and verified 2026-10-23T19:00+00:00: 2x RTX 3090 580.126.09, 96 threads, 944 GB RAM, 120 GB disk; the proxy address (ssh9.vast.ai:34845) refused connections during boot, the direct address 82.178.70.10:43654 works.",
-   "outcome": "renting",
+   "status_note": "Todo 3 complete (items 1 to 8). Stopped from inside by stop_instance.py after item 8; destroyed from the account after the upload at dataset revision 44716238 was verified from the workstation (1,526 files, 2.43 GB, private).",
+   "outcome": "retry gate run: 192 of 192 jobs, no crash; retry minus native -1 pair on safe success and -1 on violations (p = 1.0 both); receipts progress/receipts/03-*.md",
    "ssh_direct": {
     "host": "82.178.70.10",
     "port": 43654,
     "user": "root"
    },
    "ssh_verified_utc": "2026-10-23T19:00+00:00",
-   "cpu_threads_reported": 96
+   "cpu_threads_reported": 96,
+   "self_stopped_utc": "2026-10-24T03:50:00Z",
+   "destroyed_utc": "2026-10-24T05:05:00Z",
+   "duration_hours_billed": 11.2,
+   "spend_usd_approx": 5.6
   }
  ],
- "active_instance_id": 57411902
+ "active_instance_id": null
 }
