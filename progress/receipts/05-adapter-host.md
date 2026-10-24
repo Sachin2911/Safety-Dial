@@ -64,3 +64,10 @@ Its queue began at 18:39:49 UTC on this same machine. The policy servers were
 restarted between stages, and all model-only startup and reseeding queries are
 charged separately from rollout queries. Neither preparation nor the pilot
 extends the original allocation deadlines.
+
+The provider's charge records were queried for the destroyed first rental at
+19:09:48 UTC. They list $0.096 in storage charges and no GPU charge, below the
+earlier conservative $0.3278 compute/storage estimate. The reported rows are in
+`05-adapter-failed-provisioning-billing.json`; the earlier estimate remains in the
+original receipt as an estimate. Final charges for the replacement are recorded
+after teardown.
