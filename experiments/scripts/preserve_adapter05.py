@@ -33,6 +33,9 @@ def stage_evidence(remote, analysis, stage):
     receipts.mkdir(parents=True)
     if analysis.exists():
         shutil.copytree(analysis, receipts / "analysis")
+    gate_evidence = ROOT / "outputs/adapter05/task4-gate-evidence"
+    if gate_evidence.exists():
+        shutil.copytree(gate_evidence, receipts / "task4-gate-evidence")
     for path in (ROOT / "progress/receipts").glob("05-adapter-*"):
         if path.is_file():
             shutil.copy2(path, receipts / path.name)

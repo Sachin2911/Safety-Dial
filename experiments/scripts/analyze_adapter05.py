@@ -239,7 +239,8 @@ def main():
         )
         metrics["correction_abs_rad"] = stats(np.abs([e["correction"] for e in commands]))
         metrics["saturated_joint_fraction"] = float(np.mean([e["saturated"] for e in commands]))
-        metrics["final_coefficients"] = commands[-1]["next_coefficients"]
+        metrics["last_applied_coefficients"] = commands[-1]["coefficients"]
+        metrics["state_after_last_update"] = commands[-1]["next_coefficients"]
         directory = args.out / folder.name
         directory.mkdir(exist_ok=True)
         title_row = {**row, "scene_name": job["arm"] + " " + row["scene_name"]}
