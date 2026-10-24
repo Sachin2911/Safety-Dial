@@ -108,4 +108,23 @@ Paired: retry minus native is $-1$ pair on safe success and $-1$ pair on violati
 \textbf{Where that points.} A stall needs a definition this policy can satisfy, the jar not moving rather than the arm not moving, and the bigger prize is the violation rate. The next knob aims there.
 
 \textbf{Where it lives.} Both arms and the receipts are in the same private dataset (\path{jar/gate03_native}, \path{jar/gate03_retry}, \path{receipts/03}). In the repository: plan, run log, scoring, identity check and frame sheets under \path{progress/receipts/03-*}; the proxy under \path{scripts/todo3/}.
+\newpage
+\section*{Task 4: Do the native commands produce the requested motion?}
+
+\textbf{Why.} Task 2 showed where failures happen, but could not tell us whether the arm fails to follow its commands or follows unhelpful commands. That distinction matters before investing in an execution adapter inspired by the literature.
+
+\textbf{What we did.} Froze twelve native episodes on development tasks 0, 3, 6, 9, 15 and 17 at seeds 300 and 301. Two GPU lanes split the work on one new Vast host, with the paper's control and rendering protocol. A passive recorder saved every proposed chunk, executed target, measured joint state, contact event, monitor trace and both camera videos. All twelve completed on their first attempt and passed alignment checks. We inspected every episode's joint plots and event frames, including successes and safe failures. No intervention or held-out task was used.
+
+\textbf{Result.} Two safe successes, two unsafe successes, four safe failures and four unsafe failures. Safe requested completion was 2/12, violations 6/12 and engagement 12/12. Eight episodes never reached the goal. These are diagnostic counts on a different host, not a new pooled benchmark rate.
+
+\textbf{What we learned.}
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Five of six violating episodes tracked closely in the two seconds ending at their first violation. Both unsafe successes carried a jar that never closed. Three safe unfinished episodes closed the lid but never grasped or lifted it. Missing continuation and poor interaction choices remain the broader explanation.
+  \item One important exception, task 6 seed 301, developed a substantial discrepancy after closure and before tipping: mean post-action joint RMS error 0.0151 rad, against 0.000102 before contact. Physical joint limits do not explain that window. The trace cannot distinguish a causal tracking fault from resistance during an already bad contact.
+  \item Large later errors often came from commands beyond joint limits. A separately labeled post-hoc source audit explains part, not all, of them. Increasing gain is not automatically the remedy. A successful episode also waited a long time after closure, so a slow interval alone is not a reliable failure detector.
+\end{itemize}
+
+\textbf{Where that points.} No general tracking deficit is established, but the contact exception keeps a bounded adapter hypothesis open. Any adapter comparison remains exploratory and must demonstrate safe completion, not just smaller tracking error. Command and continuation steering remains the stronger broader direction. We still need a working lever before an evolutionary claim.
+
+\textbf{Cost and record.} The two-lane queue took 42 minutes after setup: 20,121 policy controls, 120 warm-up controls and 2,520 model queries including four model-only probes. Every recording was copied locally and hash-checked. Receipts are \path{progress/receipts/04-tracking-*}; full evidence belongs under \path{recordings/tracking04}, \path{jar/tracking04_native} and \path{receipts/tracking04} in the private dataset. The preservation receipt records the pinned revision and final rental state.
 \end{document}
