@@ -13,7 +13,7 @@ import pytest
 from adapter05_runtime import Runtime
 from helpers.adapter05_validation import validate_adapter_recording
 from helpers.execution_adapter import AdapterConfig
-from helpers.tracking import SCORING, STATE_FIELDS
+from helpers.tracking import SCORING, STATE_FIELDS, load_recording
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -38,7 +38,7 @@ def fixture_recording(tmp_path, monkeypatch, mode):
         "controller_preset": "joint_position_raw",
         "ik_eef_to_joint": False,
         "max_steps": 2000,
-        "source_profile": "legacy",
+        "source_profile": None,
         "gripper_binarize": True,
         "camera_resolution": 256,
         "success_hold_steps": 10,
@@ -134,6 +134,19 @@ def test_hook_roundtrip_and_validator_detect_corrupted_command(tmp_path, monkeyp
     next(e for e in journal if e["event"] == "command")["q"][0] += 0.1
     journal_path.write_text("".join(json.dumps(e) + "\n" for e in journal))
     with pytest.raises(AssertionError):
+        validate_adapter_recording(*paths)
+
+
+@pytest.mark.parametrize("profile", ["high_fidelity", "missing"])
+def test_validator_rejects_wrong_or_missing_resolved_render_profile(tmp_path, monkeypatch, profile):
+    paths = fixture_recording(tmp_path, monkeypatch, "native")
+    data, meta = load_recording(paths[0])
+    if profile == "missing":
+        del meta["config"]["source_profile"]
+    else:
+        meta["config"]["source_profile"] = profile
+    np.savez_compressed(paths[0], **data, meta=json.dumps(meta))
+    with pytest.raises(ValueError, match="source_profile"):
         validate_adapter_recording(*paths)
 
 

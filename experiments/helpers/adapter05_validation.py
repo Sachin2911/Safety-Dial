@@ -31,10 +31,11 @@ def validate_adapter_recording(path, row_path, sidecar_path):
             raise ValueError("Adapter journal policy query count differs from the proposals")
     for key, expected in {
         "max_steps": 2000,
-        "source_profile": "legacy",
+        # resolve_source_config converts the YAML spelling "legacy" to None.
+        "source_profile": None,
         "gripper_binarize": True,
     }.items():
-        if meta["config"].get(key) != expected:
+        if key not in meta["config"] or meta["config"][key] != expected:
             raise ValueError(f"Unexpected evaluation contract: {key}")
     if created[0]["arm_control_idx"] != meta["arm_control_idx"]:
         raise ValueError("Adapter and recorder disagree on joint mapping")
