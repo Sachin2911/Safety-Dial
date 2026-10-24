@@ -19,7 +19,7 @@ the older experiment queues mentioned in historical comments. Workstation
 credentials were not copied to the rented host: public downloads are used for
 setup, and evidence returns over SSH for private upload from the workstation.
 
-One resource-only installation adjustment: the remote copy of
+Resource-only installation adjustment: the remote copy of
 `scripts/todo1b/install_behavior_replay.sh` adds `export MAX_JOBS=8` before
 building curobo to bound compilation memory on this host. The executed source
 archive preserves that exact copy. No evaluator or policy source is patched.
@@ -41,3 +41,20 @@ run's evidence to ignored local storage throughout execution.
 
 Preparation, execution and final preservation status are recorded separately in
 `04-tracking-run.md` and `04-tracking-preserve.md` when those stages finish.
+
+## Dependency download recovery
+
+The host's public-package connection was unusually slow. Before any simulator
+start, curobo's pip download was stopped after its pinned Git checkout had been
+preserved intact. All 43 wheel filenames already selected by pip were downloaded
+on the workstation from PyPI, checked against PyPI's SHA-256 manifest, and sent
+over SSH. The 148,811,186-byte warp-lang wheel took 23.9 seconds locally; the
+host had received about 36 MB after several minutes.
+
+`experiments/scripts/resume_behavior_tracking.sh` rechecks all wheel hashes on
+the host and installs the same curobo VCS requirement from the unchanged cached
+checkout using a process-local Git URL mapping. It then resumes the upstream
+BEHAVIOR installer with the same flags. This changes download transport, not the
+selected package versions or experiment design. The original interrupted log,
+resume log and wheel manifest are retained. No simulator start was charged for
+this installation retry.
