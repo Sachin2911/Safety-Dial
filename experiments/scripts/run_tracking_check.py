@@ -134,6 +134,9 @@ class Check:
         if len(recordings) != 1 or len(sidecars) != 1:
             raise ValueError("Completed episode is missing a unique recording or sidecar")
         result = validate_recording(recordings[0], rows[0], sidecars[0])
+        if (result["row"]["scene_name"] != f"task_{job['task']:04d}/base"
+                or result["row"]["seed"] != job["seed"]):
+            raise ValueError("Completed episode does not match its frozen job")
         (directory / "validation.json").write_text(json.dumps(result, indent=2))
         self.record("validated", **job, attempt=attempt, **result)
         return True

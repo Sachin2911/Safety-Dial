@@ -39,6 +39,13 @@ def validate_recording(path, row_path, sidecar_path):
     n = row["steps"]
     if not 0 < n <= 2000:
         raise ValueError("Invalid executed-step count")
+    if meta["action_frequency"] != 20 or len(meta["arm_control_idx"]) != 7:
+        raise ValueError("Unexpected control frequency or arm joint mapping")
+    for key, expected in {"state_mode": "joint", "controller_preset": "joint_position_raw",
+                          "ik_eef_to_joint": False, "camera_resolution": 256,
+                          "success_hold_steps": 10}.items():
+        if meta["config"].get(key) != expected:
+            raise ValueError(f"Unexpected evaluation setting: {key}")
     for key in STATE_FIELDS:
         if key not in data or len(data[key]) != n + 1:
             raise ValueError(f"{key}: expected N+1 state rows")
@@ -76,7 +83,19 @@ def validate_recording(path, row_path, sidecar_path):
         raise ValueError("Recorded propositions differ from monitor sidecar")
     if not np.array_equal([entry["step"] for entry in sidecar["log"]], data["step"]):
         raise ValueError("Monitor sidecar steps differ from recording")
-    return {"steps": n, "queries": len(data["proposal_chunk"]), "row": row,
+    journal_path = Path(path).with_suffix(".journal.jsonl")
+    if journal_path.exists():
+        journal = [json.loads(line) for line in journal_path.read_text().splitlines()]
+        applied = [entry["step"] for entry in journal if entry["event"] == "applied"]
+        proposals = [entry["step"] for entry in journal if entry["event"] == "proposal"]
+        if not np.array_equal(applied, data["exec_step"]):
+            raise ValueError("Crash-surviving journal disagrees with executed-step array")
+        if not np.array_equal(proposals, data["proposal_step"]):
+            raise ValueError("Crash-surviving journal disagrees with proposal array")
+        if journal[-1]["event"] != "finish" or journal[-1]["result"] != row:
+            raise ValueError("Journal is incomplete or records a different result")
+    return {"steps": n, "warmup_control_steps": 10,
+            "queries": len(data["proposal_chunk"]), "row": row,
             "recorder_overhead_s": meta["recorder_overhead_s"]}
 
 
