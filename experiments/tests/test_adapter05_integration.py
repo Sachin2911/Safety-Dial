@@ -158,8 +158,16 @@ def test_resume_counts_previous_starts_and_obeys_deadline(tmp_path, monkeypatch)
     plan["max_total_starts"] = 2
     plan_path, rental_path = tmp_path / "plan.json", tmp_path / "rental.json"
     plan_path.write_text(json.dumps(plan))
-    rental_path.write_text(json.dumps({"instance_id": 123, "created_utc": runner.utc()}))
+    admission = (
+        runner.dt.datetime.now(runner.dt.timezone.utc) + runner.dt.timedelta(minutes=10)
+    ).isoformat()
+    rental_path.write_text(
+        json.dumps(
+            {"instance_id": 123, "created_utc": runner.utc(), "allocation_admission_utc": admission}
+        )
+    )
     check = runner.Check(plan_path, rental_path, "engineering")
+    assert check.admission == runner.dt.datetime.fromisoformat(admission).timestamp()
     job = plan["engineering_jobs"][0]
     assert check.reserve(job, 1)
     check.queue_lock.close()

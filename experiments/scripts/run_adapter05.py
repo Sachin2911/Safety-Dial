@@ -60,6 +60,11 @@ class Check:
                 raise ValueError("Both engineering recordings must validate first")
         self.admission = dt.datetime.fromisoformat(self.rental["created_utc"]).timestamp()
         self.admission += 3600 * self.plan["job_admission_rental_hours"]
+        if self.rental.get("allocation_admission_utc"):
+            self.admission = min(
+                self.admission,
+                dt.datetime.fromisoformat(self.rental["allocation_admission_utc"]).timestamp(),
+            )
         self.record(
             "queue_start",
             stage=stage,

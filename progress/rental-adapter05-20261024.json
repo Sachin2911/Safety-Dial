@@ -1,46 +1,70 @@
 {
-  "schema": "adapter05-rental-v1",
-  "created_utc": "2026-10-24T16:56:49.018166+00:00",
-  "instance_id": 57539828,
+  "schema": "adapter05-rental-v2",
+  "created_utc": "2026-10-24T17:37:26.591023+00:00",
+  "instance_id": 57544241,
   "template_hash": "62414e8fca6befba085051de7ed36190",
   "disk_gb": 120,
-  "label": "jar-adapter05",
+  "label": "jar-adapter05b",
   "offer": {
-    "id": 54025929,
-    "machine_id": 153150,
+    "id": 49900874,
+    "machine_id": 54514,
     "gpu_name": "RTX 3090",
     "num_gpus": 2,
-    "driver_version": "580.178.04",
-    "dph_total": 0.5177777777777778,
-    "storage_cost": 0.8666666666666666,
-    "inet_down": 579.7,
-    "inet_up": 309.5,
-    "inet_down_cost": 0.015625,
-    "inet_up_cost": 0.016927083333333332,
-    "reliability": 0.9918063,
-    "geolocation": "California, US",
-    "cpu_cores_effective": 32.0,
-    "cpu_ram": 64351
+    "driver_version": "580.173.02",
+    "dph_total": 0.5755555555555556,
+    "cpu_ram": 128283,
+    "cpu_cores_effective": 20.0,
+    "reliability": 0.9984518,
+    "verification": "verified",
+    "inet_down_cost": 0.0026041666666666665,
+    "inet_up_cost": 0.005208333333333333,
+    "geolocation": "New Zealand, NZ",
+    "verified_by": "Read-only live offer query immediately preceding creation; selected storage 120 GB"
   },
-  "max_rental_hours": 6,
-  "purpose": "Execution adapter implementation, validation and 36-episode frozen pilot",
-  "status": "loading",
+  "max_rental_hours": 5.322896428611111,
+  "allocation_deadline_utc": "2026-10-24T22:56:49.018166+00:00",
+  "allocation_admission_utc": "2026-10-24T21:26:49.018166+00:00",
+  "replaces_instance": 57539828,
+  "prior_compute_storage_estimate_usd": 0.3278005704876544,
+  "purpose": "Execution adapter engineering checks and conditional 36-episode pilot; original allocation deadline retained",
+  "status": "running",
   "provider": {
-    "id": 57539828,
-    "machine_id": 153150,
-    "actual_status": "loading",
+    "id": 57544241,
+    "machine_id": 54514,
+    "actual_status": "running",
     "cur_state": "running",
     "intended_status": "running",
-    "public_ipaddr": "104.233.209.157",
-    "ports": null,
-    "ssh_host": "ssh8.vast.ai",
-    "ssh_port": 38216,
+    "public_ipaddr": "103.224.128.81",
+    "ports": {
+      "22/tcp": [
+        {
+          "HostIp": "0.0.0.0",
+          "HostPort": "18145"
+        },
+        {
+          "HostIp": "::",
+          "HostPort": "18145"
+        }
+      ],
+      "8080/tcp": [
+        {
+          "HostIp": "0.0.0.0",
+          "HostPort": "18359"
+        },
+        {
+          "HostIp": "::",
+          "HostPort": "18359"
+        }
+      ]
+    },
+    "ssh_host": "ssh5.vast.ai",
+    "ssh_port": 34804,
     "gpu_name": "RTX 3090",
     "num_gpus": 2,
-    "driver_version": "580.178.04",
-    "dph_total": 0.5177777777777778,
-    "start_date": 1792861008.5158951,
-    "label": "jar-adapter05",
-    "status_msg": "3c645031de29: Already exists"
+    "driver_version": "580.173.02",
+    "dph_total": 0.5755555555555556,
+    "start_date": 1792863446.2317662,
+    "label": "jar-adapter05b",
+    "status_msg": "success, running vastai/base-image_cuda-12.4.1-cudnn-devel-ubuntu22.04-py310-2026-09-07/jupyter"
   }
 }

@@ -30,7 +30,10 @@ def main():
         f"root@{host}:/workspace/Safety-Dial/outputs/adapter05/",
         str(dest) + "/",
     ]
-    until = dt.datetime.fromisoformat(rental["created_utc"]).timestamp() + 6 * 3600
+    until = (
+        dt.datetime.fromisoformat(rental["created_utc"]).timestamp()
+        + rental["max_rental_hours"] * 3600
+    )
     while True:
         process = subprocess.run(command, capture_output=True)
         row = {"utc": dt.datetime.now(dt.timezone.utc).isoformat(), "sync_exit": process.returncode}

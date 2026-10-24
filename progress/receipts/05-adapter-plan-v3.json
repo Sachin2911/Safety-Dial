@@ -1,0 +1,461 @@
+{
+  "schema": "adapter05-v3",
+  "frozen_utc": "2026-10-24T17:38:21.378300+00:00",
+  "protocol": "progress/05-execution-adapter.md",
+  "tasks": [
+    0,
+    3,
+    6,
+    9,
+    15,
+    17
+  ],
+  "policy_seeds": [
+    400,
+    401
+  ],
+  "arms": [
+    "native",
+    "fixed",
+    "adaptive"
+  ],
+  "family": "jar",
+  "condition": "base",
+  "max_episode_steps": 2000,
+  "action_frequency": 20,
+  "execute_horizon": 8,
+  "chunk_length": 16,
+  "camera_resolution": 256,
+  "source_profile": "legacy",
+  "goal_hold_steps": 10,
+  "max_total_starts": 40,
+  "max_replacements_per_job": 1,
+  "max_total_replacements": 2,
+  "max_policy_controls": 80000,
+  "max_explicit_warmup_controls": 400,
+  "episode_timeout_seconds": 1500,
+  "job_admission_rental_hours": 4.5,
+  "max_rental_hours": 6,
+  "offer_rate_ceiling_usd_per_hour": 0.75,
+  "maniguard_revision": "6bf4c61a1f168cc46e02eb22c41bcb51815e9726",
+  "openpi_revision": "215abfb217dbac7d5f1273282331b9b1866c0479",
+  "checkpoint_revision": "1d84eda070313a202a595e449fcf41a1a1e8a546",
+  "dataset": "Sachioster/maniguard-jar-replication-20261022",
+  "adapter_configs": {
+    "native": {
+      "mode": "native",
+      "dt": 0.05,
+      "correction_limit": 0.1,
+      "fixed_coefficients": [
+        0.2,
+        0.0,
+        0.0
+      ],
+      "learning_rates": [
+        30.0,
+        0.1,
+        0.1
+      ],
+      "coefficient_lower": [
+        0.0,
+        -0.05,
+        -0.01
+      ],
+      "coefficient_upper": [
+        0.6,
+        0.05,
+        0.01
+      ],
+      "sliding_gain": 30.0,
+      "reference_velocity_limit": 2.0,
+      "reference_acceleration_limit": 20.0
+    },
+    "fixed": {
+      "mode": "fixed",
+      "dt": 0.05,
+      "correction_limit": 0.1,
+      "fixed_coefficients": [
+        0.2,
+        0.0,
+        0.0
+      ],
+      "learning_rates": [
+        30.0,
+        0.1,
+        0.1
+      ],
+      "coefficient_lower": [
+        0.0,
+        -0.05,
+        -0.01
+      ],
+      "coefficient_upper": [
+        0.6,
+        0.05,
+        0.01
+      ],
+      "sliding_gain": 30.0,
+      "reference_velocity_limit": 2.0,
+      "reference_acceleration_limit": 20.0
+    },
+    "adaptive": {
+      "mode": "adaptive",
+      "dt": 0.05,
+      "correction_limit": 0.1,
+      "fixed_coefficients": [
+        0.2,
+        0.0,
+        0.0
+      ],
+      "learning_rates": [
+        30.0,
+        0.1,
+        0.1
+      ],
+      "coefficient_lower": [
+        0.0,
+        -0.05,
+        -0.01
+      ],
+      "coefficient_upper": [
+        0.6,
+        0.05,
+        0.01
+      ],
+      "sliding_gain": 30.0,
+      "reference_velocity_limit": 2.0,
+      "reference_acceleration_limit": 20.0
+    }
+  },
+  "engineering_jobs": [
+    {
+      "job": "e0",
+      "stage": "engineering",
+      "task": 1,
+      "seed": 390,
+      "arm": "native",
+      "preferred_lane": 0
+    },
+    {
+      "job": "e1",
+      "stage": "engineering",
+      "task": 10,
+      "seed": 391,
+      "arm": "adaptive",
+      "preferred_lane": 1
+    }
+  ],
+  "jobs": [
+    {
+      "job": "p00",
+      "stage": "pilot",
+      "task": 0,
+      "seed": 400,
+      "arm": "native",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p01",
+      "stage": "pilot",
+      "task": 0,
+      "seed": 400,
+      "arm": "fixed",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p02",
+      "stage": "pilot",
+      "task": 0,
+      "seed": 400,
+      "arm": "adaptive",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p03",
+      "stage": "pilot",
+      "task": 3,
+      "seed": 400,
+      "arm": "fixed",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p04",
+      "stage": "pilot",
+      "task": 3,
+      "seed": 400,
+      "arm": "adaptive",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p05",
+      "stage": "pilot",
+      "task": 3,
+      "seed": 400,
+      "arm": "native",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p06",
+      "stage": "pilot",
+      "task": 6,
+      "seed": 400,
+      "arm": "adaptive",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p07",
+      "stage": "pilot",
+      "task": 6,
+      "seed": 400,
+      "arm": "native",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p08",
+      "stage": "pilot",
+      "task": 6,
+      "seed": 400,
+      "arm": "fixed",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p09",
+      "stage": "pilot",
+      "task": 9,
+      "seed": 400,
+      "arm": "native",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p10",
+      "stage": "pilot",
+      "task": 9,
+      "seed": 400,
+      "arm": "fixed",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p11",
+      "stage": "pilot",
+      "task": 9,
+      "seed": 400,
+      "arm": "adaptive",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p12",
+      "stage": "pilot",
+      "task": 15,
+      "seed": 400,
+      "arm": "fixed",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p13",
+      "stage": "pilot",
+      "task": 15,
+      "seed": 400,
+      "arm": "adaptive",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p14",
+      "stage": "pilot",
+      "task": 15,
+      "seed": 400,
+      "arm": "native",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p15",
+      "stage": "pilot",
+      "task": 17,
+      "seed": 400,
+      "arm": "adaptive",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p16",
+      "stage": "pilot",
+      "task": 17,
+      "seed": 400,
+      "arm": "native",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p17",
+      "stage": "pilot",
+      "task": 17,
+      "seed": 400,
+      "arm": "fixed",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p18",
+      "stage": "pilot",
+      "task": 0,
+      "seed": 401,
+      "arm": "native",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p19",
+      "stage": "pilot",
+      "task": 0,
+      "seed": 401,
+      "arm": "fixed",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p20",
+      "stage": "pilot",
+      "task": 0,
+      "seed": 401,
+      "arm": "adaptive",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p21",
+      "stage": "pilot",
+      "task": 3,
+      "seed": 401,
+      "arm": "fixed",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p22",
+      "stage": "pilot",
+      "task": 3,
+      "seed": 401,
+      "arm": "adaptive",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p23",
+      "stage": "pilot",
+      "task": 3,
+      "seed": 401,
+      "arm": "native",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p24",
+      "stage": "pilot",
+      "task": 6,
+      "seed": 401,
+      "arm": "adaptive",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p25",
+      "stage": "pilot",
+      "task": 6,
+      "seed": 401,
+      "arm": "native",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p26",
+      "stage": "pilot",
+      "task": 6,
+      "seed": 401,
+      "arm": "fixed",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p27",
+      "stage": "pilot",
+      "task": 9,
+      "seed": 401,
+      "arm": "native",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p28",
+      "stage": "pilot",
+      "task": 9,
+      "seed": 401,
+      "arm": "fixed",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p29",
+      "stage": "pilot",
+      "task": 9,
+      "seed": 401,
+      "arm": "adaptive",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p30",
+      "stage": "pilot",
+      "task": 15,
+      "seed": 401,
+      "arm": "fixed",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p31",
+      "stage": "pilot",
+      "task": 15,
+      "seed": 401,
+      "arm": "adaptive",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p32",
+      "stage": "pilot",
+      "task": 15,
+      "seed": 401,
+      "arm": "native",
+      "preferred_lane": 0
+    },
+    {
+      "job": "p33",
+      "stage": "pilot",
+      "task": 17,
+      "seed": 401,
+      "arm": "adaptive",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p34",
+      "stage": "pilot",
+      "task": 17,
+      "seed": 401,
+      "arm": "native",
+      "preferred_lane": 1
+    },
+    {
+      "job": "p35",
+      "stage": "pilot",
+      "task": 17,
+      "seed": 401,
+      "arm": "fixed",
+      "preferred_lane": 0
+    }
+  ],
+  "source_sha256": {
+    "experiments/helpers/execution_adapter.py": "0c205db50c1c85e21e64423a353f22b6dc46a5865c4916a9b2eba48e41e7403f",
+    "experiments/helpers/adapter05_runtime.py": "c1b09e2c7fad9a8b2b57997b9ed18668619ca4e29e2380cc6d269be013567945",
+    "experiments/helpers/adapter05_validation.py": "66f35760081be1601f1ad45ea28e924a2a13cb061a74aee545990ae16091aba2",
+    "experiments/helpers/tracking.py": "6b26e4ba4c88af600629f1f3e8cb9a4bbc7ab3bc922517cbc02d8ac7c7e0c6fd",
+    "experiments/helpers/accounted_recorder.py": "d0e1817862ffd86f111232339973444d472c82f50aa4e38af688cc394261729e",
+    "scripts/todo2/record_rollout.py": "069d5cccbd0e0c7d41cd9b293e1f846219022cbd02af4d3fb2e848acfb6aa255",
+    "experiments/scripts/run_adapter05.py": "69fda0cb800a138f64e73a85863977cce7679c8ea9a7c063402c778589846be7",
+    "experiments/scripts/patch_adapter05.py": "70edfd3787240ff3a0d50e2d8683fc20c758a353d8fe5db16e8bd4fddb6c9515",
+    "experiments/scripts/launch_adapter05.sh": "d65c856952685c36469d5b6e8aead197950d2bc48e38a46caff1b4f483404adc",
+    "experiments/scripts/analyze_adapter05.py": "a73bd279ed8c83a786a4423d9e56281918ee8301b01e23f14041d0dba097bff5",
+    "experiments/scripts/analyze_tracking.py": "4db6989470678b4d4864be16f173f2735aa06101560add55f81fba75ac4ac94d",
+    "scripts/todo2/timeline.py": "4dda44add5f4f8ed7226303cd6b765edfb87e090e990ceb5883533ef375353a6",
+    "scripts/todo2/frames.py": "e41854f22377a8108549345450fc8b24933c405ae3c0aa15351895f2d13ffbfc",
+    "progress/05-execution-adapter.md": "154a9368d37191e11e2373b9d254f931e946a6976d6c1010f0f3e66b5dc1a89f",
+    "progress/receipts/01-jar-eval.yaml": "643cba4b091d6453dc439c954229dcbd7205fbf2e6b404f667c79c402d50cc23",
+    "scripts/todo1b/serve_jar_lane.sh": "85ed8fd5e62b4edafa78a6785e01bfd2423c37bfb30493e286e00001f41f03d7",
+    "scripts/todo1/probe_server.py": "890e10e80bc0a822b3761a2e104f69ae1e383625f901a4acb904d22387ec6577",
+    "experiments/scripts/probe_adapter05.py": "f44117ddf98fad79042aeae425869ad58f83eae3fd0556cdb6c61b0ba8b5fbbe"
+  },
+  "parent_plan_sha256": "ff3a688c8acd818faf5408909f6273afbdf759cdfb0bac7a7dffdae6f218f19e",
+  "amendment": "Before any simulator start: preserve the original allocation admission deadline across rental replacement; adopt the shared analysis correction excluding the first-contact transition from the pre-contact window. Controller and scored design unchanged.",
+  "parent_plan_path": "progress/receipts/05-adapter-plan-v2.json"
+}
