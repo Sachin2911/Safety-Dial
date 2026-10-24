@@ -62,7 +62,7 @@ of each retreat, and the joint-change trace at each query.
   x 2 arms = 192 jobs, ordered by seed then task with the arms alternating, dealt to
   the two lanes alternately so each lane runs both arms equally. Commit it before any
   job runs; never edit it.
-- [ ] 6. **Run the gate.** Per lane: real server on 8000/8001, proxy `off` on 9000/9001,
+- [x] 6. **Run the gate.** Per lane: real server on 8000/8001, proxy `off` on 9000/9001,
   proxy `retry` on 9100/9101. Each job is one episode through
   `scripts/todo1/eval_family_lane.sh` with `TASKS`, `SEED` and `PORT` set from the plan
   and output leaf `gate03/<arm>/seed<s>`. Full horizon, benchmark unchanged. Keep
