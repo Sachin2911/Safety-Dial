@@ -64,7 +64,9 @@ def describe(data, meta, row):
     variation = np.vstack([np.zeros((1, 7)), np.diff(target, axis=0)])
     windows = {"all": (0, n), "last_200_steps": (max(0, n - 200), n)}
     if contact is not None:
-        windows["pre_contact"] = (0, contact)
+        # Exclude the transition that creates first contact: both endpoint states
+        # must be before contact for this reference window.
+        windows["pre_contact"] = (0, max(0, contact - 1))
         windows["post_contact"] = (contact, n)
     if v is not None:
         windows["two_seconds_before_violation"] = (max(0, v - 40), v)
