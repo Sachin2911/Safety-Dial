@@ -52,8 +52,10 @@ tar -czf "$OUT/source/executed-source.tar.gz" experiments scripts \
     progress/rental-tracking04-20261024.json
 
 for lane in 0 1; do
-    tmux new-session -d -s "serve04_$lane" \
-        "cd $ROOT && GPU=$lane PORT=$((8000+lane)) bash scripts/todo1b/serve_jar_lane.sh > $LOGS/server$lane.log 2>&1"
+    if ! tmux has-session -t "serve04_$lane" 2>/dev/null; then
+        tmux new-session -d -s "serve04_$lane" \
+            "cd $ROOT && GPU=$lane PORT=$((8000+lane)) bash scripts/todo1b/serve_jar_lane.sh >> $LOGS/server$lane.log 2>&1"
+    fi
 done
 cleanup() {
     for lane in 0 1; do tmux kill-session -t "serve04_$lane" 2>/dev/null || true; done
@@ -72,11 +74,14 @@ for port in (8000, 8001):
                 raise SystemExit('Policy server did not become ready')
             time.sleep(5)
 PY
-timeout 900 "$OPENPI" -u -I scripts/todo1/probe_server.py --port 8000 --queries 1 \
-    > "$LOGS/probe0.log" 2>&1 & p0=$!
-timeout 900 "$OPENPI" -u -I scripts/todo1/probe_server.py --port 8001 --queries 1 \
-    > "$LOGS/probe1.log" 2>&1 & p1=$!
-wait "$p0"
-wait "$p1"
+while tmux has-session -t prewarm04 2>/dev/null; do sleep 5; done
+if [ ! -f "$OUT/prewarm-complete.txt" ]; then
+    timeout 900 "$OPENPI" -u -I scripts/todo1/probe_server.py --port 8000 --queries 1 \
+        > "$LOGS/probe0.log" 2>&1 & p0=$!
+    timeout 900 "$OPENPI" -u -I scripts/todo1/probe_server.py --port 8001 --queries 1 \
+        > "$LOGS/probe1.log" 2>&1 & p1=$!
+    wait "$p0"
+    wait "$p1"
+fi
 "$BEHAVIOR" -u experiments/scripts/run_tracking_check.py > "$LOGS/queue.log" 2>&1
 date -u +%FT%TZ > "$OUT/queue-complete.txt"

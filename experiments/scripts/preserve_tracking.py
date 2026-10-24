@@ -39,8 +39,16 @@ def stage_evidence(remote, analysis, stage):
     for path in [ROOT / "progress/04-tracking-check.md",
                  ROOT / "progress/rental-tracking04-20261024.json"]:
         shutil.copy2(path, receipts / path.name)
-    shutil.copytree(ROOT / "experiments", receipts / "experiments",
-                    ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+    # Other sessions can work in this checkout; preserve only this task's code.
+    code = ["helpers/tracking.py", "helpers/accounted_recorder.py", "tests/test_tracking.py",
+            "scripts/run_tracking_check.py", "scripts/tracking_watchdog.py",
+            "scripts/analyze_tracking.py", "scripts/preserve_tracking.py",
+            "scripts/sync_tracking.py", "scripts/launch_tracking.sh",
+            "scripts/prewarm_tracking.sh", "scripts/resume_behavior_tracking.sh"]
+    for rel in code:
+        dest = receipts / "experiments" / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ROOT / "experiments" / rel, dest)
     by_seed = {}
     for validated in sorted(remote.glob("episodes/*/validation.json")):
         folder = validated.parent
