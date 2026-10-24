@@ -104,6 +104,11 @@ def plot_episode(data, meta, row, metrics, directory):
     axes[1].set_ylabel("Arm step motion\nRMS across joints (rad)")
     axes[2].plot(state_time, data["jar_joint_q"], linewidth=.9, label="lid hinge")
     axes[2].set_ylabel("Lid joint angle (rad)")
+    # Keep negligible numerical jitter from looking like a lid-closing movement.
+    lid_low = min(0.0, float(np.min(data["jar_joint_q"])))
+    lid_high = max(max(x[1] for x in meta["jar_joint_limits"]),
+                   float(np.max(data["jar_joint_q"])))
+    axes[2].set_ylim(lid_low - .03, lid_high + .03)
     axes[3].plot(state_time, data["jar_pos"][:, 2] - data["jar_pos"][0, 2],
                  label="jar height change", linewidth=.9)
     axes[3].plot(state_time, np.linalg.norm(data["eef_pos"] - data["eef_pos"][0], axis=1),
@@ -112,10 +117,12 @@ def plot_episode(data, meta, row, metrics, directory):
     axes[4].plot(state_time, np.mean(data["gripper_q"], axis=1),
                  label="mean finger joint", linewidth=.9)
     axes[4].set_ylabel("Finger position (m)")
+    axes[4].set_ylim(-.002, .042)
     ax_grip = axes[4].twinx()
     ax_grip.plot(time, data["exec_clipped"][:, -1], color="gray", alpha=.4,
                  label="gripper command")
     ax_grip.set_ylabel("Command (-1 close, +1 open)")
+    ax_grip.set_ylim(-1.1, 1.1)
     for i, name in enumerate(meta["ap_names"]):
         axes[5].step(state_time, data["ap"][:, i].astype(int) * .7 + i,
                      where="post", linewidth=.9, label=name)
