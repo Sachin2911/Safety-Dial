@@ -32,6 +32,16 @@ hook. Preserve original chunks, all executed-command boundaries, joint positions
 velocities, gripper state, end-effector and jar poses, contact flags, monitor traces,
 and both camera videos. Contact and monitor information is for offline diagnosis.
 
+Implementation addendum, frozen before any simulator start: the observer is wrapped
+by `experiments/helpers/accounted_recorder.py`, which journals the same already-read
+states and action callbacks to a fresh JSONL file. It does not add simulator steps,
+render calls, state reads or action changes. This retains partial evidence and counts
+executed actions if a process exits before writing its final NPZ. Both lanes are
+managed by `experiments/scripts/run_tracking_check.py` with a shared start budget.
+Non-engagement is an outcome, not an instrumentation defect or reason to repeat.
+Account separately for the evaluator's ten hold-command warm-up steps per initialized
+episode, which precede the recording hook and the benchmark's episode step counter.
+
 Validate each completed recording against its row and monitor sidecar: N actions,
 N+1 state rows, ceil(N/8) proposals, continuous step indices, finite action and robot
 state arrays, and identical recorded scoring fields and propositions. Check each lane's
@@ -86,6 +96,11 @@ results row, attempt log and the exact protocol and source files. Write SHA-256 
 and verify uploaded files against local copies at a pinned dataset revision. Also
 download the full recordings and necessary sidecars to ignored local storage before
 destroying the instance. No recording may be discarded after being summarized.
+
+The host uses public source downloads without workstation credentials. Results are
+copied back over SSH and uploaded from the workstation to the private dataset. The
+six-hour watchdog stops the instance with its existing instance-scoped provider
+credential and leaves its disk intact if workstation-side preservation is delayed.
 
 Write `04-tracking-host.md`, `04-tracking-run.md`, `04-tracking-results.md` and
 `04-tracking-preserve.md` under `progress/receipts/`. Add a short completed-task entry
