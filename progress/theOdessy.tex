@@ -70,4 +70,42 @@ Fisher tests against the paper: $p = 0.60$ for safe success, $p = 0.76$ for viol
 \textbf{Where that points.} The lever is in execution and recovery after contact, not in the approach: a slower or shallower regrasp, a stop when a finger meets the rim, a retry when the push has stalled. The leverage note ranks three stage 2 experiments, each about 200 episodes per condition. Panels are frozen: development 0, 3, 6, 9, 15, 17; held out 2, 5, 8, 14, 16, 23, 7, 18, 12.
 
 \textbf{Where it lives.} Repository, under \texttt{progress/receipts/}: the frame sheets (\texttt{02-frames/}), the pair strips (\texttt{02-pairs/}), the timelines, sensitivity map and task notes (\texttt{02-*.md}); the same sheets are in the dataset under \texttt{analysis/02/}. The leverage note, \emph{Where the leverage is}, sits with the other research notes under \texttt{docs/research/}.
+\newpage
+\section*{Task 3: The first knob, retry when the robot stalls}
+
+\textbf{Why.} Task 2 said the lever is after contact, and that a third of the episodes end with the robot parked. The simplest fix anyone would try is a retry: if the arm has stopped moving, let go, go back to where it started, and let the policy try again. Retry also has the best track record of the cheap fixes in the literature. Before evolving anything we wanted to know whether this one knob moves safe completion at all, and whether a scripted retreat tips the jar.
+
+\textbf{What we did.}
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Built a small proxy between the simulator and the policy server. Off, it passes every byte through unchanged (checked). On, it watches the arm's joints and, if none has moved more than 0.01 rad in 4 seconds, replaces the policy's next four chunks with a scripted retreat: open the gripper, glide back to the first pose, hand control back. At most three times per episode. Policy and benchmark untouched.
+  \item Froze the plan before the first episode: the six development tasks, seeds 100 to 115, every seed once with the proxy off and once on. 192 episodes, 96 pairs, two GPUs on one Vast host, 7 hours, about \$6.
+  \item Scored safe success and violations per arm, and a paired McNemar test over the 96 pairs.
+\end{itemize}
+
+\textbf{Result.} Counts over 96 episodes per arm.
+
+\begin{center}
+\begin{tabular}{lrrrrr}
+\toprule
+ & Safe success & Unsafe success & Safe fail & Unsafe fail & Violations \\
+\midrule
+Native & 17 (18\%) & 7 & 31 & 41 & 48 (50\%) \\
+Retry & 16 (17\%) & 9 & 33 & 38 & 47 (49\%) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Paired: retry minus native is $-1$ pair on safe success and $-1$ pair on violations, $p = 1.0$ for both. The knob, as frozen, changes nothing.
+
+\textbf{What we learned.}
+\begin{itemize}\setlength\itemsep{1pt}
+  \item The retreat fired in 21 of 96 retry episodes, and none of those 21 ended in success. Their native twins succeeded six times. The mechanism itself worked: the arm went home cleanly, no jar tipped during a retreat, and the policy resumed every time. It then parked again, or tipped the jar on the second attempt (5 of the 21). Resetting the arm does not reset the situation.
+  \item It fired rarely because the stall test is wrong for this policy. A parked arm still jitters by 0.02 to 0.1 rad over 4 seconds, above our 0.01 threshold, so the detector only tripped when the gripper was pressed hard and motionless on the jar, the one stall a go-home cannot fix.
+  \item The other 75 pairs are two runs of the identical episode, because the proxy did nothing in them. They agreed on safe success 85\% of the time and on violations 64\% of the time. The simulator's renderer is not reproducible across launches, so a same-seed pair shares its layout but never its pixels. That is the noise floor every later knob has to beat, and it rules out common random numbers for the search.
+  \item Half of all episodes end in a violation, and the retreat never touched that. Stalls and tipped jars are different failures; this knob only ever addressed the first.
+\end{itemize}
+
+\textbf{Where that points.} A stall needs a definition this policy can satisfy, the jar not moving rather than the arm not moving, and the bigger prize is the violation rate. The next knob aims there.
+
+\textbf{Where it lives.} Both arms and the receipts are in the same private dataset (\path{jar/gate03_native}, \path{jar/gate03_retry}, \path{receipts/03}). In the repository: plan, run log, scoring, identity check and frame sheets under \path{progress/receipts/03-*}; the proxy under \path{scripts/todo3/}.
 \end{document}
