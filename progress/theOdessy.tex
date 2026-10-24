@@ -127,4 +127,40 @@ Paired: retry minus native is $-1$ pair on safe success and $-1$ pair on violati
 \textbf{Where that points.} No general tracking deficit is established, but the contact exception keeps a bounded adapter hypothesis open. Any adapter comparison remains exploratory and must demonstrate safe completion, not just smaller tracking error. Command and continuation steering remains the stronger broader direction. We still need a working lever before an evolutionary claim.
 
 \textbf{Cost and record.} The two-lane queue took 42 minutes after setup: 20,121 policy controls, 120 warm-up controls and 2,520 model queries including four model-only probes. Every recording was copied locally and hash-checked. Receipts are \path{progress/receipts/04-tracking-*}; full evidence belongs under \path{recordings/tracking04}, \path{jar/tracking04_native} and \path{receipts/tracking04} in the private dataset. The preservation receipt records the pinned revision and final rental state.
+
+\newpage
+\section*{Task 5: Can bounded execution feedback improve safe completion?}
+
+\textbf{Why.} Task 4 found no general tracking deficit, but one contact-related discrepancy left a narrow adapter hypothesis open. We tested a concrete controller before allocating any evolutionary search budget.
+
+\textbf{What we did.} Implemented three modes around the frozen Jar policy: exact native pass-through, fixed position-error feedback with gain 0.2, and an online adaptive correction using position error, measured velocity and reference acceleration. Corrections were bounded at 0.10 rad per arm joint; the gripper stayed native. The adaptive rule was our specified APEX-inspired discrete implementation, not verified author code or a reproduction of its stability guarantees. The controller saw no jar state or monitor propositions.
+
+Two engineering episodes checked integration. The scored panel then ran all six development tasks at seeds 400 and 401 in every arm, twelve episodes per arm, balanced across two RTX 3090 lanes on machine 54514. Every one of the 38 starts completed and validated on its first attempt. No tuning, replacements, outcome-driven repeats or held-out tasks were used. Every recording's plots and event frames were reviewed.
+
+\textbf{Result.} Counts over twelve scored episodes per arm. Violations here are the benchmark's counted violations.
+
+\begin{center}
+\begin{tabular}{lrrrrr}
+\toprule
+ & Safe success & Unsafe success & Safe fail & Unsafe fail & Violations \\
+\midrule
+Native & 1 & 1 & 6 & 4 & 5 \\
+Fixed & 1 & 0 & 8 & 3 & 3 \\
+Adaptive & 0 & 0 & 5 & 7 & 7 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Safe requested completion was 1/12, 1/12 and 0/12. Unfinished episodes were 10/12, 11/12 and 12/12; engagement was 12/12, 12/12 and 9/12. Adaptive had eight raw violations: one tipped jar was excluded by the benchmark's contact gate. That nominal safe failure is not evidence of physical safety.
+
+\textbf{What we learned.}
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Fixed and native succeeded safely on the same task but opposite seeds. Fixed's lower observed violation count did not bring a safe-completion gain. Twelve episodes per arm and six task clusters do not establish a population advantage or equivalence.
+  \item Adaptive saturated 39.4\% of joint corrections and produced about 15.5 times native's mean per-step joint motion, often starting before contact. It never registered a grasp. A bounded correction can still produce unhelpful oscillation and poor task behavior.
+  \item Four native and four fixed safe unfinished runs closed the jar without ever grasping or lifting it. Task continuation remains a substantial failure mode. A quiet interval alone is insufficient to diagnose failure: the fixed success waited about 22 seconds between closure and grasp.
+\end{itemize}
+
+\textbf{Where that points.} This preset does not establish the useful lever needed before an optimizer comparison. Do not start evolutionary search on it. Any revised controller needs a separately frozen design and evidence of improved safe completion. This result concerns our implementation and settings, not all execution adapters or the original APEX method.
+
+\textbf{Cost and record.} The scored queue took 89 minutes, with 17.5 minutes for engineering separately. Total accounting is 73,409 policy controls, 380 warm-up controls, 9,227 model-query attempts and 9,223 confirmed returns. Receipts are under \path{progress/receipts/05-adapter-*}; full evidence uses \path{recordings/adapter05}, \path{jar/adapter05_*} and \path{receipts/adapter05} in the established private dataset. The preservation receipt records verified revisions, provider charges and teardown.
 \end{document}

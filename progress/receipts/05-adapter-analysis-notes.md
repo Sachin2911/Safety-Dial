@@ -27,3 +27,10 @@ the rental. The admission receipt remains on the workstation.
 Executed engineering and pilot source archives retain the frozen v4 files.
 The final analysis source and its hashes are preserved separately with the
 results so both the actual execution and offline reporting are reproducible.
+
+A final workstation-only reporting command, `summarize_adapter05.py`, checks
+completion against the unchanged plan, validates every numerical recording field
+and video header, reconciles attempt and query ledgers, checks visual-review
+coverage and aggregates tracking statistics by recorded steps. It performs no
+simulation, tuning, exclusion or rescoring. Its source hash is included in the
+analysis-source receipt. Full video decoding remains in `analyze_adapter05.py`.
