@@ -13,14 +13,15 @@ it cannot by itself establish that a controller would improve completion.
 
 Run the native Jar policy on development tasks 0, 3, 6, 9, 15 and 17, once at each
 policy seed 300 and 301. These seeds are chosen before looking at any new outcomes.
-Twelve planned episodes, all on one host. No pool or held-out episodes. The first
-planned episode also validates the recorder and counts in the twelve.
+Twelve planned episodes, all on one host. No pool or held-out episodes. Each lane's
+first planned episode also validates its recorder and counts in the twelve. Both
+lanes start concurrently, as requested by Sachin before any new outcome.
 
 Use ManiGuard `6bf4c61`, the pinned Jar checkpoint and the task 1 legacy 256 config:
 20 Hz, eight executed actions from each sixteen-action chunk, horizon 2,000, goal
 held ten steps. No action intervention, proxy, early violation stop or park stop.
-One evaluator and one policy server per GPU. A two-GPU host has two independent lanes;
-a one-GPU host runs the same frozen jobs sequentially. Do not infer deterministic
+One evaluator and one policy server per GPU on a two-GPU host, six jobs per lane.
+Do not infer deterministic
 replay from matching seeds. Consecutive episodes on a server must have distinct
 episode seeds; reset sampling explicitly before retrying the same episode.
 
@@ -33,8 +34,9 @@ and both camera videos. Contact and monitor information is for offline diagnosis
 
 Validate each completed recording against its row and monitor sidecar: N actions,
 N+1 state rows, ceil(N/8) proposals, continuous step indices, finite action and robot
-state arrays, and identical recorded scoring fields and propositions. Check the first
-recording before starting the rest. An instrumentation defect stops the queue; retain
+state arrays, and identical recorded scoring fields and propositions. Check each lane's
+first recording before admitting further jobs on that lane. An instrumentation defect
+stops the queue; retain
 the failed attempt and document any repair before resuming.
 
 ## Accounting and stop rules
