@@ -68,7 +68,7 @@ of each retreat, and the joint-change trace at each query.
   and output leaf `gate03/<arm>/seed<s>`. Full horizon, benchmark unchanged. Keep
   `receipts/03-run.md` updated with progress and any crash (note it, rerun that job
   once, record both).
-- [ ] 7. **Score.** `receipts/03-results.md`: per task and overall, the four classes per
+- [x] 7. **Score.** `receipts/03-results.md`: per task and overall, the four classes per
   arm; safe success and violation rate with Wilson intervals; the paired table
   (native vs retry per seed and task); McNemar on safe success and on violations;
   engagement rate per arm; retreats fired per episode. One decision line: retry moves
