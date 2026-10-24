@@ -27,13 +27,15 @@ jobs. Do not inherit their protocols, gates or budgets.
    `docs/templates/`: topic, venue, concept note and document templates.
 4. `progress/`: `theOdessy.pdf`, the running log of the project with one short entry per
    finished task (LaTeX source `theOdessy.tex` beside it; add a section per task and
-   recompile with `pdflatex`), the next checklist (`03-retry-gate.md`) and its agent prompt
-   (`goal-prompt-03.md`), the rental records, and the receipts of todo 1 (one instance per
-   prefix: `01` B, `01b` C, `01c` D) and todo 2 (`02-*`). The finished todo 1 checklists
-   and prompts are in git history up to `c248194`, todo 2's up to `b98b3cf`. Instance
+   recompile with `pdflatex`), the next checklist (`04-screen.md`) and its agent prompt
+   (`goal-prompt-04.md`), the rental records, and the receipts of todo 1 (one instance per
+   prefix: `01` B, `01b` C, `01c` D), todo 2 (`02-*`) and todo 3 (`03-*`). The finished
+   todo 1 checklists and prompts are in git history up to `c248194`, todo 2's up to
+   `b98b3cf`, todo 3's up to `af888ab`. Instance
    B's seed 0 is excluded from results and kept under `progress/receipts/excluded-instance-B/`.
-   `scripts/todo1*/`: the pinned download, serving, lane, comparison, upload, rename
-   and self-stop scripts those checklists used; the paper-protocol eval config is
+   `scripts/todo1*/`, `scripts/todo2/`, `scripts/todo3/`: the pinned download, serving, lane,
+   comparison, upload, rename, self-stop, recorder and supervisor-proxy scripts those
+   checklists used; the paper-protocol eval config is
    `progress/receipts/01-jar-eval.yaml`. `configs/` does not exist yet; new Hydra
    configs go in `configs/<group>/`. The previous Vast templates, rental records and
    setup scripts are under `archive/20261022/configs/vast/` and `archive/20261022/scripts/`.
