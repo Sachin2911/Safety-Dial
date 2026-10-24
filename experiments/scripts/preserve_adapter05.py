@@ -85,7 +85,10 @@ def stage_evidence(remote, analysis, stage):
         "`jar/adapter05_engineering_<arm>/seed<seed>`. Every raw attempt, NPZ, journal, "
         "log and executed source archive is under `recordings/adapter05/raw`. "
         "Analysis and protocol are under `receipts/adapter05`. "
-        "All failed or partial attempts remain preserved.\n"
+        "All failed or partial attempts remain preserved. "
+        "After this evidence commit is verified, final teardown and preservation "
+        "receipts are added under `receipts/adapter05/completion/` in a separate "
+        "commit. This original evidence snapshot remains unchanged.\n"
     )
     manifest = {
         str(p.relative_to(stage)): {"bytes": p.stat().st_size, "sha256": digest(p)}

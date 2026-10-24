@@ -1,7 +1,7 @@
 # Task 5 offline analysis and preservation notes
 
 24 October 2026, after the engineering checks passed and the unchanged v4 pilot
-launcher was admitted. Two workstation-only reporting changes were made. Neither
+launcher was admitted. Workstation-only reporting changes were made. None
 is copied into the running instance, alters any action or changes any outcome,
 panel, seed, budget, runtime validator or admission rule.
 
@@ -11,6 +11,11 @@ while the unused adaptive state remains zero. The previous `final_coefficients`
 label reported that internal state and could be mistaken for the fixed gain.
 The new fields are `last_applied_coefficients` and `state_after_last_update`.
 This is a reporting correction, not a change to controller mathematics.
+
+Accounting also explicitly totals returned startup and reseeding queries from
+the already recorded `adapter05_query_returned` markers. Attempt counts remain
+unchanged. A startup request can be charged even when its response is lost during
+initial compilation; returned counts therefore cannot replace attempted counts.
 
 Preservation additionally includes the local task 4 gate-evidence snapshot in
 the authorized private dataset. Automatic approval review rejected sending that

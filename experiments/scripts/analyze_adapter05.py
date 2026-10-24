@@ -189,13 +189,20 @@ def accounting(root):
                 .count("adapter05_query_attempt")
                 if (folder / "reseed.log").exists()
                 else 0,
+                "reseed_probe_query_returns": (folder / "reseed.log")
+                .read_text()
+                .count("adapter05_query_returned")
+                if (folder / "reseed.log").exists()
+                else 0,
                 "reseed_final_report": int(probes[-1]) if probes else None,
                 "truncated_journal_lines": counts["truncated_line"],
             }
         )
     startup_queries = 0
+    startup_returns = 0
     incomplete_probes = []
     for path in root.glob("logs/**/probe*.log"):
+        startup_returns += path.read_text().count("adapter05_query_returned")
         queries = re.findall(r"model queries made by this probe: (\d+)", path.read_text())
         if queries:
             startup_queries += path.read_text().count("adapter05_query_attempt")
@@ -205,6 +212,7 @@ def accounting(root):
     return {
         "attempts": attempts,
         "startup_probe_queries": startup_queries,
+        "startup_probe_query_returns": startup_returns,
         "incomplete_probe_logs": incomplete_probes,
         "query_note": "Query attempts and returns are journaled separately; interrupted calls remain charged as attempts.",
         "controls": {
