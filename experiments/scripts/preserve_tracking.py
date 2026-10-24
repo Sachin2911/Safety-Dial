@@ -42,7 +42,8 @@ def stage_evidence(remote, analysis, stage):
     # Other sessions can work in this checkout; preserve only this task's code.
     code = ["helpers/tracking.py", "helpers/accounted_recorder.py", "tests/test_tracking.py",
             "scripts/run_tracking_check.py", "scripts/tracking_watchdog.py",
-            "scripts/analyze_tracking.py", "scripts/preserve_tracking.py",
+            "scripts/analyze_tracking.py", "scripts/audit_tracking_limits.py",
+            "scripts/preserve_tracking.py",
             "scripts/sync_tracking.py", "scripts/launch_tracking.sh",
             "scripts/prewarm_tracking.sh", "scripts/resume_behavior_tracking.sh"]
     for rel in code:
@@ -103,6 +104,9 @@ def main():
     from huggingface_hub import HfApi, hf_hub_download
     secrets = [v for k, v in dotenv_values(ROOT / ".env").items()
                if v and ("TOKEN" in k or "KEY" in k)]
+    vast_key = Path.home() / ".config/vastai/vast_api_key"
+    if vast_key.exists() and vast_key.read_text().strip():
+        secrets.append(vast_key.read_text().strip())
     # Refuse rather than publishing any known workstation secret in text evidence.
     for path in args.stage.rglob("*"):
         if path.is_file() and path.suffix in (".json", ".jsonl", ".log", ".txt", ".md", ".py"):

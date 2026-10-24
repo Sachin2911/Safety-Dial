@@ -60,9 +60,27 @@ source path retained in pip provenance. An installation-only change to
 of fetching its VCS URL again. The exact one-line patch is retained under the
 run source evidence; no simulator runtime, evaluator or policy file is modified.
 The upstream installer resumes with the same flags. Subsequent pip installs are
-constrained to task 3's exact package versions, excluding the certificate bundle.
-The final environment comparison records remaining differences. A parallel HTTP
+constrained to the explicit `==` version pins in task 3's package freeze, excluding
+the certificate bundle. Conda packages represented by local build URLs are not
+covered by that constraint file. The final environment comparison records remaining
+differences. A parallel HTTP
 range download completed the large wheel and passed its full SHA-256 check; the
 redundant SSH transfer was stopped. The original interrupted log,
 resume log and wheel manifest are retained. No simulator start was charged for
 this installation retry.
+
+## Final preparation checks
+
+Preparation finished at 17:40:58 UTC, about 89 minutes after setup
+began. The simulator check reported numpy 1.26.4, torch 2.6.0+cu124, OmniGibson
+3.7.2 and Spot 2.16, with both GPUs available. The OpenPI freeze is byte-identical
+to task 3's. After normalizing temporary installer directory names, the behavior
+freeze differs only in curobo's local-source provenance described above; the
+Isaac Sim wheel filenames and SHA-256 values match. The installation metadata
+patch makes ManiGuard's runtime version include a dirty-date suffix, while its
+commit and all runtime source remain pinned.
+
+Model-only warm-up was overlapped with the simulator installation. Each server
+answered two queries, four in total, with no simulator interactions. The official
+two-lane queue started at **17:41:14 UTC** after the revision, config, environment
+and download-manifest checks passed.
