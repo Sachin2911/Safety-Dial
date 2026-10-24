@@ -73,7 +73,7 @@ of each retreat, and the joint-change trace at each query.
   (native vs retry per seed and task); McNemar on safe success and on violations;
   engagement rate per arm; retreats fired per episode. One decision line: retry moves
   safe success (yes/no, p), violations rose (yes/no, p). No interpretation beyond that.
-- [ ] 8. **Preserve and stop.** Upload both arms to the private dataset
+- [x] 8. **Preserve and stop.** Upload both arms to the private dataset
   `Sachioster/maniguard-jar-replication-20261022` under `jar/gate03_native` and
   `jar/gate03_retry` with the `<n>_<outcome>` folder convention (extend
   `scripts/todo1b/upload_lanes.py` with a `--run <prefix>=<dir>` option rather than a

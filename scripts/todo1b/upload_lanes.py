@@ -206,10 +206,16 @@ def main() -> int:
         if (run_dir / "results.jsonl").is_file():
             stage_run(run_dir, stage / "jar" / prefix, {})
             prefixes.append(f"jar/{prefix}")
+            children = [(run_dir, stage / "jar" / prefix)]
         else:
+            children = []
             for child in sorted(p for p in run_dir.iterdir() if (p / "results.jsonl").is_file()):
                 stage_run(child, stage / "jar" / prefix / child.name, {})
                 prefixes.append(f"jar/{prefix}/{child.name}")
+                children.append((child, stage / "jar" / prefix / child.name))
+        for src, dest in children:   # a merged gate run keeps expected_rollouts.json inside the run dir
+            if (src / "expected_rollouts.json").is_file() and not (dest / "expected_rollouts.json").is_file():
+                shutil.copy2(src / "expected_rollouts.json", dest / "expected_rollouts.json")
     if args.receipts and args.receipts.is_dir():
         dest = stage / "receipts" / f"0{args.tag}"
         dest.mkdir(parents=True)
