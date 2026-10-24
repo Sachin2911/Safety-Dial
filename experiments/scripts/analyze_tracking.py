@@ -8,6 +8,7 @@ from pathlib import Path
 
 import matplotlib
 import numpy as np
+import cv2
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -17,6 +18,7 @@ sys.path.insert(0, str(ROOT / "experiments"))
 sys.path.insert(0, str(ROOT / "scripts/todo2"))
 from helpers.tracking import aligned_arm, events, load_recording, requested_sequence
 from timeline import story
+from frames import label
 
 
 def stats(values):
@@ -144,6 +146,37 @@ def plot_episode(data, meta, row, metrics, directory):
     plt.close(fig)
 
 
+def frame_sheet(folder, row, metrics, directory):
+    event = metrics["events"]
+    end = row["steps"]
+    contact = event["contact"] if event["contact"] is not None else 0
+    key = next(((event[name], name) for name in ("violation", "lift")
+                if event[name] is not None), (end, "end"))
+    closed = ((event["closed"], "closed") if event["closed"] is not None
+              else (min(contact + 100, end), "contact+100"))
+    columns = [(0, "start"), (contact, "contact"),
+               (min(contact + 40, end), "contact+40"), closed, key, (end, "end")]
+    strips = []
+    for camera in ("main", "wrist"):
+        path = next(folder.rglob(f"base_{camera}.mp4"))
+        cap = cv2.VideoCapture(str(path))
+        frames = {}
+        wanted = {step for step, _ in columns}
+        for step in range(end + 1):
+            ok, frame = cap.read()
+            if not ok:
+                raise ValueError(f"{path}: missing frame {step}")
+            if step in wanted:
+                frames[step] = frame
+        cap.release()
+        strips.append(np.hstack([
+            label(frames[step], [f"seed {row['seed']} {row['scene_name']} {camera}",
+                                 f"{name}: step {step}"])
+            for step, name in columns
+        ]))
+    cv2.imwrite(str(directory / "event_frames.png"), np.vstack(strips))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT / "outputs/tracking04/remote")
@@ -161,6 +194,7 @@ def main():
         directory = args.out / folder.name
         directory.mkdir(exist_ok=True)
         plot_episode(data, meta, row, metrics, directory)
+        frame_sheet(folder, row, metrics, directory)
         episode = {**job, **metrics, "row": row, "queries": validation["queries"],
                    "recorder_overhead_s": validation["recorder_overhead_s"]}
         (directory / "metrics.json").write_text(json.dumps(episode, indent=2) + "\n")
