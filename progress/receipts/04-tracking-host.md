@@ -52,9 +52,17 @@ over SSH. The 148,811,186-byte warp-lang wheel took 23.9 seconds locally; the
 host had received about 36 MB after several minutes.
 
 `experiments/scripts/resume_behavior_tracking.sh` rechecks all wheel hashes on
-the host and installs the same curobo VCS requirement from the unchanged cached
-checkout using a process-local Git URL mapping. It then resumes the upstream
-BEHAVIOR installer with the same flags. This changes download transport, not the
-selected package versions or experiment design. The original interrupted log,
+the host and builds curobo from the unchanged cached checkout at `cbaf7d32`.
+Re-cloning the partial Git object store failed because it omits historical blobs;
+the pinned working tree passed `git diff` and is built directly, with the local
+source path retained in pip provenance. An installation-only change to
+`OmniGibson/setup.py` requires the already built `nvidia-curobo==0.0.0` instead
+of fetching its VCS URL again. The exact one-line patch is retained under the
+run source evidence; no simulator runtime, evaluator or policy file is modified.
+The upstream installer resumes with the same flags. Subsequent pip installs are
+constrained to task 3's exact package versions, excluding the certificate bundle.
+The final environment comparison records remaining differences. A parallel HTTP
+range download completed the large wheel and passed its full SHA-256 check; the
+redundant SSH transfer was stopped. The original interrupted log,
 resume log and wheel manifest are retained. No simulator start was charged for
 this installation retry.

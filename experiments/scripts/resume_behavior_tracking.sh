@@ -19,14 +19,10 @@ for item in json.loads((root / 'wheel-manifest.json').read_text()):
     assert hashlib.sha256(path.read_bytes()).hexdigest() == item['sha256'], path.name
 print('All selected dependency wheel hashes verified on host', flush=True)
 PY
-# Reuse the unmodified checkout while preserving the original VCS requirement.
-# The URL mapping applies to this one pip process, not the account's Git config.
-env GIT_CONFIG_COUNT=1 \
-    GIT_CONFIG_KEY_0=url.file:///workspace/Safety-Dial/third_party/curobo-pinned/.insteadOf \
-    GIT_CONFIG_VALUE_0=https://github.com/StanfordVL/curobo \
-    python -m pip install --no-index --find-links third_party/tracking04-wheels \
-    --no-build-isolation \
-    'nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73'
+# Build directly from the verified checkout. Its partial-clone object store cannot
+# serve an ordinary second clone; keep the local source path explicit in provenance.
+python -m pip install --no-index --find-links third_party/tracking04-wheels \
+    --no-build-isolation ./third_party/curobo-pinned
 cd third_party/ManiGuard/behavior-1k
 ./setup.sh --omnigibson --bddl --joylo --dataset --eval --primitives \
     --accept-conda-tos --accept-nvidia-eula --accept-dataset-tos --confirm-no-conda
