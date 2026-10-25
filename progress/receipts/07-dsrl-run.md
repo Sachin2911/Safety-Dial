@@ -1,9 +1,9 @@
 # Task 7 DSRL repair run record
 
-Started 25 October 2026. Status at 10:18 UTC: all numerical and live engineering
-checks passed. Eighteen training episodes are valid, 60,000 development updates
-are complete, and the next three episodes are running with trained actor
-version 4. Evaluation has not started.
+Started 25 October 2026. Status at 10:28 UTC: all numerical and live engineering
+checks passed. Twenty-one training episodes are valid, 75,000 development updates
+are complete, and the final three episodes are starting with trained actor
+version 5. Evaluation has not started.
 All times below are UTC.
 
 The user authorized a four-GPU follow-up and persistence through recoverable
@@ -274,3 +274,10 @@ original T18, T19 and T20 workers were running. Across the first eighteen traini
 episodes there were 0/18 strict safe completions, 11/18 raw and counted violations,
 18/18 unfinished episodes, 14/18 with contact and 0/18 with grasp. These are training
 outcomes under changing actors, not a final performance comparison.
+
+At 10:23:00, T18 to T20 had valid recordings, and replay held 5,250 transitions.
+The fifth 15,000-update batch finished at 10:27:32.5. By 10:28:21, actor version 5
+was published, checkpoint `round06` was saved, and the original T21, T22 and T23
+workers had started the final collection round. Development updates totalled
+75,000, with zero interrupted rounds or failed training starts. Evaluation remains
+bound to the final episode-24 checkpoint; no intermediate checkpoint is selected.
