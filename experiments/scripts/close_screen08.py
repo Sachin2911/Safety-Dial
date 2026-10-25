@@ -47,15 +47,22 @@ def check(*, stop_compute):
         raise ValueError("Remote snapshot ownership differs from the recorded allocation")
     destination = OUT / "completed-snapshot"
     destination.mkdir(parents=True, exist_ok=True)
-    transfer = subprocess.run(
-        ["rsync", "-az", "--checksum", "--copy-dest=" + str(OUT / "remote"),
-         "--partial", "--timeout=90", "-e",
-         shlex.join(["ssh", *ssh_options(port)]),
-         f"root@{host}:{state['path']}/", str(destination) + "/"],
-        capture_output=True, text=True, timeout=1200,
-    )
-    if transfer.returncode:
-        raise RuntimeError("Terminal snapshot transfer did not complete")
+    # The live mirror contains raw files directly. Match that relative layout
+    # before copying the enclosing receipt, so rsync can reuse verified bytes.
+    for suffix in ("raw/", "receipt.json"):
+        target = destination / suffix
+        if suffix == "raw/":
+            target.mkdir(parents=True, exist_ok=True)
+        reuse = ["--copy-dest=" + str(OUT / "remote")] if suffix == "raw/" else []
+        transfer = subprocess.run(
+            ["rsync", "-az", "--checksum", *reuse, "--partial", "--timeout=90", "-e",
+             shlex.join(["ssh", *ssh_options(port)]),
+             f"root@{host}:{state['path']}/{suffix}",
+             str(target) + ("/" if suffix == "raw/" else "")],
+            capture_output=True, text=True, timeout=1200,
+        )
+        if transfer.returncode:
+            raise RuntimeError("Terminal snapshot transfer did not complete")
     receipt = verify_snapshot(destination)
     if receipt["instance_id"] != instance_id:
         raise ValueError("Local snapshot ownership differs from the recorded allocation")

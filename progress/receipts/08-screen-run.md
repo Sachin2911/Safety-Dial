@@ -175,3 +175,11 @@ confirmation-plus-preservation projection was 7,258.032 seconds, within 47,661.1
 seconds remaining to the allocation deadline. The original 24-job native/slow
 confirmation schedule at seeds 82000 and 82001 began at 11:37:45.899007. No parameter,
 task panel, seed, outcome definition or selection rule changed after screening.
+
+At 12:11:31, the terminal-copy utility was corrected to match the snapshot's `raw/`
+directory to the direct file layout of the live mirror, then copy its receipt
+separately. This permits reuse of already copied bytes. A real rsync fixture
+confirmed zero network-file transfers for matching content and an independent
+destination copy; the six preservation tests and Ruff passed. Only the workstation
+completion monitor was restarted, as PID 807652. Experiment processes, financial
+watchdogs and all 65 frozen experiment files remained unchanged.
