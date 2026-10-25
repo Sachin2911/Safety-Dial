@@ -58,3 +58,71 @@ Its transferred bytes matched. Durable session `run08` started at 09:10:21 and w
 for this live installation to complete, then runs engineering, stage A and the
 predeclared conditional confirmation. Failures retain evidence and stop admission
 for diagnosis. The financial watchdog remains independent of the queue.
+
+## Runtime handover
+
+The tested screen source and pre-outcome schedule were committed as `0198c2f`
+before any episode. BEHAVIOR installation completed at 09:28:03, the pinned
+long-finger robot asset at 09:28:08, and ManiGuard dependencies at 09:28:45.
+The base preparation finished at 09:28:49. The queued launcher then verified the
+frozen runtime and started policy session `serve08`; the independent watchdog
+remained live. Disk use at handover was 76 GB of the 160 GB allocation.
+
+The final setup marker was written at 09:28:54. The source check and exact evaluator
+patch hash passed remotely. All three startup queries returned finite 16 by 8
+float64 decoded chunks; the first took 16.4 seconds and the next two 100 and 117 ms.
+The engineering queue started at 09:29:43.646950 and dispatched its first native
+pool episode, task 1 seed 80000, at 09:29:43.932660 after one counted reseed query.
+The simulator process is initializing its first scene. No outcome has yet validated.
+
+At 09:36:20 the native engineering episode validated all 2,000 controls and 250
+queries, with byte-identical command passthrough and zero modified controls. It
+finished without goal completion or raw/counted violation. Its overview and wrist
+event frames were inspected locally: the views show the jar, lid, gripper and goal
+with the expected legacy rendering, followed by the arm moving away without carrying
+the jar. This is engineering evidence on pool task 1, not a scored treatment result.
+
+At 09:38:57 the h4 engineering episode on pool task 4 also validated all 2,000
+controls, with exactly 500 queries and unchanged command values. It took 155.803
+seconds, completed without goal success and recorded a raw/counted violation.
+This checks the changed query cadence; it is not compared with the native episode
+on a different task. The slow-arm engineering episode then launched on pool task 10.
+
+All five engineering recordings subsequently validated. Each ran 2,000 policy
+controls plus ten explicit warm-up controls. Native, slow, smooth and gripwait each
+made 250 policy queries; h4 made 500. Offline replay matched every modified command.
+Slow changed 864 controls, smoothing changed 1,743, and gripwait denied 22 proposed
+closures. Native and h4 changed no command values at the action hook. All three
+action-modifying mechanisms therefore acted in their engineering episodes. These
+pool-task outcomes do not enter the sixty-episode development comparison or tune
+the frozen presets.
+
+Engineering completed at 09:45:09.474088 with five starts and no replacements.
+Stage A then began on the frozen development panel. Its first native episode,
+task 0 seed 81000, validated at 09:46:09 with 721 executed controls and 91 queries.
+The paired h4 episode launched next. The sixty-episode stage remains in progress;
+no arm selection or confirmation decision has been made. At 09:48 the active-time
+estimate was about $0.40, with the separate $2 transfer/preservation reserve retained.
+
+At 09:58:09, a remote SHA256 inventory of all five completed engineering episode
+directories matched every local copy: 75 files, 88,867,375 bytes, no missing files
+or size/hash mismatches. The inventory explicitly required engineering job IDs 0
+through 4. Its receipt is `outputs/screen08/analysis/engineering-copy-verification.json`
+and will accompany final preservation. All 65 frozen source/input hashes still
+matched locally. This verifies the engineering copies only; final whole-run local
+and private-repository verification remains required before rental-disk destruction.
+
+A separate workstation completion monitor was added after launch. It changes no
+frozen experiment files, schedules or selection rules. It requires a successful
+terminal pipeline, all 65 engineering/screening jobs, every admitted confirmation
+job, unchanged selection evidence and frozen sources, and no remaining experiment
+process before taking an immutable remote snapshot. It checks the complete local
+copy against the remote inventory before requesting a stop of this allocation.
+Private upload verification and disk destruction remain separate steps. Six focused
+tests passed, including incomplete panels, unfinished confirmation, altered evidence,
+live processes, tampered copies and incorrect instance ownership. Ruff passed.
+The additional utility source hashes are in `08-screen-preservation-tools.json`;
+all 65 experiment source hashes remained unchanged. The monitor is PID 599262.
+Its final transfer can reuse checksum-matched files from the continuous local mirror,
+then independently verifies the full immutable snapshot. The original financial
+watchdogs remain responsible for the hard cap.
