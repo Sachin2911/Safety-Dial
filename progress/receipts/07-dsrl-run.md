@@ -1,9 +1,9 @@
 # Task 7 DSRL repair run record
 
-Started 25 October 2026. Status at 10:28 UTC: all numerical and live engineering
-checks passed. Twenty-one training episodes are valid, 75,000 development updates
-are complete, and the final three episodes are starting with trained actor
-version 5. Evaluation has not started.
+Started 25 October 2026. Status at 10:58 UTC: all numerical and live engineering
+checks passed. All 24 training episodes are valid and 90,000 development updates
+are complete. The final actor is version 6 and its checkpoint/export integrity
+audit passed. Eight of 48 evaluations are valid and the next four are running.
 All times below are UTC.
 
 The user authorized a four-GPU follow-up and persistence through recoverable
@@ -314,3 +314,16 @@ The next four workers started at 10:49:45 to 10:49:47. At 10:56:24 they remained
 live at 1,440 to 1,552 controls; four of 48 evaluations were complete, with none
 invalid. The original pilot coordinator and version-6 CPU evaluation actor were
 alive. No further learning or checkpoint selection is scheduled.
+
+At 10:58:51, the second block was complete and valid, bringing evaluation to 8/48.
+The original V02 workers were live and no episode had failed or been replaced.
+
+A descriptive audit of all 24 training recordings reverified their source-query
+and recording hashes. Only 114/6,000 transitions had nonzero reward: three positive
+shaping rewards and 111 negative shaping rewards, across T03, T09 and T11. No
+transition had a nonzero completion reward. The other 21 episodes had entirely
+zero rewards. The discounted shaping return reconciled with zero base return up
+to floating-point error, as required by the frozen potential-shaping identity.
+This establishes limited observed training signal, not a causal attribution of
+the final outcome. The audits are `outputs/dsrl07/control/training-descriptive.json`
+and `training-signal-audit.json`; they do not change reward, training or evaluation.
