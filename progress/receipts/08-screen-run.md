@@ -5,8 +5,9 @@ Protocol: `progress/08-knob-screen.md`. All times below are UTC. The agent impos
 a separate $10 ceiling. No DSRL allocation, result or budget was changed.
 
 Current status: all 89 episodes and the final analysis are complete. Confirmation
-did not reproduce the screening completion gain. Compute is stopped after full
-local hash verification; private preservation and disk cleanup are being finalized.
+did not reproduce the screening completion gain. All 1,975 private primary files
+passed pinned-revision hash verification. The rental is destroyed and provider
+absence is verified. Posted charges are $1.801; the conservative estimate is $2.28.
 See [results](08-screen-results.md) and [completion receipts](08-screen-completion/README.md).
 
 ## Preparation freeze and rental
@@ -14,7 +15,8 @@ See [results](08-screen-results.md) and [completion receipts](08-screen-completi
 The preparation-only freeze contains 44 source/input files, SHA256
 `f302c5aa8fd4eb745d0c4423292d5c635a36c53794b44e8d88118d98ae064a67`.
 Financial ceiling and single-allocation checks, Python compilation and shell syntax
-passed before rental. The full simulator-source and job freeze is still required.
+passed before rental. At that preparation point, the full simulator-source and job
+freeze was still required.
 Two checks for offer 53960914 found it unavailable before any create was dispatched;
 no reservation or charge resulted. A fresh selection made one actual create request.
 
@@ -221,3 +223,22 @@ unestablished. Results, classes, per-task/per-seed breakdowns and limitations ar
 `08-screen-results.md`; the complete machine-readable analysis retains both stages
 separately. The final audit utility is post-launch verification code, recorded in
 `08-screen-analysis-source.json`; it does not change frozen scoring or selection.
+
+## Private preservation, teardown and billing
+
+All 1,975 staged files, 2,066,364,766 bytes including the manifest, were downloaded
+from private dataset revision `d0ed1e9fc908f00d22bfee347b4a2e58ab2e6c13` and matched
+their SHA256 hashes. The package includes 89 raw action recordings and journals,
+89 sidecars, both camera videos for every episode, 19 canonical run indexes,
+frozen sources and the separate-stage analysis. Local verification was repeated
+before the destruction guard admitted cleanup.
+
+Instance 57639938 was destroyed after approximately 34.55 minutes of stopped-disk
+retention. A fresh validated provider instance list confirmed absence. No other
+study's allocation was changed. The provider's 13:01:34 billing snapshot is $1.801
+across GPU, storage, download and upload charges. The conservative quote estimate
+is $2.27423, retaining the full transfer envelope and two hours of stopped disk,
+within the separate $10 cap. Provider charges can receive final adjustments.
+The [completion receipts](08-screen-completion/README.md) preserve the exact
+verification, teardown and billing proofs. The Odyssey has one task-8 entry,
+compiled with pdflatex and visually checked.
