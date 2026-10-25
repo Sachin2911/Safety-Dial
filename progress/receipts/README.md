@@ -13,6 +13,7 @@ Use the [progress index](../README.md) to find the next approved work.
 | 5 | [Executed plan v4](05-adapter-plan-v4.json), [results](05-adapter-results.md), [preservation](05-adapter-preserve.md), [completion verification](05-adapter-completion-verification.json), [billing](05-adapter-billing.json) |
 | 6 | [Result](06-dsrl-results.md), [run](06-dsrl-run.md), [executed source v4](06-dsrl-stage-a-v4.json), [decoder audit](06-dsrl-decoder-audit.md), [learner audit](06-dsrl-learner-runtime.md), [independent accounting](06-dsrl-independent-audit.json), [completion](06-dsrl-completion/README.md) |
 | 7, in progress | [Run](07-dsrl-run.md), [current source v3](07-dsrl-stage-a-v3.json), [validation repair](07-dsrl-validation-repair.md), [timing repair](07-dsrl-timing-repair.md), [analysis source](07-dsrl-analysis-source.json), [historical financial charges](07-dsrl-financial-history.json) |
+| 8, in progress | [Protocol](../08-knob-screen.md), [frozen source and schedule](08-screen-plan.json), [run](08-screen-run.md), [completion-copy utilities](08-screen-preservation-tools.json) |
 
 For task 5, `05-adapter-plan.json`, `05-adapter-plan-v2.json` and
 `05-adapter-plan-v3.json` precede the executed v4 plan. Read the three amendment

@@ -126,3 +126,14 @@ all 65 experiment source hashes remained unchanged. The monitor is PID 599262.
 Its final transfer can reuse checksum-matched files from the continuous local mirror,
 then independently verifies the full immutable snapshot. The original financial
 watchdogs remain responsible for the hard cap.
+
+The background copy begun at 10:19:33 exceeded its 180-second process window and
+returned unsuccessfully at 10:22:38. The experiment continued normally. A separate
+preservation-only copier, `mirror_screen08.py`, now permits 900 seconds per batch,
+retains partial transfers and waits for an existing copy before starting another.
+Only the original workstation copying supervisor was stopped. No simulator or policy
+process was restarted, no episode was replaced, and all 65 frozen experiment hashes
+still matched. The replacement copier is PID 635447; its I/O counters and additional
+local validation reports confirmed data was moving. Successful completion of the
+longer copy remains to be verified. Its source is included in the preservation-tools
+receipt, with lint and Python compilation passing.
