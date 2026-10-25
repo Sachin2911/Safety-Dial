@@ -411,6 +411,7 @@ class Coordinator:
     output_relative = "outputs/dsrl06"
     learner_service_relative = "experiments/scripts/dsrl06_learner_service.py"
     verify_plan = staticmethod(verify_plan)
+    validate_amendment = staticmethod(validate_amendment)
 
     def __init__(self, root, plan_path, rental_path, stage, *, repair_receipt=None):
         self.root, self.stage = Path(root).resolve(), stage
@@ -445,7 +446,7 @@ class Coordinator:
         if stage in self.state["stages"] and self.state["stages"][stage] != digest:
             old_hash = self.state["stages"][stage]
             old = json.loads((self.output / "source-freezes" / f"{old_hash}.json").read_text())
-            validate_amendment(old, self.plan, self.repair, old_hash, digest)
+            self.validate_amendment(old, self.plan, self.repair, old_hash, digest)
         frozen_path = self.output / "source-freezes" / f"{digest}.json"
         if not frozen_path.exists():
             frozen_path.parent.mkdir(parents=True, exist_ok=True)

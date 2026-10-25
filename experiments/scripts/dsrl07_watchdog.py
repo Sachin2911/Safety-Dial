@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments"))
 from helpers.dsrl07_infra import FinancialBook, atomic_json, instances, provider_stopped, utc, vast
+from helpers.dsrl07_reallocation import remote_other_reserve
 
 
 def remote_stop(instance_id):
@@ -41,6 +42,7 @@ def main():
         rental = json.loads(args.rental.read_text())
         deadline = dt.datetime.fromisoformat(rental["allocation_deadline_utc"]).timestamp()
         instance = rental["instance_id"]
+        other_reserve = remote_other_reserve(rental)
         if os.environ.get("CONTAINER_ID") != str(instance) or not os.environ.get(
             "CONTAINER_API_KEY"
         ):
@@ -97,7 +99,7 @@ def main():
                     "active_estimate_usd": active,
                 },
             )
-            if active + max(2, cumulative_transfer) >= 14.9:
+            if active + max(other_reserve, cumulative_transfer) >= 14.9:
                 break
             time.sleep(min(args.poll, max(0, deadline - time.time())))
         output = ROOT / "outputs/dsrl07"

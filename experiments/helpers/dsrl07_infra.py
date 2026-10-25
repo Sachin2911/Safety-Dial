@@ -14,6 +14,7 @@ from helpers.dsrl06_infra import ssh_endpoint as ssh_endpoint
 from helpers.dsrl06_infra import ssh_options as ssh_options
 from helpers.dsrl06_infra import utc as utc
 from helpers.dsrl06_infra import vast as vast
+from helpers.dsrl07_reallocation import REALLOCATED_LIMITS
 
 ROOT = Path(__file__).resolve().parents[2]
 HISTORY = ROOT / "progress/receipts/07-dsrl-financial-history.json"
@@ -47,7 +48,7 @@ def stage_b_projection(episode_seconds, update_seconds, cpu_actor_seconds):
 class FinancialBook(PreviousFinancialBook):
     @staticmethod
     def limits():
-        return {**PreviousFinancialBook.limits(), "aggregate_hours": 8.0}
+        return REALLOCATED_LIMITS.copy()
 
     def __init__(self, path):
         super().__init__(path)

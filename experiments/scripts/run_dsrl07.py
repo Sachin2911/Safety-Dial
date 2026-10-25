@@ -12,6 +12,11 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments"))
 from helpers.dsrl07_infra import stage_b_projection
 from helpers.dsrl07_protocol import CAPS, decoder_comparison, frozen_jobs
+from helpers.dsrl07_reallocation import (
+    ORIGINAL_LIMITS,
+    REALLOCATED_LIMITS,
+    verify_reallocation_receipt,
+)
 from run_dsrl06 import (
     Coordinator as PreviousCoordinator,
     PendingOperation,
@@ -19,6 +24,7 @@ from run_dsrl06 import (
     sha256,
     timestamp,
     utc,
+    validate_amendment as validate_source_amendment,
 )
 
 
@@ -38,10 +44,28 @@ def verify_plan(root, path, stage):
     return plan
 
 
+def validate_amendment(old, new, receipt, old_hash, new_hash):
+    if new.get("amendment", {}).get("type") != "financial_reserve_reallocation":
+        return validate_source_amendment(old, new, receipt, old_hash, new_hash)
+    verify_reallocation_receipt(receipt, old_hash, new_hash)
+    if (
+        new.get("supersedes_sha256") != old_hash
+        or old.get("money") != ORIGINAL_LIMITS
+        or new.get("money") != REALLOCATED_LIMITS
+    ):
+        raise ValueError("Reserve reallocation must retain the authorized financial envelope")
+    permitted = {"source_sha256", "created_utc", "supersedes_sha256", "amendment", "money"}
+    if {k: v for k, v in old.items() if k not in permitted} != {
+        k: v for k, v in new.items() if k not in permitted
+    }:
+        raise ValueError("Reserve reallocation cannot change the scientific freeze")
+
+
 class Coordinator(PreviousCoordinator):
     output_relative = "outputs/dsrl07"
     learner_service_relative = "experiments/scripts/dsrl07_learner_service.py"
     verify_plan = staticmethod(verify_plan)
+    validate_amendment = staticmethod(validate_amendment)
 
     def deadline(self):
         return timestamp(self.rental["allocation_deadline_utc"]) - 1200

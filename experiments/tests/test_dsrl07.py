@@ -76,7 +76,7 @@ def test_followup_budget_imports_spending_once_and_preserves_cap(tmp_path):
     book = FinancialBook(path)
     before = book.snapshot()
     assert before["active_estimate_usd"] == pytest.approx(2.9268200771)
-    assert before["other_reserved_or_actual_usd"] == 2
+    assert before["other_reserved_or_actual_usd"] == 1.8
     assert not before["active_instances"]
     again = FinancialBook(path)
     assert len(again.data["allocations"]) == 1

@@ -1,0 +1,57 @@
+{
+  "schema": "dsrl07-reserve-reallocation-v1",
+  "created_utc": "2026-10-25T11:36:37.602810+00:00",
+  "repair": "Move $0.20 of unused non-compute reserve to active compute while retaining transfer and stopped-disk allowances and the full frozen comparison",
+  "old_freeze_sha256": "3bac6f6e66cd51e726231b4208f896b9ba7dd4c2bf530467e350a98bfc2816be",
+  "new_freeze_sha256": "0253998b168930b5ced3f5ead576625de8d87bb580ba1b3121d8244d0a4df05d",
+  "old_book_sha256": "407987e461119f36c0c37cb32e38fa17a8c023e2c8c4208246ff91998e3dacab",
+  "old_limits": {
+    "total_usd": 15.0,
+    "active_usd": 13.0,
+    "active_shutdown_usd": 12.9,
+    "other_reserve_usd": 2.0,
+    "aggregate_hours": 8.0,
+    "rate_usd_hour": 2.2
+  },
+  "new_limits": {
+    "total_usd": 15.0,
+    "active_usd": 13.2,
+    "active_shutdown_usd": 13.1,
+    "other_reserve_usd": 1.8,
+    "aggregate_hours": 8.0,
+    "rate_usd_hour": 2.2
+  },
+  "hard_cumulative_usd": 15,
+  "reserve_proof": {
+    "aggregate_transfer_estimate_usd": 1.6284594104,
+    "stopped_disk_rate_usd_hour": 0.04,
+    "stopped_disk_hours": 2,
+    "other_actual_usd": 0.0
+  },
+  "validation": {
+    "tests_passed": 209,
+    "tests_skipped": 0,
+    "ruff": "passed",
+    "format": "passed"
+  },
+  "changed_sources": {
+    "experiments/helpers/dsrl07_infra.py": "52c228378adce734be13782307a0ea10c5fa978cc070892cb14d596f1e52a4a3",
+    "experiments/helpers/dsrl07_reallocation.py": "ef01c2aadd7776e345544a6ec0fea3a89fd5daaf90e82b279963a9b25c769f0b",
+    "experiments/scripts/run_dsrl06.py": "14a067b5cdc69d288d20ab6241ef7fedb83d8e9ba957af1ec6bf19069c53cc22",
+    "experiments/scripts/run_dsrl07.py": "74b825d279d889bd7dbbb28a6850798781705700d8a2ab3acdb46697698431a2",
+    "experiments/scripts/dsrl07_watchdog.py": "d9804cbf7b0526ea4d11e9b7d90aee6d921eb1e88e58d100991b2b071e05c6bb",
+    "experiments/tests/test_dsrl07.py": "b8687cb7986edb553bb8577167e1ddb4160c3580bae05f7501e7ffc2ab4c4191",
+    "experiments/tests/test_dsrl07_reallocation.py": "d4cf05c4896fbc56ac7df0e735362e2fe12d6a8a473b025288a2fc179166771b",
+    "progress/receipts/07-dsrl-reserve-reallocation.md": "804ef5a7e821a174432c1baf6abd345168a3eca382498a62fe52030059ba1e71"
+  },
+  "prior_stage_b_preserved": true,
+  "scientific_choices_changed": false,
+  "activation_pending": true,
+  "deadline_preview": {
+    "old_allocation_deadline_utc": "2026-10-25T13:03:29.994783+00:00",
+    "new_nominal_financial_deadline_utc": "2026-10-25T13:14:59.106072+00:00",
+    "new_allocation_deadline_utc": "2026-10-25T13:09:59.106072+00:00",
+    "new_last_cached_episode_start_utc": "2026-10-25T12:24:59.106072+00:00",
+    "total_estimate_at_preview_usd": 11.866677790959873
+  }
+}

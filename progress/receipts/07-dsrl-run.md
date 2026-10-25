@@ -1,9 +1,11 @@
 # Task 7 DSRL repair run record
 
-Started 25 October 2026. Status at 10:58 UTC: all numerical and live engineering
-checks passed. All 24 training episodes are valid and 90,000 development updates
+Started 25 October 2026. Status at 11:54 UTC: all required numerical and live engineering
+admission checks passed. All 24 training episodes are valid and 90,000 development updates
 are complete. The final actor is version 6 and its checkpoint/export integrity
-audit passed. Eight of 48 evaluations are valid and the next four are running.
+audit passed. Thirty-two of 48 evaluations are valid and the next four are running.
+An operational reserve reallocation retains the cumulative $15 cap and gives the
+full comparison more admission margin; its source freeze and handover are recorded below.
 All times below are UTC.
 
 The user authorized a four-GPU follow-up and persistence through recoverable
@@ -22,7 +24,8 @@ One actual create selected instance 57632188 on physical machine
 72.0 effective CPU cores and 386687 MB RAM.
 The quoted rate including 200 GB disk is $1.850370370/hour.
 Reservation began at 2026-10-25T07:45:06.606764+00:00 and is charged from that timestamp.
-The independent stop deadline is 2026-10-25T13:03:29.994783+00:00.
+The initial independent stop deadline was 2026-10-25T13:03:29.994783+00:00;
+the recorded reserve reallocation below moves it to 13:09:59.106072 UTC.
 Task 6's active charges and full transfer/stopped-disk allowance are retained in
 the new financial ledger. No old instance or experimental queue is restarted.
 Initial SSH refusal occurred while the provider was still starting the image.
@@ -327,3 +330,55 @@ to floating-point error, as required by the frozen potential-shaping identity.
 This establishes limited observed training signal, not a causal attribution of
 the final outcome. The audits are `outputs/dsrl07/control/training-descriptive.json`
 and `training-signal-audit.json`; they do not change reward, training or evaluation.
+
+## Operational reserve reallocation
+
+The first five four-arm evaluation blocks averaged 529.224 seconds, longer than
+the 425.814-second engineering measurement. Including six seconds between groups
+projected the final start about 44 seconds beyond the original admission cutoff.
+The [reserve amendment](07-dsrl-reserve-reallocation.md) moves $0.20 of unused
+non-compute contingency to the active-compute ceiling within the same cumulative
+$15 authorization. It retains the original transfer envelope, two hours of stopped
+storage, episode timeout and 20-minute preservation reservation. The revised
+$1.80 non-compute reserve covers $1.7084594104 of those retained allowances.
+No scientific choice, interaction ceiling, episode, arm or seed changes.
+
+The amended stage-B source freeze contains 181 files, SHA256
+`0253998b168930b5ced3f5ead576625de8d87bb580ba1b3121d8244d0a4df05d`.
+All 209 DSRL checks passed with zero skips; Ruff and format checks passed.
+The [reserve proof](07-dsrl-reserve-reallocation.json) retains the original book
+and freeze hashes. The new financial deadline is 13:14:59.106072 UTC; independent
+stop requests begin at 13:09:59.106072, and the last cached episode may start by
+12:24:59.106072. The $15 total and eight-hour aggregate backstop remain binding.
+
+The local replacement watchdog, PID 751614, started at 11:40:12.459. The remote
+replacement, PID 158960, was verified before the original guard retired at
+11:42:03.785. The backup supervisor's existing transfer finished before it exited
+under the changed financial-book version. PID 759512 replaced it at 11:44:05.790
+after confirming no old DSRL mirror transfer remained.
+
+The coordinator handover completed at about 11:45. The original coordinator,
+PID 41502, was deliberately replaced after pausing it and checking its durable
+process records. Its outer receipt records `-9`, not a simulator failure.
+Replacement coordinator PID 165838 adopted the amended freeze in session
+`pilot07r1`. All four policy servers, evaluation actor PID 102888 and the original
+V07 simulator attempts retained their process identities. No simulator or learner
+was signalled. Verification at 11:48:59.855 confirmed both old coordinator/remote
+watchdog identities absent, both replacements live, zero invalid episodes,
+90,000 training updates and 150 engineering updates. Diagnostic query counts
+remain 216 probes plus 18 startup queries. Full evidence is in the
+[handover receipt](07-dsrl-reserve-handover.json).
+
+Final completion must use `pilot-coordinator-r1.exit` and worker quiescence;
+`pilot-coordinator.exit` belongs to the deliberate replacement. The original
+source snapshot, financial book, rental record and freezes are retained alongside
+the revised ones. A separate final source snapshot verified all 181 amended inputs
+without changing the shared workstation authority documents.
+
+At 11:54:13, 32/48 evaluations were valid without failed or replaced simulator
+starts, and the original V08 workers were running. The partial eight-per-arm
+results were: native 2/8 strict safe completions, 4/8 raw/count violations,
+6/8 unfinished and 8/8 contact; fixed-zero 0/8, 2/8, 8/8 and 8/8 respectively;
+random 0/8, 3/8, 8/8 and 8/8; DSRL 0/8, 3/8, 8/8 and 7/8. Native grasped in
+3/8 episodes; none of the three noise arms grasped. These remain partial
+development results, and the full frozen schedule continues.
