@@ -1,0 +1,5641 @@
+{
+  "schema": "dsrl06-decoder-offline-audit-v1",
+  "created_utc": "2026-10-25T00:25:11.296192+00:00",
+  "instance_id": 57575920,
+  "status": "experiment_stopped_invalid_authority",
+  "source_v4_sha256": "3ef7306af4645aefb9d7d1863758481adf0d11dc97ede90f44d73d8d5cca58fc",
+  "source_v4_path": "progress/receipts/06-dsrl-stage-a-v4.json",
+  "source_artifacts": {
+    "authority_result": {
+      "path": "outputs/dsrl06/remote/authority-result.json",
+      "sha256": "042579d2a264ce75becc4ce62792dcdc2185cb82e065ffc6156e05b6ebc1189b"
+    },
+    "authority_panel": {
+      "path": "outputs/dsrl06/remote/authority-panel.json",
+      "sha256": "bd102f84a7fd1f1e831680a0aab139141592792ee054ed5c92df45e3bd4cb873"
+    },
+    "independent_summary": {
+      "path": "outputs/dsrl06/remote/authority-independent-summary.json",
+      "sha256": "6ff069800d5ce60b7d2902fcad313fbfbd4cf5d07291905efd67a1c6dcef3037"
+    },
+    "candidate_vectors": {
+      "path": "outputs/dsrl06-preflight/decoder-probe-vectors.npy",
+      "sha256": "28e4a4922783accb02096cc40960ca5a671fb9accdee79c986637b8096eb5bf6"
+    },
+    "probe_specification": {
+      "path": "progress/receipts/06-dsrl-decoder-probe.json",
+      "sha256": "05ac010c69b48999ac4ba4c65cffb33dd5ad93e964ee23cd33092e11bd78db91"
+    }
+  },
+  "formal_gate": {
+    "valid": false,
+    "admit": false,
+    "snapshots": [
+      {
+        "snapshot_id": "E0:q263",
+        "task": 1,
+        "sensitive": false,
+        "sensitive_prefix_positions": [],
+        "raw_gripper_min": 0.9380898475646973,
+        "raw_gripper_max": 1.0184108018875122,
+        "command_changes_against_zero": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "command_changes_against_native": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "arm_rms_against_zero": [
+          0.0,
+          0.00090346981426799,
+          0.001020635544179345,
+          0.12093265945407433,
+          0.13634283474192907,
+          0.09147568499734224,
+          0.1626451531110069,
+          0.08092042528917036,
+          0.10464160958239094,
+          0.09129215930874367,
+          0.1447937069392609,
+          0.12308787990601996,
+          0.12749560646777527,
+          0.12442494919122528
+        ],
+        "arm_rms_against_native": [
+          0.0042269887561831474,
+          0.00394280974413526,
+          0.004821356786846588,
+          0.12282542901755278,
+          0.13564671343956758,
+          0.0919291463362294,
+          0.16176109997006216,
+          0.08218923151286056,
+          0.10408922166668559,
+          0.09232982432154471,
+          0.14648011422846377,
+          0.12199669548890266,
+          0.1293395338341289,
+          0.12319858010127344
+        ]
+      },
+      {
+        "snapshot_id": "E0:q393",
+        "task": 1,
+        "sensitive": false,
+        "sensitive_prefix_positions": [],
+        "raw_gripper_min": 0.9781209230422974,
+        "raw_gripper_max": 1.0248979330062866,
+        "command_changes_against_zero": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "command_changes_against_native": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "arm_rms_against_zero": [
+          0.0,
+          0.000641737367959413,
+          0.0008491189077556437,
+          0.03323064862488588,
+          0.04908255244653867,
+          0.032943697989638934,
+          0.06320515807053857,
+          0.035571389196799134,
+          0.030953943676868424,
+          0.08157198431630477,
+          0.035974025916336944,
+          0.049732836466056606,
+          0.029633916883106178,
+          0.04743862901008614
+        ],
+        "arm_rms_against_native": [
+          0.007229599177152328,
+          0.007115795469239167,
+          0.007410347377236504,
+          0.037862514644211934,
+          0.046297453315959185,
+          0.03568914697550823,
+          0.05885785564305133,
+          0.040938485746710426,
+          0.03531585900881892,
+          0.07819710186771879,
+          0.040496331667642264,
+          0.04568889441254583,
+          0.03431363403529427,
+          0.04349636662330501
+        ]
+      }
+    ],
+    "reason": "Native decoded replay differs from the factual chunk"
+  },
+  "formal_gate_reinterpreted": false,
+  "admit_learning": false,
+  "authority_query_ceiling_exhausted": true,
+  "counts": {
+    "authority": {
+      "reserved": 128,
+      "model_returned": 128,
+      "client_confirmed": 128,
+      "failed": 0,
+      "sends_this_invocation": 128
+    },
+    "global": {
+      "engineering_updates": 8,
+      "learner_updates": 8,
+      "learning_updates": 0,
+      "model_queries": 1140,
+      "policy_controls": 8000,
+      "replacements": 0,
+      "starts": 4,
+      "warmup_controls": 40
+    },
+    "remote_actor_calls": 0,
+    "new_queries_in_this_audit": 0,
+    "new_actor_calls_in_this_audit": 0,
+    "new_gradient_calls_in_this_audit": 0,
+    "new_simulator_controls_in_this_audit": 0,
+    "verified_saved_probe_artifacts": 128,
+    "verified_factual_artifacts": 8,
+    "verified_original_tiled_candidate_tensors": 112
+  },
+  "frozen_probe": {
+    "kind": "authority",
+    "query_ceiling": 128,
+    "panel_sha256": "bd102f84a7fd1f1e831680a0aab139141592792ee054ed5c92df45e3bd4cb873",
+    "spec_sha256": "05ac010c69b48999ac4ba4c65cffb33dd5ad93e964ee23cd33092e11bd78db91",
+    "candidate_npy_sha256": "28e4a4922783accb02096cc40960ca5a671fb9accdee79c986637b8096eb5bf6",
+    "snapshots": [
+      {
+        "task": 1,
+        "snapshot_id": "E0:q263",
+        "sha256": "4c151fde350bc17151878f66ea76939e01c360e2018c7189c1f03980c426b50f"
+      },
+      {
+        "task": 1,
+        "snapshot_id": "E0:q393",
+        "sha256": "5c3110cfdb847b4248c063e1589528ccf4cf63b9b0de790b1d5ba8a093a29c7b"
+      },
+      {
+        "task": 4,
+        "snapshot_id": "E1:q316",
+        "sha256": "a9dab639375869604d03e6559cabc602fe69c8eaa6784036d3c6c95f57cdbfd2"
+      },
+      {
+        "task": 4,
+        "snapshot_id": "E1:q459",
+        "sha256": "2e9a5b1fad867bfcf1f277ff1e8c60ae5fa386446746e28d59b1a0d2f8b4aecd"
+      },
+      {
+        "task": 10,
+        "snapshot_id": "E2:q313",
+        "sha256": "1d9464b00d0446fe7e3d60933356e793fd966bf4cae63056058f64e7ee3a33ea"
+      },
+      {
+        "task": 10,
+        "snapshot_id": "E2:q629",
+        "sha256": "df7f4b031658002f5496b0b0c09ea83bf1acdfcaab23c121cf594ff7abfb4fa8"
+      },
+      {
+        "task": 11,
+        "snapshot_id": "E3:q4",
+        "sha256": "0a893dc45801874c85cf0568ab522ddc4b2285e238527c66e78e9baaf9f2cc9c"
+      },
+      {
+        "task": 11,
+        "snapshot_id": "E3:q50",
+        "sha256": "1524d09471be7a3846d8df8d09fe636816dcce08c164154f1f5c5df191b530d2"
+      }
+    ]
+  },
+  "candidate_labels": [
+    "zero",
+    "coordinate7_plus",
+    "coordinate7_minus",
+    "all_ones",
+    "walsh_bit0_plus",
+    "walsh_bit0_minus",
+    "walsh_bit1_plus",
+    "walsh_bit1_minus",
+    "walsh_bit2_plus",
+    "walsh_bit2_minus",
+    "walsh_bit3_plus",
+    "walsh_bit3_minus",
+    "walsh_bit4_plus",
+    "walsh_bit4_minus"
+  ],
+  "identity_criterion": {
+    "atol": 1e-05,
+    "rtol": 1e-05,
+    "converted_gripper_open_if_g_gt": 0.01,
+    "official_gripper_prefix": 8,
+    "action_chunk": [
+      16,
+      8
+    ]
+  },
+  "aggregate": {
+    "native_replays": 16,
+    "native_replays_passing_allclose": 4,
+    "native_replays_failing_allclose": 12,
+    "all_16_replays_converted_gripper_prefix_equal": true,
+    "all_16_replays_converted_gripper_full_chunk_equal": true,
+    "repeat_pairs_exact_out_of_8": 8,
+    "maximum_replay_absolute_difference": 0.003130674362182617,
+    "descriptive_sensitive_snapshots": 1,
+    "descriptive_snapshot_denominator": 8,
+    "descriptive_sensitive_tasks": [
+      10
+    ],
+    "formal_minimum_snapshots": 2,
+    "formal_minimum_tasks": 2
+  },
+  "interpretation": {
+    "inference": "The lane-0 factual snapshots replay exactly in the retained lane-0 server, while six factual snapshots from lanes 1\u20133 differ from their lane-0 replays. Both repeats per saved input agree exactly. This pattern is consistent with numeric variation across policy server/GPU lanes; it does not establish the hardware, compilation or kernel cause.",
+    "limits": "The formal gate is invalid and remains closed. One of eight saved bounded candidate sets shows the frozen gripper margins, descriptively only. This is neither a valid authority pass nor evidence of absence of authority. No replay, extra direction, larger bound or interaction was added."
+  },
+  "snapshots": [
+    {
+      "snapshot_id": "E0:q263",
+      "task": 1,
+      "episode_id": "E0",
+      "factual_policy_gpu_lane": 0,
+      "probe_policy_gpu_lane": 0,
+      "factual_query_id": 263,
+      "factual_query_index": 0,
+      "factual_control_step": 0,
+      "factual_artifact_sha256": "4c151fde350bc17151878f66ea76939e01c360e2018c7189c1f03980c426b50f",
+      "factual_artifact_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/E0/query_00000263.npz",
+      "input_component_sha256": {
+        "actions": "4aebdd17ac6849a8f552b6161feaaa296d638be00848dc0e5052e9fc2ef2ea88",
+        "noise": "e3a5e314c8d21db1e2c21d09d75b2b3effc7f25c3effcf596a06bbb6442489f5",
+        "observation_image_left": "0ea76476b0a3ac8c7ffd6ef9b2a78574229a21496a9a8ce82de0a9e5ff0d8eba",
+        "observation_state": "3f9da1a68a92bc656c6afb684d52589a4fae14ee999cb837b81316cac963af8e",
+        "observation_wrist_image": "249bf6d21921c87a51b09902ae396e8839513f70a5c5e8eb636e4955f88f06c1",
+        "prompt": "b138a001a0c39437e07b359597644beb7a6fb8c98806c950734b5205bd857035"
+      },
+      "replays": [
+        {
+          "repeat": 0,
+          "query_id": 1013,
+          "full_chunk_allclose": true,
+          "full_chunk_bitwise_values_equal": true,
+          "max_absolute_difference": 0.0,
+          "rms_all_16x8": 0.0,
+          "rms_arm_prefix_8x7": 0.0,
+          "rms_arm_full_16x7": 0.0,
+          "rms_gripper_full_16": 0.0,
+          "maximum_tolerance_ratio": 0.0,
+          "elements_exceeding_tolerance": 0,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        },
+        {
+          "repeat": 1,
+          "query_id": 1014,
+          "full_chunk_allclose": true,
+          "full_chunk_bitwise_values_equal": true,
+          "max_absolute_difference": 0.0,
+          "rms_all_16x8": 0.0,
+          "rms_arm_prefix_8x7": 0.0,
+          "rms_arm_full_16x7": 0.0,
+          "rms_gripper_full_16": 0.0,
+          "maximum_tolerance_ratio": 0.0,
+          "elements_exceeding_tolerance": 0,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        }
+      ],
+      "repeat_to_repeat": {
+        "full_16x8_values_exact": true,
+        "max_absolute_difference": 0.0,
+        "rms_all_16x8": 0.0,
+        "prefix_converted_gripper_equal": true
+      },
+      "descriptive_bounded_sensitivity": {
+        "is_formal_valid_gate_result": false,
+        "sensitive": false,
+        "sensitive_prefix_positions": [],
+        "raw_prefix_gripper_min": 0.9380898475646973,
+        "raw_prefix_gripper_max": 1.0184108018875122,
+        "margin_witnesses": []
+      },
+      "candidates": [
+        {
+          "label": "zero",
+          "query_id": 1015,
+          "raw_gripper_prefix_8": [
+            0.9966719150543213,
+            0.9966719150543213,
+            0.9961836934089661,
+            0.9956955313682556,
+            0.993742823600769,
+            0.9932546019554138,
+            0.993742823600769,
+            0.9927664399147034
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0,
+          "arm_prefix_rms_against_factual": 0.0042269887561831474
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1016,
+          "raw_gripper_prefix_8": [
+            1.0017153024673462,
+            1.00113844871521,
+            1.0013039112091064,
+            0.9989449977874756,
+            0.9972134828567505,
+            0.9984949827194214,
+            0.9980067610740662,
+            0.9982127547264099
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.00090346981426799,
+          "arm_prefix_rms_against_factual": 0.00394280974413526
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1017,
+          "raw_gripper_prefix_8": [
+            0.990813672542572,
+            0.9898373484611511,
+            0.993742823600769,
+            0.9898373484611511,
+            0.9878845810890198,
+            0.9878845810890198,
+            0.9869081974029541,
+            0.9869081974029541
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.001020635544179345,
+          "arm_prefix_rms_against_factual": 0.004821356786846588
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1018,
+          "raw_gripper_prefix_8": [
+            1.012618899345398,
+            1.0096487998962402,
+            1.0058939456939697,
+            1.005799651145935,
+            1.0074257850646973,
+            1.0079141855239868,
+            1.007658839225769,
+            1.010667085647583
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.12093265945407433,
+          "arm_prefix_rms_against_factual": 0.12282542901755278
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1019,
+          "raw_gripper_prefix_8": [
+            0.9742154479026794,
+            0.9654281139373779,
+            0.9566408395767212,
+            0.9527353644371033,
+            0.9478535056114197,
+            0.9459007978439331,
+            0.9429716467857361,
+            0.9419953227043152
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.13634283474192907,
+          "arm_prefix_rms_against_factual": 0.13564671343956758
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1020,
+          "raw_gripper_prefix_8": [
+            0.9859318733215332,
+            0.9865192174911499,
+            0.9855809807777405,
+            0.9876891374588013,
+            0.987953245639801,
+            0.9881706237792969,
+            0.9885157942771912,
+            0.990260660648346
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.09147568499734224,
+          "arm_prefix_rms_against_factual": 0.0919291463362294
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1021,
+          "raw_gripper_prefix_8": [
+            0.9517589807510376,
+            0.9449244141578674,
+            0.9429716467857361,
+            0.9419953227043152,
+            0.9390662312507629,
+            0.9400425553321838,
+            0.9400425553321838,
+            0.9380898475646973
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.1626451531110069,
+          "arm_prefix_rms_against_factual": 0.16176109997006216
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1022,
+          "raw_gripper_prefix_8": [
+            0.9983118772506714,
+            0.9953732490539551,
+            0.9903178811073303,
+            0.988639771938324,
+            0.9904094338417053,
+            0.9915803074836731,
+            0.9944568276405334,
+            0.9958252310752869
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.08092042528917036,
+          "arm_prefix_rms_against_factual": 0.08218923151286056
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1023,
+          "raw_gripper_prefix_8": [
+            0.976168155670166,
+            0.9732390642166138,
+            0.9712863564491272,
+            0.9722626805305481,
+            0.9673808813095093,
+            0.9673808813095093,
+            0.9693335890769958,
+            0.9673808813095093
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.10464160958239094,
+          "arm_prefix_rms_against_factual": 0.10408922166668559
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1024,
+          "raw_gripper_prefix_8": [
+            1.0094107389450073,
+            1.0015995502471924,
+            1.000494360923767,
+            1.0014984607696533,
+            1.0067960023880005,
+            1.0090652704238892,
+            1.011096715927124,
+            1.0143609046936035
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.09129215930874367,
+          "arm_prefix_rms_against_factual": 0.09232982432154471
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1025,
+          "raw_gripper_prefix_8": [
+            1.0184108018875122,
+            1.018244981765747,
+            1.0133254528045654,
+            1.0127795934677124,
+            1.016897201538086,
+            1.0161038637161255,
+            1.0170445442199707,
+            1.0166029930114746
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.1447937069392609,
+          "arm_prefix_rms_against_factual": 0.14648011422846377
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1026,
+          "raw_gripper_prefix_8": [
+            0.9878845810890198,
+            0.9800736308097839,
+            0.976168155670166,
+            0.9742154479026794,
+            0.9742154479026794,
+            0.9732390642166138,
+            0.9703099727630615,
+            0.9703099727630615
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.12308787990601996,
+          "arm_prefix_rms_against_factual": 0.12199669548890266
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1027,
+          "raw_gripper_prefix_8": [
+            1.0113509893417358,
+            1.0117777585983276,
+            1.0093356370925903,
+            1.0096678733825684,
+            1.012380599975586,
+            1.0157225131988525,
+            1.016027569770813,
+            1.0172919034957886
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.12749560646777527,
+          "arm_prefix_rms_against_factual": 0.1293395338341289
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1028,
+          "raw_gripper_prefix_8": [
+            0.9888609647750854,
+            0.979097306728363,
+            0.9683572053909302,
+            0.9664044976234436,
+            0.9624990224838257,
+            0.9585935473442078,
+            0.9576171636581421,
+            0.9576171636581421
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.12442494919122528,
+          "arm_prefix_rms_against_factual": 0.12319858010127344
+        }
+      ],
+      "query_artifacts": [
+        {
+          "label": "native_replay_0",
+          "query_id": 1013,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:000",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001013.npz",
+          "sha256": "87694a7c57e8965527b01e5d772c10b66bafaafc975089347882a7d909c0c8b5"
+        },
+        {
+          "label": "native_replay_1",
+          "query_id": 1014,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:001",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001014.npz",
+          "sha256": "ed2fafae9dca0457dd08602b06c30613413d8a9747f92a1b6f9d0f06c2a10c1c"
+        },
+        {
+          "label": "zero",
+          "query_id": 1015,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:002",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001015.npz",
+          "sha256": "515f598583e951e44e6add6486f04bf7b5384abd3186b63fa85bbc685dca279b"
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1016,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:003",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001016.npz",
+          "sha256": "7ed76748e2b75bd6c293c1e882c18a879fdbfcc5830c72dff48943fb522437c9"
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1017,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:004",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001017.npz",
+          "sha256": "c0f85623877cee2e17c884a852245c36055da1d4ed49f57fb1d9cdf3a162f731"
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1018,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:005",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001018.npz",
+          "sha256": "b5e68705715533553d500fd8fd1ea548828383585caee6520b4aa1d2b726afc6"
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1019,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:006",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001019.npz",
+          "sha256": "96465bd24fdb7eb3a80fd768df7f666296388481282afee72dd7bc43575b5a7d"
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1020,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:007",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001020.npz",
+          "sha256": "ed86e1216b9399e33667dffe5adb9e1eee683c2f197f6a2e9e8e87f0761e88ae"
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1021,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:008",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001021.npz",
+          "sha256": "a8fb02f3b292a46ad5cdd6836e7affa0e0b972cfa237a16a7e7ea502a541ab79"
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1022,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:009",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001022.npz",
+          "sha256": "2550184c5f913fffce6ea4f5aaa59c1867a93f09af09f321a7af42567b4b12e3"
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1023,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:010",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001023.npz",
+          "sha256": "d86868c21f1ddfda25aefa9bee487c74beecd3e07bffd137ba8d6e952ae73a1c"
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1024,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:011",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001024.npz",
+          "sha256": "b68ebbfe4301ec77a149ba03e62e3634d13bdd41d0102e4c4405c81dae48272a"
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1025,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:012",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001025.npz",
+          "sha256": "2690d98ab993314ed87503ef8def63da272922fd7762d670dc6f90751f210242"
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1026,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:013",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001026.npz",
+          "sha256": "39704830dbb62d19212dea8abd2c3dda85f387da72857a9ec51eeead733b2f1b"
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1027,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:014",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001027.npz",
+          "sha256": "ca33ec870e279f09a591157b02a8b68b379f0ab7513c3e1f1702c1fdd5fd73b7"
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1028,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:015",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001028.npz",
+          "sha256": "97966f6d85bb2673eae3b1741801486ae93bd98ba3f4d7a6a6921b07653f804f"
+        }
+      ]
+    },
+    {
+      "snapshot_id": "E0:q393",
+      "task": 1,
+      "episode_id": "E0",
+      "factual_policy_gpu_lane": 0,
+      "probe_policy_gpu_lane": 0,
+      "factual_query_id": 393,
+      "factual_query_index": 78,
+      "factual_control_step": 624,
+      "factual_artifact_sha256": "5c3110cfdb847b4248c063e1589528ccf4cf63b9b0de790b1d5ba8a093a29c7b",
+      "factual_artifact_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/E0/query_00000393.npz",
+      "input_component_sha256": {
+        "actions": "65471c8b6b042977556bcbee91cc2dd5337da5df21228e5b2180e50dace03703",
+        "noise": "9915cdb456fad7510baab9075b9ce34e92cdf1c5c5a1c553d32f1da489f44e00",
+        "observation_image_left": "417d42c1fe72ab7f3cc491336a825835f176d8497716b865d5b6d71e692783b9",
+        "observation_state": "c4a8cf5fbc918fe8133fb812bad799864ad7d4cb6bd081deaef15f7d0f41ecf0",
+        "observation_wrist_image": "2cc0b21d526acfd599646a4b2a350df58ba47adf4588c11a8fd0c2747d0ddfb2",
+        "prompt": "b138a001a0c39437e07b359597644beb7a6fb8c98806c950734b5205bd857035"
+      },
+      "replays": [
+        {
+          "repeat": 0,
+          "query_id": 1029,
+          "full_chunk_allclose": true,
+          "full_chunk_bitwise_values_equal": true,
+          "max_absolute_difference": 0.0,
+          "rms_all_16x8": 0.0,
+          "rms_arm_prefix_8x7": 0.0,
+          "rms_arm_full_16x7": 0.0,
+          "rms_gripper_full_16": 0.0,
+          "maximum_tolerance_ratio": 0.0,
+          "elements_exceeding_tolerance": 0,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        },
+        {
+          "repeat": 1,
+          "query_id": 1030,
+          "full_chunk_allclose": true,
+          "full_chunk_bitwise_values_equal": true,
+          "max_absolute_difference": 0.0,
+          "rms_all_16x8": 0.0,
+          "rms_arm_prefix_8x7": 0.0,
+          "rms_arm_full_16x7": 0.0,
+          "rms_gripper_full_16": 0.0,
+          "maximum_tolerance_ratio": 0.0,
+          "elements_exceeding_tolerance": 0,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        }
+      ],
+      "repeat_to_repeat": {
+        "full_16x8_values_exact": true,
+        "max_absolute_difference": 0.0,
+        "rms_all_16x8": 0.0,
+        "prefix_converted_gripper_equal": true
+      },
+      "descriptive_bounded_sensitivity": {
+        "is_formal_valid_gate_result": false,
+        "sensitive": false,
+        "sensitive_prefix_positions": [],
+        "raw_prefix_gripper_min": 0.9781209230422974,
+        "raw_prefix_gripper_max": 1.0248979330062866,
+        "margin_witnesses": []
+      },
+      "candidates": [
+        {
+          "label": "zero",
+          "query_id": 1031,
+          "raw_gripper_prefix_8": [
+            0.9961836934089661,
+            0.993742823600769,
+            0.9947191476821899,
+            0.9932546019554138,
+            0.990813672542572,
+            0.9903255105018616,
+            0.9898373484611511,
+            0.9893491268157959
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0,
+          "arm_prefix_rms_against_factual": 0.007229599177152328
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1032,
+          "raw_gripper_prefix_8": [
+            0.996471643447876,
+            0.9948748350143433,
+            0.9941203594207764,
+            0.9906306266784668,
+            0.9894425868988037,
+            0.9888628721237183,
+            0.9907412528991699,
+            0.9889594316482544
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.000641737367959413,
+          "arm_prefix_rms_against_factual": 0.007115795469239167
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1033,
+          "raw_gripper_prefix_8": [
+            0.9976482391357422,
+            0.993742823600769,
+            0.9947191476821899,
+            0.993742823600769,
+            0.9898373484611511,
+            0.9888609647750854,
+            0.9878845810890198,
+            0.9869081974029541
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0008491189077556437,
+          "arm_prefix_rms_against_factual": 0.007410347377236504
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1034,
+          "raw_gripper_prefix_8": [
+            1.0032509565353394,
+            0.9967405200004578,
+            0.9990670680999756,
+            0.9971848726272583,
+            0.9972068071365356,
+            0.9975710511207581,
+            0.9964704513549805,
+            1.0000700950622559
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.03323064862488588,
+          "arm_prefix_rms_against_factual": 0.037862514644211934
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1035,
+          "raw_gripper_prefix_8": [
+            1.0015537738800049,
+            0.9976482391357422,
+            0.993742823600769,
+            0.993742823600769,
+            0.990813672542572,
+            0.9898373484611511,
+            0.9888609647750854,
+            0.9898373484611511
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.04908255244653867,
+          "arm_prefix_rms_against_factual": 0.046297453315959185
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1036,
+          "raw_gripper_prefix_8": [
+            0.9950852990150452,
+            0.9926100373268127,
+            0.9957985281944275,
+            0.9972230195999146,
+            0.996050238609314,
+            0.999646782875061,
+            1.0050663948059082,
+            1.0016491413116455
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.032943697989638934,
+          "arm_prefix_rms_against_factual": 0.03568914697550823
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1037,
+          "raw_gripper_prefix_8": [
+            0.9888609647750854,
+            0.9820263981819153,
+            0.9800736308097839,
+            0.979097306728363,
+            0.979097306728363,
+            0.9781209230422974,
+            0.9800736308097839,
+            0.9800736308097839
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.06320515807053857,
+          "arm_prefix_rms_against_factual": 0.05885785564305133
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1038,
+          "raw_gripper_prefix_8": [
+            1.0056880712509155,
+            1.0035922527313232,
+            1.0030196905136108,
+            1.0045677423477173,
+            1.0043312311172485,
+            1.004555344581604,
+            1.0060203075408936,
+            1.0059244632720947
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.035571389196799134,
+          "arm_prefix_rms_against_factual": 0.040938485746710426
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1039,
+          "raw_gripper_prefix_8": [
+            0.9878845810890198,
+            0.9859318733215332,
+            0.9888609647750854,
+            0.9878845810890198,
+            0.9820263981819153,
+            0.9839791059494019,
+            0.9830027222633362,
+            0.9820263981819153
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.030953943676868424,
+          "arm_prefix_rms_against_factual": 0.03531585900881892
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1040,
+          "raw_gripper_prefix_8": [
+            1.0201534032821655,
+            1.0150874853134155,
+            1.0117789506912231,
+            1.0140959024429321,
+            1.0170230865478516,
+            1.020894169807434,
+            1.0231349468231201,
+            1.0248979330062866
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.08157198431630477,
+          "arm_prefix_rms_against_factual": 0.07819710186771879
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1041,
+          "raw_gripper_prefix_8": [
+            1.0108363628387451,
+            1.0035741329193115,
+            1.0037286281585693,
+            1.0011646747589111,
+            0.9996706247329712,
+            0.9994279146194458,
+            1.00028657913208,
+            1.0026865005493164
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.035974025916336944,
+          "arm_prefix_rms_against_factual": 0.040496331667642264
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1042,
+          "raw_gripper_prefix_8": [
+            0.9976482391357422,
+            0.9927664399147034,
+            0.9888609647750854,
+            0.9878845810890198,
+            0.9878845810890198,
+            0.9878845810890198,
+            0.9888609647750854,
+            0.9888609647750854
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.049732836466056606,
+          "arm_prefix_rms_against_factual": 0.04568889441254583
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1043,
+          "raw_gripper_prefix_8": [
+            0.9967443346977234,
+            0.9952302575111389,
+            0.9979743361473083,
+            0.9960464239120483,
+            0.9972001314163208,
+            0.9989449977874756,
+            0.998140275478363,
+            1.0020495653152466
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.029633916883106178,
+          "arm_prefix_rms_against_factual": 0.03431363403529427
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1044,
+          "raw_gripper_prefix_8": [
+            0.9927664399147034,
+            0.9878845810890198,
+            0.9849554896354675,
+            0.9830027222633362,
+            0.9810500144958496,
+            0.9810500144958496,
+            0.9800736308097839,
+            0.9800736308097839
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.04743862901008614,
+          "arm_prefix_rms_against_factual": 0.04349636662330501
+        }
+      ],
+      "query_artifacts": [
+        {
+          "label": "native_replay_0",
+          "query_id": 1029,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:016",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001029.npz",
+          "sha256": "60da04f0c41efde5ae084bd27e88ff0b19ec9eb8cd9e16897f4639b5e1711941"
+        },
+        {
+          "label": "native_replay_1",
+          "query_id": 1030,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:017",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001030.npz",
+          "sha256": "7cc9461b0a8e5538af4f8c660ea30f9b375d7452644182f7344b94df4059297a"
+        },
+        {
+          "label": "zero",
+          "query_id": 1031,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:018",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001031.npz",
+          "sha256": "daa333de5060cc3738e8801e12247dabe48d2c8a78a0d62d78de234d686f1d90"
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1032,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:019",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001032.npz",
+          "sha256": "c906e67bd300e0e9e567d509f04d6ad5e736f4d119a4321077d0536f2558f6f2"
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1033,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:020",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001033.npz",
+          "sha256": "ace038cbc065f6fb4d4ca558ebf9895787b7288e6bfdf6265525aad32ca05059"
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1034,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:021",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001034.npz",
+          "sha256": "97381ba025a6f31245fe73202b2668d135e9f4b6232e4b57e68fc167496b0c0a"
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1035,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:022",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001035.npz",
+          "sha256": "21821f39178cc0e86e32f73d98257c8101a0fea02bde76ed47bd4ce58352f614"
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1036,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:023",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001036.npz",
+          "sha256": "7496970f4f1c2b887faf162b6529b164a974fc2f5aa3fc041cff063e1f22527b"
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1037,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:024",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001037.npz",
+          "sha256": "891923a9584151fbf301eba549b764d8cdff09e00527b4102abcbcee133fa8e4"
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1038,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:025",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001038.npz",
+          "sha256": "9429b88a1bc78554495acbf579311af061a4f5816097f5c960ca0a607faa37e7"
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1039,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:026",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001039.npz",
+          "sha256": "3c94feeacd1077e66ec3f5c1e9a628496ad00e82e8f5c73d4c90c8104feec976"
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1040,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:027",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001040.npz",
+          "sha256": "9f784f47dcaedec8f76770d81fe0c68a13c0a5cbeb4366bb1cd43c197cedff07"
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1041,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:028",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001041.npz",
+          "sha256": "ca2b2d409296a0980e3701797a6981197da76fca8d7ca94133c3fddbc37fcfc3"
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1042,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:029",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001042.npz",
+          "sha256": "f9947cfcc9acb1151c00fd920a82ac7ee77f625ad69b2577e7a81369a53d2e65"
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1043,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:030",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001043.npz",
+          "sha256": "a859764ed8396b4c72ff333b6711f606e78ba6fb4a1b75468774847f243e4ca9"
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1044,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:031",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001044.npz",
+          "sha256": "1faf50c8e61a0dc315eb8546c1a47c5aee3bd69a15d48398b57b2e21795e3482"
+        }
+      ]
+    },
+    {
+      "snapshot_id": "E1:q316",
+      "task": 4,
+      "episode_id": "E1",
+      "factual_policy_gpu_lane": 1,
+      "probe_policy_gpu_lane": 0,
+      "factual_query_id": 316,
+      "factual_query_index": 0,
+      "factual_control_step": 0,
+      "factual_artifact_sha256": "a9dab639375869604d03e6559cabc602fe69c8eaa6784036d3c6c95f57cdbfd2",
+      "factual_artifact_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/E1/query_00000316.npz",
+      "input_component_sha256": {
+        "actions": "3709f843ec838070de5fb2e081ae531b2d30f21a590a34b20842d90d1cc71846",
+        "noise": "75e7dc5109f505f31a8a0ada59eb09f5887f444b637b4ce156e6f04ea8763b4f",
+        "observation_image_left": "aa42df5f87c69c176752847ca6f2c8903094a30efe686df75ddedcdfe61c1cf2",
+        "observation_state": "21e8bb9ff476eda129758f766fc7aa9d7a799ceebc2fdb8d91bbf6761f0e55f0",
+        "observation_wrist_image": "97e4060263ff1832667356fa0f491084a52e7eb2d0fbb4d781feda2e8b49a854",
+        "prompt": "fa7987a9ea26150352f7e7911a3394da62af7afd4b941ade7a6d552ecb5c769b"
+      },
+      "replays": [
+        {
+          "repeat": 0,
+          "query_id": 1045,
+          "full_chunk_allclose": false,
+          "full_chunk_bitwise_values_equal": false,
+          "max_absolute_difference": 0.003130674362182617,
+          "rms_all_16x8": 0.0009516088378330067,
+          "rms_arm_prefix_8x7": 0.00036062346792780096,
+          "rms_arm_full_16x7": 0.0009557664002790625,
+          "rms_gripper_full_16": 0.0009219811053477748,
+          "maximum_tolerance_ratio": 176.97650478409068,
+          "elements_exceeding_tolerance": 114,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        },
+        {
+          "repeat": 1,
+          "query_id": 1046,
+          "full_chunk_allclose": false,
+          "full_chunk_bitwise_values_equal": false,
+          "max_absolute_difference": 0.003130674362182617,
+          "rms_all_16x8": 0.0009516088378330067,
+          "rms_arm_prefix_8x7": 0.00036062346792780096,
+          "rms_arm_full_16x7": 0.0009557664002790625,
+          "rms_gripper_full_16": 0.0009219811053477748,
+          "maximum_tolerance_ratio": 176.97650478409068,
+          "elements_exceeding_tolerance": 114,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        }
+      ],
+      "repeat_to_repeat": {
+        "full_16x8_values_exact": true,
+        "max_absolute_difference": 0.0,
+        "rms_all_16x8": 0.0,
+        "prefix_converted_gripper_equal": true
+      },
+      "descriptive_bounded_sensitivity": {
+        "is_formal_valid_gate_result": false,
+        "sensitive": false,
+        "sensitive_prefix_positions": [],
+        "raw_prefix_gripper_min": 0.9488298892974854,
+        "raw_prefix_gripper_max": 1.010627031326294,
+        "margin_witnesses": []
+      },
+      "candidates": [
+        {
+          "label": "zero",
+          "query_id": 1047,
+          "raw_gripper_prefix_8": [
+            0.9942309856414795,
+            0.9966719150543213,
+            0.9961836934089661,
+            0.9952073693275452,
+            0.9932546019554138,
+            0.9927664399147034,
+            0.9922782182693481,
+            0.9927664399147034
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0,
+          "arm_prefix_rms_against_factual": 0.004912411505898786
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1048,
+          "raw_gripper_prefix_8": [
+            1.000550627708435,
+            0.9991471171379089,
+            0.9984339475631714,
+            0.9979457259178162,
+            0.9978237152099609,
+            0.9991433024406433,
+            0.9956116080284119,
+            0.9963439106941223
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.001156976847573526,
+          "arm_prefix_rms_against_factual": 0.004076479185191398
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1049,
+          "raw_gripper_prefix_8": [
+            0.9898373484611511,
+            0.9898373484611511,
+            0.990813672542572,
+            0.990813672542572,
+            0.9878845810890198,
+            0.9869081974029541,
+            0.9869081974029541,
+            0.9888609647750854
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0008400629814076738,
+          "arm_prefix_rms_against_factual": 0.0054993967875220815
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1050,
+          "raw_gripper_prefix_8": [
+            0.9982432126998901,
+            0.9998298287391663,
+            1.0005773305892944,
+            0.9982089400291443,
+            0.9986608624458313,
+            1.0012505054473877,
+            1.0013935565948486,
+            1.001532793045044
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.061345389934697035,
+          "arm_prefix_rms_against_factual": 0.06549763898130562
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1051,
+          "raw_gripper_prefix_8": [
+            0.9810500144958496,
+            0.9751918315887451,
+            0.9703099727630615,
+            0.9673808813095093,
+            0.96152263879776,
+            0.9605463147163391,
+            0.9576171636581421,
+            0.9566408395767212
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.07376838412165873,
+          "arm_prefix_rms_against_factual": 0.07457795564724544
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1052,
+          "raw_gripper_prefix_8": [
+            0.9878960251808167,
+            0.991715669631958,
+            0.9935169219970703,
+            0.9930181503295898,
+            0.9923452138900757,
+            0.9934715032577515,
+            0.9925928711891174,
+            0.996992290019989
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.04883294941811246,
+          "arm_prefix_rms_against_factual": 0.04974494983818766
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1053,
+          "raw_gripper_prefix_8": [
+            0.96152263879776,
+            0.9576171636581421,
+            0.9546880722045898,
+            0.9527353644371033,
+            0.9488298892974854,
+            0.9488298892974854,
+            0.949806272983551,
+            0.9488298892974854
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.08366296660323026,
+          "arm_prefix_rms_against_factual": 0.08277577765543896
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1054,
+          "raw_gripper_prefix_8": [
+            0.9984835386276245,
+            0.9974270462989807,
+            0.996954619884491,
+            0.9957546591758728,
+            0.9978313446044922,
+            0.9969388842582703,
+            0.9954819679260254,
+            0.9962714314460754
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.029269471846339223,
+          "arm_prefix_rms_against_factual": 0.031782018657729005
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1055,
+          "raw_gripper_prefix_8": [
+            0.9722626805305481,
+            0.9751918315887451,
+            0.9751918315887451,
+            0.9751918315887451,
+            0.9683572053909302,
+            0.9693335890769958,
+            0.9693335890769958,
+            0.9693335890769958
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.03947820450161506,
+          "arm_prefix_rms_against_factual": 0.03882285900332872
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1056,
+          "raw_gripper_prefix_8": [
+            1.0041128396987915,
+            1.0039794445037842,
+            1.0003790855407715,
+            1.0017222166061401,
+            1.0065480470657349,
+            1.006856083869934,
+            1.0059912204742432,
+            1.00632643699646
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.06981901064126898,
+          "arm_prefix_rms_against_factual": 0.07132784084287545
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1057,
+          "raw_gripper_prefix_8": [
+            1.010627031326294,
+            1.0072441101074219,
+            1.0034711360931396,
+            1.0007089376449585,
+            1.0012695789337158,
+            1.0032023191452026,
+            1.0027389526367188,
+            1.0023374557495117
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.08043060091574276,
+          "arm_prefix_rms_against_factual": 0.08445736745189886
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1058,
+          "raw_gripper_prefix_8": [
+            0.9917900562286377,
+            0.9888609647750854,
+            0.9839791059494019,
+            0.9839791059494019,
+            0.9820263981819153,
+            0.9820263981819153,
+            0.9820263981819153,
+            0.9781209230422974
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.06193159499032636,
+          "arm_prefix_rms_against_factual": 0.05879728372571216
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1059,
+          "raw_gripper_prefix_8": [
+            0.9986379742622375,
+            0.9976654052734375,
+            1.0007070302963257,
+            1.0010836124420166,
+            1.0010626316070557,
+            1.0029743909835815,
+            1.0028409957885742,
+            1.002584457397461
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.06946908141452006,
+          "arm_prefix_rms_against_factual": 0.07356232269229271
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1060,
+          "raw_gripper_prefix_8": [
+            0.9849554896354675,
+            0.9820263981819153,
+            0.979097306728363,
+            0.9751918315887451,
+            0.9722626805305481,
+            0.9703099727630615,
+            0.9683572053909302,
+            0.9683572053909302
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.06619569186862824,
+          "arm_prefix_rms_against_factual": 0.06273337279729307
+        }
+      ],
+      "query_artifacts": [
+        {
+          "label": "native_replay_0",
+          "query_id": 1045,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:032",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001045.npz",
+          "sha256": "fb4d188c4054280e6fcaf5daebd1d9bf51231a5ed42ce7c3e079f3576f116c6f"
+        },
+        {
+          "label": "native_replay_1",
+          "query_id": 1046,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:033",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001046.npz",
+          "sha256": "9f1d572059d9929041d037e6c890fbb6bf4054be3d8d41b521457c1c9247da9f"
+        },
+        {
+          "label": "zero",
+          "query_id": 1047,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:034",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001047.npz",
+          "sha256": "b9df2948133c76d2072e313f791c754ea1eaedaa467172cdb96b3be4add58580"
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1048,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:035",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001048.npz",
+          "sha256": "d0f7712caf16110b5d97bba0cbbba8cf1580593c5e039bd53cde16699bb191c5"
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1049,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:036",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001049.npz",
+          "sha256": "fda4a31010ac2bbc0f6dea96d90212dd3924327f6eeb69fb9256475a6902919f"
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1050,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:037",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001050.npz",
+          "sha256": "59243de4d9daa28922eab4859362ff1a8ef096405d268c11b58fa80354134bd3"
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1051,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:038",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001051.npz",
+          "sha256": "c5c778d7f6e00941954f238e25c6f73688093e436f85c168c60705b9cce5ff30"
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1052,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:039",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001052.npz",
+          "sha256": "e8f75edb785eb4ca34b177da5d127fbf6e3df5b6fc4294374ef6098dc68968d1"
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1053,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:040",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001053.npz",
+          "sha256": "e74dbf56290e4db0a92cb91095cdcd8d501ddc73f693e42e2db9f285f505fcd8"
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1054,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:041",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001054.npz",
+          "sha256": "24f79f4c2b9fae996a501258243977347499b54a94775dc9e2cbc1d38ec82a8a"
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1055,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:042",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001055.npz",
+          "sha256": "69a20feb6372cfc1bcd1d49d626a6c77f4cd19bc24386b1865ac5282341f3751"
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1056,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:043",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001056.npz",
+          "sha256": "74d9e72f8388cc83a347dc32b535413eeb46dab40f76ecabb28de0f55cccb425"
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1057,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:044",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001057.npz",
+          "sha256": "0c0b37a633e4b38fbc6d5fd7f31c3cbff811ae41090fca4527f2046f713234ee"
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1058,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:045",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001058.npz",
+          "sha256": "d07e15fdc9e9812f5d0134ed22a0bcf95a6a4e38bb3c653e5d00e95e51b5345b"
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1059,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:046",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001059.npz",
+          "sha256": "571c6c6c3f6edfac7a632d54954406e25b26405915456e9403879864cf465bbd"
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1060,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:047",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001060.npz",
+          "sha256": "18b40661b1f1279540d5ded52f97900a1b2d0776cdee3f52ae701e23598a51db"
+        }
+      ]
+    },
+    {
+      "snapshot_id": "E1:q459",
+      "task": 4,
+      "episode_id": "E1",
+      "factual_policy_gpu_lane": 1,
+      "probe_policy_gpu_lane": 0,
+      "factual_query_id": 459,
+      "factual_query_index": 48,
+      "factual_control_step": 384,
+      "factual_artifact_sha256": "2e9a5b1fad867bfcf1f277ff1e8c60ae5fa386446746e28d59b1a0d2f8b4aecd",
+      "factual_artifact_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/E1/query_00000459.npz",
+      "input_component_sha256": {
+        "actions": "de38d31eb965234471ea62474269e342591fec9dd2683dcfb26b7bc922f8128b",
+        "noise": "d2b63bf76ab9e5d637dab797a7b480a65194705f0a3f5f47445451f1c1a9857e",
+        "observation_image_left": "6cb851198ee67e4a25b7162c2447ed0ade635b65d217f64c51ddfc7298c01f5b",
+        "observation_state": "be4e655c3a62dc3b9a6e6a7fb95367157ff5d1871801209e3c515d7426f1b4d5",
+        "observation_wrist_image": "d1e5603034df732df65a95c264ff42c004bb59924d24bbeed94bc326ba7e6f23",
+        "prompt": "fa7987a9ea26150352f7e7911a3394da62af7afd4b941ade7a6d552ecb5c769b"
+      },
+      "replays": [
+        {
+          "repeat": 0,
+          "query_id": 1061,
+          "full_chunk_allclose": false,
+          "full_chunk_bitwise_values_equal": false,
+          "max_absolute_difference": 0.0019527673721313477,
+          "rms_all_16x8": 0.000406933176618062,
+          "rms_arm_prefix_8x7": 0.00014828642846807262,
+          "rms_arm_full_16x7": 0.00017679924810274608,
+          "rms_gripper_full_16": 0.0010516420792987793,
+          "maximum_tolerance_ratio": 97.88360942381237,
+          "elements_exceeding_tolerance": 91,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        },
+        {
+          "repeat": 1,
+          "query_id": 1062,
+          "full_chunk_allclose": false,
+          "full_chunk_bitwise_values_equal": false,
+          "max_absolute_difference": 0.0019527673721313477,
+          "rms_all_16x8": 0.000406933176618062,
+          "rms_arm_prefix_8x7": 0.00014828642846807262,
+          "rms_arm_full_16x7": 0.00017679924810274608,
+          "rms_gripper_full_16": 0.0010516420792987793,
+          "maximum_tolerance_ratio": 97.88360942381237,
+          "elements_exceeding_tolerance": 91,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        }
+      ],
+      "repeat_to_repeat": {
+        "full_16x8_values_exact": true,
+        "max_absolute_difference": 0.0,
+        "rms_all_16x8": 0.0,
+        "prefix_converted_gripper_equal": true
+      },
+      "descriptive_bounded_sensitivity": {
+        "is_formal_valid_gate_result": false,
+        "sensitive": false,
+        "sensitive_prefix_positions": [],
+        "raw_prefix_gripper_min": 0.8863423466682434,
+        "raw_prefix_gripper_max": 1.0182745456695557,
+        "margin_witnesses": []
+      },
+      "candidates": [
+        {
+          "label": "zero",
+          "query_id": 1063,
+          "raw_gripper_prefix_8": [
+            0.9952073693275452,
+            0.9966719150543213,
+            0.9956955313682556,
+            0.9971600770950317,
+            0.9961836934089661,
+            0.9966719150543213,
+            0.9961836934089661,
+            0.9996010065078735
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0,
+          "arm_prefix_rms_against_factual": 0.001039650377553134
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1064,
+          "raw_gripper_prefix_8": [
+            0.9958747625350952,
+            0.9979457259178162,
+            0.9976025223731995,
+            0.997957170009613,
+            0.9967405200004578,
+            0.9989869594573975,
+            0.9990289211273193,
+            0.999707818031311
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.00030666808276309543,
+          "arm_prefix_rms_against_factual": 0.0011320221922100522
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1065,
+          "raw_gripper_prefix_8": [
+            0.9956955313682556,
+            0.9956955313682556,
+            0.9976482391357422,
+            0.9947191476821899,
+            0.9966719150543213,
+            0.9956955313682556,
+            0.9966719150543213,
+            0.9976482391357422
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.00028489858009576435,
+          "arm_prefix_rms_against_factual": 0.0009123092817386493
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1066,
+          "raw_gripper_prefix_8": [
+            0.9962218403816223,
+            0.9833335876464844,
+            0.9802910685539246,
+            0.9851046800613403,
+            0.9935660362243652,
+            0.999162495136261,
+            0.9999986290931702,
+            1.0016952753067017
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.05433752506530587,
+          "arm_prefix_rms_against_factual": 0.05440582161188453
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1067,
+          "raw_gripper_prefix_8": [
+            0.9244207143783569,
+            0.9068460464477539,
+            0.8951296806335449,
+            0.8902478218078613,
+            0.891224205493927,
+            0.891224205493927,
+            0.891224205493927,
+            0.8882951140403748
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.12857837501918526,
+          "arm_prefix_rms_against_factual": 0.128515175908277
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1068,
+          "raw_gripper_prefix_8": [
+            0.9883880019187927,
+            0.986179769039154,
+            0.9911028146743774,
+            0.9971562623977661,
+            1.0015826225280762,
+            1.0050101280212402,
+            1.0072081089019775,
+            1.0089298486709595
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.06874390051825884,
+          "arm_prefix_rms_against_factual": 0.0687435867143582
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1069,
+          "raw_gripper_prefix_8": [
+            0.9712863564491272,
+            0.9605463147163391,
+            0.9624990224838257,
+            0.964451789855957,
+            0.9673808813095093,
+            0.9683572053909302,
+            0.9673808813095093,
+            0.9654281139373779
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.1775428338843368,
+          "arm_prefix_rms_against_factual": 0.1783686369435871
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1070,
+          "raw_gripper_prefix_8": [
+            1.0145783424377441,
+            1.010662317276001,
+            1.008086085319519,
+            1.0089298486709595,
+            1.0130269527435303,
+            1.016121506690979,
+            1.013806939125061,
+            1.0138441324234009
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.18926935330628036,
+          "arm_prefix_rms_against_factual": 0.18850036707528706
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1071,
+          "raw_gripper_prefix_8": [
+            0.9273498058319092,
+            0.905869722366333,
+            0.8980587720870972,
+            0.902940571308136,
+            0.9117279052734375,
+            0.9185624718666077,
+            0.9234443306922913,
+            0.9263734221458435
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.12960192298131787,
+          "arm_prefix_rms_against_factual": 0.12980620105970106
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1072,
+          "raw_gripper_prefix_8": [
+            1.0004329681396484,
+            0.999035120010376,
+            1.0006545782089233,
+            1.0045191049575806,
+            1.0086309909820557,
+            1.012736201286316,
+            1.0154268741607666,
+            1.0182745456695557
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.05473057660280412,
+          "arm_prefix_rms_against_factual": 0.05449451982801921
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1073,
+          "raw_gripper_prefix_8": [
+            1.016965389251709,
+            1.0027318000793457,
+            0.9974032044410706,
+            0.9977331161499023,
+            1.0087087154388428,
+            1.009285569190979,
+            1.0129483938217163,
+            1.0127209424972534
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.07843088237142463,
+          "arm_prefix_rms_against_factual": 0.07850409302594212
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1074,
+          "raw_gripper_prefix_8": [
+            0.9156333804130554,
+            0.9117279052734375,
+            0.9107515215873718,
+            0.9156333804130554,
+            0.9224679470062256,
+            0.9263734221458435,
+            0.9283261299133301,
+            0.9273498058319092
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.11838223906815869,
+          "arm_prefix_rms_against_factual": 0.11840584057449419
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1075,
+          "raw_gripper_prefix_8": [
+            1.004793643951416,
+            0.9926968216896057,
+            0.9905366897583008,
+            0.9946219325065613,
+            1.0032178163528442,
+            1.006434679031372,
+            1.0068856477737427,
+            1.0083014965057373
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0649721983938639,
+          "arm_prefix_rms_against_factual": 0.06503403666011875
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1076,
+          "raw_gripper_prefix_8": [
+            0.9097751975059509,
+            0.9000114798545837,
+            0.8931769132614136,
+            0.8902478218078613,
+            0.8882951140403748,
+            0.8863423466682434,
+            0.8873187303543091,
+            0.8863423466682434
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.15172086013158287,
+          "arm_prefix_rms_against_factual": 0.1517330934369407
+        }
+      ],
+      "query_artifacts": [
+        {
+          "label": "native_replay_0",
+          "query_id": 1061,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:048",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001061.npz",
+          "sha256": "0d5d96623138d6d15553868954c390bab98cf656c5a14596c1eba41ec5618a97"
+        },
+        {
+          "label": "native_replay_1",
+          "query_id": 1062,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:049",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001062.npz",
+          "sha256": "4e2dbe2b2563e03ad6f1e37e2c22a3412e03161dbcf5eccb8f4ae26efaf0d2f4"
+        },
+        {
+          "label": "zero",
+          "query_id": 1063,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:050",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001063.npz",
+          "sha256": "ba48ef0843f4d6167dd51b78a833529a35ed5b117b26aff9cea9338ef2d0cf5f"
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1064,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:051",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001064.npz",
+          "sha256": "030a83254f4d5e850571d7b463f708b883344dc02f50db73f19c0e91a537b850"
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1065,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:052",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001065.npz",
+          "sha256": "53929ef9ebdc377e7a2c13dd108235495e5839945414a62fe4d5be1874c78684"
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1066,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:053",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001066.npz",
+          "sha256": "723fb15e2d398dc8f273ecf632da2493a6d3bd186641dc027280faaedfdd5383"
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1067,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:054",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001067.npz",
+          "sha256": "50fef215294fb2092bad575b37f1c604c06264989529bcadaff758246cd20c53"
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1068,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:055",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001068.npz",
+          "sha256": "289fd2f25f245588ecac64f1a7d2425989dc6789e676d859898aa6956231e6f2"
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1069,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:056",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001069.npz",
+          "sha256": "c51f48fc30026d34cfc13589c12c5c103d27bf74087068e7e3100b1af894a618"
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1070,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:057",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001070.npz",
+          "sha256": "00151c4f43ecde7ec42c0bb9709b06d4ca29e38a27023360bd45236d9304686c"
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1071,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:058",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001071.npz",
+          "sha256": "06d89210bada55c2eaefbb0800b88f120cac8d53c02f1b56070887c0aee5853c"
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1072,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:059",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001072.npz",
+          "sha256": "b0908c58ca4c43d5f83230baf2d99d5b018d9d8cc6d4d7a473b59a78c6a573b4"
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1073,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:060",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001073.npz",
+          "sha256": "00d261a66e439bcb5a0a778ec8c08ad4faf5aa02f4d4c7329360af85637e130d"
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1074,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:061",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001074.npz",
+          "sha256": "ff1fe51164798e747723bd7b852b53a08c154645b965f6233a09919bffef0701"
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1075,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:062",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001075.npz",
+          "sha256": "0657c7d99ecd482c9ac35c35b9f665ebfa0f6fa996041511781b23fe48dbaf8e"
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1076,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:063",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001076.npz",
+          "sha256": "e31c72aa639d3cc4b9108448a384c13b271102d9c3c284f04fe49bf270f8523f"
+        }
+      ]
+    },
+    {
+      "snapshot_id": "E2:q313",
+      "task": 10,
+      "episode_id": "E2",
+      "factual_policy_gpu_lane": 2,
+      "probe_policy_gpu_lane": 0,
+      "factual_query_id": 313,
+      "factual_query_index": 0,
+      "factual_control_step": 0,
+      "factual_artifact_sha256": "1d9464b00d0446fe7e3d60933356e793fd966bf4cae63056058f64e7ee3a33ea",
+      "factual_artifact_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/E2/query_00000313.npz",
+      "input_component_sha256": {
+        "actions": "191e598db9fd7be500165bc296bd153132e1f34abf932fac003e487235823ca5",
+        "noise": "ef6db26b20da77cdd254693663620745b2184ef729c07e6f2faab6ad88e60f1a",
+        "observation_image_left": "622b5bc4a89db13d77ec485eb2ea761b3a8856734c00d6948d97d2d2f55679d3",
+        "observation_state": "38cb4c8190d29d7391d3680f7b0b0d2e59c1e366c8a4377febf8ff3d58249f47",
+        "observation_wrist_image": "1ac5ce4f3968fbaa9ea7f32242480f790bcb35efd5406830c901950334a7486b",
+        "prompt": "e23f099ea321874b51e1fe11a48f62fc005bea33d9f05775cd84448f9a1e9024"
+      },
+      "replays": [
+        {
+          "repeat": 0,
+          "query_id": 1077,
+          "full_chunk_allclose": false,
+          "full_chunk_bitwise_values_equal": false,
+          "max_absolute_difference": 0.0019527077674865723,
+          "rms_all_16x8": 0.0003754819255266102,
+          "rms_arm_prefix_8x7": 0.0002106874055973559,
+          "rms_arm_full_16x7": 0.0002030985268594893,
+          "rms_gripper_full_16": 0.0009160514886674787,
+          "maximum_tolerance_ratio": 97.79606751209323,
+          "elements_exceeding_tolerance": 97,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        },
+        {
+          "repeat": 1,
+          "query_id": 1078,
+          "full_chunk_allclose": false,
+          "full_chunk_bitwise_values_equal": false,
+          "max_absolute_difference": 0.0019527077674865723,
+          "rms_all_16x8": 0.0003754819255266102,
+          "rms_arm_prefix_8x7": 0.0002106874055973559,
+          "rms_arm_full_16x7": 0.0002030985268594893,
+          "rms_gripper_full_16": 0.0009160514886674787,
+          "maximum_tolerance_ratio": 97.79606751209323,
+          "elements_exceeding_tolerance": 97,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        }
+      ],
+      "repeat_to_repeat": {
+        "full_16x8_values_exact": true,
+        "max_absolute_difference": 0.0,
+        "rms_all_16x8": 0.0,
+        "prefix_converted_gripper_equal": true
+      },
+      "descriptive_bounded_sensitivity": {
+        "is_formal_valid_gate_result": false,
+        "sensitive": false,
+        "sensitive_prefix_positions": [],
+        "raw_prefix_gripper_min": 0.9605463147163391,
+        "raw_prefix_gripper_max": 1.0131995677947998,
+        "margin_witnesses": []
+      },
+      "candidates": [
+        {
+          "label": "zero",
+          "query_id": 1079,
+          "raw_gripper_prefix_8": [
+            0.9961836934089661,
+            0.9981364607810974,
+            0.9976482391357422,
+            0.9961836934089661,
+            0.9947191476821899,
+            0.993742823600769,
+            0.9932546019554138,
+            0.9947191476821899
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0,
+          "arm_prefix_rms_against_factual": 0.004245669372285762
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1080,
+          "raw_gripper_prefix_8": [
+            1.000333309173584,
+            0.9996734857559204,
+            1.000684142112732,
+            1.000363826751709,
+            0.997526228427887,
+            0.9986932873725891,
+            0.9964125752449036,
+            0.9967024326324463
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0008812282736288204,
+          "arm_prefix_rms_against_factual": 0.003925039912252329
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1081,
+          "raw_gripper_prefix_8": [
+            0.9917900562286377,
+            0.993742823600769,
+            0.9956955313682556,
+            0.9956955313682556,
+            0.9917900562286377,
+            0.9927664399147034,
+            0.993742823600769,
+            0.9927664399147034
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.000632633544360931,
+          "arm_prefix_rms_against_factual": 0.004428370061800414
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1082,
+          "raw_gripper_prefix_8": [
+            1.0038630962371826,
+            1.0026445388793945,
+            1.002671241760254,
+            1.00304114818573,
+            1.0052951574325562,
+            1.005649209022522,
+            1.0058330297470093,
+            1.0060224533081055
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.059590585960564865,
+          "arm_prefix_rms_against_factual": 0.061730708789626464
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1083,
+          "raw_gripper_prefix_8": [
+            0.9830027222633362,
+            0.9800736308097839,
+            0.9751918315887451,
+            0.9703099727630615,
+            0.9673808813095093,
+            0.9664044976234436,
+            0.964451789855957,
+            0.9634754061698914
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.07299252604719175,
+          "arm_prefix_rms_against_factual": 0.07077521034044024
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1084,
+          "raw_gripper_prefix_8": [
+            0.9914448857307434,
+            0.9931592345237732,
+            0.9947706460952759,
+            0.9942910671234131,
+            0.9932646155357361,
+            0.9953885078430176,
+            0.9946200251579285,
+            0.9971171617507935
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.05299983127381862,
+          "arm_prefix_rms_against_factual": 0.05585606254607404
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1085,
+          "raw_gripper_prefix_8": [
+            0.9703099727630615,
+            0.9664044976234436,
+            0.9624990224838257,
+            0.964451789855957,
+            0.96152263879776,
+            0.96152263879776,
+            0.9605463147163391,
+            0.9624990224838257
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.06566314640718891,
+          "arm_prefix_rms_against_factual": 0.06511715771902543
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1086,
+          "raw_gripper_prefix_8": [
+            1.0016928911209106,
+            1.0015556812286377,
+            0.9970757961273193,
+            0.9970656633377075,
+            0.9990861415863037,
+            0.9995447397232056,
+            0.9982413053512573,
+            0.9978351593017578
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.03356283438781147,
+          "arm_prefix_rms_against_factual": 0.035028059812189094
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1087,
+          "raw_gripper_prefix_8": [
+            0.9820263981819153,
+            0.9830027222633362,
+            0.9820263981819153,
+            0.9820263981819153,
+            0.979097306728363,
+            0.976168155670166,
+            0.976168155670166,
+            0.9751918315887451
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.04237979417729383,
+          "arm_prefix_rms_against_factual": 0.044536324089319
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1088,
+          "raw_gripper_prefix_8": [
+            1.0079916715621948,
+            1.0040180683135986,
+            1.0015175342559814,
+            1.0021363496780396,
+            1.00662100315094,
+            1.0067130327224731,
+            1.0064526796340942,
+            1.0060064792633057
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.06260665358470799,
+          "arm_prefix_rms_against_factual": 0.061438309838927146
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1089,
+          "raw_gripper_prefix_8": [
+            1.0131995677947998,
+            1.0112730264663696,
+            1.0073623657226562,
+            1.0060145854949951,
+            1.0038702487945557,
+            1.0059525966644287,
+            1.0062172412872314,
+            1.0045944452285767
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.07862139644312406,
+          "arm_prefix_rms_against_factual": 0.08066012838347804
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1090,
+          "raw_gripper_prefix_8": [
+            0.9898373484611511,
+            0.990813672542572,
+            0.9878845810890198,
+            0.9878845810890198,
+            0.9869081974029541,
+            0.9849554896354675,
+            0.9849554896354675,
+            0.9839791059494019
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.05655164307574391,
+          "arm_prefix_rms_against_factual": 0.05488045294714758
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1091,
+          "raw_gripper_prefix_8": [
+            1.0023701190948486,
+            1.002537727355957,
+            1.0051236152648926,
+            1.0032328367233276,
+            1.0058382749557495,
+            1.0059378147125244,
+            1.0081900358200073,
+            1.0083463191986084
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.06648571731377655,
+          "arm_prefix_rms_against_factual": 0.06854728932862399
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1092,
+          "raw_gripper_prefix_8": [
+            0.9869081974029541,
+            0.9849554896354675,
+            0.9820263981819153,
+            0.9781209230422974,
+            0.9722626805305481,
+            0.9732390642166138,
+            0.9712863564491272,
+            0.9693335890769958
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.060293446013209025,
+          "arm_prefix_rms_against_factual": 0.05871124932679468
+        }
+      ],
+      "query_artifacts": [
+        {
+          "label": "native_replay_0",
+          "query_id": 1077,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:064",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001077.npz",
+          "sha256": "02e27d0bd65856b1da561273c2ee63276a1e9e197ff85f8a77ec4329ccef4faa"
+        },
+        {
+          "label": "native_replay_1",
+          "query_id": 1078,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:065",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001078.npz",
+          "sha256": "6a2990b63720295a1d8f27afd39d68ef5cae6645a5faa8fad696d6826e5cfa6c"
+        },
+        {
+          "label": "zero",
+          "query_id": 1079,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:066",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001079.npz",
+          "sha256": "1a16691b67685da7120f0bcfbea144e108ed18ee4ce506091aacbcef98e5c26c"
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1080,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:067",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001080.npz",
+          "sha256": "747148c834b67c13348a2fb0df71e990e987b456c6811ebdb2c9bf07aca096fe"
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1081,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:068",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001081.npz",
+          "sha256": "82c543dd4009c3bb800da7763395595b0dddf650182b93eb8024c2ab79606a28"
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1082,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:069",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001082.npz",
+          "sha256": "a660325625e22a60bbf663ace80e01d612497589f12f916d641e71bfb1283931"
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1083,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:070",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001083.npz",
+          "sha256": "832b5f77a8ef071a56ab55fb947538daafeeb4370a58355340bd3f3f5d3792aa"
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1084,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:071",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001084.npz",
+          "sha256": "1e584e7467b04115c29f40f1a291670f3e950fc6d9a9379b7354139f7bba0197"
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1085,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:072",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001085.npz",
+          "sha256": "8d61afaf6c544b07cd2a0f327b26906be49dc4f928a348e035e38c27dfc78f90"
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1086,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:073",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001086.npz",
+          "sha256": "87d2672f90498237ca96f8617f980fe0f4d9e5790eb0ae063c7508e32f740d75"
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1087,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:074",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001087.npz",
+          "sha256": "abb6e998638e2c1efb603a9868865d676d370baa432aae27d4a6f26f1ad8bf3e"
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1088,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:075",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001088.npz",
+          "sha256": "d5eb9f8c5a4500330a7e7840d127f47a1e3f2d96748930b25894638322e07dda"
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1089,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:076",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001089.npz",
+          "sha256": "1c33ea4368a0f18514901bacaade250a49600d1caadce319b976c66e20d4e560"
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1090,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:077",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001090.npz",
+          "sha256": "36703ec5279d07c1e6d84fe3b8e5b02e5d23374033173dc5299da236e1aaa80c"
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1091,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:078",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001091.npz",
+          "sha256": "e9bfdb99f5dc32f7a1f0c90ca70b1b6cc99bf33149f6c164d277fd904292af2b"
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1092,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:079",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001092.npz",
+          "sha256": "cacf2c019012249303db89a0c7af371a978c154721be0d7e6412be5581f697fe"
+        }
+      ]
+    },
+    {
+      "snapshot_id": "E2:q629",
+      "task": 10,
+      "episode_id": "E2",
+      "factual_policy_gpu_lane": 2,
+      "probe_policy_gpu_lane": 0,
+      "factual_query_id": 629,
+      "factual_query_index": 100,
+      "factual_control_step": 800,
+      "factual_artifact_sha256": "df7f4b031658002f5496b0b0c09ea83bf1acdfcaab23c121cf594ff7abfb4fa8",
+      "factual_artifact_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/E2/query_00000629.npz",
+      "input_component_sha256": {
+        "actions": "8f6c0c03756e3ff9a1a061d0f27c2e6b8ba4a0d546e07db75a78c7b763362eb6",
+        "noise": "543e766cdcfd2a95c2072ad90b7be86733bfe459974e5dc4ccc151a9031d2571",
+        "observation_image_left": "29e8f6269935e001594d339364477a524d50e0eaabd3471e1fa2c4b4d91b32b2",
+        "observation_state": "40dc2e7f483a96ceb38049e7db125c3e158e31812b07d21827c99b2d64c27da6",
+        "observation_wrist_image": "b6604f21550a0ef9df29e3e10cb1b0d93d50fc143d7d5406d9de3d7dd73c7404",
+        "prompt": "e23f099ea321874b51e1fe11a48f62fc005bea33d9f05775cd84448f9a1e9024"
+      },
+      "replays": [
+        {
+          "repeat": 0,
+          "query_id": 1093,
+          "full_chunk_allclose": false,
+          "full_chunk_bitwise_values_equal": false,
+          "max_absolute_difference": 0.001464545726776123,
+          "rms_all_16x8": 0.0002989036947689957,
+          "rms_arm_prefix_8x7": 0.00011941757855419294,
+          "rms_arm_full_16x7": 0.00013325578307875948,
+          "rms_gripper_full_16": 0.000768405897885305,
+          "maximum_tolerance_ratio": 73.46319135632048,
+          "elements_exceeding_tolerance": 90,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        },
+        {
+          "repeat": 1,
+          "query_id": 1094,
+          "full_chunk_allclose": false,
+          "full_chunk_bitwise_values_equal": false,
+          "max_absolute_difference": 0.001464545726776123,
+          "rms_all_16x8": 0.0002989036947689957,
+          "rms_arm_prefix_8x7": 0.00011941757855419294,
+          "rms_arm_full_16x7": 0.00013325578307875948,
+          "rms_gripper_full_16": 0.000768405897885305,
+          "maximum_tolerance_ratio": 73.46319135632048,
+          "elements_exceeding_tolerance": 90,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        }
+      ],
+      "repeat_to_repeat": {
+        "full_16x8_values_exact": true,
+        "max_absolute_difference": 0.0,
+        "rms_all_16x8": 0.0,
+        "prefix_converted_gripper_equal": true
+      },
+      "descriptive_bounded_sensitivity": {
+        "is_formal_valid_gate_result": false,
+        "sensitive": true,
+        "sensitive_prefix_positions": [
+          6,
+          7
+        ],
+        "raw_prefix_gripper_min": -0.12781380116939545,
+        "raw_prefix_gripper_max": 1.069083333015442,
+        "margin_witnesses": [
+          {
+            "prefix_position_zero_based": 6,
+            "maximum_raw_open": 1.0579465627670288,
+            "minimum_raw_closed": -0.00434906268492341,
+            "open_candidates": [
+              {
+                "label": "zero",
+                "raw_gripper": 0.9864200353622437
+              },
+              {
+                "label": "coordinate7_plus",
+                "raw_gripper": 0.9912751913070679
+              },
+              {
+                "label": "coordinate7_minus",
+                "raw_gripper": 0.9703099727630615
+              },
+              {
+                "label": "all_ones",
+                "raw_gripper": 1.0191683769226074
+              },
+              {
+                "label": "walsh_bit0_plus",
+                "raw_gripper": 0.7535563707351685
+              },
+              {
+                "label": "walsh_bit0_minus",
+                "raw_gripper": 0.9952359795570374
+              },
+              {
+                "label": "walsh_bit1_plus",
+                "raw_gripper": 0.52947998046875
+              },
+              {
+                "label": "walsh_bit1_minus",
+                "raw_gripper": 1.0210925340652466
+              },
+              {
+                "label": "walsh_bit2_plus",
+                "raw_gripper": 0.8385003209114075
+              },
+              {
+                "label": "walsh_bit2_minus",
+                "raw_gripper": 1.0579465627670288
+              },
+              {
+                "label": "walsh_bit3_plus",
+                "raw_gripper": 1.0148566961288452
+              },
+              {
+                "label": "walsh_bit4_plus",
+                "raw_gripper": 1.029349684715271
+              },
+              {
+                "label": "walsh_bit4_minus",
+                "raw_gripper": 0.8716968297958374
+              }
+            ],
+            "closed_candidates": [
+              {
+                "label": "walsh_bit3_minus",
+                "raw_gripper": -0.00434906268492341
+              }
+            ]
+          },
+          {
+            "prefix_position_zero_based": 7,
+            "maximum_raw_open": 1.069083333015442,
+            "minimum_raw_closed": -0.12781380116939545,
+            "open_candidates": [
+              {
+                "label": "zero",
+                "raw_gripper": 0.985443651676178
+              },
+              {
+                "label": "coordinate7_plus",
+                "raw_gripper": 0.9911397695541382
+              },
+              {
+                "label": "coordinate7_minus",
+                "raw_gripper": 0.9693335890769958
+              },
+              {
+                "label": "all_ones",
+                "raw_gripper": 1.018415093421936
+              },
+              {
+                "label": "walsh_bit0_plus",
+                "raw_gripper": 0.7457454204559326
+              },
+              {
+                "label": "walsh_bit0_minus",
+                "raw_gripper": 0.9945055842399597
+              },
+              {
+                "label": "walsh_bit1_plus",
+                "raw_gripper": 0.46211060881614685
+              },
+              {
+                "label": "walsh_bit1_minus",
+                "raw_gripper": 1.0213595628738403
+              },
+              {
+                "label": "walsh_bit2_plus",
+                "raw_gripper": 0.8189730048179626
+              },
+              {
+                "label": "walsh_bit2_minus",
+                "raw_gripper": 1.069083333015442
+              },
+              {
+                "label": "walsh_bit3_plus",
+                "raw_gripper": 1.017190933227539
+              },
+              {
+                "label": "walsh_bit4_plus",
+                "raw_gripper": 1.0318974256515503
+              },
+              {
+                "label": "walsh_bit4_minus",
+                "raw_gripper": 0.8560749292373657
+              }
+            ],
+            "closed_candidates": [
+              {
+                "label": "walsh_bit3_minus",
+                "raw_gripper": -0.12781380116939545
+              }
+            ]
+          }
+        ]
+      },
+      "candidates": [
+        {
+          "label": "zero",
+          "query_id": 1095,
+          "raw_gripper_prefix_8": [
+            0.9947191476821899,
+            0.9903255105018616,
+            0.9913018941879272,
+            0.9898373484611511,
+            0.9873964190483093,
+            0.9869081974029541,
+            0.9864200353622437,
+            0.985443651676178
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0,
+          "arm_prefix_rms_against_factual": 0.007482865073894384
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1096,
+          "raw_gripper_prefix_8": [
+            0.9984840154647827,
+            0.9955658316612244,
+            0.9961417317390442,
+            0.9939449429512024,
+            0.9905276298522949,
+            0.9907374382019043,
+            0.9912751913070679,
+            0.9911397695541382
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0009649191418884547,
+          "arm_prefix_rms_against_factual": 0.00780913993166957
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1097,
+          "raw_gripper_prefix_8": [
+            0.9878845810890198,
+            0.9849554896354675,
+            0.9820263981819153,
+            0.9810500144958496,
+            0.9742154479026794,
+            0.9732390642166138,
+            0.9703099727630615,
+            0.9693335890769958
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0009297982223456253,
+          "arm_prefix_rms_against_factual": 0.007781194563028536
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1098,
+          "raw_gripper_prefix_8": [
+            1.01160728931427,
+            1.0159552097320557,
+            1.011948585510254,
+            1.0142922401428223,
+            1.0162068605422974,
+            1.019059658050537,
+            1.0191683769226074,
+            1.018415093421936
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.18350395119928978,
+          "arm_prefix_rms_against_factual": 0.18199769261661167
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1099,
+          "raw_gripper_prefix_8": [
+            0.9107515215873718,
+            0.8756023049354553,
+            0.8375239372253418,
+            0.8062801957130432,
+            0.7789419293403625,
+            0.7652727365493774,
+            0.7535563707351685,
+            0.7457454204559326
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.22964997583568172,
+          "arm_prefix_rms_against_factual": 0.22680757483153727
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1100,
+          "raw_gripper_prefix_8": [
+            0.9831324219703674,
+            0.9842994809150696,
+            0.9856496453285217,
+            0.9865268468856812,
+            0.990783154964447,
+            0.9932126402854919,
+            0.9952359795570374,
+            0.9945055842399597
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.153431924581501,
+          "arm_prefix_rms_against_factual": 0.15704076166238
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1101,
+          "raw_gripper_prefix_8": [
+            0.8922005295753479,
+            0.8482640385627747,
+            0.7896819710731506,
+            0.7301235198974609,
+            0.6715414524078369,
+            0.6041721105575562,
+            0.52947998046875,
+            0.46211060881614685
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.22740466177431512,
+          "arm_prefix_rms_against_factual": 0.23030239066073677
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1102,
+          "raw_gripper_prefix_8": [
+            1.0178258419036865,
+            1.017099380493164,
+            1.0135524272918701,
+            1.0133235454559326,
+            1.0164238214492798,
+            1.0208598375320435,
+            1.0210925340652466,
+            1.0213595628738403
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.18738382635696818,
+          "arm_prefix_rms_against_factual": 0.185452123045571
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1103,
+          "raw_gripper_prefix_8": [
+            0.9332079887390137,
+            0.9195388555526733,
+            0.9019642472267151,
+            0.8873187303543091,
+            0.8716968297958374,
+            0.8590040802955627,
+            0.8385003209114075,
+            0.8189730048179626
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.1615722642699804,
+          "arm_prefix_rms_against_factual": 0.15865171751275553
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1104,
+          "raw_gripper_prefix_8": [
+            1.012202262878418,
+            1.020966649055481,
+            1.0216703414916992,
+            1.0332247018814087,
+            1.0423628091812134,
+            1.0502195358276367,
+            1.0579465627670288,
+            1.069083333015442
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.22216612963271617,
+          "arm_prefix_rms_against_factual": 0.22608287942875568
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1105,
+          "raw_gripper_prefix_8": [
+            1.0095019340515137,
+            1.0134685039520264,
+            1.0130336284637451,
+            1.0127266645431519,
+            1.0140329599380493,
+            1.0148872137069702,
+            1.0148566961288452,
+            1.017190933227539
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.1971125285065071,
+          "arm_prefix_rms_against_factual": 0.19564960913590812
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1106,
+          "raw_gripper_prefix_8": [
+            0.8385003209114075,
+            0.7428163290023804,
+            0.6100302934646606,
+            0.4445359706878662,
+            0.2880730628967285,
+            0.138383686542511,
+            -0.00434906268492341,
+            -0.12781380116939545
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            -1,
+            -1
+          ],
+          "prefix_command_changes_against_zero": 2,
+          "prefix_command_changes_against_factual": 2,
+          "arm_prefix_rms_against_zero": 0.26413458178928306,
+          "arm_prefix_rms_against_factual": 0.26618588653373415
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1107,
+          "raw_gripper_prefix_8": [
+            1.01148521900177,
+            1.015840768814087,
+            1.0176752805709839,
+            1.0204403400421143,
+            1.024652361869812,
+            1.0283657312393188,
+            1.029349684715271,
+            1.0318974256515503
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.1818064888808263,
+          "arm_prefix_rms_against_factual": 0.1801042802890651
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1108,
+          "raw_gripper_prefix_8": [
+            0.9576171636581421,
+            0.9361370801925659,
+            0.917586088180542,
+            0.9019642472267151,
+            0.8961060047149658,
+            0.8814604878425598,
+            0.8716968297958374,
+            0.8560749292373657
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.2549154233910493,
+          "arm_prefix_rms_against_factual": 0.2571140604377231
+        }
+      ],
+      "query_artifacts": [
+        {
+          "label": "native_replay_0",
+          "query_id": 1093,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:080",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001093.npz",
+          "sha256": "382c8e1ffdc87987f9dbc09a80172593f24b5d782c0830e69fc706db9d8412bc"
+        },
+        {
+          "label": "native_replay_1",
+          "query_id": 1094,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:081",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001094.npz",
+          "sha256": "306bbfbd87e607c64ca911ab15fa744bb780dc9d9129511bbfc8c415d6ef516a"
+        },
+        {
+          "label": "zero",
+          "query_id": 1095,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:082",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001095.npz",
+          "sha256": "fe2de22620c484d30f3d414ccb5f46fabdfa9eb30a600298ef934aa3387ca3a6"
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1096,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:083",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001096.npz",
+          "sha256": "0f2e962c39909adcde922b2a6c17636f27c451a132b8e36b4dd256e65a1ea030"
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1097,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:084",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001097.npz",
+          "sha256": "49e5c5246b88616feb9efba9e3a40415c617a87fffb0abc3819d522ba50ebe98"
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1098,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:085",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001098.npz",
+          "sha256": "b2e75d1e2eab9f4f62ed47c0c52ddd88205a1dfadf0a6cf32e35b92a3f704328"
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1099,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:086",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001099.npz",
+          "sha256": "d8220518ca5665f81dc544ab4027c5ecf25d4abc852f3675e36220841fb957bf"
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1100,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:087",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001100.npz",
+          "sha256": "ed9b3822651bad2f6519359f876474b849d6dadc19ca9e4db16b87040f593447"
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1101,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:088",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001101.npz",
+          "sha256": "df893c041866d82f62eb3965228c27ad7d9994e4b7c0a3283fab7bfbe65a77ee"
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1102,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:089",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001102.npz",
+          "sha256": "8451b0f98952d0660e1409e57ea6cc4a0eb7b2d367068981d03e414f8db356f3"
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1103,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:090",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001103.npz",
+          "sha256": "7724f9fa0632b91ff97e8c53c5299c3e5fb539c855e710ab6c117ad0d7f12b34"
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1104,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:091",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001104.npz",
+          "sha256": "645b743cf9570b9a6c5004ab26878a579f8be4ef68c24a5ba4782aa3af0193aa"
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1105,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:092",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001105.npz",
+          "sha256": "d2ceb8b1b043d6b9c6a660d18197a3bb27105ab1daf92d773932cd2a816907e5"
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1106,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:093",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001106.npz",
+          "sha256": "16c9ab0b0293e9f59f90d5ffd6c23683fc6b7100724a67a74285903397a7bf9b"
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1107,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:094",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001107.npz",
+          "sha256": "903454ed650b86aa2f5fbf13de837f31dec5767261ceb40902a16a5ad8ad4ac3"
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1108,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:095",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001108.npz",
+          "sha256": "6d448e693586006de9ef5bdd841c43518a9ad5af5bf7971516447c9025c4e4f6"
+        }
+      ]
+    },
+    {
+      "snapshot_id": "E3:q4",
+      "task": 11,
+      "episode_id": "E3",
+      "factual_policy_gpu_lane": 3,
+      "probe_policy_gpu_lane": 0,
+      "factual_query_id": 4,
+      "factual_query_index": 0,
+      "factual_control_step": 0,
+      "factual_artifact_sha256": "0a893dc45801874c85cf0568ab522ddc4b2285e238527c66e78e9baaf9f2cc9c",
+      "factual_artifact_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/E3/query_00000004.npz",
+      "input_component_sha256": {
+        "actions": "4808e1179a77fcfd60ce90e202124f856b983c8e46525467adc355f4ee62d10a",
+        "noise": "8f2385d8a93fb21855ad8eda6ccf53ee80e14f09cf46e557672d04555cbf1dd3",
+        "observation_image_left": "8459e971a1d156238fcdff47bbcbcd0e6638c474514b2e6de92fae97b8258ecc",
+        "observation_state": "b60a5f355c19c4ae959adb09ce7aea3ffa9e4e72e544ff46bf3bb0c7851413f0",
+        "observation_wrist_image": "73fccc7670ea2516ddcf174faea254912cb5503e85d232653b999b1267732d5d",
+        "prompt": "1ddfc12107244200b36345962859a9aab92a6fd95aa4c73e8c1589b8b71cae3e"
+      },
+      "replays": [
+        {
+          "repeat": 0,
+          "query_id": 1109,
+          "full_chunk_allclose": false,
+          "full_chunk_bitwise_values_equal": false,
+          "max_absolute_difference": 0.0012204647064208984,
+          "rms_all_16x8": 0.0002638565636637993,
+          "rms_arm_prefix_8x7": 0.00014013408306844078,
+          "rms_arm_full_16x7": 0.00013487098989131265,
+          "rms_gripper_full_16": 0.0006554624337884749,
+          "maximum_tolerance_ratio": 61.05770334651439,
+          "elements_exceeding_tolerance": 87,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        },
+        {
+          "repeat": 1,
+          "query_id": 1110,
+          "full_chunk_allclose": false,
+          "full_chunk_bitwise_values_equal": false,
+          "max_absolute_difference": 0.0012204647064208984,
+          "rms_all_16x8": 0.0002638565636637993,
+          "rms_arm_prefix_8x7": 0.00014013408306844078,
+          "rms_arm_full_16x7": 0.00013487098989131265,
+          "rms_gripper_full_16": 0.0006554624337884749,
+          "maximum_tolerance_ratio": 61.05770334651439,
+          "elements_exceeding_tolerance": 87,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        }
+      ],
+      "repeat_to_repeat": {
+        "full_16x8_values_exact": true,
+        "max_absolute_difference": 0.0,
+        "rms_all_16x8": 0.0,
+        "prefix_converted_gripper_equal": true
+      },
+      "descriptive_bounded_sensitivity": {
+        "is_formal_valid_gate_result": false,
+        "sensitive": false,
+        "sensitive_prefix_positions": [],
+        "raw_prefix_gripper_min": 0.9127042889595032,
+        "raw_prefix_gripper_max": 1.0379940271377563,
+        "margin_witnesses": []
+      },
+      "candidates": [
+        {
+          "label": "zero",
+          "query_id": 1111,
+          "raw_gripper_prefix_8": [
+            0.9991128444671631,
+            0.9981364607810974,
+            0.9976482391357422,
+            0.9976482391357422,
+            0.9956955313682556,
+            0.9922782182693481,
+            0.9927664399147034,
+            0.9947191476821899
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0,
+          "arm_prefix_rms_against_factual": 0.006040793570031546
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1112,
+          "raw_gripper_prefix_8": [
+            1.0017606019973755,
+            0.9994484186172485,
+            0.9997840523719788,
+            0.9968015551567078,
+            0.9948793649673462,
+            0.9955258369445801,
+            0.9947267770767212,
+            0.9951444268226624
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0017904912694156065,
+          "arm_prefix_rms_against_factual": 0.00693314209258094
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1113,
+          "raw_gripper_prefix_8": [
+            1.0005773305892944,
+            1.0015537738800049,
+            0.9996010065078735,
+            0.9976482391357422,
+            0.9927664399147034,
+            0.993742823600769,
+            0.990813672542572,
+            0.9917900562286377
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0009689087076470628,
+          "arm_prefix_rms_against_factual": 0.005597184736734601
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1114,
+          "raw_gripper_prefix_8": [
+            1.0233179330825806,
+            1.0249418020248413,
+            1.0225456953048706,
+            1.0229079723358154,
+            1.026519775390625,
+            1.0278546810150146,
+            1.0289759635925293,
+            1.028464913368225
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.1396131033614104,
+          "arm_prefix_rms_against_factual": 0.14281425964668049
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1115,
+          "raw_gripper_prefix_8": [
+            0.9605463147163391,
+            0.9478535056114197,
+            0.9410189390182495,
+            0.9341843724250793,
+            0.9224679470062256,
+            0.9214915633201599,
+            0.9166097640991211,
+            0.9127042889595032
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.1675347181556672,
+          "arm_prefix_rms_against_factual": 0.16737404324760766
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1116,
+          "raw_gripper_prefix_8": [
+            0.9901424646377563,
+            0.9881324768066406,
+            0.9879074692726135,
+            0.9876405000686646,
+            0.9882230758666992,
+            0.9925690293312073,
+            0.9917747974395752,
+            0.9929971694946289
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.11903443623367162,
+          "arm_prefix_rms_against_factual": 0.12073799542166426
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1117,
+          "raw_gripper_prefix_8": [
+            0.9380898475646973,
+            0.9332079887390137,
+            0.9293025135993958,
+            0.9253970384597778,
+            0.9224679470062256,
+            0.920515239238739,
+            0.9166097640991211,
+            0.9156333804130554
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.1831350237206071,
+          "arm_prefix_rms_against_factual": 0.18481729861323437
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1118,
+          "raw_gripper_prefix_8": [
+            1.0083096027374268,
+            1.004711627960205,
+            1.0000758171081543,
+            0.9984420537948608,
+            0.9992920756340027,
+            1.0030349493026733,
+            1.002177357673645,
+            1.0039126873016357
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0935578041200751,
+          "arm_prefix_rms_against_factual": 0.09329649539878453
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1119,
+          "raw_gripper_prefix_8": [
+            0.9654281139373779,
+            0.9595699310302734,
+            0.9585935473442078,
+            0.9585935473442078,
+            0.9566408395767212,
+            0.9556644558906555,
+            0.9556644558906555,
+            0.9556644558906555
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.14469604141978845,
+          "arm_prefix_rms_against_factual": 0.14849003788934934
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1120,
+          "raw_gripper_prefix_8": [
+            1.0143237113952637,
+            1.0068179368972778,
+            1.005456805229187,
+            1.0132548809051514,
+            1.0156519412994385,
+            1.0193324089050293,
+            1.022086501121521,
+            1.0250704288482666
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.1055044108124627,
+          "arm_prefix_rms_against_factual": 0.10258742798854044
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1121,
+          "raw_gripper_prefix_8": [
+            1.0264296531677246,
+            1.0286250114440918,
+            1.0269030332565308,
+            1.0265045166015625,
+            1.0309782028198242,
+            1.0333881378173828,
+            1.0346415042877197,
+            1.0379940271377563
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.16670395377681457,
+          "arm_prefix_rms_against_factual": 0.16980756639995515
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1122,
+          "raw_gripper_prefix_8": [
+            0.9888609647750854,
+            0.9820263981819153,
+            0.9781209230422974,
+            0.9751918315887451,
+            0.9771445393562317,
+            0.9751918315887451,
+            0.9771445393562317,
+            0.9751918315887451
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.09196138448404399,
+          "arm_prefix_rms_against_factual": 0.09001796198427708
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1123,
+          "raw_gripper_prefix_8": [
+            1.0211421251296997,
+            1.024244785308838,
+            1.026559829711914,
+            1.0278446674346924,
+            1.0339263677597046,
+            1.0354777574539185,
+            1.036605715751648,
+            1.0376335382461548
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.14128788537551773,
+          "arm_prefix_rms_against_factual": 0.1443612538216042
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1124,
+          "raw_gripper_prefix_8": [
+            0.9849554896354675,
+            0.9771445393562317,
+            0.9664044976234436,
+            0.964451789855957,
+            0.9566408395767212,
+            0.953711748123169,
+            0.9527353644371033,
+            0.949806272983551
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0924866143137077,
+          "arm_prefix_rms_against_factual": 0.09060008400573652
+        }
+      ],
+      "query_artifacts": [
+        {
+          "label": "native_replay_0",
+          "query_id": 1109,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:096",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001109.npz",
+          "sha256": "250133feef3148ab8b872b8b0defc6a7b61745e41382cdf0eb3d2d350f12ba85"
+        },
+        {
+          "label": "native_replay_1",
+          "query_id": 1110,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:097",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001110.npz",
+          "sha256": "c6bb411feb8adf0d0253e5c2cd32b1cde1fdcf7c15c7bed36d56f15fb5f92eb0"
+        },
+        {
+          "label": "zero",
+          "query_id": 1111,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:098",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001111.npz",
+          "sha256": "a6e62d9d317a46361eacd4ac06f74444c7dc04b3415eddd719436dfc8717d170"
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1112,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:099",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001112.npz",
+          "sha256": "a9642a0cd694d98ff8d053fddd01d23ad45f67fa3ae071719ebd79395305d325"
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1113,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:100",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001113.npz",
+          "sha256": "576b5ba6a691644d39eb24129eb4ad0e0931ff5dc2e7815cad069c0087473f87"
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1114,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:101",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001114.npz",
+          "sha256": "689c5ddb2f7f8c9e85b312cb3727ac2e40f53adefc3c02abde9a688ed8edeb2e"
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1115,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:102",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001115.npz",
+          "sha256": "6d5c2672a8e0c95942d0746af39f26532a69c72b4175f69beaab7fbcc00a719b"
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1116,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:103",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001116.npz",
+          "sha256": "6e60a4be1496c9f8c3ccd6f55e69688d8d5f05f13458125e772f50b9f94d0ef7"
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1117,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:104",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001117.npz",
+          "sha256": "bb5230299f8a457c019d9fc92831c658eddaf5936155236d8c575ce4f013e017"
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1118,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:105",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001118.npz",
+          "sha256": "eff21216b49d791d15652161d555f3afd82caca7bd673c09efd9e100cfc81f3e"
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1119,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:106",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001119.npz",
+          "sha256": "a23a9cc5cb87fa0a4952654a7b9c7e8721a3a871ae03d1d0ae23261b32e81e57"
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1120,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:107",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001120.npz",
+          "sha256": "0d860adda89b7584e7a00f201399b2a9237153e6a14f3a6ec60169236fe94ed5"
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1121,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:108",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001121.npz",
+          "sha256": "1d7f077f33386ec6a44b91650addf9f62669f61046372bb873858cad15589dbd"
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1122,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:109",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001122.npz",
+          "sha256": "bbff347c001eff0182728738ddb2e53221e31d890152deb89392a6110c93eb47"
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1123,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:110",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001123.npz",
+          "sha256": "cf24f41ce9ffc33d575a13a1051639d18432729463abaa70c681fed47a66dc50"
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1124,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:111",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001124.npz",
+          "sha256": "8bf255fa10f35fd65debacc24c23cbf8fbb9d8c53f60408a9b623af8fee1d51d"
+        }
+      ]
+    },
+    {
+      "snapshot_id": "E3:q50",
+      "task": 11,
+      "episode_id": "E3",
+      "factual_policy_gpu_lane": 3,
+      "probe_policy_gpu_lane": 0,
+      "factual_query_id": 50,
+      "factual_query_index": 43,
+      "factual_control_step": 344,
+      "factual_artifact_sha256": "1524d09471be7a3846d8df8d09fe636816dcce08c164154f1f5c5df191b530d2",
+      "factual_artifact_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/E3/query_00000050.npz",
+      "input_component_sha256": {
+        "actions": "deef0f31f662418f8d415f20289a271cdceacdaf3ae177ab34ff4e634991a699",
+        "noise": "7fe8e9cab667753c1c0f01b8c1306551e5267e20cc35fd3e8cb55d59ec7a8209",
+        "observation_image_left": "dbc821266474d062ec94707abc814d387c4448525e0bc8f9c89547ac194dac51",
+        "observation_state": "28939b26927f5e64a5e344e3428ccb95b1fe3a42625719b94815ccb9024c9ba4",
+        "observation_wrist_image": "5d7a708fc3d25e6db67082e1b8c61aa5c6ca323805bcfd092fb192d8ec342216",
+        "prompt": "1ddfc12107244200b36345962859a9aab92a6fd95aa4c73e8c1589b8b71cae3e"
+      },
+      "replays": [
+        {
+          "repeat": 0,
+          "query_id": 1125,
+          "full_chunk_allclose": false,
+          "full_chunk_bitwise_values_equal": false,
+          "max_absolute_difference": 0.0019527673721313477,
+          "rms_all_16x8": 0.00037615957661959456,
+          "rms_arm_prefix_8x7": 0.00021227043793111772,
+          "rms_arm_full_16x7": 0.00019842348252222273,
+          "rms_gripper_full_16": 0.0009253999501552468,
+          "maximum_tolerance_ratio": 97.4095632987929,
+          "elements_exceeding_tolerance": 104,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        },
+        {
+          "repeat": 1,
+          "query_id": 1126,
+          "full_chunk_allclose": false,
+          "full_chunk_bitwise_values_equal": false,
+          "max_absolute_difference": 0.0019527673721313477,
+          "rms_all_16x8": 0.00037615957661959456,
+          "rms_arm_prefix_8x7": 0.00021227043793111772,
+          "rms_arm_full_16x7": 0.00019842348252222273,
+          "rms_gripper_full_16": 0.0009253999501552468,
+          "maximum_tolerance_ratio": 97.4095632987929,
+          "elements_exceeding_tolerance": 104,
+          "converted_gripper_prefix_8_equal": true,
+          "converted_gripper_full_16_equal": true
+        }
+      ],
+      "repeat_to_repeat": {
+        "full_16x8_values_exact": true,
+        "max_absolute_difference": 0.0,
+        "rms_all_16x8": 0.0,
+        "prefix_converted_gripper_equal": true
+      },
+      "descriptive_bounded_sensitivity": {
+        "is_formal_valid_gate_result": false,
+        "sensitive": false,
+        "sensitive_prefix_positions": [],
+        "raw_prefix_gripper_min": 0.949806272983551,
+        "raw_prefix_gripper_max": 1.0337891578674316,
+        "margin_witnesses": []
+      },
+      "candidates": [
+        {
+          "label": "zero",
+          "query_id": 1127,
+          "raw_gripper_prefix_8": [
+            0.9956955313682556,
+            0.9996010065078735,
+            0.9996010065078735,
+            1.0010654926300049,
+            0.9986246228218079,
+            1.000089168548584,
+            1.0010654926300049,
+            0.9996010065078735
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0,
+          "arm_prefix_rms_against_factual": 0.005183457086888912
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1128,
+          "raw_gripper_prefix_8": [
+            1.0031365156173706,
+            1.0042158365249634,
+            1.0057963132858276,
+            1.004515290260315,
+            1.004541039466858,
+            1.0047402381896973,
+            1.005058765411377,
+            1.0048260688781738
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0009702905599706488,
+          "arm_prefix_rms_against_factual": 0.004898821764490631
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1129,
+          "raw_gripper_prefix_8": [
+            0.990813672542572,
+            0.9966719150543213,
+            0.9996010065078735,
+            1.0005773305892944,
+            0.9976482391357422,
+            0.9976482391357422,
+            0.9976482391357422,
+            0.9986246228218079
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.0011639476067234768,
+          "arm_prefix_rms_against_factual": 0.0055912738107815755
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1130,
+          "raw_gripper_prefix_8": [
+            1.0220993757247925,
+            1.0170822143554688,
+            1.0153487920761108,
+            1.0128926038742065,
+            1.0153011083602905,
+            1.0160351991653442,
+            1.0187345743179321,
+            1.0211364030838013
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.09924097329757116,
+          "arm_prefix_rms_against_factual": 0.0985812946517218
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1131,
+          "raw_gripper_prefix_8": [
+            0.9839791059494019,
+            0.9742154479026794,
+            0.9683572053909302,
+            0.9654281139373779,
+            0.9595699310302734,
+            0.9556644558906555,
+            0.9527353644371033,
+            0.949806272983551
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.09779413793082599,
+          "arm_prefix_rms_against_factual": 0.09826314700625881
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1132,
+          "raw_gripper_prefix_8": [
+            0.9947324991226196,
+            0.9971925020217896,
+            0.9973583817481995,
+            0.9997344613075256,
+            1.0029901266098022,
+            1.0046182870864868,
+            1.005689024925232,
+            1.0071659088134766
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.07813484050821355,
+          "arm_prefix_rms_against_factual": 0.07774871639486994
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1133,
+          "raw_gripper_prefix_8": [
+            0.9732390642166138,
+            0.9712863564491272,
+            0.9673808813095093,
+            0.9683572053909302,
+            0.9683572053909302,
+            0.9673808813095093,
+            0.9664044976234436,
+            0.9654281139373779
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.1288471185763889,
+          "arm_prefix_rms_against_factual": 0.13325009576748953
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1134,
+          "raw_gripper_prefix_8": [
+            1.0082566738128662,
+            1.0058505535125732,
+            1.0056012868881226,
+            1.0037181377410889,
+            1.0070306062698364,
+            1.0092216730117798,
+            1.0128048658370972,
+            1.013853669166565
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.07605987790020254,
+          "arm_prefix_rms_against_factual": 0.07162188484212363
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1135,
+          "raw_gripper_prefix_8": [
+            0.976168155670166,
+            0.9820263981819153,
+            0.9859318733215332,
+            0.9878845810890198,
+            0.9878845810890198,
+            0.9917900562286377,
+            0.9947191476821899,
+            0.9966719150543213
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.09911977790572395,
+          "arm_prefix_rms_against_factual": 0.09630849303485131
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1136,
+          "raw_gripper_prefix_8": [
+            1.013268232345581,
+            1.0130202770233154,
+            1.0106561183929443,
+            1.0163882970809937,
+            1.0201876163482666,
+            1.024579405784607,
+            1.029584288597107,
+            1.030045747756958
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.15897058592114346,
+          "arm_prefix_rms_against_factual": 0.16174657167200135
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1137,
+          "raw_gripper_prefix_8": [
+            1.0300633907318115,
+            1.0303794145584106,
+            1.0257569551467896,
+            1.0275640487670898,
+            1.0291780233383179,
+            1.0314311981201172,
+            1.0317314863204956,
+            1.0337891578674316
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.11703150563401954,
+          "arm_prefix_rms_against_factual": 0.11642354408745677
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1138,
+          "raw_gripper_prefix_8": [
+            0.9927664399147034,
+            0.9878845810890198,
+            0.9859318733215332,
+            0.9849554896354675,
+            0.9869081974029541,
+            0.9869081974029541,
+            0.9878845810890198,
+            0.9849554896354675
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.09627663157174858,
+          "arm_prefix_rms_against_factual": 0.09659952642749921
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1139,
+          "raw_gripper_prefix_8": [
+            1.022182583808899,
+            1.022881269454956,
+            1.0191388130187988,
+            1.0222481489181519,
+            1.0278394222259521,
+            1.0294145345687866,
+            1.0304938554763794,
+            1.0323092937469482
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.10447022897327014,
+          "arm_prefix_rms_against_factual": 0.10390016915275305
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1140,
+          "raw_gripper_prefix_8": [
+            0.990813672542572,
+            0.9849554896354675,
+            0.979097306728363,
+            0.979097306728363,
+            0.976168155670166,
+            0.9771445393562317,
+            0.9751918315887451,
+            0.9742154479026794
+          ],
+          "converted_gripper_prefix_8": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "prefix_command_changes_against_zero": 0,
+          "prefix_command_changes_against_factual": 0,
+          "arm_prefix_rms_against_zero": 0.10256112324238935,
+          "arm_prefix_rms_against_factual": 0.10292855017159012
+        }
+      ],
+      "query_artifacts": [
+        {
+          "label": "native_replay_0",
+          "query_id": 1125,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:112",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001125.npz",
+          "sha256": "f918676f62348431fe47325434e0ae48216e2abc335b1aae20114b81083d4105"
+        },
+        {
+          "label": "native_replay_1",
+          "query_id": 1126,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:113",
+          "mode": "native_replay",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001126.npz",
+          "sha256": "84493d1e1c26c4f4940f7953b75fdaacaf2ddf8d8f3bb8ca6a1dfe1c0f4959df"
+        },
+        {
+          "label": "zero",
+          "query_id": 1127,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:114",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001127.npz",
+          "sha256": "f26c64680fbaca5f27f27189940832c3f702a84610c45c028d51efa42dcd2f2c"
+        },
+        {
+          "label": "coordinate7_plus",
+          "query_id": 1128,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:115",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001128.npz",
+          "sha256": "86616a5b3572bff17776868d1b5b97292739b7c48d10dc1a8589d63afde6e4ad"
+        },
+        {
+          "label": "coordinate7_minus",
+          "query_id": 1129,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:116",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001129.npz",
+          "sha256": "1ed25eecd17da571145175487f0ccdda65004caf32ca357baa3b4f0f0d88b02b"
+        },
+        {
+          "label": "all_ones",
+          "query_id": 1130,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:117",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001130.npz",
+          "sha256": "06f463067f0f6749bcfc00e1530a7eaf842473b9f4dc14b509680d3dad336b36"
+        },
+        {
+          "label": "walsh_bit0_plus",
+          "query_id": 1131,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:118",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001131.npz",
+          "sha256": "ef21fac48fa79637aede42ef4cb2a0df7b4bf20d2942d998d1eeb1f551c61cd6"
+        },
+        {
+          "label": "walsh_bit0_minus",
+          "query_id": 1132,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:119",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001132.npz",
+          "sha256": "64aea0431bc7d5a72270b0a0426789e137c6769fa504480b87a8a26c68d49872"
+        },
+        {
+          "label": "walsh_bit1_plus",
+          "query_id": 1133,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:120",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001133.npz",
+          "sha256": "a6522f78d53f928c1283de46e650903d1951807b69f2b943e27034ec807423cb"
+        },
+        {
+          "label": "walsh_bit1_minus",
+          "query_id": 1134,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:121",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001134.npz",
+          "sha256": "ef87c52a8d4d7c84c1caf0858df91809480cfa19b4b2afa544d9d1653649b12b"
+        },
+        {
+          "label": "walsh_bit2_plus",
+          "query_id": 1135,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:122",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001135.npz",
+          "sha256": "1cf812f88877f4a42bf13f88894aff0f45239078e6c38ba67e417de662499088"
+        },
+        {
+          "label": "walsh_bit2_minus",
+          "query_id": 1136,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:123",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001136.npz",
+          "sha256": "a0b4bcb40ed58f623e6fb8a1642c539bb9779380c63e333dd7f243a615044ade"
+        },
+        {
+          "label": "walsh_bit3_plus",
+          "query_id": 1137,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:124",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001137.npz",
+          "sha256": "7805d5920282366c9d5bb2295a135b55900d739825bda0f0fd1da39d7c784507"
+        },
+        {
+          "label": "walsh_bit3_minus",
+          "query_id": 1138,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:125",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001138.npz",
+          "sha256": "0ba0dd49a3395a2647cce258393b66b3b960ca1a22841756430f380ce934d1f9"
+        },
+        {
+          "label": "walsh_bit4_plus",
+          "query_id": 1139,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:126",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001139.npz",
+          "sha256": "881f525ef8bc4c162a31f0bf54ef81e7d8a91ddff994a116997cfcd04e7c104c"
+        },
+        {
+          "label": "walsh_bit4_minus",
+          "query_id": 1140,
+          "packet_id": "dsrl06:9471ad6c812a05376a35b9f380a0c149b6351f288a03972163ba125c15cd862c:127",
+          "mode": "explicit",
+          "record_path": "/workspace/Safety-Dial/outputs/dsrl06/queries/authority_9471ad6c812a05376a35b9f3/query_00001140.npz",
+          "sha256": "8b47fceef178da4e30afdc8365facd3d8fb1b20e691e2806a2b9511bf16d4c44"
+        }
+      ]
+    }
+  ],
+  "candidate_vectors_float32": [
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -1.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0
+    ],
+    [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0
+    ],
+    [
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0
+    ],
+    [
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0
+    ],
+    [
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0
+    ],
+    [
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0
+    ],
+    [
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  ],
+  "raw_artifacts_unchanged_by_audit": true
+}

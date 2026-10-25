@@ -1,0 +1,63 @@
+{
+  "schema": "dsrl06-decoder-probe-spec-v1",
+  "status": "Frozen planning specification; no decoder queries or physics performed",
+  "model_shape_receipt": "progress/receipts/06-dsrl-shape-audit.json",
+  "candidate_shape": [
+    14,
+    32
+  ],
+  "tiled_shape_per_candidate": [
+    16,
+    32
+  ],
+  "dtype": "float32 little-endian",
+  "magnitude_bound_linf": 1.0,
+  "construction": "zero, +e7, -e7, ones, then plus/minus r_j[k] = +1 if bit j of k is zero else -1, j=0..4, k=0..31",
+  "candidate_labels": [
+    "zero",
+    "coordinate7_plus",
+    "coordinate7_minus",
+    "all_ones",
+    "walsh_bit0_plus",
+    "walsh_bit0_minus",
+    "walsh_bit1_plus",
+    "walsh_bit1_minus",
+    "walsh_bit2_plus",
+    "walsh_bit2_minus",
+    "walsh_bit3_plus",
+    "walsh_bit3_minus",
+    "walsh_bit4_plus",
+    "walsh_bit4_minus"
+  ],
+  "candidate_float32_bytes_sha256": "876155de2870c7fb7d4da3aaa9f977344380884a82fe49cd56011465b4ec11d5",
+  "candidate_npy_path": "outputs/dsrl06-preflight/decoder-probe-vectors.npy",
+  "candidate_npy_sha256": "28e4a4922783accb02096cc40960ca5a671fb9accdee79c986637b8096eb5bf6",
+  "snapshots": 8,
+  "native_episodes": [
+    "E0",
+    "E1",
+    "E2",
+    "E3"
+  ],
+  "snapshots_per_episode": 2,
+  "snapshot_selection": "Initial query; first strictly later nonviolating query after first observed closure, else latest strictly later nonviolating query at or before control 800. No replacement if insufficient. Freeze raw observations, native draws and outputs before probing.",
+  "queries_per_snapshot": 16,
+  "native_replays_per_snapshot": 2,
+  "bounded_candidates_per_snapshot": 14,
+  "total_query_ceiling": 128,
+  "identity_atol": 1e-05,
+  "identity_rtol": 1e-05,
+  "identity_requires_exact_converted_prefix_gripper": true,
+  "executed_prefix": 8,
+  "native_gripper_open_threshold": 0.01,
+  "native_gripper_open_test": "g > 0.01",
+  "minimum_raw_open": 0.02,
+  "maximum_raw_closed": 0.0,
+  "sensitivity": "Two bounded candidates produce opposite converted gripper commands at the same prefix position with the stated margins.",
+  "minimum_sensitive_snapshots": 2,
+  "minimum_distinct_sensitive_tasks": 2,
+  "absence_action": "Stop engineering; no E4/E5, development learning, evaluation, larger bounds, extra directions or replacement snapshots.",
+  "simulator_starts": 0,
+  "model_queries_performed": 0,
+  "learner_updates": 0
+}

@@ -1,131 +1,124 @@
 # First principles plan
 
-Sachin Mohan, 22 October 2026. Supersedes nothing; this is a staging order for the
-existing goal, previously set out in
-[Evolutionary improvement on ManiGuard](archive/20261022/Evolutionary%20improvement%20on%20ManiGuard.md).
-The research controls in [AGENTS.md](AGENTS.md) still apply at every stage.
+Sachin Mohan. Established 22 October 2026; current status updated 25 October 2026.
+The goal remains a compact evolved controller that raises safe task completion of
+frozen ManiGuard policies under matched interaction budgets. The research controls
+in [AGENTS.md](AGENTS.md) apply throughout. Jar is the chosen family; Stack is the backup.
 
-## Why this plan exists
+## Current decision
 
-Every study so far started at the optimizer. Push-T, Walker, UNISafe, ManiGuard Parts 1
-to 4, the six-hypothesis study and the latent-evolution pilot each built a full
-comparison around an untested lever on a family whose base rate was never measured.
-The latest pilot ended 0/4 in every condition and could not say whether the policy, the
-lever, the objective or the budget was at fault
-([progress audit](archive/20261022/reports/Recent%20ManiGuard%20progress%20audit.md)). The fix is to
-measure the preconditions before buying another comparison.
+Tasks 1 through 6 are complete. The baseline has useful variance, but the tested
+retry and execution-feedback presets have not established a useful lever. Sachin
+selected DSRL noise steering, four RTX 4090 GPUs and a hard $15 cap, then authorized
+implementation and execution. Task 6 completed four native engineering episodes
+and its decoder probe, then stopped at failed numerical integration gates. It did
+not train or evaluate a DSRL controller. See the
+[result](progress/receipts/06-dsrl-results.md). A useful learned lever remains
+unestablished.
 
-## What evolution needs, in order
+This decision replaces the original scalar-only restriction on stage 2. Ordinary
+learning is now the next way to test whether the frozen policy offers useful steering.
+It does not skip the requirement to demonstrate a lever before an evolutionary search.
+The earlier plan remains in git history; its budgets and immediate-action text are
+not current launch instructions. Use the [progress index](progress/README.md) for status.
 
-1. **Variance.** The base policy must sometimes complete safely and sometimes not.
-2. **A lever.** A knob whose setting changes the safe-completion rate, not merely the
-   decoded actions.
-3. **Cheap, stable evaluation.** Enough episodes per candidate that fitness is signal.
-4. **An optimizer**, compared first against random search and the best hand setting.
+## What must be established in order
 
-Each stage below establishes one requirement and is a measurement, not a bet. A stage
-can only inform; the first point at which the plan can fail is stage 4.
+1. **Variance.** The native policy sometimes completes safely and sometimes does not.
+2. **A lever.** A controller changes safe completion, rather than merely changing actions.
+3. **Stable evaluation.** Enough episodes and repeats to distinguish improvement from noise.
+4. **An optimizer advantage.** Evolution improves on appropriate fixed, random and ordinary-learning controls.
 
-## Stage 1: base-rate survey
+Each stage has its own frozen protocol. A negative result belongs in the record and
+does not authorize an unplanned extension, another seed or a restarted archived pilot.
 
-**Update, 22 October 2026.** The ManiGuard paper already supplies this survey; see
-[ManiGuard base rates](docs/research/research_notes/ManiGuard%20base%20rates.md). Jar is
-chosen and Stack is the backup. Stage 1 is therefore a reproduction of the published Jar
-in-distribution row under the paper's protocol, which also yields the per-task variance
-split and the development and held-out task panels. The frozen protocol for that
-reproduction is still to be written. The original survey text is kept below for the
-record.
+## Stage 1 Baseline and variance
 
-**Done, 23 October 2026.** The reproduction passed under the paper's protocol on one
-host (machine 54514, seeds 0, 0, 1 and 2, 104 episodes): 24 safe successes, 7 unsafe
-successes, 37 safe failures, 36 violations without success, engaged 103 of 104; safe
-success 23 percent and violations 41 percent against the paper's 27 and 38 (p = 0.60 and
-0.76). Two repeats of one seed agree on 13 of 26 tasks, so an episode is a draw from a
-per-task rate; 13 tasks never gave a safe success, 12 are in the middle, one always
-succeeds. Story and numbers:
-[Jar replication and noise floor](docs/research/research_notes/Jar%20replication%20and%20noise%20floor.md).
-Stage 2 is sized on these rates, blocked by host, and averaged over repeats.
+Completed on 23 October. The paper-protocol Jar reproduction on machine 54514 ran
+104 episodes: 24 safe successes, 7 unsafe successes, 37 safe failures and 36 unsafe
+failures. Counted violations occurred in 43/104 episodes and engagement in 103/104.
+The observed safe-success and violation rates were compatible with the published
+Jar rates. Two repeats of one seed agreed on the four-class outcome for 13/26 tasks.
+See [Jar replication and noise floor](docs/research/research_notes/Jar%20replication%20and%20noise%20floor.md).
 
-Run every ManiGuard family (Jar, Lid, Stack, Clutter, Cabinet, Dusty) with its native
-policy and no controller. Twenty episodes per family, fresh seeds, native horizons,
-matched benchmark contract. Record safe requested completion, raw goal, violations and
-unfinished together, with denominators.
+The frozen [panels](progress/panels.json) separate development, diagnostic pool and
+held-out tasks. Held-out tasks already have baseline and descriptive evidence;
+they receive no new intervention episodes before the final comparison.
 
-- Budget: 120 episodes. At the historical five minutes per episode that is ten serial
-  hours, about five on two GPUs.
-- Output: a table of per-family rates with 95% bounds (zero successes in n gives an
-  upper bound of about 3/n).
-- Gate: choose the family whose safe-completion rate is closest to the middle, roughly
-  15% to 70%. Historical hints are thin: Jar identity gave 2/12 in the six-hypothesis
-  study and 0/4 in the pilot; Stack gave 1/6. Those are consistent with single-digit
-  rates, which is why the survey is needed. If no family exceeds about 10%, stop and
-  report that the benchmark offers no selection signal to this approach; the diagnosis
-  paper becomes the contribution.
+## Stage 2 Find a useful controller
 
-Jar is not privileged. It was chosen before because it was hard. That is the wrong
-reason for a first result.
+The retry controller produced 16/96 safe successes against 17/96 native, with no
+observed improvement. The native tracking diagnostic found no general tracking
+deficit, although one contact-associated discrepancy kept a narrow feedback hypothesis
+open. The subsequent bounded-adapter pilot produced safe requested completion of
+1/12 native, 1/12 fixed and 0/12 adaptive. These are separate studies with separate
+controls, not a pooled estimate. [Retry results](progress/receipts/03-results.md),
+[tracking results](progress/receipts/04-tracking-results.md),
+[adapter results](progress/receipts/05-adapter-results.md).
 
-## Stage 2: find a dial
+Task 6 implemented a DSRL noise actor around the frozen pi0.5 checkpoint using the
+author's SAC code. GPU SAC parity and cross-lane native decoder replay failed their
+numerical criteria. All 128 decoder queries were used; learning was not admitted.
+Descriptive sensitivity in one of eight inputs cannot establish absence or efficacy
+under an invalid identity gate. The [plan](progress/06-dsrl-plan.md) and stage freezes
+are historical launch evidence. A revised integration protocol or another lever
+needs a new decision; unused allocations do not authorize extensions.
 
-On the chosen family, sweep one scalar lever by hand. The primary candidate is the
-native-noise scale, because the explicit-noise hook already exists, scale 1.0 with zero
-bias reproduces the native RNG path exactly, and the decoder audits showed influence
-grows with magnitude ([pilot report](archive/20261022/docs/research/reports/ManiGuard%20latent%20evolution%20pilot.md)).
-Fallback candidates are a gripper-coordinate-only scale and a motion-speed scale.
+A future valid pilot could support another development replication, not an
+evolutionary or generalization claim. A fixed-zero control is not a tuned best fixed setting, and
+random noise per query is not parameter random search. Those comparisons must be
+added before attributing an advantage to an optimizer. The actor's parameter count
+and the cost of any learned feature encoder must be visible when defining a later
+compact evolutionary search space.
 
-- Design: five settings, including native, twenty episodes each on a fixed seed panel
-  shared across settings. One hundred episodes, about eight serial hours.
-- Output: safe completion, violations and unfinished per setting on common seeds.
-- Gate: at least one setting changes the safe-completion rate by more than its
-  standard error with violations not rising to match. If no setting moves the rate,
-  try one fallback lever once, then stop. A lever that cannot move the rate by hand
-  cannot be improved by evolution, and that finding is reported, not hidden.
+## Stage 3 Size a stable comparison
 
-This stage already answers the literal Safety Dial question: does a single knob trade
-safety against completion in a frozen manipulation policy?
+After a useful lever is observed and replicated, use its per-task variance, learner-seed
+variance and measured rollout speed to fix the comparison. Freeze the controller
+domain, evaluation panel, training and selection budgets, outcome definitions, number
+of optimizer seeds and analysis before running searches. Historical episode seeds do
+not guarantee identical trajectories. Keep new control and intervention results
+blocked by physical host.
 
-## Stage 3: size the evaluation
+The final held-out task panel stays unavailable for method selection. A small
+development screen is not a power calculation. Use uncertainty appropriate to task
+and training-seed replication, rather than treating every correlated rollout as an
+independent experiment.
 
-Use the stage 1 and 2 numbers to fix the per-candidate panel. With base rate p and n
-episodes the standard error is sqrt(p(1-p)/n); n = 20 at p = 0.3 gives 0.10. Fitness is
-the count of safe requested completions on a fixed common-seed panel, with violations
-reported alongside, never imagined safety. Freeze the panel size, the seeds, the
-parameter domain and the total episode ceiling before any search runs.
+## Stage 4 Test the evolutionary contribution
 
-No new physical work in this stage. It is arithmetic plus a protocol freeze.
+Compare evolution with parameter random search, a tuned fixed controller, native
+execution and an ordinary-learning controller using the same allowed observations,
+action/noise interface and reward information. Charge shared representation learning,
+tuning, rejected candidates and validation interactions explicitly. Match simulator
+interaction budgets and report model queries, learner updates and wall time separately.
 
-## Stage 4: the evolutionary question
+An evolutionary claim requires replicated improvement on reserved evaluations with
+safe completion up and violations not increased within the stated uncertainty. A
+positive DSRL result establishes a comparator and a candidate mechanism; it does not
+by itself establish novelty or an evolutionary advantage. Transfer and broader safety
+tradeoff studies need their own justified protocols.
 
-Only now compare optimizers. The genotype is the stage 2 lever plus at most a handful
-of conditioning parameters; the shared recurrent controller returns later, not here.
+## Controls that remain in force
 
-- Arms: evolutionary search, random search, best fixed setting from stage 2, native.
-  All search arms receive the same episode budget and see the same seeds.
-- Illustrative size: eight candidates per generation, three generations, twenty
-  episodes each, about 480 episodes per search arm. Resize from stage 3 numbers.
-- Reserve fresh seeds for independent checking before looking at search outcomes.
-- Gate for a claim: the evolved setting beats random search and the best fixed setting
-  on reserved seeds, with safe completion up and violations not up. One optimizer seed
-  supports a pilot claim only; replicate before calling it an advantage.
-
-Transfer across families, ordinary-learning comparators and the observation-conditioned
-controller are stage 5 and later. They are earned by a stage 4 positive, not scheduled
-ahead of it.
-
-## Rules carried forward
-
-- Count every simulator interaction including sweeps, discarded candidates and failed
-  starts. Report elapsed time and model queries separately.
-- Report safe completion, physical violations and unfinished episodes together.
-- Keep proposed, filtered and executed actions distinguishable. The monitor labels and
-  never vetoes.
-- Freeze each stage's protocol before running it. Do not read the next stage's
-  outcomes while choosing the current stage's design.
-- Do not resume the completed pilot or the failed continuation screen.
+- Preserve the benchmark protocol and label every intervention-specific deviation.
+- Report benchmark and requested-sequence completion, raw and counted violations,
+  unfinished episodes and engagement together, with denominators.
+- A monitor labels outcomes; it never vetoes commands. Distinguish proposed,
+  clipped and executed actions.
+- Count every simulator interaction, including engineering, failures, discarded
+  attempts and selection. Report queries, gradient updates and elapsed time separately.
+- Freeze each stage before its first eligible episode. Do not use held-out outcomes
+  to select the next method, reward or budget.
+- Preserve original evidence and use fresh output paths for new experiments.
+- Do not restart the superseded twelve-mechanism screen or any pre-22 October pilot.
 
 ## Immediate next action
 
-Write the stage 1 protocol: family list, seed panel, horizon contract, render profile,
-outcome definitions per family, episode ceiling and stop rule. Then reconstruct the
-ManiGuard host and run the survey. Nothing else is authorized until the survey table
-exists.
+Review the [task 6 result](progress/receipts/06-dsrl-results.md) before choosing new
+work. The evidence distinguishes numerical integration failures from descriptive
+decoder sensitivity. Same-lane replay and deterministic learner kernels are possible
+engineering questions for a separately frozen follow-up; neither was tested as a
+new protocol in this run. Development and held-out tasks received no new episodes.
+The next allocation, integration amendment or method needs its own concrete plan.
+Do not resume the stopped task 6 queue.

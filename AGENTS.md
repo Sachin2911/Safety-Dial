@@ -25,21 +25,29 @@ jobs. Do not inherit their protocols, gates or budgets.
    compressed with Ghostscript `/ebook` before committing.
 3. `docs/allocatedTopic.md`, `docs/gecco2027.md`, `docs/researchConceptNote/`,
    `docs/templates/`: topic, venue, concept note and document templates.
-4. `progress/`: `theOdessy.pdf`, the running log of the project with one short entry per
-   finished task (LaTeX source `theOdessy.tex` beside it; add a section per task and
-   recompile with `pdflatex`), the next checklist (`04-screen.md`) and its agent prompt
-   (`goal-prompt-04.md`), the rental records, and the receipts of todo 1 (one instance per
-   prefix: `01` B, `01b` C, `01c` D), todo 2 (`02-*`) and todo 3 (`03-*`). The finished
+4. `progress/`: start at `README.md`. `theOdessy.pdf` is the running log with one short
+   entry per finished task (LaTeX source `theOdessy.tex` beside it; add a section per task
+   and recompile with `pdflatex`). Tasks 1 through 6 are complete. Task 6 stopped
+   at engineering gates; no DSRL training or evaluation ran. Its result is
+   `receipts/06-dsrl-results.md`. Its plan and source freezes are historical launch
+   evidence, not permission to resume unused work. The original screen
+   and launch prompt are under `superseded/`, with inactive notices at their old paths.
+   Rental records and completed protocols retain their existing paths for source and
+   script compatibility. `receipts/README.md` indexes final evidence; task 5 executed
+   `05-adapter-plan-v4.json`, not its earlier versions. Todo 1 has one instance per
+   prefix (`01` B, `01b` C, `01c` D), followed by `02-*`, `03-*`, `04-tracking-*` and
+   `05-adapter-*` receipts. The finished
    todo 1 checklists and prompts are in git history up to `c248194`, todo 2's up to
    `b98b3cf`, todo 3's up to `af888ab`. Instance
    B's seed 0 is excluded from results and kept under `progress/receipts/excluded-instance-B/`.
    `scripts/todo1*/`, `scripts/todo2/`, `scripts/todo3/`: the pinned download, serving, lane,
    comparison, upload, rename, self-stop, recorder and supervisor-proxy scripts those
    checklists used; the paper-protocol eval config is
-   `progress/receipts/01-jar-eval.yaml`. `configs/` does not exist yet; new Hydra
-   configs go in `configs/<group>/`. The previous Vast templates, rental records and
+   `progress/receipts/01-jar-eval.yaml`. `configs/dsrl06/` pins the isolated learner
+   dependencies; new Hydra configs go in `configs/<group>/`. The previous Vast templates, rental records and
    setup scripts are under `archive/20261022/configs/vast/` and `archive/20261022/scripts/`.
-5. `experiments/` does not exist yet. New reusable code goes in `experiments/helpers/`,
+5. `experiments/` contains the tracking diagnostic and execution adapter. Reusable
+   code goes in `experiments/helpers/`,
    entry points in `experiments/scripts/`, tests in `experiments/tests/`. No `src/`.
 6. `archive/20261022/`: the ManiGuard and UNISafe studies, previous direction, plan
    history, reports, code, configs and tests, moved unchanged on 22 October 2026 with
@@ -63,19 +71,24 @@ jobs. Do not inherit their protocols, gates or budgets.
   starts. Report model queries and elapsed time separately.
 - The ManiGuard monitor labels violations and never vetoes actions. Keep proposed,
   filtered and executed actions distinguishable.
-- Ordinary learning with the same information is an essential comparison before any
-  evolutionary claim. Compare native, a tuned fixed setting and random search first.
+- Before any evolutionary claim, compare against native, a tuned fixed setting,
+  parameter random search and ordinary learning with the same information. A
+  development-only ordinary-learning pilot may precede that optimizer comparison.
 - Freeze each stage's protocol before running it. Choose panels and seeds before reading
   outcomes. Keep held-out tasks untouched until the final comparison.
 - Archived results stay as recorded. New experiments use new files and output paths.
 
 ## Environment and engineering
 
-- Host: the Vast template "ManiGuard latent evolution" (hash
+- Historical host: the Vast template "ManiGuard latent evolution" (hash
   `62414e8fca6befba085051de7ed36190`) on an RTX 3090 host with driver 580.x, installed
   from `progress/receipts/01-install.md` and `01-sources.json` at the pinned revisions
-  (ManiGuard `6bf4c61` with the legacy 256 render profile). Results of record come from
-  one machine (54514); comparisons are blocked by host.
+  (ManiGuard `6bf4c61` with the legacy 256 render profile). Baseline replication results
+  of record come from machine 54514; later studies have their own host records and
+  contemporary controls. Comparisons remain blocked by host. The selected task 6
+  configuration used four RTX 4090 GPUs; its plan and $15 cap are in
+  `progress/06-dsrl-plan.md`. It stopped at engineering gates. Do not rent or run
+  from historical host records or resume its unused development allocation.
 - Rollouts, sidecars and results rows live in the private dataset
   `Sachioster/maniguard-jar-replication-20261022`, task folders `<n>_<outcome>` with an
   `index.json` per run.

@@ -1,0 +1,11 @@
+--- executed/manage_dsrl06.py
++++ completion/manage_dsrl06.py
+@@ -399,7 +399,7 @@
+         raise ValueError("Stop and verify compute before destroying its disk")
+     if row is not None:
+         try:
+-            vast(["destroy", "instance", str(rental["instance_id"])])
++            vast(["destroy", "instance", str(rental["instance_id"]), "--yes"])
+         except RuntimeError:
+             pass  # Never repeat this mutation on an uncertain acknowledgement.
+         for _ in range(12):

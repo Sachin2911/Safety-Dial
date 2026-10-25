@@ -163,4 +163,36 @@ Safe requested completion was 1/12, 1/12 and 0/12. Unfinished episodes were 10/1
 \textbf{Where that points.} This preset does not establish the useful lever needed before an optimizer comparison. Do not start evolutionary search on it. Any revised controller needs a separately frozen design and evidence of improved safe completion. This result concerns our implementation and settings, not all execution adapters or the original APEX method.
 
 \textbf{Cost and record.} The scored queue took 89 minutes, with 17.5 minutes for engineering separately. Total accounting is 73,409 policy controls, 380 warm-up controls, 9,227 model-query attempts and 9,223 confirmed returns. Receipts are under \path{progress/receipts/05-adapter-*}; full evidence uses \path{recordings/adapter05}, \path{jar/adapter05_*} and \path{receipts/adapter05} in the established private dataset. The preservation receipt records verified revisions, provider charges and teardown.
+\newpage
+\section*{Planning task: DSRL proposal and progress cleanup}
+
+\textbf{Why.} The retry and bounded-feedback presets did not establish a useful lever. Sachin selected DSRL, which learns input-noise steering around a frozen policy, as the next development experiment. He also selected a four-RTX-4090 host and requested a final plan review before implementation or rental.
+
+\textbf{What we did.} Added a progress index and a receipt index, separated the superseded twelve-mechanism screen and its launch prompt from current work, and brought the first-principles status and agent map up to date. Completed protocols, rental records, panels and existing receipts remain at their recorded paths. The two superseded originals are retained unchanged, with notices at their old paths.
+
+Read the authors' DSRL code at revision \texttt{7f48937} and finalized an integration stage followed by a smaller development pilot. Sachin selected a hard \$15 total cap. The allocation is six engineering episodes, 24 training episodes and 48 evaluations across native, fixed-zero, bounded-random and learned-noise arms, with two infrastructure replacement starts reserved. Three rollout workers share one learner GPU during training; all four GPUs serve evaluation. At most \$13 goes to active compute and disk, with \$2 reserved for transfers and other storage. Aggregate rental time cannot exceed six hours or the money deadline, whichever comes first. Engineering must demonstrate that the fixed pilot fits the remaining allowance.
+
+\textbf{Review.} The selected reward is one for strict safe requested completion and zero for other terminal outcomes, plus potential-based progress shaping. A fixed potential gives intermediate feedback for closure, closed-jar grasp, legal carry and the native goal predicate. It is zero at all episode endings; a numerical return identity checks that shaping does not add a net completion substitute. The potential scale is 0.25 and the per-control discount is 0.9998. Safety remains a separately logged cost and an outcome criterion. The final episode-24 checkpoint is selected in advance; the held-out tasks receive no new episodes. One learner seed and twelve evaluations per arm make this an exploratory pilot. A sparse-reward learner is deferred beyond this allocation. A positive result would justify replicated development work and stronger controls.
+
+\textbf{Independent review, 25 October.} A workstation source and metadata audit confirms a 16 by 32 latent interface. The plan now freezes a 128-query magnitude-1 decoder probe, requiring robust gripper-command changes on two snapshots from two pool tasks before learning. Closure is latched once observed. The first attempt per GPU has a 40-minute wall timeout; later attempts retain 25 minutes. Engineering updates have their own ledger, and the authority documents agree that the full optimizer comparisons precede any evolutionary claim. Timeout termination is explicitly labeled as a departure from the author loop. Corrected discounted shaped return cannot rise from closure alone because the potential terms cancel. The \$15 cap is unchanged.
+
+\textbf{Status and record.} Cleanup and the reviewed plan are complete. The experiment has not been implemented, rented or run. Start at \path{progress/README.md}.
+
+\noindent Plan: \path{progress/06-dsrl-plan.md}.\\
+Review: \path{progress/receipts/06-dsrl-plan-review.md}.\\
+Reviewer prompt: \path{progress/06-review-prompt.md}.
+\newpage
+\section*{Task 6: DSRL implementation and engineering gates}
+
+\textbf{Why.} Test whether the frozen Jar policy offers a useful input-noise lever before spending the development allocation on ordinary learning. The reviewed plan required native replay identity, gripper authority and learner integration before training.
+
+\textbf{What we did.} Implemented the explicit-noise server, passive transition and reward recorder, author-SAC bridge, deterministic queue, budget guards and private preservation. All 166 local tests passed. Rented four RTX 4090 GPUs on one new host and completed four native pool episodes. A grasp-enum validation bug was repaired against the already saved native predicate, preserving every raw value and outcome. No episode was replaced. Source freezes and the engineering measurement amendment record the changes.
+
+\textbf{Result.} The 128-query decoder gate was invalid. Four of sixteen factual replay comparisons passed, all from lane 0; the other lanes differed by up to 0.00313 when replayed on lane 0. All sixteen retained the same converted gripper commands, and each pair of replays was exactly repeatable. Descriptive candidate sensitivity appeared on one of eight inputs, below the two-input, two-task minimum, but the invalid identity gate prevents an authority or absence conclusion.
+
+GPU source-update checks also exceeded the unchanged $10^{-6}$ threshold by small optimizer-state differences. The 128 timed updates and remote CPU/GPU actor check did not complete. Engineering stopped at its frozen gate; no development training or evaluation ran. Safe-completion efficacy remains untested.
+
+\textbf{Accounting.} Four starts, 8,000 policy controls, 40 warm-up controls, 1,140 confirmed VLA queries and eight engineering SAC calls, including two workstation calls. The four native pool episodes yielded strict safe completion 0/4, violations 2/4, unfinished 4/4 and engagement 4/4. There were no grasps. These are engineering observations, separate from baseline estimates. Scene/reset physics is unmeasured. Compute was verified stopped after a complete local backup, within the \$15 cap.
+
+\textbf{Record.} Start at \path{progress/receipts/06-dsrl-results.md}. The decoder and learner audits retain the failed criteria, and \path{progress/receipts/06-dsrl-completion/} records private revisions, teardown and billing. Further experiments need a new frozen protocol.
 \end{document}

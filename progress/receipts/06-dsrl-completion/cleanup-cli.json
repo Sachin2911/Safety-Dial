@@ -1,0 +1,33 @@
+{
+  "schema": "dsrl06-cleanup-cli-v1",
+  "instance_id": 57575920,
+  "checked_utc": "2026-10-25T01:03:15.741157+00:00",
+  "cli_source_sha256": "3dab69c92c509bb1558a8f37f9e6f957c348977946abfb9ee3c3b3c5bc6a920d",
+  "cause": "Installed CLI prompts before its destroy API call unless --yes is present. Initial guarded invocation omitted --yes; stdin EOF aborts before API mutation. Provider still shows the instance stopped.",
+  "remedy": "Retain the original manager preservation and stop guards; add --yes to the single authorized destroy command at invocation time.",
+  "before": [
+    {
+      "id": 57575920,
+      "machine_id": 139769,
+      "actual_status": "exited",
+      "cur_state": "stopped",
+      "intended_status": "stopped",
+      "public_ipaddr": "211.72.37.229",
+      "ports": null,
+      "ssh_host": "ssh1.vast.ai",
+      "ssh_port": 30240,
+      "gpu_name": "RTX 4090",
+      "num_gpus": 4,
+      "driver_version": "580.173.02",
+      "dph_total": 1.9037037037037035,
+      "start_date": 1792882526.057285,
+      "label": "jar-dsrl06-1024225522",
+      "disk_space": 200.0
+    }
+  ],
+  "mutation_requests": 1,
+  "request_utc": "2026-10-25T01:03:20.246654+00:00",
+  "after": [],
+  "absence_verified": true,
+  "verified_utc": "2026-10-25T01:03:26.759701+00:00"
+}
