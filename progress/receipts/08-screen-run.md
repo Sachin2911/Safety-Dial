@@ -134,6 +134,44 @@ retains partial transfers and waits for an existing copy before starting another
 Only the original workstation copying supervisor was stopped. No simulator or policy
 process was restarted, no episode was replaced, and all 65 frozen experiment hashes
 still matched. The replacement copier is PID 635447; its I/O counters and additional
-local validation reports confirmed data was moving. Successful completion of the
-longer copy remains to be verified. Its source is included in the preservation-tools
-receipt, with lint and Python compilation passing.
+local validation reports confirmed data was moving. The first extended batch
+completed successfully at 10:34:59 after 8 minutes 15.5 seconds. It transferred 62
+regular files with 65,039,626 bytes of changed-file content; the source inventory
+at that pass contained 456 regular files and 418,853,730 bytes. Continuous copying
+continues, and whole-run terminal hash verification remains required. Its source is
+included in the preservation-tools receipt, with lint and Python compilation passing.
+
+## Complete screen and confirmation admission
+
+Stage A completed at 11:37:29.420256: all sixty planned episodes validated on their
+first attempts. Including engineering, there had been 65 starts and no replacements.
+Workstation revalidation replayed all sixty recordings and matched their validation
+hashes to the complete evidence set bound into the remote decision. A separate
+calculation of the completion, violation and mechanism-activity criteria reproduced
+that decision exactly. The audit is
+`outputs/screen08/analysis/stage-a-selection-audit.json`.
+
+Every arm has twelve scored episodes, and contact engagement was 12/12 in each arm.
+Primary safe requested completion, raw/counted violations, and unfinished episodes
+were, respectively:
+
+- Native: 4/12, 5/12, 8/12.
+- h4: 1/12, 5/12, 9/12.
+- Slow: 6/12, 4/12, 5/12.
+- Smooth: 5/12, 3/12, 7/12.
+- Gripwait: 1/12, 3/12, 11/12.
+
+Raw and counted violation counts agree in this stage. Benchmark safe-success counts
+also equal primary safe requested completion here. Slow gained one primary completion
+over native in each seed, 3/6 versus 2/6. Its mechanism acted in three additional-success
+task/seed cells. Its paired completion difference was +16.7 percentage points; the
+predeclared six-task cluster bootstrap interval was -16.7 to +41.7 points. This is a
+small development screen with substantial uncertainty, not a confirmed improvement.
+
+The frozen rule selected slow alone. Smoothing gained only one primary completion,
+below the required two; h4 and gripwait each lost three. The decision was written at
+11:37:45.783480 and is preserved as `08-screen-confirmation.json`. The conservative
+confirmation-plus-preservation projection was 7,258.032 seconds, within 47,661.196
+seconds remaining to the allocation deadline. The original 24-job native/slow
+confirmation schedule at seeds 82000 and 82001 began at 11:37:45.899007. No parameter,
+task panel, seed, outcome definition or selection rule changed after screening.
