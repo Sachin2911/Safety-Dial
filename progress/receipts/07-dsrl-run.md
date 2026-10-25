@@ -1,9 +1,9 @@
 # Task 7 DSRL repair run record
 
-Started 25 October 2026. Status at 09:27 UTC: all numerical and live engineering
-checks passed. All six warm-up episodes are valid, and the first actor-driven
-collection round is running. No development gradient updates or evaluation
-outcomes exist yet.
+Started 25 October 2026. Status at 09:44 UTC: all numerical and live engineering
+checks passed. Nine training episodes are valid, the first 15,000 development
+updates are complete, and three episodes are collecting with trained actor
+version 1. Evaluation has not started.
 All times below are UTC.
 
 The user authorized a four-GPU follow-up and persistence through recoverable
@@ -211,3 +211,22 @@ the frozen protocol updates after that three-episode collection barrier. No
 training start had failed or been replaced. The first three warm-up recordings
 had zero completions, three raw violations and exact return-identity reconciliation.
 These untrained outcomes do not measure a learned-controller benefit.
+
+The first actor-driven round, T06 to T08, completed valid recordings and appended
+750 transitions at 09:34:21.688, bringing replay to 2,250. Its scheduled 15,000
+updates began at 09:34:22.878 and completed at 09:40:08.317. The batch took
+345.438 seconds including compilation and ended with finite metrics. Actor
+version 1 was published at 09:40:09.338; checkpoint `round02` was saved at
+09:40:14.666 with manifest SHA256
+`87a585de4a2335551874191aeca2de5f6be8915225b98047c8695854eda45b84`.
+
+A read-only weight audit at 09:43:51 verified every file hash in the warm-up and
+trained checkpoints. Of 1,077,622 actor parameter scalars across 22 leaves,
+1,075,701 changed from `round01`; the largest absolute change was 0.219228432.
+All trained actor parameters were finite and exactly matched the published actor
+parameters. The audit performed no forward passes or gradient calls and is saved
+as `outputs/dsrl07/control/round02-weight-audit.json`. The actor ledger confirms
+T09, T10 and T11 requests use version 1. At 09:44:33 those original workers were
+roughly halfway through their episodes, without a failed or replaced start. This
+verifies a functioning learning and deployment loop; safe-completion efficacy
+still awaits the frozen final comparison.
