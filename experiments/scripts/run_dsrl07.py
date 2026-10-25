@@ -10,6 +10,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments"))
+from helpers.dsrl07_infra import stage_b_projection
 from helpers.dsrl07_protocol import CAPS, decoder_comparison, frozen_jobs
 from run_dsrl06 import (
     Coordinator as PreviousCoordinator,
@@ -189,12 +190,10 @@ class Coordinator(PreviousCoordinator):
             - timestamp(self.state["episodes"][job]["started_utc"])
             for job in ("E4", "E5")
         )
-        projected = (
-            20 * duration
-            + 90000 * profile["median_update_seconds"]
-            + 3000 * cpu_parity["median_cpu_seconds"]
-            + 1500
+        projection = stage_b_projection(
+            duration, profile["median_update_seconds"], cpu_parity["median_cpu_seconds"]
         )
+        projected = projection["total_seconds"]
         remaining = timestamp(self.rental["allocation_deadline_utc"]) - time.time()
         source_difference = profile.get("source_parity", {}).get("maximum_state_difference")
         source_pass = (
@@ -216,6 +215,7 @@ class Coordinator(PreviousCoordinator):
             "engineering_checkpoint": checkpoint,
             "cached_episode_seconds": duration,
             "projected_stage_b_seconds_including_preservation": projected,
+            "stage_b_projection_components": projection,
             "remaining_allocation_seconds": remaining,
             "resources": self.sync_counters(),
             "reason": "ready_for_stage_b"

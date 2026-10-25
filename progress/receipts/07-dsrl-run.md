@@ -1,7 +1,8 @@
 # Task 7 DSRL repair run record
 
-Started 25 October 2026. Status at 07:59 UTC: environment installation is running.
-No new model, learner-update or simulator calls have run. All times below are UTC.
+Started 25 October 2026. Status at 08:41 UTC: numerical checks passed and the first
+live engineering episode is running. No development learning or evaluation has run.
+All times below are UTC.
 
 The user authorized a four-GPU follow-up and persistence through recoverable
 failures. The protocol is `progress/07-dsrl-repair.md`; cumulative DSRL spend remains
@@ -109,3 +110,38 @@ was repeated by the coordinator. The fresh-path offline analyzer and its four
 focused checks were separately frozen before any live episode in
 `07-dsrl-analysis-source.json`; it keeps numerical integration distinct from the
 six required live engineering records and the final learning comparison.
+
+## Environment completion and live engineering
+
+The original simulator installation completed at 08:28:16, robot assets at 08:28:21,
+ManiGuard dependencies at 08:29:25 and final environment checks at 08:29:33. The
+task-7 preparation script finished its explicit pin repairs and provenance checks
+at 08:29:41. There was no setup restart or replacement. Final versions are NumPy
+1.26.4, Torch 2.6.0+cu124, dm-control 1.0.49, MuJoCo 3.16.0,
+googleapis-common-protos 1.75.5 and vhacdx 0.1.0. All four source revisions, asset
+provenance and the actual passive evaluator patch hash verified. Ten environment
+files are hashed in `runtime-environment.json` before the first simulator episode.
+
+Before live engineering, inspection found that the full-pilot projection could
+omit the final block's existing admission-time reservation. The
+[timing repair](07-dsrl-timing-repair.md) corrects that calculation while retaining
+the full schedule, timeouts and money cap. All 195 local tests pass with zero skips.
+Stage A v3 SHA256 is
+`ac5fd5f27d28d9348a2282565f1933139438fff0d4fb98a7d9fa0ff95cb91440`;
+the ten-file repair archive SHA256 is
+`c88bde202533232bf53c7a84f9604a0438f7c16fd6e8740096296f84926c31c2`.
+All 178 declared source/input files verified after deployment. The completed
+numerical evidence and live policy processes on lanes 0 to 2 remain unchanged.
+
+Durable session `engineering07` started at 08:37:55 using the BEHAVIOR interpreter.
+GPU 3's new `live-native` policy generation completed its three charged startup
+queries. Native E3, task 11 and root seed 70003, started at 08:38:31.779203 with
+the frozen 40-minute first-episode timeout. Its original worker was confirmed live
+at 08:41. The remaining native lanes await its first policy response. At that
+check, all 231 VLA requests were startup or diagnostic calls, and engineering
+learner update attempts remained twenty.
+
+The private dataset and newly prepared private task-7 model repository are
+accessible. Their pre-upload state is recorded in
+`07-dsrl-preservation-access.json`. No task-7 artifact upload has yet occurred;
+continuous local evidence copying and both financial stop guards remain active.

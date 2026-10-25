@@ -4,10 +4,10 @@ Updated 25 October 2026. Task 7 is in progress under the authorized
 [DSRL follow-up](07-dsrl-repair.md), retaining the cumulative $15 cap including
 task 6. Fixed-batch deterministic SAC comparisons pass exactly, as do all
 same-process decoder repeats and native-draw passthrough checks. Cross-process
-differences are recorded separately. At 08:22 UTC, simulator installation is
-downloading assets; live engineering and development learning have not run. See the
+differences are recorded separately. At 08:41 UTC, installation is complete and the
+first live engineering episode is running. Development learning has not run. See the
 [run record](receipts/07-dsrl-run.md) and current
-[source freeze v2](receipts/07-dsrl-stage-a-v2.json). Numerical integration does not
+[source freeze v3](receipts/07-dsrl-stage-a-v3.json). Numerical integration does not
 establish safe-completion efficacy.
 
 Tasks 1 through 6 are complete.

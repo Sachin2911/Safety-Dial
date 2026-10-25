@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import math
 from pathlib import Path
 
 from helpers.dsrl06_infra import FinancialBook as PreviousFinancialBook
@@ -16,6 +17,31 @@ from helpers.dsrl06_infra import vast as vast
 
 ROOT = Path(__file__).resolve().parents[2]
 HISTORY = ROOT / "progress/receipts/07-dsrl-financial-history.json"
+
+
+def stage_b_projection(episode_seconds, update_seconds, cpu_actor_seconds):
+    """Reserve both preservation time and the queue's final-start allowance."""
+    values = tuple(map(float, (episode_seconds, update_seconds, cpu_actor_seconds)))
+    if not all(map(math.isfinite, values)) or min(values[:2]) <= 0 or values[2] < 0:
+        raise ValueError("Projection requires finite positive episode/update durations")
+    episode_seconds, update_seconds, cpu_actor_seconds = values
+    # Eight three-episode training rounds and twelve four-arm evaluation blocks.
+    collection = 20 * episode_seconds
+    learning = 90000 * update_seconds
+    actor = 3000 * cpu_actor_seconds
+    # Every lane has already run during engineering. The queue reserves 25 minutes
+    # for a cached episode plus 20 minutes for preservation at each new admission.
+    # Merely adding 25 minutes after measured work could reject the last block.
+    reserve = max(1500.0, 2700.0 - episode_seconds)
+    return {
+        "collection_rounds": 20,
+        "collection_seconds": collection,
+        "learning_seconds": learning,
+        "evaluation_actor_seconds": actor,
+        "final_reserve_seconds": reserve,
+        "last_start_allowance_seconds": 2700,
+        "total_seconds": collection + learning + actor + reserve,
+    }
 
 
 class FinancialBook(PreviousFinancialBook):
