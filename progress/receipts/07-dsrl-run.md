@@ -1,7 +1,8 @@
 # Task 7 DSRL repair run record
 
-Started 25 October 2026. Status at 08:41 UTC: numerical checks passed and the first
-live engineering episode is running. No development learning or evaluation has run.
+Started 25 October 2026. Status at 09:12 UTC: all numerical and live engineering
+checks passed. Stage B is frozen and its first three warm-up collection episodes
+are running. No development gradient updates or evaluation outcomes exist yet.
 All times below are UTC.
 
 The user authorized a four-GPU follow-up and persistence through recoverable
@@ -145,3 +146,53 @@ The private dataset and newly prepared private task-7 model repository are
 accessible. Their pre-upload state is recorded in
 `07-dsrl-preservation-access.json`. No task-7 artifact upload has yet occurred;
 continuous local evidence copying and both financial stop guards remain active.
+
+E3 returned its first policy response before 08:44:21. The original E0, E1 and E2
+workers were then admitted at 08:44:20.949, 08:44:21.064 and 08:44:21.094,
+respectively. All four original worker identities were confirmed live at 08:46;
+E3 had 41 returned policy queries. No episode had completed or been replaced at
+that check. This establishes live native execution, not a learned-controller result.
+
+E3 finished at 08:54:25.518 with a valid 2,000-control recording and 250 policy
+queries. It was unfinished, with a raw and counted violation, contact but no grasp.
+The original E0 to E2 workers continued without replacement. The learner started
+on GPU 3 after those lanes had returned their first policy query. At 09:00:21 its
+live-image/state check matched the author update exactly, and its 128-update
+profile completed with a median of 0.015460644 seconds per update. The timed block
+took 101.741 seconds including compilation; synthetic zero actions and targets
+were used for profiling. All 150 learner update attempts to this point are
+engineering charges, including the twenty prior diagnostics. Training replay
+remains empty. These measurements do not establish a trained-controller benefit.
+
+All four native engineering recordings were valid by 09:03:33. They yielded 0/4
+safe requested completions, 3/4 raw and counted violations, 4/4 unfinished episodes
+and 0/4 episodes with grasp. CPU/GPU actor agreement then passed on eight inputs:
+maximum difference 2.384185791015625e-7 against the frozen 1e-5 tolerances, with
+median warm CPU inference of 0.004996796 seconds. The bounded-random E4 and
+initialized-actor E5 workers started at 09:03:50.027 and 09:03:50.127. Their live
+execution and cached duration remain the last engineering admission checks.
+
+## Engineering admission and learning launch
+
+E4 finished at 09:10:11.288 and E5 at 09:10:55.941. Both recordings were valid;
+both were unfinished with raw and counted violations and no grasp. The six
+engineering episodes therefore produced 0/6 safe requested completions, 5/6
+raw and counted violations, and 6/6 unfinished episodes. They remain engineering
+evidence and do not enter training replay or the development comparison.
+
+Stage A admitted the full learning comparison at 09:10:59.833. Its slowest cached
+episode took 425.814 seconds. The projection is 12,196.915 seconds including the
+existing preservation and final-start reserves, against 13,922.913 seconds remaining
+at the stage-B freeze. At engineering completion, all six starts were valid without
+replacement: 12,000 policy controls, 60 explicit warm-up controls, 1,731 VLA queries,
+266 actor calls and 150 engineering updates. Development updates remained zero.
+
+Stage B was frozen at 09:11:27.082 with SHA256
+`3bac6f6e66cd51e726231b4208f896b9ba7dd4c2bf530467e350a98bfc2816be`.
+It retains all 24 training and 48 evaluation jobs and the cumulative $15 cap. The
+freeze was copied back locally and its hash verified. Durable session `pilot07`
+launched the learning queue. At 09:12:08, original workers T00, T01 and T02 were
+running the first warm-up collection round. No trained-controller improvement is
+claimed. The rental's 178 frozen source/input files verified unchanged before this
+launch; concurrent task-8 documentation edits on the workstation are separate from
+the source snapshot running this experiment.
