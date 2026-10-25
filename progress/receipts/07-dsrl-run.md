@@ -1,9 +1,9 @@
 # Task 7 DSRL repair run record
 
-Started 25 October 2026. Status at 09:44 UTC: all numerical and live engineering
-checks passed. Nine training episodes are valid, the first 15,000 development
-updates are complete, and three episodes are collecting with trained actor
-version 1. Evaluation has not started.
+Started 25 October 2026. Status at 09:55 UTC: all numerical and live engineering
+checks passed. Twelve training episodes are valid, 30,000 development updates
+are complete, and the next three episodes are collecting with trained actor
+version 2. Evaluation has not started.
 All times below are UTC.
 
 The user authorized a four-GPU follow-up and persistence through recoverable
@@ -230,3 +230,18 @@ T09, T10 and T11 requests use version 1. At 09:44:33 those original workers were
 roughly halfway through their episodes, without a failed or replaced start. This
 verifies a functioning learning and deployment loop; safe-completion efficacy
 still awaits the frozen final comparison.
+
+By 09:48:39, T09 to T11 were valid and replay held 3,000 transitions. The next
+15,000-update batch completed in 251.517 seconds; the episode-12 checkpoint was
+written at 09:52:00.840 with actor version 2 and no pending transitions. Its
+manifest SHA256 is
+`e63f84386469f77b772bad10cc4af1272d3521ac3949b1ed9f533e50e810bf9c`.
+All checkpoint files were copied locally and verified against that manifest.
+At 09:52:42, the original T12, T13 and T14 workers were running the next round.
+
+Across the first twelve training episodes there were 0/12 strict safe completions,
+10/12 raw and counted violations, 12/12 unfinished episodes, 11/12 with contact
+and 0/12 with grasp. These combine warm-up and changing training actors and are
+not the final evaluation comparison. No start had failed or been replaced.
+The original local budget watchdog and sync processes were confirmed live at
+09:54; the most recent evidence copy completed successfully at 09:54:16.657.
