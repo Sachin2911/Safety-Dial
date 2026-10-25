@@ -1,0 +1,159 @@
+{
+  "schema": "screen08-posthoc-diagnostic-v1",
+  "created_utc": "2026-10-25T12:46:01.768242+00:00",
+  "scope": "Post-hoc description requested after the complete screen and confirmation; no outcome rescoring, selection change, new model query or simulator interaction.",
+  "source_analysis_sha256": "135996070a2e697410eb229365bfd08dc3bb913cd6b7b00b82cc9f2f02a0363e",
+  "definitions": {
+    "safe_unfinished": "no raw violation and no benchmark goal success",
+    "closed_never_grasped": "closed event exists and grasp event is absent",
+    "event_source": "frozen tracking.events on revalidated complete recordings"
+  },
+  "stages": {
+    "stage_a": {
+      "native": {
+        "n": 12,
+        "safe_unfinished": 3,
+        "safe_unfinished_never_grasped": 3,
+        "safe_unfinished_closed_never_grasped": 3,
+        "safe_unfinished_jobs": [
+          113,
+          121,
+          142
+        ],
+        "closed_never_grasped_jobs": [
+          113,
+          121,
+          142
+        ],
+        "ever_closed": 10,
+        "ever_grasped": 4,
+        "ever_departed_support": 4
+      },
+      "h4": {
+        "n": 12,
+        "safe_unfinished": 6,
+        "safe_unfinished_never_grasped": 6,
+        "safe_unfinished_closed_never_grasped": 4,
+        "safe_unfinished_jobs": [
+          105,
+          126,
+          139,
+          143,
+          147,
+          155
+        ],
+        "closed_never_grasped_jobs": [
+          139,
+          143,
+          147,
+          155
+        ],
+        "ever_closed": 9,
+        "ever_grasped": 3,
+        "ever_departed_support": 5
+      },
+      "slow": {
+        "n": 12,
+        "safe_unfinished": 2,
+        "safe_unfinished_never_grasped": 2,
+        "safe_unfinished_closed_never_grasped": 0,
+        "safe_unfinished_jobs": [
+          106,
+          148
+        ],
+        "closed_never_grasped_jobs": [],
+        "ever_closed": 9,
+        "ever_grasped": 7,
+        "ever_departed_support": 8
+      },
+      "smooth": {
+        "n": 12,
+        "safe_unfinished": 4,
+        "safe_unfinished_never_grasped": 4,
+        "safe_unfinished_closed_never_grasped": 2,
+        "safe_unfinished_jobs": [
+          107,
+          115,
+          124,
+          128
+        ],
+        "closed_never_grasped_jobs": [
+          115,
+          128
+        ],
+        "ever_closed": 8,
+        "ever_grasped": 5,
+        "ever_departed_support": 4
+      },
+      "gripwait": {
+        "n": 12,
+        "safe_unfinished": 8,
+        "safe_unfinished_never_grasped": 5,
+        "safe_unfinished_closed_never_grasped": 2,
+        "safe_unfinished_jobs": [
+          108,
+          116,
+          120,
+          129,
+          133,
+          137,
+          145,
+          158
+        ],
+        "closed_never_grasped_jobs": [
+          116,
+          137
+        ],
+        "ever_closed": 8,
+        "ever_grasped": 5,
+        "ever_departed_support": 5
+      }
+    },
+    "stage_b": {
+      "native": {
+        "n": 12,
+        "safe_unfinished": 4,
+        "safe_unfinished_never_grasped": 4,
+        "safe_unfinished_closed_never_grasped": 2,
+        "safe_unfinished_jobs": [
+          209,
+          225,
+          238,
+          259
+        ],
+        "closed_never_grasped_jobs": [
+          209,
+          225
+        ],
+        "ever_closed": 8,
+        "ever_grasped": 2,
+        "ever_departed_support": 2
+      },
+      "slow": {
+        "n": 12,
+        "safe_unfinished": 7,
+        "safe_unfinished_never_grasped": 7,
+        "safe_unfinished_closed_never_grasped": 4,
+        "safe_unfinished_jobs": [
+          206,
+          210,
+          219,
+          235,
+          248,
+          252,
+          256
+        ],
+        "closed_never_grasped_jobs": [
+          206,
+          210,
+          235,
+          252
+        ],
+        "ever_closed": 7,
+        "ever_grasped": 4,
+        "ever_departed_support": 5
+      }
+    }
+  },
+  "interpretation": "All seven slow confirmation safe failures lacked a recorded grasp; four had closed the lid. This motivates inspecting the transition from closure to grasp; it does not establish the cause or efficacy of a new controller."
+}

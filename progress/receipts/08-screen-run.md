@@ -4,6 +4,11 @@ Started 25 October 2026. The user authorized a fresh GPU study alongside DSRL.
 Protocol: `progress/08-knob-screen.md`. All times below are UTC. The agent imposed
 a separate $10 ceiling. No DSRL allocation, result or budget was changed.
 
+Current status: all 89 episodes and the final analysis are complete. Confirmation
+did not reproduce the screening completion gain. Compute is stopped after full
+local hash verification; private preservation and disk cleanup are being finalized.
+See [results](08-screen-results.md) and [completion receipts](08-screen-completion/README.md).
+
 ## Preparation freeze and rental
 
 The preparation-only freeze contains 44 source/input files, SHA256
@@ -183,3 +188,36 @@ confirmed zero network-file transfers for matching content and an independent
 destination copy; the six preservation tests and Ruff passed. Only the workstation
 completion monitor was restarted, as PID 807652. Experiment processes, financial
 watchdogs and all 65 frozen experiment files remained unchanged.
+
+## Complete confirmation and local preservation
+
+Stage B completed at 12:23:47.085337, and the pipeline exited with code zero.
+All twenty-four confirmation episodes validated on attempt one. The complete study
+therefore has five engineering, sixty screening and twenty-four confirmation starts,
+all valid and with no replacements. No additional job was admitted.
+
+The terminal snapshot contains 1,385 files and 1,383,915,325 bytes. Its local copy
+matched the remote inventory at 12:25:34.943411. Provider state verified compute
+stopped at 12:25:47.309958: actual status exited, intended status stopped and current
+state stopped. The active rental estimate was $1.6385 for 3.478 hours; the full
+$2 other-cost reserve remained retained. Disk destruction still requires verified
+private preservation.
+
+Workstation replay revalidated all 89 recordings. The final audit reproduced the
+screen selection, checked every frozen job and first-attempt ledger, all 65 source
+hashes, host identity, protocol/admission timestamps and interaction ceilings.
+It found 153,636 attempted and returned policy controls, 890 warm-ups, 22,105
+attempted and returned VLA queries including 92 model-only queries, zero learner
+updates, and no truncated journals. All 89 reset calls returned; internal reset
+physics remains unmeasured. Episode wall time totals 10,377.046 seconds.
+
+Confirmation primary completion was 2/12 in both arms. Raw and counted violations
+were 6/12 native and 3/12 slow; unfinished episodes were 10/12 and 9/12; both arms
+engaged in 12/12. Slow acted in nine episodes and in one additional-success cell,
+but gained zero completions against the required two. The frozen confirmation rule
+failed. Its paired completion interval is -25.0 to +25.0 percentage points; the
+violation interval is -66.7 to +16.7. A useful replicated completion lever remains
+unestablished. Results, classes, per-task/per-seed breakdowns and limitations are in
+`08-screen-results.md`; the complete machine-readable analysis retains both stages
+separately. The final audit utility is post-launch verification code, recorded in
+`08-screen-analysis-source.json`; it does not change frozen scoring or selection.

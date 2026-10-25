@@ -1,21 +1,36 @@
 {
   "created_utc": "2026-10-25T12:02:21.138712+00:00",
-  "scope": "Presentation of already frozen metrics; no scoring, selection, controller or schedule changes.",
+  "scope": "Presentation and independent audit of frozen metrics, schedules, source hashes and budgets; no scoring, selection, controller or schedule changes.",
   "source_sha256": {
-    "experiments/scripts/plot_screen08.py": "8e80cb3821da3e549a881ea73a7bb7033dbcf8bb7c1a4079997e8242a246ab57"
+    "experiments/scripts/plot_screen08.py": "8e80cb3821da3e549a881ea73a7bb7033dbcf8bb7c1a4079997e8242a246ab57",
+    "experiments/scripts/audit_screen08.py": "aa2a8cc0f38f08ec1d1e181a513353044e5ac3429aadd2ad2cdc4a038701bcbf"
   },
   "input_sha256": {
-    "stage-a-selection-audit.json": "574da55841363b9f5967025baf2bff8aa80e9f0dd40cee18e0d1a39ef295ddc7"
+    "stage-a-selection-audit.json": "574da55841363b9f5967025baf2bff8aa80e9f0dd40cee18e0d1a39ef295ddc7",
+    "analysis.json": "135996070a2e697410eb229365bfd08dc3bb913cd6b7b00b82cc9f2f02a0363e"
   },
   "figure_sha256": {
     "stage_a-rates.png": "2bf9c4effc99b90967205a27e6faa075c99aaf3e14973934bb81d2a3ad6d034f",
-    "stage_a-rates.svg": "2644fe031c5146296024a94aed4de1171d9641f662162c37785dd75c26f89541"
+    "stage_a-rates.svg": "92500927ea8d54765f94939ccd136eb294502223e2cfacfff81252b7dcb3125d",
+    "stage_b-rates.png": "2efa9d3eeb84670b7a6caba6a8cd5a406a3c16a8a550d4a805a7091f890acbd1",
+    "stage_b-rates.svg": "8b1f6ffcfc98a82ad2611145f4b15aaa9c04469f958f570ccce58fe335862e9e"
   },
   "checks": [
     "Ruff passed",
     "Actual stage-A figure rendered and visually inspected",
     "Legend placement repaired and re-rendered",
     "Only complete twelve-episode arms accepted",
-    "No confirmation outcomes plotted while confirmation is running"
-  ]
+    "No confirmation outcomes plotted while confirmation is running",
+    "Complete stage-B figure rendered and visually inspected",
+    "Final audit passed: 89 jobs, all attempt ledgers, 65 source hashes, selection and budgets",
+    "Confirmation outcome rule failed as recorded; no analysis or selection rule changed",
+    "Canvas strict typecheck and all embedded-data comparisons passed"
+  ],
+  "audit_source_recorded_utc": "2026-10-25T12:22:15.428547+00:00",
+  "audit_status": "Passed against all 89 complete recordings and the immutable terminal snapshot.",
+  "updated_utc": "2026-10-25T12:32:36.120052+00:00",
+  "output_sha256": {
+    "final-audit.json": "1368306c8ba9ade538eb355fe7b3ddbeaf40263bbbd76100d4d3c7dbb469e027",
+    "canvas-verification.json": "400a32229a994b926925bd364f68ee346eac744958a802d85d9a67cf39495765"
+  }
 }
