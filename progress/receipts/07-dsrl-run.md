@@ -1,9 +1,9 @@
 # Task 7 DSRL repair run record
 
-Started 25 October 2026. Status at 10:04 UTC: all numerical and live engineering
-checks passed. Fifteen training episodes are valid, 45,000 development updates
-are complete, and the next three episodes are starting with trained actor
-version 3. Evaluation has not started.
+Started 25 October 2026. Status at 10:18 UTC: all numerical and live engineering
+checks passed. Eighteen training episodes are valid, 60,000 development updates
+are complete, and the next three episodes are running with trained actor
+version 4. Evaluation has not started.
 All times below are UTC.
 
 The user authorized a four-GPU follow-up and persistence through recoverable
@@ -254,3 +254,23 @@ updates separate and no interrupted training round, failed start or replacement.
 The provider independently confirmed instance 57632188 running on machine 102318
 at the frozen hourly rate. The full 24-training and 48-evaluation schedule remains
 unchanged.
+
+The continuous copy returned rsync exit 24 at 10:03:50.877; its following pass
+returned exit 1 after about 182 seconds at 10:07:37.889. The original sync
+supervisor remained live, and the next pass succeeded at 10:09:23.599. The complete
+`round04` checkpoint then verified locally against manifest SHA256
+`1722a280d3411bf0ea02d79dd298a6aca8e906bcdfa97db877a2a266b53c772d`.
+A stale `round04.partial` copy also remained in the continuous mirror. Final
+preservation must therefore use a fresh exact inventory after worker quiescence,
+with the frozen SQLite backup, rather than treating the live mirror as final.
+This operational requirement is recorded in
+`outputs/dsrl07/control/preservation-readiness.json`. Scientific workers were not
+restarted or interrupted by these copy failures.
+
+T15 to T17 had valid recordings by 10:12:26, bringing replay to 4,500 transitions.
+Their update batch finished at 10:14:56.5. At 10:15:31 actor version 4 and checkpoint
+`round05` were published, all 60,000 development updates were complete, and the
+original T18, T19 and T20 workers were running. Across the first eighteen training
+episodes there were 0/18 strict safe completions, 11/18 raw and counted violations,
+18/18 unfinished episodes, 14/18 with contact and 0/18 with grasp. These are training
+outcomes under changing actors, not a final performance comparison.
