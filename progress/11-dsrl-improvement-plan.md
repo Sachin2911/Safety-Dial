@@ -1,10 +1,12 @@
 # Task 11: make DSRL informative and preserve native behavior
 
-Written 25 October 2026 for handoff. Status: proposed experiment, ready for local
-implementation and review. This document does not authorize a rental. The proposed
-new allocation is **$15 total**, separate from the completed tasks 6 and 7. Record
-Sachin's approval of that allocation before creating an instance. An unused balance
-or an old launch instruction is not an allocation for this phase.
+Written 25 October 2026 for handoff. Sachin subsequently authorized the new agent
+to use **four RTX 4090s**. Status: authorized for implementation and a fresh rental
+under the plan's **$15 total cap**, separate from tasks 6 and 7. Complete the
+workstation checks, source freeze and preliminary financial admission before
+creating the instance; no additional rental confirmation is required when those
+checks pass. Record this authorization in the launch receipt. The authorization
+comes from this new decision, not an unused balance or an old launch instruction.
 
 ## Objective and evidence
 
@@ -93,8 +95,8 @@ the root legacy environment into `/venv/main`.
 ## Stage A: implement and audit before simulator learning
 
 Finish the following on the workstation where possible. GPU numerical checks may
-use the proposed rental after approval. Freeze their inputs, scripts, candidate
-configurations, seeds and decision rules before executing them.
+use the authorized rental after workstation preparation and preliminary financial
+checks. Freeze their inputs, scripts, candidate configurations, seeds and decision rules before executing them.
 
 ### A1. Reproduce and diagnose the critic issue
 
@@ -223,7 +225,7 @@ concrete launch-review artifacts. No simulator learning is admitted yet.
 
 ## Stage B: fresh live engineering and native prior bank
 
-After rental approval, use a new host for the whole comparison and contemporary
+Use the authorized new host for the whole comparison and contemporary
 native controls. Retain 20 Hz, 256 by 256 collection-time cameras, 16 proposed/eight
 executed controls, 2,000 policy-control horizon and the ten-control goal hold.
 
@@ -357,12 +359,19 @@ Task 7's historical rate was $1.850370370/hour, including disk; this is evidence
 planning, not a current offer or a promised price. Maximum acceptable rate is
 $2.20/hour including disk, subject to the complete-schedule projection fitting.
 
-The proposed fresh $15 cap reserves $3 for transfer, stopped disk, billing margin
+There are two financial checks. Before creating the instance, the workstation
+implementation and source bundle must pass, and a preliminary complete-schedule
+projection using the quoted rate and historical timings must fit. GPU numerical
+checks and live profiling then run on that authorized rental. The later stage-C
+admission uses measured new-host timings before online training starts. Do not
+claim GPU/live gates passed before renting or create a circular prerequisite.
+
+The authorized fresh $15 cap reserves $3 for transfer, stopped disk, billing margin
 and preservation, leaving $12 active. Initiate shutdown before $11.90 active, with
 independent local and remote guards and a five-minute acknowledgement margin.
 Use the tighter of the money deadline and eight aggregate active rental hours.
 The old tasks 6/7 ledger remains historical and is not charged against or silently
-funded from this proposed new allocation. Report cumulative project spend separately.
+funded from this authorized new allocation. Report cumulative project spend separately.
 
 At the historical rate, the active allowance is about 6.4 hours; at $2.20/hour it
 is about 5.4 hours. Expect roughly 45-55 minutes for preparation, 20-35 for offline
@@ -394,7 +403,7 @@ and admit no new cached episode within 45 minutes of the effective stop deadline
 Do not start a cold lane within 60 minutes. Persist reservations before dispatch;
 an observation timeout does not authorize restarting a still-live job.
 
-If approval or the measured allowance cannot cover the specified full comparison,
+If the measured allowance cannot cover the specified full comparison,
 finish local work and present the concrete launch review. Any smaller pilot or
 larger budget needs an explicit new decision before its outcomes, not a silent
 reinterpretation of this schedule.
@@ -439,5 +448,7 @@ is not guaranteed. If a named prerequisite blocks learning, preserve the concret
 diagnosis and obtain a decision about a materially changed experiment rather than
 calling an unexecuted learning comparison complete.
 
-The [handoff prompt](goal-prompt-11-dsrl.md) starts with local implementation and a
-launch review. It deliberately does not inherit task 7's rental authorization.
+The [handoff prompt](goal-prompt-11-dsrl.md) authorizes implementation and execution
+on four RTX 4090s within this fresh $15 allocation. It starts with local preparation
+and a recorded launch-admission review, then proceeds autonomously when the checks
+pass. Task 7's rental and financial ledger are not inherited.
