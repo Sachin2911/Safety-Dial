@@ -1,9 +1,9 @@
 # Task 7 DSRL repair run record
 
-Started 25 October 2026. Status at 09:55 UTC: all numerical and live engineering
-checks passed. Twelve training episodes are valid, 30,000 development updates
-are complete, and the next three episodes are collecting with trained actor
-version 2. Evaluation has not started.
+Started 25 October 2026. Status at 10:04 UTC: all numerical and live engineering
+checks passed. Fifteen training episodes are valid, 45,000 development updates
+are complete, and the next three episodes are starting with trained actor
+version 3. Evaluation has not started.
 All times below are UTC.
 
 The user authorized a four-GPU follow-up and persistence through recoverable
@@ -245,3 +245,12 @@ and 0/12 with grasp. These combine warm-up and changing training actors and are
 not the final evaluation comparison. No start had failed or been replaced.
 The original local budget watchdog and sync processes were confirmed live at
 09:54; the most recent evidence copy completed successfully at 09:54:16.657.
+
+At 09:59:27, T12 to T14 had valid recordings and replay held 3,750 transitions.
+Their 15,000-update batch finished at 10:03:17.8. By 10:04:27, the coordinator had
+published actor version 3, saved checkpoint `round04`, and started the original
+T15, T16 and T17 workers. Training updates totalled 45,000, with the 150 engineering
+updates separate and no interrupted training round, failed start or replacement.
+The provider independently confirmed instance 57632188 running on machine 102318
+at the frozen hourly rate. The full 24-training and 48-evaluation schedule remains
+unchanged.
