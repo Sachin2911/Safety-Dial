@@ -312,10 +312,11 @@ class FinancialBook:
             row.get("transfer_actual_usd", row["transfer_estimate_usd"])
             for row in self.data["allocations"]
         )
-        other = max(2.0, transfers, float(self.data["other_actual_usd"]))
-        total_remaining = 15.0 - other - cost
-        money_remaining = min(12.9 - cost, total_remaining - 0.1)
-        hours_remaining = max(0.0, 6.0 - hours)
+        limits = self.limits()
+        other = max(limits["other_reserve_usd"], transfers, float(self.data["other_actual_usd"]))
+        total_remaining = limits["total_usd"] - other - cost
+        money_remaining = min(limits["active_shutdown_usd"] - cost, total_remaining - 0.1)
+        hours_remaining = max(0.0, limits["aggregate_hours"] - hours)
         # If allocations accidentally overlap, sum their rates and active hours.
         rate = sum(r["rate_usd_hour"] for r in running)
         count = len(running)

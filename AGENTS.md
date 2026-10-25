@@ -30,7 +30,11 @@ jobs. Do not inherit their protocols, gates or budgets.
    and recompile with `pdflatex`). Tasks 1 through 6 are complete. Task 6 stopped
    at engineering gates; no DSRL training or evaluation ran. Its result is
    `receipts/06-dsrl-results.md`. Its plan and source freezes are historical launch
-   evidence, not permission to resume unused work. The original screen
+   evidence, not permission to resume unused work.
+   Task 7 is now authorized under `progress/07-dsrl-repair.md`: repair numerical
+   integration, verify live execution and pursue a development learning result,
+   retaining the cumulative $15 DSRL cap and all task-6 historical charges.
+   Task 7 uses fresh `dsrl07` paths and freezes. The original screen
    and launch prompt are under `superseded/`, with inactive notices at their old paths.
    Rental records and completed protocols retain their existing paths for source and
    script compatibility. `receipts/README.md` indexes final evidence; task 5 executed

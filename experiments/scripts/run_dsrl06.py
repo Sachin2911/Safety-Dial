@@ -408,14 +408,18 @@ def validate_amendment(old, new, receipt, old_hash, new_hash):
 
 
 class Coordinator:
+    output_relative = "outputs/dsrl06"
+    learner_service_relative = "experiments/scripts/dsrl06_learner_service.py"
+    verify_plan = staticmethod(verify_plan)
+
     def __init__(self, root, plan_path, rental_path, stage, *, repair_receipt=None):
         self.root, self.stage = Path(root).resolve(), stage
         self.plan_path, self.rental_path = Path(plan_path), Path(rental_path)
-        self.plan = verify_plan(self.root, self.plan_path, stage)
+        self.plan = self.verify_plan(self.root, self.plan_path, stage)
         self.rental = json.loads(self.rental_path.read_text())
         if str(self.rental["instance_id"]) != os.environ.get("CONTAINER_ID"):
             raise ValueError("Queue is not running on the frozen rental")
-        self.output = self.root / "outputs/dsrl06"
+        self.output = self.root / self.output_relative
         self.output.mkdir(parents=True, exist_ok=True)
         self.lock = (self.output / "queue.lock").open("a")
         fcntl.flock(self.lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -709,7 +713,7 @@ class Coordinator:
             command = [
                 self.learner_python,
                 "-u",
-                str(self.root / "experiments/scripts/dsrl06_learner_service.py"),
+                str(self.root / self.learner_service_relative),
                 "--work-dir",
                 str(self.learner_dir),
                 "--data-root",

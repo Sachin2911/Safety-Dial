@@ -195,7 +195,7 @@ class ProbeRunner:
         for key, value in raw_observation_arrays(inputs).items():
             if not np.array_equal(arrays[key], value):
                 raise FailedQuery("Probe artifact changed a frozen observation")
-        if envelope["mode"] == "native_replay":
+        if envelope["mode"] == "native_replay" or envelope.get("native_draw_replay"):
             if not np.array_equal(arrays["rng_before"], envelope["rng_before"]):
                 raise FailedQuery("Native replay changed the saved policy key")
         if expected_noise is not None and not np.array_equal(arrays["noise"], expected_noise):
@@ -214,7 +214,17 @@ class ProbeRunner:
             "rpc_confirmed": row["client_confirmed_utc"] is not None,
         }
 
-    def query(self, index, inputs, *, mode, noise=None, rng_before=None, step=0):
+    def query(
+        self,
+        index,
+        inputs,
+        *,
+        mode,
+        noise=None,
+        rng_before=None,
+        step=0,
+        native_draw_replay=False,
+    ):
         ceiling = self.state["freeze"]["query_ceiling"]
         if not 0 <= index < ceiling or self.counts()["reserved"] > ceiling:
             raise FailedQuery("Frozen probe query allowance exceeded")
@@ -231,6 +241,10 @@ class ProbeRunner:
         }
         if noise is not None:
             envelope["noise"] = np.asarray(noise, dtype=np.float32)
+        if native_draw_replay:
+            if mode != "explicit" or self.state["freeze"]["kind"] != "authority":
+                raise FailedQuery("Native noise passthrough is an explicit model probe only")
+            envelope["native_draw_replay"] = True
         if rng_before is not None:
             envelope["rng_before"] = np.asarray(rng_before, dtype=np.uint32)
         key = str(index)

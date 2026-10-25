@@ -7,6 +7,13 @@ in [AGENTS.md](AGENTS.md) apply throughout. Jar is the chosen family; Stack is t
 
 ## Current decision
 
+Sachin has authorized task 7, a four-GPU follow-up under
+[07-dsrl-repair.md](progress/07-dsrl-repair.md), with persistence through technical
+failures. It diagnoses the numerical integration on saved pool observations, then
+validates live execution and pursues the learning comparison. It retains the $15
+cumulative DSRL cap and task 6's historical charges. New paths and freezes separate
+this authorized work from the completed task 6 queue.
+
 Tasks 1 through 6 are complete. The baseline has useful variance, but the tested
 retry and execution-feedback presets have not established a useful lever. Sachin
 selected DSRL noise steering, four RTX 4090 GPUs and a hard $15 cap, then authorized
@@ -115,10 +122,8 @@ tradeoff studies need their own justified protocols.
 
 ## Immediate next action
 
-Review the [task 6 result](progress/receipts/06-dsrl-results.md) before choosing new
-work. The evidence distinguishes numerical integration failures from descriptive
-decoder sensitivity. Same-lane replay and deterministic learner kernels are possible
-engineering questions for a separately frozen follow-up; neither was tested as a
-new protocol in this run. Development and held-out tasks received no new episodes.
-The next allocation, integration amendment or method needs its own concrete plan.
-Do not resume the stopped task 6 queue.
+Implement and run the authorized [task 7 follow-up](progress/07-dsrl-repair.md).
+Freeze each stage before its outcomes, count all repairs and failed attempts, and
+keep working through recoverable integration failures within the financial cap.
+The [task 6 result](progress/receipts/06-dsrl-results.md) remains unchanged historical
+evidence. Do not resume its stopped queue or use held-out tasks for method selection.

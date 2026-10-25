@@ -374,7 +374,7 @@ class PolicyBridge:
             if episode_seed is not None and int(episode_seed) != self.last_seed:
                 self.policy._rng = self.backend.seed(int(episode_seed))
                 self.last_seed = int(episode_seed)
-            if context["mode"] == "native_replay":
+            if context["mode"] == "native_replay" or settings.get("native_draw_replay"):
                 if context["purpose"] != "probe":
                     raise ValueError("Original native replay is only a model probe")
                 self.policy._rng = self.backend.unpack(settings["rng_before"])
