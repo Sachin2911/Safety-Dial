@@ -43,3 +43,48 @@ Source drift, a different host, failed actor parity, changed numerical evidence
 and an expired projection are rejected. These two new source/test files were not
 part of the stage-A bootstrap and do not alter it; they are included in the stage-B
 source inventory when that later freeze is created. Stage B is not yet admitted.
+
+## Fixed-batch learner diagnosis during installation
+
+The isolated learner environment and pinned author source were ready before the
+simulator. The original managed `learner-default` operation ran from 08:03:17 to
+08:04:08 on GPU 3, with five reference/bridge pairs and ten charged engineering
+updates. All five parity comparisons failed; maximum difference was
+0.00019738743867492303. Repeated direct author updates also differed, by up to
+0.00014509260654449463, after restoring identical initial state and RNG each time.
+The discrepancy is therefore not unique to the bridge path in this check.
+
+The predeclared `learner-deterministic` operation ran from 08:05:25 to 08:06:18
+with `--xla_gpu_deterministic_ops=true` set before JAX initialization. All five
+reference/bridge pairs and all repeated-reference comparisons were exactly equal.
+The original 1e-6 tolerance is unchanged. This passes the fixed-batch numerical
+check; source parity on a live batch and actor execution still remain to be tested.
+The fallback with autotuning disabled was not needed. Total task-7 engineering
+update attempts are twenty, with zero training updates or replay episodes.
+
+Both original process receipts, launch records, before/after checkpoints and the
+shared learner ledger are preserved. The original fixed-batch checks will be
+adopted by their managed operation identities, not repeated by the later queue.
+The result JSON SHA256 values in `diagnostics/` are:
+
+- `learner-default/result.json`: `ac3becf51e36548e042149821fbf96c06c16ca50a6ffdf18bed0515af71e5ea9`.
+- `learner-deterministic/result.json`: `a96df02844941b6b743faea77e5230a5b1b12c1816f3974b42b5b3aa519943e8`.
+
+## Validation repair and decoder launch
+
+Before a new VLA query or simulator episode, inspection found that the reused
+validator still selected task 6's job schedule. The explicit
+[repair](07-dsrl-validation-repair.md) passes the verified current schedule through
+both queue validation paths. All 186 local DSRL tests passed with zero skips.
+Stage A v2 SHA256 is
+`5e6275008ccbae872959a82f227d4823f91b6099b497c2aea962cd18cba64b7f`;
+the nine-file repair archive SHA256 is
+`0aa6cb3a90289b3dd7b710c92c55f8f6f7a341fe3a0364ba55db2ec6a9f29c8d`.
+All 172 frozen source/input files verified on the host after deployment. No earlier
+diagnostic result or source archive was rewritten.
+
+The model-only numerical coordinator started in durable session `numerical07` at
+08:12:41, using the stable isolated learner interpreter while the simulator
+continued installing. Policy and probe subprocesses use the pinned OpenPI
+interpreter. This stage does not admit simulator episodes. The learner diagnostic
+operations above already exited and are adopted without duplicate updates.

@@ -1010,7 +1010,11 @@ class Coordinator:
             try:
                 if status.get("returncode") != 0:
                     raise ValueError("Evaluator did not exit cleanly")
-                built = build_episode(entry["directory"], Path(entry["directory"]) / "learner.npz")
+                built = build_episode(
+                    entry["directory"],
+                    Path(entry["directory"]) / "learner.npz",
+                    job_schedule=self.plan["jobs"],
+                )
                 atomic_json(Path(entry["directory"]) / "validation.json", built["validation"])
                 atomic_json(Path(entry["directory"]) / "descriptor.json", built["descriptor"])
                 entry.update(
@@ -1054,7 +1058,9 @@ class Coordinator:
             )
 
     def episode(self, job_id):
-        return build_episode(self.state["episodes"][job_id]["directory"])
+        return build_episode(
+            self.state["episodes"][job_id]["directory"], job_schedule=self.plan["jobs"]
+        )
 
     def profile(self):
         snapshots = self.episode("E3")["snapshots"]

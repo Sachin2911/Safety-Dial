@@ -237,11 +237,12 @@ def _scorer_history(data, meta, row, journal):
     return labels, histories, potentials, audit
 
 
-def _frozen_job(meta, row, directory):
+def _frozen_job(meta, row, directory, job_schedule=None):
     settings = meta["dsrl_settings"]
-    jobs = {item["job_id"]: item for group in frozen_jobs().values() for item in group}
+    schedule = frozen_jobs() if job_schedule is None else job_schedule
+    jobs = {item["job_id"]: item for group in schedule.values() for item in group}
     if settings.get("job_id") not in jobs:
-        raise ValueError("Episode does not belong to the frozen DSRL06 job list")
+        raise ValueError("Episode does not belong to the supplied frozen job list")
     job = jobs[settings["job_id"]]
     if (
         row["scene_name"] != f"task_{job['task']:04d}/base"
@@ -321,12 +322,15 @@ def build_episode(
     row_path: str | Path | None = None,
     sidecar_path: str | Path | None = None,
     path_map: Mapping[str, str] | None = None,
+    job_schedule: Mapping[str, list[dict[str, Any]]] | None = None,
 ) -> dict[str, Any]:
     """Validate one complete rollout and optionally admit its non-native replay.
 
     Returns ``validation`` (JSON-safe receipt), ``descriptor`` (learner input or
     None), and ``snapshots`` (query receipts plus permitted pixels/state arrays).
     The latter can supply both authority probes and engineering learner inputs.
+    A caller reusing this validator supplies its verified frozen job schedule;
+    omission retains the original task-6 schedule for historical analysis.
     """
     directory = Path(directory).resolve()
     recording_path = (
@@ -349,7 +353,7 @@ def build_episode(
     journal_path = recording_path.with_suffix(".journal.jsonl")
     journal = [json.loads(line) for line in journal_path.read_text().splitlines()]
     row, count = legacy["row"], legacy["queries"]
-    job, settings = _frozen_job(meta, row, directory)
+    job, settings = _frozen_job(meta, row, directory, job_schedule)
     labels, histories, potentials, scorer_audit = _scorer_history(data, meta, row, journal)
     scorer_audit["input_sha256"] = {
         "recording": _sha256(recording_path),
