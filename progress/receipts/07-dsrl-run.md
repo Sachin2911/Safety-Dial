@@ -281,3 +281,36 @@ was published, checkpoint `round06` was saved, and the original T21, T22 and T23
 workers had started the final collection round. Development updates totalled
 75,000, with zero interrupted rounds or failed training starts. Evaluation remains
 bound to the final episode-24 checkpoint; no intermediate checkpoint is selected.
+
+## Training completion and frozen evaluation
+
+All 24 training recordings completed validly, supplying 6,000 replay transitions.
+The sixth and final 15,000-update batch finished at 10:40:06.543, for 90,000
+development updates plus the separately charged 150 engineering updates. Actor
+version 6 was published and checkpoint `episode24` and export `final24` saved.
+There were no failed training starts, replacements or interrupted update rounds.
+
+The 24 training episodes produced 0/24 strict safe completions, 13/24 raw and
+counted violations, 24/24 unfinished episodes, 20/24 with contact and 1/24 with
+grasp. These combine warm-up and changing actors and are not the final comparison.
+
+A read-only final weight audit passed at 10:45:22.265. It verified every snapshot
+file hash, all 24 training jobs, zero pending transitions and actor version 6. The
+published actor's full training state matched the trained actor exactly; exported
+parameters and batch statistics also matched exactly. All parameters were finite,
+and 1,077,580 of 1,077,622 parameter scalars changed from the warm-up checkpoint.
+The audit used no forward passes or gradient calls. Its evidence is
+`outputs/dsrl07/control/final-actor-audit.json`. The checkpoint manifest SHA256 is
+`6d293c337291d1011f8db7d7e3e8ce6b77f5ceafa3145bf6a9b605a2ead68907`;
+the final export manifest SHA256 is
+`c0e08c432479c55af420a1fa954e85c829f2a35ce6e830ca2b6ba68bb56dbe04`.
+
+Evaluation started at 10:41:13 with the final actor fixed. All four first-block
+recordings were valid by 10:49:41.547. On task 0, seed 72000, native completed
+safely after 935 controls with contact and grasp. Fixed-zero, random and DSRL each
+used all 2,000 controls, remained unfinished with a raw violation, and made contact
+without grasp. These are one episode per arm and do not establish an effect.
+The next four workers started at 10:49:45 to 10:49:47. At 10:56:24 they remained
+live at 1,440 to 1,552 controls; four of 48 evaluations were complete, with none
+invalid. The original pilot coordinator and version-6 CPU evaluation actor were
+alive. No further learning or checkpoint selection is scheduled.
