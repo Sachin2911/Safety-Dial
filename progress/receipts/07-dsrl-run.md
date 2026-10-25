@@ -1,8 +1,9 @@
 # Task 7 DSRL repair run record
 
-Started 25 October 2026. Status at 09:12 UTC: all numerical and live engineering
-checks passed. Stage B is frozen and its first three warm-up collection episodes
-are running. No development gradient updates or evaluation outcomes exist yet.
+Started 25 October 2026. Status at 09:27 UTC: all numerical and live engineering
+checks passed. All six warm-up episodes are valid, and the first actor-driven
+collection round is running. No development gradient updates or evaluation
+outcomes exist yet.
 All times below are UTC.
 
 The user authorized a four-GPU follow-up and persistence through recoverable
@@ -196,3 +197,17 @@ running the first warm-up collection round. No trained-controller improvement is
 claimed. The rental's 178 frozen source/input files verified unchanged before this
 launch; concurrent task-8 documentation edits on the workstation are separate from
 the source snapshot running this experiment.
+
+By 09:19:15, T00 to T02 had completed valid recordings and the first collection
+round had appended 750 transitions to the fresh training replay. Checkpoint
+`round00` was saved. T03 to T05 were running the second Gaussian warm-up round.
+The learner remained at zero development gradient updates, with the 150 engineering
+calls separately accounted and no engineering episodes in replay.
+
+At 09:27:09, all six Gaussian warm-up episodes had valid recordings, replay held
+1,500 transitions and `warmup_complete` was true. Checkpoint `round01` was saved.
+The original T06, T07 and T08 workers were running actor-version-0 collection;
+the frozen protocol updates after that three-episode collection barrier. No
+training start had failed or been replaced. The first three warm-up recordings
+had zero completions, three raw violations and exact return-identity reconciliation.
+These untrained outcomes do not measure a learned-controller benefit.
