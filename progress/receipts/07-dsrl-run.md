@@ -88,3 +88,24 @@ The model-only numerical coordinator started in durable session `numerical07` at
 continued installing. Policy and probe subprocesses use the pinned OpenPI
 interpreter. This stage does not admit simulator episodes. The learner diagnostic
 operations above already exited and are adopted without duplicate updates.
+
+The numerical stage completed at 08:16:04 with live integration admitted. All 216
+probe queries and 12 startup queries returned. All same-process repeats were exact
+on the eight observations on each of four GPU servers. All eight explicit native-draw
+passthroughs on server 0 were also exact. Bounded candidates showed nonzero decoded
+influence; gripper sensitivity remained one of eight inputs, on task 10. This is a
+descriptive finding, not a completion result or the old two-task authority gate.
+
+Eight of 24 cross-process comparisons met the original tolerance; the largest
+absolute difference was 0.013146638870239258 in decoded action coordinates. All
+converted prefix gripper commands agreed. These cross-process differences remain
+reproducibility evidence and are not relabelled as same-process failures. The frozen
+evaluation schedule rotates arms across GPU lanes. GPU 3's numerical policy process
+was stopped as planned; servers 0 to 2 remain available for live engineering.
+
+At numerical completion there were zero simulator starts, zero policy controls,
+zero training updates and twenty engineering update calls. No learner diagnostic
+was repeated by the coordinator. The fresh-path offline analyzer and its four
+focused checks were separately frozen before any live episode in
+`07-dsrl-analysis-source.json`; it keeps numerical integration distinct from the
+six required live engineering records and the final learning comparison.

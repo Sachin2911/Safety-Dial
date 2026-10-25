@@ -1,6 +1,16 @@
 # Project progress
 
-Updated 25 October 2026. Tasks 1 through 6 are complete.
+Updated 25 October 2026. Task 7 is in progress under the authorized
+[DSRL follow-up](07-dsrl-repair.md), retaining the cumulative $15 cap including
+task 6. Fixed-batch deterministic SAC comparisons pass exactly, as do all
+same-process decoder repeats and native-draw passthrough checks. Cross-process
+differences are recorded separately. At 08:22 UTC, simulator installation is
+downloading assets; live engineering and development learning have not run. See the
+[run record](receipts/07-dsrl-run.md) and current
+[source freeze v2](receipts/07-dsrl-stage-a-v2.json). Numerical integration does not
+establish safe-completion efficacy.
+
+Tasks 1 through 6 are complete.
 [Task 6 DSRL engineering](receipts/06-dsrl-results.md) stopped at failed numerical
 integration gates after four native pool episodes and the full decoder probe.
 No development learning or evaluation ran. All 166 local tests passed; real GPU
@@ -21,9 +31,9 @@ authority or absence result. A new experiment needs its own frozen plan.
 ## Current reading order
 
 1. [First principles](../firstPrinciples.md): research direction and stage boundaries.
-2. [DSRL experiment plan](06-dsrl-plan.md): mechanism, controls, budgets and decision rules.
-3. [Plan review](receipts/06-dsrl-plan-review.md): resolved issues and remaining engineering checks.
-4. [Independent reviewer prompt](06-review-prompt.md): a short request for the next review.
+2. [DSRL follow-up plan](07-dsrl-repair.md): current numerical repair, live validation and learning allocation.
+3. [Current run](receipts/07-dsrl-run.md): measured progress and source amendments.
+4. [Task 6 result](receipts/06-dsrl-results.md) and [original plan](06-dsrl-plan.md): historical outcome and the retained learning design.
 5. [The Odyssey](theOdessy.pdf): short entries for completed work, with [LaTeX source](theOdessy.tex).
 
 ## Completed experiments
@@ -60,6 +70,8 @@ or restart its instance.
 | [rental-runpod-20261023.json](rental-runpod-20261023.json) | Task 2 analysis host |
 | [rental-tracking04-20261024.json](rental-tracking04-20261024.json) | Task 4 allocation |
 | [rental-adapter05-20261024.json](rental-adapter05-20261024.json) | Task 5 allocations |
+| [rental-dsrl06-20261025.json](rental-dsrl06-20261025.json) | Completed task 6 allocation |
+| [rental-dsrl07-20261025.json](rental-dsrl07-20261025.json) | Active task 7 allocation |
 
 ## Superseded material
 
