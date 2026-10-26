@@ -31,13 +31,11 @@ jobs. Do not inherit their protocols, gates or budgets.
    at engineering gates; no DSRL training or evaluation ran. Its result is
    `receipts/06-dsrl-results.md`. Its plan and source freezes are historical launch
    evidence, not permission to resume unused work.
-   Task 7 is now authorized under `progress/07-dsrl-repair.md`: repair numerical
-   integration, verify live execution and pursue a development learning result,
-   retaining the cumulative $15 DSRL cap and all task-6 historical charges.
-   Task 7 uses fresh `dsrl07` paths and freezes. The original screen
-   and launch prompt are under `superseded/`, with inactive notices at their old paths.
-   Rental records and completed protocols retain their existing paths for source and
-   script compatibility. `receipts/README.md` indexes final evidence; task 5 executed
+   Task 7's experiment is complete; its protocol `progress/07-dsrl-repair.md`, rental
+   record and the reused `progress/06-dsrl-plan.md` stay until its closeout is written. Task 15 is the only live rental. Completed
+   task protocols, handovers, prompts and closed-task rental records were removed on
+   26 October 2026; the committed ones are in git history at `1291199`.
+   `receipts/README.md` indexes final evidence; task 5 executed
    `05-adapter-plan-v4.json`, not its earlier versions. Todo 1 has one instance per
    prefix (`01` B, `01b` C, `01c` D), followed by `02-*`, `03-*`, `04-tracking-*` and
    `05-adapter-*` receipts. The finished

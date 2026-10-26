@@ -1,5 +1,7 @@
 # Todo 2, item 5: success against failure on the same task
 
+The PNG files were removed from git on 26 October 2026. They remain in the private dataset `Sachioster/maniguard-jar-replication-20261022` under `analysis/02/02-pairs/` at revision `11b5a0f9b91fa51660e09474bfab0f8460c25f51` ([02-preserve.md](02-preserve.md)).
+
 Strips: `02-pairs/task_<nn>.png` (rows: success main, failure main, success wrist, failure
 wrist; columns contact - 50 to contact + 250 every 25 steps, each episode aligned on its own
 first contact) and `02-pairs/task_<nn>_late.png` (the same rows over absolute steps from

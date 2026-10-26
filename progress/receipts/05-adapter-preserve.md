@@ -64,7 +64,7 @@ both instances were destroyed. They are a billing snapshot, not an assertion
 that later adjustments are impossible. Earlier conservative estimates remain
 labeled separately. Exact provider rows are in
 [05-adapter-billing.json](05-adapter-billing.json); terminal state is in the
-[rental record](../rental-adapter05-20261024.json).
+[rental record](https://github.com/Sachin2911/Safety-Dial/blob/1291199e665ed574050de42a7708c19965ecda35/progress/rental-adapter05-20261024.json).
 
 ## Completion metadata and local record
 

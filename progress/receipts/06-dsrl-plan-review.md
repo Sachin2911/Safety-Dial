@@ -162,4 +162,4 @@ The updated six-page Odyssey compiled twice without warnings, its first five pag
 retain identical extracted text, and its sixth page was rendered and visually checked.
 No decoder inference, simulator execution or rental was performed.
 
-The independent prompt is [06-review-prompt.md](../06-review-prompt.md).
+The independent prompt is [06-review-prompt.md](https://github.com/Sachin2911/Safety-Dial/blob/1291199e665ed574050de42a7708c19965ecda35/progress/06-review-prompt.md).

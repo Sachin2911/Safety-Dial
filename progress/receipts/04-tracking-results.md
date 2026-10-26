@@ -203,7 +203,7 @@ Repeats the missing closure-before-carry sequence on task 17 with the other seed
 
 ## Evidence and limits
 
-The frozen design is [04-tracking-check.md](../04-tracking-check.md), the source and
+The frozen design is [04-tracking-check.md](https://github.com/Sachin2911/Safety-Dial/blob/1291199e665ed574050de42a7708c19965ecda35/progress/04-tracking-check.md), the source and
 environment record is [04-tracking-host.md](04-tracking-host.md), and all interaction
 accounting is in [04-tracking-run.md](04-tracking-run.md). Preservation, pinned dataset
 revision and terminal provider state are in

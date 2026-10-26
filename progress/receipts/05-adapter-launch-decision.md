@@ -49,5 +49,5 @@ Admissions still close at 21:26:49 UTC and the rental stops by 22:56:49 UTC. The
 is no extra budget for an optimizer or a replacement method in this allocation.
 
 Evidence: [Task 4 results](04-tracking-results.md),
-[frozen task 5 protocol](../05-execution-adapter.md),
+[frozen task 5 protocol](https://github.com/Sachin2911/Safety-Dial/blob/1291199e665ed574050de42a7708c19965ecda35/progress/05-execution-adapter.md),
 [execution plan v4](05-adapter-plan-v4.json).

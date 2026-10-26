@@ -1,5 +1,7 @@
 # Todo 2, item 3: task notes from the frame sheets
 
+The PNG files were removed from git on 26 October 2026. They remain in the private dataset `Sachioster/maniguard-jar-replication-20261022` under `analysis/02/02-frames/` at revision `11b5a0f9b91fa51660e09474bfab0f8460c25f51` ([02-preserve.md](02-preserve.md)).
+
 Sheets: `02-frames/task_<nn>.png` (main camera, 26 tasks, rows seed0_run2, seed0_run3, seed1,
 seed2; columns step 0, first contact, contact + 40, key event, last step) and
 `02-frames/task_<nn>_wrist.png` for the 15 panel tasks, made by `scripts/todo2/frames.py`.
