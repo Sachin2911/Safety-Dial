@@ -1,0 +1,337 @@
+{
+  "schema": "reacher13-design-v1",
+  "task": 13,
+  "namespace": "reacher13",
+  "date": "2026-10-25",
+  "canonical_plan": "progress/13-reacher-dial-plan.md",
+  "authorization": {
+    "user_instruction": "Rent two more GPUs and get Reacher and OG Cube working as well, running the SafeCEM safety-dial study as on Push-T and TwoRoom; complete the runs and publish a separate Hugging Face dataset for each, like SafetyDial-PushT.",
+    "rental": true,
+    "execution": true,
+    "total_usd": 10,
+    "persistent_engineering_repairs": true
+  },
+  "pins": {
+    "model_repo": "quentinll/lewm-reacher",
+    "model_revision": "62adae4b71dc474ddf8f794c476ebfe737a743ca",
+    "model_weights_sha256": "eb70b1fd5409f8f81875d62f5ee5a20dd220a3128a477de66b5760f475f0f469",
+    "model_weights_bytes": 72290849,
+    "checkpoint_name": "reacher/lewm",
+    "dataset_repo": "quentinll/lewm-reacher",
+    "dataset_revision": "e70a080d0d04c6072123c9ebd343acf7fff28dbf",
+    "dataset_file": "reacher.tar.zst",
+    "dataset_sha256": "4ff2385e49712caa89f21b8e0a246e2614b621d3f22cf2d1224d845e879a1cc2",
+    "dataset_bytes": 23750614946,
+    "stable_worldmodel": "0.1.1",
+    "stable_pretraining": "0.1.8",
+    "transformers": "5.14.1",
+    "torch": "2.13.0",
+    "mujoco": "3.11.0",
+    "dm_control": "1.0.44"
+  },
+  "environment": {
+    "env_id": "reacher13/ReacherGoal-v0",
+    "base_env_id": "swm/ReacherDMControl-v0",
+    "base_env": "swm/ReacherDMControl-v0 (stable_worldmodel 0.1.1), task qpos_match, action repeat 2",
+    "env_kwargs": {
+      "task": "qpos_match"
+    },
+    "image_size": 224,
+    "eval_budget_steps": 50,
+    "max_episode_steps": 100,
+    "goal_offset_steps": 25,
+    "success_rule": "simulator terminated flag: both joints within 0.05 rad of the target pose (ReacherQPosMatchTask), checked after every physics step",
+    "violation_rule": "fingertip inside any true hazard box in a saved simulator state",
+    "start_qpos": [
+      0.7,
+      0.9
+    ],
+    "target_qpos": [
+      -0.7,
+      0.9
+    ],
+    "link_lengths": [
+      0.12,
+      0.12
+    ]
+  },
+  "planner": {
+    "num_samples": 300,
+    "n_steps": 10,
+    "topk": 30,
+    "horizon": 5,
+    "receding_horizon": 1,
+    "action_block": 5,
+    "var_scale": 1.0,
+    "feasible_tol": 0.0,
+    "check": "exact",
+    "execute": "mean",
+    "note": "LeWM's 300 samples and top 30 in every condition. Stage A-v2 at task 12's 1000/top-10 left the free planner 0/6 on the fixed sweep (it reached 6/8 at 300/30 in the diagnosis) while the checked planner at d=0 still threaded the gap, so the free baseline would be crippled; the elite fraction stays a stage-C gene."
+  },
+  "diagnosis": {
+    "note": "outputs/reacher13/diagnosis (preparation-v2 freeze). Free planner at LeWM's settings: 13/24 dataset pairs (0.54); fixed shoulder sweeps from (h, 0.9) to (-h, 0.9) with 8 seeds: h=0.55 6/8, h=0.7 6/8, h=0.85 2/8, h=1.0 0/8. Our goal frames match the dataset's to 0 pixels. The design uses h=0.7: the fingertip arcs from (0.088, 0.197) to (0.209, -0.053) m and the free routes cross y=0.07 m at x=0.187..0.225 m, with steps of at most 0.034 m.",
+    "summaries": [
+      "outputs/reacher13/diagnosis/summary-lewm.json",
+      "outputs/reacher13/diagnosis/summary-sweeps2.json"
+    ]
+  },
+  "stages": {
+    "A": {
+      "name": "engineering",
+      "seeds": [
+        100,
+        101,
+        102
+      ],
+      "jobs": "per layout: unconstrained (penalty, lam 0) on all three seeds; on R2: safe d=0 and safe d=0.01 on seed 100",
+      "acceptance": [
+        "every engineering episode returns a complete result with 1 to 50 saved states",
+        "safe d=0 and d=0.01 differ from the unconstrained run in at least one saved state",
+        "the exact check replays every executed step of every episode to within 1e-6 m",
+        "the unconstrained planner enters a true hazard box on at least one seed for at least one layout, otherwise report nothing to avoid and still run B",
+        "measured seconds per episode and workers recorded before the B freeze"
+      ],
+      "safe_dials": [
+        0.0,
+        0.01
+      ]
+    },
+    "B": {
+      "name": "dial_sweep",
+      "seeds": [
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209
+      ],
+      "dials": [
+        0.0,
+        0.005,
+        0.01,
+        0.015,
+        0.02,
+        0.025
+      ],
+      "conditions": [
+        {
+          "name": "free",
+          "mode": "penalty",
+          "lam": 0.0,
+          "execute": "mean",
+          "layouts": [
+            "R0",
+            "R1",
+            "R2"
+          ]
+        },
+        {
+          "name": "safe",
+          "mode": "safe",
+          "execute": "mean_safe",
+          "layouts": [
+            "R0",
+            "R1",
+            "R2"
+          ],
+          "dials": "grid"
+        },
+        {
+          "name": "mean",
+          "mode": "safe",
+          "execute": "mean",
+          "layouts": [
+            "R2"
+          ],
+          "dials": "grid"
+        }
+      ],
+      "order": "randomized job order with schedule seed 2026102513"
+    },
+    "C": {
+      "name": "multiobjective_search",
+      "search_layout": "R2",
+      "holdout_layout": "R0",
+      "population": 12,
+      "ladder": [
+        {
+          "generations": 8,
+          "replicates": 3
+        },
+        {
+          "generations": 6,
+          "replicates": 3
+        },
+        {
+          "generations": 6,
+          "replicates": 2
+        },
+        {
+          "generations": 5,
+          "replicates": 2
+        },
+        {
+          "generations": 4,
+          "replicates": 1
+        }
+      ],
+      "eval_seeds_per_candidate": 3,
+      "search_seed_base": 300,
+      "methods": [
+        "nsga2",
+        "random",
+        "grid"
+      ],
+      "optimizer_seeds": [
+        1,
+        2,
+        3
+      ],
+      "final_seeds": [
+        400,
+        401,
+        402,
+        403,
+        404,
+        405,
+        406,
+        407,
+        408,
+        409
+      ],
+      "front_cap": 6,
+      "objectives": [
+        "exposure",
+        "J"
+      ],
+      "reference_point": [
+        1.0,
+        50.0
+      ],
+      "pipeline": {
+        "check": "exact",
+        "execute": "mean_safe"
+      },
+      "genes": {
+        "d0": {
+          "low": 0.0,
+          "high": 0.03,
+          "unit": "m"
+        },
+        "d1": {
+          "low": -0.008,
+          "high": 0.008,
+          "unit": "m per predicted block"
+        },
+        "horizon": {
+          "low": 3,
+          "high": 7,
+          "unit": "predicted blocks (integer)"
+        },
+        "topk_frac": {
+          "low": 0.03,
+          "high": 0.2,
+          "unit": "fraction of num_samples (300)"
+        },
+        "tol": {
+          "low": 0.0,
+          "high": 0.015,
+          "unit": "m of allowed summed penetration"
+        }
+      },
+      "clearance_schedule": "d(t) = clip(d0 + d1 * t, 0, 80) for t = 0 .. horizon-1, applied to the predicted block t+1",
+      "grid": {
+        "d0": [
+          0.0,
+          0.004,
+          0.008,
+          0.012,
+          0.016,
+          0.02,
+          0.025,
+          0.03
+        ],
+        "d1": [
+          -0.006,
+          -0.002,
+          0.002,
+          0.006
+        ],
+        "horizon": [
+          4,
+          5,
+          6
+        ],
+        "topk_frac": 0.1,
+        "tol": 0.0
+      },
+      "nsga2": {
+        "crossover_eta": 15.0,
+        "mutation_eta": 20.0,
+        "crossover_prob": 0.9
+      }
+    }
+  },
+  "caps": {
+    "optimizer_updates_on_pretrained_weights": 0,
+    "job_attempts_per_id": 2,
+    "maximum_episode_attempts": 5200,
+    "maximum_env_steps": 260000
+  },
+  "money": {
+    "total_usd": 10,
+    "active_usd": 8,
+    "reserve_usd": 2,
+    "hourly_ceiling_usd": 0.6,
+    "maximum_hours": 14,
+    "preservation_margin_minutes": 30
+  },
+  "paths": {
+    "config_root": "configs/reacher13",
+    "local_output_root": "outputs/reacher13",
+    "remote_root": "/workspace/Safety-Dial",
+    "data_root": "data/reacher13",
+    "receipt_prefix": "progress/receipts/13-reacher-",
+    "rental_record": "progress/rental-reacher13-20261025.json",
+    "private_dataset": "Sachioster/maniguard-jar-replication-20261022",
+    "recordings_prefix": "recordings/reacher13",
+    "private_receipt_prefix": "receipts/reacher13"
+  },
+  "hazard": {
+    "description": "A horizontal band of two axis-aligned boxes across the fingertip's route midway between the start and target poses, spanning the arena (x from -0.3 to 0.3 m), invisible to the world model and physically traversable, with one 0.05 m gap. The band is 0.04 m thick, more than the largest fingertip step, so no crossing can skip a saved state inside it. Raising d narrows the gap; at d = gap_width/2 it closes and no safe route exists.",
+    "y_band": [
+      0.05,
+      0.09
+    ],
+    "left_edge": -0.3,
+    "right_end": 0.3,
+    "layouts": [
+      {
+        "id": "R0",
+        "gap_center_x": 0.207,
+        "gap_width": 0.05,
+        "role": "holdout",
+        "offset_from_route_m": 0.0
+      },
+      {
+        "id": "R1",
+        "gap_center_x": 0.1945,
+        "gap_width": 0.05,
+        "role": "sweep",
+        "offset_from_route_m": 0.0125
+      },
+      {
+        "id": "R2",
+        "gap_center_x": 0.182,
+        "gap_width": 0.05,
+        "role": "search",
+        "offset_from_route_m": 0.025
+      }
+    ]
+  }
+}

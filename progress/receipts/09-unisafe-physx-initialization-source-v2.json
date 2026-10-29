@@ -1,0 +1,83 @@
+{
+  "path": "/venv/main/lib/python3.12/site-packages/isaaclab_physx/physics/physx_manager.py",
+  "sha256": "dc1a3fbabbb54a4a3f7c45bf10e25643a346b06a6d9577e8f974584df9869742",
+  "class": "PhysxManager",
+  "methods": {
+    "initialize": {
+      "line": 405,
+      "source": "    def initialize(cls, sim_context: SimulationContext) -> None:\n        \"\"\"Initialize the physics manager.\"\"\"\n        from isaaclab_physx import _patch_isaacsim_simulation_manager, _subscribe_to_simulation_manager_enable\n\n        _subscribe_to_simulation_manager_enable()\n        _patch_isaacsim_simulation_manager()\n\n        from isaaclab.sim.utils.stage import get_current_stage_id\n\n        super().initialize(sim_context)\n        cls._stage_id = get_current_stage_id()\n\n        cls._setup_subscriptions()\n        cls._configure_physics()\n        cls._load_fabric()\n        cls._anim_recorder = AnimationRecorder(sim_context)\n        cls._scene_data_backend = PhysxSceneDataBackend()\n        cls.kinematics_dirty = False\n\n        # force update cycle to apply dt\n        sim = PhysicsManager._sim\n        sim.set_setting(\"/app/player/playSimulations\", False)  # type: ignore[union-attr]\n        omni.kit.app.get_app().update()\n        sim.set_setting(\"/app/player/playSimulations\", True)  # type: ignore[union-attr]\n\n        # Register the headless video pump as a render callback so it fires after each\n        # visualizer step without depending on the now-deleted recording_hooks module.\n        from isaaclab_physx.renderers.isaac_rtx_renderer_utils import (  # noqa: PLC0415\n            pump_kit_app_for_headless_video_render_if_needed,\n        )\n\n        _sim = PhysicsManager._sim\n        _sim.add_render_callback(\n            \"physx_headless_video_pump\", lambda _: pump_kit_app_for_headless_video_render_if_needed(_sim), order=-10\n        )"
+    },
+    "reset": {
+      "line": 491,
+      "source": "    def reset(cls, soft: bool = False) -> None:\n        \"\"\"Reset the physics simulation.\"\"\"\n        if not soft:\n            # Ensure views are created (warmup only happens once per stage)\n            if cls.backend is None:\n                cls._warmup_and_create_views()\n            # Deterministic lifecycle dispatch for backend-agnostic callbacks.\n            # This avoids relying on asynchronous event-bus ordering during env construction.\n            cls.dispatch_event(PhysicsEvent.PHYSICS_READY, payload={})\n            # Legacy IsaacEvents dispatch for callbacks registered directly on IsaacEvents.\n            cls._event_bus.dispatch_event(IsaacEvents.PHYSICS_READY.value, payload={})\n\n        device = PhysicsManager._device\n        if \"cuda\" in device:\n            torch.cuda.set_device(device)\n\n        if cls.backend is not None:\n            cls.backend.simulation_view._backend.initialize_kinematic_bodies()\n\n        cls.invalidate_transforms(kinematics=True)\n        cls._scene_data_backend.geometry_timestamp += 1\n        cls.raise_callback_exception_if_any()"
+    },
+    "step": {
+      "line": 556,
+      "source": "    def step(cls) -> None:\n        \"\"\"Step the physics simulation.\"\"\"\n        sim = PhysicsManager._sim\n        if sim is None:\n            return\n\n        if cls._anim_recorder and cls._anim_recorder.enabled and cls._anim_recorder.update():\n            logger.warning(\"Animation recording finished. Shutting down.\")\n            omni.kit.app.get_app().shutdown()\n            return\n\n        physx_sim = omni.physx.get_physx_simulation_interface()\n        physx_sim.simulate(sim.cfg.dt, 0.0)\n        physx_sim.fetch_results()\n        cls.kinematics_dirty = False\n        cls.invalidate_transforms()\n        cls._scene_data_backend.geometry_timestamp += 1\n        device = PhysicsManager._device\n        if \"cuda\" in device:\n            torch.cuda.set_device(device)\n\n        cls.raise_callback_exception_if_any()"
+    },
+    "play": {
+      "line": 580,
+      "source": "    def play(cls) -> None:\n        \"\"\"Start or resume the timeline.\"\"\"\n        cls._timeline.play()\n        # Pump events so timeline callbacks fire synchronously\n        omni.kit.app.get_app().update()\n        cls._sync_fabric_after_resume()"
+    },
+    "_warmup_and_create_views": {
+      "line": 987,
+      "source": "    def _warmup_and_create_views(cls) -> None:\n        \"\"\"Warm-start physics and create simulation views.\"\"\"\n        if not cls._warmup_needed:\n            return\n\n        # Get stage ID first (needed for both warmup and view creation)\n        from isaaclab.sim.utils.stage import get_current_stage_id\n\n        stage_id = get_current_stage_id()\n\n        sim = PhysicsManager._sim\n        entries = None\n        if (plan := sim.get_clone_plan()) is not None:\n            env_ids = np.arange(len(plan.topology.world_prototype_layout))\n            entries = expand_deformable_entries(deformable_prototypes(sim.stage, plan), plan, env_ids, plan.positions)\n\n        is_gpu = \"cuda\" in PhysicsManager.get_device()\n\n        physx = omni.physx.get_physx_interface()\n        physx_sim = omni.physx.get_physx_simulation_interface()\n\n        # Both APIs load physics. Force-loading after attachment destroys and rebuilds it.\n        # CPU uses the Kit bridge's implicit attachment to preserve MBP collision setup.\n        if is_gpu:\n            physx_sim.attach_stage(stage_id)\n        else:\n            physx.force_load_physics_from_usd()\n\n        # warmup physx\n        physx.start_simulation()\n        physx.update_simulation(cls.get_physics_dt(), 0.0)\n        physx_sim.fetch_results()\n        cls._event_bus.dispatch_event(IsaacEvents.PHYSICS_WARMUP.value, payload={})\n        cls._warmup_needed = False\n\n        if cls._view_created:\n            return\n\n        # Register the complete tensor view only after PhysX has loaded the stage.\n        cls.backend = sim.get_or_create_backend(PhysxBackendCfg(stage_id=stage_id))\n        cls._scene_data_backend.backend = cls.backend\n        # omni.physics.tensors logs errors for an empty selection, so static scenes skip the request.\n        prims = Usd.PrimRange.Stage(sim.stage, Usd.TraverseInstanceProxies())\n        if any(prim.HasAPI(UsdPhysics.RigidBodyAPI) for prim in prims):\n            view = cls.backend.simulation_view.create_rigid_body_view(\"/**\")\n            # PhysX returns a wrapper with no native handle for an empty selection.\n            cls._scene_data_backend._rigid_body_view = view if view._backend is not None else None\n            if view._backend is not None:\n                # Wildcard bindings expose articulation aliases; publish the actual root-link paths.\n                native = cls.backend.simulation_view\n                paths = view.prim_paths\n                articulation_type = omni.physics.tensors.ObjectType.Articulation\n                roots = [path for path in paths if native.get_object_type(path) == articulation_type]\n                if roots:\n                    articulations = native.create_articulation_view(roots)\n                    links = (body_paths[0] for body_paths in articulations.link_paths)\n                    aliases = dict(zip(articulations.prim_paths, links, strict=True))\n                    cls._scene_data_backend._rigid_body_view = native.create_rigid_body_view(\n                        [aliases.get(path, path) for path in paths]\n                    )\n\n        # Final update after view creation\n        physx.update_simulation(cls.get_physics_dt(), 0.0)\n        if entries is not None:\n            cls._scene_data_backend._setup_deformable_geometry(entries)\n        cls._view_created = True\n\n        cls._event_bus.dispatch_event(IsaacEvents.SIMULATION_VIEW_CREATED.value, payload={})\n        cls.dispatch_event(PhysicsEvent.PHYSICS_READY, payload={})\n        cls._event_bus.dispatch_event(IsaacEvents.PHYSICS_READY.value, payload={})"
+    },
+    "_on_play": {
+      "line": 1073,
+      "source": "    def _on_play(cls, event: Any) -> None:\n        sim = PhysicsManager._sim\n        if sim is not None and sim.get_setting(\"/app/player/playSimulations\"):  # type: ignore[union-attr]\n            cls._warmup_and_create_views()"
+    },
+    "_on_stop": {
+      "line": 1079,
+      "source": "    def _on_stop(cls, event: Any) -> None:\n        cls._warmup_needed = True\n        cls._invalidate_views()\n        # Detach the stage `_warmup_and_create_views` attached (GPU pipeline only, matching its own\n        # is_gpu guard) so the next play() can reattach cleanly. Without this, a second\n        # `_warmup_and_create_views` (e.g. play() -> stop() -> play() with no reset() in between)\n        # calls attach_stage() on a stage that is still attached (\"Stage already attached\") and\n        # corrupts PhysX's native view registry (SIGSEGV inside omni.physx.tensors). Guarded by\n        # get_attached_stage() so this is a no-op when close() already detached it.\n        if \"cuda\" in PhysicsManager.get_device() and (physx_sim := omni.physx.get_physx_simulation_interface()):\n            if physx_sim.get_attached_stage():\n                physx_sim.detach_stage()"
+    }
+  },
+  "warmup_flags": [
+    {
+      "line": 72,
+      "source": "SIMULATION_VIEW_CREATED = \"isaac.simulation_view_created\""
+    },
+    {
+      "line": 373,
+      "source": "_warmup_needed: ClassVar[bool] = True"
+    },
+    {
+      "line": 374,
+      "source": "_view_created: ClassVar[bool] = False"
+    },
+    {
+      "line": 650,
+      "source": "cls._warmup_needed = True"
+    },
+    {
+      "line": 755,
+      "source": "lambda dt: callback(dt) if cls._view_created else None,"
+    },
+    {
+      "line": 989,
+      "source": "if not cls._warmup_needed:"
+    },
+    {
+      "line": 1020,
+      "source": "cls._warmup_needed = False"
+    },
+    {
+      "line": 1022,
+      "source": "if cls._view_created:"
+    },
+    {
+      "line": 1052,
+      "source": "cls._view_created = True"
+    },
+    {
+      "line": 1070,
+      "source": "cls._view_created = False"
+    },
+    {
+      "line": 1080,
+      "source": "cls._warmup_needed = True"
+    }
+  ],
+  "inspected_utc": "2026-10-25T13:37:49.960828+00:00",
+  "instance_id": 57647787
+}

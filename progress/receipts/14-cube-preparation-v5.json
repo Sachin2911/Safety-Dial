@@ -1,0 +1,131 @@
+{
+  "schema": "cube14-freeze-v1",
+  "utc": "2026-10-25T22:10:55.689386+00:00",
+  "stage": "preparation",
+  "authorization": {
+    "user_launch": true,
+    "persistent_engineering_repairs": true
+  },
+  "money": {
+    "total_usd": 10,
+    "active_usd": 8,
+    "reserve_usd": 2,
+    "hourly_ceiling_usd": 0.6,
+    "maximum_hours": 14,
+    "preservation_margin_minutes": 30
+  },
+  "source_sha256": {
+    "configs/cube14/bootstrap.json": "6eccbf499c193b29b5afd4f4d32007b9c8a8318f1294d9d254334eaf5f5ca82e",
+    "configs/cube14/design.json": "f10e0980315a8665d01af7c14c9e89636172609e8a90a056d93951e3e6c6f297",
+    "configs/cube14/requirements.txt": "3563bb49aea4b9a564f5329916bc24ff1c017fa668b7d3a8ed045a5295580e2f",
+    "experiments/helpers/cube14_env.py": "bafe6cf43a0d83dbbe6ae6ae717200d12ab019eeea40b42a67c2e352db5ae495",
+    "experiments/helpers/cube14_evo.py": "e65e03695f3dbe48699e18c513e789f548fd7ef57c008f5060e4488fdcad64fa",
+    "experiments/helpers/cube14_geometry.py": "5ad739435603f4b73cb478ce380a3d1e024ef897b494d23b2657c0db1806f453",
+    "experiments/helpers/cube14_infra.py": "e8db4b8bd1bb830b19e255b17fe9c0eb6a72e790d34163c9339e084403553365",
+    "experiments/helpers/cube14_planner.py": "417c388fdc690827c9210d828042b15a5b82ed73bcf23b6db2af042959468052",
+    "experiments/helpers/cube14_protocol.py": "4c29dc29a8e0c485da46134c139a560e53ac376abcad3ea7fb5721cabdb7d311",
+    "experiments/helpers/cube14_runtime.py": "f7272939e9db4d9330b856387ce1bf20b2e986528acd1ce77c6b19cf2139718d",
+    "experiments/helpers/dsrl06_infra.py": "1e2a2aff8f3243843a89694bc1b6e019c046e22514be6bc886e0a6057558b1e1",
+    "experiments/helpers/safecem10_planner.py": "9f4dddaa54012c1f45fce6da054b74611d826e4f2fa91445c274a43cca5a43ed",
+    "experiments/scripts/admit_cube14.py": "9d89f236c470de7ae100ff3a678fe9720bd97c072e4115b40eab1bf807839e67",
+    "experiments/scripts/bootstrap_cube14.sh": "fa419567cdf7062b3439cec29e2632f3d74ba7051dc978b4ad3b9a38e758c24c",
+    "experiments/scripts/cube14_watchdog.py": "3e21655c543a32e5e7bb6d8488892b81784a4b33f7068215a81fa011260f2645",
+    "experiments/scripts/diagnose_cube14.py": "ea88c7e7885dc6ad1c2690a1524c08036c27290128241f479dad771e1690c459",
+    "experiments/scripts/freeze_cube14.py": "ae5955a62b1ce875cbee86e7cc5dcbae1d29d4025cb5ebfea960a1103f6a44c9",
+    "experiments/scripts/prepare_cube14.py": "7ba33f8906e52f2807bd1a44a9d640e042367b6426a632b08fcac6982b32498c",
+    "experiments/scripts/run_cube14.py": "8eedd8bc80f3a134d59ca72ccf6a637053cfcf3c85d76266cb44ce161e321d81",
+    "experiments/scripts/setup_cube14.sh": "c8445887234027df6aa61d53c26db631d18782713eb0628452933f6aedf00ab8",
+    "experiments/scripts/worker_cube14.py": "a728f997dd3c480861d0e6229a599a3fffadd1c7dc419e2d72de3513b8c06b95",
+    "experiments/tests/test_cube14.py": "dbee1eb698e6fcbd94ec043d8564f47e9bf2670e8d7b5f3066584f78544ee153"
+  },
+  "design": {
+    "schema": "cube14-design-v0",
+    "task": 14,
+    "namespace": "cube14",
+    "date": "2026-10-25",
+    "canonical_plan": "progress/14-cube-dial-plan.md",
+    "authorization": {
+      "user_instruction": "Rent two more GPUs and get Reacher and OG Cube working as well, running the SafeCEM safety-dial study as on Push-T and TwoRoom; complete the runs and publish a separate Hugging Face dataset for each, like SafetyDial-PushT.",
+      "rental": true,
+      "execution": true,
+      "total_usd": 10,
+      "persistent_engineering_repairs": true
+    },
+    "pins": {
+      "model_repo": "quentinll/lewm-cube",
+      "model_revision": "b0747c5002e86d2ce8f3cd8178004b97524c587d",
+      "model_weights_sha256": "2839a907362f403f9136383016e91774373a295d958ae75121791f22a9fddf89",
+      "model_weights_bytes": 72291425,
+      "checkpoint_name": "cube/lewm",
+      "dataset_repo": "quentinll/lewm-cube",
+      "dataset_revision": "02a19a67a0dc8c9d6215f89c19e0a597691e152a",
+      "dataset_file": "cube_single_expert.tar.zst",
+      "dataset_sha256": "3725d6a01abd492164441ef0a27e588f52b94a118fab56b96987b1a34a6c2600",
+      "dataset_bytes": 46184624478,
+      "ogbench": "1.2.1",
+      "stable_worldmodel": "0.1.1",
+      "stable_pretraining": "0.1.8",
+      "transformers": "5.14.1",
+      "torch": "2.13.0",
+      "mujoco": "3.11.0",
+      "dm_control": "1.0.44"
+    },
+    "environment": {
+      "env_id": "cube14/CubeGoal-v0",
+      "base_env_id": "swm/OGBCube-v0",
+      "base_env": "swm/OGBCube-v0 (stable_worldmodel 0.1.1, ogbench 1.2.1), env_type single, relative end-effector control",
+      "env_kwargs": {
+        "env_type": "single",
+        "ob_type": "pixels"
+      },
+      "image_size": 224,
+      "eval_budget_steps": 50,
+      "max_episode_steps": 100,
+      "goal_offset_steps": 25,
+      "success_rule": "to be fixed after the diagnosis (the simulator's own rule is the cube within 0.04 m of its target)",
+      "violation_rule": "to be fixed by the hazard design after the diagnosis"
+    },
+    "planner": {
+      "num_samples": 300,
+      "n_steps": 10,
+      "topk": 30,
+      "horizon": 5,
+      "receding_horizon": 1,
+      "action_block": 5,
+      "var_scale": 1.0,
+      "feasible_tol": 0.0,
+      "check": "exact",
+      "execute": "mean"
+    },
+    "diagnosis": {
+      "note": "Preparation-stage design: pinned assets and the environment only. The hazard, the check and the stages are added after a diagnosis of the unconstrained planner at LeWM's own protocol (goals 25 steps ahead, 50-step budget), as task 12 learned to do."
+    },
+    "stages": {},
+    "caps": {
+      "optimizer_updates_on_pretrained_weights": 0,
+      "job_attempts_per_id": 2
+    },
+    "money": {
+      "total_usd": 10,
+      "active_usd": 8,
+      "reserve_usd": 2,
+      "hourly_ceiling_usd": 0.6,
+      "maximum_hours": 14,
+      "preservation_margin_minutes": 30
+    },
+    "paths": {
+      "config_root": "configs/cube14",
+      "local_output_root": "outputs/cube14",
+      "remote_root": "/workspace/Safety-Dial",
+      "data_root": "data/cube14",
+      "receipt_prefix": "progress/receipts/14-cube-",
+      "rental_record": "progress/rental-cube14-20261025.json",
+      "private_dataset": "Sachioster/maniguard-jar-replication-20261022",
+      "recordings_prefix": "recordings/cube14",
+      "private_receipt_prefix": "receipts/cube14"
+    }
+  },
+  "jobs": [],
+  "sizing": null,
+  "engineering_acceptance_sha256": null
+}

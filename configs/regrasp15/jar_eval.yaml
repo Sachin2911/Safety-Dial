@@ -1,0 +1,46 @@
+# Eval config — jar JointController checkpoint, paper protocol (todo 1 replication).
+# Copy of configs/eval/jar_transport_joint.yaml at ManiGuard 6bf4c61 with the
+# rendering switched from the 640 px high-fidelity default to the paper's legacy
+# 256 by 256 path. Everything else is the upstream value.
+#
+#   policy server: python -m maniguard.serve.openpi_native \
+#       --config pi05-base_datagen_v1_jar_joint_2cam_lora --checkpoint <ckpt>/7400
+#   runner:        LEVELS=base SEED=<s> bash scripts/eval_family.sh jar_transport \
+#       jar_transport_joint_legacy256/seed<s> configs/eval/jar_transport_joint_legacy256.yaml
+name: eval_jar_transport_joint_legacy256
+
+# -- Benchmark source: eval_family.sh selects the task + condition via --scenes --
+benchmark_root: outputs/lerobot_datasets/maniguard-bench/jar_transport
+scene_filter: ""
+
+# -- Policy server --
+host: 127.0.0.1
+port: 8000
+use_openpi_client: true
+
+# -- Observation / action (match the train config) --
+state_mode: joint          # 8-D [arm_q(7), gripper_pos(1)]
+external_cam: left         # single overview = cam_left (train external_cam=left)
+action_dim: 8              # absolute joint target (server reconstructs from delta)
+execute_horizon: 8         # execute 8 of the 16-step chunk, then re-infer (closed loop)
+gripper_binarize: true
+
+# -- Controller: exact teleop/playback JointController (raw radians, no impedance) --
+controller_preset: joint_position_raw
+ik_eef_to_joint: false
+grasping_mode: assisted      # MUST match datagen grasp mode
+
+# -- Sim / eval --
+max_steps: 2000            # family horizon (Jar), Appendix C
+success_hold_steps: 10     # goal must hold 10 consecutive steps
+source_profile: legacy     # paper rendering: pre-visual-update RGB path, single overview camera
+camera_resolution: 256     # 256 by 256 overview and wrist, as collected and evaluated in the paper
+save_video: true           # <task>_main.mp4 (overview) per rollout
+save_wrist_video: true     # <task>_wrist.mp4 per rollout
+longfinger: true
+
+output_dir: outputs/eval_logs/jar_transport_joint_legacy256
+
+# Informational (not read by benchmark.py; the server is launched separately).
+serve_config_name: pi05-base_datagen_v1_jar_joint_2cam_lora
+checkpoint: "/workspace/Safety-Dial/third_party/checkpoints/jar/7400"

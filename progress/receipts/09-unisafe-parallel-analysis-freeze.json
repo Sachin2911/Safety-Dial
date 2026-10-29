@@ -1,0 +1,34 @@
+{
+  "schema": "unisafe09-amended-analysis-freeze-v1",
+  "utc": "2026-10-25T17:00:50.468899+00:00",
+  "original_scientific_freeze_sha256": "51a09105b0fc1365c3061d0575008e6e752e3cd772bc65fa1683c48e5b608f53",
+  "allocation_sha256": "33c9bb23175decadd1ae8c9d5ddc8509569c282f3ae59a0039193f0b3f9016bb",
+  "source_sha256": {
+    "experiments/helpers/unisafe09p_statistics.py": "ad6603d72c40e8342642a2dece84a6d89bc826b793c9217c70e31e4f8493191c",
+    "experiments/scripts/analyze_unisafe09p.py": "7e283315acc84e6855e6501efeca75d8e7b76cf13e0dbd33cdf503ab385b38e4",
+    "experiments/scripts/validate_unisafe09_combined.py": "a600f36fba2663a4410a28757d1f93a2beefeb24b45e424e310c08ef9d7dfc87",
+    "experiments/tests/test_unisafe09p_statistics.py": "e12567b92b060e286fdc9d4db16b8b503715eddc5cbcdad4f4562553a759df06",
+    "experiments/scripts/account_unisafe09_combined.py": "825077c8ed82b635bfed6a7df72ec858433917ac50309ac67d22b7dcbb464d6d"
+  },
+  "primary_contrasts": [
+    [
+      "d15_g075",
+      "reference_random"
+    ],
+    [
+      "history_only",
+      "d15_g100"
+    ]
+  ],
+  "bootstrap_seed": 2026102609,
+  "bootstrap_draws": 10000,
+  "bootstrap_strata": "physical host; sorted host IDs; shared draws across endpoints and contrasts",
+  "binary_difference_method": "Within-host paired wins/losses use exact marginal binomial intervals with error alpha/(2H); weight difference limits by host paired-seed count",
+  "rate_display_method": "Pooled empirical rates, with separate host-specific rates; combined display bounds use host-weighted exact marginal binomial bounds at error .05/H",
+  "familywise_alpha": 0.05,
+  "adjusted_endpoint_alpha": 0.008333333333333333,
+  "C_performance_aggregates_inspected_before_freeze": false,
+  "all_384_jobs_required": true,
+  "negative_physical_outcome_replacement_allowed": false,
+  "tests": "Five host-stratified uncertainty tests passed; ten queue and finance tests passed; new code passed Ruff"
+}

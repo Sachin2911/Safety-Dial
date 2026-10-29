@@ -1,95 +1,34 @@
 # SafetyDial
 
-**Evolutionary execution adaptation for safe manipulation.**
+Small controllers around frozen learned models, evaluated on safe task completion.
 
 Sachin Mohan, BSc Honours Computer Science, University of the Witwatersrand.
 Supervised by Geraud Nangue Tasse.
 
-Start with [firstPrinciples.md](firstPrinciples.md). It is the current plan: establish
-the preconditions for an evolutionary safety dial on ManiGuard one measurement at a time,
-beginning with a reproduction of the published Jar base rate, before any optimizer runs.
+## Start here
 
-## Current workspace
+- [Principia](principia.pdf): the consolidated experiment record. Thirty-seven
+  experiment accounts, one page each, plus an overview and linked index.
+- [Research manuscript](docs/research/honours-gecco/honoursThesis.pdf): the current
+  argument, methods, figures and limitations in ACM format.
+- [Current direction and research controls](firstPrinciples.md).
+- [Documentation](docs/README.md) and [evidence locations](progress/README.md).
 
-- [First-principles plan](firstPrinciples.md): the four staged preconditions and gates.
-- [Jar replication and noise floor](docs/research/research_notes/Jar%20replication%20and%20noise%20floor.md):
-  stage 1 done on 23 October 2026; the measured Jar base rate, the same-seed noise
-  floor and the per-task structure, with the single-host decision.
-- [ManiGuard base rates](docs/research/research_notes/ManiGuard%20base%20rates.md): the
-  published four-outcome counts for every family and why Jar is the testbed.
-- [The Odyssey (PDF)](progress/theOdessy.pdf): the running log of the project, one
-  short entry per task, starting with the benchmark replication and its results table.
-  `progress/` also holds the next checklist, the receipts and the rental record; the
-  rollout dataset is `Sachioster/maniguard-jar-replication-20261022` (private).
-- [ManiGuard paper](docs/papers/Maniguard.pdf): the benchmark, protocol and full results.
-- [Allocated topic](docs/allocatedTopic.md) and [GECCO notes](docs/gecco2027.md).
-- [Research concept note](docs/researchConceptNote.pdf) with
-  [LaTeX source](docs/researchConceptNote/README.md).
-- [Proposal template](docs/templates/research-proposal/).
-- [Agent and engineering guidance](AGENTS.md).
+Tuned fixed planning improved safe completion at unchanged margins in four tasks.
+Feedback and evolution have not established an advantage over strong fixed settings
+and simpler search. A ManiGuard Jar tip shield reduced observed violations with
+unchanged safe completion. The original evolutionary completion goal remains open.
 
-## Archived research
+## Repository layout
 
-Everything completed before 22 October 2026 is preserved unchanged under
-[archive/](archive/README.md), with hash manifests checked by `archive/verify.py`.
+- `docs/research/`: Principia source and the current manuscript.
+- `progress/receipts/`: frozen machine-readable evidence, audits and source snapshots.
+- `experiments/{helpers,scripts,tests}/`: reusable code, entry points and tests.
+- `configs/`: task-specific configurations. `scripts/`: baseline and study tooling.
+- [archive/](archive/README.md): historical studies and the compressed document bundle.
+- `outputs/`, `data/`, `third_party/`: ignored local evidence, data and upstream clones.
 
-- [22 October 2026 archive](archive/20261022/): ManiGuard Phase 3 Parts 1 to 4, the
-  six-hypothesis study, the latent-evolution pilot and continuation screen, the GECCO
-  negative-result draft, UNISafe studies, the previous research direction, plan history
-  and all experiment code, configs and tests. Entry points:
-  [previous direction](archive/20261022/Evolutionary%20improvement%20on%20ManiGuard.md),
-  [progress audit](archive/20261022/reports/Recent%20ManiGuard%20progress%20audit.md),
-  [negative-pilot paper](archive/20261022/docs/research/reports/maniguard-phase3-part1-gecco/named.pdf).
-- [Legacy archive](archive/legacy/): Push-T Safe CEM, Hopper and Walker locomotion,
-  LeWM experience study and Walker evolutionary studies.
-
-## Setup on RunPod
-
-Todo 2 runs on RunPod. Create a pod from `runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04`
-with one 24 GB or larger RTX-class GPU, a volume at `/workspace`, port 22 exposed, and
-the project keys (`HF_TOKEN`, `GITHUB_TOKEN`, `HF_NAMESPACE`, `GIT_AUTHOR_NAME`,
-`GIT_AUTHOR_EMAIL`, `RUNPOD_API_KEY`) in its environment; the workstation does this
-with the RunPod SDK and the key in the ignored `.env`, and records the pod in
-`progress/rental-runpod-<date>.json`. Then, from the workstation:
-
-```bash
-ssh -p <port> root@<pod ip> 'bash -s' < scripts/todo2/bootstrap_pod.sh
-ssh -p <port> -t root@<pod ip> tmux attach -t jar
-```
-
-The bootstrap installs Claude Code, clones this repository under `/workspace`, checks
-the GPU and render libraries, and leaves `claude` running in a `jar` tmux session.
-Attach, sign in, paste the goal prompt. The agent ends by stopping the pod with
-`scripts/todo2/stop_pod.py`; the pod is terminated from the account after review.
-
-## Setup on Vast
-
-No instance is running. To run the next checklist, rent an RTX 3090 or 4090 host on
-NVIDIA driver 580.x with the private **ManiGuard latent evolution** template (hash
-`62414e8fca6befba085051de7ed36190`); the results of record came from machine 54514
-(two RTX 3090), and comparisons must stay on one host. The template provides Ubuntu
-22.04, Python 3.10 in `/venv/main`, CUDA 12.4.1, tmux, git and uv, and installs no
-research packages. `HF_TOKEN` and `GITHUB_TOKEN` are set in the instance environment;
-never print them. Record the rental in `progress/rental-<date>.json`.
-
-Connect, install Claude Code, clone and start the agent inside tmux so it survives
-disconnects (`Ctrl-b d` detaches, `tmux attach -t jar` reconnects):
-
-```bash
-ssh -p <port> root@<host>        # the direct address from `vastai ssh-url <id>`; the ssh<n>.vast.ai proxy may refuse
-source /opt/nvm/nvm.sh && npm install -g @anthropic-ai/claude-code
-cd /workspace && git clone https://github.com/Sachin2911/Safety-Dial.git && cd Safety-Dial
-tmux new -s jar
-claude
-```
-
-Sign in when prompted, then paste the goal prompt for the checklist at hand. The todo 1
-checklists and prompts are in the git history up to commit `c248194` and are the
-pattern: the agent replays the pinned install from `progress/receipts/01-install.md`,
-works through its checklist, commits evidence under `progress/`, uploads rollouts to
-the dataset and stops its own instance with `scripts/todo1c/stop_instance.py`.
-
-Earlier Vast templates, rental records and setup scripts are preserved under
-[archive/20261022/configs/vast](archive/20261022/configs/vast/) and
-[archive/20261022/scripts](archive/20261022/scripts/). Root `pyproject.toml` and
-`uv.lock` describe the local legacy environment used by `archive/run.sh`.
+Read [AGENTS.md](AGENTS.md) before research work. The root environment is legacy;
+use the intended interpreter explicitly and do not sync it into ManiGuard's runtime.
+Local tests use `.venv/bin/python`, without `uv run`. No new experiment is authorized
+by a completed protocol or unused historical allocation.

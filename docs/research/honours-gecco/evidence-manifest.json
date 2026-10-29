@@ -1,0 +1,898 @@
+{
+  "title": "Helping Frozen Models Finish Safely: Small Controllers and the Limits of Evolutionary Search",
+  "evidence_cutoff": "2026-10-27",
+  "author": "Sachin Mohan",
+  "status": "Plain-language honours draft including audited task-18 PushT and original Cube comparisons and the task-19 ManiGuard Jar tip-shield result (fewer violations on the key secondary endpoint, strict safe completion unchanged)",
+  "sources": [
+    {
+      "path": "archive/20261022/docs/research/reports/UNISafe grasp maintenance and evolutionary adaptation.md",
+      "bytes": 15958,
+      "sha256": "8facfb14bc3ec658d7e026ca961f1d822519ca5364ce3be5d36ef481d8c6f909"
+    },
+    {
+      "path": "archive/20261022/docs/research/reports/assets/unisafe-grasp-maintenance-20261016/results.json",
+      "bytes": 259225,
+      "sha256": "1ad2a11c82b405705c0c96220e018c61438f263d2e1093bde67d1bc9ce15a023"
+    },
+    {
+      "path": "configs/evo19/protocol.json",
+      "bytes": 11316,
+      "sha256": "05de627e3456936e49d86c51874b3ce08c4d1d40c49ee32f2621b17cd959f6ef"
+    },
+    {
+      "path": "configs/lewm17/comparison.json",
+      "bytes": 6256,
+      "sha256": "52dbdd0fa4aca9480c11434e39f99e20024eee76c9981ab2a7f358b5563c0f5f"
+    },
+    {
+      "path": "configs/lewm18/protocol.json",
+      "bytes": 7138,
+      "sha256": "6c78939de4d43a0ea2a3497f33cd8574bd77a5580228e84013525d6413bca981"
+    },
+    {
+      "path": "docs/research/research_notes/Jar replication and noise floor.md",
+      "bytes": 7673,
+      "sha256": "4ae472df0f0c28c9d9f0ef75c46779f6613b515d5a89de44083562d0bceaf825"
+    },
+    {
+      "path": "experiments/helpers/lewm17_planner.py",
+      "bytes": 15440,
+      "sha256": "ce3f6d050f0111bc424617186a049193f633215d23167926398595670243af5c"
+    },
+    {
+      "path": "experiments/helpers/lewm17_selector.py",
+      "bytes": 3801,
+      "sha256": "5cf60f1a43eec450a6c7f3d3e07c5b9ba257c0f0354d57fdb5296264c711c7c5"
+    },
+    {
+      "path": "experiments/scripts/analyze_evo19.py",
+      "bytes": 15645,
+      "sha256": "05891db807c9cce5cec20431df8a86d55212e4d367d520ee9e9e918c96bfe708"
+    },
+    {
+      "path": "experiments/scripts/mechanism_evo19.py",
+      "bytes": 12426,
+      "sha256": "64cd16f1ddcf8c74030471cb12d359a859245b3638f58a06a51717cb6f7fb8c7"
+    },
+    {
+      "path": "experiments/scripts/report_evo19.py",
+      "bytes": 10214,
+      "sha256": "5614491cefc6360057ae49443f51d272913678121bc32f4a6d2611036ebd52ad"
+    },
+    {
+      "path": "experiments/scripts/revalidate_evo19.py",
+      "bytes": 4410,
+      "sha256": "d677a2a780ebb6be8dbe4565ca9588e50c5ce67cd1548ae3fd297b0a19ab7150"
+    },
+    {
+      "path": "experiments/scripts/sensitivity_evo19.py",
+      "bytes": 4638,
+      "sha256": "6683aa5329286fe45a93b8e64dc765f4ef297a1c83b250f2e5c030ef64116674"
+    },
+    {
+      "path": "outputs/evo19/analysis/mechanism.json",
+      "bytes": 322545,
+      "sha256": "48c5843a4e0af2954759c7f45e61874b941d5b66775c70684d7b9a0b32fa11dd"
+    },
+    {
+      "path": "outputs/evo19/analysis/revalidation.json",
+      "bytes": 932,
+      "sha256": "81dc8e38a32e8063d970d88a7985920f30e1d569041f64dbff21b252e6455b22"
+    },
+    {
+      "path": "outputs/evo19/analysis/sensitivity.json",
+      "bytes": 1686,
+      "sha256": "4287bbb0a30c687da8a9d8ae91da3a6939e7b8db37e5bd337ce90a5140e7f127"
+    },
+    {
+      "path": "outputs/evo19/analysis/summary.json",
+      "bytes": 26026,
+      "sha256": "346063349ff7f2a3a60c4bd3ea9b208d369c12390ae66e4d006a9ecb4d544050"
+    },
+    {
+      "path": "outputs/evo19/search/state.json",
+      "bytes": 612475,
+      "sha256": "b9a6c2b5cf0844067fd5f27baff253fb518c2eef0a648e449f1bd4579617e63b"
+    },
+    {
+      "path": "outputs/evo19/upload-verification.json",
+      "bytes": 424,
+      "sha256": "d8095eeb72da9eafa9174eac2e8bfaa19e16e6f74f1b2ed3b99dc9936d3764ea"
+    },
+    {
+      "path": "outputs/lewm18-combined/analysis/summary.json",
+      "bytes": 90727,
+      "sha256": "c82d55b025e4666edb964cb8e89bf8708d6ec75350e22c2ccb9cf0598138b712"
+    },
+    {
+      "path": "outputs/regrasp15/remote/attempts_stage_b.jsonl",
+      "bytes": 150513,
+      "sha256": "9476c4164b0c31fbaa610fee635d3b8014028d3cadefd47369d6e6f59de6526d"
+    },
+    {
+      "path": "progress/paperCombination.pdf",
+      "bytes": 184915,
+      "sha256": "0c4d5738e7d8b3d7cf5668c01f631d7175ef61ca5095afe12bbbc5fe8acbf6f0"
+    },
+    {
+      "path": "progress/paperCombination.tex",
+      "bytes": 9760,
+      "sha256": "7abd64c0a8c18d82ecb651e8aa30d3b8efaac8c36d827160baf3664fe3721c4e"
+    },
+    {
+      "path": "progress/receipts/03-results.md",
+      "bytes": 13661,
+      "sha256": "ea34a62a6071e23c842ca9aa139e1ed1e7db0ed97c9464772b9baf74f5ca6b2d"
+    },
+    {
+      "path": "progress/receipts/05-adapter-results.md",
+      "bytes": 11975,
+      "sha256": "00cac4e275a6c58ac7fd580615800e7d90561e06cc29305e5b32543b3aaf36d4"
+    },
+    {
+      "path": "progress/receipts/07-dsrl-results.md",
+      "bytes": 6051,
+      "sha256": "272609bb9c8f9f830a8921e285cdda8382dde8b73e6cfc77879b933a3e3e463c"
+    },
+    {
+      "path": "progress/receipts/08-screen-results.md",
+      "bytes": 12282,
+      "sha256": "2e4a492eed7485eff0833ae19d4fcfb706856894cbdf29cc5680519eccc54e64"
+    },
+    {
+      "path": "progress/receipts/09-unisafe-C-combined-analysis.json",
+      "bytes": 33863,
+      "sha256": "0aba3b600c732c3e563442bfee34cb4374c561d09dd2c20065bce801cc2f3b8f"
+    },
+    {
+      "path": "progress/receipts/09-unisafe-C.json",
+      "bytes": 251594,
+      "sha256": "51a09105b0fc1365c3061d0575008e6e752e3cd772bc65fa1683c48e5b608f53"
+    },
+    {
+      "path": "progress/receipts/09-unisafe-results.md",
+      "bytes": 10811,
+      "sha256": "105aeae70bf8bc5923ef0e3bb2986fe66c9a789ecfb0c4168d5a0aa4f65fbf9e"
+    },
+    {
+      "path": "progress/receipts/10-safecem-C2-freeze.json",
+      "bytes": 15900,
+      "sha256": "1a00358227b6e13f6684db379ffd3820b1b0e8a89d84ca9a85e41bdc9e17658d"
+    },
+    {
+      "path": "progress/receipts/10-safecem-C2-search.md",
+      "bytes": 5108,
+      "sha256": "c6849bcea13d4e0a64c32def4f26e5ffa8cf772dc6f524273da63a4f738e1a6b"
+    },
+    {
+      "path": "progress/receipts/12-tworoom-C-search.md",
+      "bytes": 5065,
+      "sha256": "fb25614b00fb5f435f0649d9eef8444366b815a1e4f1711490cb5e20a3b87e87"
+    },
+    {
+      "path": "progress/receipts/13-reacher-C-search.md",
+      "bytes": 4848,
+      "sha256": "7a4e1f144c109ef011153329e68e109d4e2e55312e9702791050afbc8c57d1a7"
+    },
+    {
+      "path": "progress/receipts/14-cube-A-engineering.md",
+      "bytes": 3601,
+      "sha256": "e989691226f4e37285e777dbc5b2b0f1cd802a7d87af2f851500480fb67ba09f"
+    },
+    {
+      "path": "progress/receipts/14-cube-C-search.md",
+      "bytes": 5725,
+      "sha256": "2230d166a8ad3e5f57a60093d66b4fcb6da8b68002e94df893d3c744e1e72f61"
+    },
+    {
+      "path": "progress/receipts/15-regrasp-results.md",
+      "bytes": 10071,
+      "sha256": "8cca3bd018f8d9f7d1f2296265bde904ec7c04fdb1c90acc6723ed2798af1f4b"
+    },
+    {
+      "path": "progress/receipts/16-final-ab-v1.json",
+      "bytes": 1504782,
+      "sha256": "9b78a206f9cd8e179a1c4e23382a4a2a66b68d04facfa383be83b4f6350ada6f"
+    },
+    {
+      "path": "progress/receipts/16-final-audit.json",
+      "bytes": 1839,
+      "sha256": "26066ea9d25e427324b9b066e27b27eeaea0617ed0f3a7fe95dd43660d53f37c"
+    },
+    {
+      "path": "progress/receipts/16-final-selection.json",
+      "bytes": 3369,
+      "sha256": "e80925e496d5f8a67381b13b0db406a03ea52f3496473e0a79aa6e648a376cfe"
+    },
+    {
+      "path": "progress/receipts/16-final-statistics.json",
+      "bytes": 290179,
+      "sha256": "cedc08a8048b6bf886809f0d589225f050bc62db0626865210daa223f75c09f1"
+    },
+    {
+      "path": "progress/receipts/16-lewm-results.md",
+      "bytes": 17164,
+      "sha256": "8984cc96eda45c71b884ab9241972c8ad5aefac273563176c41bddb3f3f603cf"
+    },
+    {
+      "path": "progress/receipts/16-quick-results.json",
+      "bytes": 131250,
+      "sha256": "a149a0cd51e88a45c6eb5f5919f7a4c6f413738273102bb2615694231df16e5f"
+    },
+    {
+      "path": "progress/receipts/17-final-audit.json",
+      "bytes": 463,
+      "sha256": "e279b3a922e74ee427c824f6b64d5bee043743cf3235a17128d1849d1e7e8d74"
+    },
+    {
+      "path": "progress/receipts/17-final-evaluation.json",
+      "bytes": 2981257,
+      "sha256": "4bb18b841a7a3024f6e7e1999ab832127e39f78f115c0eea0cdf10da3c6ff955"
+    },
+    {
+      "path": "progress/receipts/17-final-planner-seed-amendment.json",
+      "bytes": 3050,
+      "sha256": "2ad3c8e48cdf046eea71cc52d2806d293375038a85addc53bd422946a10fc630"
+    },
+    {
+      "path": "progress/receipts/17-final-statistics.json",
+      "bytes": 142175,
+      "sha256": "a8a6d5831917c4087c7f32cba3ecc953632fb9aa40a64414de0bd14d447fb2a8"
+    },
+    {
+      "path": "progress/receipts/17-lewm-evolution-results.md",
+      "bytes": 15801,
+      "sha256": "ce6ecee050df61a0f0e0643bebad6bbf195c085891cd0aec9648653e6ad822c0"
+    },
+    {
+      "path": "progress/receipts/17-local-recovery.json",
+      "bytes": 5021,
+      "sha256": "951ff673aaa2b476185300bed77c674b42d03ea70e1fee4c2234afb09e426f2d"
+    },
+    {
+      "path": "progress/receipts/17-optimizer-comparison.json",
+      "bytes": 10789,
+      "sha256": "2332f8cb53859ce7649104ae0e6f22f2405a8fbfab3d5f79b09b9172e3b280e3"
+    },
+    {
+      "path": "progress/receipts/18-all-cohort-source-audit.json",
+      "bytes": 3999,
+      "sha256": "41d3ed7b413267e840dfc749151d6515cfbfc75aaec8ae9cc0c95a3e68ab9d7b"
+    },
+    {
+      "path": "progress/receipts/18-closeout.json",
+      "bytes": 4555,
+      "sha256": "2a6a94014046f4993e5f7bf8cca2720df589805e3f4345a6227ac40929f9f11b"
+    },
+    {
+      "path": "progress/receipts/18-cube-completion-check.json",
+      "bytes": 19739,
+      "sha256": "a96bfbd577ff6fb4b6ffd5f96976c75d2a4d6bef02f8aefc5be745c69b2cccbb"
+    },
+    {
+      "path": "progress/receipts/18-cube-download-recovery.json",
+      "bytes": 1263,
+      "sha256": "70856768f9f08668cfbdbfd1fc5257b837cc2026a37eb570c1051c460930e769"
+    },
+    {
+      "path": "progress/receipts/18-datasets-preservation.json",
+      "bytes": 879,
+      "sha256": "26faaf18feca64028e620015e3e7f3903988ea52bf682c9a3de22641cbf49aa4"
+    },
+    {
+      "path": "progress/receipts/18-final-analysis-check.json",
+      "bytes": 2168,
+      "sha256": "db9ea8359d1f3e100dfbe5357c315b1859f549efdccf4a86c0b9aeb863464b91"
+    },
+    {
+      "path": "progress/receipts/18-final-local-preservation.json",
+      "bytes": 740,
+      "sha256": "682276d1bc25d427e7e88626a9d3d4c201f08920a48c1e06098860c9f46e90c2"
+    },
+    {
+      "path": "progress/receipts/18-final-publication.json",
+      "bytes": 1692,
+      "sha256": "26f70765a43b9b25eb22f964347dac139cccc62498817053ab376ac27612fced"
+    },
+    {
+      "path": "progress/receipts/18-hf-destination-preflight.json",
+      "bytes": 740,
+      "sha256": "b6dcd5a18fd686f5d913ed3a68a98199152918104e1234942eb5d051b6004e0e"
+    },
+    {
+      "path": "progress/receipts/18-host-comparison-and-retirement.json",
+      "bytes": 1130,
+      "sha256": "999f2d9143839bdc72bd4127e8e636a6715ffb879633dba73cfb987fb23d255d"
+    },
+    {
+      "path": "progress/receipts/18-independent-task-scheduling.json",
+      "bytes": 1083,
+      "sha256": "827a391a4b88c1870190488e5c23afcd19dc09a5885b3e375bb6fe0795da7e03"
+    },
+    {
+      "path": "progress/receipts/18-joint-repair-schedule.json",
+      "bytes": 660,
+      "sha256": "d09c000f70b6445d6dd02f3acc02b11e91315dfed0d3a9dafa22462f4da22115"
+    },
+    {
+      "path": "progress/receipts/18-lewm-results.md",
+      "bytes": 8840,
+      "sha256": "ddc7300e01926d1922b99f842017355b150b07bb7bdbd6aca4128beb89077046"
+    },
+    {
+      "path": "progress/receipts/18-live-status.json",
+      "bytes": 4437,
+      "sha256": "9ef38da6de4c43f79c985e7b78db93fd81b4072ebd65e5892b709f920f5bd71b"
+    },
+    {
+      "path": "progress/receipts/18-media-validation.json",
+      "bytes": 1121,
+      "sha256": "84d3a2ae0399c4499e28086df3a9983683e7673f14c1d327869f3f242e062793"
+    },
+    {
+      "path": "progress/receipts/18-noninteractive-cleanup-repair.json",
+      "bytes": 586,
+      "sha256": "a3ce476d29627c6a6d95b38c7b10f0e6937f283d53f4f51caaaa8953945d5a7f"
+    },
+    {
+      "path": "progress/receipts/18-panel-schema-repair.json",
+      "bytes": 465,
+      "sha256": "035e9038e3ef07f637a4b49df6e27861fd092bf485e1f4e07dfd2bda9a265d0a"
+    },
+    {
+      "path": "progress/receipts/18-paper-validation.json",
+      "bytes": 3458,
+      "sha256": "ccd9a0a71c71d1e4aad57244e2d6cb5e8bd18f7a708c4c6d9af6c7bbf69637eb"
+    },
+    {
+      "path": "progress/receipts/18-pre-scoring-amendment.json",
+      "bytes": 996,
+      "sha256": "1d2f4e9d90734fedc1a94c14df9ebea4aec196192db9ae9af0964d9f36958ff0"
+    },
+    {
+      "path": "progress/receipts/18-preparation-freeze-v2.json",
+      "bytes": 1200,
+      "sha256": "ad87b1474c64cab8c37e5e97cdb6781ff1423fa5547b8083abdd8fa1808f87a6"
+    },
+    {
+      "path": "progress/receipts/18-preparation-freeze.json",
+      "bytes": 1094,
+      "sha256": "b1113287a83af27eb03d08fc0ab13272ea566a07cf0f837a7b844d9c8542abd2"
+    },
+    {
+      "path": "progress/receipts/18-pusht-completion-check.json",
+      "bytes": 13091,
+      "sha256": "61424a0cdd82b71252c6b07c78c085fbb1bc4d7c2923c289146915839d69f588"
+    },
+    {
+      "path": "progress/receipts/18-pusht-repair-engineering.json",
+      "bytes": 1549,
+      "sha256": "b7a8b6b930bf93b9158981df118e56805f95a692bdadb844ca26b908f2a1dd88"
+    },
+    {
+      "path": "progress/receipts/18-reference-check.json",
+      "bytes": 536,
+      "sha256": "6aff92d6c04a1f107292342f80a7cad9e96ae6e1c5204a59e68e9088f835cebf"
+    },
+    {
+      "path": "progress/receipts/18-rental-destroy.json",
+      "bytes": 1535,
+      "sha256": "6584ac92ab3729744ad426234e284e3ea32c11a524623435b30f2fe763566980"
+    },
+    {
+      "path": "progress/receipts/18-replacement-attempt1.json",
+      "bytes": 1119,
+      "sha256": "e6096d49c1f449f092ae8fed69614dab76357f2f90f8edcdcf48657f10d3fdf6"
+    },
+    {
+      "path": "progress/receipts/18-replacement-attempt2.json",
+      "bytes": 1104,
+      "sha256": "b91dbd86c3df880eeb22571f3eb6d59989e285a30e1d6370c0262f52a1719791"
+    },
+    {
+      "path": "progress/receipts/18-replacement-attempt3.json",
+      "bytes": 1233,
+      "sha256": "dcc09848f87eaf3d5f24564041ee5691162aed48b63185e04bdbdb1f777d2d52"
+    },
+    {
+      "path": "progress/receipts/18-reporting-accounting-amendment.json",
+      "bytes": 1264,
+      "sha256": "bcd58ec20e8b98a2802d99eaf1162fdb3f7ef5d4d826020170f7fd83c3033309"
+    },
+    {
+      "path": "progress/receipts/18-reset-repair-admission.json",
+      "bytes": 1218,
+      "sha256": "d8ae5755285ebbdcf17c0a2ebada9e081aafe3283b95b31cef5ee2aac268fc7a"
+    },
+    {
+      "path": "progress/receipts/18-second-host-admission.json",
+      "bytes": 696,
+      "sha256": "f98d9285ff12b3a1de54c0ecaa7838446ca0696632e09cb8230a18c1cb715a16"
+    },
+    {
+      "path": "progress/receipts/19-evo-adapter-results.md",
+      "bytes": 8582,
+      "sha256": "76459c11ae63909a2bbef81d1bd8aeed5ea2af371b617aa0a6f4b8e04b63237a"
+    },
+    {
+      "path": "progress/receipts/dataset-clarity-refinement-20261026.json",
+      "bytes": 2670,
+      "sha256": "f26d52a6fdb7d6c9eba79bebf3c43d6a752b9022916b20c5718fe4f1a8ad7d63"
+    },
+    {
+      "path": "progress/receipts/lewm-datasets-consolidation-20261026.json",
+      "bytes": 3510,
+      "sha256": "416f3f65d49ca34b4a2f69cd32d0f29a2f731633286a59c42da8f5e167b7b0b4"
+    },
+    {
+      "path": "progress/rental-lewm18-20261026.json",
+      "bytes": 1181,
+      "sha256": "fcc46079aa019b3ab5da576b779eec09a1fbb80d2ed63ef676d0de548e7bffb2"
+    },
+    {
+      "path": "progress/rental-lewm18-replacement-20261026.json",
+      "bytes": 1108,
+      "sha256": "7bd8a3e02dc44aea202145b5735284babfc228dcd3dcb1709323c514e52c15c0"
+    },
+    {
+      "path": "progress/theOdessy.pdf",
+      "bytes": 191002,
+      "sha256": "5c2f923583218d1435b4835ef641e7424cdd3af2711aded9ba1e1404c55aac0f"
+    },
+    {
+      "path": "progress/theOdessy.tex",
+      "bytes": 45507,
+      "sha256": "b5f2de9c1b2dc4ebba6fe0d0040144dfa1ca8ffb80bdefd95a165277ee0448d6"
+    }
+  ],
+  "claim_map": {
+    "algorithm_1": "Appendix A: task-16/17 checked planning plus task-18 simulator prefix checking for Cube",
+    "section_4": "Task 16 configuration, familiar and fresh-case results; section 4.4 is the task 18 PushT and original Cube extension (full methods in its own appendix)",
+    "section_8": "Interpretation and limitations; no new optimizer claim",
+    "table_1": "Study map; every number repeated from the sections it cites",
+    "section_5_and_appendices_A_B": "Task 17 optimizer comparison and provenance",
+    "section_6_and_jar_appendix": "Task 19 ManiGuard Jar tip shield: diagnosis, protocol, confirmation, mechanism, post hoc checks and integrity; earlier Jar studies 1-15 as history",
+    "section_7": "Task 9 UNISafe sensing ablation",
+    "evo_history_appendix": "Tasks 10, 12, 13 and 14 exploratory NSGA-II versus random search"
+  },
+  "dataset_revisions": [
+    {
+      "repo": "Sachioster/SafetyDial-TwoRoom",
+      "private": true,
+      "parent_revision": "666b1381be3c64b2220538f38ad159b47c148984",
+      "revision": "983ed6d98815ff6ae4eb7e8789ad90304b7acd46",
+      "verified_uploaded_files": 669,
+      "bytes": 110851113,
+      "old_files_deleted": 0,
+      "old_paths_updated": [
+        "README.md",
+        "sha256-manifest.json"
+      ],
+      "verification": "Every uploaded file downloaded at pinned revision and SHA-256 checked",
+      "utc": "2026-10-26T16:01:07.708657+00:00"
+    },
+    {
+      "repo": "Sachioster/SafetyDial-Reacher",
+      "private": true,
+      "parent_revision": "2411b6e8a2a72550a4812ef89967eeb12c85ee15",
+      "revision": "ce60cc7a174656807e8d6b78c96e720231af4a71",
+      "verified_uploaded_files": 695,
+      "bytes": 221012768,
+      "old_files_deleted": 0,
+      "old_paths_updated": [
+        "README.md",
+        "sha256-manifest.json"
+      ],
+      "verification": "Every uploaded file downloaded at pinned revision and SHA-256 checked",
+      "utc": "2026-10-26T16:04:56.157965+00:00"
+    },
+    {
+      "repo": "Sachioster/SafetyDial-PushT",
+      "private": true,
+      "parent_revision": "c47c5704954a5d8aee7c4490c47c7318417857d8",
+      "revision": "ab3a1b4f7244227cf2b6cc972a38390b5cdfe6c4",
+      "files_verified": 331,
+      "bytes": 38333808,
+      "deleted_files": 0,
+      "verification": "Every uploaded file read back at the commit and SHA-256 checked",
+      "utc": "2026-10-26T22:41:06.590566+00:00"
+    },
+    {
+      "repo": "Sachioster/SafetyDial-Cube",
+      "private": true,
+      "parent_revision": "e6335dc66df17752216195668b6ed341ddb09a9c",
+      "revision": "49f10a4fc4fadcd520797a46d224a12d9bc299f7",
+      "files_verified": 331,
+      "bytes": 53612688,
+      "deleted_files": 0,
+      "verification": "Every uploaded file read back at the commit and SHA-256 checked",
+      "utc": "2026-10-26T22:42:45.308512+00:00"
+    },
+    {
+      "repo": "Sachioster/maniguard-jar-replication-20261022",
+      "private": true,
+      "prefix": "evo19/",
+      "revision": "98e8fe31b47d288e9c66b34cc8d7ea66b88fb01e",
+      "verified_files": 5564,
+      "verification": "Every task 19 file re-downloaded at the pinned revision and SHA-256 checked"
+    }
+  ],
+  "documentation_revisions": [
+    {
+      "repo": "Sachioster/SafetyDial-TwoRoom",
+      "parent_revision": "983ed6d98815ff6ae4eb7e8789ad90304b7acd46",
+      "revision": "bed33b8967c30728dd76bfbdd4a046a6c34cedf8",
+      "private": true,
+      "verified_files": 13,
+      "updated_existing_paths": [
+        "README.md",
+        "campaigns/lewm16/README.md",
+        "campaigns/lewm16/sha256-manifest.json",
+        "campaigns/lewm17/README.md",
+        "campaigns/lewm17/sha256-manifest.json",
+        "sha256-manifest.json"
+      ],
+      "new_files": 7,
+      "removed_files": 0,
+      "verification": "Every uploaded documentation file downloaded at its revision and SHA-256 checked",
+      "utc": "2026-10-26T17:31:22.387673+00:00"
+    },
+    {
+      "repo": "Sachioster/SafetyDial-Reacher",
+      "parent_revision": "ce60cc7a174656807e8d6b78c96e720231af4a71",
+      "revision": "12624bc18843f0826566c4f1408d9028b2c61616",
+      "private": true,
+      "verified_files": 13,
+      "updated_existing_paths": [
+        "README.md",
+        "campaigns/lewm16/README.md",
+        "campaigns/lewm16/sha256-manifest.json",
+        "campaigns/lewm17/README.md",
+        "campaigns/lewm17/sha256-manifest.json",
+        "sha256-manifest.json"
+      ],
+      "new_files": 7,
+      "removed_files": 0,
+      "verification": "Every uploaded documentation file downloaded at its revision and SHA-256 checked",
+      "utc": "2026-10-26T17:31:33.987965+00:00"
+    },
+    {
+      "repo": "Sachioster/SafetyDial-PushT",
+      "parent_revision": "24de3f9f2a273598b7bcd9883d79f6a0c0b06c23",
+      "revision": "c47c5704954a5d8aee7c4490c47c7318417857d8",
+      "private": true,
+      "verified_files": 4,
+      "updated_existing_paths": [
+        "README.md",
+        "sha256-manifest.json"
+      ],
+      "new_files": 2,
+      "removed_files": 0,
+      "verification": "Every uploaded documentation file downloaded at its revision and SHA-256 checked",
+      "utc": "2026-10-26T17:31:38.783509+00:00"
+    },
+    {
+      "repo": "Sachioster/SafetyDial-Cube",
+      "parent_revision": "9ce85e92463cc66f130b4c370533aca1d444a883",
+      "revision": "e6335dc66df17752216195668b6ed341ddb09a9c",
+      "private": true,
+      "verified_files": 4,
+      "updated_existing_paths": [
+        "README.md",
+        "sha256-manifest.json"
+      ],
+      "new_files": 2,
+      "removed_files": 0,
+      "verification": "Every uploaded documentation file downloaded at its revision and SHA-256 checked",
+      "utc": "2026-10-26T17:31:43.681196+00:00"
+    }
+  ],
+  "private_dataset_access": true,
+  "maniguard_final_confirmation": {
+    "task": 19,
+    "result": "On 107 matched scene-seed pairs, violations 37/107 native versus 21/107 shield (one-sided Fisher p=0.0103, Barnard p=0.0083 after the column-orientation correction, Newcombe -15.0 [-26.3, -3.0] points); strict safe completion 32/107 in both arms (0.0 [-12.1, 12.1]).",
+    "endpoint_status": "Primary endpoint (strict safe completion) unchanged; violation reduction is the key secondary endpoint (amendment 5), test fixed before any shielded confirmation attempt; no multiplicity correction was fixed in advance (passes 0.025 for two endpoints, not 0.0071 for all seven listed); design inspected five native violations",
+    "task15_confirmation": "Lost with two rented hosts; unverified and unused",
+    "post_hoc": "Without pairs whose native attempt finished before the freeze: 20/62 versus 12/62, p=0.075",
+    "receipt": "progress/receipts/19-evo-adapter-results.md",
+    "dataset": "Sachioster/maniguard-jar-replication-20261022",
+    "dataset_prefix": "evo19/",
+    "dataset_revision": "98e8fe31b47d288e9c66b34cc8d7ea66b88fb01e",
+    "verified_files": 5564
+  },
+  "numerical_checks": [
+    "fig:outcomes (four-task outcomes) against planning-outcomes-data.json, 16-final-statistics.json and the task-18 summary",
+    "tab:fresh: every task-16 new-case outcome and denominator",
+    "tab:primary, tab:optimizer-all and fig:contrasts: task-17 totals, run selections and simultaneous intervals",
+    "tab:workload: action, physics and model-work totals",
+    "tab:unisafe and fig:unisafe: UNISafe confirmation counts, timeouts and capped time; archived 16 October optimizer study",
+    "Appendix C: six all-attempt capped-action means and all 24 dial-comparison cells",
+    "tab:extension-all, tab:extension-time, tab:extension-work: all 24 task-18 cells, eight timing cells and work totals",
+    "Task 19 Jar confirmation: 107 matched pairs, strict safe 32/32, violations 37/21, Fisher, Barnard (arms in columns, corrected), McNemar and Newcombe statistics recomputed from state.json",
+    "Task 19 mechanism and rule replay from mechanism.json (0 mismatches with logged retreats)",
+    "Task 19 post hoc timing cuts and pair transition table from sensitivity.json; protocol endpoints and amendments",
+    "Task 19 revalidation: 215 counted confirmation attempts match records and host checks",
+    "fig:jar-history: earlier Jar studies (tasks 3, 5, 7, 8, 15, 19) against receipts",
+    "tab:evo-history: exploratory NSGA-II versus random search (tasks 10, 12, 13, 14) against stage C receipts",
+    "Dataset attempt counts, media counts and verification receipts"
+  ],
+  "format_reference": "https://gecco-2026.sigevo.org/Paper%2BSubmission%2BInstructions",
+  "format_scope": "ACM SIGCONF authored internal draft; GECCO 2027 requirements not verified",
+  "new_experiments_run_for_draft": true,
+  "artifacts": [
+    {
+      "path": "docs/research/honours-gecco/assets/cube-case-0-high-margin-paper.png",
+      "bytes": 71082,
+      "sha256": "a11aa0897dda4744196c8c37c59d86e5f5658c66302835e7f63d8aa6736dd46b"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/dial-comparison-data.json",
+      "bytes": 5613,
+      "sha256": "aa62a369147c132be653ca15ac8c62a3d14007f783362fb31e46047aa3b21db5"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/dial-comparison.pdf",
+      "bytes": 25817,
+      "sha256": "1000b509aaff86c03ce69a43b9ca002294177fac830643800d0529db0ec40e82"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/dial-comparison.png",
+      "bytes": 134225,
+      "sha256": "6f12347202b0672f338214da61d99797b65d2894288c7f8a46a2563a8aecbc4f"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/evo19-frames.pdf",
+      "bytes": 847649,
+      "sha256": "5f246457a0e3a40adcfa7cb4352f167d1a5157f276d1d719630423fe06e3c2e5"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/evo19-result.pdf",
+      "bytes": 35767,
+      "sha256": "d8352ea5eb1ca561737f0b9e53cd2aec7055286c566cbccfa7ae2b754cc71707"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/evo19-search.pdf",
+      "bytes": 28862,
+      "sha256": "6f54039d5f3560054e494f297528c175610c733b77cd4a375dc0bf0ca01b8c0d"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/jar-history-data.json",
+      "bytes": 4332,
+      "sha256": "40a8a824f14ac07264ea52812349177c7f520d62f22c1a8de79e382a3b23434a"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/jar-history.pdf",
+      "bytes": 17218,
+      "sha256": "19a1b719952aa1deefb6b398da3342558e478cd5712cb3f29558a24a15dfec5d"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/lewm18-comparison.pdf",
+      "bytes": 27439,
+      "sha256": "b362f40cadb068cb2445ffbe33bfbc7efb249574d8cdff4486a1689b96f5c0a0"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/planning-outcomes-data.json",
+      "bytes": 3059,
+      "sha256": "be477ed6eb3633a1b1bab8ce0bd76cf25f791b21a46667c7cc134710b09d4d1e"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/planning-outcomes.pdf",
+      "bytes": 20167,
+      "sha256": "3827a2b5d79f34cbe9c1b9dd7fefecbd0ee9d530a72e1080acd79975fa7b4128"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/primary-contrasts.pdf",
+      "bytes": 15793,
+      "sha256": "f801d3684cd12032e3b4e606d6b58e1cebb6a5b6bb98c9a5a29104b2d0557948"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/progress-recovery.pdf",
+      "bytes": 17320,
+      "sha256": "94e0ad0b09a7740859d97e3b65c77dfcda1d7e3e7ff620e2397c550a1da781c7"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/pusht-case-0-high-margin-paper.png",
+      "bytes": 34070,
+      "sha256": "58f98abb61aa2416d050f5db605e4f98038533c568e315f1b94c2759836fe86e"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/reacher-four-methods.png",
+      "bytes": 238447,
+      "sha256": "07fc1d1c2485392d0f50ed8366035fd7e875c07b174a8a1fb7d3440a77f3e663"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/three-outcomes.pdf",
+      "bytes": 15734,
+      "sha256": "d58c943adcd9f09c13a6f3be07d268b291dd8ccfb0451a10d677def693e97b75"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/three-outcomes.png",
+      "bytes": 37173,
+      "sha256": "87b322aaf23bda1a85f61ec496594217953d9c0b55f981c742e47451fdf6ed86"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/tworoom-four-methods.png",
+      "bytes": 147743,
+      "sha256": "02c4db7d9c93d1a3075b200757e1480c24a6694d57e25e6c906e067f46a74f1d"
+    },
+    {
+      "path": "docs/research/honours-gecco/assets/unisafe-outcomes.pdf",
+      "bytes": 13990,
+      "sha256": "2229eea4cc0840c7df8d2211b610605cef92abdc2773f87f41ae4a9c62e7cd79"
+    },
+    {
+      "path": "docs/research/honours-gecco/build.sh",
+      "bytes": 565,
+      "sha256": "a40a6a2f37a8d1c6e0a24e12caaca8b24b3b2d2019553daf99a17d37be23db8d"
+    },
+    {
+      "path": "docs/research/honours-gecco/draft-notes.txt",
+      "bytes": 8469,
+      "sha256": "50a6ba37d09d14a6722daab5faea6119430d3b95a1f954be5a1259e60e443a94"
+    },
+    {
+      "path": "docs/research/honours-gecco/evo-history-appendix.tex",
+      "bytes": 6619,
+      "sha256": "92dd993a148469fcc7cb116248fcd68332acbe331936706ee956484d446de122"
+    },
+    {
+      "path": "docs/research/honours-gecco/honoursThesis.pdf",
+      "bytes": 2169643,
+      "sha256": "263a1b8e56e62c6f146dfd378192e3c504c2422749502fef3c33358d3c82f0e1"
+    },
+    {
+      "path": "docs/research/honours-gecco/honoursThesis.tex",
+      "bytes": 50269,
+      "sha256": "75a0dbebfccdb67c8e1dd054b86a5912cb6e14f7b45ea3b3f36b7e8f774d63d2"
+    },
+    {
+      "path": "docs/research/honours-gecco/lewm18-appendix-intro.tex",
+      "bytes": 1417,
+      "sha256": "181609f90e557d44308de2161ae60f20cd79b21187c7811c143630f9cba7bd30"
+    },
+    {
+      "path": "docs/research/honours-gecco/lewm18-appendix-methods.tex",
+      "bytes": 4425,
+      "sha256": "5c7ccf1421073b3f54f71814b572bd0c50015abd00f127809548b0e668339932"
+    },
+    {
+      "path": "docs/research/honours-gecco/lewm18-appendix.tex",
+      "bytes": 3596,
+      "sha256": "1a7f1bdcace5e6f4ab56127671e185de6d9f59991824cabfbb41808f9c003f5d"
+    },
+    {
+      "path": "docs/research/honours-gecco/lewm18-cube-results.tex",
+      "bytes": 1151,
+      "sha256": "6ce0fc654d869c93a460ba496fb564baef6881c18b7864d5faaeb2c10b13fc22"
+    },
+    {
+      "path": "docs/research/honours-gecco/lewm18-guide-results.tex",
+      "bytes": 627,
+      "sha256": "47c4bbbd3accbe6007f2cc659ad50063647fdfc0a563c6351955316579c9603b"
+    },
+    {
+      "path": "docs/research/honours-gecco/lewm18-guide.tex",
+      "bytes": 2274,
+      "sha256": "7b7ea47381496bc9e35d6e355cd804668941c76164ade032edd7542ca949c9e5"
+    },
+    {
+      "path": "docs/research/honours-gecco/lewm18-methods.tex",
+      "bytes": 1742,
+      "sha256": "fb947bff524eb6de6d71e3e691db0cc6ed77126989b92e368f2a283b0543798d"
+    },
+    {
+      "path": "docs/research/honours-gecco/lewm18-results.tex",
+      "bytes": 2402,
+      "sha256": "09023e5af95249403d891809ac5786b9b1e4143664b69c134aa70cbb654a41e2"
+    },
+    {
+      "path": "docs/research/honours-gecco/lewm18-tables.tex",
+      "bytes": 4337,
+      "sha256": "5f9c6853e855049ca88979bb5e3d10f9500d6803e5eb56fd452ad84975665ead"
+    },
+    {
+      "path": "docs/research/honours-gecco/make_evo19_figures.py",
+      "bytes": 13648,
+      "sha256": "c9b0eed5ba51e795d7466b38ea1c72c43cf234a0f775def8e0da61adc4b6771b"
+    },
+    {
+      "path": "docs/research/honours-gecco/make_evo19_frames.py",
+      "bytes": 4601,
+      "sha256": "493ad4f74c23f671a6c837124f9ab894181e620f6f44f017266d57c166801ada"
+    },
+    {
+      "path": "docs/research/honours-gecco/make_figures.py",
+      "bytes": 12118,
+      "sha256": "0bd1dcffcdf2d7926f4aacd622e8ef403de4d3bf8ee9e8d5e7dbe1cb95710782"
+    },
+    {
+      "path": "docs/research/honours-gecco/make_lewm18_figure.py",
+      "bytes": 1501,
+      "sha256": "27210cc329329cc86c56c89531148637773b9500156859bfc3e85e9a5d7fd87a"
+    },
+    {
+      "path": "docs/research/honours-gecco/maniguard19-appendix.tex",
+      "bytes": 13664,
+      "sha256": "9e8a728d165edbd09b6f87a6bb64953397d0207223e858f01b833c84ccbec300"
+    },
+    {
+      "path": "docs/research/honours-gecco/maniguard19.tex",
+      "bytes": 11258,
+      "sha256": "63c52c28a860ce5f9d59e1a54b9aa673917b465b9cf6be38bbb38dee84fcc453"
+    },
+    {
+      "path": "docs/research/honours-gecco/references.bib",
+      "bytes": 11469,
+      "sha256": "697708d652e6027caa7f77f6c5996eb51291a5fc179937e298a1d8045d12fbbc"
+    },
+    {
+      "path": "docs/research/honours-gecco/validation.json",
+      "bytes": 5591,
+      "sha256": "8154f3a863897bd301fdede455debd2c82611693155aa463fd9a746b3acef4db"
+    },
+    {
+      "path": "docs/research/honours-gecco/visual-appendix.tex",
+      "bytes": 7214,
+      "sha256": "9b377108d1564756beb549d5bfcefdec140d5ab428476711c103e879e773a515"
+    }
+  ],
+  "appendix_video_links": [
+    "https://huggingface.co/datasets/Sachioster/SafetyDial-Reacher/blob/12624bc18843f0826566c4f1408d9028b2c61616/campaigns/lewm16/videos/comparisons/A-paired-high-margin.mp4",
+    "https://huggingface.co/datasets/Sachioster/SafetyDial-Reacher/blob/12624bc18843f0826566c4f1408d9028b2c61616/campaigns/lewm16/videos/comparisons/B-paired-high-margin.mp4",
+    "https://huggingface.co/datasets/Sachioster/SafetyDial-Reacher/blob/12624bc18843f0826566c4f1408d9028b2c61616/campaigns/lewm17/videos/comparisons/H-paired-high-margin.mp4",
+    "https://huggingface.co/datasets/Sachioster/SafetyDial-TwoRoom/blob/bed33b8967c30728dd76bfbdd4a046a6c34cedf8/campaigns/lewm16/videos/comparisons/A-paired-high-margin.mp4",
+    "https://huggingface.co/datasets/Sachioster/SafetyDial-TwoRoom/blob/bed33b8967c30728dd76bfbdd4a046a6c34cedf8/campaigns/lewm16/videos/comparisons/B-paired-high-margin.mp4",
+    "https://huggingface.co/datasets/Sachioster/SafetyDial-TwoRoom/blob/bed33b8967c30728dd76bfbdd4a046a6c34cedf8/campaigns/lewm17/videos/comparisons/H-paired-high-margin.mp4",
+    "https://huggingface.co/datasets/Sachioster/SafetyDial-PushT/blob/ab3a1b4f7244227cf2b6cc972a38390b5cdfe6c4/campaigns/lewm18/media/pusht-case-0-high-margin.mp4",
+    "https://huggingface.co/datasets/Sachioster/SafetyDial-PushT/blob/ab3a1b4f7244227cf2b6cc972a38390b5cdfe6c4/campaigns/lewm18/media/pusht-case-1-high-margin.mp4",
+    "https://huggingface.co/datasets/Sachioster/SafetyDial-Cube/blob/49f10a4fc4fadcd520797a46d224a12d9bc299f7/campaigns/lewm18/media/cube-case-0-high-margin.mp4",
+    "https://huggingface.co/datasets/Sachioster/SafetyDial-Cube/blob/49f10a4fc4fadcd520797a46d224a12d9bc299f7/campaigns/lewm18/media/cube-case-1-high-margin.mp4"
+  ],
+  "new_experiment_scope": "Separately authorized tasks 18 and 19; prior study findings unchanged",
+  "task18_final_closeout_revisions": [
+    {
+      "repo": "Sachioster/SafetyDial-PushT",
+      "private": true,
+      "parent_revision": "ab3a1b4f7244227cf2b6cc972a38390b5cdfe6c4",
+      "revision": "81ccb90f1251ae9d0b007b56d9ee8e2f93d49078",
+      "verified_files": {
+        "campaigns/lewm18/protocol/final-closeout.json": {
+          "bytes": 4555,
+          "sha256": "2a6a94014046f4993e5f7bf8cca2720df589805e3f4345a6227ac40929f9f11b"
+        },
+        "campaigns/lewm18/sha256-manifest.json": {
+          "bytes": 53130,
+          "sha256": "99ab33260ce4a9bdeec052ad7836f7c0b424ae4b2c3281a41c6ad50f13d0405c"
+        },
+        "sha256-manifest.json": {
+          "bytes": 109167,
+          "sha256": "0937256e2af615ac2ae461dc9524b63c570f80bdf035b4bc49cb76f840d22fbd"
+        }
+      },
+      "deleted_files": 0,
+      "utc": "2026-10-26T22:50:16.232647+00:00"
+    },
+    {
+      "repo": "Sachioster/SafetyDial-Cube",
+      "private": true,
+      "parent_revision": "49f10a4fc4fadcd520797a46d224a12d9bc299f7",
+      "revision": "75b0d5ae2d97ac8ce28213f7e3d9b35ade4e8eb5",
+      "verified_files": {
+        "campaigns/lewm18/protocol/final-closeout.json": {
+          "bytes": 4555,
+          "sha256": "2a6a94014046f4993e5f7bf8cca2720df589805e3f4345a6227ac40929f9f11b"
+        },
+        "campaigns/lewm18/sha256-manifest.json": {
+          "bytes": 53119,
+          "sha256": "40f26e0a90a8d5dd8dcf20e0b9047eb2ebcc596710a8a0f1314119e35f694d36"
+        },
+        "sha256-manifest.json": {
+          "bytes": 95569,
+          "sha256": "5bfac6a43b8f1b1fbe557b2645bfd449c83268b20951c0fb1b11fda8fddd6ee8"
+        }
+      },
+      "deleted_files": 0,
+      "utc": "2026-10-26T22:50:20.847571+00:00"
+    }
+  ]
+}

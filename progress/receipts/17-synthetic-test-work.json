@@ -1,0 +1,25 @@
+{
+  "schema": "lewm17-synthetic-test-work-v1",
+  "recorded_epoch": 1793025543.6954625,
+  "counting_method": "Derived from recorded test-suite executions and fixed solver loop shapes, not measured simulator integrations.",
+  "analytic_path_steps_per_solve_by_horizon": {
+    "2": 250010,
+    "3": 249915,
+    "5": 250025
+  },
+  "legacy_setup_suite_executions": 1,
+  "legacy_suite_analytic_path_steps": 1500025,
+  "new_campaign_suite_executions": 2,
+  "new_suite_analytic_path_steps_per_execution": 6499530,
+  "synthetic_analytic_path_steps_total": 14499085,
+  "real_simulator_integrations": 0,
+  "frozen_lewm_model_queries": 0,
+  "derivation": "Every synthetic solve checks10 candidate batches and1 mean. Legacy suite:4 horizon5 solves plus1 horizon3 and1 horizon2. New suite:4 solves for each of6 constant-mode tests (4 horizon2 and2 horizon3 modes), plus2 horizon5 native/infeasible solves.",
+  "execution_evidence": [
+    "outputs/lewm17/environment/tests.txt",
+    "progress/receipts/17-engineering-v1-audit.json",
+    "outputs/lewm17/environment/campaign-tests.txt"
+  ],
+  "scope": "Setup test_lewm16 ran once. test_lewm17_campaign ran once individually and once within the17-test combined gate. Optimizer and bootstrap tests use synthetic arithmetic only. Mock recorder events are not real physics integrations.",
+  "allocation": "Shared development verification, separate from admitted real episodes and per-optimizer resource allowances."
+}

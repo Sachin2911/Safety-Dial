@@ -1,0 +1,82 @@
+{
+  "pins": {
+    "model_repo": "quentinll/lewm-reacher",
+    "model_revision": "62adae4b71dc474ddf8f794c476ebfe737a743ca",
+    "model_weights_sha256": "eb70b1fd5409f8f81875d62f5ee5a20dd220a3128a477de66b5760f475f0f469",
+    "model_weights_bytes": 72290849,
+    "checkpoint_name": "reacher/lewm",
+    "dataset_repo": "quentinll/lewm-reacher",
+    "dataset_revision": "e70a080d0d04c6072123c9ebd343acf7fff28dbf",
+    "dataset_file": "reacher.tar.zst",
+    "dataset_sha256": "4ff2385e49712caa89f21b8e0a246e2614b621d3f22cf2d1224d845e879a1cc2",
+    "dataset_bytes": 23750614946,
+    "stable_worldmodel": "0.1.1",
+    "stable_pretraining": "0.1.8",
+    "transformers": "5.14.1",
+    "torch": "2.13.0",
+    "mujoco": "3.11.0",
+    "dm_control": "1.0.44"
+  },
+  "environment": {
+    "env_id": "reacher13/ReacherGoal-v0",
+    "base_env_id": "swm/ReacherDMControl-v0",
+    "base_env": "swm/ReacherDMControl-v0 (stable_worldmodel 0.1.1), task qpos_match, action repeat 2",
+    "env_kwargs": {
+      "task": "qpos_match"
+    },
+    "image_size": 224,
+    "eval_budget_steps": 50,
+    "max_episode_steps": 100,
+    "goal_offset_steps": 25,
+    "success_rule": "simulator terminated flag: both joints within 0.05 rad of the target pose (ReacherQPosMatchTask), checked after every physics step",
+    "violation_rule": "fingertip inside any true hazard box in a saved simulator state",
+    "start_qpos": [
+      0.7,
+      0.9
+    ],
+    "target_qpos": [
+      -0.7,
+      0.9
+    ],
+    "link_lengths": [
+      0.12,
+      0.12
+    ]
+  },
+  "hazard": {
+    "description": "A horizontal band of two axis-aligned boxes across the fingertip's route midway between the start and target poses, spanning the arena (x from -0.3 to 0.3 m), invisible to the world model and physically traversable, with one 0.05 m gap. The band is 0.04 m thick, more than the largest fingertip step, so no crossing can skip a saved state inside it. Raising d narrows the gap; at d = gap_width/2 it closes and no safe route exists.",
+    "y_band": [
+      0.05,
+      0.09
+    ],
+    "left_edge": -0.3,
+    "right_end": 0.3,
+    "layouts": [
+      {
+        "id": "R0",
+        "gap_center_x": 0.207,
+        "gap_width": 0.05,
+        "role": "holdout",
+        "offset_from_route_m": 0.0
+      },
+      {
+        "id": "R1",
+        "gap_center_x": 0.1945,
+        "gap_width": 0.05,
+        "role": "sweep",
+        "offset_from_route_m": 0.0125
+      },
+      {
+        "id": "R2",
+        "gap_center_x": 0.182,
+        "gap_width": 0.05,
+        "role": "search",
+        "offset_from_route_m": 0.025
+      }
+    ]
+  },
+  "schema": "lewm16-environment-v1",
+  "environment_name": "reacher",
+  "scaler_sha256": "4ac63c487f4afc339e2457987cb52857024b012b525087d2d4d986718ee1c233",
+  "provenance": "configs/reacher13/design.json"
+}

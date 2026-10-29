@@ -1,0 +1,69 @@
+% Task-18 full methods, moved from the main text. Summary in lewm18-methods.tex.
+\section{PushT and Cube Methods}\label{app:extension-methods}
+\subsection{Tasks, cases and methods}
+In Cube, success means the cube's centre comes within 4 cm of the target.
+(An earlier Cube probe in our records tested only gripper reaching, so it is
+not evidence for this goal.) Each task uses its own frozen LeWM checkpoint.
+Each case takes a start image and a goal image 25 recorded actions apart in
+the task's pinned demonstration dataset, places a forbidden band across the
+straight line from start to goal with an off-centre gap, and keeps the start
+and goal outside the enlarged danger region. Development and
+final cases come from different demonstrations. A 0 margin keeps only the
+original danger region. Native planning ignores the margin, so its attempts
+are recorded once and scored at all three margins; these are three views of
+the same attempts, not three independent samples.
+
+The allowance is 50 executed actions, with a replan after every five.
+Original SafeCEM uses 30 CEM iterations, 300 candidates and five blocks of
+look-ahead. Shorter look-ahead receives more candidates under the same
+allowance of 1,500 predictor steps per iteration. We report actual model
+work separately, because early completion, failed replans and the extra
+prediction for the chosen plan change the work used.
+
+\subsection{Selection}
+The Feedback controller uses latent progress and prediction error to change look-ahead, sampling
+spread and candidate reuse; it cannot weaken the margin. For each margin, six
+fixed configurations are compared on six development cases with two seeds.
+Four Feedback presets then use the same six cases and one seed. Selection
+first maximizes safe completion, then breaks ties by fewer failure-capped
+actions, less model work and finally list order. Feedback builds on the
+fixed-setting selection and uses another 72 development attempts per task,
+so its tuning cost is higher, not equal.
+
+\subsection{What the checks and speed measurements mean}
+The safety rule covers only the pusher centre in PushT and the gripper pinch
+point in Cube. It does not certify the moved object, the arm or the whole
+robot against collision. In PushT, the checker uses the known pusher
+dynamics and tests every physics step. In Cube, it ranks candidates with an
+approximate path, then tests the first five actions of up to eight
+candidates in the true simulator. Every such preview counts toward the work
+totals, and the full simulator state is restored before the next preview or
+the real action. If no preview passes, the attempt ends as a controller
+failure; there is no unchecked fallback.
+
+PushT keeps the pinned environment's own success test, which requires the
+pusher position, block position and block angle to be close to the goal; we
+do not report shape overlap. Cube's goals come from LeWM's dataset pairs, not
+the full official five-goal OGBench evaluation. As a small protocol check,
+native planning also ran on twelve separate pairs per task executing all
+25 planned actions before replanning, as the reference planner does, without
+a danger region or checker. It completes 11/12 PushT pairs and 10/12 Cube
+pairs, but seven of the Cube pairs already meet the object goal at reset, so
+this panel must not replace the reserved cases.
+
+Speed is scored in failure-capped actions (Section~\ref{sec:success}): a safe
+completion costs the actions it used, and every unsafe or unfinished attempt
+costs 50, so early failure cannot look fast. Mean actions among successful
+attempts are secondary and are reported with their own counts. A separate
+run, one attempt at a time, measures actual planning time on the first two
+final cases at the largest margin, with a new shared seed. Video playback
+speed says nothing about computation time. Uncertainty intervals resample
+whole cases, keeping each case's seeds and paired planners together.
+
+\subsection{The PushT reset repair}
+A review before publication found that resetting PushT moves the simulator
+slightly, but the checker in our first cohort started from the state before
+the reset. We made the checker start from the state that reset returns and
+repeated the full protocol, including development selection, with the same
+cases and candidate configurations. The first cohort's 676 attempts are kept
+and counted in the work totals, but excluded from the performance results.

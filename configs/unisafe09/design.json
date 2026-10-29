@@ -1,0 +1,411 @@
+{
+  "status": "authorized_design_pending_source_freeze",
+  "date": "2026-10-25",
+  "task": 9,
+  "namespace": "unisafe09",
+  "runnable": false,
+  "authorization": {
+    "planning": true,
+    "rental": true,
+    "execution": true,
+    "total_usd": 10,
+    "persistent_engineering_repairs": true,
+    "user_instruction": "Implement the plan, rent the GPU, and fix recoverable problems to obtain the result."
+  },
+  "canonical_plan": "progress/09-unisafe-dial-plan.md",
+  "environment": {
+    "task": "Isaac-Takeoff-Franka-IK-Rel-v0",
+    "horizon_controls": 300,
+    "control_hz": 20,
+    "physics_dt_s": 0.01,
+    "physics_steps_per_control": 5,
+    "continuation_controls": 40,
+    "primary_goal": "released compound predicate including XY separation > 0.07 m",
+    "reset_rule": "fresh simulator process per episode; no reset before continuation finishes"
+  },
+  "pins": {
+    "unisafe_revision": "ab0fdf87f38edefa48b54a291ec5b7156c17b6e0",
+    "checkpoint_repo": "Sachioster/unisafe-pretrained",
+    "checkpoint_revision": "39bd3c84a1c9f3e84891eb09b1122d252c84e9c9",
+    "checkpoint_manifest_sha256": "d6d540fda8ebed4b80eb7f4d6551161def10f57d44ccbac7b775b340d76ebd00",
+    "isaaclab_revision": "6bfde876089661e116dc5a5d9c6805f18127fe32",
+    "isaacsim": "6.2.0.0",
+    "python": "3.12",
+    "torch": "2.11.0",
+    "cuda": "13.0",
+    "availability_verified_for_new_launch": false
+  },
+  "filter": {
+    "snapshot": 200000,
+    "uncertainty_threshold": 4.3,
+    "value_threshold": 0.1,
+    "backup_postprocess": "released",
+    "pretrained_updates": 0,
+    "bypass_allowed": false
+  },
+  "shared_gate": {
+    "max_aperture_m_per_finger": 0.025,
+    "max_aperture_change_m_exclusive": 0.002,
+    "first_observation_has_stability": false,
+    "translation_activation": "current intermediate-aperture AND stability flag; pre-action observation",
+    "translation_coordinates": [
+      0,
+      1,
+      2
+    ],
+    "rotation_coordinates_unchanged": [
+      3,
+      4,
+      5
+    ],
+    "apply_before_filter": true,
+    "scale_backup_after_filter": false,
+    "command_history": "original task gripper proposals, preserving archived adapter counter semantics"
+  },
+  "conditions": [
+    {
+      "id": "d00_g050",
+      "adapter_kind": "grasp_release_delay",
+      "hold_steps": 0,
+      "translation_scale": 0.5,
+      "min_close_steps": 3,
+      "min_aperture_m": 0.005
+    },
+    {
+      "id": "d00_g075",
+      "adapter_kind": "grasp_release_delay",
+      "hold_steps": 0,
+      "translation_scale": 0.75,
+      "min_close_steps": 3,
+      "min_aperture_m": 0.005
+    },
+    {
+      "id": "d00_g100",
+      "adapter_kind": "grasp_release_delay",
+      "hold_steps": 0,
+      "translation_scale": 1.0,
+      "min_close_steps": 3,
+      "min_aperture_m": 0.005
+    },
+    {
+      "id": "d15_g050",
+      "adapter_kind": "grasp_release_delay",
+      "hold_steps": 15,
+      "translation_scale": 0.5,
+      "min_close_steps": 3,
+      "min_aperture_m": 0.005
+    },
+    {
+      "id": "d15_g075",
+      "adapter_kind": "grasp_release_delay",
+      "hold_steps": 15,
+      "translation_scale": 0.75,
+      "min_close_steps": 3,
+      "min_aperture_m": 0.005
+    },
+    {
+      "id": "d15_g100",
+      "adapter_kind": "grasp_release_delay",
+      "hold_steps": 15,
+      "translation_scale": 1.0,
+      "min_close_steps": 3,
+      "min_aperture_m": 0.005
+    },
+    {
+      "id": "d40_g050",
+      "adapter_kind": "grasp_release_delay",
+      "hold_steps": 40,
+      "translation_scale": 0.5,
+      "min_close_steps": 3,
+      "min_aperture_m": 0.005
+    },
+    {
+      "id": "d40_g075",
+      "adapter_kind": "grasp_release_delay",
+      "hold_steps": 40,
+      "translation_scale": 0.75,
+      "min_close_steps": 3,
+      "min_aperture_m": 0.005
+    },
+    {
+      "id": "d40_g100",
+      "adapter_kind": "grasp_release_delay",
+      "hold_steps": 40,
+      "translation_scale": 1.0,
+      "min_close_steps": 3,
+      "min_aperture_m": 0.005
+    },
+    {
+      "id": "reference_random",
+      "adapter_kind": "grasp_release_delay",
+      "hold_steps": 60,
+      "translation_scale": 1.0,
+      "min_close_steps": 1,
+      "min_aperture_m": 0.005
+    },
+    {
+      "id": "history_only",
+      "adapter_kind": "release_delay",
+      "hold_steps": 15,
+      "translation_scale": 1.0,
+      "min_close_steps": 3
+    },
+    {
+      "id": "grasp_latch",
+      "adapter_kind": "grasp_latch",
+      "hold_until_episode_end": true,
+      "translation_scale": 1.0,
+      "min_close_steps": 3,
+      "min_aperture_m": 0.005
+    }
+  ],
+  "references": {
+    "N": "d00_g100",
+    "E": "d15_g100",
+    "F": "d40_g100",
+    "R": "reference_random"
+  },
+  "stages": {
+    "A": {
+      "name": "engineering",
+      "episodes": 10,
+      "continuation": true,
+      "jobs": [
+        {
+          "id": "engineering-00",
+          "seed": 9100000,
+          "policy_seed": 9100000,
+          "condition": "native_direct",
+          "purpose": "native identity reference"
+        },
+        {
+          "id": "engineering-01",
+          "seed": 9100000,
+          "policy_seed": 9100000,
+          "condition": "d00_g100",
+          "purpose": "no-op wrapper identity"
+        },
+        {
+          "id": "engineering-02",
+          "seed": 9100001,
+          "policy_seed": 9100001,
+          "condition": "d15_g100",
+          "purpose": "existing evolved adapter"
+        },
+        {
+          "id": "engineering-03",
+          "seed": 9100001,
+          "policy_seed": 9100001,
+          "condition": "d15_g050",
+          "purpose": "translation scaling"
+        },
+        {
+          "id": "engineering-04",
+          "seed": 9100002,
+          "policy_seed": 9100002,
+          "condition": "history_only",
+          "purpose": "history-only ablation"
+        },
+        {
+          "id": "engineering-05",
+          "seed": 9100002,
+          "policy_seed": 9100002,
+          "condition": "grasp_latch",
+          "purpose": "latch ablation"
+        },
+        {
+          "id": "engineering-06",
+          "seed": 9100003,
+          "policy_seed": 9100003,
+          "condition": "d15_g100",
+          "purpose": "repeatability first run"
+        },
+        {
+          "id": "engineering-07",
+          "seed": 9100003,
+          "policy_seed": 9100003,
+          "condition": "d15_g100",
+          "purpose": "repeatability repeat"
+        },
+        {
+          "id": "engineering-08",
+          "seed": 9100004,
+          "policy_seed": 9100004,
+          "condition": "d40_g100",
+          "purpose": "fixed reference and continuation"
+        },
+        {
+          "id": "engineering-09",
+          "seed": 9100004,
+          "policy_seed": 9100004,
+          "condition": "reference_random",
+          "purpose": "strong completion reference and continuation"
+        }
+      ]
+    },
+    "B": {
+      "name": "response_map",
+      "seed_start": 9200000,
+      "seed_stop_exclusive": 9200016,
+      "condition_ids": [
+        "d00_g050",
+        "d00_g075",
+        "d00_g100",
+        "d15_g050",
+        "d15_g075",
+        "d15_g100",
+        "d40_g050",
+        "d40_g075",
+        "d40_g100",
+        "reference_random",
+        "history_only",
+        "grasp_latch"
+      ],
+      "episodes": 192,
+      "continuation": false
+    },
+    "C": {
+      "name": "independent_confirmation",
+      "seed_start": 9300000,
+      "seed_stop_exclusive": 9300064,
+      "required_conditions": [
+        "d00_g100",
+        "d15_g100",
+        "d40_g100",
+        "reference_random"
+      ],
+      "maximum_additional_conditions": 2,
+      "maximum_episodes": 384,
+      "continuation": true,
+      "admission": "canonical plan section 5; complete selected panel must fit"
+    }
+  },
+  "schedule": {
+    "rng_seed": 2026102509,
+    "workers": 1,
+    "one_physical_host": true,
+    "policy_seed_equals_initial_condition_seed": true,
+    "rule": "randomized seed-block order and cyclically rotated condition order",
+    "ordered_job_lists_must_be_frozen_before_stage": true
+  },
+  "selection": {
+    "minimum_safe_completions_out_of_16": 8,
+    "maximum_observed_violations": "reference_random on same 16 starts",
+    "pareto_axes": [
+      "maximize C",
+      "minimize V",
+      "minimize J"
+    ],
+    "speed_order": [
+      "J ascending",
+      "C descending",
+      "V ascending",
+      "condition ID ascending"
+    ],
+    "completion_order": [
+      "C descending",
+      "V ascending",
+      "J ascending",
+      "condition ID ascending"
+    ],
+    "improvement_signal": {
+      "additional_completions_over_R": 2,
+      "no_more_violations_than_R": true
+    },
+    "efficiency_signal": {
+      "maximum_J_fraction_of_R": 0.9,
+      "no_fewer_completions_than_R": true,
+      "no_more_violations_than_R": true
+    },
+    "tradeoff_signal": {
+      "minimum_completion_count_difference": 2,
+      "minimum_J_ratio_completion_over_speed": 1.1
+    },
+    "component_signal": {
+      "reference": "d15_g100",
+      "candidates": [
+        "history_only",
+        "grasp_latch"
+      ],
+      "minimum_absolute_completion_difference": 4,
+      "minimum_absolute_violation_difference": 2,
+      "either_difference_suffices": true
+    },
+    "priority": "qualifying novel performance endpoints, then qualifying H/L by descending absolute C difference, descending absolute V difference, ascending ID",
+    "no_signal": "finish after B; no unplanned extension"
+  },
+  "metrics": {
+    "C": "safe benchmark completions / valid completed episodes; also publish attempted denominator",
+    "V": "any physical failure or boundary exit up to benchmark termination",
+    "J": "mean(seconds to safe success, otherwise 15 seconds)",
+    "deadline_seconds": [
+      2,
+      5,
+      10,
+      15
+    ],
+    "sustained": "benchmark safe success plus all 40 extension steps preserving the full success predicate without violation; denominator all valid starts",
+    "invalid_attempts": "visible separately, never safe successes",
+    "analysis_seed": 2026102609,
+    "paired_bootstrap_resamples": 10000,
+    "familywise_alpha": 0.05,
+    "simultaneous_intervals": "Bonferroni across C/V/J for frozen primary contrasts",
+    "allowed_positive_safety_noninferiority_margin": 0.0
+  },
+  "caps": {
+    "planned_episodes": 586,
+    "infrastructure_replacements": 4,
+    "maximum_attempts": 590,
+    "maximum_controls": 192920,
+    "maximum_decimated_physics_steps": 964600,
+    "maximum_offline_controller_queries": 3000,
+    "maximum_controller_query_bundles": 195920,
+    "optimizer_updates": 0,
+    "pretrained_weight_updates": 0,
+    "internal_reset_physics": "count separately; unavailable is unknown"
+  },
+  "proposed_rental": {
+    "gpu_preference": [
+      "RTX 3090",
+      "RTX 4090"
+    ],
+    "gpu_count": 1,
+    "minimum_vram_gb": 24,
+    "minimum_allocated_ram_gb": 64,
+    "minimum_effective_cpu_cores": 12,
+    "disk_gb": 200,
+    "driver_family": "580.x; verify exact renderer compatibility",
+    "inclusive_hourly_rate_ceiling_usd": 0.65,
+    "active_compute_and_disk_cap_usd": 8,
+    "preservation_reserve_usd": 2,
+    "total_cap_usd": 10,
+    "maximum_rental_hours": 15,
+    "preservation_margin_minutes": 30,
+    "first_sim_startup_timeout_minutes": 30,
+    "later_episode_process_timeout_minutes": 10,
+    "is_live_quote": false
+  },
+  "paths": {
+    "code_prefix": "unisafe09",
+    "config_root": "configs/unisafe09",
+    "local_output_root": "outputs/unisafe09",
+    "receipt_prefix": "progress/receipts/09-unisafe-",
+    "private_dataset": "Sachioster/maniguard-jar-replication-20261022",
+    "recordings_prefix": "recordings/unisafe09",
+    "private_receipt_prefix": "receipts/unisafe09",
+    "outcome_prefix": "unisafe/unisafe09_<stage>_<condition>/seed<seed>/<task>_<outcome>"
+  },
+  "optimizer_followup": {
+    "included_in_this_allocation": false,
+    "requires_new_protocol_and_budget": true,
+    "minimum_optimizer_seeds": 3,
+    "comparators": [
+      "multiobjective evolution",
+      "parameter random search",
+      "tuned fixed grid",
+      "ordinary learning"
+    ],
+    "matching": "actual simulator interactions, same adapter inputs and outcome information",
+    "final_evaluation": "new unused starts; evaluate each optimizer replicate"
+  }
+}

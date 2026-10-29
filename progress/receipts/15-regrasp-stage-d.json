@@ -1,0 +1,48 @@
+{
+  "schema": "regrasp15-stage-d-declaration-v1",
+  "declared_utc": "2026-10-26T05:06:56.849639+00:00",
+  "approval": "Yes please go ahead",
+  "status": "Post-screen addition approved by the user and declared before the stage C queue started, so before any stage C outcome existed. Reported separately from the frozen stage C confirmation; nothing is pooled with stage B.",
+  "evidence_seen": "Stage B at 77 of 80 episodes: project-0.10 9/15 strict safe completions and 1 violation; native 5/15 and 6; select-0.06 4/16 and 5; select-0.10 3/16 and 6; always-0.10 3/15 and 5.",
+  "arm": "project-0.10",
+  "comparator": "The stage C native episodes on the same tasks and seeds, not re-run.",
+  "tasks": [
+    0,
+    3,
+    6,
+    9
+  ],
+  "seeds": [
+    152000,
+    152001,
+    152002,
+    152003,
+    152004,
+    152005,
+    152006,
+    152007,
+    152008,
+    152009,
+    152010,
+    152011
+  ],
+  "order": "by seed, then task; one sequential lane after the stage C queue finishes",
+  "primary": "Strict safe completion, project-0.10 minus native: one-sided exact Barnard test at alpha 0.05, Wilson intervals and a task-stratified bootstrap.",
+  "secondary": [
+    "Raw-violation episodes, one-sided for fewer under projection (Barnard)",
+    "post-gate tips",
+    "post-gate stalls",
+    "post-gate conversion"
+  ],
+  "ceilings": {
+    "simulator_starts": 250,
+    "policy_controls": 500000,
+    "native_queries": 62000
+  },
+  "admission": "Episodes start only while at least 45 minutes remain before the allocation deadline; an incomplete stage D is reported with its actual denominators.",
+  "money": "Within the existing $10 cap and watchdogs; no increase.",
+  "caveats": [
+    "The comparator was collected earlier on the same host and software rather than interleaved.",
+    "Projection was chosen after the stage B screen; stage B's projection episodes are not pooled with stage D."
+  ]
+}

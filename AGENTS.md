@@ -10,6 +10,12 @@ frozen before it runs. Jar is the chosen family; Stack is the backup. The publis
 base rates and the reasons are in
 [ManiGuard base rates](docs/research/research_notes/ManiGuard%20base%20rates.md).
 
+[principia.pdf](principia.pdf) is the consolidated experiment record, with one page
+per experiment. The current manuscript is under `docs/research/honours-gecco/`.
+As of 29 October 2026, the planning studies establish a useful fixed-configuration
+lever; an evolutionary advantage and a replicated ManiGuard completion lever remain
+unestablished. Task 19 reduced observed violations without improving completion.
+
 Everything completed before 22 October 2026 lives under `archive/` and is historical
 evidence, not a launch instruction. Do not resume archived pilots, screens or managed
 jobs. Do not inherit their protocols, gates or budgets.
@@ -25,17 +31,16 @@ jobs. Do not inherit their protocols, gates or budgets.
    compressed with Ghostscript `/ebook` before committing.
 3. `docs/allocatedTopic.md`, `docs/gecco2027.md`, `docs/researchConceptNote/`,
    `docs/templates/`: topic, venue, concept note and document templates.
-4. `progress/`: start at `README.md`. `theOdessy.pdf` is the running log with one short
-   entry per finished task (LaTeX source `theOdessy.tex` beside it; add a section per task
-   and recompile with `pdflatex`). Tasks 1 through 6 are complete. Task 6 stopped
-   at engineering gates; no DSRL training or evaluation ran. Its result is
-   `receipts/06-dsrl-results.md`. Its plan and source freezes are historical launch
-   evidence, not permission to resume unused work.
-   Task 7's experiment is complete; its protocol `progress/07-dsrl-repair.md`, rental
-   record and the reused `progress/06-dsrl-plan.md` stay until its closeout is written. Task 15 is the only live rental. Completed
-   task protocols, handovers, prompts and closed-task rental records were removed on
-   26 October 2026; the committed ones are in git history at `1291199`.
-   `receipts/README.md` indexes final evidence; task 5 executed
+4. `progress/`: start at `README.md`. It holds machine-readable evidence, not duplicate
+   task write-ups. On 29 October, Sachin requested consolidation into `principia.pdf`
+   followed by removal of old documents while retaining code and evidence. The old
+   task plans, prompts, reports, Odyssey and framing guide are preserved with original
+   bytes in `archive/20261029/documents.tar.gz`; its manifest hashes every member.
+   Restore required document paths from that bundle before running historical
+   packaging, source-freeze scripts or tests that read them. Completed protocols do
+   not authorize more work. Task 7's experiment is complete with closeout records
+   pending; task 15's final recovery confirmation remains unverified. Neither status
+   asserts a live rental. `receipts/README.md` indexes retained evidence; task 5 executed
    `05-adapter-plan-v4.json`, not its earlier versions. Todo 1 has one instance per
    prefix (`01` B, `01b` C, `01c` D), followed by `02-*`, `03-*`, `04-tracking-*` and
    `05-adapter-*` receipts. The finished
@@ -47,7 +52,10 @@ jobs. Do not inherit their protocols, gates or budgets.
    checklists used; the paper-protocol eval config is
    `progress/receipts/01-jar-eval.yaml`. `configs/dsrl06/` pins the isolated learner
    dependencies; new Hydra configs go in `configs/<group>/`. The previous Vast templates, rental records and
-   setup scripts are under `archive/20261022/configs/vast/` and `archive/20261022/scripts/`.
+   setup scripts were under `archive/20261022/configs/vast/` and `archive/20261022/scripts/`.
+   Sachin requested deletion of all rental files on 29 October; the removal inventory
+   is `archive/20261029/removals.json`. The older archive manifest records this explicit
+   exception. Historical scripts may require separately recovered rental records.
 5. `experiments/` contains the tracking diagnostic and execution adapter. Reusable
    code goes in `experiments/helpers/`,
    entry points in `experiments/scripts/`, tests in `experiments/tests/`. No `src/`.
@@ -57,6 +65,10 @@ jobs. Do not inherit their protocols, gates or budgets.
    `python archive/verify.py --manifest 20261022/manifest.json`.
 7. `archive/legacy/`: Push-T, Hopper, Walker and LeWM studies from 8 October 2026,
    checked by `python archive/verify.py`.
+8. `archive/20261029/`: the compressed superseded-document bundle and its inventory.
+   Check with `python archive/verify.py --manifest 20261029/manifest.json`.
+   Edit `docs/research/principia.tex` to update the consolidated record, then rebuild
+   `principia.pdf` using the instructions in `docs/README.md`.
 
 ## Research controls
 
@@ -88,8 +100,8 @@ jobs. Do not inherit their protocols, gates or budgets.
   (ManiGuard `6bf4c61` with the legacy 256 render profile). Baseline replication results
   of record come from machine 54514; later studies have their own host records and
   contemporary controls. Comparisons remain blocked by host. The selected task 6
-  configuration used four RTX 4090 GPUs; its plan and $15 cap are in
-  `progress/06-dsrl-plan.md`. It stopped at engineering gates. Do not rent or run
+  configuration used four RTX 4090 GPUs; its plan and $15 cap are preserved as
+  `progress/06-dsrl-plan.md` inside the document bundle. It stopped at engineering gates. Do not rent or run
   from historical host records or resume its unused development allocation.
 - Rollouts, sidecars and results rows live in the private dataset
   `Sachioster/maniguard-jar-replication-20261022`, task folders `<n>_<outcome>` with an

@@ -1,0 +1,41 @@
+{
+  "schema": "dsrl07-posthoc-critic-diagnostic-v1",
+  "created_utc": "2026-10-25T12:53:44.884750+00:00",
+  "method": "Read-only source AST inspection and existing scalar training logs; no forwards, gradient updates, or simulator queries.",
+  "pinned_dsrl_revision": "7f48937d4553e95244cd81c79236a3256df80597",
+  "files": {
+    "third_party/dsrl_pi0/jaxrl2/agents/pixel_sac/pixel_sac_learner.py": "6f06c5d555e6c1fee748eeec6f8eb10c6f09f34130e209e961b97c520b142c49",
+    "third_party/dsrl_pi0/jaxrl2/agents/pixel_sac/critic_updater.py": "b8f093602ca6340baf2552b3532032d57a9ff537d6fd270bde4aec95249dbe18",
+    "experiments/helpers/dsrl06_protocol.py": "3023ec6558f222b4f7ff40dc5e6390c623ceaacfda759a11ac6656b3aa438575",
+    "experiments/helpers/dsrl06_learner.py": "768736c5e4843607c21c5994d2899dcc783e8a79e79d9204568db9ab60feaf97"
+  },
+  "critic_backup_entropy_default": false,
+  "caller_overrides_backup_entropy": false,
+  "critic_reduction": "mean",
+  "first_logged_q": 0.3068614602088928,
+  "last_logged_q": 37.185646057128906,
+  "last_logged_target_q": 37.18730163574219,
+  "last_logged_critic_loss": 0.002705159829929471,
+  "last_logged_temperature": 0.002258221386000514,
+  "last_logged_entropy": -15.171449661254883,
+  "training_completion_rewards": 0,
+  "inference": "Critic inflation is consistent with bootstrap overestimation and requires separate diagnosis. It cannot be explained by an entropy term added to this critic target, because that term is disabled. Numerical parity confirms faithful implementation, not stable estimation under this task and reward.",
+  "limits": "This inspection does not establish the causal mechanism, show a repair works, or authorize another rental.",
+  "return_bound": {
+    "potential_range": [
+      0,
+      1
+    ],
+    "potential_scale": 0.25,
+    "single_terminal_base_reward_range": [
+      0,
+      1
+    ],
+    "discounted_shaped_return_range": [
+      -0.25,
+      1
+    ],
+    "reason": "For any history, the finite terminal-zero shaping sum equals discounted terminal base reward minus 0.25 times current potential. Entropy is not part of this critic target.",
+    "interpretation": "A predicted mean Q around 37 is outside the intended task-return range. This proves miscalibration of the value estimate under that objective, not the cause of the actor failure."
+  }
+}

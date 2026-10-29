@@ -1,0 +1,664 @@
+{
+  "schema": "regrasp15-design-v1",
+  "k": 32,
+  "stage0": {
+    "summary_sha256": "05de31abe325761d2f974411ad956c337f744c09e28aab13113e702cab8d4a93",
+    "rescue_rate_0.10": 0.48031496062992124,
+    "live_k": 32
+  },
+  "arms": {
+    "native": {
+      "mode": "native",
+      "gate": "closure"
+    },
+    "select-0.10": {
+      "mode": "select",
+      "speed_limit_mps": 0.1,
+      "candidates": 32,
+      "gate": "closure"
+    },
+    "select-0.06": {
+      "mode": "select",
+      "speed_limit_mps": 0.06,
+      "candidates": 32,
+      "gate": "closure"
+    },
+    "project-0.10": {
+      "mode": "project",
+      "speed_limit_mps": 0.1,
+      "gate": "closure"
+    },
+    "always-0.10": {
+      "mode": "select",
+      "speed_limit_mps": 0.1,
+      "candidates": 32,
+      "gate": "always"
+    },
+    "project-always-0.10": {
+      "mode": "project",
+      "speed_limit_mps": 0.1,
+      "gate": "always"
+    }
+  },
+  "stage_a_jobs": [
+    {
+      "job": 0,
+      "stage": "stage_a",
+      "arm": "native",
+      "task": 1,
+      "seed": 150000
+    },
+    {
+      "job": 1,
+      "stage": "stage_a",
+      "arm": "always-0.10",
+      "task": 1,
+      "seed": 150001
+    },
+    {
+      "job": 2,
+      "stage": "stage_a",
+      "arm": "project-always-0.10",
+      "task": 1,
+      "seed": 150002
+    },
+    {
+      "job": 3,
+      "stage": "stage_a",
+      "arm": "select-0.10",
+      "task": 1,
+      "seed": 150003
+    }
+  ],
+  "stage_b_jobs": [
+    {
+      "job": 100,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 0,
+      "seed": 151000
+    },
+    {
+      "job": 101,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 0,
+      "seed": 151000
+    },
+    {
+      "job": 102,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 0,
+      "seed": 151000
+    },
+    {
+      "job": 103,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 0,
+      "seed": 151000
+    },
+    {
+      "job": 104,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 0,
+      "seed": 151000
+    },
+    {
+      "job": 105,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 6,
+      "seed": 151002
+    },
+    {
+      "job": 106,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 6,
+      "seed": 151002
+    },
+    {
+      "job": 107,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 6,
+      "seed": 151002
+    },
+    {
+      "job": 108,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 6,
+      "seed": 151002
+    },
+    {
+      "job": 109,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 6,
+      "seed": 151002
+    },
+    {
+      "job": 110,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 6,
+      "seed": 151001
+    },
+    {
+      "job": 111,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 6,
+      "seed": 151001
+    },
+    {
+      "job": 112,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 6,
+      "seed": 151001
+    },
+    {
+      "job": 113,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 6,
+      "seed": 151001
+    },
+    {
+      "job": 114,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 6,
+      "seed": 151001
+    },
+    {
+      "job": 115,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 9,
+      "seed": 151000
+    },
+    {
+      "job": 116,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 9,
+      "seed": 151000
+    },
+    {
+      "job": 117,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 9,
+      "seed": 151000
+    },
+    {
+      "job": 118,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 9,
+      "seed": 151000
+    },
+    {
+      "job": 119,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 9,
+      "seed": 151000
+    },
+    {
+      "job": 120,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 9,
+      "seed": 151001
+    },
+    {
+      "job": 121,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 9,
+      "seed": 151001
+    },
+    {
+      "job": 122,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 9,
+      "seed": 151001
+    },
+    {
+      "job": 123,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 9,
+      "seed": 151001
+    },
+    {
+      "job": 124,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 9,
+      "seed": 151001
+    },
+    {
+      "job": 125,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 0,
+      "seed": 151002
+    },
+    {
+      "job": 126,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 0,
+      "seed": 151002
+    },
+    {
+      "job": 127,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 0,
+      "seed": 151002
+    },
+    {
+      "job": 128,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 0,
+      "seed": 151002
+    },
+    {
+      "job": 129,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 0,
+      "seed": 151002
+    },
+    {
+      "job": 130,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 6,
+      "seed": 151003
+    },
+    {
+      "job": 131,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 6,
+      "seed": 151003
+    },
+    {
+      "job": 132,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 6,
+      "seed": 151003
+    },
+    {
+      "job": 133,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 6,
+      "seed": 151003
+    },
+    {
+      "job": 134,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 6,
+      "seed": 151003
+    },
+    {
+      "job": 135,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 3,
+      "seed": 151001
+    },
+    {
+      "job": 136,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 3,
+      "seed": 151001
+    },
+    {
+      "job": 137,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 3,
+      "seed": 151001
+    },
+    {
+      "job": 138,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 3,
+      "seed": 151001
+    },
+    {
+      "job": 139,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 3,
+      "seed": 151001
+    },
+    {
+      "job": 140,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 0,
+      "seed": 151003
+    },
+    {
+      "job": 141,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 0,
+      "seed": 151003
+    },
+    {
+      "job": 142,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 0,
+      "seed": 151003
+    },
+    {
+      "job": 143,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 0,
+      "seed": 151003
+    },
+    {
+      "job": 144,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 0,
+      "seed": 151003
+    },
+    {
+      "job": 145,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 6,
+      "seed": 151000
+    },
+    {
+      "job": 146,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 6,
+      "seed": 151000
+    },
+    {
+      "job": 147,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 6,
+      "seed": 151000
+    },
+    {
+      "job": 148,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 6,
+      "seed": 151000
+    },
+    {
+      "job": 149,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 6,
+      "seed": 151000
+    },
+    {
+      "job": 150,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 9,
+      "seed": 151002
+    },
+    {
+      "job": 151,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 9,
+      "seed": 151002
+    },
+    {
+      "job": 152,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 9,
+      "seed": 151002
+    },
+    {
+      "job": 153,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 9,
+      "seed": 151002
+    },
+    {
+      "job": 154,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 9,
+      "seed": 151002
+    },
+    {
+      "job": 155,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 9,
+      "seed": 151003
+    },
+    {
+      "job": 156,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 9,
+      "seed": 151003
+    },
+    {
+      "job": 157,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 9,
+      "seed": 151003
+    },
+    {
+      "job": 158,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 9,
+      "seed": 151003
+    },
+    {
+      "job": 159,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 9,
+      "seed": 151003
+    },
+    {
+      "job": 160,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 0,
+      "seed": 151001
+    },
+    {
+      "job": 161,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 0,
+      "seed": 151001
+    },
+    {
+      "job": 162,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 0,
+      "seed": 151001
+    },
+    {
+      "job": 163,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 0,
+      "seed": 151001
+    },
+    {
+      "job": 164,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 0,
+      "seed": 151001
+    },
+    {
+      "job": 165,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 3,
+      "seed": 151002
+    },
+    {
+      "job": 166,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 3,
+      "seed": 151002
+    },
+    {
+      "job": 167,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 3,
+      "seed": 151002
+    },
+    {
+      "job": 168,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 3,
+      "seed": 151002
+    },
+    {
+      "job": 169,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 3,
+      "seed": 151002
+    },
+    {
+      "job": 170,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 3,
+      "seed": 151003
+    },
+    {
+      "job": 171,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 3,
+      "seed": 151003
+    },
+    {
+      "job": 172,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 3,
+      "seed": 151003
+    },
+    {
+      "job": 173,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 3,
+      "seed": 151003
+    },
+    {
+      "job": 174,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 3,
+      "seed": 151003
+    },
+    {
+      "job": 175,
+      "stage": "stage_b",
+      "arm": "select-0.06",
+      "task": 3,
+      "seed": 151000
+    },
+    {
+      "job": 176,
+      "stage": "stage_b",
+      "arm": "select-0.10",
+      "task": 3,
+      "seed": 151000
+    },
+    {
+      "job": 177,
+      "stage": "stage_b",
+      "arm": "native",
+      "task": 3,
+      "seed": 151000
+    },
+    {
+      "job": 178,
+      "stage": "stage_b",
+      "arm": "project-0.10",
+      "task": 3,
+      "seed": 151000
+    },
+    {
+      "job": 179,
+      "stage": "stage_b",
+      "arm": "always-0.10",
+      "task": 3,
+      "seed": 151000
+    }
+  ],
+  "stage_c_tasks": [
+    0,
+    3,
+    6,
+    9
+  ],
+  "stage_c_seeds": [
+    152000,
+    152001,
+    152002,
+    152003,
+    152004,
+    152005,
+    152006,
+    152007,
+    152008,
+    152009,
+    152010,
+    152011
+  ],
+  "episode_timeout_seconds": 2700,
+  "ceilings": {
+    "simulator_starts": 200,
+    "replacements": 20,
+    "attempts_per_job": 2,
+    "policy_controls": 420000,
+    "native_queries": 60000,
+    "candidate_decodes": 120000
+  }
+}

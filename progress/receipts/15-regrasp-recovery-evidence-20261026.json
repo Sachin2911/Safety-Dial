@@ -1,0 +1,144 @@
+{
+  "schema": "regrasp15-recovery-evidence-v1",
+  "prepared_utc": "2026-10-26T08:07:52.500837+00:00",
+  "provider": {
+    "checked_utc": "2026-10-26T07:55:23.932568+00:00",
+    "query": "Vast show instances through helpers.regrasp15_infra.instances (schema-validated, complete list)",
+    "instances_listed": 0,
+    "instance_57727030_present": false,
+    "other_task15_instances": []
+  },
+  "billing": {
+    "queried_utc": "2026-10-26T07:55:33.662327+00:00",
+    "rows": {
+      "gpu": {
+        "usd": 1.595,
+        "hours": 7.718,
+        "rate": 0.2067
+      },
+      "disk": {
+        "usd": 0.805,
+        "hours": 7.763,
+        "rate": 0.1037
+      },
+      "download": {
+        "usd": 0.147,
+        "gb": 56.5
+      },
+      "upload": {
+        "usd": 0.008,
+        "gb": 2.0
+      }
+    },
+    "posted_total_usd": 2.555,
+    "unchanged_since": "2026-10-26T07:35:36.277767+00:00 (handoff snapshot)",
+    "note": "Detailed invoices-v1 rows carry only a daily window (start 2026-10-25T00:00Z, end 2026-10-26T00:00Z), not instance times."
+  },
+  "private_dataset": {
+    "checked_utc": "2026-10-26T07:56:09.125316+00:00",
+    "repo": "Sachioster/maniguard-jar-replication-20261022",
+    "private": true,
+    "revision": "c68069b2168156f13945e23d8488d7b1d97b073d",
+    "files": 30268,
+    "paths_containing_regrasp": 0,
+    "other_owner_repos_checked": "13 datasets and 12 models under Sachioster; none named for task 15"
+  },
+  "other_local_copies": "Filesystem search for *regrasp* outside the task 15 tree found only the memory note; no second mirror exists.",
+  "termination": {
+    "created_utc": "2026-10-25T21:57:04.277373+00:00",
+    "provider_start_utc": "2026-10-25T21:57:07.300960+00:00",
+    "last_mirror_sync_utc": "2026-10-26T05:33:18 to 05:33:46 (network-cost.json written 05:33:18; mirrored queue log ends with job 305 launch at 05:33:46.17)",
+    "last_successful_remote_query_utc": "about 05:39:03 to 05:39:11 (original session's wait loop, whose final ssh preceded a 45 s sleep and returned n=6 validated stage C episodes; the tool call returned at 05:39:56.459)",
+    "gpu_meter_end_utc": "2026-10-26T05:40:12.100960+00:00",
+    "disk_meter_end_utc": "2026-10-26T05:42:54.100960+00:00",
+    "original_session_killed_utc": "2026-10-26T05:41:28.199Z (exit 137)",
+    "workstation_boot_ended_utc": "2026-10-26T05:41:39Z (journalctl boot -1 ended 07:41:39 SAST)",
+    "local_watchdog_last_heartbeat_utc": "2026-10-26T05:41:29.465279+00:00 (stop false; process gone after reboot)",
+    "absence_verified_utc": [
+      "2026-10-26T07:33:17.167994+00:00",
+      "2026-10-26T07:55:23.932568+00:00"
+    ],
+    "cause": "Not established. Both watchdogs only request a stop, which leaves an instance listed; no recorded task 15 session issued a destroy. Removal by the account holder or the provider cannot be distinguished from the available records.",
+    "conservative_stop_bound_utc": "2026-10-26T05:45:00+00:00",
+    "bound_rationale": "Provider metering ends at 05:40:12 (GPU) and 05:42:54 (disk) and posted charges did not grow between 07:35 and 07:55; the bound rounds the later meter end up to 05:45:00. The provider-absence check at 07:33:17 is the outer bound; admission is also reported against it."
+  },
+  "historical_cohort": {
+    "host": {
+      "instance": 57727030,
+      "machine": 148266,
+      "gpu": "RTX 3090",
+      "cpu": "Xeon E5-2680 v4",
+      "driver": "580.173.02"
+    },
+    "stage_a": {
+      "validated_jobs": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "local_files": "complete"
+    },
+    "stage_b": {
+      "validated": 80,
+      "local_files": "complete"
+    },
+    "stage_c": {
+      "validated_complete_locally": [
+        300,
+        301,
+        302,
+        303
+      ],
+      "job_304": "native task 6 seed 152000: validated on the host at 05:33:45.61; the validation event (outcome and adapter counts) is mirrored in logs/stage-c-queue.log, but the local folder is a mid-run copy lacking the npz recording, results row, LTL sidecar and validation.json, so it cannot be re-validated locally",
+      "job_305": "select-0.06 task 6 seed 152000: launched 05:33:46.17; the host ledger counted it validated by about 05:39 (n=6); outcome unknown; no local files",
+      "job_306": "select-0.06 task 9 seed 152000 is next in the frozen order and would have started at about 05:38 to 05:39; its start and outcome are unknown",
+      "after_306": "No later start was possible before metering ended"
+    },
+    "stage_d": "Never started; its launcher waited for the main pipeline to end"
+  },
+  "historical_counters": {
+    "simulator_starts": {
+      "recorded": 90,
+      "possible_unrecorded": 1,
+      "conservative": 91
+    },
+    "replacements": 0,
+    "policy_controls": {
+      "validated_steps": 155335,
+      "unknown_jobs_305_306_worst_case": 4000,
+      "conservative": 159335
+    },
+    "native_queries": {
+      "validated_ceil_steps_over_8": 19429,
+      "reseed_probes": 91,
+      "startup_probes": 9,
+      "unknown_jobs_305_306_worst_case": 500,
+      "stage0_identity_replays": 2440,
+      "conservative": 22469
+    },
+    "candidate_decodes": {
+      "server_ledger_to_05_23_09": 23776,
+      "v1_probe_failed_batch": 32,
+      "unknown_jobs_305_306_worst_case": 16000,
+      "stage0_smoke_partial_full": 19520,
+      "conservative": 59328
+    }
+  },
+  "local_snapshot": {
+    "inventory": "outputs/regrasp15r1/historical/inventory.json",
+    "inventory_sha256": "895df17ee2c898f932d6fee75e93f5fca1437f017361f68b1c25808326937f52",
+    "archive": "outputs/regrasp15r1/historical/regrasp15-local-evidence-20261026.tar",
+    "archive_sha256": "9730c3658f722564594dc3621f152bb62418f202baa3238f85f67cbfc98c806b",
+    "files": 2884,
+    "bytes": 1561530251
+  },
+  "missing": [
+    "Host files written after about 05:33:46: job 304's npz, results row, sidecar and validation.json; everything for jobs 305 and 306; server ledger rows after 05:23:09; final server and watchdog logs"
+  ],
+  "unknown": [
+    "Outcomes of jobs 305 and 306",
+    "Whether job 306 started",
+    "The exact removal time inside 05:39 to 05:43 and its cause"
+  ]
+}

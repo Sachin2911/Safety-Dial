@@ -77,10 +77,11 @@ proceedings.
 
 - **Fit.** GECCO reviews for relevance to evolutionary computation. The
   [allocated topic](allocatedTopic.md) is evolutionary, but the
-  [adopted direction](researchDirection.md) studies LeWM world-model adaptation. A GECCO
-  paper would need an evolutionary component at its centre.
+  [current direction](../firstPrinciples.md) targets evolutionary adaptation around
+  frozen policies. The current manuscript distinguishes useful controller mechanisms
+  from an unestablished evolutionary advantage.
 - **Timing.** The thesis target is late November 2026
-  ([main plan](mainPlan/README.md)), which leaves roughly two months to turn it into an
+  ([historical main plan](../archive/legacy/docs/mainPlan/README.md)), which leaves roughly two months to turn it into an
   8-page paper for a late-January deadline.
 
 ## Sources

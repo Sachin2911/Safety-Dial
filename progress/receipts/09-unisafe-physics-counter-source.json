@@ -1,0 +1,46 @@
+{
+  "path": "/venv/main/lib/python3.12/site-packages/isaaclab/sim/simulation_context.py",
+  "sha256": "4878dabac6e761437717ca037a763886c448b90d705cae3d58dcef50bb992ded",
+  "counter_occurrences": [
+    {
+      "line": 226,
+      "source": "self._physics_step_count: int = 0"
+    },
+    {
+      "line": 364,
+      "source": "def get_physics_step_count(self) -> int:"
+    },
+    {
+      "line": 366,
+      "source": "return self._physics_step_count"
+    },
+    {
+      "line": 745,
+      "source": "self._physics_step_count += 1"
+    }
+  ],
+  "methods": {
+    "get_physics_step_count": {
+      "line": 364,
+      "source": "    def get_physics_step_count(self) -> int:\n        \"\"\"Return the monotonic physics step counter (incremented each :meth:`step`).\"\"\"\n        return self._physics_step_count"
+    },
+    "forward": {
+      "line": 684,
+      "source": "    def forward(self) -> None:\n        \"\"\"Update kinematics without stepping physics.\"\"\"\n        self.physics_manager.forward()"
+    },
+    "reset": {
+      "line": 705,
+      "source": "    def reset(self, soft: bool = False) -> None:\n        \"\"\"Reset the simulation.\n\n        Args:\n            soft: If True, skip full reinitialization.\n        \"\"\"\n        self.physics_manager.reset(soft)\n        for viz in self._visualizers:\n            viz.reset(soft)\n        # Initialize visualizers not prepared by a backend-specific pre-capture hook.\n        self.initialize_visualizers()\n        self._render_context.finalize_consumers(self._visualizers, rebuild=not soft)\n        # Start the timeline so the play button is pressed\n        self.physics_manager.play()\n        self._is_playing = True\n        self._is_stopped = False\n        for callback in tuple(self._reset_callbacks.values()):\n            callback(self)"
+    },
+    "step": {
+      "line": 724,
+      "source": "    def step(self, render: bool = True) -> None:\n        \"\"\"Step physics and optionally render.\n\n        If the timeline is paused (e.g. via the GUI), this method blocks and keeps\n        the visualizer responsive until the timeline is resumed or stopped.\n\n        Args:\n            render: Whether to render the scene after stepping. Defaults to True.\n        \"\"\"\n        # Block while the GUI timeline is paused so the entire training loop freezes.\n        # See: https://github.com/isaac-sim/IsaacLab/issues/4279\n        self.physics_manager.wait_for_playing()\n        visualizers_to_remove = []\n        for viz in self._visualizers:\n            try:\n                while viz.is_training_paused() and viz.is_running():\n                    viz.step(0.0)\n            except Exception as exc:\n                logger.error(\"Error stepping visualizer '%s': %s\", type(viz).__name__, exc)\n                visualizers_to_remove.append(viz)\n        self._remove_visualizers(visualizers_to_remove)\n        self._physics_step_count += 1\n        self.physics_manager.step()\n        if render and self.is_rendering:\n            self.render()"
+    },
+    "render": {
+      "line": 750,
+      "source": "    def render(self, mode: int | None = None, skip_app_pumping: bool = False) -> None:\n        \"\"\"Update visualizers and render the scene.\n\n        Calls update_visualizers() so visualizers run at the render cadence (not at\n        every physics step). Camera sensors drive their configured renderer when\n        fetching data. Physics-backend recording hooks (e.g. Kit/RTX headless video pump) fire through\n        :meth:`add_render_callback` so they are not hard-coded in this class.\n\n        **Kit vs. standalone visualizers:**  The Kit app loop (``app.update()``) is the\n        only way to drive camera/RTX sensor rendering and viewport GUI updates; it\n        cannot be split into \"cameras only\" and \"GUI only\".  Standalone visualizers\n        (Newton, Rerun, Viser) have self-contained ``step()`` methods that never call\n        ``app.update()``, so they can run independently of camera rendering.  The\n        ``skip_app_pumping`` flag exploits this distinction: when True, Kit is skipped\n        while standalone visualizers continue to update.\n\n        Args:\n            mode: Unused. Kept for backward compatibility.\n            skip_app_pumping: When True, skip visualizers whose :meth:`~BaseVisualizer.pumps_app_update`\n                returns True (e.g. KitVisualizer).  This disables the Kit app loop and camera\n                updates while still stepping standalone visualizers (Newton, Rerun, Viser).\n                Used by environment ``step()`` when ``render_enabled`` is False.\n        \"\"\"\n        self.physics_manager.pre_render()\n        self.update_visualizers(self.get_rendering_dt(), skip_app_pumping=skip_app_pumping)\n        self.physics_manager.after_visualizers_render()\n        for _, callback in sorted(self._render_callbacks.values(), key=lambda x: x[0]):\n            callback(None)\n        self._render_generation += 1"
+    }
+  },
+  "inspected_utc": "2026-10-25T13:31:47.652320+00:00",
+  "instance_id": 57647787
+}

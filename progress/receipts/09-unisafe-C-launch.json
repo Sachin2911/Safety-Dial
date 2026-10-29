@@ -1,0 +1,44 @@
+{
+  "utc": "2026-10-25T14:42:46.894332+00:00",
+  "instance_id": 57647787,
+  "freeze_sha256": "51a09105b0fc1365c3061d0575008e6e752e3cd772bc65fa1683c48e5b608f53",
+  "admission_sha256": "9d0772fceaec88967eb11292863824a1fd646070ec2fb66240033c914c974dcd",
+  "tmux_session": "confirmation09",
+  "jobs": 384,
+  "source_files": 43,
+  "deadline_utc": "2026-10-26T01:00:00+00:00",
+  "first_attempt_utc": "2026-10-25T14:42:08.366826+00:00",
+  "first_job": "C-9300039-d00_g100",
+  "live_processes": [
+    {
+      "pid": 110782,
+      "argv": [
+        "/venv/main/bin/python",
+        "-u",
+        "experiments/scripts/run_unisafe09.py",
+        "--freeze",
+        "progress/receipts/09-unisafe-C.json",
+        "--admission",
+        "progress/receipts/09-unisafe-C-admission.json"
+      ]
+    },
+    {
+      "pid": 110789,
+      "argv": [
+        "/venv/main/bin/python",
+        "-u",
+        "/workspace/Safety-Dial/experiments/scripts/worker_unisafe09.py",
+        "--freeze",
+        "/workspace/Safety-Dial/progress/receipts/09-unisafe-C.json",
+        "--job",
+        "/workspace/Safety-Dial/outputs/unisafe09/attempts/0206-C-9300039-d00_g100/job.json",
+        "--output",
+        "/workspace/Safety-Dial/outputs/unisafe09/attempts/0206-C-9300039-d00_g100"
+      ]
+    }
+  ],
+  "confirmation_attempts_observed": 1,
+  "launch_receipt_recovered_after_metadata_key_error": true,
+  "runner_restarted": false,
+  "notes": "The tmux launch succeeded. Only the outer launch-receipt formatter failed on its source-count field; live runner and first frozen attempt were verified without restarting."
+}

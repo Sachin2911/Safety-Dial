@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-26T19:00:02.664575+00:00",
+  "stage": "Before scored task-18 engineering episodes",
+  "changes": [
+    "Explicitly seed Cube np_random because the pinned wrapper drops seed.",
+    "Observe dense positions using a separate MuJoCo data object; preview restores full MjData and metadata.",
+    "Twelve unfiltered dataset pairs per task provide native benchmark context with 25 executed actions per replan; primary comparison uses five for all four methods.",
+    "Serial latency pass: first two final cases, seed 180400, highest margin, all four methods, one worker; separate descriptive timing evidence."
+  ],
+  "engineering_validation": {
+    "first": "Initial-state mismatch, 2 actions and 50 physics steps retained.",
+    "second": "Exact Cube dynamics and pixels, exact preview restoration, PushT PD error 7.28e-12 px. 23 actions, 530 real and 125 counterfactual physics steps."
+  },
+  "protocol_sha256": "d6dce87d06c4ad2eed5cbb739b47051c76182b1f460738b22971351dd9af17ca"
+}

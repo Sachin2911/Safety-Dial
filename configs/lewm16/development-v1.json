@@ -1,0 +1,153 @@
+{
+  "stage": "D1",
+  "recipes": {
+    "f00": {
+      "horizon": 2,
+      "variance": 0.5,
+      "retain": 0,
+      "correlate": 0
+    },
+    "f01": {
+      "horizon": 2,
+      "variance": 1,
+      "retain": 0.25,
+      "correlate": 0
+    },
+    "f02": {
+      "horizon": 2,
+      "variance": 2,
+      "retain": 0.5,
+      "correlate": 0
+    },
+    "f03": {
+      "horizon": 3,
+      "variance": 0.5,
+      "retain": 0.25,
+      "correlate": 0
+    },
+    "f04": {
+      "horizon": 3,
+      "variance": 1,
+      "retain": 0.5,
+      "correlate": 0
+    },
+    "f05": {
+      "horizon": 3,
+      "variance": 2,
+      "retain": 0,
+      "correlate": 0
+    },
+    "f06": {
+      "horizon": 5,
+      "variance": 0.5,
+      "retain": 0.5,
+      "correlate": 0
+    },
+    "f07": {
+      "horizon": 5,
+      "variance": 1,
+      "retain": 0,
+      "correlate": 0
+    },
+    "f08": {
+      "horizon": 5,
+      "variance": 2,
+      "retain": 0.25,
+      "correlate": 0
+    },
+    "f09": {
+      "horizon": 3,
+      "variance": 1,
+      "retain": 0,
+      "correlate": 0
+    },
+    "f10": {
+      "horizon": 5,
+      "variance": 1,
+      "retain": 0.25,
+      "correlate": 0.5
+    },
+    "f11": {
+      "horizon": 2,
+      "variance": 1,
+      "retain": 0,
+      "correlate": 0
+    },
+    "a00": {
+      "horizon": 5,
+      "variance": 1,
+      "retain": 0,
+      "correlate": 0,
+      "error_threshold": 0.25,
+      "stall_threshold": 0.02,
+      "repair_horizon": 2,
+      "stall_horizon": 3,
+      "stall_retain": 0.25,
+      "adaptive": true,
+      "exploration_multiplier": 2.0
+    },
+    "a01": {
+      "horizon": 3,
+      "variance": 1,
+      "retain": 0,
+      "correlate": 0,
+      "error_threshold": 0.25,
+      "stall_threshold": 0.02,
+      "repair_horizon": 2,
+      "stall_horizon": 2,
+      "stall_retain": 0.25,
+      "adaptive": true,
+      "exploration_multiplier": 2.0
+    },
+    "a02": {
+      "horizon": 3,
+      "variance": 1,
+      "retain": 0.25,
+      "correlate": 0.5,
+      "error_threshold": 0.5,
+      "stall_threshold": 0.02,
+      "repair_horizon": 2,
+      "stall_horizon": 3,
+      "stall_retain": 0.5,
+      "adaptive": true,
+      "exploration_multiplier": 2.0
+    },
+    "a03": {
+      "horizon": 5,
+      "variance": 0.5,
+      "retain": 0.5,
+      "correlate": 0.5,
+      "error_threshold": 0.5,
+      "stall_threshold": 0.05,
+      "repair_horizon": 3,
+      "stall_horizon": 2,
+      "stall_retain": 0.25,
+      "adaptive": true,
+      "exploration_multiplier": 2.0
+    }
+  },
+  "tuning_cases": [
+    "first",
+    "third"
+  ],
+  "middle_layout_reserved_for_development_validation": true,
+  "margins": {
+    "tworoom": [
+      0,
+      4,
+      6
+    ],
+    "reacher": [
+      0,
+      0.01,
+      0.015
+    ]
+  },
+  "seed": 162000,
+  "rationale": "Horizon and candidate memory outperform additional samples in ongoing Q; balanced static coverage plus four compact feedback candidates",
+  "remaining_development_allocation": {
+    "D2_revisions": 48,
+    "D3_validation": 60
+  },
+  "total_development_episodes": 300
+}

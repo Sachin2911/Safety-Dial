@@ -1,0 +1,202 @@
+{
+  "stage": "D2",
+  "recipes": {
+    "tworoom": {
+      "b00": {
+        "horizon": 3,
+        "variance": 1,
+        "retain": 0.25,
+        "correlate": 0.5,
+        "error_threshold": 0.5,
+        "stall_threshold": 0.02,
+        "repair_horizon": 2,
+        "stall_horizon": 3,
+        "stall_retain": 0.5,
+        "adaptive": true,
+        "exploration_multiplier": 2.0,
+        "joint_response": true
+      },
+      "b01": {
+        "horizon": 3,
+        "variance": 1,
+        "retain": 0.25,
+        "correlate": 0.5,
+        "error_threshold": 0.5,
+        "stall_threshold": 0.02,
+        "repair_horizon": 2,
+        "stall_horizon": 3,
+        "stall_retain": 0.5,
+        "adaptive": true,
+        "exploration_multiplier": 2.0,
+        "joint_response": true,
+        "progress_smoothing": 0.5
+      },
+      "f12": {
+        "horizon": 3,
+        "variance": 2,
+        "retain": 0.5,
+        "correlate": 0.5
+      },
+      "f13": {
+        "horizon": 2,
+        "variance": 2,
+        "retain": 0.5,
+        "correlate": 0.5
+      }
+    },
+    "reacher": {
+      "b00": {
+        "horizon": 3,
+        "variance": 1,
+        "retain": 0.25,
+        "correlate": 0.5,
+        "error_threshold": 0.5,
+        "stall_threshold": 0.02,
+        "repair_horizon": 2,
+        "stall_horizon": 3,
+        "stall_retain": 0.5,
+        "adaptive": true,
+        "exploration_multiplier": 2.0,
+        "joint_response": true
+      },
+      "b01": {
+        "horizon": 3,
+        "variance": 1,
+        "retain": 0.25,
+        "correlate": 0.5,
+        "error_threshold": 0.5,
+        "stall_threshold": 0.02,
+        "repair_horizon": 2,
+        "stall_horizon": 3,
+        "stall_retain": 0.5,
+        "adaptive": true,
+        "exploration_multiplier": 2.0,
+        "joint_response": true,
+        "progress_smoothing": 0.5
+      },
+      "f12": {
+        "horizon": 3,
+        "variance": 2,
+        "retain": 0.5,
+        "correlate": 0.5
+      },
+      "f13": {
+        "horizon": 2,
+        "variance": 2,
+        "retain": 0.5,
+        "correlate": 0.5
+      }
+    }
+  },
+  "selection": {
+    "tworoom": {
+      "best_D1_adaptive": "a02",
+      "score": [
+        0,
+        -6,
+        13.166666666666666,
+        141618.5,
+        "a02"
+      ],
+      "recipes": {
+        "b00": {
+          "horizon": 3,
+          "variance": 1,
+          "retain": 0.25,
+          "correlate": 0.5,
+          "error_threshold": 0.5,
+          "stall_threshold": 0.02,
+          "repair_horizon": 2,
+          "stall_horizon": 3,
+          "stall_retain": 0.5,
+          "adaptive": true,
+          "exploration_multiplier": 2.0,
+          "joint_response": true
+        },
+        "b01": {
+          "horizon": 3,
+          "variance": 1,
+          "retain": 0.25,
+          "correlate": 0.5,
+          "error_threshold": 0.5,
+          "stall_threshold": 0.02,
+          "repair_horizon": 2,
+          "stall_horizon": 3,
+          "stall_retain": 0.5,
+          "adaptive": true,
+          "exploration_multiplier": 2.0,
+          "joint_response": true,
+          "progress_smoothing": 0.5
+        },
+        "f12": {
+          "horizon": 3,
+          "variance": 2,
+          "retain": 0.5,
+          "correlate": 0.5
+        },
+        "f13": {
+          "horizon": 2,
+          "variance": 2,
+          "retain": 0.5,
+          "correlate": 0.5
+        }
+      }
+    },
+    "reacher": {
+      "best_D1_adaptive": "a02",
+      "score": [
+        0,
+        -6,
+        20.666666666666668,
+        70012.83333333333,
+        "a02"
+      ],
+      "recipes": {
+        "b00": {
+          "horizon": 3,
+          "variance": 1,
+          "retain": 0.25,
+          "correlate": 0.5,
+          "error_threshold": 0.5,
+          "stall_threshold": 0.02,
+          "repair_horizon": 2,
+          "stall_horizon": 3,
+          "stall_retain": 0.5,
+          "adaptive": true,
+          "exploration_multiplier": 2.0,
+          "joint_response": true
+        },
+        "b01": {
+          "horizon": 3,
+          "variance": 1,
+          "retain": 0.25,
+          "correlate": 0.5,
+          "error_threshold": 0.5,
+          "stall_threshold": 0.02,
+          "repair_horizon": 2,
+          "stall_horizon": 3,
+          "stall_retain": 0.5,
+          "adaptive": true,
+          "exploration_multiplier": 2.0,
+          "joint_response": true,
+          "progress_smoothing": 0.5
+        },
+        "f12": {
+          "horizon": 3,
+          "variance": 2,
+          "retain": 0.5,
+          "correlate": 0.5
+        },
+        "f13": {
+          "horizon": 2,
+          "variance": 2,
+          "retain": 0.5,
+          "correlate": 0.5
+        }
+      }
+    }
+  },
+  "seed": 162100,
+  "reason": "Joint response keeps exploration/retention active under high prediction error; EMA reduces response to one-step goal-cost noise. Fixed controls test the same resulting planning modes.",
+  "total_jobs": 48
+}

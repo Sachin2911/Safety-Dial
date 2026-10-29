@@ -1,0 +1,17 @@
+{
+  "engineering_audit": "progress/receipts/17-engineering-final-audit.json",
+  "tests": {
+    "setup": 13,
+    "new_campaign": 17,
+    "log": "outputs/lewm17/environment/campaign-tests.txt"
+  },
+  "selector_coefficients_per_environment": 36,
+  "frozen_model_parameters_per_environment": 18034478,
+  "mode_libraries_match_campaign": true,
+  "task_side_feature_audit": "features_vector rejects undeclared keys; CampaignCEM constructs features from current/past latent cost, prediction error, past feasible fraction and replan count; margin is supplied unchanged. No state/target coordinates reach select_mode.",
+  "checker_audit": "Reviewed task-16 exact dynamics copied into task-17 paths; all requested clearances and numerical guards retained; counterfactual steps charged before rollout.",
+  "action_audit": "Fixed/selector exact trajectory equality for all six modes in both environments; inverse scaler round trip tested; actual checked execution replay audited.",
+  "optimizer_audit": "All three complete synthetic runs consume 24 anchors +144 training +24 validation episodes; finite-difference REINFORCE gradient and ES antithetic sign verified.",
+  "information_isolation_note": "Training source integrity verification hashes the sealed final file without parsing it. Explicit inferred integrity-access record is separate from later final semantic-access record.",
+  "historical_paths": "Task-16 source and results unmodified; only reviewed helpers imported or copied. No historical launchers executed."
+}

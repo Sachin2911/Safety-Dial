@@ -1,0 +1,24 @@
+% Task-18 methods summary. Final comparison complete; full methods are in
+% lewm18-appendix-methods.tex, results in lewm18-results.tex.
+\subsection{Extension: pushing and moving an object}\label{sec:extension}
+We repeat the comparison where an object must move: PushT, where a pusher
+moves a block, and OGBench Cube~\cite{park2025ogbench}, where an arm must
+bring a cube's centre within 4 cm of its target. Each task has its own
+frozen LeWM checkpoint. Cases are chosen from geometry alone before any
+planner runs: a forbidden band crosses the straight line from start to goal,
+with an off-centre gap. Twelve reserved final cases, drawn from different
+demonstrations than the six development cases, and three planner seeds give
+36 attempts per planner at each of three margins, 0, 6 and 12 pixels for
+PushT and 0, 0.5 and 1 cm for Cube; a 0 margin keeps only the original
+danger region. The four planners keep their roles, re-set for these tasks:
+Original SafeCEM uses each task's original settings ($K=30$, $N_0=300$,
+$H=5$), and Feedback applies the same kind of switching rule as
+Experiment One on top of each margin's Tuned fixed setting. Native
+planning ignores the margin, so its attempts are recorded once and scored at
+every margin. At every margin both tasks' Tuned fixed settings chose two or
+three blocks of look-ahead instead of five, with candidate reuse. In Cube
+the checker ranks plans with an approximate path, then previews the first
+block of up to eight of them in the true simulator before executing one; if
+none passes, the attempt ends as a controller failure. No evolutionary
+optimizer is trained here, and a first PushT cohort with a reset bug is
+excluded. Appendix~\ref{app:extension-methods} gives the full protocol.

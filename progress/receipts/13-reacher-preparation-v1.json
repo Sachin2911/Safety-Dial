@@ -1,0 +1,123 @@
+{
+  "schema": "reacher13-freeze-v1",
+  "utc": "2026-10-25T21:21:28.284364+00:00",
+  "stage": "preparation",
+  "authorization": {
+    "user_launch": true,
+    "persistent_engineering_repairs": true
+  },
+  "money": {
+    "total_usd": 10,
+    "active_usd": 8,
+    "reserve_usd": 2,
+    "hourly_ceiling_usd": 0.6,
+    "maximum_hours": 14,
+    "preservation_margin_minutes": 30
+  },
+  "source_sha256": {
+    "configs/reacher13/bootstrap.json": "fcfa87ce0532c477bb68ffc43440c0de1e725077b6c8ecda7d3765c3bfba4fbd",
+    "configs/reacher13/design.json": "5bdf6055d84820c7ae30975de2b1cf2ca04ce4b98ba2512fbb3476f51752152e",
+    "configs/reacher13/requirements.txt": "876e8150ac3f1efd1a04290f7d8283b6e1bc75ba258b504f1faee4cf002280ce",
+    "experiments/helpers/dsrl06_infra.py": "1e2a2aff8f3243843a89694bc1b6e019c046e22514be6bc886e0a6057558b1e1",
+    "experiments/helpers/reacher13_evo.py": "e65e03695f3dbe48699e18c513e789f548fd7ef57c008f5060e4488fdcad64fa",
+    "experiments/helpers/reacher13_infra.py": "f2e09c5b2ac2b8242384ca9c60318d3e79875891c5ae48a6c5e4af79e6c01de1",
+    "experiments/helpers/reacher13_protocol.py": "98bcdad5ab1aabafaa22900eab281d71612bd21faff1a4e2e3d1ea19da881a14",
+    "experiments/helpers/safecem10_planner.py": "9f4dddaa54012c1f45fce6da054b74611d826e4f2fa91445c274a43cca5a43ed",
+    "experiments/scripts/admit_reacher13.py": "727d2736f2db5e46ba8e26d4ef9f1ce9c9f189bea657933abd1b2ca1d0afd561",
+    "experiments/scripts/bootstrap_reacher13.sh": "6dfdeecc40e3f5f31727d3ee03ea30d52631df2973843c44ef3352e4fb6f6249",
+    "experiments/scripts/freeze_reacher13.py": "cc980cef613e8864fa7336f0d9539305a3845e510e65ec6976a16e60b5519e17",
+    "experiments/scripts/prepare_reacher13.py": "4f11249efb48cf2eab338e401f0fed5b661258e776530f0bec1a3dfb841733cd",
+    "experiments/scripts/reacher13_watchdog.py": "9ab17fa19c29bb91d5cfb452eaa7accd7e426fd3f802a81b01ee818e05020f31",
+    "experiments/scripts/run_reacher13.py": "fa1eced6e07872660d9406807d5bb52d52b501d4c8b0a8487163667871718f03",
+    "experiments/scripts/setup_reacher13.sh": "a18b6a48ada904f58bbe09bef582a2cab93da415f42b175106afa8da060e38bc",
+    "experiments/scripts/worker_reacher13.py": "04fe14f316cdb2a1e63d2863e630f5efb4cac6aea771fba05d94b44ffc975228"
+  },
+  "design": {
+    "schema": "reacher13-design-v0",
+    "task": 13,
+    "namespace": "reacher13",
+    "date": "2026-10-25",
+    "canonical_plan": "progress/13-reacher-dial-plan.md",
+    "authorization": {
+      "user_instruction": "Rent two more GPUs and get Reacher and OG Cube working as well, running the SafeCEM safety-dial study as on Push-T and TwoRoom; complete the runs and publish a separate Hugging Face dataset for each, like SafetyDial-PushT.",
+      "rental": true,
+      "execution": true,
+      "total_usd": 10,
+      "persistent_engineering_repairs": true
+    },
+    "pins": {
+      "model_repo": "quentinll/lewm-reacher",
+      "model_revision": "62adae4b71dc474ddf8f794c476ebfe737a743ca",
+      "model_weights_sha256": "eb70b1fd5409f8f81875d62f5ee5a20dd220a3128a477de66b5760f475f0f469",
+      "model_weights_bytes": 72290849,
+      "checkpoint_name": "reacher/lewm",
+      "dataset_repo": "quentinll/lewm-reacher",
+      "dataset_revision": "e70a080d0d04c6072123c9ebd343acf7fff28dbf",
+      "dataset_file": "reacher.tar.zst",
+      "dataset_sha256": "4ff2385e49712caa89f21b8e0a246e2614b621d3f22cf2d1224d845e879a1cc2",
+      "dataset_bytes": 23750614946,
+      "stable_worldmodel": "0.1.1",
+      "stable_pretraining": "0.1.8",
+      "transformers": "5.14.1",
+      "torch": "2.13.0",
+      "mujoco": "3.11.0",
+      "dm_control": "1.0.44"
+    },
+    "environment": {
+      "env_id": "reacher13/ReacherGoal-v0",
+      "base_env_id": "swm/ReacherDMControl-v0",
+      "base_env": "swm/ReacherDMControl-v0 (stable_worldmodel 0.1.1), task qpos_match, action repeat 2",
+      "env_kwargs": {
+        "task": "qpos_match"
+      },
+      "image_size": 224,
+      "eval_budget_steps": 50,
+      "max_episode_steps": 100,
+      "goal_offset_steps": 25,
+      "success_rule": "simulator termination of the qpos_match task: both joints within 0.05 rad of the target pose",
+      "violation_rule": "to be fixed by the hazard design after the diagnosis"
+    },
+    "planner": {
+      "num_samples": 300,
+      "n_steps": 10,
+      "topk": 30,
+      "horizon": 5,
+      "receding_horizon": 1,
+      "action_block": 5,
+      "var_scale": 1.0,
+      "feasible_tol": 0.0,
+      "check": "exact",
+      "execute": "mean"
+    },
+    "diagnosis": {
+      "note": "Preparation-stage design: pinned assets and the environment only. The hazard, the check and the stages are added after a diagnosis of the unconstrained planner at LeWM's own protocol (goals 25 steps ahead, 50-step budget), as task 12 learned to do."
+    },
+    "stages": {},
+    "caps": {
+      "optimizer_updates_on_pretrained_weights": 0,
+      "job_attempts_per_id": 2
+    },
+    "money": {
+      "total_usd": 10,
+      "active_usd": 8,
+      "reserve_usd": 2,
+      "hourly_ceiling_usd": 0.6,
+      "maximum_hours": 14,
+      "preservation_margin_minutes": 30
+    },
+    "paths": {
+      "config_root": "configs/reacher13",
+      "local_output_root": "outputs/reacher13",
+      "remote_root": "/workspace/Safety-Dial",
+      "data_root": "data/reacher13",
+      "receipt_prefix": "progress/receipts/13-reacher-",
+      "rental_record": "progress/rental-reacher13-20261025.json",
+      "private_dataset": "Sachioster/maniguard-jar-replication-20261022",
+      "recordings_prefix": "recordings/reacher13",
+      "private_receipt_prefix": "receipts/reacher13"
+    }
+  },
+  "jobs": [],
+  "sizing": null,
+  "engineering_acceptance_sha256": null
+}

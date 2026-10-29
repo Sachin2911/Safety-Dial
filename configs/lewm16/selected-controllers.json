@@ -1,0 +1,141 @@
+{
+  "methods": {
+    "tworoom": {
+      "adaptive": {
+        "recipe_id": "a02",
+        "params": {
+          "horizon": 3,
+          "variance": 1,
+          "retain": 0.25,
+          "correlate": 0.5,
+          "budget_scale": 1.0,
+          "adaptive": true,
+          "objective": "latent",
+          "checked": true,
+          "error_threshold": 0.5,
+          "stall_threshold": 0.02,
+          "repair_horizon": 2,
+          "stall_horizon": 3,
+          "stall_retain": 0.5,
+          "exploration_multiplier": 2.0
+        }
+      },
+      "fixed": {
+        "0": {
+          "recipe_id": "f11",
+          "params": {
+            "horizon": 2,
+            "variance": 1,
+            "retain": 0,
+            "correlate": 0,
+            "budget_scale": 1.0,
+            "adaptive": false,
+            "objective": "latent",
+            "checked": true
+          }
+        },
+        "4": {
+          "recipe_id": "f13",
+          "params": {
+            "horizon": 2,
+            "variance": 2,
+            "retain": 0.5,
+            "correlate": 0.5,
+            "budget_scale": 1.0,
+            "adaptive": false,
+            "objective": "latent",
+            "checked": true
+          }
+        },
+        "6": {
+          "recipe_id": "f02",
+          "params": {
+            "horizon": 2,
+            "variance": 2,
+            "retain": 0.5,
+            "correlate": 0,
+            "budget_scale": 1.0,
+            "adaptive": false,
+            "objective": "latent",
+            "checked": true
+          }
+        }
+      }
+    },
+    "reacher": {
+      "adaptive": {
+        "recipe_id": "a02",
+        "params": {
+          "horizon": 3,
+          "variance": 1,
+          "retain": 0.25,
+          "correlate": 0.5,
+          "budget_scale": 1.0,
+          "adaptive": true,
+          "objective": "latent",
+          "checked": true,
+          "error_threshold": 0.5,
+          "stall_threshold": 0.02,
+          "repair_horizon": 2,
+          "stall_horizon": 3,
+          "stall_retain": 0.5,
+          "exploration_multiplier": 2.0
+        }
+      },
+      "fixed": {
+        "0": {
+          "recipe_id": "f14",
+          "params": {
+            "horizon": 3,
+            "variance": 1,
+            "retain": 0.25,
+            "correlate": 0.5,
+            "budget_scale": 1.0,
+            "adaptive": false,
+            "objective": "latent",
+            "checked": true
+          }
+        },
+        "0.01": {
+          "recipe_id": "f14",
+          "params": {
+            "horizon": 3,
+            "variance": 1,
+            "retain": 0.25,
+            "correlate": 0.5,
+            "budget_scale": 1.0,
+            "adaptive": false,
+            "objective": "latent",
+            "checked": true
+          }
+        },
+        "0.015": {
+          "recipe_id": "f04",
+          "params": {
+            "horizon": 3,
+            "variance": 1,
+            "retain": 0.5,
+            "correlate": 0,
+            "budget_scale": 1.0,
+            "adaptive": false,
+            "objective": "latent",
+            "checked": true
+          }
+        }
+      }
+    }
+  },
+  "selection_data": [
+    "D1",
+    "D2",
+    "Dbase",
+    "D3a"
+  ],
+  "selection_rule": "Safe completion, then failure-capped J, then predictor work; safety breaches disqualify before ranking. D3a selects high-margin fixed and one adaptive per environment; earlier development selects other fixed margins.",
+  "D3b_role": "Prospective robustness check of selected methods; no further performance-based selection after this freeze. Engineering failures still require invalidation and repair.",
+  "frozen_world_model_parameters_per_environment": 18034478,
+  "adapter_tunable_parameters": 10,
+  "additional_trainable_readout_parameters": 0,
+  "main_adapter_true_goal_geometry": false,
+  "safety_clearance_adaptable": false
+}

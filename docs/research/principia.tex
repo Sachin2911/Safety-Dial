@@ -1,0 +1,539 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,xcolor,geometry,fancyhdr,multicol,tcolorbox}
+\usepackage[obeyspaces]{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+\geometry{left=23mm,right=23mm,top=23mm,bottom=23mm,headheight=15pt}
+\definecolor{ink}{HTML}{17334A}
+\definecolor{accent}{HTML}{186F72}
+\definecolor{pale}{HTML}{EDF4F5}
+\definecolor{muted}{HTML}{526471}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{8pt}
+\setlength{\columnsep}{20pt}
+\renewcommand{\familydefault}{\sfdefault}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\color{muted}SafetyDial / Principia}
+\fancyhead[R]{\small\color{muted}Research record / 29 October 2026}
+\fancyfoot[L]{\footnotesize\color{muted}Measured outcomes, including negative and incomplete studies}
+\fancyfoot[R]{\color{ink}\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\hypersetup{pdftitle={Principia: SafetyDial experiment record},pdfauthor={Sachin Mohan},pdfsubject={One-page accounts of experiments and results}}
+\newcommand{\block}[2]{\par\textbf{\color{ink}#1}\par\nopagebreak #2\par}
+\newcommand{\finding}[1]{\begin{tcolorbox}[colback=pale,colframe=pale,boxrule=0pt,arc=1mm,left=10pt,right=10pt,top=10pt,bottom=10pt]\color{ink}\large\bfseries #1\end{tcolorbox}}
+\begin{document}
+\thispagestyle{empty}
+{\color{accent}\large SAFETYDIAL / EXPERIMENT RECORD}\par
+\vspace{13mm}
+{\color{ink}\fontsize{44}{48}\selectfont\bfseries Principia}\par
+\vspace{3mm}
+{\color{ink}\Large What we tried, what happened, what follows}\par
+\vspace{8mm}
+Sachin Mohan (2699183)\\
+BSc Honours Computer Science, University of the Witwatersrand\\
+Supervisor: Geraud Nangue Tasse
+\vspace{8mm}
+\finding{Useful control mechanisms emerged. An evolutionary safe-completion advantage remains unestablished.}
+This volume consolidates the experimental record from September through
+27 October 2026. It contains 37 experiment accounts, each on one page:
+18 historical studies and 19 numbered tasks from the current programme.
+Closely related engineering screens are grouped under their campaign; planning-only
+proposals and document-production tasks are not counted as experiments.
+\block{The strongest positive evidence}{Tuned fixed planning recovered safe completion at unchanged margins in four tasks. Grasp sensing supported useful release control in UNISafe. A Jar tip shield reduced observed violations while leaving completion unchanged.}
+\block{The original objective remains open}{The target is a compact evolved controller that improves safe task completion of frozen ManiGuard policies under matched interaction budgets. Planning results, better predictions and fewer violations do not individually establish that objective.}
+\block{How to read the record}{Counts and definitions remain local to each study. Benchmark success, requested completion, raw violations and counted violations can differ. Failed engineering gates and missing confirmation are labelled explicitly. Zero observed violations is not a safety guarantee.}
+\vfill
+{\small\color{muted}Compiled 29 October 2026. No new experimental episodes were run for this summary. Original prose removed during cleanup is preserved in the document-recovery bundle; code, frozen configurations and machine-readable evidence retain their paths.}
+\clearpage
+{\color{ink}\LARGE\bfseries Experiment index}\par
+\vspace{3mm}
+{\small H identifies historical campaigns; T preserves the numbered task identifiers. Click an entry to jump to its one-page account.}
+\vspace{4mm}
+\begin{multicols}{2}
+\small
+\raggedright
+
+\noindent\hyperref[exp:H01]{\textbf{H01} PushT: a clearance dial around frozen LeWM}\par\vspace{5pt}
+\noindent\hyperref[exp:H02]{\textbf{H02} Locomotion: termination is not irreversibility}\par\vspace{5pt}
+\noindent\hyperref[exp:H03]{\textbf{H03} PushT: diagnosing and repairing imagined safety}\par\vspace{5pt}
+\noindent\hyperref[exp:H04]{\textbf{H04} Walker: training LeWM and qualifying a readout}\par\vspace{5pt}
+\noindent\hyperref[exp:H05]{\textbf{H05} Walker: boundary acquisition versus random data}\par\vspace{5pt}
+\noindent\hyperref[exp:H06]{\textbf{H06} Walker: evolutionary pressure and model exploitation}\par\vspace{5pt}
+\noindent\hyperref[exp:H07]{\textbf{H07} Walker: was a better candidate available?}\par\vspace{5pt}
+\noindent\hyperref[exp:H08]{\textbf{H08} Walker: repairing prediction did not repair control}\par\vspace{5pt}
+\noindent\hyperref[exp:H09]{\textbf{H09} UNISafe: the migrated baseline}\par\vspace{5pt}
+\noindent\hyperref[exp:H10]{\textbf{H10} UNISafe: release before intervention}\par\vspace{5pt}
+\noindent\hyperref[exp:H11]{\textbf{H11} UNISafe: maintaining a sensed grasp}\par\vspace{5pt}
+\noindent\hyperref[exp:H12]{\textbf{H12} ManiGuard: the six-mechanism engineering screen}\par\vspace{5pt}
+\noindent\hyperref[exp:H13]{\textbf{H13} ManiGuard: an evolved execution dial}\par\vspace{5pt}
+\noindent\hyperref[exp:H14]{\textbf{H14} ManiGuard: correction-triggered feedback}\par\vspace{5pt}
+\noindent\hyperref[exp:H15]{\textbf{H15} ManiGuard: prediction before model-assisted evolution}\par\vspace{5pt}
+\noindent\hyperref[exp:H16]{\textbf{H16} ManiGuard: the counterexample-predictor premise}\par\vspace{5pt}
+\noindent\hyperref[exp:H17]{\textbf{H17} ManiGuard: the native-noise evolutionary pilot}\par\vspace{5pt}
+\noindent\hyperref[exp:H18]{\textbf{H18} ManiGuard: handing off after closure}\par\vspace{5pt}
+\noindent\hyperref[exp:T01]{\textbf{T01} Jar: replicate the published baseline}\par\vspace{5pt}
+\noindent\hyperref[exp:T02]{\textbf{T02} Jar: read the behavior behind the labels}\par\vspace{5pt}
+\noindent\hyperref[exp:T03]{\textbf{T03} Jar: retry when the policy stalls}\par\vspace{5pt}
+\noindent\hyperref[exp:T04]{\textbf{T04} Jar: commands versus realized motion}\par\vspace{5pt}
+\noindent\hyperref[exp:T05]{\textbf{T05} Jar: bounded execution feedback}\par\vspace{5pt}
+\noindent\hyperref[exp:T06]{\textbf{T06} Jar: first DSRL engineering attempt}\par\vspace{5pt}
+\noindent\hyperref[exp:T07]{\textbf{T07} Jar: DSRL repaired and evaluated}\par\vspace{5pt}
+\noindent\hyperref[exp:T08]{\textbf{T08} Jar: screen execution knobs, then confirm}\par\vspace{5pt}
+\noindent\hyperref[exp:T09]{\textbf{T09} UNISafe: mechanism, grasp information and a dial}\par\vspace{5pt}
+\noindent\hyperref[exp:T10]{\textbf{T10} PushT: search the constraint interface}\par\vspace{5pt}
+\noindent\hyperref[exp:T11]{\textbf{T11} Jar: DSRL improvement stopped at startup}\par\vspace{5pt}
+\noindent\hyperref[exp:T12]{\textbf{T12} TwoRoom: planner horizon was the useful lever}\par\vspace{5pt}
+\noindent\hyperref[exp:T13]{\textbf{T13} Reacher: no clear optimizer separation}\par\vspace{5pt}
+\noindent\hyperref[exp:T14]{\textbf{T14} Cube: planner search did not beat the fixed dial}\par\vspace{5pt}
+\noindent\hyperref[exp:T15]{\textbf{T15} Jar: slow the regrasp or select another sample}\par\vspace{5pt}
+\noindent\hyperref[exp:T16]{\textbf{T16} LeWM: recover progress without relaxing safety}\par\vspace{5pt}
+\noindent\hyperref[exp:T17]{\textbf{T17} LeWM: compare evolution with simpler optimizers}\par\vspace{5pt}
+\noindent\hyperref[exp:T18]{\textbf{T18} PushT and Cube: original object-moving goals}\par\vspace{5pt}
+\noindent\hyperref[exp:T19]{\textbf{T19} Jar: a tip shield around frozen pi0.5}\par\vspace{5pt}
+\end{multicols}\clearpage
+\phantomsection\label{exp:H01}
+{\color{accent}\small\bfseries H01 / 20 September 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries PushT: a clearance dial around frozen LeWM}\par
+{\color{muted}\small Frozen world model and constrained planning}\par\vspace{2mm}
+\finding{Explicit feasibility ranking avoided the supplied hazard on nine small pilot runs.}
+\block{Question}{Can a frozen visual world model support planning with an interpretable safety margin?}
+\block{What ran}{A position probe read imagined pusher states. SafeCEM ranked feasible action sequences before goal cost, using clearances of 0, 20 and 40 pixels with three planner seeds each. Penalty-CEM controls and an arena-constraint repair were evaluated separately.}
+\block{Results}{All 9 usable-clearance runs recorded zero hazard entries; all moved the block substantially and 7 carried the recorder's terminal-success flag. Mean final block-centre errors were 9.05, 11.86 and 6.66 pixels. Unconstrained CEM entered the hazard in all 3 runs. Penalty weight 1 also made useful progress, with one violating run out of three. A 60-pixel version escaped the arena because its probe-domain constraint was defective; a later action-space repair is a separate variant.}
+\block{What this establishes}{The pilot supports constrained planning on this setup. It does not establish a calibrated probability of safety, monotonic completion tradeoff, or evolutionary advantage. The hazard and pusher-centre rule differ from later whole-object and dense-checker studies.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/legacy/notes/safeCEM.md}\par \path{archive/legacy/docs/safeDial/results/results.json}}
+\clearpage
+\phantomsection\label{exp:H02}
+{\color{accent}\small\bfseries H02 / 20 September 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Locomotion: termination is not irreversibility}\par
+{\color{muted}\small Walker2d and Hopper recoverability}\par\vspace{2mm}
+\finding{The proposed irreversible-fall premise did not survive direct recovery tests.}
+\block{Question}{Do benchmark failure flags identify states from which a robot cannot recover?}
+\block{What ran}{With termination disabled, saved MuJoCo states were replayed and searched using constant, random and CEM action sequences. The oracle tested return to a bounded upright pose with a dwell requirement, and varied horizon and recovery predicate.}
+\block{Results}{Walker2d recovered from all 30 settled-fallen states at both tested horizons. Across 1,288 triage states, 97.4\% were recoverable. Hopper initially looked less recoverable, but the apparent boundary depended strongly on pitch tolerance, dwell time and search horizon. Relaxing pitch tolerance to 0.15 rad or dwell to ten steps removed the reported irrecoverable fraction in the 40-state sensitivity panel. Correcting post-failure sampling also invalidated the proposed disjointness gate.}
+\block{What this establishes}{Benchmark termination cannot be used as ground truth for physical irreversibility. A successful recovery is a witness; failed finite search is not proof of impossibility. The reusable outcome was an exact replay and recovery-measurement pipeline, rather than a validated environment premise.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/legacy/notes/phase0Report.md}}
+\clearpage
+\phantomsection\label{exp:H03}
+{\color{accent}\small\bfseries H03 / 27 September 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries PushT: diagnosing and repairing imagined safety}\par
+{\color{muted}\small Qualified source-separated world-model study}\par\vspace{2mm}
+\finding{The bounded predictor repair failed its required improvement and retention gates.}
+\block{Question}{Does acquiring additional experience repair false-safe imagined plans?}
+\block{What ran}{The qualified evaluation separated source trajectories, used 128 reserved source roots and 2,048 physical branches, and applied two correlated virtual-hazard labels per branch. Predictor adaptation, readout correction, a fixed margin and no update were compared. Earlier leaked banks were excluded.}
+\block{Results}{Of 28 attributable development false-safe decisions, 21 came from imagined dynamics and 7 from image readout. On the representative test, no-update accepted 3,139/4,096 rows, including 756 known unsafe and 49 unresolved; adaptation accepted 2,950, including 620 known unsafe and 50 unresolved. All point false-safe rates were undefined because accepted futures were censored. A conservative relative-reduction upper bound was 18.05\%, below the fixed 25\% repair target. Goal-reaching retention was incomplete.}
+\block{What this establishes}{These are identification bounds for recorded missing outcomes, not population confidence intervals. Acceptance differs between arms. The failed gate prevented the proposed acquisition, transfer and closed-loop extension from launching; it does not show that all predictor repair is ineffective.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/legacy/docs/mainPlan/reports/through-s4-20260927/report.md}}
+\clearpage
+\phantomsection\label{exp:H04}
+{\color{accent}\small\bfseries H04 / 27 September 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Walker: training LeWM and qualifying a readout}\par
+{\color{muted}\small World-model training and health-only qualification}\par\vspace{2mm}
+\finding{Training completed; only the health rule qualified for the next experiment.}
+\block{Question}{Can an image-based world model predict the supplied health and speed rules accurately enough for a repair study?}
+\block{What ran}{LeWM-A trained for 214,780 AdamW updates over ten epochs, using 4,544 training and 93 validation source episodes. Linear and nonlinear physical readouts were assessed on real-image and imagined branches. The encoder, scalers and source identities were preserved.}
+\block{Results}{The final saved validation prediction loss was 0.003944. The nonlinear readout passed frame-level regression thresholds, but decision qualification was stricter. Health recall was 67/71 and specificity 107/121. Speed recall was 143/160, but specificity only 15/32, so speed was excluded. Health false-safe acceptance was 4/111 for real-image readout and 68/187 for imagination on the development branches.}
+\block{What this establishes}{Good average regression does not establish reliable safety decisions. Qualification enabled only the health-focused acquisition study, not a safety guarantee. Original collection provenance, missing terminal successors and absent per-example forecast exports limit reconstruction of some early diagnostics.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/legacy/docs/mainPlan/reports/through-s4-20260927/report.md}}
+\clearpage
+\phantomsection\label{exp:H05}
+{\color{accent}\small\bfseries H05 / 27 September 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Walker: boundary acquisition versus random data}\par
+{\color{muted}\small S4 predictor-side adaptation}\par\vspace{2mm}
+\finding{Boundary-focused acquisition did not consistently beat random acquisition.}
+\block{Question}{At equal additional-branch budgets, is boundary data more useful than random data for repairing imagined health decisions?}
+\block{What ran}{Twelve adaptations crossed acquisition method, budgets of 128 and 512 branches, and three seeds. The model encoder and readout stayed frozen. Representative and stress tests reused source-episode blocks; ordinary prediction retention was evaluated separately.}
+\block{Results}{The no-update representative false-safe rate was 225/504 accepted branches, or 44.64\%. Adapted rates remained approximately 42.9\% to 44.8\%. None of the main boundary-minus-random intervals lay strictly below zero; one larger-budget seed significantly favoured random within its saved per-cell analysis. A smaller-budget stress advantage did not recur at the larger budget. All twelve adaptations worsened final-block height, pitch and speed prediction errors.}
+\block{What this establishes}{Some auxiliary ranking improved, but the study did not demonstrate a repeatable acquisition advantage or repair without prediction regression. Branch correlation, differing achieved acceptance and reused source episodes restrict inference. The proposed S5 pretraining-versus-adaptation comparison did not launch.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/legacy/docs/mainPlan/reports/through-s4-20260927/report.md}}
+\clearpage
+\phantomsection\label{exp:H06}
+{\color{accent}\small\bfseries H06 / 4-5 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Walker: evolutionary pressure and model exploitation}\par
+{\color{muted}\small Locked Stage 5 optimizer study}\par\vspace{2mm}
+\finding{The combined method mitigated optimization-induced harm but did not beat the original controller.}
+\block{Question}{Does stronger selection exploit world-model errors, and can the proposed combined procedure reduce that amplification?}
+\block{What ran}{After bounded visual-controller and transfer diagnostics, a separately authorized locked study ran twenty paired search seeds, 240 searches, 720 selected checkpoints and 320 fresh final episodes. Selections were frozen before final evaluation. The historical visual-readiness gate remained unpassed.}
+\block{Results}{Control gap amplification was +10.39 percentage points, with adjusted 97.5\% interval [6.70, 14.25]. The combined method reduced amplification by 7.22 points [2.49, 12.18]. At high pressure, actual failure fell from 29.56\% under the control to 22.36\%, retaining 99.04\% progress. However, the frozen starting controller failed at 16.88\%. Recorded work included 444,403,200 predictor rows and 23,567,921 real simulator steps.}
+\block{What this establishes}{This is evidence of partial mitigation of harm introduced by optimization, not net safety improvement over the starting controller. Short simulated branches do not establish full-episode safety. Earlier zero-imagined-failure and failed transfer diagnostics remain part of the interpretation.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/legacy/docs/evoPlan/results/README.md}\par \path{archive/legacy/docs/evoPlan/results/stage2-status-20261004.md}}
+\clearpage
+\phantomsection\label{exp:H07}
+{\color{accent}\small\bfseries H07 / 5 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Walker: was a better candidate available?}\par
+{\color{muted}\small Stage 6 candidate-quality diagnostic}\par\vspace{2mm}
+\finding{No candidate met the improvement criterion on both reused development banks.}
+\block{Question}{Did the previous method fail because candidate quality was poor or because imagined selection was unreliable?}
+\block{What ran}{A fixed pool of 89 interventions was evaluated on 32 simulator-selection episodes and 64 separate development-check episodes, all previously exposed. The predictor, probe and baseline were frozen; no fresh final bank or gradient update was used.}
+\block{Results}{Thirteen candidates improved selection failure while retaining at least 90\% progress. The declared simulator choice improved selection from 6/32 to 4/32 failures, but worsened the check from baseline 4/64 to 6/64. Both imagined selectors chose a candidate with 12/64 check failures. One retrospectively identified pool sample achieved 3/64, but it tied the baseline on selection and was not eligible under the frozen rule. Imagined-versus-real rank correlation was only 0.041 across the correlated pool.}
+\block{What this establishes}{The evidence points toward unreliable predicted trajectories, but does not prove the controller family cannot improve. The retrospective 3/64 candidate is not an independently selected success. No controller was promoted. The diagnostic charged 854,400 simulator steps and 768,960 predictor rows.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/legacy/docs/evoPlan/results/stage6-candidate-quality/walker2d-evo-s6-candidate-quality-20261005-1/INTERPRETATION.md}}
+\clearpage
+\phantomsection\label{exp:H08}
+{\color{accent}\small\bfseries H08 / 5 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Walker: repairing prediction did not repair control}\par
+{\color{muted}\small Stage 6 predictor and probe repair}\par\vspace{2mm}
+\finding{Failure detection improved substantially; the selected controller did not improve.}
+\block{Question}{Can a targeted prediction repair remove the model defect and produce a better selected controller?}
+\block{What ran}{A frozen hash split assigned 96 exposed source episodes to four groups of 24. Across three seeds, the predictor received 1,000 updates with a physical prediction loss through the original frozen probe. Probe-only and combined repairs were separate arms. This used privileged retrospective labels.}
+\block{Results}{On 24 audit source episodes, one-step failure-endpoint detection rose from 11.3\% to 67.7\%. Healthy height and pitch errors fell, while healthy-endpoint false alarms rose from 0.39\% to 0.85\% and speed error increased. Detection under an action-tape rollout remained only 31.2\%. The predictor-repaired model selected a controller with 3/24 real failures, versus baseline 2/24, at 98.3\% progress retention. Probe-only and combined repairs failed their relevant development criteria.}
+\block{What this establishes}{The repair supports a prediction-level improvement under this recipe. It supplies no demonstrated controller benefit. Endpoint detection can occur after the first dense failure, and these audit episodes were reused development evidence rather than fresh confirmation.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/legacy/docs/evoPlan/results/stage6-repair/walker2d-evo-s6-repair-20261005-1/INTERPRETATION.md}}
+\clearpage
+\phantomsection\label{exp:H09}
+{\color{accent}\small\bfseries H09 / 15 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries UNISafe: the migrated baseline}\par
+{\color{muted}\small Frozen Dreamer-derived actor and safety filter}\par\vspace{2mm}
+\finding{The system ran end to end, but the small baseline pilot did not establish filter benefit.}
+\block{Question}{On the migrated simulator stack, does filtering improve safe completion or explain stalled extraction?}
+\block{What ran}{Filtered and unfiltered execution each used twenty starts on Isaac Sim 6.2 / Isaac Lab 3. Initial rigid-body tensors matched within pairs, checkpoints stayed frozen, and original physical predicates scored outcomes.}
+\block{Results}{Both arms recorded 2/20 safe successes, 2/20 physical failures and 16/20 timeouts. Filtering replaced arm commands on 1,207 of 5,239 controls. All 32 timeouts showed very little middle-block motion near the end while the arm kept moving. Reset images and initial task proposals differed despite matching physical tensors; both filtered successes had zero interventions.}
+\block{What this establishes}{Equal aggregate counts do not establish equivalence, and matched physical starts did not produce identical visual-policy trajectories. The observed stall is real, but it is not isolated as filter-induced continuation failure. A block-height failure does not necessarily mean the block fell to the floor.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/20261022/docs/research/reports/UNISafe baseline pilot.md}}
+\clearpage
+\phantomsection\label{exp:H10}
+{\color{accent}\small\bfseries H10 / 15-16 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries UNISafe: release before intervention}\par
+{\color{muted}\small Recorded-trace diagnosis and controlled replay}\par\vspace{2mm}
+\finding{Premature gripper opening preceded the safety intervention in the diagnosed failure.}
+\block{Question}{Was the robot losing the block because of filter switching or because of its task-policy release?}
+\block{What ran}{All 300 recorded inputs were replayed offline, reproducing task actions, executed commands, values, uncertainty and decisions exactly. Conditional model resampling and bounded counterfactual checks separated the task proposal from the backup arm action.}
+\block{Results}{The task policy opened at 2.15 seconds; the first safety replacement occurred at 2.50 seconds. The block settled about 6.09 cm from the base, below the greater-than-7-cm extraction requirement, and remained essentially stationary. There were 63 intervention controls, 100 filter transitions and 50 intervention bursts. The filter preserved the gripper proposal. A hand-timed hold completed this inspected case at 2.80 seconds.}
+\block{What this establishes}{The trace identifies premature release as a useful mechanism for this case. It does not explain the actor's internal reason for opening or establish prevalence across starts. Model resamples are hypothetical predictions, not additional physical trials. A timed successful intervention motivates an automatic rule rather than proving one generalizes.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/20261022/docs/research/reports/UNISafe release and switching diagnosis.md}\par \path{archive/20261022/docs/research/reports/UNISafe grasp maintenance and evolutionary adaptation.md}}
+\clearpage
+\phantomsection\label{exp:H11}
+{\color{accent}\small\bfseries H11 / 16 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries UNISafe: maintaining a sensed grasp}\par
+{\color{muted}\small Compact adapter and three optimizer controls}\par\vspace{2mm}
+\finding{A grasp-maintenance adapter improved completion; evolution supplied no isolated advantage.}
+\block{Question}{Can a bounded release delay repair loss of grasp around the frozen actor and filter?}
+\block{What ran}{The adapter recognized intermediate finger aperture and recent closing commands, then delayed a release. Evolution, random search and categorical policy gradient each received 192 training episodes in the same three-parameter family. Validation selected controllers before 64 reserved starts per arm.}
+\block{Results}{Task completion was 2/64 for baseline, 54/64 for the evolutionary controller, 55/64 for a tuned fixed rule, 56/64 for random search and 54/64 for policy gradient. The evolutionary arm had eight violation episodes versus baseline six, including seven physical failures and one boundary exit. Much of the completion benefit persisted when filter replacements were disabled.}
+\block{What this establishes}{The useful intervention combined additional grasp information with a behavioral rule. The gain is not attributable to evolution, and reduced risk was not demonstrated. Equal training episode counts had different control-step totals. Reserved-start overlap with original checkpoint training is unknown, and this is a migrated simulated Dreamer system, not a VLA or real robot.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/20261022/docs/research/reports/UNISafe grasp maintenance and evolutionary adaptation.md}}
+\clearpage
+\phantomsection\label{exp:H12}
+{\color{accent}\small\bfseries H12 / 17 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries ManiGuard: the six-mechanism engineering screen}\par
+{\color{muted}\small Jar, Lid and Stack fixed-adapter studies}\par\vspace{2mm}
+\finding{Across 196 validated episodes, no repeatable repair justified optimizer training.}
+\block{Question}{Do simple replanning, motion, prerequisite, grasp, retry or return rules offer useful control authority?}
+\block{What ran}{The campaign combined initial family screens and prospectively declared repeat studies around frozen checkpoints. It tested six mechanism families, with privileged information explicitly declared for prerequisite guards. Reserved scenes were not evaluated.}
+\block{Results}{Jar repeats gave safe completion 2/12 native, 4/12 prerequisite guard, 3/12 smoothing and 3/12 guard-plus-settling; violations were 4, 2, 5 and 2 respectively. Settling used 10,452 queries versus plain guard 2,746. Stack tight and middle motion caps each achieved 1/6 safe completions versus native 0/6, but each had 3/6 violations versus 2/6. Neither Stack release-delay rule achieved a safe completion; all 179 broader-trigger delays acted while the target was unheld. Lid native and guard each had 0/8 safe completions and one violation. Corrected Jar joint-limit guards produced no safe completion.}
+\block{What this establishes}{These are small, heterogeneous engineering comparisons, not a pooled efficacy estimate. The guard lead failed to become a robust repair; motion changes traded progress against violations. Joint-limit clipping and a fixed lift-trigger tolerance exposed implementation limitations. No optimizer trained in this campaign.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/20261022/docs/research/reports/ManiGuard six-hypothesis study.md}\par \path{archive/20261022/docs/research/reports/ManiGuard controller-limit guard comparison.md}}
+\clearpage
+\phantomsection\label{exp:H13}
+{\color{accent}\small\bfseries H13 / 18 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries ManiGuard: an evolved execution dial}\par
+{\color{muted}\small 48-episode pilot and offline failure audit}\par\vspace{2mm}
+\finding{The selected controller did not improve fresh safe completion.}
+\block{Question}{Can evolution tune motion restraint and query timing into a useful safety dial?}
+\block{What ran}{A compact controller changed free/grasp joint-target caps, smoothing and query horizon around frozen policies. Forty-eight full episodes included search and a 24-episode comparison of identity, midpoint and full-strength settings. A subsequent failure audit reused recordings without new simulator interaction.}
+\block{Results}{Identity safely completed 5/8 fresh trials with 0/8 violations; midpoint completed 3/8 with 2/8 violations; full strength completed 4/8 with 2/8 violations. Full strength reached six raw goals, but two were unsafe. The audit found a grasp-band miss, direction distortion from independent joint caps and confounded query horizons of 8, 12 and 16 controls. Candidate fitness used only two episodes, five of twelve measurements tied at the maximum, and a repeated elite varied across fresh panels.}
+\block{What this establishes}{There was neither a monotonic safety dial nor evidence of evolutionary advantage. The grasp-detection gap was measurable but also present in safe episodes, so repairing it alone was not shown sufficient. These earlier checkpoints and protocols are separate from the later paper-protocol Jar replication.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/20261022/docs/research/reports/ManiGuard evolutionary safety dial pilot.md}\par \path{archive/20261022/docs/research/reports/ManiGuard Part1 failure investigation.md}}
+\clearpage
+\phantomsection\label{exp:H14}
+{\color{accent}\small\bfseries H14 / 18 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries ManiGuard: correction-triggered feedback}\par
+{\color{muted}\small Part 2 fixed and adaptive query schedules}\par\vspace{2mm}
+\finding{Adaptive querying showed no benefit, and its trigger never changed the schedule.}
+\block{Question}{Does accumulated command correction identify when a frozen action chunk should be refreshed?}
+\block{What ran}{Sixteen episodes crossed identity at interval eight, capped commands at interval eight, capped commands at interval four, and a correction-triggered four-to-eight rule. The capped conditions shared the preceding finalist's motion settings. Two development scenes supplied four episodes per condition.}
+\block{Results}{Safe completion was 3/4 for identity, fixed-eight and adaptive, and 2/4 for fixed-four. Every condition had one violating episode. Fixed-four reached one additional unsafe goal. Policy queries were 353, 336, 750 and 341 respectively. The adaptive departure threshold never fired early, so its schedule matched the fixed-eight pattern.}
+\block{What this establishes}{The measured negative result concerns this frozen recipe. It does not establish what an actively triggering rule would do. More frequent querying increased query cost without safe-completion benefit in this small sample; task and scene replication remain limited.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/20261022/docs/research/reports/ManiGuard Part2 correction triggered feedback.md}}
+\clearpage
+\phantomsection\label{exp:H15}
+{\color{accent}\small\bfseries H15 / 18 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries ManiGuard: prediction before model-assisted evolution}\par
+{\color{muted}\small Part 3 forecast feasibility gate}\par\vspace{2mm}
+\finding{The forecast ensemble failed accuracy qualification, so physical search did not launch.}
+\block{Question}{Are short-horizon predictions reliable enough to allocate physical evolutionary evaluations?}
+\block{What ran}{A five-network ensemble was compared with persistence, a fitted ridge predictor and shuffled action prefixes on 263 changing held-out windows. Event support, physical-margin accuracy, progress ranking and screening latency were checked before the proposed 64-episode optimizer experiment.}
+\block{Results}{The ensemble was 27.8\% worse than persistence after one action and 45.1\% worse after four. Correct-action predictions beat shuffled-action predictions by 2.69\%, but remained 15.45\% worse than the ridge reference. Progress error was 79.01 mm against a 30-mm limit; ranking correlation was 0.126 against 0.25. All seven event-support checks passed, and sixteen-candidate screening took 0.810 seconds, but the accuracy gate failed.}
+\block{What this establishes}{Action dependence and speed were insufficient to justify imagined fitness. No evolved finalist, physical optimizer comparison or search curve exists for Part 3. The stop is a scientific gate failure, not evidence that a launched optimizer ran out of time.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/20261022/docs/research/reports/ManiGuard Part3 model assisted evolution.md}}
+\clearpage
+\phantomsection\label{exp:H16}
+{\color{accent}\small\bfseries H16 / 19 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries ManiGuard: the counterexample-predictor premise}\par
+{\color{muted}\small Part 4 offline warning diagnostic}\par\vspace{2mm}
+\finding{The frozen warning rule had too many false alarms to admit acquisition.}
+\block{Question}{Can a predictor identify confident near-term safety misses for targeted counterexample collection?}
+\block{What ran}{An offline protocol froze the predictor, calibration target, eight-control warning horizon and four-control minimum lead. Historical episodes were separated by role before the proposed acquisition-and-repair comparison.}
+\block{Results}{Despite satisfying a 5\% episode-weighted calibration target, the rule alarmed on 2,045 of 2,229 negative development windows. Development contained one first-uprightness event; it had a timely warning and no qualifying confident miss. The proposed random, uncertainty, evolutionary and diagnostic acquisition stages therefore did not launch.}
+\block{What this establishes}{This is a negative operating-point result for a specific predictor and corpus. Correlated windows are not independent trials, and one event supplies very weak support for detection reliability. It does not establish that confident hazards are absent or that evolutionary counterexample acquisition cannot work.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/20261022/docs/research/reports/ManiGuard Part4 counterexample premise.md}}
+\clearpage
+\phantomsection\label{exp:H17}
+{\color{accent}\small\bfseries H17 / 19-20 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries ManiGuard: the native-noise evolutionary pilot}\par
+{\color{muted}\small Frozen VLA with a compact noise controller}\par\vspace{2mm}
+\finding{Integration worked; every protected-check arm had zero safe requested completions.}
+\block{Question}{Does a small observation-conditioned native-noise offset improve closure-before-carry completion?}
+\block{What ran}{The shared 176-parameter controller conditioned four bounded noise coordinates on robot state, executed-action history and frozen image/text features. Sixty full episodes included forty comparison-training episodes and sixteen protected-check episodes, plus engineering. Decoder identity and influence were separately audited.}
+\block{Results}{All forty comparison-training episodes were requested-unfinished, with sixteen violations. Four safe supported lid closures never extended to holding. Native, fixed, evolution and random search each achieved 0/4 safe requested completions on protected checking. Native and evolution each had 3/4 violations; fixed and random each had 2/4. Fixed and random retained the identical genotype. Original-start accounting included 112,131 controls and 14,019 physical policy requests across sixty valid full episodes and six engineering starts.}
+\block{What this establishes}{No evolutionary advantage was established, and one search run with four checking cases per arm cannot supply a general rate estimate. Noise influenced decoded actions but supplied no demonstrated physical completion lever. Raw benchmark goals that omitted closure were not accepted as requested completions.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/20261022/docs/research/reports/ManiGuard latent evolution pilot.md}\par \path{archive/20261022/reports/Recent ManiGuard progress audit.md}}
+\clearpage
+\phantomsection\label{exp:H18}
+{\color{accent}\small\bfseries H18 / 20 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries ManiGuard: handing off after closure}\par
+{\color{muted}\small Separate four-start continuation screen}\par\vspace{2mm}
+\finding{Neither a clock handoff nor privileged closure handoff produced useful continuation.}
+\block{Question}{Can a successful closure prefix be composed with native continuation to obtain a grasp and carry?}
+\block{What ran}{A separately frozen screen used one exposed Jar development case and four total starts: native-only, closure-only, clock handoff at control 488, and supported-closure handoff with three-observation debounce. All starts retained the 2,000-control horizon.}
+\block{Results}{Native-only and closure-only were safe unfinished. Both handoff modes were unsafe unfinished. None reached a requested completion, raw goal, native holding event or qualifying post-switch milestone. The four starts used 8,000 controls and 1,000 physical VLA requests. Decoder and saved-trace work suggested possible gripper authority and persistence limitations, but remained diagnostic.}
+\block{What this establishes}{The advancement gate failed and the larger continuation stage was not admitted. This single exposed-case screen does not estimate population efficacy. Model-only evidence and implemented future fitness functions do not count as successful physical controller experiments. The original pilot and this screen are closed historical studies.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{archive/20261022/reports/Recent ManiGuard progress audit.md}\par \path{archive/20261022/configs/maniguard/continuation/handoff-screen-frozen-v1.json}}
+\clearpage
+\phantomsection\label{exp:T01}
+{\color{accent}\small\bfseries T01 / 22-23 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Jar: replicate the published baseline}\par
+{\color{muted}\small Task 1 | Paper-protocol ManiGuard reproduction}\par\vspace{2mm}
+\finding{The baseline had useful outcome variance and broadly compatible published rates.}
+\block{Question}{Does the released frozen Jar policy reproduce the benchmark before adaptation?}
+\block{What ran}{The study used 20-Hz control, eight executed actions per sixteen-step chunk, 256-pixel collection-time camera observations, a 2,000-control horizon and ten-step goal hold. Three policy seeds plus one same-seed repeat produced 104 episodes on physical machine 54514.}
+\block{Results}{Outcomes were 24/104 benchmark safe successes, 7/104 unsafe successes, 37/104 safe failures and 36/104 unsafe failures. Counted violations occurred in 43/104; engagement in 103/104. Of the 24 benchmark safe successes, 23 met closure-before-carry. Two repeats of one seed agreed on four-class outcome for only 13/26 scenes. Rates were compatible with the published Jar results within the recorded uncertainty.}
+\block{What this establishes}{The benchmark is capable but noisy, so fresh contemporary controls and repeat-aware inference are necessary. A repeated scene and policy seed are not identical trajectories. Later hosts and intervention panels are separate studies and cannot be pooled into this reproduction.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{docs/research/research_notes/Jar replication and noise floor.md}\par \path{progress/receipts/01-jar-eval.yaml}}
+\clearpage
+\phantomsection\label{exp:T02}
+{\color{accent}\small\bfseries T02 / 23 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Jar: read the behavior behind the labels}\par
+{\color{muted}\small Task 2 | Reanalysis of the 104 baseline episodes}\par\vspace{2mm}
+\finding{Contact and the transition from closure to grasp separated many outcomes.}
+\block{Question}{What actually happened in the baseline successes, violations and unfinished episodes?}
+\block{What ran}{Sidecars, state timelines, contact-aligned camera frames and matched scene strips were analysed from the existing 104 episodes. The analysis reused recorded trajectories rather than collecting a new efficacy panel.}
+\block{Results}{The story counts included 18 stalls, 18 closed-but-unlifted stalls, 9 tips before closure, 19 tips after closure on the table, 3 open-lid lifts, 5 carry failures, 24 safe successes, 7 unsafe successes and one no-contact episode. Several scenes reached similar contact states and then diverged during regrasp; others consistently withdrew or hovered. Benchmark class and requested closure-before-carry success were kept distinct.}
+\block{What this establishes}{This identifies plausible points for intervention, especially regrasp and continuation, but does not establish a causal failure mechanism or a useful controller. Visual examples explain behavior and are not extra independent observations. Reusing this baseline evidence for diagnosis must not be described as a new trial replication.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/02-timelines.md}\par \path{progress/receipts/02-task-notes.md}\par \path{progress/receipts/02-pairs.md}}
+\clearpage
+\phantomsection\label{exp:T03}
+{\color{accent}\small\bfseries T03 / 23-24 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Jar: retry when the policy stalls}\par
+{\color{muted}\small Task 3 | Frozen native-versus-retry comparison}\par\vspace{2mm}
+\finding{The bounded retry controller did not improve safe completion.}
+\block{Question}{Can an observable stall detector and short retreat restart useful manipulation?}
+\block{What ran}{The frozen plan ran 192 episodes: six development tasks, sixteen policy seeds and two arms. Both arms used contemporary controls and retained engagement and complete outcome classes. Failed or discarded candidates were not silently replaced.}
+\block{Results}{Native versus retry benchmark safe success was 17/96 versus 16/96. Unsafe successes were 7/96 versus 9/96; safe failures 31/96 versus 33/96; unsafe failures 41/96 versus 38/96. Thus counted violations were 48/96 versus 47/96, and benchmark-unfinished episodes 72/96 versus 71/96. Both arms engaged in all 96 episodes.}
+\block{What this establishes}{The near-equal violation count accompanied no completion gain. This frozen detector-and-retreat recipe failed to establish the useful lever needed for an optimizer comparison. Engagement does not imply useful progress, and benchmark-safe outcomes must not replace the requested-sequence audit.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/03-results.md}\par \path{progress/receipts/03-plan.json}}
+\clearpage
+\phantomsection\label{exp:T04}
+{\color{accent}\small\bfseries T04 / 24 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Jar: commands versus realized motion}\par
+{\color{muted}\small Task 4 | Native tracking diagnostic}\par\vspace{2mm}
+\finding{A general actuator-tracking deficit was not established.}
+\block{Question}{Are failed manipulations mainly caused by the robot not executing the native joint targets?}
+\block{What ran}{Twelve native episodes on six development tasks and two seeds recorded targets and realized motion. Time alignment compared pre-action state and post-action response, with contact and first-violation windows analysed separately.}
+\block{Results}{Safe requested completion was 2/12; raw and counted violations were 6/12; benchmark-unfinished episodes 8/12; all twelve engaged. Five of six violating episodes tracked closely in the two seconds before the first violation. Three safe unfinished episodes closed the lid but never grasped or lifted despite close post-closure tracking. One contact-associated exception had mean arm RMS error 0.015068 rad in the forty controls before tipping, versus 0.000102 before contact.}
+\block{What this establishes}{Command choice and continuation were the broader diagnostic lead. The exception kept a narrow contact-execution hypothesis open, but its trace cannot determine whether discrepancy caused the tip or resulted from contact. This was not an intervention comparison or an updated baseline reproduction.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/04-tracking-results.md}}
+\clearpage
+\phantomsection\label{exp:T05}
+{\color{accent}\small\bfseries T05 / 24 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Jar: bounded execution feedback}\par
+{\color{muted}\small Task 5 | Native, fixed and adaptive adapter}\par\vspace{2mm}
+\finding{The adaptive execution adapter did not improve requested safe completion.}
+\block{Question}{Does bounded feedback around contact help the frozen policy complete safely?}
+\block{What ran}{The executed v4 plan compared native, fixed and adaptive control on twelve scored development episodes per arm. Engineering and efficacy work were kept separate. Commands and raw versus counted monitor outcomes were replayed.}
+\block{Results}{Safe requested completion was 1/12 native, 1/12 fixed and 0/12 adaptive. Raw violations were 5/12, 3/12 and 8/12; counted violations were 5/12, 3/12 and 7/12. Benchmark-unfinished counts were 10/12, 11/12 and 12/12. Engagement was 12/12, 12/12 and 9/12. One adaptive tip was not counted by the benchmark because target contact never registered, illustrating why raw monitor violations matter.}
+\block{What this establishes}{The adaptive rule neither established a completion lever nor justified evolutionary optimization. The fixed arm's lower violation count came with more unfinished episodes and is uncertain on this small panel. Proposed, adapted and executed actions and both monitor definitions must remain distinguishable.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/05-adapter-results.md}\par \path{progress/receipts/05-adapter-plan-v4.json}}
+\clearpage
+\phantomsection\label{exp:T06}
+{\color{accent}\small\bfseries T06 / 24-25 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Jar: first DSRL engineering attempt}\par
+{\color{muted}\small Task 6 | Noise actor and SAC integration}\par\vspace{2mm}
+\finding{Numerical gates failed; no DSRL training or efficacy evaluation ran.}
+\block{Question}{Can the author's SAC learner and an explicit-noise decoder be integrated faithfully with the frozen Jar policy?}
+\block{What ran}{The implementation isolated learner dependencies, compared CPU/GPU SAC behavior and probed native decoder replay before admitting learning. Four native engineering starts and a bounded 128-query decoder probe were charged.}
+\block{Results}{GPU SAC parity and cross-lane native decoder replay failed their numerical criteria. The four native engineering episodes had 0/4 strict safe completions, 2/4 violations, 4/4 unfinished and 4/4 engaged. Sensitivity appeared on one of eight saved inputs, but identity failure prevented a valid negative authority screen. Work included 8,000 policy controls, forty warm-up controls and 1,140 VLA queries: 1,000 task, twelve startup and 128 probe queries.}
+\block{What this establishes}{This is an engineering stop, not evidence that a trained DSRL controller failed to improve completion. No actor was trained or evaluated for efficacy, and the unused allocation did not authorize more work. Unmeasured internal reset physics remains unknown rather than zero.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/06-dsrl-results.md}\par \path{progress/receipts/06-dsrl-independent-audit.json}}
+\clearpage
+\phantomsection\label{exp:T07}
+{\color{accent}\small\bfseries T07 / 25 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Jar: DSRL repaired and evaluated}\par
+{\color{muted}\small Task 7 | Ordinary-learning noise steering}\par\vspace{2mm}
+\finding{Integration passed, but the learned actor failed the completion screen.}
+\block{Question}{Once numerical integration works, can a learned noise actor improve the frozen policy?}
+\block{What ran}{The full admitted comparison completed six engineering, twenty-four training and forty-eight evaluation episodes across native, zero-noise, random-noise and DSRL conditions. The final actor was frozen and independently verified.}
+\block{Results}{Strict safe completion was 3/12 native and 0/12 for each of fixed-zero, random and DSRL steering. Violations were 4/12, 3/12, 7/12 and 4/12 respectively. DSRL left 12/12 unfinished and engaged in 10/12, versus native 9/12 unfinished and 12/12 engaged. Training had 0/24 safe completions; twenty-one episodes had all-zero reward. Logged mean critic Q rose to about 37 despite intended returns bounded between -0.25 and 1.}
+\block{What this establishes}{The observed actor supplied no useful completion lever. Reward starvation, altered noise structure, impaired grasp and critic inflation are separate diagnostic hypotheses, not individually isolated causes. One learner seed and a small development panel do not rule out DSRL generally. The experiment is complete; its remaining closeout paperwork is distinct from efficacy.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/07-dsrl-results.md}\par \path{progress/receipts/07-dsrl-analysis.json}\par \path{progress/receipts/07-dsrl-critic-diagnostic.json}}
+\clearpage
+\phantomsection\label{exp:T08}
+{\color{accent}\small\bfseries T08 / 25 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Jar: screen execution knobs, then confirm}\par
+{\color{muted}\small Task 8 | Independent fresh-seed confirmation}\par\vspace{2mm}
+\finding{Slower target scaling looked promising in the screen but did not replicate.}
+\block{Question}{Can a simple fixed change provide a useful completion lever before more learning?}
+\block{What ran}{Eighty-nine valid episodes comprised five engineering, sixty screening and twenty-four confirmation episodes. Native was screened against shorter chunks, target scaling, smoothing and gripper wait; the frozen rule selected scaling for a fresh-seed native comparison.}
+\block{Results}{Screening safe requested completion was 4/12 native, 1/12 shorter chunks, 6/12 scaling, 5/12 smoothing and 1/12 gripper wait. In confirmation, both native and scaling achieved 2/12. Violations were 6/12 native versus 3/12 scaling; unfinished counts 10/12 versus 9/12; engagement 12/12 for both. The preset failed the rule requiring at least two additional safe completions.}
+\block{What this establishes}{Selected screening gains cannot be pooled with confirmation to manufacture replication. Lower observed violations did not establish improved completion, and same-seed trajectories could differ even when the intervention stayed inactive. This was a bounded mechanism study, not an evolutionary comparison.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/08-screen-results.md}\par \path{progress/receipts/08-screen-audit.json}}
+\clearpage
+\phantomsection\label{exp:T09}
+{\color{accent}\small\bfseries T09 / 25 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries UNISafe: mechanism, grasp information and a dial}\par
+{\color{muted}\small Task 9 | Independent follow-up confirmation}\par\vspace{2mm}
+\finding{The grasp-sensing ablation confirmed; the new gain and dial did not.}
+\block{Question}{Does a translated/delayed release improve the earlier adapter, does sensing matter, and is there a speed/completion tradeoff?}
+\block{What ran}{An engineering stage and response screen preceded 384 frozen confirmation episodes across six conditions, all ultimately run on one physical host. An added host failed workload admission before simulator use. No optimizer or pretrained-weight update ran.}
+\block{Results}{The selected translation-0.75, delay-15 setting completed 54/64 against the earlier random-search setting's 51/64; simultaneous paired intervals included zero. Sensed delay 15 completed 50/64 versus history-only 31/64, a 29.7-point drop when sensing was removed; both had 8/64 violations. The completion-loss interval was [-52.6, -1.0] points. The chosen speed and completion endpoints were the same setting, so a tradeoff could not be confirmed.}
+\block{What this establishes}{Useful grasp information is supported within this study. The screen's mechanism gain did not confirm, no reduction in violation risk is claimed, and no evolutionary advantage follows. The Dreamer-derived actor and its task predicates are separate from ManiGuard and the planning studies.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/09-unisafe-results.md}\par \path{progress/receipts/09-unisafe-C-combined-analysis.json}}
+\clearpage
+\phantomsection\label{exp:T10}
+{\color{accent}\small\bfseries T10 / 25 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries PushT: search the constraint interface}\par
+{\color{muted}\small Task 10 | SafeCEM exploratory multiobjective search}\par\vspace{2mm}
+\finding{Search-layout gains did not establish a held-out-layout advantage.}
+\block{Question}{Can NSGA-II learn a useful clearance schedule and planning configuration?}
+\block{What ran}{Initial diagnosis found severe out-of-distribution position-probe errors. A grounded, anchored-probe pipeline and best-candidate execution were fixed before the later search. NSGA-II, random search and a grid used three replicates; stage C2 ran 3,032 episodes, including final fronts reevaluated on ten fresh seeds.}
+\block{Results}{Mean best safe-success rates on the search layout were 0.43 for NSGA-II, 0.60 for random search and 0.33 for the grid. On the held-out layout they were 0.27, 0.17 and 0.17. Fresh-seed hypervolumes were 6.23, 9.18 and 3.77 respectively; held-out hypervolumes 8.64, 5.32 and 7.56. Searching the constraint interface beat the fixed dial on the search layout, but that advantage did not carry over.}
+\block{What this establishes}{These are exploratory final-front statistics over three runs, not an established evolutionary contribution. The pipeline repair and optimized constraint interface differ from later studies that hold requested clearance fixed. Probe errors can masquerade as an ineffective or uncalibrated safety dial.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/10-safecem-C2-search.md}\par \path{docs/research/research_notes/SafeCEM task 10 diagnosis and next steps.md}}
+\clearpage
+\phantomsection\label{exp:T11}
+{\color{accent}\small\bfseries T11 / 25 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Jar: DSRL improvement stopped at startup}\par
+{\color{muted}\small Task 11 | Residual-noise and critic engineering}\par\vspace{2mm}
+\finding{Decoder checks passed; a simulator startup race prevented any live episode.}
+\block{Question}{Can native-preserving residual noise, denser shaping and critic calibration repair the previous learning setup?}
+\block{What ran}{The implementation added a bounded residual on native Gaussian noise, denser potential shaping and critic calibration. A four-cell update-to-data/reduction grid and real-policy decoder checks ran before the planned four-condition learning pilot.}
+\block{Results}{High-update mean critics inflated above the reward range; minimum reductions were initially very pessimistic. The admitted low-update mean setting stayed calibrated but barely changed its policy. All four decoder lanes passed native-preserving zero residual and finite influence checks. Four cold simulator workers then raced while downloading and unpacking shared Isaac extensions; the admission rule closed and all workers stopped during startup. No engineering rollout or efficacy episode completed.}
+\block{What this establishes}{The critic diagnostic is real evidence; a completion effect is unmeasured. The four-condition reward/prior-replay pilot never ran, so this must not be described as another failed trained-controller efficacy test. The source record preserves the race and explicit stop decision.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/11-dsrl-results.md}\par \path{progress/receipts/11-dsrl-stage-a.json}}
+\clearpage
+\phantomsection\label{exp:T12}
+{\color{accent}\small\bfseries T12 / 25-26 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries TwoRoom: planner horizon was the useful lever}\par
+{\color{muted}\small Task 12 | NSGA-II, random and grid search}\par\vspace{2mm}
+\finding{Random search beat NSGA-II and the grid in every cross-replicate hypervolume pair.}
+\block{Question}{Can search tune the safety interface and planner into a better progress/exposure frontier?}
+\block{What ran}{Five settings included clearance schedule, horizon, elite fraction and tolerated penetration. Each method used three replicates, population twelve and eight generations. The campaign ran 2,892 episodes; final fronts were reevaluated on ten fresh seeds and one held-out layout.}
+\block{Results}{Fresh-seed hypervolume means were 32.83 for NSGA-II, 37.00 for random search and 31.20 for the grid; held-out means were 35.57, 38.10 and 33.27. Random search beat both alternatives in all nine cross-replicate pairs on each measure. NSGA-II and random search both reached best safe success 1.00 on fresh and held-out layouts. Their selected good settings used horizon three, while the frozen grid only offered four, five and six.}
+\block{What this establishes}{The result points to a useful planning configuration, with random search a strong comparator. It does not establish evolutionary superiority. Hypervolume includes speed/progress and exposure, so equal best completion does not imply equal fronts. Only one reserved layout limits transfer claims.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/12-tworoom-C-search.md}}
+\clearpage
+\phantomsection\label{exp:T13}
+{\color{accent}\small\bfseries T13 / 25-26 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Reacher: no clear optimizer separation}\par
+{\color{muted}\small Task 13 | Exploratory planner search}\par\vspace{2mm}
+\finding{NSGA-II and random search were similar; search-layout gains did not generalize cleanly.}
+\block{Question}{Do planner and clearance-interface searches carry from one reaching layout to another?}
+\block{What ran}{NSGA-II, random search and a grid each tuned five settings with three replicates and eight generations. The 2,792 episodes included 2,592 search and 200 final episodes. Final fronts used ten fresh seeds on the search and held-out layouts.}
+\block{Results}{Mean best safe success on fresh search-layout seeds was 0.77 for both NSGA-II and random search, versus 0.70 for the grid. Held-out means were 0.63, 0.70 and 0.53. Fresh-seed hypervolume means were 17.20, 16.20 and 12.30; held-out means 11.67, 14.13 and 8.70. NSGA-II beat random in five of nine cross-replicate pairs on each hypervolume measure, with no stable separation.}
+\block{What this establishes}{Both search methods improved over the limited grid on some measures, but this did not establish a transferable gain over the best fixed dial or an evolutionary advantage. Final fronts were small, and three optimizer runs plus one held-out layout provide limited inference.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/13-reacher-C-search.md}}
+\clearpage
+\phantomsection\label{exp:T14}
+{\color{accent}\small\bfseries T14 / 25-26 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Cube: planner search did not beat the fixed dial}\par
+{\color{muted}\small Task 14 | Earlier reaching-proxy Cube study}\par\vspace{2mm}
+\finding{NSGA-II lost to random search, and neither established the desired fixed-baseline gain.}
+\block{Question}{Can multiobjective tuning repair the earlier Cube planner on the chosen layout?}
+\block{What ran}{The study tuned clearance schedule, horizon, elite fraction and penetration tolerance with three replicates per method. It ran 2,872 episodes, including 280 final episodes. The search layout changed before its freeze. This was the earlier gripper-reaching proxy, not task 18's original object-moving objective.}
+\block{Results}{Fresh-layout best safe-success means were 0.20 NSGA-II, 0.27 random search and 0.27 grid. Held-out means were 0.20, 0.70 and 0.43. Fresh-seed hypervolume means were 1.20, 4.42 and 3.53; held-out means 1.13, 12.23 and 5.17. NSGA-II beat random in only one of nine fresh-seed pairs and none of nine held-out pairs.}
+\block{What this establishes}{No search beat the best fixed dial on the search layout. The method ordering contradicts an evolutionary-superiority claim for this recipe. Goal definition, checker and layout differences prevent pooling these counts with the later object-moving experiment.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/14-cube-C-search.md}}
+\clearpage
+\phantomsection\label{exp:T15}
+{\color{accent}\small\bfseries T15 / 25-26 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Jar: slow the regrasp or select another sample}\par
+{\color{muted}\small Task 15 | Development complete; confirmation unverified}\par\vspace{2mm}
+\finding{Projection looked promising in development, but no verified final confirmation survives.}
+\block{Question}{Does the native policy offer slower safe samples after closure, or must its chunk be projected?}
+\block{What ran}{Offline steerability decoded sixteen alternatives for each of 720 saved queries. A live eighty-episode screen compared native, speed projection and three sampling conditions, sixteen episodes each. A separately admitted replacement-host cohort followed loss of the original host.}
+\block{Results}{At 0.10 m/s, 122 of 254 failing saved queries had a passing alternative among sixteen samples; the distribution was strongly bimodal. Development strict safe completion was 5/16 native, 9/16 projection, 3/16 select-0.10, 4/16 select-0.06 and 3/16 always-select. Corresponding raw violations were 6, 2, 6, 5 and 5. The frozen rule selected select-0.06 for stage C and separately declared projection stage D. The original host vanished during C; the replacement passed engineering and began C, but the inspected local/private record contains no verified final recovery report.}
+\block{What this establishes}{The projection gain is a selected development observation, not a replicated completion lever. Missing final evidence is unknown, not zero success or confirmed failure. Original and replacement cohorts must not be pooled. No current rental status can be inferred from the historical records.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/15-regrasp-results.md}\par \path{progress/receipts/15-regrasp-recovery-evidence-20261026.json}}
+\clearpage
+\phantomsection\label{exp:T16}
+{\color{accent}\small\bfseries T16 / 26 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries LeWM: recover progress without relaxing safety}\par
+{\color{muted}\small Task 16 | TwoRoom and Reacher fixed versus feedback}\par\vspace{2mm}
+\finding{Strong fixed settings recovered safe progress; feedback added no established benefit.}
+\block{Question}{Can planning configuration avoid the safe-but-unfinished behavior at large requested margins?}
+\block{What ran}{Frozen LeWM and requested clearance stayed unchanged. Development and mechanism work preceded 864 familiar-layout and 960 fresh-case evaluations. There were 2,380 charged attempts, including four engineering failures. Fixed and feedback controllers used reserved cases chosen before outcomes.}
+\block{Results}{At the largest familiar-layout margins, original SafeCEM versus tuned fixed achieved 3/36 versus 34/36 safe completions in TwoRoom and 0/36 versus 33/36 in Reacher. On fresh cases, fixed versus feedback achieved 238/240 versus 240/240 in TwoRoom and 218/240 versus 212/240 in Reacher. All 960 fresh-case episodes engaged and had zero observed original-hazard or requested-margin breaches.}
+\block{What this establishes}{This establishes a useful configuration lever in the tested planning tasks. It does not establish feedback or evolutionary advantage. The exact checker uses privileged state/dynamics, the case shifts are modest within-family changes, and zero breaches is not zero population risk. Actual model and counterfactual checker costs were separately charged.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/16-lewm-results.md}\par \path{progress/receipts/16-final-statistics.json}\par \path{progress/receipts/16-final-audit.json}}
+\clearpage
+\phantomsection\label{exp:T17}
+{\color{accent}\small\bfseries T17 / 26 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries LeWM: compare evolution with simpler optimizers}\par
+{\color{muted}\small Task 17 | Thirty runs and reserved final evaluation}\par\vspace{2mm}
+\finding{Evolution failed the frozen criterion for a useful completion advantage.}
+\block{Question}{Within one compact controller class, does evolution beat parameter random search, policy gradient and strong fixed control?}
+\block{What ran}{All methods shared a 36-coefficient selector over six planning modes, allowed observations and reward information. Five runs per optimizer/environment used six rounds and shared anchor/selection allowances. The complete campaign ran 7,800 episodes, including 1,632 final evaluations on twelve reserved cases and two planner seeds.}
+\block{Results}{On Reacher at 1.5 cm, safe completion was 101/120 evolution, 97/120 random search, 99/120 REINFORCE and 20/24 retuned fixed. Evolution-minus-comparator differences were +3.3, +1.7 and +0.8 points, with simultaneous 98.33\% intervals [-20.8, 25.8], [-10.0, 15.0] and [-20.8, 20.0]. Eight of ten evolution runs selected shared preset anchors. All final episodes engaged with zero observed breaches; failures were unfinished.}
+\block{What this establishes}{Five optimizer repeats and twelve case blocks left wide uncertainty. Equal enforced ceilings did not make actual consumed work equal, so there is no equal-work efficiency claim. Shared-anchor outcomes cannot be credited to optimizer discovery. All rounds updated parameters, so the negative result was not simply an inactive optimizer loop.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/17-lewm-evolution-results.md}\par \path{progress/receipts/17-final-statistics.json}\par \path{progress/receipts/17-final-audit.json}}
+\clearpage
+\phantomsection\label{exp:T18}
+{\color{accent}\small\bfseries T18 / 26-27 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries PushT and Cube: original object-moving goals}\par
+{\color{muted}\small Task 18 | Four-method fixed-margin comparison}\par\vspace{2mm}
+\finding{Tuned fixed planning improved safe completion in both object-moving tasks.}
+\block{Question}{Do the planning benefits extend beyond navigation and reaching to moving an object?}
+\block{What ran}{Each task used twelve reserved cases, three planner seeds and frozen checkpoints. Engineering, fixed tuning, feedback tuning, final evaluation, context and timing totalled 676 valid attempts per task. A PushT reset-anchor defect required repeating the full unchanged protocol; the 676 superseded attempts were preserved and charged.}
+\block{Results}{At 12 pixels in PushT, safe completion was 0/36 native, 2/36 original SafeCEM, 19/36 tuned fixed and 20/36 feedback. At 1 cm in Cube it was 0/36, 0/36, 12/36 and 12/36. All checked final groups had zero observed margin breaches. Tuned fixed left 17/36 and 24/36 unfinished, with engagement 36/36 and 35/36. Failure-capped action means fell from 49.53 to 35.42 and from 50.00 to 37.86.}
+\block{What this establishes}{The bundled configuration changes establish a gain on these panels; feedback's added benefit remains uncertain. No evolutionary search ran. Safety covers pusher centre or gripper pinch point, not the whole robot/object. Without a tuned native ablation, generic planning improvement and constraint-specific improvement cannot be separated.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/18-lewm-results.md}\par \path{progress/receipts/18-final-analysis-check.json}\par \path{progress/receipts/18-closeout.json}}
+\clearpage
+\phantomsection\label{exp:T19}
+{\color{accent}\small\bfseries T19 / 26-27 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Jar: a tip shield around frozen pi0.5}\par
+{\color{muted}\small Task 19 | CMA-ES tuning and 107 matched pairs}\par\vspace{2mm}
+\finding{Observed violations fell, but strict safe completion stayed at 32/107.}
+\block{Question}{Can a simple contact-and-tilt-triggered retreat prevent tipping while preserving completion?}
+\block{What ran}{Exploratory speed-limit searches preceded a two-parameter tip shield. At each eight-control query, recent contact and tilt above 8.9 degrees triggered retracing the arm's recorded path by about 7.1 cm. Eight CMA-ES generations preceded confirmation on four development scenes with disjoint seeds; 107 of 120 planned pairs completed.}
+\block{Results}{Native and shield each achieved 32/107 strict safe completions. Raw violations fell from 37/107 to 21/107, with one-sided Fisher p=0.0103 and Barnard p=0.0083. Stalls after closure rose from 26 to 40; never-closed counts were 12 and 14. The secondary violation difference was about -15 points. The final setting remained very close to its hand-chosen starting values.}
+\block{What this establishes}{The primary completion endpoint did not improve. Five native confirmation violations were inspected during design, no multiplicity correction was fixed in advance, and the cleanest post-freeze subset gave p=0.075. Only twenty pairs shared a physical host. Privileged jar pose/contact, one policy, four reused scenes and missing fixed/random/learning shield controls prevent claims of general safety or evolutionary discovery.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
+\raggedright \path{progress/receipts/19-evo-adapter-results.md}\par \path{docs/research/honours-gecco/maniguard19.tex}}
+\clearpage
+\end{document}

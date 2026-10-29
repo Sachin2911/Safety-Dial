@@ -1,0 +1,124 @@
+Honours research paper, plain-language revision
+Sachin Mohan (2699183), BSc Honours Computer Science, University of the Witwatersrand
+Supervisor: Geraud Nangue Tasse
+Evidence cutoff: 27 October 2026
+
+Open honoursThesis.pdf. Edit honoursThesis.tex, the files it \input's and
+references.bib. progress/paperCombination.pdf is an older four-page guide and
+does not yet include the task 19 Jar result.
+This is a substantive research-paper draft, not a complete university thesis
+with institutional front matter, and not an anonymized conference submission.
+The main text (pages 1 to 8) explains the problem, model, planner, adapter and
+results: Experiment One (tasks 16 and 18: TwoRoom, Reacher, PushT, Cube),
+Experiment Two (task 17 optimizer comparison), Experiment Three (task 19 Jar
+tip shield) and the UNISafe supporting study (task 9). Section 2 defines
+safe completion and the planner's constrained objective (Eqs. 1-2); the
+main text gives the fitness functions (Eq. 3 and the ES update, Eq. 4; the
+shield rule and its CMA-ES fitness, Eqs. 5-6), states the selection order,
+claim rule and feedback rule in words, and has four plain-language
+algorithm blocks: SafeCEM with an adapter, a planned (mu+lambda) evolution
+search over a fixed adapter (Section 2.4, defined with the fitness R of
+Eq. 3; explicitly marked not yet run and used by no result), the shared
+search-and-select run and the tip shield. Experiment One's settings came
+from a hand-picked development screen (312 attempts), as Section 2.4 says. Indicators use \mathds{1} (dsfont, Type 1). Appendices:
+A exact rules (feedback signals and rule, ranking key, selection order,
+REINFORCE gradient and update) and remaining recipe details; B full outcomes, workload, UNISafe and data counts; C planners
+across margins with recorded examples; D task-18 tables and pictures; E task-18
+methods; F ManiGuard Jar history, task 19 protocol, amendments, search,
+confirmation details and integrity; G exploratory NSGA-II searches (tasks 10,
+12, 13, 14). The first figure is a conceptual sketch, separate from measured
+trajectories. Action-count evidence is distinguished from wall-clock speed.
+
+Build from the repository root:
+  MPLCONFIGDIR=/tmp/safety-dial-mpl .venv/bin/python docs/research/honours-gecco/make_figures.py
+  MPLCONFIGDIR=/tmp/safety-dial-mpl .venv/bin/python docs/research/honours-gecco/make_lewm18_figure.py
+  MPLCONFIGDIR=/tmp/safety-dial-mpl .venv/bin/python docs/research/honours-gecco/make_evo19_figures.py
+  MPLCONFIGDIR=/tmp/safety-dial-mpl .venv/bin/python docs/research/honours-gecco/make_evo19_frames.py
+  bash docs/research/honours-gecco/build.sh
+
+The figure scripts read frozen statistics and assert the plotted counts.
+make_evo19_figures.py reads outputs/evo19/analysis/{summary,mechanism}.json and
+outputs/evo19/search/state.json; make_evo19_frames.py also needs the mirrored
+recordings in outputs/evo19/remote and experiments/scripts/revalidate_evo19.py.
+Regenerate the task 19 analysis first if its inputs change:
+experiments/scripts/{analyze,mechanism,sensitivity,revalidate,report}_evo19.py.
+The shell script requires TeX Live with acmart, pdflatex and bibtex. Build files
+stay in outputs/honours-gecco/build. The stable PDF stays beside its source.
+The output has 22 US-letter pages, with the main text through the
+Acknowledgments on pages 1 to 8 and a 199-word abstract. It has thirteen
+figures (the UNISafe figure is in Appendix B), four algorithms and fourteen numbered tables. All fonts are embedded and
+none is Type 3; validation.json records the exact checked PDF and source hashes.
+lewm18-tables.tex and lewm18-appendix.tex were hand-edited after generation;
+rerunning experiments/scripts/write_lewm18_tables.py or write_lewm18_paper.py
+would overwrite those edits.
+
+Format baseline
+The official GECCO 2026 instructions were checked on 26 October 2026:
+  https://gecco-2026.sigevo.org/Paper%2BSubmission%2BInstructions
+They specify ACM SIGCONF, US letter, up to eight main-text pages excluding
+references, abstract no more than 200 words, and embedded non-Type-3 fonts.
+This internal version uses acmart's sigconf,nonacm options, names the student,
+and omits invented conference metadata, DOI, copyright or publication claims.
+Appendices are single-column. GECCO 2027 instructions were not verified. Check
+the eventual call and track before submitting. A review version would need the
+venue's required anonymous and review options, anonymized artifact links,
+author removal and a fresh check of page limits. University honours submission
+requirements are also separate.
+
+Evidence and framing
+Task 16 establishes fixed configuration benefits on familiar layouts, with a
+separate fresh-case comparison that does not establish a feedback gain. Task 18
+extends the matched comparison to PushT and original Cube object moving: at the
+largest margins Original SafeCEM versus Tuned fixed is 2/36 versus 19/36 in
+PushT and 0/36 versus 12/36 in Cube, with no observed breaches by checked
+planners; Feedback (20/36, 12/36) adds no established benefit. No tuned
+native-planning ablation exists, so the gain cannot be credited to handling the
+safety check rather than better planning in general. Task 17 is the main
+evolutionary comparison and has a negative frozen claim gate; eight of ten
+evolution selections were shared presets, and on the primary Reacher test the
+one evolved controller scored 19/24 against 20/24 for its paired comparators.
+Task 19 (ManiGuard Jar, frozen pi0.5): on 107 matched scene-seed pairs a
+hand-designed tip shield, whose two numbers CMA-ES left near their start, cuts
+violation attempts from 37 to 21 (one-sided Fisher p=0.010, Barnard p=0.008,
+Newcombe -15.0 [-26.3, -3.0]) while strict safe completion stays at 32/107 in
+both arms (primary endpoint, 0.0 [-12.1, 12.1]). Violations were the key
+secondary endpoint (amendment 5), with no multiplicity correction fixed in
+advance; the design inspected five native confirmation violations, and the
+cleanest post hoc subset gives p=0.075. The Barnard values were corrected on
+27 October (arms belong in columns); the receipt records the correction.
+Task 15's confirmation was lost with two rented hosts and is not used.
+The UNISafe grasp-sensing ablation is confirmed within its study; the archived
+16 October UNISafe optimizer comparison found no evolution advantage either.
+The UNISafe actor is Dreamer-derived, not a VLA. Zero observed breaches is not
+a guarantee, and rates are never pooled across studies.
+
+Review priorities
+1. Have the author and supervisor assess the main contribution and whether the
+   GECCO version should narrow further to one focused optimizer comparison. A
+   bounded negative result is not a guarantee of venue suitability.
+2. Judge the task 19 framing: the amendment timing, the five native violations
+   inspected during the design, and how the multiplicity question is presented.
+3. Expand or refine the related-work discussion. Bibliography metadata was
+   checked; the 2026 ManiGuard and battery-fallback preprints should still be
+   checked against the papers.
+4. Decide whether a further prospectively frozen study is needed, for example
+   a shield that also helps the policy finish, or a tuned native-planning
+   ablation. This draft does not authorize or prescribe a new run.
+5. Review authorship, AI-assistance disclosure, artifact access and licensing,
+   university front matter, and the eventual conference's anonymization rules.
+   The task 19 receipts and analysis scripts are not yet committed to the
+   repository that the evidence citation names.
+
+Preservation
+The evidence manifest hashes the source receipts and lists private Hugging Face
+revisions, including Sachioster/maniguard-jar-replication-20261022, prefix
+evo19/, revision 98e8fe31b47d288e9c66b34cc8d7ea66b88fb01e (5,564 files
+re-downloaded and SHA-256 checked). The consolidated datasets include complete
+raw attempts and selected replays. Replays reconstruct recorded simulator
+states without new action integration; galleries include prespecified first
+examples and failure examples. They are illustrative, not an unbiased sample of
+the quantitative evaluation. The Jar frame strip uses one matched pair chosen
+because the retreat is visible. The manuscript is stored locally; no conference
+submission or public release has been made. Dataset access remains private.
+The documentation-only upload receipt for the planning datasets is
+progress/receipts/dataset-clarity-refinement-20261026.json.

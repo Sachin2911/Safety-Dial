@@ -20,7 +20,7 @@ The abstract, declaration, contents and bibliography are included. Topic-specifi
 subsections use editable prompts for Sachin's current research interests. No
 environment, algorithm, hypothesis, result or date range has been selected by
 this template.
-[Evolutionary improvement on ManiGuard](../../../Evolutionary%20improvement%20on%20ManiGuard.md)
+[First principles](../../../firstPrinciples.md)
 is the current research direction.
 
 ## Editing

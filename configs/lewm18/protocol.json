@@ -1,0 +1,185 @@
+{
+  "schema": "lewm18-protocol-v1",
+  "date": "2026-10-26",
+  "total_usd": 5,
+  "rental_hours_max": 5,
+  "question": "Do tuned fixed and feedback SafeCEM recover safe task completion and use fewer actions than original SafeCEM at the same requested margin on PushT and original OGBench Cube?",
+  "no_new_evolutionary_claim": true,
+  "frozen_models": true,
+  "cube_task": "Original cube object must be within 0.04 m of its goal position, not effector reaching. LeWM dataset-pair goals at +25 steps; separately report nontrivial moving-cube pairs and initially solved pairs in a benchmark-context panel. Do not claim the full official five-goal OGBench leaderboard protocol.",
+  "pusht_task": "Retain the pinned swm/PushT-v1 termination rule: joint pusher/block planar position error <20 px and block angle error <pi/9. Recompute from saved states. Do not label the negative-distance reward as coverage.",
+  "budget_actions": 50,
+  "action_block": 5,
+  "executed_blocks_per_replan": 1,
+  "iterations": 30,
+  "canonical_samples": 300,
+  "canonical_horizon": 5,
+  "canonical_elite_fraction": 0.1,
+  "methods": [
+    "native",
+    "canonical",
+    "fixed",
+    "feedback"
+  ],
+  "dials": {
+    "pusht": [
+      0,
+      6,
+      12
+    ],
+    "cube": [
+      0,
+      0.005,
+      0.01
+    ]
+  },
+  "checker": {
+    "pusht": "Known linear pusher PD path at every physics substep, anchored to current state.",
+    "cube": "Commanded-path approximation for population ranking plus a true-simulator check of the executable five-action prefix; up to eight ordered candidates, restore full simulator state between checks. Same checker for every checked method. Record counterfactual interactions separately.",
+    "authority": "Neither adapter nor search can lower the requested margin. No unchecked fallback.",
+    "safety_predicate": "Pusher centre or Cube gripper pinch point inside a planar keep-out band; not whole-body collision certification."
+  },
+  "geometry": {
+    "frame": "Direction from start to goal pusher (PushT), or start to goal cube (Cube), with perpendicular axis; two finite rectangular pillars form a band and gap.",
+    "pusht": {
+      "band_half_width": 8,
+      "gap_width": 60,
+      "gap_offset_abs": 40,
+      "pillar_extent": 400
+    },
+    "cube": {
+      "band_half_width": 0.01,
+      "gap_width": 0.08,
+      "gap_offset_abs": 0.04,
+      "pillar_extent": 0.5
+    },
+    "case_admission": "Use state metadata only; no outcome-based acceptance. Start and requested goal positions must be outside the maximum inflated hazard. Keep rejection reasons. Cube planar object displacement >=0.08 m; PushT object displacement >=20 px and start not already successful."
+  },
+  "panel_seed": 2026102618,
+  "disjoint_by_dataset_episode": true,
+  "engineering": {
+    "max_attempts": 120,
+    "purpose": "Native/action parity, goal predicate, rendering/state replay, dense monitor, Cube preview restoration, and runtime. Repair errors within this allowance; low task success is recorded and does not cancel the comparison."
+  },
+  "development": {
+    "cases_per_env": 6,
+    "planner_seeds": [
+      180100,
+      180101
+    ],
+    "fixed_modes": [
+      [
+        5,
+        1,
+        0,
+        0
+      ],
+      [
+        3,
+        1,
+        0.25,
+        0.5
+      ],
+      [
+        2,
+        2,
+        0.5,
+        0
+      ],
+      [
+        2,
+        2,
+        0.5,
+        0.5
+      ],
+      [
+        3,
+        1,
+        0.5,
+        0
+      ],
+      [
+        1,
+        1,
+        0.5,
+        0.5
+      ]
+    ],
+    "fixed_tuple": "horizon, sampling spread, retention, correlation",
+    "feedback_presets": [
+      {
+        "error_threshold": 0.25,
+        "stall_threshold": 0.02
+      },
+      {
+        "error_threshold": 0.5,
+        "stall_threshold": 0.02
+      },
+      {
+        "error_threshold": 0.25,
+        "stall_threshold": 0.05
+      },
+      {
+        "error_threshold": 0.5,
+        "stall_threshold": 0.05
+      }
+    ],
+    "feedback_seed": [
+      180110
+    ],
+    "feedback_base": "Selected fixed setting per environment and margin; repair horizon min(base,2), stall horizon 3, exploration multiplier 2, stall retention 0.5.",
+    "selection": "Maximize safe completions, then minimize safe-failure-capped actions, predictor work and candidate index; break ties deterministically. Select without final-case access."
+  },
+  "final": {
+    "tiers": [
+      {
+        "name": "full",
+        "cases_per_env": 12,
+        "seeds": [
+          180200,
+          180201,
+          180202
+        ]
+      },
+      {
+        "name": "compact",
+        "cases_per_env": 8,
+        "seeds": [
+          180200,
+          180201
+        ]
+      }
+    ],
+    "admission": "Before development outcomes, choose largest tier fitting measured engineering timings with 50% runtime contingency and 40 minutes reserved for preservation. Do not change tier based on efficacy.",
+    "native": "Run once per case/seed and score under all three margins, without duplicating it as independent evidence.",
+    "paired": "Same frozen cases, planner seeds and host for all methods; method job order randomized in blocks.",
+    "all_outcomes_retained": true
+  },
+  "metrics": [
+    "task completion",
+    "benchmark-hazard-safe completion",
+    "requested-margin-safe completion",
+    "original hazard breaches",
+    "requested-margin breaches",
+    "unfinished",
+    "engagement",
+    "controller failures",
+    "safe-failure-capped actions J_safe",
+    "actions and simulated seconds among safe successes",
+    "episode wall time",
+    "planning time",
+    "model predictor steps",
+    "executed physics steps",
+    "counterfactual physics steps"
+  ],
+  "speed": "J_safe equals executed actions on requested-safe completion and 50 otherwise, including unsafe successes and early failures. Conditional safe-success speed is secondary and always accompanied by its success denominator. Report actual wall-clock and compute separately; no video-playback speed claim.",
+  "uncertainty": "Paired resampling over complete case blocks, preserving seeds and margins. Prespecified descriptive contrasts fixed-canonical and feedback-fixed for safe completion and J_safe; clustered intervals and denominators. No success-only ranking or claim of evolutionary superiority.",
+  "preservation": "New outputs/lewm18 and receipts; periodic local sync; hash-verified archive before destroying this rental. Existing historical records unchanged.",
+  "execution_amendment": {
+    "date": "2026-10-26",
+    "reason": "Large public input downloads delayed Cube; completed PushT engineering permits its independent campaign to proceed.",
+    "schedule": "Choose full or compact tier separately for each environment, using only its engineering timings before its development outcomes. Same contingency and preservation reserve.",
+    "hosts": "All efficacy methods, development selection and serial timing for one environment remain on one host. Do not pool cross-host timing or repeat selected efficacy on a faster host.",
+    "budget": "Both authorized rentals remain within the original $5 aggregate and common deadline."
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "lewm16-design-v1",
+  "namespace": "lewm16",
+  "max_env_actions": 160000,
+  "episode_actions": 50,
+  "executed_block": 5,
+  "iterations": 10,
+  "monitors": [
+    "environment_samples",
+    "all_executed_physics_samples"
+  ],
+  "numerical_guard": {
+    "tworoom": 0.001,
+    "reacher": 1e-06
+  },
+  "canonical": {
+    "tworoom": {
+      "samples": 1000,
+      "elite": 0.01
+    },
+    "reacher": {
+      "samples": 300,
+      "elite": 0.1
+    }
+  },
+  "panel_sha256": "9fcad804f5bcf7fddb5a2703dd94100f603f11478951e325a37a94cc71f7eb53",
+  "fresh_cases_sealed": true,
+  "readout": null,
+  "controller_inputs": [
+    "latent_goal_cost",
+    "relative_cost_improvement",
+    "observed_prediction_error",
+    "previous_feasible_fraction"
+  ]
+}

@@ -1,0 +1,169 @@
+{
+  "workload": "compact",
+  "rounds": 6,
+  "final_cases": 12,
+  "optimizer_runs_per_method_environment": 5,
+  "methods": [
+    "random",
+    "reinforce",
+    "evolution"
+  ],
+  "episodes_per_run": 192,
+  "per_run_resource_ceilings": {
+    "tworoom": {
+      "environment_actions": 9600,
+      "executed_physics_steps": 9600,
+      "predictor_steps": 96009600,
+      "analytic_path_steps": 480105600
+    },
+    "reacher": {
+      "environment_actions": 9600,
+      "executed_physics_steps": 19200,
+      "predictor_steps": 28809600,
+      "checker_physics_steps": 288211200
+    }
+  },
+  "equal_allowances_not_equal_consumption": true,
+  "efficiency_claim": "No resource-matched validation checkpoints; no search-efficiency claim",
+  "forecast_revision": "Initial serial p90-per-episode forecast rejected full and compact. Before optimizer outcomes, improve lane packing (max5 rather than6 runs) and use measured all-mode arithmetic mean with50% contingency; retain initial rejection receipt. Evaluation adds40% imbalance and30minutes overhead/reporting.",
+  "forecasts": {
+    "full": {
+      "rounds": 8,
+      "final_cases": 20,
+      "forecast_seconds_including_reporting": 16311.854448375485,
+      "forecast_training_seconds": 10013.930614175148,
+      "forecast_context_tuning_final_seconds": 4497.923834200337,
+      "admissible": false
+    },
+    "compact": {
+      "rounds": 6,
+      "final_cases": 12,
+      "forecast_seconds_including_reporting": 12720.191334757998,
+      "forecast_training_seconds": 8011.144491340118,
+      "forecast_context_tuning_final_seconds": 2909.04684341788,
+      "admissible": true
+    }
+  },
+  "available_seconds_at_admission": 13874.537527799606,
+  "timing_seconds_per_episode_mean_times_1_5": {
+    "tworoom": 8.34494217847929,
+    "reacher": 8.339896388799058
+  },
+  "mode_libraries": {
+    "tworoom": [
+      [
+        2,
+        1,
+        0,
+        0
+      ],
+      [
+        2,
+        2,
+        0.5,
+        0.5
+      ],
+      [
+        2,
+        2,
+        0.5,
+        0
+      ],
+      [
+        3,
+        1,
+        0.25,
+        0.5
+      ],
+      [
+        2,
+        1,
+        0.25,
+        0.5
+      ],
+      [
+        3,
+        2,
+        0.5,
+        0.5
+      ]
+    ],
+    "reacher": [
+      [
+        3,
+        1,
+        0.25,
+        0.5
+      ],
+      [
+        3,
+        1,
+        0.5,
+        0
+      ],
+      [
+        2,
+        1,
+        0.25,
+        0.5
+      ],
+      [
+        3,
+        2,
+        0.5,
+        0.5
+      ],
+      [
+        2,
+        2,
+        0.5,
+        0
+      ],
+      [
+        5,
+        1,
+        0,
+        0
+      ]
+    ]
+  },
+  "coefficient_shape": [
+    6,
+    6
+  ],
+  "bounds": [
+    -3,
+    3
+  ],
+  "initialization": "Independent optimizer replicates; paired methods share clipped N(0,0.5) initialization",
+  "parameter_seed": "17020000 + (1000 for Reacher) + 10000*replicate",
+  "optimizer_rng": "parameter seed + 1 random, +2 REINFORCE, +3 evolution",
+  "feature_vector": [
+    "bias=1",
+    "relative latent cost improvement clipped [-1,1]",
+    "prediction squared error/current latent cost floored at 1; clipped [0,2]/2",
+    "previous feasible fraction clipped [0,1]",
+    "replan/9 clipped [0,1]",
+    "requested clearance/max tested clearance"
+  ],
+  "first_observation": "improvement=0, prediction_error=0, previous_feasible=1, replan=0",
+  "training_decoder": "softmax temperature 1; separate mode RNG, not planner RNG",
+  "deployment_decoder": "deterministic argmax, smallest mode index breaks ties",
+  "anchors": "Six bias-only constant modes and two opposing margin routes; deterministic; 8*3 episodes charged per run",
+  "utility": "requested_safe_completion - 0.1*J/50; J=50 on unsafe or unsuccessful episodes",
+  "random": "One re-evaluated incumbent plus seven fresh clipped N(0,0.5) candidates each round; eight candidates on common three points; never compare stale scores",
+  "evolution": "Four standard-normal antithetic directions; sigma=.3; raw mean utility pair differences/(2*sigma*4); gradient L2 clipped to 1; ascent step=.2; weights clipped [-3,3]",
+  "reinforce": "Eight groups of three stochastic episodes; terminal reward times sum of log-softmax score gradients; batch mean over 24; baseline starts 0 and updates .8*old+.2*mean reward after gradient; L2 clip1; step .2; weights clipped [-3,3]; no entropy bonus",
+  "validation": "24 deterministic episodes: 4 candidates x first3 validation cases x2 margins; random finalists best3 on last common batch plus anchor; other methods final/penultimate/initial plus anchor; all selected only by validation",
+  "selection": "Disqualify any original or margin breach; then safe completions, lower failure-capped J, lower predictor work, earlier candidate index; anchor is first fallback; all-unsafe aborts",
+  "fixed_tuning": "six modes x six development cases x two margins x two planner seeds per environment; same safety-first lexicographic selection separately per margin",
+  "validation_panel_sha256": "53c037ec42bfc0bf5dcafa3d314631ef03969fa7a75cff3384df7208589b0ab4",
+  "final_panel_sha256": "53b59eaf3c1f1b2facc86e8b7951f9dd57469eb3eed29a27ab0f225b2dbd11b6",
+  "final_access": "Only finalization script opens sealed cases after every selected controller is frozen; log access",
+  "practical_effect_target": 0.1,
+  "primary": "Reacher at .015, evolution minus random, REINFORCE, newly tuned fixed",
+  "uncertainty": "Paired crossed bootstrap resampling five optimizer-run indices and whole final case blocks independently; retain both planner seeds per block; 10000 draws seed170990; 95% descriptive intervals and 98.333333% primary contrast intervals for three comparisons",
+  "claim_gate": "For all three primary comparators: mean completion gain >=.10 and simultaneous contrast interval lower>0; no increased breaches, with observed rates and uncertainty reported. No broad safety guarantee",
+  "all_evidence": "Report every optimizer replicate, engagement, both safety labels, censoring, unfinished, J, all counters, rejected candidates, failed attempts and wall time",
+  "placement": "Single host33061; replicate%2 GPU plus2 for Reacher; paired methods same GPU; runs packed alternately across two lanes; method execution order rotates by replicate"
+}

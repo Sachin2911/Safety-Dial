@@ -1,0 +1,59 @@
+{
+  "utc": "2026-10-25T17:31:10.696893+00:00",
+  "instance_id": 57690181,
+  "admitted": false,
+  "stage": "C_parallel",
+  "decision": "Added-host C admission judged infeasible before its effective work deadline; recorded fallback adopted before any added-host engineering or C attempt",
+  "effective_work_deadline_utc": "2026-10-25T19:04:21.650419+00:00",
+  "available_seconds_at_decision": 5590.953910112381,
+  "state_at_decision": {
+    "pinned_installer_running": true,
+    "ready_marker": false,
+    "engineering_launch_marker": null,
+    "added_host_attempts": 0,
+    "added_host_C_attempts": 0,
+    "watcher_1601196": "exited after its bounded poll without launching"
+  },
+  "frozen_admission_rule": "48 jobs x 1.25 x (max steady startup + max process overhead + 340 x max seconds per control) + 120 s launch allowance <= available (admit_unisafe09p.py)",
+  "reference_timings_original_host_C_192_jobs": {
+    "startup_s": [
+      18.446870787010994,
+      20.735993493522983,
+      48.18658137100283
+    ],
+    "seconds_per_control": [
+      0.0911996735980663,
+      0.10355807561528943,
+      0.2539969042304736
+    ],
+    "process_overhead_s": [
+      3.135751006018836,
+      4.234947408956941,
+      16.76284399605356
+    ],
+    "order": "min, median, max"
+  },
+  "bound_seconds_with_rule_applied_to_original_timings": 9198.502368325046,
+  "bound_seconds_optimistic_medians": 3730.8411967007,
+  "bound_seconds_optimistic_minima": 3275.4306489823425,
+  "remaining_prerequisites_not_started": [
+    "pinned installation",
+    "twelve concurrent engineering jobs",
+    "validation",
+    "C freeze and transfer"
+  ],
+  "rationale": "The frozen rule applied to the 192 measured original-host C jobs gives 9,199 s against 5,591 s available. Fitting would need the twelve-job maxima to stay near the original-host minima or medians (bounds 3,275 to 3,731 s) while the unfinished installation (24 min of slow downloads so far), first-start engineering on four lanes, validation, freeze and transfer all finish within the remaining 31 to 38 min. That is very unlikely, and each further minute costs $1.922/h without contributing confirmation data. No added-host C outcome exists, and no C outcome aggregate informed this decision. It is a judgement against a prospective bound, not a measured engineering failure.",
+  "fallback": "progress/09-unisafe-handover.md: finish unexecuted C jobs on original host 57647787 under the unchanged original freeze with a fresh remaining-work admission; preserve and account for added-host setup and charges",
+  "combined_finance_at_decision": {
+    "combined_cap_usd": 15.0,
+    "active_compute_disk_estimate_usd": 5.283292344466992,
+    "transfer_estimate_usd": 1.7317708333333333,
+    "other_reserved_or_actual_usd": 2.0,
+    "total_estimate_usd": 7.283292344466992,
+    "combined_stop": false,
+    "active_instances": [
+      57647787,
+      57690181
+    ]
+  }
+}

@@ -1,0 +1,909 @@
+% Authored honours draft in ACM SIGCONF layout. Not a conference submission.
+\documentclass[sigconf,nonacm]{acmart}
+\setkeys{acmart.cls}{balance=false}
+\usepackage{amsmath,booktabs,tabularx,dsfont}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\setcopyright{none}
+\settopmatter{printacmref=false}
+\acmConference{}{}{}\acmBooktitle{}\acmDOI{}\acmISBN{}
+\graphicspath{{assets/}}
+\emergencystretch=1em
+\begin{document}
+\raggedbottom
+\title[Helping Frozen Models Finish Safely]{Helping Frozen Models Finish Safely: Small Controllers and the Limits of Evolutionary Search}
+\author{Sachin Mohan}
+\affiliation{\institution{University of the Witwatersrand}\city{Johannesburg}\country{South Africa}}
+\authornote{BSc Honours Computer Science draft, supervised by Geraud Nangue Tasse. Evidence through 27 October 2026. Requires author and supervisor review before submission.}
+\renewcommand{\shortauthors}{S. Mohan}
+\begin{abstract}
+A safety check can keep an agent out of danger without helping it finish.
+We ask whether a small controller can recover finishing around a frozen
+model, and whether evolution tunes it well. We score safe completion:
+reaching the goal with no breach. With frozen LeWorldModel planning and a
+simulator check, tuned fixed settings raise safe completion
+at the largest margins from 3/36 to 34/36 in TwoRoom and 0/36 to 33/36 in
+Reacher on familiar layouts, and 2/36 to 19/36 in PushT and 0/36 to 12/36
+in Cube on reserved cases. Feedback adds no established benefit. With one
+36-parameter selector, fitness and budget, evolution, random search
+and policy gradient finish safely in 101, 97 and 99 of 120 primary Reacher
+attempts: too close to call; most evolution runs deployed a shared preset. Around a frozen $\pi_{0.5}$ robot policy on ManiGuard's Jar task, a
+shield that retreats when the jar tilts during contact cuts violations from
+37 to 21 in 107 matched pairs (one-sided $p=0.010$, secondary endpoint), but
+strict safe completion stays at 32 as stalls rise. A UNISafe ablation shows
+grasp sensing matters. A useful control interface is not yet a
+successful optimizer, and avoiding harm is not finishing.
+\end{abstract}
+\ccsdesc[500]{Computing methodologies~Genetic algorithms}
+\ccsdesc[500]{Computing methodologies~Planning under uncertainty}
+\keywords{safe task completion, frozen models, compact controllers, evolution strategies, planning, safety shields}
+\maketitle
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small Honours research draft, 27 October 2026}
+\fancyhead[R]{\small S. Mohan}\fancyfoot[C]{\thepage}\thispagestyle{fancy}
+
+\section{Introduction}
+Imagine an agent that must reach a goal beyond a dangerous area
+(Figure~\ref{fig:problem}). It can cut through the danger, stop safely
+short of it, or find the safe gap. Only the third outcome is what we want.
+A safety check that blocks danger can easily turn the first outcome into the
+second: fewer violations, but nothing done. So we never score safety and
+progress apart; we score them together, as one number.
+
+Our question is practical: \emph{can a small controller help an existing
+model finish safely, without retraining it?} The model is \emph{frozen}: its
+learned weights never change. The small controller, or \emph{adapter},
+changes only how the model is used. Around a planner it chooses the
+planner's settings; around a robot policy it overrides a motion when a check
+fails. This splits into three questions, each needing its own comparison:
+\textbf{(Q1)} does a good \emph{fixed} setting exist? \textbf{(Q2)} does
+\emph{changing} settings during an attempt beat it? \textbf{(Q3)} does
+\emph{evolution} find a better adapter than simpler search? A strong tuned
+planner answers Q1; it says nothing about Q3.
+
+Our answers, in brief (Table~\ref{tab:studies}). With LeWorldModel (LeWM)
+planning~\cite{maes2026lewm}, Q1 is yes: tuned fixed settings recover much
+safe completion in four tasks. Q2 and Q3 are not established: feedback adds
+no clear benefit, and three optimizers given the same fitness end too close
+to separate. Experiment Three moves to a frozen robot policy with no planner
+to tune. There a hand-designed \emph{shield} cuts rule violations, yet the
+robot finishes no more often: the middle outcome of Figure~\ref{fig:problem}
+in a real policy.
+
+We contribute (i) a precise problem statement with one score
+(Section~\ref{sec:problem}); (ii) a controlled planning comparison in four
+tasks; (iii) a completed optimizer comparison with a predeclared claim rule,
+uncertainty and selection records; (iv) a diagnosed shield around a frozen
+vision-language-action policy that reduced violations on a listed secondary
+endpoint without improving completion; and (v) evidence about the
+information an adapter needs. We use established optimizers, not a new
+evolutionary algorithm.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=.94\textwidth]{three-outcomes.pdf}
+\caption{The problem in three outcomes; only the right-hand one scores
+($S=1$ in Eq.~\ref{eq:safe}). Sketches, not measured trajectories: the two
+shaded boxes form one forbidden band, and the safe path uses its gap.
+Figures~\ref{fig:outcomes} and~\ref{fig:jar}a count these outcomes; any
+breach or violation is unsafe whether or not the task finished.}
+\label{fig:problem}
+\Description{Three sketches show an agent crossing a forbidden band to reach a goal,
+stopping before the band without finishing, and going through a safe gap to reach the goal.}
+\end{figure*}
+
+\begin{table*}[t]
+\caption{The four studies. Each has its own cases and attempts, so rates
+are never pooled. Planning results are at the largest tested margin; Jar
+uses strict safe completion, and UNISafe its own benchmark's safe
+completion.}
+\label{tab:studies}\centering\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}p{3.4cm}>{\raggedright\arraybackslash}p{3.4cm}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Study & Frozen model and tasks & What the adapter changes & Main result \\
+\midrule
+Experiment One (\S\ref{sec:exp1}) & LeWM planning in TwoRoom, Reacher, PushT and Cube & Planner settings, fixed or by feedback &
+Tuned fixed finishes safely in 34, 33, 19 and 12 of 36 attempts, against
+3, 0, 2 and 0 for Original SafeCEM; feedback adds no established benefit. \\
+\addlinespace
+Experiment Two (\S\ref{sec:exp2}) & LeWM planning in TwoRoom and Reacher & A 36-number mode selector, learned three ways &
+Evolution 101/120, random search 97/120, policy gradient 99/120, retuned
+fixed 20/24 on the main test; no advantage established. \\
+\addlinespace
+Experiment Three (\S\ref{sec:jar}) & $\pi_{0.5}$ robot policy on ManiGuard Jar & A hand-designed tip shield, tuned by CMA-ES &
+On 107 matched pairs, violations fall from 37 to 21 (one-sided $p=0.010$, secondary endpoint); strict safe
+completions stay at 32. \\
+\addlinespace
+Supporting (\S\ref{sec:unisafe}) & UNISafe block plucking with a Dreamer actor & Release timing before the safety filter &
+Removing grasp sensing lowers safe completion from 50/64 to 31/64. \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\section{The Problem, Precisely}\label{sec:problem}
+\subsection{One score for safety and progress}\label{sec:success}
+An \emph{attempt} $\tau$ runs until the task succeeds, fails or uses its
+allowance of 50 executed actions. Let $D$ be the danger region, $p(s)$ the
+\emph{checked point} of state $s$ (the dot in TwoRoom, the fingertip in
+Reacher, the pusher centre in PushT, the gripper pinch point in Cube) and
+$\delta\ge0$ the requested \emph{safety margin}; $D_\delta$ is the danger
+region enlarged by $\delta$. An attempt \emph{breaches} if the checked point
+ever enters $D_\delta$, and \emph{safely completes} if it reaches the goal
+without a breach:
+\begin{equation}\label{eq:safe}
+B(\tau)=\mathds 1\bigl[\exists t: p(s_t)\in D_\delta\bigr],\qquad
+S(\tau)=G(\tau)\,\bigl(1-B(\tau)\bigr),
+\end{equation}
+where $t$ runs over every state the checker tests and $G(\tau)=1$ if the
+goal is reached within the allowance. The product is the point: an attempt
+scores only if it is safe \emph{and} finished. Speed is counted in
+\emph{failure-capped actions}: $J(\tau)$ is the number of actions used by a
+safe completion and 50 for any other attempt, so failing early never looks
+fast.
+
+The adapter sits between the frozen model and the environment, and its job
+is to maximize the expected safe completion at each tested margin. The
+expectation runs over \emph{cases}, each fixing the geometry, start and
+goal, and \emph{seeds}, each fixing the planner's random sampling. Several
+seeds on one case show how much chance matters; they do not create new
+geometry. The margin is an input, never a decision variable: the adapter
+cannot lower it. A 1.5 cm margin asks for more room than 1 cm; it is not a
+failure probability. We also report entries into $D$ itself, unfinished
+attempts and \emph{engagement}: whether the agent moved at all.
+
+\subsection{The frozen planner: SafeCEM}\label{sec:planner}
+LeWM encodes an image as a latent vector and predicts how that vector
+changes under actions. A \emph{plan} $a$ has $H$ blocks of five actions.
+Each replan approximately solves
+\begin{equation}\label{eq:plan}
+\min_a\ c(a)=\lVert\hat z_H(a)-z_g\rVert^2\quad\text{subject to}\quad v_\delta(a)=0 :
+\end{equation}
+bring LeWM's predicted final latent $\hat z_H(a)$ close to the goal image's
+latent $z_g$, using only plans that a separate \emph{checker} passes. The
+checker knows the true simulator state and motion rules, simulates each
+plan's physical path and measures $v_\delta(a)$, how deeply the checked
+point enters $D_\delta$ along it; a plan passes when $v_\delta(a)=0$. This
+privileged checker is an explicit assumption of the experiment. The solver
+is the cross-entropy method (CEM): sample many plans, keep the best few,
+refit the sampler to them and repeat. Passing plans rank by cost, ahead of
+every failing plan; failing plans rank by $v_\delta$. The agent executes the
+first block of the chosen plan, observes and replans
+(Algorithm~\ref{alg:safecem}). If no plan passes, the attempt ends as a
+\emph{controller failure}; there is never an unchecked fallback. We call
+this checked planner SafeCEM. CEM has been combined with constraints and
+model uncertainty before~\cite{liu2020cem}; we study how a frozen planning
+system is configured, not a new constrained planner.
+
+\begin{algorithm}[t]
+\caption{SafeCEM with a planning adapter (one attempt)}
+\label{alg:safecem}
+\small
+\begin{algorithmic}[1]
+\Require frozen LeWM; goal image; margin $\delta$; adapter $A$; $K$
+iterations; $N_0$ base plans
+\While{goal not reached and fewer than 50 actions used}
+  \State $(H,\sigma,\rho,\beta)\gets A(\text{feedback signals},\delta)$ \Comment{$\delta$ never changes}
+  \State $N\gets\lfloor5N_0/H\rfloor$ \Comment{same model work for any $H$}
+  \State start the sampler at the previous plan, with spread $\sigma$
+  \For{$K$ iterations}
+    \State sample $N$ plans, correlated by $\beta$; reuse a fraction $\rho$
+    of stored passing plans
+    \State score each plan: LeWM cost $c$ and checker depth $v_\delta$
+    \State rank passing plans by $c$, then failing plans by $v_\delta$
+    \State refit the sampler to the best-ranked plans; store passing plans
+  \EndFor
+  \State $a^\star\gets$ the sampler's mean if it passes, else the best
+  passing plan seen
+  \If{no passing $a^\star$ exists} \Return controller failure
+  \EndIf
+  \State execute the first block (five actions) of $a^\star$
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{The adapter: how the planner searches}\label{sec:adapter}
+CEM decides where to go; the adapter decides how CEM searches. It sets
+$\theta=(H,\sigma,\rho,\beta)$: \emph{look-ahead} $H$ in blocks, initial
+\emph{sampling spread} $\sigma$, the fraction $\rho$ of passing plans
+\emph{reused} from earlier iterations, and the \emph{temporal correlation}
+$\beta$ of neighbouring sampled actions. Shorter look-ahead buys more plans,
+because the model work per iteration is held fixed. A \emph{fixed} adapter
+holds one $\theta$ per margin. A \emph{feedback} adapter also reads two
+signals from its own images: \emph{progress}, the relative drop in LeWM's
+distance to the goal since the last replan, and \emph{prediction error}, how
+far the last plan's predicted latent missed the one observed
+(Appendix~\ref{app:recipe}). It never sees true goal coordinates or
+candidate endpoints.
+
+\subsection{Planned: evolving the adapter}\label{sec:outer}
+Two searches must be kept apart. \emph{CEM searches for actions within an
+attempt; an outer search tunes the adapter across attempts} (for a fixed
+adapter, its setting $\theta$). Neither changes LeWM's weights. A candidate's
+fitness $\hat F$ is its mean score over whole attempts on shared training
+points (case, margin, seed), where an attempt earns
+\begin{equation}\label{eq:reward}
+R(\tau)=S(\tau)-0.1\,J(\tau)/50.
+\end{equation}
+A safe finish earns between 0.9 and 1, more when faster; anything else
+earns $-0.1$. With three training points, one extra safe finish always
+outweighs any saving in actions: safe completion first, speed second.
+Experiment Two uses this fitness. Experiment One instead chose its settings
+by hand (sixteen settings, four refinements and a check on the third
+layout; 312 development attempts). A planned next step, \emph{not yet run},
+replaces that screen with a simple $(\mu+\lambda)$ evolution
+strategy~\cite{beyer2002es} (Algorithm~\ref{alg:evo}); no result in this
+paper uses it.
+
+\begin{algorithm}[t]
+\caption{Planned evolution search over a fixed adapter (not yet run)}
+\label{alg:evo}
+\small
+\begin{algorithmic}[1]
+\Require SafeCEM; margin $\delta$; training points; $\mu$ parents;
+$\lambda$ children; mutation spread $s$
+\State parents $\gets\mu$ random settings $\theta$, scored by $\hat F$
+\Comment{Eq.~\ref{eq:reward}}
+\For{each generation}
+  \State children $\gets\lambda$ copies of random parents, each mutated:
+  $\theta\gets\theta+s\epsilon$, $\epsilon$ standard normal, $H$ rounded,
+  all within bounds
+  \State score every child by $\hat F$ on the same training points
+  \State parents $\gets$ the best $\mu$ of parents and children
+  \Comment{selection}
+\EndFor
+\State \Return the fittest $\theta$, to be validated on new cases
+\end{algorithmic}
+\end{algorithm}
+
+\section{Related Work}
+Frozen systems offer other control interfaces: learned latent safety
+filters~\cite{nakamura2025latent}, uncertainty-aware
+filtering~\cite{seo2025unisafe} and latent-space steering of a frozen
+diffusion policy~\cite{wagenmaker2025dsrl}. ManiGuard scores manipulation
+policies on safety specifications alongside task
+success~\cite{peng2026maniguard}; its monitor records violations but does
+not block actions. A shield or safety filter overrides a policy only when a
+check fails~\cite{alshiekh2018shielding,hsu2024safetyfilter}; related work
+switches to a recovery behaviour when risk is
+detected~\cite{thananjeyan2021recovery}, wraps frozen vision-language-action
+policies in barrier-function filters~\cite{hu2025vlsa}, finds that
+retreating can beat holding still~\cite{cao2026battery}, and tunes filter
+parameters by black-box search~\cite{wang2025safebo}. Our Jar shield is
+simpler, with measured effects and no safety guarantee: a hand-designed
+trigger and retreat whose two numbers were tuned by
+CMA-ES~\cite{hansen2001cma}, an evolution strategy that adapts the spread
+and direction of its samples. We did not find prior work that derives such a
+contact-gated tilt shield for a frozen vision-language-action policy from
+its recorded failures, but our search was not exhaustive. Our main
+comparison sets evolution strategies~\cite{salimans2017es} against
+REINFORCE~\cite{williams1992reinforce} and random search, a necessary
+reference when good settings may be easy to find~\cite{bergstra2012random},
+and reports uncertainty because a few training runs can
+mislead~\cite{agarwal2021statistics}.
+
+\section{Experiment One: Can Better Planning Recover Progress?}\label{sec:exp1}
+\subsection{Tasks and comparison}
+TwoRoom is navigation: a dot must reach a target through a gap in a
+forbidden band. Reacher is an arm task: the arm must reach a target joint
+pose, not just bring its fingertip near the target, while keeping the
+fingertip out of a danger region. Each task uses $224\times224$ images and
+its own frozen LeWM checkpoint of 18,034,478 parameters; the adapters here
+have 10 or 36. The checker tests every simulated action state in TwoRoom and
+both internal physics steps per action in Reacher. CEM runs 10 iterations
+with 1,000 base plans in TwoRoom, keeping the best 1\%, and 300 in Reacher,
+keeping the best 10\%.
+
+We compare four planners, named the same way throughout: \emph{No safety
+check} (native planning without the checker), \emph{Original SafeCEM} (each
+task's original checked settings), \emph{Tuned fixed} settings and a
+10-parameter \emph{Feedback} controller. Feedback starts from a tuned
+setting, $\theta_0=(3,1,0.25,0.5)$ in both tasks, and after each replan
+applies one rule: when the model's predictions are poor (prediction error
+above 0.5), look less far ahead (two blocks); otherwise, when progress
+stalls (below 0.02), double the sampling spread and reuse half the passing
+plans. Its ten parameters are the starting setting, the two thresholds and
+the responses (Appendix~\ref{app:recipe}).
+
+The first comparison uses three familiar layouts per environment, twelve new
+planner seeds and three margins, so 36 attempts per planner and margin. The
+layouts had been used during development, so this part tests recovery on
+familiar geometry. Appendix~\ref{app:visuals} shows all four planners at all
+three margins. A separate comparison of Tuned fixed and Feedback uses twenty
+new cases per environment, two margins and six planner seeds. The cases
+were generated before any development outcomes and not filtered by success;
+the comparison rules were fixed in advance, and paired methods ran on the
+same host and GPU.
+
+\subsection{Tuned fixed settings make a large difference}
+At the largest margins (6 pixels in TwoRoom, 1.5 cm in Reacher), Original
+SafeCEM mostly runs out of actions without finishing. Tuned fixed settings
+change that (Figure~\ref{fig:outcomes}): safe completion rises from 3/36 to
+34/36 in TwoRoom and from 0/36 to 33/36 in Reacher, and unfinished attempts
+fall from 33 to 2 and from 36 to 3. Every attempt in these four groups
+moves, and none breaches the margin. So, in these cases, the lost progress
+was not an unavoidable cost of the margin: the same requirement allowed far
+better planning. A small mechanism screen, nine attempts per condition,
+suggests that at TwoRoom's 6-pixel margin and Reacher's 0 cm margin how the
+search is organized matters more than how much it searches; it credits
+complete configurations, not single settings (Appendix~\ref{app:results}).
+
+\begin{figure*}[t]
+\centering\includegraphics[width=\textwidth]{planning-outcomes.pdf}
+\caption{The three outcomes of Figure~\ref{fig:problem} at the largest
+tested margin, 36 attempts per bar; tasks are never pooled. TwoRoom and
+Reacher use familiar layouts (three layouts, twelve seeds), PushT and Cube
+reserved cases (twelve cases, three seeds). No safety check mostly breaches,
+Original SafeCEM mostly stops short, and Tuned fixed finishes safely far
+more often. ``Stopped short'' includes running out of actions and, in Cube,
+controller failures. Counts below 4 are not printed.}
+\label{fig:outcomes}
+\Description{Four panels of stacked bars. In each task, No safety check mostly breaches the margin, Original SafeCEM mostly stops short, and Tuned fixed and Feedback finish safely in 34 and 36 of 36 in TwoRoom,
+33 and 29 in Reacher, 19 and 20 in PushT, and 12 and 12 in Cube.}
+\end{figure*}
+
+\subsection{Feedback adds no clear benefit}
+On the new cases (Table~\ref{tab:fresh} in Appendix~\ref{app:results}),
+tuned fixed settings already perform strongly. At Reacher's 1.5 cm margin
+they finish safely in 99/120 attempts and Feedback in 92/120, a difference
+of $-5.8$ percentage points with a 95\% interval of $[-19.2,7.5]$. The
+interval includes both losses and gains, so these data do not establish a
+feedback advantage. The controller does act: across the familiar and
+new-case panels it leaves its starting setting at least once in 197 of 348 TwoRoom
+and 347 of 348 Reacher attempts, so its small effect is not because it
+never switches.
+
+\input{lewm18-methods.tex}
+\input{lewm18-results.tex}
+
+\section{Experiment Two: Can Evolution Find a Better Adapter?}\label{sec:exp2}
+\subsection{One controller, one fitness, three optimizers}
+On TwoRoom and Reacher we now learn a 36-parameter adapter. A linear
+\emph{selector} chooses one of six planning \emph{modes}, each a fixed
+$\theta$ (Table~\ref{tab:modes} in Appendix~\ref{app:recipe}): it picks mode
+$m$ with probability $\operatorname{softmax}(Wx_t)_m$, where $W$ is a
+$6\times6$ matrix with entries in $[-3,3]$ and $x_t$ holds six inputs: a
+constant, progress, prediction error, the fraction of plans that passed the
+check in the previous replan, elapsed replans and the requested margin.
+Training samples modes; validation and deployment take the most likely one.
+
+All three methods learn from the fitness $\hat F$ of Eq.~\ref{eq:reward}.
+Each round gives each method 24 attempts: eight
+candidates on the same three training points (case, margin, seed).
+\emph{Random search} tries seven fresh random settings, re-runs its current
+best on the same points and keeps the winner under the selection order
+below, which ranks as $\hat F$ does when nothing breaches.
+\emph{Evolution}, an antithetic evolution strategy~\cite{salimans2017es},
+tests $W\pm\sigma\epsilon_i$ for four random directions $\epsilon_i$, with
+$\sigma=0.3$, and moves along the estimated fitness gradient
+\begin{equation}\label{eq:es}
+\hat g=\frac{1}{2\sigma n}\sum_{i=1}^{n}
+\bigl[\hat F(W+\sigma\epsilon_i)-\hat F(W-\sigma\epsilon_i)\bigr]\epsilon_i,
+\quad n=4.
+\end{equation}
+\emph{Policy gradient} (REINFORCE) runs $W$ itself 24 times and makes the
+mode choices that earned above-baseline reward more likely, with a
+running-mean baseline. Both gradient methods take a normalized ascent step
+of size 0.2 within the bounds (Appendix~\ref{app:recipe}). No method
+retrains LeWM or evolves an architecture.
+
+\begin{algorithm}[t]
+\caption{One search-and-select run (shared by all methods)}
+\label{alg:search}
+\small
+\begin{algorithmic}[1]
+\Require method (random search, evolution or policy gradient); shared
+start $W$; eight presets
+\State $W^{+}\gets$ best preset, 3 attempts each \Comment{24 attempts}
+\For{round $r=1,\dots,6$} \Comment{24 attempts each}
+  \State pick three training points (case, margin, seed)
+  \State form eight candidates: random search, $W$ and seven random draws;
+  evolution, $W\pm\sigma\epsilon_i$; policy gradient, eight copies of $W$
+  \State run every candidate on the three points, sampling modes
+  \State random search: $W\gets$ best candidate
+  \State evolution, policy gradient: ascent step on $W$
+\EndFor
+\State validate $W^{+}$ and three learned candidates, six attempts each
+\Comment{24}
+\State \Return the best, frozen before the final cases open
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Presets, selection and the final test}
+Each run (Algorithm~\ref{alg:search}) first scores eight simple
+\emph{presets}, six that always use one mode and two that choose a mode
+from the margin, and keeps the best as a fallback. Candidates are always
+compared by one strict \emph{selection order}: reject any candidate with a
+breach; then prefer more safe completions, then fewer failure-capped
+actions, then less model work, and finally the lower index, so the preset
+wins exact ties. Each method validates four candidates on separate
+validation cases, deploys the best and freezes it before the final case
+file is opened. Each runs five independent searches per environment, of 192
+attempts each. Within each repeat the methods share initial parameters,
+training cases and caps on attempts, actions, model and checker work, though
+actual use can differ when a controller finishes sooner. As a further
+baseline, we retune a fixed controller that uses one mode per margin.
+
+The final panel has twelve new cases per environment, two margins and two
+planner seeds, so each selected controller has 24 attempts per margin.
+Search-method rows combine five controllers (120 attempts); the fixed
+controller is evaluated once (24). The primary comparison is Reacher at
+1.5 cm, the only setting where earlier results left clear room for
+improvement.
+
+Before the final test we fixed a demanding claim rule: evolution is credited
+only if it beats random search, policy gradient and retuned fixed settings
+each by at least ten percentage points of safe completion, with the lower
+end of every 98.33\% interval (95\% familywise) above zero and no increase
+in breaches. The intervals come from a bootstrap that resamples whole cases
+and optimizer runs while keeping comparisons paired.
+
+\subsection{Evolution's small lead is too uncertain}
+Evolution finishes safely in 101/120 primary attempts, against 97/120 for
+random search, 99/120 for policy gradient and 20/24 for retuned fixed
+settings (Table~\ref{tab:primary} in Appendix~\ref{app:results}). Every
+attempt moves, none breaches the margin, and the rest are unfinished. The
+leads are $+3.3$, $+1.7$ and $+0.8$ percentage points, but every interval in
+Figure~\ref{fig:contrasts} includes zero, so the data fit evolution being
+worse as well as better. They fail the claim rule, and they do not prove
+the methods are equivalent.
+
+\begin{figure}[t]
+\centering\includegraphics[width=\columnwidth]{primary-contrasts.pdf}
+\caption{Evolution minus each comparator on the main test: observed
+difference in safe-completion rate (dot) and 98.33\% interval (line; 95\%
+familywise). Every interval crosses zero. The dashed line is the
+predeclared ten-point target of the claim rule.}
+\label{fig:contrasts}
+\Description{All three intervals for evolution minus its comparator cross zero;
+observed differences are positive but smaller than ten percentage points.}
+\end{figure}
+
+The selection records add a qualification. Across both environments, eight
+of ten evolution searches select a shared preset; only two select parameters
+that evolution changed. Eight of ten policy-gradient searches also select a
+preset. These are valid outcomes of the procedure, but success from a
+preset should not be credited to evolution. On the primary Reacher test,
+four of five evolution runs deployed their preset, three of them the same
+preset as policy gradient, and the one evolved controller finished 19/24,
+against 20/24 for both its paired random-search and policy-gradient
+controllers. Both gradient methods did change their parameters every round
+and tried all six modes. Across all 1,632 final attempts none breaches, all
+move and none ends in a controller failure; several methods are near
+perfect in TwoRoom (Appendix~\ref{app:results}).
+
+\input{maniguard19.tex}
+
+\section{Supporting Study: UNISafe and Useful Information}\label{sec:unisafe}
+UNISafe tests the same idea on a different frozen system with its own task
+and safety definition, so its results are not pooled. In its block-plucking task, the actor, world model and
+safety filter stay frozen; the actor is derived from
+Dreamer~\cite{hafner2025dreamerv3}, not a vision-language-action policy. Our
+controller edits the actor's proposed action before it reaches the filter:
+when the actor asks to open the gripper after enough consecutive closing
+commands, it holds the gripper closed for a set \emph{delay}. The
+\emph{sensed} version restarts its count whenever the fingers are not stably
+closed on an object; the \emph{history-only} version counts commands alone.
+It can also scale the hand's translation while a grasp is sensed. The
+filter's own backup actions are unchanged.
+
+Removing grasp sensing but keeping the history-based timing
+(Figure~\ref{fig:unisafe} in Appendix~\ref{app:results}) lowers safe
+completion from 50/64 to 31/64, by 29.7 percentage points, with an interval
+of $[-52.6,-1.0]$ corrected for the several comparisons made. Violations
+(physical failures or boundary exits) are 8/64 in both, though the analysis
+does not establish that they did not increase, while timeouts rise from
+6/64 to 25/64. So, for this controller and task, sensing the grasp helps
+beyond counting commands. A newly
+chosen setting reaches 54/64 against 51/64 for the random-search controller
+of an earlier optimizer study, but the corrected intervals do not confirm
+the gain, and no optimizer or model-weight update ran in this follow-up.
+
+\section{What We Can Conclude}
+\subsection{Three checks before choosing an optimizer}
+The studies suggest three checks before choosing an optimizer: can the
+controller observe a useful signal, change the action usefully, and leave a
+system that still makes progress? UNISafe tests the first by removing grasp
+sensing; the Jar shield has a useful signal and a change that avoids harm
+but does not help finishing; LeWM tests the third by holding the margin
+fixed while changing planning. This is a shared argument, not a transfer
+claim, and the evidence differs in strength: the UNISafe ablation is
+confirmed within its task, the Jar violation reduction passes its secondary
+test but not the cleanest post hoc subset, and LeWM supplies the completed
+optimizer comparison. In none of the three systems did the optimizer supply the gain:
+in LeWM the learned controllers did not clearly beat a retuned fixed
+setting, in an earlier study of the UNISafe adapter (Appendix~\ref{app:results}) a
+tuned fixed rule and random search matched evolution, and on Jar, CMA-ES stayed near a hand-chosen start. The
+evolutionary contribution currently lies in controlled comparisons and their
+limits, not an established winning method.
+
+\subsection{Limits of the answer}\label{sec:limits}
+Both the LeWM checker and the Jar shield read privileged simulator state, so
+neither result shows that the same safety would hold with an uncertain
+learned checker or on a physical robot. Zero observed breaches means none
+occurred in these tests, not that breaches are impossible; even the
+approximate 95\% bound of $3/n$ for zero events in $n$ attempts assumes
+independent attempts, which repeated cases and controllers weaken. Cases
+accepted by the geometry filter are valid but not proven solvable within 50
+actions. The check covers one point per task, not the moved object or the
+rest of the robot. PushT and Cube settings were tuned for each task, so they
+show no controller transfer, and no test covers new cameras or dynamics.
+Experiment One and its extension compare complete configurations that
+change several settings together and did not tune native planning, so their
+gains cannot be credited to handling the safety check rather than to better
+planning in general; in Reacher, Tuned fixed already beats Original SafeCEM
+with no added margin (36/36 against 19/36).
+
+The optimizer comparison tested one small recipe: a linear selector, six
+training rounds, end-of-attempt rewards and a small validation panel, with
+five repeats and twelve final cases per environment. Frequent preset
+selection could reflect strong presets, limited learning or noisy
+validation, and the records do not separate these. Equal allowances do not
+mean equal work, so we make no compute-efficiency claim
+(Appendix~\ref{app:results}).
+
+The Jar shield was tested with one fine-tuned policy, one task and one
+simulator, on four scenes that earlier studies and the search had already
+used, and its violation result is a secondary endpoint whose cleanest post
+hoc subset gives $p=0.075$ (Section~\ref{sec:jar}).
+Attempts are not deterministic per seed: a repeated native attempt closed
+the jar and tipped late instead of early, so pairs match scenes, not
+trajectories. Only 20 of the 107 pairs ran both arms on the same one of five
+rented RTX 3090 hosts.
+
+\section{Conclusion}
+A small controller can help a frozen planning model finish safely: tuned
+fixed settings substantially raise safe completion at unchanged margins in
+four planning tasks, so a good fixed setting deserves to be a serious
+baseline. In the tested controller class and budget, feedback and evolution
+have not beaten strong fixed settings and simpler search. Around a frozen
+robot policy, a shield that retreats when the jar starts to tip cuts
+violations from 35\% to 20\% of attempts, but the robot does not finish more
+often: finishing needs a better action, not only a safer stop. A useful
+adapter is therefore not yet evidence for a successful optimizer, and
+avoiding harm is not the same as finishing the task; the two must be scored
+together, as Eq.~\ref{eq:safe} does.
+
+\section*{Data and Reproducibility}
+The evidence manifest~\cite{mohan2026evidence} lists records, source hashes
+and dataset revisions; Appendix~\ref{app:data} gives counts and links.
+
+\begin{acks}
+This work forms part of Sachin Mohan's BSc Honours research at the University
+of the Witwatersrand, supervised by Geraud Nangue Tasse. Codex and Claude
+assisted with software, experiment operation, evidence consolidation and
+writing.
+\end{acks}
+
+\AtBeginEnvironment{thebibliography}{\interlinepenalty=10000}
+\bibliographystyle{ACM-Reference-Format}\bibliography{references}
+
+\onecolumn
+\appendix
+\section{Exact Controller and Search Recipe}\label{app:recipe}
+This appendix gives the details needed to reproduce the planning
+experiments. In the repository, Experiment One is task 16, its PushT and
+Cube extension is task 18 and Experiment Two is task 17. The UNISafe
+follow-up is task 9, the Jar speed screen (16 attempts per condition) is task 15 and the Jar
+tip shield is task 19. Appendix~\ref{app:jar-history} also draws on Jar
+tasks 1, 3, 5, 7 and 8, and Appendix~\ref{app:evo-history} on tasks 10 and
+12 to 14. Algorithms~\ref{alg:safecem}--\ref{alg:shield} and
+Eqs.~\ref{eq:safe}--\ref{eq:jarfit} in the main text give the planner, the
+controllers, the fitness functions and the planned search; this appendix gives the exact rules
+and the remaining details.
+
+\paragraph{Planner details.} Within a CEM iteration, plan $i$ with LeWM
+cost $c_i$ and checker depth $v_i$ is ranked by $r_i=c_i$ if $v_i=0$ and
+$r_i=C+v_i$ otherwise, where $C$ exceeds every passing cost; $v_\delta$ sums
+the checked point's penetration depth into each margin-enlarged danger box
+over the simulated path. Plan $i$'s sampling noise follows
+$\nu_{h}=\beta\nu_{h-1}+\sqrt{1-\beta^2}\,\eta_h$ across blocks with
+standard-normal $\eta_h$, and the plan is $\mu+s\odot\nu$. The current mean
+$\mu$ is always one of the $N$ plans. Stored passing plans are shifted by
+one block between replans. The elite count is $k=\max(2,\operatorname{round}(qN))$,
+the sampling spread is clipped to $[0.5,2]$ and the reuse fraction to
+$[0,0.5]$. After execution, LeWM predicts the next latent of the chosen
+plan, which defines the next prediction error $e_{t+1}$; this extra
+prediction is counted as model work. In Cube, after the approximate check,
+the chosen plan, the best passing plan and up to six stored plans are
+previewed in that order in the true simulator, restoring its full state
+after each preview, and the first whose first block passes is executed.
+
+\paragraph{Feedback signals and rule.} Let $E$ be LeWM's encoder, $o_t$
+the image at replan $t$, $z_g$ the goal latent and $c_t=\lVert
+E(o_t)-z_g\rVert^2$ the current latent cost. Progress is
+$\Delta_t=(c_{t-1}-c_t)/c_{t-1}$ and prediction error is
+$e_t=\lVert E(o_t)-\hat z_t\rVert^2/\max(c_t,1)$, where $\hat z_t$ is the
+latent that the previously executed plan predicted for $o_t$. From its
+starting setting $\theta_0=(H_0,\sigma_0,\rho_0,\beta)$, the Experiment One
+Feedback controller uses, after the first replan,
+\begin{equation*}
+\theta_t=\begin{cases}
+(H_r,\ \sigma_0,\ \rho_0,\ \beta) & \text{if } e_t>\tau_e,\\
+(H_s,\ \lambda\sigma_0,\ \rho_s,\ \beta) & \text{else if } \Delta_t<\tau_s,\\
+\theta_0 & \text{otherwise},
+\end{cases}
+\end{equation*}
+with selected values $\theta_0=(3,1,0.25,0.5)$, $\tau_e=0.5$, $\tau_s=0.02$,
+$H_r=2$, $H_s=3$, $\lambda=2$ and $\rho_s=0.5$ in both tasks: ten
+parameters.
+
+\paragraph{Selector inputs.} The selector uses
+$x_t=(1,\Delta_t,e_t,f_{t-1},\min(t,9)/9,\delta/\delta_{\max})$, where
+$\Delta_t$ is clipped to $[-1,1]$; $e_t$ is clipped to $[0,2]$ and halved; $f_{t-1}$ is
+the fraction of plans that passed the check in the last CEM iteration of
+the previous replan; $t$ is the replan index; and $\delta_{\max}$ is the
+larger tested margin (6 px in TwoRoom, 1.5 cm in Reacher). The initial
+values of $\Delta$, $e$ and $f$ are 0, 0 and 1. Training samples modes at
+temperature one, with separate mode and planner random streams. Validation
+and deployment use argmax, breaking ties by smallest mode index.
+
+\begin{table}[htbp]
+\caption{The six modes. Each tuple is $\theta=(H,\sigma,\rho,\beta)$:
+look-ahead blocks, initial sampling spread, reuse fraction and temporal
+correlation.}
+\label{tab:modes}\centering\small
+\begin{tabular}{cll}
+\toprule
+Mode & TwoRoom & Reacher \\
+\midrule
+0 & $(2,1,0,0)$ & $(3,1,0.25,0.5)$ \\
+1 & $(2,2,0.5,0.5)$ & $(3,1,0.5,0)$ \\
+2 & $(2,2,0.5,0)$ & $(2,1,0.25,0.5)$ \\
+3 & $(3,1,0.25,0.5)$ & $(3,2,0.5,0.5)$ \\
+4 & $(2,1,0.25,0.5)$ & $(2,2,0.5,0)$ \\
+5 & $(3,2,0.5,0.5)$ & $(5,1,0,0)$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Optimizers.} Paired methods share clipped $\mathcal N(0,0.5^2)$
+initial coefficients $W_0$, and random search draws its fresh candidates
+from the same distribution. For a candidate with attempts
+$\tau_1,\dots,\tau_n$ and no breach, the selection order sorts the key
+\begin{equation*}
+\Bigl(-\textstyle\sum_j S(\tau_j),\ \sum_j J(\tau_j),\ \text{predictor steps},\ \text{index}\Bigr)
+\end{equation*}
+lexicographically, smallest first; candidates with any breach are rejected.
+Random search keeps its incumbent by this order rather than the scalar
+fitness of Eq.~\ref{eq:reward}; with no training breaches, the two orders
+differ only in the predictor-work tie-break. REINFORCE uses the 24 training
+attempts of each round,
+\begin{equation*}
+\hat g_{\mathrm{PG}}=\frac{1}{24}\sum_{j=1}^{24}\bigl(R(\tau_j)-b\bigr)
+\sum_t\bigl(\mathbf e_{m_t}-\pi_W(\cdot\mid x_t)\bigr)\,x_t^{\mathsf T},
+\end{equation*}
+the score-function gradient of the softmax selector
+$\pi_W(m\mid x)=\operatorname{softmax}(Wx)_m$, with a baseline $b$ that
+starts at 0 and becomes $0.8b+0.2\bar R$ after each round. Both gradient
+methods update $W\gets\operatorname{clip}_{[-3,3]}\bigl(W+0.2\,\hat
+g/\max(1,\lVert\hat g\rVert)\bigr)$. Evolution's candidates $W\pm\sigma\epsilon_i$
+are clipped to the bounds, while Eq.~\ref{eq:es} uses the unclipped
+directions. REINFORCE has no entropy bonus, and a finite-difference
+expected-reward check validated its gradient.
+
+\paragraph{Presets and validation.} Each constant-mode preset gives its
+mode a weight of 3 on the constant input and sets every other coefficient to
+zero. The two margin-dependent presets switch between the two modes of
+Experiment One's best margin routing at $\delta/\delta_{\max}=5/6$, one in
+each direction. Each run evaluates the eight presets
+on three attempts each (24 in total); the best under the selection order
+becomes the run's preset finalist. In index order, evolution and REINFORCE
+validate that preset and then their final, penultimate and initial
+coefficients; random search validates the preset and then the last batch's
+best three. Four candidates each receive three validation cases at two
+margins. If every candidate breaches, the run aborts. Fixed tuning tests
+six modes on six development cases, two margins and two planner seeds,
+selecting a fixed mode per margin.
+
+\paragraph{Uncertainty.} The primary intervals use 10,000 crossed-bootstrap
+draws, seed 170990, resampling five optimizer-run indices and twelve whole
+case blocks while retaining paired methods and both planner seeds. Each of
+the three primary contrasts uses 98.33\% confidence. Fixed observations are
+not treated as five independent copies. The intervals are
+$[-20.8,25.8]$, $[-10.0,15.0]$ and $[-20.8,20.0]$ percentage points for
+evolution minus random search, REINFORCE and retuned fixed. Task-16 feedback
+uncertainty resamples whole case blocks. UNISafe's primary correction covers
+two contrasts and three endpoints at familywise $\alpha=0.05$.
+
+A pre-final audit found overlap in the initially proposed task-17 final
+planner seeds. A recorded amendment replaced them with disjoint seeds
+179710 and 179711 before final case access. Panels, counts and selection
+rules were unchanged. All selected parameters were frozen before final
+case deserialization.
+
+\begin{table*}[htbp]
+\caption{All task-17 final outcomes: safe completions, with unfinished counts
+in parentheses. Historical fixed means the preceding study's tuned fixed
+setting. Across these 1,632 attempts, all move, none ends in a controller
+failure, and none breaches the margin.}
+\label{tab:optimizer-all}\centering\small
+\begin{tabular}{llrrrrr}
+\toprule
+Task & Margin & Historical fixed & Retuned fixed & Random search & Policy gradient & Evolution \\
+\midrule
+TwoRoom & 4 px & 23/24 (1) & 24/24 (0) & 117/120 (3) & 117/120 (3) & 118/120 (2) \\
+TwoRoom & 6 px & 24/24 (0) & 24/24 (0) & 119/120 (1) & 120/120 (0) & 120/120 (0) \\
+Reacher & 1 cm & 24/24 (0) & 24/24 (0) & 120/120 (0) & 118/120 (2) & 119/120 (1) \\
+Reacher & 1.5 cm & 20/24 (4) & 20/24 (4) & 97/120 (23) & 99/120 (21) & 101/120 (19) \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\section{Full Outcomes and Workload}\label{app:results}
+Table~\ref{tab:fresh} gives the Experiment One new-case results,
+Table~\ref{tab:primary} the main optimizer comparison and
+Table~\ref{tab:optimizer-all} every task-17 final outcome.
+
+\begin{table}[htbp]
+\caption{New cases in Experiment One. Safe completions out of 120 attempts
+per cell, with unfinished counts in parentheses. All attempts move, and
+none breaches the margin.}
+\label{tab:fresh}\centering\small
+\begin{tabular}{llrr}
+\toprule
+Task & Margin & Tuned fixed & Feedback \\
+\midrule
+TwoRoom & 4 px & 120 (0) & 120 (0) \\
+TwoRoom & 6 px & 118 (2) & 120 (0) \\
+Reacher & 1 cm & 119 (1) & 120 (0) \\
+Reacher & 1.5 cm & 99 (21) & 92 (28) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Main optimizer comparison: Reacher, 1.5 cm margin. Search methods
+combine five controllers; retuned fixed uses one. Percentages are rounded to one decimal.
+No row has a breach, and every attempt moves.}
+\label{tab:primary}\centering\small
+\begin{tabular}{lrrr}
+\toprule
+Method & Safe completion & Rate & Unfinished \\
+\midrule
+Retuned fixed & 20/24 & 83.3\% & 4/24 \\
+Random search & 97/120 & 80.8\% & 23/120 \\
+Policy gradient & 99/120 & 82.5\% & 21/120 \\
+Evolution & 101/120 & 84.2\% & 19/120 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Mechanism screen.} At the 6-pixel TwoRoom margin, shorter
+look-ahead completes 6/9 attempts and candidate reuse with correlated
+sampling 8/9, compared with 0/9 for Original SafeCEM and 0/9 for simply
+doubling the search work. At Reacher's 0 cm margin the same conditions
+complete 7/9 and 6/9, against 1/9 and 1/9; at 1.5 cm none of these four completes more than 1 of 9 (a privileged
+geometric reference, not a deployable planner, completes 3/9). Those small conditions do not
+isolate a single cause. Shorter look-ahead also allows more sampled
+sequences under the model-work limit, and reuse was tested together with
+correlation. The supported finding is about the complete configuration,
+rather than one setting in isolation.
+
+Task 16 includes 216 mechanism, 312 development, 864 familiar-layout,
+960 new-case and 24 valid engineering attempts, plus four failed starts.
+Task 17 includes 48 engineering, 72 context, 288 fixed-tuning, 5,760 optimizer
+and 1,632 final attempts. The optimizer subtotal includes 720 preset,
+4,320 training and 720 validation attempts. Its thirty runs each complete
+192 attempts without failed starts.
+
+\begin{table}[htbp]
+\caption{Workload includes engineering, training, selection and final tests.
+The task-16 physics total includes four reconstructed missing integrations
+from invalid recorder attempts; the absent states remain absent.}
+\label{tab:workload}\centering\small
+\begin{tabular}{lrr}
+\toprule
+Measured quantity & Task 16 & Task 17 \\
+\midrule
+Attempts & 2,380 & 7,800 \\
+Valid attempts & 2,376 & 7,800 \\
+Executed actions & 61,388 & 193,861 \\
+Executed physics steps & 99,899 & 318,709 \\
+Model predictor steps & 375,902,973 & 1,136,321,665 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:workload} totals the work. Every task-17 optimizer run has an allowance of 9,600 executed actions.
+Predictor ceilings are 96,009,600 for TwoRoom and 28,809,600 for Reacher,
+with separate checker ceilings. Across the campaign, counterfactual checking
+uses 3,946,414,366 Reacher physics steps and 3,708,000,933 TwoRoom analytic
+path steps. Shared synthetic tests add 14,499,085 analytic checks with no
+live physics integrations or LeWM queries. Executed interaction, imagined
+model work and counterfactual checking are recorded separately, alongside
+wall time. The final audit recomputes safety labels, completion and counters.
+
+Equal search allowances do not mean equal actual work. A controller
+that finishes early consumes fewer actions, and its planning modes change
+model and checker cost. We did not compare intermediate controllers at
+matched consumed-work checkpoints. This study therefore supports no claim
+that one optimizer is more compute-efficient.
+
+\begin{figure}[htbp]
+\centering\includegraphics[width=\columnwidth]{unisafe-outcomes.pdf}
+\caption{UNISafe confirmation, 64 attempts per setting on one host.
+Removing grasp sensing (history-only release) turns completions into
+timeouts. Counts below 4 are not printed.}
+\label{fig:unisafe}
+\Description{Stacked bars for six settings. Native finishes 3 of 64 and times
+out 52 times. Sensed release finishes 50; history-only release finishes 31 with
+25 timeouts; the best setting finishes 54.}
+\end{figure}
+
+\begin{table}[htbp]
+\caption{UNISafe confirmation: 64 attempts per condition. $V$ is a physical
+failure or boundary exit, $T$ a timeout, and $J$ completion time in seconds,
+with 15 seconds assigned to failures and unfinished attempts.}
+\label{tab:unisafe}\centering\small
+\begin{tabular}{lrrrr}
+\toprule
+Setting & Safe completion & $V$ & $T$ & $J$ \\
+\midrule
+Native & 3/64 & 9 & 52 & 14.47 \\
+Sensed release, delay 15 & 50/64 & 8 & 6 & 5.64 \\
+Sensed release, delay 40 & 47/64 & 9 & 8 & 6.27 \\
+Earlier random-search setting & 51/64 & 9 & 4 & 5.68 \\
+Delay 15, translation 0.75 & 54/64 & 4 & 6 & 4.92 \\
+History-only release & 31/64 & 8 & 25 & 10.57 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The UNISafe study (Table~\ref{tab:unisafe}) has 590 attempts, including
+four invalid renderer starts; all 384 confirmation attempts ran on one
+physical host and are valid. The setting selected for speed is the same as the one selected for
+completion, and no tested setting traded speed against completion, so the
+study does not establish a useful speed/completion dial. High-completion settings still move the hand 70--83 cm
+on average, so fewer filter interventions do not mean the agent stayed
+still. Removing sensing increases capped completion time by 4.93 seconds,
+with a corrected interval of $[2.86,6.89]$. Forty extra control steps after
+success show that reaching the success condition and holding it are
+different. Translation scaling holds success better, but that comparison
+was post hoc.
+
+The 16 October study ran on a different host and seed panel. Its selected
+controllers finished safely in 54/64 (evolution), 56/64 (random search),
+54/64 (policy gradient) and 55/64 (tuned fixed rule), against 2/64 for the
+frozen policy; evolution's selection had seven physical failures and one
+boundary exit, against six physical failures for the frozen policy. The
+follow-up's delay-15 and delay-40 settings have the same parameters as that
+study's evolution and fixed-rule selections, and its reference setting is
+that study's random-search selection. The two studies are reported
+separately and not pooled.
+
+Appendix~\ref{app:jar} gives the ManiGuard Jar baseline, every numbered earlier Jar study and the details of the task 19 shield.
+
+\subsection{Data and attempt counts}\label{app:data}
+The experiment records, source hashes and private dataset revisions are
+listed in the accompanying evidence manifest~\cite{mohan2026evidence}.
+The task-16 and task-17 campaign folders of the TwoRoom and Reacher
+datasets retain 10,180 attempts, including four failed engineering starts,
+with raw traces, selected parameters, figures and replay videos; the same
+datasets also hold the earlier task-12 and task-13 searches of
+Appendix~\ref{app:evo-history}.
+The PushT and Cube extension adds 2,028 attempts: two valid cohorts of 676,
+one per task, each covering engineering, development, final, context and
+timing attempts, and the superseded 676-attempt PushT cohort. Early engineering checks and
+their work are recorded separately. Every scored stage has a verified source
+archive. The earlier pre-data checks retain scripts, results and source-hash
+records; their complete intermediate runtime sources were not recovered.
+The \href{https://huggingface.co/datasets/Sachioster/SafetyDial-TwoRoom}{TwoRoom}
+and \href{https://huggingface.co/datasets/Sachioster/SafetyDial-Reacher}{Reacher}
+front pages provide a guided introduction before the technical records.
+The \href{https://huggingface.co/datasets/Sachioster/SafetyDial-PushT}{PushT}
+and \href{https://huggingface.co/datasets/Sachioster/SafetyDial-Cube}{Cube}
+front pages link to the new matched comparisons and speed measurements.
+The Jar tip-shield study preserves all 120 search attempts and 215 counted
+confirmation attempts, plus one uncounted duplicate and one deliberate
+repeat,
+with recordings, monitor records, shield decisions and videos, in a private
+ManiGuard dataset revision (Appendix~\ref{app:jar}).
+The videos replay saved states or images; no new attempts were run to make
+them. They illustrate behaviour, while the complete tables support the
+performance claims. The datasets are currently private.
+\input{visual-appendix}
+\input{lewm18-appendix}
+\input{lewm18-appendix-methods}
+\input{maniguard19-appendix}
+\input{evo-history-appendix}
+\end{document}

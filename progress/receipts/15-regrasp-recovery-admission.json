@@ -1,0 +1,467 @@
+{
+  "schema": "regrasp15-recovery-admission-v1",
+  "utc": "2026-10-26T08:16:40.143140+00:00",
+  "book": "outputs/regrasp15r1/control/finance.json",
+  "outer_bound_book": "outputs/regrasp15r1/control/finance-outer-bound.json",
+  "valid_offers_checked_utc": "2026-10-26T07:59:54.586685+00:00",
+  "valid_offers": [
+    {
+      "id": 45572740,
+      "machine_id": 141415,
+      "gpu_name": "RTX 3090",
+      "dph_total": 0.3377777777777778,
+      "cpu_name": "Xeon\u00ae E5-2697 v3 ",
+      "cpu_cores_effective": 28.0,
+      "cpu_ram": 161148,
+      "driver_version": "580.82.07",
+      "geolocation": "Massachusetts, US"
+    },
+    {
+      "id": 54602212,
+      "machine_id": 52517,
+      "gpu_name": "RTX 3090",
+      "dph_total": 0.4296296296296296,
+      "cpu_name": "Xeon\u00ae W-2133 ",
+      "cpu_cores_effective": 12.0,
+      "cpu_ram": 128489,
+      "driver_version": "580.95.05",
+      "geolocation": "Quebec, CA"
+    },
+    {
+      "id": 57365774,
+      "machine_id": 152108,
+      "gpu_name": "RTX 4090",
+      "dph_total": 0.5111111111111111,
+      "cpu_name": "AMD EPYC 7K62 48-Core Processor",
+      "cpu_cores_effective": 48.0,
+      "cpu_ram": 80561,
+      "driver_version": "580.178.04",
+      "geolocation": "Zhejiang, CN"
+    },
+    {
+      "id": 35877320,
+      "machine_id": 13986,
+      "gpu_name": "RTX 4090",
+      "dph_total": 0.5348148148148149,
+      "cpu_name": "AMD EPYC 7402P 24-Core Processor",
+      "cpu_cores_effective": 12.0,
+      "cpu_ram": 64396,
+      "driver_version": "580.65.06",
+      "geolocation": "Michigan, US"
+    },
+    {
+      "id": 56408443,
+      "machine_id": 17046,
+      "gpu_name": "RTX 4090",
+      "dph_total": 0.5111111111111111,
+      "cpu_name": "AMD EPYC 7542 32-Core Processor",
+      "cpu_cores_effective": 16.0,
+      "cpu_ram": 64396,
+      "driver_version": "580.82.09",
+      "geolocation": "Pennsylvania, US"
+    },
+    {
+      "id": 39099112,
+      "machine_id": 25706,
+      "gpu_name": "RTX 4090",
+      "dph_total": 0.5081481481481481,
+      "cpu_name": "AMD EPYC 7542 32-Core Processor",
+      "cpu_cores_effective": 16.0,
+      "cpu_ram": 96731,
+      "driver_version": "580.126.09",
+      "geolocation": "Japan, JP"
+    }
+  ],
+  "faster_cpu_offers_excluded": "Threadripper PRO, EPYC 9554 and Xeon 8352V hosts on driver 580.x fail the frozen transfer-allowance check (150 GB down and 40 GB up above $1.50); faster consumer CPUs are on drivers 595 and newer. The limits are not changed.",
+  "choice": {
+    "offer": 54602212,
+    "machine": 52517,
+    "gpu": "RTX 3090",
+    "cpu": "Xeon W-2133 (whole machine, 12 threads)",
+    "rate_usd_hour": 0.43,
+    "reason": "Passes money at the original host's speed (unlike the $0.51 EPYC 4090 offers) and has a faster single-thread CPU than the original Broadwell host, which the per-step time tracks."
+  },
+  "decision": "Admitted: stage C (96 episodes) is admitted in full in every scenario, including the outer-bound book; stage D is admitted in full on a host at least about 5% faster than the original, and otherwise runs under its declared incomplete-stage rule. Stage C is re-admitted from measured engineering timings before it starts.",
+  "scenarios": {
+    "chosen_offer_original_speed": {
+      "label": "chosen_offer_original_speed",
+      "utc": "2026-10-26T08:16:39.777876+00:00",
+      "rate_usd_hour": 0.43,
+      "model": {
+        "startup_s": 56.844233195185204,
+        "per_step_s": 0.10323206190395279,
+        "per_request_s": 2.9755161939676973,
+        "episodes": 85,
+        "residual_sd_s": 17.044067820915476
+      },
+      "workload": {
+        "always-0.10": {
+          "steps": 1760.875,
+          "requests": 15.25,
+          "episodes": 16
+        },
+        "native": {
+          "steps": 1745.0526315789473,
+          "requests": 0.0,
+          "episodes": 19
+        },
+        "select-0.10": {
+          "steps": 1843.5625,
+          "requests": 9.5625,
+          "episodes": 16
+        },
+        "project-0.10": {
+          "steps": 1487.25,
+          "requests": 0.0,
+          "episodes": 16
+        },
+        "select-0.06": {
+          "steps": 1817.3333333333333,
+          "requests": 18.555555555555557,
+          "episodes": 18
+        }
+      },
+      "book": {
+        "nominal_allocation_hours": 12.201188159187636,
+        "money_remaining_usd": 5.4794798805182365,
+        "hours_remaining": 12.201188159187634,
+        "speed_factor": 1.0,
+        "setup_hours": 0.9333333333333333,
+        "engineering_hours": 0.40064999999999995,
+        "replacement_allowance": 2,
+        "episode_seconds": {
+          "native": 238.48961448399882,
+          "select-0.06": 301.1636564055916,
+          "project-0.10": 211.876117261839
+        },
+        "admitted": {
+          "stage_c": 96,
+          "stage_d": 46
+        },
+        "planned": {
+          "stage_c": 96,
+          "stage_d": 48
+        },
+        "stage_c_complete": true,
+        "stage_d_complete": false,
+        "predicted_queue_end_hours": 11.375838330234973,
+        "slack_hours_after_last_start": 0.050870972636506244,
+        "predicted_instance_cost_usd": 4.9632771486677045
+      },
+      "outer_bound_book": {
+        "nominal_allocation_hours": 10.396419271959198,
+        "money_remaining_usd": 4.919333092556226,
+        "hours_remaining": 10.396419271959198,
+        "speed_factor": 1.0,
+        "setup_hours": 0.9333333333333333,
+        "engineering_hours": 0.40064999999999995,
+        "replacement_allowance": 2,
+        "episode_seconds": {
+          "native": 238.48961448399882,
+          "select-0.06": 301.1636564055916,
+          "project-0.10": 211.876117261839
+        },
+        "admitted": {
+          "stage_c": 96,
+          "stage_d": 16
+        },
+        "planned": {
+          "stage_c": 96,
+          "stage_d": 48
+        },
+        "stage_c_complete": true,
+        "stage_d_complete": false,
+        "predicted_queue_end_hours": 9.610204019719642,
+        "slack_hours_after_last_start": 0.01173639592340098,
+        "predicted_instance_cost_usd": 4.2040543951461125
+      },
+      "admit_stage_c": true,
+      "admit_full_cohort": false
+    },
+    "chosen_offer_10pct_faster": {
+      "label": "chosen_offer_10pct_faster",
+      "utc": "2026-10-26T08:16:39.912410+00:00",
+      "rate_usd_hour": 0.43,
+      "model": {
+        "startup_s": 56.844233195185204,
+        "per_step_s": 0.10323206190395279,
+        "per_request_s": 2.9755161939676973,
+        "episodes": 85,
+        "residual_sd_s": 17.044067820915476
+      },
+      "workload": {
+        "always-0.10": {
+          "steps": 1760.875,
+          "requests": 15.25,
+          "episodes": 16
+        },
+        "native": {
+          "steps": 1745.0526315789473,
+          "requests": 0.0,
+          "episodes": 19
+        },
+        "select-0.10": {
+          "steps": 1843.5625,
+          "requests": 9.5625,
+          "episodes": 16
+        },
+        "project-0.10": {
+          "steps": 1487.25,
+          "requests": 0.0,
+          "episodes": 16
+        },
+        "select-0.06": {
+          "steps": 1817.3333333333333,
+          "requests": 18.555555555555557,
+          "episodes": 18
+        }
+      },
+      "book": {
+        "nominal_allocation_hours": 12.201188159187636,
+        "money_remaining_usd": 5.4794798805182365,
+        "hours_remaining": 12.201188159187634,
+        "speed_factor": 0.9,
+        "setup_hours": 0.9333333333333333,
+        "engineering_hours": 0.360585,
+        "replacement_allowance": 2,
+        "episode_seconds": {
+          "native": 214.79065303559895,
+          "select-0.06": 271.19729076503245,
+          "project-0.10": 190.83850553565512
+        },
+        "admitted": {
+          "stage_c": 96,
+          "stage_d": 48
+        },
+        "planned": {
+          "stage_c": 96,
+          "stage_d": 48
+        },
+        "stage_c_complete": true,
+        "stage_d_complete": true,
+        "predicted_queue_end_hours": 10.443609222509073,
+        "slack_hours_after_last_start": 0.977256299327356,
+        "predicted_instance_cost_usd": 4.562418632345568
+      },
+      "outer_bound_book": {
+        "nominal_allocation_hours": 10.396419271959198,
+        "money_remaining_usd": 4.919333092556226,
+        "hours_remaining": 10.396419271959198,
+        "speed_factor": 0.9,
+        "setup_hours": 0.9333333333333333,
+        "engineering_hours": 0.360585,
+        "replacement_allowance": 2,
+        "episode_seconds": {
+          "native": 214.79065303559895,
+          "select-0.06": 271.19729076503245,
+          "project-0.10": 190.83850553565512
+        },
+        "admitted": {
+          "stage_c": 96,
+          "stage_d": 32
+        },
+        "planned": {
+          "stage_c": 96,
+          "stage_d": 48
+        },
+        "stage_c_complete": true,
+        "stage_d_complete": false,
+        "predicted_queue_end_hours": 9.595438086795047,
+        "slack_hours_after_last_start": 0.02065854781294547,
+        "predicted_instance_cost_usd": 4.197705043988536
+      },
+      "admit_stage_c": true,
+      "admit_full_cohort": true
+    },
+    "cheapest_3090_original_speed": {
+      "label": "cheapest_3090_original_speed",
+      "utc": "2026-10-26T08:16:40.022148+00:00",
+      "rate_usd_hour": 0.338,
+      "model": {
+        "startup_s": 56.844233195185204,
+        "per_step_s": 0.10323206190395279,
+        "per_request_s": 2.9755161939676973,
+        "episodes": 85,
+        "residual_sd_s": 17.044067820915476
+      },
+      "workload": {
+        "always-0.10": {
+          "steps": 1760.875,
+          "requests": 15.25,
+          "episodes": 16
+        },
+        "native": {
+          "steps": 1745.0526315789473,
+          "requests": 0.0,
+          "episodes": 19
+        },
+        "select-0.10": {
+          "steps": 1843.5625,
+          "requests": 9.5625,
+          "episodes": 16
+        },
+        "project-0.10": {
+          "steps": 1487.25,
+          "requests": 0.0,
+          "episodes": 16
+        },
+        "select-0.06": {
+          "steps": 1817.3333333333333,
+          "requests": 18.555555555555557,
+          "episodes": 18
+        }
+      },
+      "book": {
+        "nominal_allocation_hours": 12.201188159187636,
+        "money_remaining_usd": 5.4794798805182365,
+        "hours_remaining": 12.201188159187634,
+        "speed_factor": 1.0,
+        "setup_hours": 0.9333333333333333,
+        "engineering_hours": 0.40064999999999995,
+        "replacement_allowance": 2,
+        "episode_seconds": {
+          "native": 238.48961448399882,
+          "select-0.06": 301.1636564055916,
+          "project-0.10": 211.876117261839
+        },
+        "admitted": {
+          "stage_c": 96,
+          "stage_d": 46
+        },
+        "planned": {
+          "stage_c": 96,
+          "stage_d": 48
+        },
+        "stage_c_complete": true,
+        "stage_d_complete": false,
+        "predicted_queue_end_hours": 11.375838330234973,
+        "slack_hours_after_last_start": 0.050870972636506244,
+        "predicted_instance_cost_usd": 3.9013666889527547
+      },
+      "outer_bound_book": {
+        "nominal_allocation_hours": 10.396419271959198,
+        "money_remaining_usd": 4.919333092556226,
+        "hours_remaining": 10.396419271959198,
+        "speed_factor": 1.0,
+        "setup_hours": 0.9333333333333333,
+        "engineering_hours": 0.40064999999999995,
+        "replacement_allowance": 2,
+        "episode_seconds": {
+          "native": 238.48961448399882,
+          "select-0.06": 301.1636564055916,
+          "project-0.10": 211.876117261839
+        },
+        "admitted": {
+          "stage_c": 96,
+          "stage_d": 16
+        },
+        "planned": {
+          "stage_c": 96,
+          "stage_d": 48
+        },
+        "stage_c_complete": true,
+        "stage_d_complete": false,
+        "predicted_queue_end_hours": 9.610204019719642,
+        "slack_hours_after_last_start": 0.01173639592340098,
+        "predicted_instance_cost_usd": 3.304582291998573
+      },
+      "admit_stage_c": true,
+      "admit_full_cohort": false
+    },
+    "epyc_4090_original_speed": {
+      "label": "epyc_4090_original_speed",
+      "utc": "2026-10-26T08:16:40.124131+00:00",
+      "rate_usd_hour": 0.511,
+      "model": {
+        "startup_s": 56.844233195185204,
+        "per_step_s": 0.10323206190395279,
+        "per_request_s": 2.9755161939676973,
+        "episodes": 85,
+        "residual_sd_s": 17.044067820915476
+      },
+      "workload": {
+        "always-0.10": {
+          "steps": 1760.875,
+          "requests": 15.25,
+          "episodes": 16
+        },
+        "native": {
+          "steps": 1745.0526315789473,
+          "requests": 0.0,
+          "episodes": 19
+        },
+        "select-0.10": {
+          "steps": 1843.5625,
+          "requests": 9.5625,
+          "episodes": 16
+        },
+        "project-0.10": {
+          "steps": 1487.25,
+          "requests": 0.0,
+          "episodes": 16
+        },
+        "select-0.06": {
+          "steps": 1817.3333333333333,
+          "requests": 18.555555555555557,
+          "episodes": 18
+        }
+      },
+      "book": {
+        "nominal_allocation_hours": 10.723052603753887,
+        "money_remaining_usd": 5.4794798805182365,
+        "hours_remaining": 12.201188159187634,
+        "speed_factor": 1.0,
+        "setup_hours": 0.9333333333333333,
+        "engineering_hours": 0.40064999999999995,
+        "replacement_allowance": 2,
+        "episode_seconds": {
+          "native": 238.48961448399882,
+          "select-0.06": 301.1636564055916,
+          "project-0.10": 211.876117261839
+        },
+        "admitted": {
+          "stage_c": 96,
+          "stage_d": 21
+        },
+        "planned": {
+          "stage_c": 96,
+          "stage_d": 48
+        },
+        "stage_c_complete": true,
+        "stage_d_complete": false,
+        "predicted_queue_end_hours": 9.90447640480553,
+        "slack_hours_after_last_start": 0.0440973426322004,
+        "predicted_instance_cost_usd": 5.146354109522293
+      },
+      "outer_bound_book": {
+        "nominal_allocation_hours": 9.626874936509248,
+        "money_remaining_usd": 4.919333092556226,
+        "hours_remaining": 10.396419271959198,
+        "speed_factor": 1.0,
+        "setup_hours": 0.9333333333333333,
+        "engineering_hours": 0.40064999999999995,
+        "replacement_allowance": 2,
+        "episode_seconds": {
+          "native": 238.48961448399882,
+          "select-0.06": 301.1636564055916,
+          "project-0.10": 211.876117261839
+        },
+        "admitted": {
+          "stage_c": 96,
+          "stage_d": 3
+        },
+        "planned": {
+          "stage_c": 96,
+          "stage_d": 48
+        },
+        "stage_c_complete": true,
+        "stage_d_complete": false,
+        "predicted_queue_end_hours": 8.845095818496333,
+        "slack_hours_after_last_start": 0.007300261696759157,
+        "predicted_instance_cost_usd": 4.605010629918293
+      },
+      "admit_stage_c": true,
+      "admit_full_cohort": false
+    }
+  }
+}

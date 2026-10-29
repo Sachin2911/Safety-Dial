@@ -18,8 +18,8 @@ draft, not an approved proposal or an official university template.
   `\printbibliography` in `main.tex` if references are needed.
 
 The draft records the earlier direction in the
-[archived oracle](../research/history/20261018/oracle.md). The current direction is
-[Evolutionary improvement on ManiGuard](../../Evolutionary%20improvement%20on%20ManiGuard.md);
+[archived oracle](../../archive/20261022/docs/research/history/20261018/oracle.md). The current direction is
+[first principles](../../firstPrinciples.md);
 the concept note has not been revised to match it. The crest is
 copied from the existing template, which extracted it from the supplied proposal.
 

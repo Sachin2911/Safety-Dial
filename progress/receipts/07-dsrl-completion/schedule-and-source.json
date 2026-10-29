@@ -1,0 +1,44 @@
+{
+  "schema": "dsrl07-completion-schedule-audit-v1",
+  "utc": "2026-10-25T13:09:37.728496+00:00",
+  "frozen_jobs_verified": 78,
+  "fields_verified": [
+    "job_id",
+    "stage",
+    "task",
+    "seed",
+    "lane",
+    "episode_seed",
+    "policy_rng_seed",
+    "numpy_seed",
+    "simulator_reset_seed",
+    "actor_rng_seed"
+  ],
+  "resolved_modes_verified": true,
+  "warmup_mode_resolution": {
+    "jobs": [
+      "T00",
+      "T01",
+      "T02",
+      "T03",
+      "T04",
+      "T05"
+    ],
+    "job_table_mode": "actor",
+    "resolved_mode": "gaussian",
+    "source": "The frozen jobs mark warmup_required; progress/07-dsrl-repair.md retains six Gaussian warm-up episodes, and run_dsrl06.py:1360 resolves their actual mode before launch. This is the predeclared schedule, not a post-hoc exception."
+  },
+  "evaluation_dsrl_actor_version": 6,
+  "development_tasks": [
+    0,
+    3,
+    6,
+    9,
+    15,
+    17
+  ],
+  "heldout_interventions": 0,
+  "frozen_sources_verified": 181,
+  "source_snapshot": "outputs/dsrl07-preservation/source-final",
+  "stage_b_sha256": "0253998b168930b5ced3f5ead576625de8d87bb580ba1b3121d8244d0a4df05d"
+}

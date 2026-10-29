@@ -1,0 +1,143 @@
+{
+  "stage": "D3a",
+  "chosen": {
+    "tworoom": {
+      "fixed0": {
+        "recipe_id": "f14",
+        "params": {
+          "horizon": 3,
+          "variance": 1,
+          "retain": 0.25,
+          "correlate": 0.5,
+          "budget_scale": 1.0,
+          "adaptive": false,
+          "objective": "latent",
+          "checked": true
+        }
+      },
+      "fixed1": {
+        "recipe_id": "f02",
+        "params": {
+          "horizon": 2,
+          "variance": 2,
+          "retain": 0.5,
+          "correlate": 0,
+          "budget_scale": 1.0,
+          "adaptive": false,
+          "objective": "latent",
+          "checked": true
+        }
+      },
+      "adaptive0": {
+        "recipe_id": "a02",
+        "params": {
+          "horizon": 3,
+          "variance": 1,
+          "retain": 0.25,
+          "correlate": 0.5,
+          "budget_scale": 1.0,
+          "adaptive": true,
+          "objective": "latent",
+          "checked": true,
+          "error_threshold": 0.5,
+          "stall_threshold": 0.02,
+          "repair_horizon": 2,
+          "stall_horizon": 3,
+          "stall_retain": 0.5,
+          "exploration_multiplier": 2.0
+        }
+      },
+      "adaptive1": {
+        "recipe_id": "b00",
+        "params": {
+          "horizon": 3,
+          "variance": 1,
+          "retain": 0.25,
+          "correlate": 0.5,
+          "budget_scale": 1.0,
+          "adaptive": true,
+          "objective": "latent",
+          "checked": true,
+          "error_threshold": 0.5,
+          "stall_threshold": 0.02,
+          "repair_horizon": 2,
+          "stall_horizon": 3,
+          "stall_retain": 0.5,
+          "exploration_multiplier": 2.0,
+          "joint_response": true
+        }
+      }
+    },
+    "reacher": {
+      "fixed0": {
+        "recipe_id": "f14",
+        "params": {
+          "horizon": 3,
+          "variance": 1,
+          "retain": 0.25,
+          "correlate": 0.5,
+          "budget_scale": 1.0,
+          "adaptive": false,
+          "objective": "latent",
+          "checked": true
+        }
+      },
+      "fixed1": {
+        "recipe_id": "f04",
+        "params": {
+          "horizon": 3,
+          "variance": 1,
+          "retain": 0.5,
+          "correlate": 0,
+          "budget_scale": 1.0,
+          "adaptive": false,
+          "objective": "latent",
+          "checked": true
+        }
+      },
+      "adaptive0": {
+        "recipe_id": "a02",
+        "params": {
+          "horizon": 3,
+          "variance": 1,
+          "retain": 0.25,
+          "correlate": 0.5,
+          "budget_scale": 1.0,
+          "adaptive": true,
+          "objective": "latent",
+          "checked": true,
+          "error_threshold": 0.5,
+          "stall_threshold": 0.02,
+          "repair_horizon": 2,
+          "stall_horizon": 3,
+          "stall_retain": 0.5,
+          "exploration_multiplier": 2.0
+        }
+      },
+      "adaptive1": {
+        "recipe_id": "b01",
+        "params": {
+          "horizon": 3,
+          "variance": 1,
+          "retain": 0.25,
+          "correlate": 0.5,
+          "budget_scale": 1.0,
+          "adaptive": true,
+          "objective": "latent",
+          "checked": true,
+          "error_threshold": 0.5,
+          "stall_threshold": 0.02,
+          "repair_horizon": 2,
+          "stall_horizon": 3,
+          "stall_retain": 0.5,
+          "exploration_multiplier": 2.0,
+          "joint_response": true,
+          "progress_smoothing": 0.5
+        }
+      }
+    }
+  },
+  "seed": 162200,
+  "role": "Fresh development seed, all three familiar layouts, difficult margin. Compare two strongest high-margin fixed settings and best original versus revised adaptive controller.",
+  "selection_after": "Adaptive winner per environment by safe completion, then lower failure-capped J, then predictor work. High-margin fixed winner by same rule. Other margins chosen from D1/D2/Dbase per-margin data. D3b will validate provisional selections on all three margins with another seed."
+}

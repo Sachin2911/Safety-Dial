@@ -1,0 +1,37 @@
+% Task-18 main-text results. Hand-edited after generation: rerunning
+% experiments/scripts/write_lewm18_paper.py would overwrite these edits.
+\paragraph{PushT: tuned settings finish safely about half the time.}
+At the 12-pixel margin (Figure~\ref{fig:outcomes}), Original SafeCEM
+finishes safely in 2/36 attempts, Tuned fixed in 19/36 and Feedback in
+20/36, with no breaches. Native planning breaches the margin in 30/36
+attempts and reaches the goal in only 8/36, even ignoring safety. Tuned
+fixed gains 47.2 percentage points over Original SafeCEM, with a descriptive
+95\% paired case-bootstrap interval of $[22.2,72.2]$, and mean
+failure-capped actions fall from 49.53 to 35.42, a difference of $-14.11$
+($[-22.31,-6.42]$).
+
+\paragraph{Cube: a smaller gain, with many attempts unfinished.}
+At the 1 cm margin, Original SafeCEM finishes safely in 0/36 attempts, and
+Tuned fixed and Feedback in 12/36 each, again with no breaches. Native
+planning breaches in 34/36 attempts and reaches the object goal once. Tuned
+fixed gains 33.3 points ($[11.1,58.3]$), and failure-capped actions fall
+from 50.00 to 37.86 ($-12.14$, $[-21.67,-3.72]$). Of the 24 unfinished Tuned
+fixed attempts, 11 were controller failures because no plan passed the
+simulator preview; the other 13 ran out of actions.
+
+\paragraph{What the extension adds.}
+The gains concentrate on some cases: at the largest margins, Tuned fixed
+finishes safely with at least one seed in 7 of 12 PushT and 5 of 12 Cube
+cases, while no checked planner finishes the other 5 and 7 safely with any
+seed. Feedback adds no established benefit: Feedback minus Tuned fixed is
+$+5.6$ ($[-5.6,16.7]$), $-2.8$ ($[-8.3,0.0]$) and $+2.8$ points
+($[0.0,8.3]$) at PushT's 0, 6 and 12 pixels and 0.0 at every Cube margin,
+and at the largest margins Feedback leaves its starting configuration in
+the logged replans of only 3 of 36 Cube attempts (27 of 36 in PushT). The
+intervals keep each case's seeds together and are conditional on the
+selected settings; a zero-width interval means every case showed the same
+difference, not certainty. Native planning rarely finishes even when it
+ignores the boundary, and it was not retuned, so part of the gain may be
+better planning in general rather than better handling of the check
+(Section~\ref{sec:limits}). Appendix~\ref{app:extension} gives every margin,
+timing, a protocol check without danger and recorded examples.

@@ -4,9 +4,9 @@ The overarching Honours topic allocated to Sachin Mohan (2699183) by the supervi
 Geraud Nangue Tasse. Recorded here on 1 October 2026; the wording below is the
 supervisor's brief, unedited apart from line wrapping.
 
-This is the brief the project sits under. The research question actually being pursued
-is in [researchDirection.md](researchDirection.md) and the executable plan is in
-[mainPlan/](mainPlan/README.md). The supervisor's target venue is recorded in
+This is the brief the project sits under. The current research direction is in
+[firstPrinciples.md](../firstPrinciples.md), and the experiment record is
+[Principia](../principia.pdf). The supervisor's target venue is recorded in
 [gecco2027.md](gecco2027.md).
 
 ## Title

@@ -1,7 +1,18 @@
 # Research archive
 
-Archived 8 October 2026 while narrowing the current research to
-[task continuation under learned safety filtering](../docs/research/history/20261018/oracle.md).
+Start with [Principia](../principia.pdf) for a concise account of all experimental
+campaigns. The [29 October document bundle](20261029/README.md) replaces loose task
+write-ups, plans and working notes with one verified recovery archive. Code, frozen
+configs and machine-readable evidence retain their existing paths. The older frozen
+archives indexed below are unchanged.
+
+Exception: on 29 October, Sachin requested all rental files deleted. Four versioned
+records and one local copy were removed from the 22 October archive; its manifest
+retains their hashes under `user_requested_removals`. Other archived source and
+evidence remains unchanged.
+
+Archived 8 October 2026 while narrowing the research to
+[task continuation under learned safety filtering](20261022/docs/research/history/20261018/oracle.md).
 
 Earlier work is preserved in `legacy/` with its original relative directory layout.
 The shared helpers and configurations make a single historical workspace more reliable

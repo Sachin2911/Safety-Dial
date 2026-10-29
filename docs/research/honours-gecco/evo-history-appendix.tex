@@ -1,0 +1,88 @@
+% Exploratory NSGA-II versus random search, tasks 10, 12, 13 and 14 (stage C searches).
+% Numbers come from progress/receipts/{10-safecem-C2-search.md,12-tworoom-C-search.md,
+% 13-reacher-C-search.md,14-cube-C-search.md} and their freezes, cross-checked against
+% outputs/safecem10/analysis/stageC2-summary.json and outputs/{tworoom12,reacher13,cube14}/
+% analysis/stageC-summary.json ("methods" and "pairwise"; wins count strict NSGA-II > random
+% over the 3 x 3 run pairs). Task 10 numbers are from stage C2, the rerun after stage C was
+% paused at generation 0. Written for the one-column appendix layout.
+\section{Earlier Exploratory Evolutionary Searches}\label{app:evo-history}
+Before the main optimizer comparison (task 17, Table~\ref{tab:primary}), four
+exploratory studies compared NSGA-II~\cite{deb2002nsga2}, a multi-objective evolutionary
+algorithm, with random search. Both methods tuned the settings of SafeCEM. SafeCEM is a planner with a
+safety check, not an evolutionary method; evolution was only this outer search over
+its settings. The tasks were PushT with a gapped wall across the pusher's route
+(task 10), TwoRoom (task 12), Reacher (task 13) and Cube (task 14). Task 14 used an
+earlier gripper-reaching goal, not the object-moving goal of
+Section~\ref{sec:extension}.
+% source: progress/receipts/10-safecem-C2-freeze.json:139 (wall with a gap), :93 (success =
+% block coverage); progress/receipts/14-cube-A-engineering.md:21-22 (reach task: pinch point
+% within 0.04 m of the goal); experiments/helpers/{tworoom12,reacher13,cube14}_planner.py:1
+% ("SafeCEM on ...").
+Each search tuned five settings, with ranges scaled to each task: the margin at the
+first predicted block and its change per later block, the look-ahead horizon (3 to 7
+blocks), the elite fraction, and a tolerance on the summed predicted penetration of the
+danger region plus margin. Unlike the main experiments, the margin itself was searched.
+Two objectives were minimized: exposure, the fraction of saved states inside the danger
+region, and steps to success, counted as 50 when the attempt failed. Each front was
+scored by its hypervolume up to the reference point (1, 50). This score rewards low
+exposure rather than requiring zero entries into the danger region, and the tolerance let the check accept
+small predicted penetrations. Each method ran three independent searches per task. One
+search evaluated 96 settings (12 per generation for 8 generations) on three seeds each,
+288 attempts. Its final front, at most six settings, was then rerun on ten new seeds of
+the search layout and ten seeds of a held-out layout.
+% source: progress/receipts/10-safecem-C2-freeze.json:278-312 (objectives exposure and J,
+% reference point [1.0, 50.0], genes d0, d1, horizon 3..7, topk_frac, tol), :230-234,253,265-277
+% (population 12, 8 generations, 3 replicates, 3 seeds per candidate, final seeds 400..409,
+% front cap 6); progress/receipts/12-tworoom-C-search.md:14-19,72-73 ("96 candidates of 3 seeds
+% per run"); 13-reacher-C-search.md:14-19; 14-cube-C-search.md:14-20; same objectives and
+% reference point in 12-tworoom-C-v1.json:274-281, 13-reacher-C-v1.json:248-255,
+% 14-cube-C-v1.json:245-252. Exposure = share of saved states inside the true boxes
+% (experiments/helpers/safecem10_geometry.py:111); tolerance = summed penetration of the inflated
+% boxes still accepted as feasible (safecem10_planner.py:89-90,175-179); hypervolume = exact
+% dominated area (safecem10_evo.py:194-195). Totals 3032, 2892, 2792, 2872 attempts (receipts
+% lines 4-5) equal 9 x 288 search attempts plus 20 per final setting.
+
+\begin{table}[htbp]
+\caption{Exploratory NSGA-II versus random search. Hypervolume (HV, higher is better, at
+most 50) of each final front, mean $\pm$ standard deviation over three runs per method,
+on new seeds of the search layout (fresh) and on a held-out layout; standard deviations
+are population values with $n=3$. Wins give, out of the nine pairings of one NSGA-II run
+with one random-search run, how many NSGA-II won on HV. HV scales differ
+by task, so compare only within a row. A third method, a fixed grid, is omitted.}
+\label{tab:evo-history}\centering\small
+\begin{tabular}{@{}lrrrrcc@{}}
+\toprule
+ & \multicolumn{2}{c}{Fresh HV} & \multicolumn{2}{c}{Held-out HV} & \multicolumn{2}{c}{NSGA-II wins} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}
+Task & NSGA-II & Random & NSGA-II & Random & Fresh & Held out \\
+\midrule
+% source: progress/receipts/10-safecem-C2-search.md:32 (NSGA-II 6.23 +/- 2.89, 8.64 +/- 2.27),
+% :33 (random 9.18 +/- 3.47, 5.32 +/- 3.86), :42 (wins 3/9 fresh, 7/9 held out)
+PushT (10) & $6.2\pm2.9$ & $9.2\pm3.5$ & $8.6\pm2.3$ & $5.3\pm3.9$ & 3/9 & 7/9 \\
+% source: progress/receipts/12-tworoom-C-search.md:25 (NSGA-II 32.83 +/- 1.80, 35.57 +/- 0.87),
+% :26 (random 37.00 +/- 0.22, 38.10 +/- 0.22), :29-30 (random beat NSGA-II in 9 of 9 on both)
+TwoRoom (12) & $32.8\pm1.8$ & $37.0\pm0.2$ & $35.6\pm0.9$ & $38.1\pm0.2$ & 0/9 & 0/9 \\
+% source: progress/receipts/13-reacher-C-search.md:25 (NSGA-II 17.20 +/- 6.49, 11.67 +/- 0.68),
+% :26 (random 16.20 +/- 5.55, 14.13 +/- 4.43), :32-33 (NSGA-II 5 of 9 on both)
+Reacher (13) & $17.2\pm6.5$ & $16.2\pm5.6$ & $11.7\pm0.7$ & $14.1\pm4.4$ & 5/9 & 5/9 \\
+% source: progress/receipts/14-cube-C-search.md:26 (NSGA-II 1.20 +/- 0.62, 1.13 +/- 0.90),
+% :27 (random 4.42 +/- 3.59, 12.23 +/- 6.39), :33-34 (NSGA-II 1 of 9 fresh, 0 of 9 held out)
+Cube reaching (14) & $1.2\pm0.6$ & $4.4\pm3.6$ & $1.1\pm0.9$ & $12.2\pm6.4$ & 1/9 & 0/9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+NSGA-II did not consistently beat random search (Table~\ref{tab:evo-history}). Random
+search won every TwoRoom comparison and all but one on Cube, and Reacher was a tie. On
+PushT, NSGA-II trailed on new seeds but led on the held-out layout; with three runs per
+method and standard deviations of 2 to 4, neither difference is conclusive. The study
+records suggest the TwoRoom and Cube losses were partly due to selecting on only three
+noisy seeds per setting.
+% source: progress/receipts/10-safecem-C2-search.md:66-69 (fresh favours random, held out
+% favours NSGA-II, sd 2 to 4, neither conclusive); 13-reacher-C-search.md:58-60 (tie);
+% 12-tworoom-C-search.md:65-66,72-75 ("selection on 3 noisy seeds also cost it");
+% 14-cube-C-search.md:64-68,81-83 ("its selection was misled by noise").
+These studies were exploratory. Their objectives, budgets and optimizer differ from
+task 17, so we neither pool them nor compare them across tasks. They show only that
+NSGA-II gave no reliable gain over random search at these small budgets, not that
+evolution cannot help.

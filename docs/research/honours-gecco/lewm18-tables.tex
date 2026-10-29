@@ -1,0 +1,95 @@
+\section{PushT and Cube: Complete Matched Comparisons}\label{app:extension}
+Table~\ref{tab:extension-all} gives every final comparison from
+Section~\ref{sec:extension}. Each cell uses the same twelve cases and three
+planner seeds. A breach and an unfinished task can occur in the same
+attempt, so those columns can overlap.
+\begin{table*}[t]
+\caption{Task-18 final results, 36 attempts per cell: safe completions,
+margin breaches, unfinished attempts, attempts that moved, and mean
+failure-capped actions (lower is better; every unsafe or unfinished attempt
+counts as 50 actions).}
+\label{tab:extension-all}\centering\small
+\begin{tabular}{llrrrrr}\toprule
+Task and margin & Planner & Safe & Breaches & Unfinished & Moved & Capped actions \\
+\midrule
+PushT, 0 px & No safety check & 4 & 22 & 28 & 36 & 46.89 \\
+ & Original SafeCEM & 4 & 0 & 32 & 36 & 48.14 \\
+ & Tuned fixed & 19 & 0 & 17 & 36 & 35.22 \\
+ & Feedback & 21 & 0 & 15 & 36 & 35.06 \\
+\midrule
+PushT, 6 px & No safety check & 3 & 23 & 28 & 36 & 47.44 \\
+ & Original SafeCEM & 1 & 0 & 35 & 36 & 49.14 \\
+ & Tuned fixed & 18 & 0 & 18 & 36 & 31.33 \\
+ & Feedback & 17 & 0 & 19 & 36 & 31.81 \\
+\midrule
+PushT, 12 px & No safety check & 0 & 30 & 28 & 36 & 50.00 \\
+ & Original SafeCEM & 2 & 0 & 34 & 36 & 49.53 \\
+ & Tuned fixed & 19 & 0 & 17 & 36 & 35.42 \\
+ & Feedback & 20 & 0 & 16 & 36 & 34.42 \\
+\midrule
+Cube, 0 cm & No safety check & 0 & 33 & 35 & 36 & 50.00 \\
+ & Original SafeCEM & 0 & 0 & 36 & 36 & 50.00 \\
+ & Tuned fixed & 13 & 0 & 23 & 34 & 37.08 \\
+ & Feedback & 13 & 0 & 23 & 34 & 37.08 \\
+\midrule
+Cube, 0.5 cm & No safety check & 0 & 34 & 35 & 36 & 50.00 \\
+ & Original SafeCEM & 1 & 0 & 35 & 36 & 49.72 \\
+ & Tuned fixed & 13 & 0 & 23 & 35 & 36.47 \\
+ & Feedback & 13 & 0 & 23 & 35 & 36.44 \\
+\midrule
+Cube, 1 cm & No safety check & 0 & 34 & 35 & 36 & 50.00 \\
+ & Original SafeCEM & 0 & 0 & 36 & 36 & 50.00 \\
+ & Tuned fixed & 12 & 0 & 24 & 35 & 37.86 \\
+ & Feedback & 12 & 0 & 24 & 35 & 37.86 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table}[t]
+\caption{Planning time at the largest margin, measured one attempt at a
+time: two cases per planner, chosen in advance, with one new seed shared by
+all four planners. Seconds per solve also count any failed final solve.
+These timings describe two cases only and do not estimate a general speed
+advantage.}
+\label{tab:extension-time}\centering\small
+\begin{tabular}{llrr}\toprule
+Task & Planner & Seconds/solve & Safe / $n$ \\ \midrule
+PushT & No safety check & 0.579 & 0/2 \\
+PushT & Original SafeCEM & 0.597 & 0/2 \\
+PushT & Tuned fixed & 0.410 & 0/2 \\
+PushT & Feedback & 0.413 & 0/2 \\
+Cube & No safety check & 0.637 & 0/2 \\
+Cube & Original SafeCEM & 0.928 & 0/2 \\
+Cube & Tuned fixed & 0.476 & 1/2 \\
+Cube & Feedback & 0.531 & 1/2 \\
+\bottomrule\end{tabular}
+\end{table}
+
+\paragraph{All work, including the superseded PushT cohort.}
+Each task's valid cohort has 676 attempts: 8 engineering checks, 216
+attempts to develop the fixed settings, 72 to develop feedback, 360 in the
+final comparison (attempts without the safety check counted once, not once
+per margin), 12 in the context panel that checks the protocol, and 8 timing
+attempts. The two
+valid cohorts together have 1,352 attempts. The superseded PushT cohort, run
+before the reset repair, adds another 676, for 2,028 in all.
+Table~\ref{tab:extension-work} also counts preliminary failed checks, model
+warm-ups and reset work.
+\begin{table}[t]\centering\small
+\caption{Task-18 work across both valid cohorts, the superseded PushT cohort and preliminary checks.}
+\label{tab:extension-work}
+\begin{tabular}{lr}\toprule Quantity & Count \\ \midrule
+Executed actions, excluding reset & 72,289 \\
+Reset stabilization actions & 1,360 \\
+Environment resets & 2,033 \\
+All physics integrations & 1,840,851 \\
+Of which simulator previews of candidates & 718,225 \\
+Learned predictor steps & 660,428,575 \\
+Model batch calls & 454,774 \\
+\bottomrule\end{tabular}\end{table}
+For the superseded PushT cohort and the preliminary checks, reset work is
+reconstructed from the pinned reset code; the repaired cohort measures it
+directly. Cube's 50 reset physics steps per attempt are already in its
+physics count and are not added twice. Analytic path checks of candidates
+are counted separately from true physics integrations; the dataset keeps
+every counter.
