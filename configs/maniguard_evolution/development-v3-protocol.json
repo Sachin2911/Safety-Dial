@@ -1,0 +1,236 @@
+{
+  "schema": "maniguard-evolution-v3-protocol-v1",
+  "status": "prepared_not_launched",
+  "prepared_date": "2026-10-30",
+  "purpose": "Test whether conservative recurrent corrections can improve strict safe completion of frozen Jar pi0.5 on development tasks.",
+  "launch_authorized_now": false,
+  "current_authorization": "Write the next experiment and future goal prompt; rent and prepare one Vast GPU for at most ten hours; do not start the experiment.",
+  "implementation_status": {
+    "conservative_mutations_native_anchor_contact_objective": "Implemented; 33 software tests passed on the previous rented host; no v3 robot rollouts.",
+    "selection_stage": "Required before launch; current runner still exports its distribution mean.",
+    "failure_stage_summaries": "Required before launch.",
+    "runtime_configuration": "Generate a fresh executable config from this protocol and the new rental receipt after implementation; this protocol is not a runner config."
+  },
+  "scientific_scope": {
+    "family": "jar",
+    "development_only": true,
+    "held_out_tasks_used": [],
+    "optimizer_repeats": 1,
+    "evolutionary_advantage_claim": false,
+    "prior_result": "Version 2: 0/48 strict safe completions across sampled training candidates versus native 5/8; final selected 0/6 versus native 1/6. Engagement was reduced.",
+    "hypothesis": "Smaller perturbations, a native candidate, informative safe progress and measured controller selection will preserve engagement and expose a completion lever."
+  },
+  "sources": {
+    "maniguard": "6bf4c61a1f168cc46e02eb22c41bcb51815e9726",
+    "behavior_1k": "88454bd04f75dc57c00ab1f1a00bcde1ff505950",
+    "openpi": "215abfb217dbac7d5f1273282331b9b1866c0479",
+    "benchmark": "af09438cebcd8f532e82cb5302701173ebb59f6e",
+    "jar_checkpoint": "1d84eda070313a202a595e449fcf41a1a1e8a546",
+    "jar_checkpoint_step": 7400,
+    "longfinger": "5f65ec0a715bc88ea865c2c69133b08b395c66bc",
+    "assets": "9f0d57d465726976ed98138d3f8b8ca3e2186775"
+  },
+  "execution": {
+    "action_frequency_hz": 20,
+    "rendering_frequency_hz": 20,
+    "physics_frequency_hz": 120,
+    "chunk_length": 16,
+    "execute_horizon": 8,
+    "camera_resolution": 256,
+    "render_profile": "legacy",
+    "external_camera": "left",
+    "wrist_camera": true,
+    "horizon_controls": 2000,
+    "goal_hold_controls": 10,
+    "state_mode": "joint",
+    "controller_preset": "joint_position_raw",
+    "grasping_mode": "assisted",
+    "longfinger": true,
+    "original_monitor": "Passive labels only; no veto or environment modification."
+  },
+  "controller": {
+    "features": 35,
+    "hidden_size": 4,
+    "outputs": 9,
+    "evolvable_parameters": 205,
+    "correction_limit_rad": 0.08,
+    "smoothing": 0.5,
+    "gripper_threshold": 0.6,
+    "position_scale_m": 0.25,
+    "joint_error_scale_rad": 0.2,
+    "joint_velocity_scale": 2.0,
+    "stall_scale_controls": 400,
+    "privileged_inputs": [
+      "Robot joint position and velocity",
+      "Native command",
+      "Relative jar and end-effector pose",
+      "Jar orientation",
+      "Original task propositions",
+      "Grasp state",
+      "Robot-jar contact",
+      "Causal history"
+    ],
+    "initial_controller": "Fresh seeded hidden state weights with exactly zero output layer, producing native commands; do not warm-start from failed v2 controller."
+  },
+  "training": {
+    "method": "diagonal_cmaes",
+    "cma_version": "4.4.4",
+    "generations": 6,
+    "population": 6,
+    "native_reference_panels_per_generation": 1,
+    "native_anchor_in_each_population": true,
+    "native_anchor_reuses_reference_episode": false,
+    "tasks": [
+      0,
+      3
+    ],
+    "policy_seeds": [
+      303100,
+      303101,
+      303102,
+      303103,
+      303104,
+      303105
+    ],
+    "optimizer_seed": 303021,
+    "initialization_seed": 303022,
+    "sigma": 0.3,
+    "mutation_profile": "conservative_arm_v3",
+    "initial_parameter_standard_deviations": {
+      "hidden_recurrent_and_mixing": 0.05,
+      "arm_output": 0.025,
+      "gripper_output": 0.3
+    },
+    "objective": "completion_progress_contact_v3",
+    "fitness": "For n valid cases: (4*n+2)*strict_safe_completions + sum(safe_stage_progress + 0.25*safe_target_contact) - raw_violation_episodes/(n+1). Invalid panels are ineligible.",
+    "stage_progress": "0 none; 1 closure while supported; 2 ten consecutive closed/grasped controls after closure; 3 a support-departure transition after stage 2 while closed and grasped. A raw violation or invalid closure-before-departure order removes auxiliary credit.",
+    "contact_credit": "Contact must occur while supported, upright and not dropped, with no raw violation and a valid closure-before-departure prefix. Movement alone earns no credit.",
+    "order": "Seeded candidate permutation; alternate separate native-reference panel placement by generation. Preserve all 12 native-anchor and 12 separate native-reference episodes distinctly.",
+    "episodes": 84
+  },
+  "selection": {
+    "tasks": [
+      6,
+      9
+    ],
+    "policy_seeds": [
+      303200,
+      303201
+    ],
+    "candidates": [
+      "native",
+      "best_evaluated_non_anchor_training_candidate",
+      "final_cma_phenotype_mean"
+    ],
+    "elite_rule": "Maximize recorded training fitness among non-anchor candidates; exact ties use earliest generation then lowest candidate index. This only nominates a candidate for fresh selection evaluation.",
+    "order": "For the four task/seed cases in task-major order, rotate [native, elite, mean] left by case index modulo 3. Evaluate all three slots even if parameter vectors coincide.",
+    "admissibility": "An adapter is eligible only if its selection-panel strict safe completion count exceeds the native count.",
+    "winner": "Among eligible adapters maximize the same v3 fitness over all four selection cases; an exact tie prefers the evaluated elite. If none qualifies, return native unchanged.",
+    "validation_never_selects": true,
+    "episodes": 12
+  },
+  "validation": {
+    "tasks": [
+      15,
+      17
+    ],
+    "policy_seeds": [
+      303300,
+      303301,
+      303302
+    ],
+    "arms": [
+      "native",
+      "selected"
+    ],
+    "order": "Task-major then seed-major; alternate native-first and selected-first by case index.",
+    "selection_frozen_before_first_validation_episode": true,
+    "native_fallback_interpretation": "If selection returns native, label selected as a repeated native control; differences cannot be attributed to an evolved intervention.",
+    "episodes": 12
+  },
+  "limits": {
+    "rental_duration_seconds": 36000,
+    "deadline_source": "Actual new rental receipt; absolute and unchanged by resume, delayed launch or setup.",
+    "preservation_reserve_seconds": 2700,
+    "minimum_remaining_seconds_before_first_scored_episode": 25200,
+    "minimum_episode_start_window_seconds": 960,
+    "episode_timeout_seconds": 900,
+    "planned_valid_episodes": 108,
+    "maximum_additional_failed_engineering_starts": 4,
+    "max_episode_starts_including_failures": 112,
+    "max_instrumented_environment_step_attempts": 225120,
+    "max_episode_model_query_attempts": 28112,
+    "max_server_preparation_model_query_attempts": 4,
+    "max_total_model_query_attempts": 28116,
+    "unknown_bootstrap_physics": "Retain as unknown; do not assume zero or hide it inside control-step counts.",
+    "no_performance_based_early_stopping": true,
+    "technical_or_time_stop": "Save all evidence and mark incomplete. Do not change panels, seeds, population, objectives or the selected controller from validation outcomes. No new rental or deadline extension is authorized."
+  },
+  "diagnostics": {
+    "events": [
+      "First robot-jar contact",
+      "First closure while supported",
+      "First ten-control grasp after closure",
+      "First later departure while closed and grasped",
+      "First raw violation",
+      "Ten-control benchmark goal hold"
+    ],
+    "unfinished_stage": "Farthest valid ordered stage reached, retaining event order and reason for any invalid prefix.",
+    "action_metrics": [
+      "Controls with arm corrections",
+      "Joint residual RMS and maxima",
+      "Gripper overrides",
+      "Engagement",
+      "Native versus modified versus executed commands"
+    ],
+    "diagnostics_do_not_change_selection_or_fitness": true
+  },
+  "analysis": {
+    "primary": "Strict safe completions with closure before carry, n=6 per validation arm.",
+    "also_report": [
+      "Benchmark safe completion",
+      "Requested-sequence completion",
+      "Raw and counted violations",
+      "Unfinished episodes",
+      "Engagement",
+      "Native-anchor episodes separately",
+      "Every failed start",
+      "Simulator steps, physics counters and model queries",
+      "Model-query time and elapsed wall time separately"
+    ],
+    "interpretation": "A non-native selected controller with more fresh validation strict safe completions is a development signal, not replicated superiority. Lower violations with inactivity do not establish a lever.",
+    "optimizer_controls": "Native, tuned fixed, parameter random search and ordinary learning with identical information and matched interactions remain required for a later evolutionary-advantage comparison; they are not added to this allocation."
+  },
+  "preservation": {
+    "private_dataset": "Sachioster/maniguard-jar-replication-20261022",
+    "fresh_prefix": "22_conservative_adapter_development/<actual-launch-utc>",
+    "contents": [
+      "Protocol, complete runtime config and frozen sources",
+      "Controller and optimizer checkpoints",
+      "All successful, unfinished and failed episode records",
+      "Native, modified and executed action boundaries",
+      "Monitor labels, causal state and diagnostics",
+      "Rollout videos",
+      "Counters and timing",
+      "Environment and public-input provenance",
+      "Audit and lifecycle closeout"
+    ],
+    "excluded": [
+      "Credentials",
+      "Account process environments",
+      "Dataset licence keys",
+      "Unrelated projects"
+    ],
+    "verification": "Seal the remote inventory, match every local file, upload privately at a pinned revision, then download and verify every file before destruction.",
+    "deadline_action": "Independent local and instance-side guards stop GPU computation after ten hours. Stopped disks remain billed until verified preservation and explicit lifecycle destruction. The future goal requires teardown after preservation."
+  },
+  "rental_binding": {
+    "instance_id": 58363639,
+    "machine_id": 141415,
+    "label": "maniguard-v3-prepared-20261030T064632Z",
+    "created_request_utc": "2026-10-30T06:46:32.937332+00:00",
+    "deadline_utc": "2026-10-30T16:46:32.937332+00:00",
+    "deadline_sast": "2026-10-30T18:46:32.937332+02:00",
+    "receipt": "progress/receipts/20261030-vast-maniguard-v3-preparation.json"
+  }
+}
