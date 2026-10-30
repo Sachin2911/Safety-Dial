@@ -24,6 +24,13 @@ The clean source checkout is `/workspace/maniguard-v3-agent`, on branch
 current `AGENTS.md`. Start Codex with `/usr/local/bin/maniguard-v3-agent` inside
 the existing `tmux` session `maniguard-v3`. Authenticate Codex yourself with
 `codex login --device-auth`. No Codex login cache was copied from the laptop.
+The initial bare executable was incomplete for the background server. This was
+repaired at 08:41 UTC with the official checksum-verifying standalone installer,
+pinned to 0.165.0. `/usr/local/bin/codex` now resolves to the complete package at
+`/root/.codex/packages/standalone/releases/0.165.0-x86_64-unknown-linux-musl`.
+An actual interactive startup succeeded, and its test process was retired without
+submitting a model prompt or goal. The user's own ChatGPT login remains configured.
+The verification record is `supervision/codex-complete-install-verification.json`.
 Sachin separately explicitly approved transferring the HF, GitHub and Vast
 credentials to `/root/.config/maniguard-v3/handoff.env`, mode 0600, outside all
 evidence and Git paths. The launcher sources that account wrapper. Do not print
