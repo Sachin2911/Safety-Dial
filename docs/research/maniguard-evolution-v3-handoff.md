@@ -19,6 +19,16 @@ evidence, checkpoints, videos and private lifecycle records only in the existing
 private Hugging Face dataset. Never publish credentials, process credential
 environments, licence keys, model weights, simulator assets or unrelated studies.
 
+The clean source checkout is `/workspace/maniguard-v3-agent`, on branch
+`maniguard-v3-20261030-handoff`. The runtime project is separate and has its own
+current `AGENTS.md`. Start Codex with `/usr/local/bin/maniguard-v3-agent` inside
+the existing `tmux` session `maniguard-v3`. Authenticate Codex yourself with
+`codex login --device-auth`. No Codex login cache was copied from the laptop.
+Sachin separately explicitly approved transferring the HF, GitHub and Vast
+credentials to `/root/.config/maniguard-v3/handoff.env`, mode 0600, outside all
+evidence and Git paths. The launcher sources that account wrapper. Do not print
+its contents. Git authentication uses the protected `git-askpass.py` helper.
+
 ## Exact rental and time limits
 
 Only instance **58363639**, machine **141415**, label
@@ -136,6 +146,31 @@ Campaign base prefix:
 The launch snapshot was completely downloaded and byte-verified at revision
 **`2ff13da95049278a7e7104aaa68b8b6a00869314`**, prefix `interim-launch`,
 80 files, 652387 bytes. Later snapshots must use fresh names; never overwrite it.
+
+The complete point-in-time handoff snapshot is revision
+`d1430058d84f637ba7424f2a032daa7b4928abb7`, prefix `handoff`, all **191 files,
+19191189 bytes** downloaded and SHA-256 verified. It includes the failed run,
+recovery source and checkpoint, instructions, setup provenance and lifecycle records.
+
+An independent file-only remote mirror is already running: PID **18146**, start
+ticks **49938218**, record `supervision/hf-mirror-process.json`. It verifies exact
+Vast identity, stages changed files and completed episode folders in fresh delta
+snapshots, confirms dataset privacy, pins the commit, downloads every changed file
+and checks bytes/SHA-256. It repeats 60 seconds after a verified snapshot. It never
+starts episodes or selects a controller. First mirror revision
+`99ea8686e395482768a591e6f4dfa7e3134f0902` verified all **217 files, 37615519
+bytes**. The next verified delta was
+`b506a5e5b85b18d77343bd80b620970f0c95fff1`, 23 files, 6895946 bytes.
+
+Read `supervision/hf-mirror-latest.json` for current verified evidence. Its durable
+state, complete receipt chain, pending uploads and verification copies are outside
+the live project under `/workspace/maniguard-v3-preservation/live-mirror`.
+The log is `/workspace/maniguard-v3-preservation/live-mirror.log`. Inspect the exact
+mirror PID before any restart. Retire it before the final seal and copy its receipts,
+state and snapshot indexes into the project as lifecycle evidence. Do not copy its
+entire duplicate snapshot/download tree into the final artifact project. If an
+upload is pending, finish its pinned verification before replacing it. The full
+final archive must independently contain all raw evidence, not only these deltas.
 
 `preserve_maniguard_evolution.py` stages immutable completed episodes and source
 snapshots, uploads, pins a revision, downloads every file, and checks size/SHA-256.
