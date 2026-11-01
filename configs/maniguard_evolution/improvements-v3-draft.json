@@ -1,0 +1,25 @@
+{
+  "schema": "maniguard-evolution-improvements-draft-v3",
+  "status": "not_launched_not_a_complete_run_configuration",
+  "basis": "Manual review and saved development trajectories from the running v2 study",
+  "current_run_unchanged": true,
+  "new_simulator_interactions": 0,
+  "proposed_search_overrides": {
+    "objective": "completion_progress_contact_v3",
+    "mutation_profile": "conservative_arm_v3",
+    "native_anchor": true
+  },
+  "changes": [
+    "Require support departure after the ten-control grasp for auxiliary carry-stage credit",
+    "Use 0.025 initial arm-output parameter perturbations and 0.05 hidden/recurrent perturbations while preserving 0.3 gripper exploration",
+    "Inject the native-output controller into each population before asking candidates; use the same anchor in random search",
+    "Give small tie-breaking credit for safe target contact with a valid requested-sequence prefix; no contact credit after raw violation or early departure"
+  ],
+  "unchanged": [
+    "Strict safe-completion endpoint",
+    "Passive original ManiGuard monitor",
+    "Joint correction bounds and execution protocol",
+    "Frozen VLA and declared privileged observations"
+  ],
+  "limits": "A future launch requires a new full configuration, source freeze, declared development panels/seeds and an authorized compute allocation. This draft authorizes no launch or rental."
+}

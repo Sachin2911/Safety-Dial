@@ -1,0 +1,193 @@
+{
+  "schema": "runpod-maniguard-setup-v1",
+  "created_request_utc": "2026-10-29T13:48:07.610753+00:00",
+  "purpose": "Fresh ManiGuard and frozen Jar pi0.5 environment for discussion and later development.",
+  "authorization": "User requested RunPod rental and setup; user selected a $10 initial cap.",
+  "initial_cap_usd": 10,
+  "automatic_stop_utc": "2026-10-29T17:47:47.304605+00:00",
+  "local_guard": {
+    "pid": 732864,
+    "state_path": "/tmp/safety-dial-runpod-guard.json",
+    "status_verified_before_creation": "armed_waiting_for_creation"
+  },
+  "pod_local_guard_in_startup_command": true,
+  "catalog_gpu_rate_usd_per_hour": 0.59,
+  "running_storage_estimate_usd_per_hour": 0.027777777777777776,
+  "stopped_volume_estimate_usd_per_hour": 0.044444444444444446,
+  "storage_pricing_source": "https://docs.runpod.io/pods/storage/types",
+  "storage_survives_stop_not_termination": true,
+  "unrelated_existing_pod_left_untouched": "sx1m7orpwfx62x",
+  "pod": {
+    "id": "c17y05k4ahtbxi",
+    "name": "safetydial-maniguard-dev-20261029",
+    "desiredStatus": "TERMINATED",
+    "costPerHr": 0.59,
+    "imageName": "runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04",
+    "gpuCount": 1,
+    "volumeInGb": 160,
+    "containerDiskInGb": 40
+  },
+  "public_environment": {
+    "NVIDIA_DRIVER_CAPABILITIES": "all",
+    "HF_HOME": "/workspace/.cache/huggingface",
+    "XDG_CACHE_HOME": "/workspace/.cache",
+    "OMNI_KIT_ACCEPT_EULA": "YES",
+    "PRIVACY_CONSENT": "Y",
+    "SAFETY_DIAL_STOP_AT": "1793296067.304605"
+  },
+  "sources": {
+    "ManiGuard": "6bf4c61a1f168cc46e02eb22c41bcb51815e9726",
+    "BEHAVIOR-1K": "88454bd04f75dc57c00ab1f1a00bcde1ff505950",
+    "OpenPI": "215abfb217dbac7d5f1273282331b9b1866c0479",
+    "Jar_checkpoint": {
+      "repo": "IDEAS-Lab-Northwestern/pi05-base-datagen-v1-jar-joint-2cam-lora",
+      "revision": "1d84eda070313a202a595e449fcf41a1a1e8a546",
+      "step": 7400
+    }
+  },
+  "status": "destroyed_at_user_request",
+  "simulator_episodes": 0,
+  "environment_steps": 0,
+  "model_queries": 2,
+  "host_preflight": {
+    "gpu": "NVIDIA A40",
+    "vram_mib": 46068,
+    "driver": "595.91.07",
+    "public_ip": "194.68.245.52",
+    "ssh_port": 22019,
+    "vcpu_count": 9,
+    "ram_gib": 50,
+    "data_center": "EU-SE-1",
+    "nvidia_graphics_libraries_present": [
+      "libnvoptix.so.1",
+      "libGLX_nvidia.so.0",
+      "libEGL_nvidia.so.0"
+    ],
+    "headless_simulator_startup_verified": false
+  },
+  "stop_guards": {
+    "local_guard_pid": 732864,
+    "remote_guard_pid": 73,
+    "remote_guard_has_pod_scoped_key": true,
+    "deadline_utc": "2026-10-29T17:47:47.304605+00:00",
+    "both_verified_running": false,
+    "local_guard_status": "pod_already_stopped"
+  },
+  "private_project_transfer": {
+    "status": "blocked_by_automatic_approval_review",
+    "transferred": false,
+    "reason": "Full private research archive and Git history were not separately authorized for export.",
+    "alternative": "Install public pinned ManiGuard and OpenPI sources and fresh environment setup only."
+  },
+  "downloads_verified": {
+    "benchmark": {
+      "files": 792,
+      "bytes": 50398272,
+      "revision": "af09438cebcd8f532e82cb5302701173ebb59f6e"
+    },
+    "checkpoint": {
+      "files": 26,
+      "bytes": 6335682384,
+      "revision": "1d84eda070313a202a595e449fcf41a1a1e8a546"
+    },
+    "robot": {
+      "files": 8,
+      "bytes": 36917495,
+      "revision": "5f65ec0a715bc88ea865c2c69133b08b395c66bc"
+    },
+    "behavior_assets_archive": {
+      "bytes": 31280662307,
+      "sha256": "3bd7cdc1a8c5621768c2aaaf57c12a024560ab4f49d0162e540e769d8b165e8b"
+    },
+    "robot_assets_archive": {
+      "bytes": 501401227,
+      "sha256": "5e9fe726172c8b4beb4ba4e12dbf5cf6c5791553a05c52be661eb2d6a3d241b8"
+    }
+  },
+  "openpi_environment": {
+    "jax": "0.5.3",
+    "cuda_device_visible": true,
+    "path": "/workspace/Safety-Dial/third_party/openpi/.venv"
+  },
+  "simulator_core": {
+    "python": "3.10.22",
+    "numpy": "1.26.4",
+    "torch": "2.6.0+cu124",
+    "cuda_device_visible": true,
+    "path": "/workspace/miniforge3/envs/behavior"
+  },
+  "setup_issues": [
+    {
+      "issue": "SciPy 1.15.3 unavailable from conda-forge during the first environment solve",
+      "resolution": "Installed SciPy 1.15.3 from PyPI into the separate simulator environment; core CUDA and NumPy pins unchanged."
+    },
+    {
+      "issue": "Default Isaac Sim SimulationApp startup crashed with exit 139 in omni.kit.material.library menu initialization.",
+      "status": "Investigating native OmniGibson launcher; simulator readiness not yet established.",
+      "benchmark_episodes": 0,
+      "environment_steps": 0
+    },
+    {
+      "issue": "Native OmniGibson startup also segfaulted; disabling the GUI material catalogue did not fix the viewport crash.",
+      "status": "Host rejected for simulator use. Public runtime retained in persistent workspace; seeking an older-driver replacement."
+    }
+  ],
+  "local_repository_revision": "317899496d71abc07473f3af6830a60a1ae90653",
+  "policy_probe": {
+    "passed": true,
+    "synthetic_observations": true,
+    "attempted_model_queries": 2,
+    "completed_model_queries": 2,
+    "action_shape": [
+      16,
+      8
+    ],
+    "native_return_dtype": "float64",
+    "all_finite": true,
+    "first_query_seconds": 89.50088000297546,
+    "second_query_seconds": 0.20807576179504395,
+    "evaluator_converts_actions_to_float32": true
+  },
+  "engineering_startup_attempts": 3,
+  "engineering_startup_failures": 3,
+  "stop_requested_utc": "2026-10-29T15:05:12.101470+00:00",
+  "gpu_stop_confirmed": true,
+  "estimated_session_cost_at_stop_usd": 0.7971875752805192,
+  "replacement_attempts": {
+    "created_replacements": 0,
+    "graphql_allocation_refusals": 3,
+    "rest_request_outcome_checked_no_created_pod": true,
+    "reason": "Driver-compatible supply could not be allocated despite intermittent availability listings."
+  },
+  "headless_workaround_test": {
+    "flags": [
+      "--/exts/omni.kit.material.library/lib_paths=[]",
+      "--/exts/omni.kit.material.library/cache_mdl=false"
+    ],
+    "outcome": "failed with exit 139 in viewport initialization",
+    "retained_as_working_configuration": false
+  },
+  "alternative_pending_user_choice": {
+    "provider": "Vast.ai",
+    "gpu": "RTX 3090",
+    "driver": "580.173.02",
+    "offer_id_at_lookup": 55801600,
+    "machine_id_at_lookup": 48612,
+    "hourly_usd_with_200gb_disk": 0.3222222222222222,
+    "download_usd_per_gb": 0.0026041666666666665,
+    "upload_usd_per_gb": 0.00390625,
+    "same_initial_cap_usd": 10,
+    "rented": false,
+    "user_approved": true
+  },
+  "updated_utc": "2026-10-29T15:15:59.571776+00:00",
+  "provider_change_authorized_utc": "2026-10-29T15:20:34.026187+00:00",
+  "provider_change_authorization": "User explicitly approved switching to Vast and destroying this RunPod pod.",
+  "destroy_requested_utc": "2026-10-29T15:20:34.852011+00:00",
+  "deletion_verified_utc": "2026-10-29T15:29:14.101553+00:00",
+  "deletion_verification": "runpodctl pod list --all contains no c17y05k4ahtbxi; unrelated pod left untouched",
+  "replacement_provider": "Vast.ai",
+  "replacement_instance_id": 58267560,
+  "never_exported_private_archive_removed_from_local_tmp": true,
+  "private_archive_cleanup_utc": "2026-10-29T15:56:49.743014+00:00"
+}

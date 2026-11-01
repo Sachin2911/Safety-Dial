@@ -1,0 +1,35 @@
+{
+  "study": "pusht-three-refinements-control-20261030-v1",
+  "protocol": "configs/pusht_improvements_20261030/design-v3.json",
+  "frozen_utc": "2026-10-30T08:58:16.170773+00:00",
+  "pod_id": "y4oq5yi1k239im",
+  "gpu_rate_usd_per_hour": 0.24,
+  "deadline_utc": "2026-10-30T09:41:05.061049+00:00",
+  "prior_combined_bound_usd": 3.4985070058661263,
+  "approved_combined_cap_usd": 5,
+  "software_gate": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "report": "environment/refinements-tests-v2.xml",
+    "repairs": "Public solver configure API in test harness; retained refusal diagnostics. No eligible episodes preceded the repair.",
+    "source_manifest_update": "Include the new helper in source collectors; no algorithm changes after passing GPU tests."
+  },
+  "maximum_trials": 6,
+  "maximum_actions_per_episode": 150,
+  "maximum_environment_actions": 900,
+  "engineering_failures": [
+    {
+      "stage": "software-tests-v1",
+      "passed": 3,
+      "failed": 2,
+      "cause": "Test fixture assigned read-only action_dim instead of using solver.configure.",
+      "simulator_interactions": 0,
+      "frozen_model_queries": 0,
+      "preserved_report": "environment/refinements-tests-v1.xml"
+    }
+  ],
+  "no_local_simulation_or_model_queries": true,
+  "no_parameter_search": true
+}

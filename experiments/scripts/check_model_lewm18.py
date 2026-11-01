@@ -26,7 +26,11 @@ def main():
     path = out / "synthetic-model-check.json"
     if path.exists():
         raise FileExistsError(path)
-    sources = [Path(__file__), ROOT / "experiments/helpers/lewm18_planner.py"]
+    sources = [
+        Path(__file__),
+        ROOT / "experiments/helpers/lewm18_planner.py",
+        ROOT / "experiments/helpers/cem_refinements.py",
+    ]
     atomic_json(
         out / "synthetic-model-check-freeze.json",
         {

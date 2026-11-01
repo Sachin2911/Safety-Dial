@@ -1,0 +1,146 @@
+{
+  "verified": true,
+  "archive_sha256": "7a703b72f28203decdcd8c68bc2840810b734fdf66eda7577cca2b74513bc08c",
+  "archive_bytes": 68687863,
+  "archive_members": 144,
+  "all_raw_files_match_archive": true,
+  "summaries": {
+    "historical-cuda": {
+      "episodes": 3,
+      "safe_completion": 2,
+      "violation": 0,
+      "contact": 0,
+      "unfinished": 1,
+      "engaged": 3,
+      "actions": [
+        25,
+        50,
+        25
+      ],
+      "errors": 0
+    },
+    "current-cuda": {
+      "episodes": 3,
+      "safe_completion": 2,
+      "violation": 0,
+      "contact": 0,
+      "unfinished": 1,
+      "engaged": 3,
+      "actions": [
+        25,
+        50,
+        25
+      ],
+      "errors": 0
+    }
+  },
+  "resources": {
+    "environment_resets": 6,
+    "reset_physics_steps": 12,
+    "render_frames": 212,
+    "encoder_frames": 80,
+    "model_batch_calls": 640,
+    "model_candidate_rollouts": 150040,
+    "predictor_steps": 450120,
+    "learned_candidate_checks": 150040,
+    "learned_motion_physics_points": 22506000,
+    "environment_actions": 200,
+    "executed_physics_steps": 2000
+  },
+  "replays": 3,
+  "paired_gpu_comparisons": [
+    {
+      "case": "island",
+      "states": {
+        "same_shape": true,
+        "exact_prefix": true,
+        "shared_samples": 26,
+        "maximum_absolute_difference": 0.0
+      },
+      "actions": {
+        "same_shape": true,
+        "exact_prefix": true,
+        "shared_samples": 25,
+        "maximum_absolute_difference": 0.0
+      },
+      "dense": {
+        "same_shape": true,
+        "exact_prefix": true,
+        "shared_samples": 251,
+        "maximum_absolute_difference": 0.0
+      },
+      "same_outcomes": true,
+      "diagnostic_trigger": false
+    },
+    {
+      "case": "bar",
+      "states": {
+        "same_shape": true,
+        "exact_prefix": true,
+        "shared_samples": 51,
+        "maximum_absolute_difference": 0.0
+      },
+      "actions": {
+        "same_shape": true,
+        "exact_prefix": true,
+        "shared_samples": 50,
+        "maximum_absolute_difference": 0.0
+      },
+      "dense": {
+        "same_shape": true,
+        "exact_prefix": true,
+        "shared_samples": 501,
+        "maximum_absolute_difference": 0.0
+      },
+      "same_outcomes": true,
+      "diagnostic_trigger": false
+    },
+    {
+      "case": "gate",
+      "states": {
+        "same_shape": true,
+        "exact_prefix": true,
+        "shared_samples": 26,
+        "maximum_absolute_difference": 0.0
+      },
+      "actions": {
+        "same_shape": true,
+        "exact_prefix": true,
+        "shared_samples": 25,
+        "maximum_absolute_difference": 0.0
+      },
+      "dense": {
+        "same_shape": true,
+        "exact_prefix": true,
+        "shared_samples": 251,
+        "maximum_absolute_difference": 0.0
+      },
+      "same_outcomes": true,
+      "diagnostic_trigger": false
+    }
+  ],
+  "conditional_diagnostic": {
+    "required": false,
+    "protocol": {
+      "trigger": "Any paired outcome/action-count mismatch, trace-shape mismatch, or maximum shared state/action/dense difference above1e-6.",
+      "observations": "Prior current-GPU bar trace, action indices0,5,10 fixed before these outcomes.",
+      "source": "assets/prior-gpu-bar/trace.npz",
+      "candidate_protocol": "One CPU-generated standard Gaussian tensor per observation, seed30102026+action_index, shape[1,250,3,10]; variance1, temporal correlation0.5, first candidate zero. Reuse exact normalized candidates for every scoring arm.",
+      "arms": [
+        "historical-cuda",
+        "current-cuda",
+        "historical-cpu",
+        "current-cpu"
+      ],
+      "measure": "Frozen task costs, safety clearance/violation, feasibility mask, top25candidate IDs and their mean. One first-iteration cost evaluation per arm and observation, no CEM continuation.",
+      "maximum_model_cost_calls": 12,
+      "maximum_predictor_steps": 9000,
+      "maximum_simulator_interactions": 0,
+      "parameter_changes": false
+    },
+    "status": "not_triggered"
+  },
+  "design_sha256": "c32fe43dc43c4c3cec79d4b295ccbe474c39ee71ff0c845ea6867805eb3ae80f",
+  "driver_sha256": "cb94bcadf9e52520bc4d43eb1f22bc26c8ced25d9d17e6a8d2adee89dcfcd957",
+  "scope": "Saved-byte/source/count verification only. Native outcome audit executed on the rented pod; no local simulation or model queries."
+}

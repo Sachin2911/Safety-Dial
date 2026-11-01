@@ -1,0 +1,55 @@
+{
+  "pod": {
+    "name": "safetydial-lewm-proposal-smoke-20261030",
+    "authorization": "User explicitly requested a RunPod rental and the previously discussed single-episode integration test.",
+    "requested_utc": "2026-10-30T19:46:41.429958+00:00",
+    "deadline_utc": "2026-10-30T21:46:41.429958+00:00",
+    "fresh_task_cap_usd": 1.0,
+    "max_gpu_hourly": 0.3,
+    "quoted_gpu_hourly": 0.24,
+    "container_gb": 30,
+    "volume_gb": 10,
+    "earlier_lewm_allocation": "Separate completed allocation; no unused balance inherited.",
+    "maximum_valid_episodes": 1,
+    "id": "dcyk2i5ug0e9yv",
+    "costPerHr": 0.24,
+    "desiredStatus": "RUNNING",
+    "imageName": "runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04"
+  },
+  "protocol": "configs/lewm_proposal_20261030/smoke.json",
+  "protocol_sha256": "d67579634944966dff1747501915e7ccb203e3e78309c75741c11acc4891def5",
+  "environment_preparation": {
+    "failed_identity_check": "SSH omitted provider env; verified identity from init metadata. Zero simulator interactions or model queries.",
+    "archive_extraction": "Ownership preservation unsupported on pod volume; use no-same-owner. Zero simulator interactions or model queries."
+  },
+  "credential_transfer": {
+    "automatic_approval_review_rejected": true,
+    "credential_was_transferred": false,
+    "resolution": "Provider credential remains local. Remote guard is credential-free and terminates experiment processes only; local guard issues provider stop."
+  },
+  "software_checks": {
+    "tests_passed": 11,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 5.72,
+    "report": "environment/software-v2/tests.xml",
+    "ruff": "Passed with repository-equivalent settings",
+    "new_simulator_interactions": 0,
+    "new_frozen_model_queries": 0,
+    "additional_regression": "Creates nested controller directory, preserves identical artifact, refuses mismatched artifact"
+  },
+  "valid_episodes": 0,
+  "new_optimizer_updates": 0,
+  "failed_starts": [
+    {
+      "attempt": "attempt-001",
+      "stage": "Saving initial untrained controller",
+      "cause": "Artifact writer did not create the controller parent directory",
+      "simulator_interactions": 0,
+      "frozen_model_queries": 0,
+      "source_archive": "environment/software-v1/source.tar.gz",
+      "log": "results/attempt-001.log",
+      "repair": "Atomic JSON writer creates parent directories; added initialization regression check. No scientific settings changed."
+    }
+  ]
+}

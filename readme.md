@@ -7,21 +7,33 @@ Supervised by Geraud Nangue Tasse.
 
 ## Start here
 
-- [Principia](principia.pdf): the consolidated experiment record. Thirty-seven
-  experiment accounts, one page each, plus an overview and linked index.
+- [Rule42](SafeLeWM/Rule42.pdf): the current two-page experiment outline,
+  with [editable LaTeX](SafeLeWM/Rule42.tex).
+- [First experiment](SafeLeWM/FirstExperiment.md): the detailed LeWM design,
+  adapter alternatives, comparisons, ablations and safety dial.
+- [SafeLeWM working area](SafeLeWM/README.md).
+- [Principia](principia.pdf): the consolidated earlier experiment record,
+  with one-page accounts, an overview and linked index.
 - [Research manuscript](docs/research/honours-gecco/honoursThesis.pdf): the current
   argument, methods, figures and limitations in ACM format.
 - [Current direction and research controls](firstPrinciples.md).
 - [Documentation](docs/README.md) and [evidence locations](progress/README.md).
 
-Tuned fixed planning improved safe completion at unchanged margins in four tasks.
-Feedback and evolution have not established an advantage over strong fixed settings
-and simpler search. A ManiGuard Jar tip shield reduced observed violations with
-unchanged safe completion. The original evolutionary completion goal remains open.
+The current question is whether evolutionary search can learn compact adapters
+around frozen world-model systems with less reliance on manually tuned behavioural
+rules. LeWM across TwoRoom, PushT and OGBench Cube is the opening study; Block
+Plucking is the intended main study. ManiGuard is deferred. The allocated topic is
+[Safe AI via Evolutionary Algorithms](docs/allocatedTopic.md), targeting GECCO 2027.
+
+Earlier studies found useful fixed planning configurations, but did not establish
+a consistent evolutionary advantage. They remain exploratory context for the new
+design. Protocols and budgets are not frozen, and provisioning a pod does not
+authorise experiments.
 
 ## Repository layout
 
 - `docs/research/`: Principia source and the current manuscript.
+- `SafeLeWM/`: all documents, new code, configs, tests and local outputs for the first experiment.
 - `progress/receipts/`: frozen machine-readable evidence, audits and source snapshots.
 - `experiments/{helpers,scripts,tests}/`: reusable code, entry points and tests.
 - `configs/`: task-specific configurations. `scripts/`: baseline and study tooling.
@@ -30,5 +42,7 @@ unchanged safe completion. The original evolutionary completion goal remains ope
 
 Read [AGENTS.md](AGENTS.md) before research work. The root environment is legacy;
 use the intended interpreter explicitly and do not sync it into ManiGuard's runtime.
-Local tests use `.venv/bin/python`, without `uv run`. No new experiment is authorized
-by a completed protocol or unused historical allocation.
+Experiment computation and experiment tests run only on rented RunPod or Vast
+hosts. Local work is limited to editing, orchestration, transfers and saved-evidence
+inspection. No new experiment is authorized by a completed protocol or unused
+historical allocation.

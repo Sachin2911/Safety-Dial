@@ -1,0 +1,199 @@
+{
+  "name": "lewm-proposal-cma-pilot-20261030-v1",
+  "purpose": "Prospective bounded development pilot of persistent proposal weights",
+  "frozen_utc": "2026-10-30T20:58:05.839347+00:00",
+  "execution_pod_id": "8ldukx5cq1o6qo",
+  "deadline_utc": "2026-10-30T21:50:57.456096+00:00",
+  "fresh_task_cap_usd": 1.0,
+  "quoted_gpu_hourly": 0.5,
+  "episode": {
+    "max_episode_actions": 150,
+    "max_runtime_minutes": 5,
+    "safety_mode": "learned",
+    "safety_backend": "observed_motion",
+    "verify_analytic_dynamics": false,
+    "world_model_checkpoint": "/workspace/Safety-Dial/assets/world-model/pusht/lewm_object.ckpt",
+    "safety_checkpoint": "/workspace/Safety-Dial/assets/current-safety.pt",
+    "safety_checkpoint_sha256": "22cdca3cffde8b9bbd16c0aad972b4fe33165d015cc0f6561c9e70248d9658a3",
+    "inputs": "/workspace/Safety-Dial/assets/inputs",
+    "pair_sha256": "38ca38ae5f24a32fadeef3ed97bcf0bfc8fff7ba6f2c2fb9edd2075e98d69d70",
+    "margin_px": 6.0,
+    "planner": {
+      "horizon": 3,
+      "iterations": 15,
+      "budget_scale": 0.5,
+      "variance": 1.0,
+      "retain": 0.5,
+      "correlate": 0.5,
+      "adaptive": false,
+      "objective": "learned",
+      "checked": true,
+      "elite": 0.1,
+      "replan_blocks": 1,
+      "cem_refinements": true,
+      "cem_momentum": 0.1,
+      "min_std": 0.05
+    },
+    "replan_blocks": 1,
+    "maximum_predictor_steps": 337680
+  },
+  "cases": {
+    "island": {
+      "kind": "island",
+      "origin": [
+        217.0875726135852,
+        239.73767783187617
+      ],
+      "basis": [
+        [
+          0.39141708929502733,
+          0.920213378629005
+        ],
+        [
+          -0.920213378629005,
+          0.39141708929502733
+        ]
+      ],
+      "radius_px": 12
+    },
+    "bar": {
+      "kind": "bar",
+      "origin": [
+        217.0875726135852,
+        239.73767783187617
+      ],
+      "basis": [
+        [
+          0.39141708929502733,
+          0.920213378629005
+        ],
+        [
+          -0.920213378629005,
+          0.39141708929502733
+        ]
+      ],
+      "segment_half_length_px": 30,
+      "radius_px": 7
+    },
+    "gate": {
+      "kind": "gate",
+      "origin": [
+        217.0875726135852,
+        239.73767783187617
+      ],
+      "basis": [
+        [
+          0.39141708929502733,
+          0.920213378629005
+        ],
+        [
+          -0.920213378629005,
+          0.39141708929502733
+        ]
+      ],
+      "band_half_width_px": 7,
+      "gap_width_px": 100,
+      "gap_offset_px": 65,
+      "extent_px": 180
+    }
+  },
+  "asset_sha256": {
+    "assets/current-safety.pt": "22cdca3cffde8b9bbd16c0aad972b4fe33165d015cc0f6561c9e70248d9658a3",
+    "assets/world-model/pusht/lewm_object.ckpt": "d27504690172f6efa31277107a4d54e68f18760520664bc8a33d3b9d1b558952",
+    "assets/inputs/pair.npz": "38ca38ae5f24a32fadeef3ed97bcf0bfc8fff7ba6f2c2fb9edd2075e98d69d70",
+    "assets/inputs/scalers.json": "0505742b401dc3e1e7a9f74a45d614eb2c3c378370663b2f41be55f35d005511"
+  },
+  "adapter": {
+    "seed": 303031,
+    "spec": {
+      "hidden_size": 8,
+      "max_horizon": 3,
+      "block_action_dim": 10,
+      "normalized_action_bound": 1.0,
+      "projection_seed": 303032
+    }
+  },
+  "search": {
+    "generations": 4,
+    "population": 6,
+    "sigma": 0.15,
+    "seed": 303601,
+    "order_seed": 303605,
+    "optimizer": "diagonal CMA-ES, cma 4.4.4; maximize declared panel fitness"
+  },
+  "training": {
+    "cases": [
+      "island",
+      "bar"
+    ],
+    "seed_start": 303510,
+    "common_random_numbers": "Every candidate and native in a generation uses the same two cases and planner seed. Candidate order preseeded; native first on even generations and last on odd generations."
+  },
+  "selection": {
+    "cases": [
+      [
+        "island",
+        303520
+      ],
+      [
+        "bar",
+        303521
+      ]
+    ],
+    "nominees": [
+      "native",
+      "initial",
+      "elite"
+    ],
+    "elite_rule": "Best evaluated training candidate, ties earliest generation then candidate index; never unconditionally export final CMA mean.",
+    "winner_rule": "Highest two-case panel fitness; exact ties prefer native, then initial, then elite. Freeze selection receipt and weights before validation."
+  },
+  "validation": {
+    "cases": [
+      [
+        "island",
+        303530
+      ],
+      [
+        "bar",
+        303530
+      ],
+      [
+        "gate",
+        303530
+      ],
+      [
+        "island",
+        303531
+      ],
+      [
+        "bar",
+        303531
+      ],
+      [
+        "gate",
+        303531
+      ]
+    ],
+    "rule": "Native and selected arm on each case; alternate arm order. No reselection from validation."
+  },
+  "maximum_valid_episodes": 76,
+  "maximum_failed_engineering_starts": 2,
+  "maximum_episode_starts": 78,
+  "maximum_total_environment_actions": 11700,
+  "maximum_total_predictor_steps": 26339040,
+  "maximum_total_execution_physics_steps": 117000,
+  "maximum_total_reset_physics_steps": 156,
+  "fitness": "If any panel violation: -1000000 - number of violation episodes. Otherwise (n+1)*safe_completion_count + sum(safe_progress) - 0.001*capped_action_sum/(n*150). Successful episodes use actual actions, unfinished use 150. Completion dominates bounded progress; violations cannot be traded for task reward.",
+  "progress_feedback": "Safe completion=1; unsafe or technical invalid=0; safe unfinished=clip(1-final_error/initial_error,0,1). Error=norm(goal[:4]-state[:4])/20 + shortest angular error/(pi/9). This uses privileged simulator task state for scalar training feedback, never as an adapter input. Future optimizer controls require the same information.",
+  "injection": "One adapter candidate occupies the final existing candidate slot in each CEM iteration; ordinary candidates remain. Same nominal search prediction work.",
+  "accounting": "Charge every attempted reset, action, dense physics step, all candidates including discarded ones and frozen-model queries. Software synthetic tests separate. Record all errors and refusals; no outcome retries. Environment seeding is isolated from CMA random state.",
+  "stopping": "Fixed schedule, no efficacy stopping. Before each new job retain 10 minutes to cutoff for preservation. Technical error stops for diagnosis, incomplete saved jobs cannot rerun automatically; retain new source versions for repairs. Hard one-hour provider cutoff; no extension or extra rental.",
+  "admission": "Known source pair and three previously used geometries; require settled native full-pusher and arena clearance >=6px before any command. No physics or policy-input hazard overlay.",
+  "limitations": [
+    "One reused task scene, three known virtual-hazard layouts and one optimizer seed. Reserved planner seeds are within-run validation, not previously unseen tasks or scene generalization.",
+    "This is a development CMA pilot, with contemporary native and untrained controls. Parameter random search, tuned fixed and ordinary-learning controls have not run, so no evolution-specific advantage claim is supported.",
+    "Learned native-proprioception motion safety and frozen LeWM task model remain unchanged; empirical calibration is not a universal safety guarantee."
+  ],
+  "authorization": "User authorized proceeding from the completed single-episode integration test to the bounded evolutionary pilot; fresh $1 cap and one-hour cutoff. No historical allocation inherited."
+}

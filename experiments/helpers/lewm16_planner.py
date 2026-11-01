@@ -77,7 +77,12 @@ class CostModel(torch.nn.Module):
         self.counters["model_candidate_rollouts"] += b * s
         self.counters["predictor_steps"] += b * s * h
         learned = self.base.get_cost(info, candidates)
-        violation, path, geometric = self.checker.check(candidates)
+        # Learned checkers reuse the just-computed frozen imagination. Analytic and
+        # simulator-backed checkers retain their original path without extra queries.
+        if hasattr(self.checker, "check_with_rollout"):
+            violation, path, geometric = self.checker.check_with_rollout(info, candidates)
+        else:
+            violation, path, geometric = self.checker.check(candidates)
         goal = geometric.to(learned.dtype) if self.params["objective"] == "geometric" else learned
         cost, feasible = rank_costs(
             goal, violation.to(goal.dtype), "safe" if self.params["checked"] else "penalty"

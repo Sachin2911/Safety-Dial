@@ -1,0 +1,264 @@
+{
+  "study": "pusht-three-refinements-control-20261030-v1",
+  "protocol": "configs/pusht_improvements_20261030/design-v3.json",
+  "implemented": [
+    "Fit to feasible elites when any exist; otherwise least violation; preserve singleton spread.",
+    "Score and safety-check final mean, compare with best checked candidate, and execute the lower task-cost feasible plan.",
+    "Smooth means and standard deviations with0.1 old/0.9 fitted, floor normalized standard deviation at0.05."
+  ],
+  "software_tests_gpu": 5,
+  "summaries": {
+    "baseline-gpu": {
+      "episodes": 3,
+      "safe_completion": 2,
+      "violation": 0,
+      "contact": 0,
+      "unfinished": 1,
+      "engaged": 3,
+      "actions": [
+        25,
+        150,
+        25
+      ],
+      "errors": 0,
+      "safe_completion_at": {
+        "50": 2,
+        "100": 2,
+        "150": 2
+      }
+    },
+    "improved-gpu": {
+      "episodes": 3,
+      "safe_completion": 2,
+      "violation": 0,
+      "contact": 0,
+      "unfinished": 1,
+      "engaged": 3,
+      "actions": [
+        26,
+        150,
+        40
+      ],
+      "errors": 0,
+      "safe_completion_at": {
+        "50": 2,
+        "100": 2,
+        "150": 2
+      }
+    }
+  },
+  "rows": [
+    {
+      "arm": "baseline-gpu",
+      "case": "island",
+      "safe_completion": true,
+      "success": true,
+      "violation": false,
+      "contact": false,
+      "unfinished": false,
+      "engaged": true,
+      "actions": 25,
+      "error": null,
+      "controller_failure": null,
+      "minimum_clearance_px": 6.622136701904452,
+      "minimum_arena_clearance_px": 84.98735571058913,
+      "historical_trace_comparison": {
+        "shared_state_samples": 26,
+        "max_state_difference": 247.56939103423827,
+        "exact_state_prefix": false,
+        "same_completion_actions": false
+      },
+      "episode_seconds": 3.0932837900472805,
+      "planning_seconds": 2.3982840210665017,
+      "result_sha256": "9d3d14459f9c49235f1545f66e7f2b6ad2e8ea151ab4f2f70ac291c62cc73720"
+    },
+    {
+      "arm": "baseline-gpu",
+      "case": "bar",
+      "safe_completion": false,
+      "success": false,
+      "violation": false,
+      "contact": false,
+      "unfinished": true,
+      "engaged": true,
+      "actions": 150,
+      "error": null,
+      "controller_failure": null,
+      "minimum_clearance_px": 6.735544763072927,
+      "minimum_arena_clearance_px": 48.568020354300465,
+      "historical_trace_comparison": {
+        "shared_state_samples": 44,
+        "max_state_difference": 447.46050616700006,
+        "exact_state_prefix": false,
+        "same_completion_actions": false
+      },
+      "episode_seconds": 16.279930529999547,
+      "planning_seconds": 11.726466393331066,
+      "result_sha256": "eed275c8e163099c2e871902aa7d0d86ea8f155bf8073aee13f127da13f45672"
+    },
+    {
+      "arm": "baseline-gpu",
+      "case": "gate",
+      "safe_completion": true,
+      "success": true,
+      "violation": false,
+      "contact": false,
+      "unfinished": false,
+      "engaged": true,
+      "actions": 25,
+      "error": null,
+      "controller_failure": null,
+      "minimum_clearance_px": 6.46409658310845,
+      "minimum_arena_clearance_px": 69.35744517683271,
+      "historical_trace_comparison": {
+        "shared_state_samples": 26,
+        "max_state_difference": 217.3251605383269,
+        "exact_state_prefix": false,
+        "same_completion_actions": true
+      },
+      "episode_seconds": 3.0260040890425444,
+      "planning_seconds": 2.387452556169592,
+      "result_sha256": "f22162311970dcf3d11fce0c8a480c87b87043d2cf86e3047747cfccbff1b0f3"
+    },
+    {
+      "arm": "improved-gpu",
+      "case": "island",
+      "safe_completion": true,
+      "success": true,
+      "violation": false,
+      "contact": false,
+      "unfinished": false,
+      "engaged": true,
+      "actions": 26,
+      "error": null,
+      "controller_failure": null,
+      "minimum_clearance_px": 7.411957406419461,
+      "minimum_arena_clearance_px": 82.12210848761778,
+      "historical_trace_comparison": {
+        "shared_state_samples": 27,
+        "max_state_difference": 247.26330681395848,
+        "exact_state_prefix": false,
+        "same_completion_actions": true
+      },
+      "episode_seconds": 3.436200518044643,
+      "planning_seconds": 2.776849675923586,
+      "result_sha256": "7dcac8edd14b07036df7b59d5a6abbbab1f0f5c5d0d04a15df7c45c311dd8c33"
+    },
+    {
+      "arm": "improved-gpu",
+      "case": "bar",
+      "safe_completion": false,
+      "success": false,
+      "violation": false,
+      "contact": false,
+      "unfinished": true,
+      "engaged": true,
+      "actions": 150,
+      "error": null,
+      "controller_failure": null,
+      "minimum_clearance_px": 6.997308650983218,
+      "minimum_arena_clearance_px": 39.29197349643936,
+      "historical_trace_comparison": {
+        "shared_state_samples": 44,
+        "max_state_difference": 348.31658809161104,
+        "exact_state_prefix": false,
+        "same_completion_actions": false
+      },
+      "episode_seconds": 16.387164628016762,
+      "planning_seconds": 12.12300128582865,
+      "result_sha256": "7892499ac5331126b84dfa3a9c36678015788a555d9c82258cc127c3550ef9ea"
+    },
+    {
+      "arm": "improved-gpu",
+      "case": "gate",
+      "safe_completion": true,
+      "success": true,
+      "violation": false,
+      "contact": false,
+      "unfinished": false,
+      "engaged": true,
+      "actions": 40,
+      "error": null,
+      "controller_failure": null,
+      "minimum_clearance_px": 6.1941756634691885,
+      "minimum_arena_clearance_px": 80.13164786098355,
+      "historical_trace_comparison": {
+        "shared_state_samples": 26,
+        "max_state_difference": 195.44107209108978,
+        "exact_state_prefix": false,
+        "same_completion_actions": false
+      },
+      "episode_seconds": 4.833236362901516,
+      "planning_seconds": 3.601373814744875,
+      "result_sha256": "a417f2b85bd839d2339393939862860261bc7ea8ef1c54f3a519f302503ba41b"
+    }
+  ],
+  "resources": {
+    "environment_resets": 6,
+    "reset_physics_steps": 12,
+    "render_frames": 428,
+    "encoder_frames": 168,
+    "model_batch_calls": 1387,
+    "model_candidate_rollouts": 315127,
+    "predictor_steps": 945381,
+    "learned_candidate_checks": 315128,
+    "learned_motion_physics_points": 47269200,
+    "environment_actions": 416,
+    "executed_physics_steps": 4160
+  },
+  "refinement_audit": [
+    {
+      "case": "island",
+      "refinement_iterations": 90,
+      "few_safe_iterations": 0,
+      "zero_safe_iterations": 0,
+      "best_checked_selections": 6,
+      "baseline_prior_gpu_state_prefix_exact": true
+    },
+    {
+      "case": "bar",
+      "refinement_iterations": 450,
+      "few_safe_iterations": 0,
+      "zero_safe_iterations": 0,
+      "best_checked_selections": 29,
+      "baseline_prior_gpu_state_prefix_exact": true
+    },
+    {
+      "case": "gate",
+      "refinement_iterations": 120,
+      "few_safe_iterations": 0,
+      "zero_safe_iterations": 0,
+      "best_checked_selections": 8,
+      "baseline_prior_gpu_state_prefix_exact": true
+    }
+  ],
+  "interpretation": "No completion improvement on these three known layouts. Both arms2/3 at50/100/150, zero observed violations, one unfinished and3/3 engaged. Changed planner used more actions on the completed cases. No tuning or per-change ablations followed.",
+  "limits": "One known scene and seed, three correlated layouts; bundled engineering control, not independent generalization evidence. Fixed smoothing/floor defaults were not optimized.",
+  "feasible_elite_diagnostic": "All660 improved-arm CEM iterations had at least25 feasible candidates, so the scarce-feasible-elite branch had no opportunity to help in this control; software edge cases were tested separately.",
+  "extra_query_accounting": "Equal11250 search predictor steps per replan. New final selection may use an additional3 predictor steps; actual counters include them.",
+  "no_local_simulation_or_model_queries": true,
+  "artifacts": {
+    "raw": "outputs/pusht-improvements-20261030-v1/remote",
+    "gallery": "outputs/pusht-improvements-20261030-v1/remote/results/media/comparison.png",
+    "archive": "outputs/pusht-improvements-20261030-v1/release/pusht-improvements-20261030-v1.tar.gz",
+    "archive_sha256": "aa74712934c64352ac2aaff7d38219bc214110977e821498c048258f1f007f72",
+    "archive_members": 160,
+    "replays": 3
+  },
+  "todo_cleared": [
+    {
+      "removed": "docs/research/todo.pdf",
+      "preserved": "outputs/pusht-improvements-20261030-v1/remote/assets/safecem-todo-before.pdf",
+      "sha256": "8594336425e6aaa5fb00aba5a1f5adad589d973845c4f80826aa30b81a24a4fb"
+    },
+    {
+      "removed": "docs/research/build_todo.py",
+      "preserved": "outputs/pusht-improvements-20261030-v1/remote/assets/safecem-todo-builder-before.py",
+      "sha256": "9c570eff55eda505171158cb3ad9255a8b23322c1a23d0ea2f6450ac97d2a31e"
+    }
+  ],
+  "visual_qa": "Inspected all six gallery panels and their labels against the audited outcomes.",
+  "postprocessing_repair": "Original renderer referenced current/experiments; version2 uses improved/experiments. Original failed script/log retained. No episode or model query was repeated.",
+  "private_upload": "No new upload; all evidence verified locally.",
+  "pod_closeout_receipt": "progress/receipts/20261030-pusht-improvements-pod-closeout.json"
+}

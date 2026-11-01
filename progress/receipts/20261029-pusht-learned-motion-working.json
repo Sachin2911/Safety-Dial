@@ -1,0 +1,552 @@
+{
+  "date": "2026-10-29",
+  "objective": "Get the learned safety model fully working on PushT",
+  "status": "Complete: learned-controlled PushT implementation, local validation and private pinned preservation verified",
+  "method": {
+    "predictor": "Supervised causal affine dense-motion model, ordinary least squares",
+    "inference_input": "Native observed pusher x,y,vx,vy plus normalized candidate actions",
+    "information_change": "Uses native proprioception; does not claim image/latent-only safety",
+    "constraints": "Generic supplied circle/capsule/box/workspace signed distances",
+    "learned_component": "Dense pusher motion; no handwritten dynamics or simulator previews in inference",
+    "protected_body": "Full 15px pusher disk; T-block excluded from hazard safety",
+    "requested_margin_px": 6.0,
+    "frozen_world_model": true,
+    "source_sha256": {
+      "experiments/helpers/learned_motion.py": "e8e4576903a4badea3cf815df96a9ad53725d9f834ec3fabe0ed85a4edcd6956",
+      "experiments/helpers/safety_model.py": "8600d917c44d39e747204bd7215881aed63983c83db6d0d5adcf8d92e30aef72",
+      "experiments/helpers/lewm16_planner.py": "7bd4b4f2c9cd0158d5effe9988410cf5954a8281006d0db0c8b24ec03852908f",
+      "experiments/helpers/lewm18_planner.py": "52690a96c4ba4ce91fc5f652d0b9d02e807e7768bffc756cbc27b58f44b78cad",
+      "experiments/scripts/train_pusht_motion.py": "ce43660b1fc949b7ad342b942fe651f1ba3efd1d2897ce8f6cd8101041d6232b",
+      "experiments/scripts/run_safety_pusht.py": "01f2625e376d56c8c9f98b03bb1dd13ef0d33b0764bb156fb79cb92926a5f95a",
+      "experiments/scripts/run_pusht_smoke.py": "7052628f80f5c5eec0e3a20de0d49c5888a6f4a1d640ed9b7b93b2aa74f31bdf",
+      "experiments/scripts/media_learned_pusht.py": "489fd75ad14c9ec2d08c3e6b76cbb0e11edf5c4a9d70059ffda1ecb435f01f69",
+      "experiments/tests/test_learned_motion.py": "40989daf5c97c6f00693a6d6a3e6c88b5768519c868540a279c5f3fa0bc66fe6",
+      "configs/safety_model/pusht-motion-v1.json": "a85766da4c15bd699f2a8c4e7c5f46b32e7a533cbbb3a4f0993cef5cee20a069"
+    }
+  },
+  "training_and_motion_validation": {
+    "metrics": {
+      "train": {
+        "trajectories": 512,
+        "physics_points": 76800,
+        "mean_position_error_px": 6.668631243522705e-13,
+        "max_position_error_px": 7.547341993495883e-12
+      },
+      "calibration": {
+        "trajectories": 96,
+        "physics_points": 14400,
+        "mean_position_error_px": 6.621532960110095e-13,
+        "max_position_error_px": 5.381862882387366e-12
+      },
+      "test": {
+        "trajectories": 96,
+        "physics_points": 14400,
+        "mean_position_error_px": 6.671390059299671e-13,
+        "max_position_error_px": 5.747935010775985e-12
+      }
+    },
+    "calibration": {
+      "ready": true,
+      "source_groups": 12,
+      "alpha": 0.1,
+      "allowance": 0.001,
+      "unit": "px",
+      "order_statistic": 12,
+      "scope": "Source-group worst dense position error; not a universal safety guarantee"
+    },
+    "passed": true,
+    "resources": {
+      "environment_resets": 704,
+      "reset_physics_steps": 1408,
+      "environment_actions": 10560,
+      "executed_physics_steps": 105600
+    },
+    "design_ranks": [
+      7,
+      9,
+      11,
+      13,
+      15,
+      17,
+      19,
+      21,
+      23,
+      25,
+      27,
+      29,
+      31,
+      33,
+      35
+    ],
+    "elapsed_seconds": 5.545109403996321,
+    "new_external_compute_usd": 0,
+    "dataset_sha256": "30c12ac98ed272cb143b950556b9caf0380a0eceeb64146dddb53e48690405f3"
+  },
+  "closed_loop": {
+    "denominator": 3,
+    "safe_completions": 3,
+    "violating_episodes": 0,
+    "unfinished": 0,
+    "same_known_task_scene": true,
+    "reference_predictors_forbidden": true,
+    "results": [
+      {
+        "role": "safety-model",
+        "case": {
+          "kind": "island",
+          "origin": [
+            217.0875726135852,
+            239.73767783187617
+          ],
+          "basis": [
+            [
+              0.39141708929502733,
+              0.920213378629005
+            ],
+            [
+              -0.920213378629005,
+              0.39141708929502733
+            ]
+          ],
+          "radius_px": 12
+        },
+        "seed": 29102026,
+        "success": true,
+        "safe_completion": true,
+        "unfinished": false,
+        "hazard_violation": false,
+        "margin_breach": false,
+        "arena_margin_breach": false,
+        "min_hazard_clearance_px": 6.905402053900701,
+        "min_arena_clearance_px": 67.77991863038326,
+        "actions": 26,
+        "simulated_seconds": 2.6,
+        "episode_seconds": 13.537422266999783,
+        "planning_seconds": 13.48482625401084,
+        "pd_max_error_px": null,
+        "resources": {
+          "environment_resets": 1,
+          "reset_physics_steps": 2,
+          "render_frames": 28,
+          "encoder_frames": 12,
+          "model_batch_calls": 96,
+          "model_candidate_rollouts": 22506,
+          "predictor_steps": 67518,
+          "learned_candidate_checks": 22506,
+          "learned_motion_physics_points": 3375900,
+          "environment_actions": 26,
+          "executed_physics_steps": 260
+        },
+        "controller_failure": null,
+        "error": null,
+        "initial_state": [
+          378.5397886657715,
+          181.55394327163697,
+          192.76044626075682,
+          335.3701455876347,
+          2.944023701972812,
+          -116.89515686035156,
+          15.622293472290039
+        ],
+        "goal_state": [
+          87.58565521240234,
+          305.3126525878906,
+          163.5110321044922,
+          358.951416015625,
+          1.8576234579086304,
+          -18.75950813293457,
+          35.579708099365234
+        ],
+        "final_state": [
+          98.42838656390775,
+          293.30522875084847,
+          164.26940133645277,
+          348.30318827882354,
+          1.9103302442089969,
+          37.32292044785368,
+          29.96858816236163
+        ],
+        "joint_position_error_px": 19.38305776161385,
+        "object_displacement_px": 31.289027375916067,
+        "pusher_path_length_px": 388.86765249451423,
+        "safety_model": {
+          "mode": "learned",
+          "calibration": {
+            "ready": true,
+            "source_groups": 12,
+            "alpha": 0.1,
+            "allowance": 0.001,
+            "unit": "px",
+            "order_statistic": 12,
+            "scope": "Source-group worst dense position error; not a universal safety guarantee"
+          },
+          "reference_controls_execution": false
+        },
+        "reference_predictors_forbidden": true,
+        "safety_backend": "observed_motion",
+        "safety_observation": "Native pusher position and velocity"
+      },
+      {
+        "role": "safety-model",
+        "case": {
+          "kind": "bar",
+          "origin": [
+            217.0875726135852,
+            239.73767783187617
+          ],
+          "basis": [
+            [
+              0.39141708929502733,
+              0.920213378629005
+            ],
+            [
+              -0.920213378629005,
+              0.39141708929502733
+            ]
+          ],
+          "segment_half_length_px": 30,
+          "radius_px": 7
+        },
+        "seed": 29102026,
+        "success": true,
+        "safe_completion": true,
+        "unfinished": false,
+        "hazard_violation": false,
+        "margin_breach": false,
+        "arena_margin_breach": false,
+        "min_hazard_clearance_px": 6.954011843163091,
+        "min_arena_clearance_px": 52.751558419323274,
+        "actions": 43,
+        "simulated_seconds": 4.3,
+        "episode_seconds": 21.015048351000587,
+        "planning_seconds": 20.92236996999418,
+        "pd_max_error_px": null,
+        "resources": {
+          "environment_resets": 1,
+          "reset_physics_steps": 2,
+          "render_frames": 45,
+          "encoder_frames": 18,
+          "model_batch_calls": 144,
+          "model_candidate_rollouts": 33759,
+          "predictor_steps": 101277,
+          "learned_candidate_checks": 33759,
+          "learned_motion_physics_points": 5063850,
+          "environment_actions": 43,
+          "executed_physics_steps": 430
+        },
+        "controller_failure": null,
+        "error": null,
+        "initial_state": [
+          378.5397886657715,
+          181.55394327163697,
+          192.76044626075682,
+          335.3701455876347,
+          2.944023701972812,
+          -116.89515686035156,
+          15.622293472290039
+        ],
+        "goal_state": [
+          87.58565521240234,
+          305.3126525878906,
+          163.5110321044922,
+          358.951416015625,
+          1.8576234579086304,
+          -18.75950813293457,
+          35.579708099365234
+        ],
+        "final_state": [
+          94.93760948847029,
+          291.1088518519874,
+          152.14145157024552,
+          355.3666933555844,
+          1.9609737036851929,
+          5.240651852736367,
+          35.3242859123694
+        ],
+        "joint_position_error_px": 19.947851641135877,
+        "object_displacement_px": 45.27432663556334,
+        "pusher_path_length_px": 636.4548886734768,
+        "safety_model": {
+          "mode": "learned",
+          "calibration": {
+            "ready": true,
+            "source_groups": 12,
+            "alpha": 0.1,
+            "allowance": 0.001,
+            "unit": "px",
+            "order_statistic": 12,
+            "scope": "Source-group worst dense position error; not a universal safety guarantee"
+          },
+          "reference_controls_execution": false
+        },
+        "reference_predictors_forbidden": true,
+        "safety_backend": "observed_motion",
+        "safety_observation": "Native pusher position and velocity"
+      },
+      {
+        "role": "safety-model",
+        "case": {
+          "kind": "gate",
+          "origin": [
+            217.0875726135852,
+            239.73767783187617
+          ],
+          "basis": [
+            [
+              0.39141708929502733,
+              0.920213378629005
+            ],
+            [
+              -0.920213378629005,
+              0.39141708929502733
+            ]
+          ],
+          "band_half_width_px": 7,
+          "gap_width_px": 100,
+          "gap_offset_px": 65,
+          "extent_px": 180
+        },
+        "seed": 29102026,
+        "success": true,
+        "safe_completion": true,
+        "unfinished": false,
+        "hazard_violation": false,
+        "margin_breach": false,
+        "arena_margin_breach": false,
+        "min_hazard_clearance_px": 6.404872745531176,
+        "min_arena_clearance_px": 51.58492015839332,
+        "actions": 25,
+        "simulated_seconds": 2.5,
+        "episode_seconds": 11.58439004200045,
+        "planning_seconds": 11.534910640017188,
+        "pd_max_error_px": null,
+        "resources": {
+          "environment_resets": 1,
+          "reset_physics_steps": 2,
+          "render_frames": 27,
+          "encoder_frames": 10,
+          "model_batch_calls": 80,
+          "model_candidate_rollouts": 18755,
+          "predictor_steps": 56265,
+          "learned_candidate_checks": 18755,
+          "learned_motion_physics_points": 2813250,
+          "environment_actions": 25,
+          "executed_physics_steps": 250
+        },
+        "controller_failure": null,
+        "error": null,
+        "initial_state": [
+          378.5397886657715,
+          181.55394327163697,
+          192.76044626075682,
+          335.3701455876347,
+          2.944023701972812,
+          -116.89515686035156,
+          15.622293472290039
+        ],
+        "goal_state": [
+          87.58565521240234,
+          305.3126525878906,
+          163.5110321044922,
+          358.951416015625,
+          1.8576234579086304,
+          -18.75950813293457,
+          35.579708099365234
+        ],
+        "final_state": [
+          82.83024624174054,
+          291.0966988323155,
+          160.508380804339,
+          348.55509023347656,
+          1.89168604428164,
+          42.631733448035405,
+          134.3900519405335
+        ],
+        "joint_position_error_px": 18.488016666418748,
+        "object_displacement_px": 34.84305514042898,
+        "pusher_path_length_px": 412.1059864391302,
+        "safety_model": {
+          "mode": "learned",
+          "calibration": {
+            "ready": true,
+            "source_groups": 12,
+            "alpha": 0.1,
+            "allowance": 0.001,
+            "unit": "px",
+            "order_statistic": 12,
+            "scope": "Source-group worst dense position error; not a universal safety guarantee"
+          },
+          "reference_controls_execution": false
+        },
+        "reference_predictors_forbidden": true,
+        "safety_backend": "observed_motion",
+        "safety_observation": "Native pusher position and velocity"
+      }
+    ],
+    "resources": {
+      "predictor_steps": 225060,
+      "executed_physics_steps": 940,
+      "encoder_frames": 40,
+      "reset_physics_steps": 6,
+      "environment_actions": 94,
+      "model_batch_calls": 320,
+      "environment_resets": 3,
+      "model_candidate_rollouts": 75020,
+      "render_frames": 100,
+      "learned_candidate_checks": 75020,
+      "learned_motion_physics_points": 11253000
+    },
+    "audit": {
+      "passed": true,
+      "runs": [
+        {
+          "layout": "island",
+          "safe_completion": true,
+          "actions": 26,
+          "min_clearance_px": 6.905402053900701,
+          "physics_steps": 260,
+          "reference_predictors_forbidden": true
+        },
+        {
+          "layout": "bar",
+          "safe_completion": true,
+          "actions": 43,
+          "min_clearance_px": 6.954011843163091,
+          "physics_steps": 430,
+          "reference_predictors_forbidden": true
+        },
+        {
+          "layout": "gate",
+          "safe_completion": true,
+          "actions": 25,
+          "min_clearance_px": 6.404872745531179,
+          "physics_steps": 250,
+          "reference_predictors_forbidden": true
+        }
+      ],
+      "scope": "Three layouts on one known scene; original joint goal and full-pusher 6px margins",
+      "reference_prediction_forbidden": true
+    }
+  },
+  "accounting": {
+    "training_resources": {
+      "environment_resets": 704,
+      "reset_physics_steps": 1408,
+      "environment_actions": 10560,
+      "executed_physics_steps": 105600
+    },
+    "closed_loop_resources": {
+      "predictor_steps": 225060,
+      "executed_physics_steps": 940,
+      "encoder_frames": 40,
+      "reset_physics_steps": 6,
+      "environment_actions": 94,
+      "model_batch_calls": 320,
+      "environment_resets": 3,
+      "model_candidate_rollouts": 75020,
+      "render_frames": 100,
+      "learned_candidate_checks": 75020,
+      "learned_motion_physics_points": 11253000
+    },
+    "total_new_environment_actions": 10654,
+    "total_new_resets": 707,
+    "total_physics_steps": 107954,
+    "external_compute_usd": 0
+  },
+  "engineering_failures": [
+    {
+      "stage": "First island launch, before model load",
+      "cause": "Relative model prefix joined to cache directory twice",
+      "repair": "Resolve paths against repository root",
+      "new_environment_actions": 0,
+      "new_physics_steps": 0,
+      "model_queries": 0,
+      "scene_seed_settings_unchanged": true,
+      "evidence": "outputs/pusht-learned-motion-e2e-v1/island/failure.json"
+    }
+  ],
+  "checks": {
+    "pytest": "31 passed in 3.38s",
+    "ruff": "Passed including explicit E501",
+    "dense_trace_audit": true,
+    "original_joint_goal_audit": true,
+    "reference_predictor_runtime_guards": true,
+    "media_visually_verified": true,
+    "base_checkpoint_sha256_matches_training": true,
+    "reloaded_artifact_audit": {
+      "path": "outputs/pusht-learned-motion-e2e-v1/reloaded-artifact-audit.json",
+      "sha256": "b5341a1f0c96480b6696a42baf8fde95718711043cce0b4cba31cf44cb98e56e",
+      "passed": true,
+      "offline_model_queries": 20,
+      "new_simulator_interactions": 0
+    },
+    "private_checkpoint_preservation": true
+  },
+  "limitations": [
+    "Three end-to-end layouts share one known scene and planner seed",
+    "Motion test uses 12 independent source scenes, not a task-success benchmark",
+    "No image-only safety claim or cross-environment transfer established",
+    "No evolution, planner tuning or ablation comparison run",
+    "Zero observed violations in three demonstrations does not establish zero risk"
+  ],
+  "release": {
+    "local_path": "outputs/pusht-learned-motion-release-v1",
+    "files": 70,
+    "bytes": 75145749,
+    "manifest_sha256": "b21308e7736934860bf6707786a2477b8e5190d0adad0e317dfb208dd6f4ab2f",
+    "checkpoint_sha256": "3d9d471d69dc135c12c36436328886c04485cd19f0dd0a815659e4ecb822bed5",
+    "intended_private_repo": "Sachioster/SafetyDial-PushT",
+    "intended_path": "campaigns/pusht-learned-safety-20261029-v1",
+    "upload_status": "Uploaded to the approved private dataset; downloaded checkpoints, videos, README and manifest verified",
+    "revision": "34256873f32a27e90c16ee081d30660aecc6acb4",
+    "approval_review_history": {
+      "initial_rejection_reason": "Exact sensitive payload and private Hugging Face destination require explicit user authorization",
+      "resolved_by": "Explicit user approval of the payload and destination on 29 October 2026"
+    },
+    "initial_revision": "bd24ea5b037521e63f4ca49dc883c7b5c065db3c",
+    "url": "https://huggingface.co/datasets/Sachioster/SafetyDial-PushT/tree/34256873f32a27e90c16ee081d30660aecc6acb4/campaigns/pusht-learned-safety-20261029-v1",
+    "private": true,
+    "download_verified": {
+      "model/safety-model.pt": {
+        "sha256": "3d9d471d69dc135c12c36436328886c04485cd19f0dd0a815659e4ecb822bed5",
+        "bytes": 90191
+      },
+      "model/frozen-lewm_object.ckpt": {
+        "sha256": "d27504690172f6efa31277107a4d54e68f18760520664bc8a33d3b9d1b558952",
+        "bytes": 72334773
+      },
+      "media/island.mp4": {
+        "sha256": "381dd903e70f6b370c6e65f9178330cf0efda02f74cf33a3790b04bde6627a1b",
+        "bytes": 83016
+      },
+      "media/bar.mp4": {
+        "sha256": "9d3cd3eaf9b818b4d0fa7cec577563bb7cd8d3a6c768e1be1bcfd5d0063bd4f1",
+        "bytes": 114134
+      },
+      "media/gate.mp4": {
+        "sha256": "8b3ef34f1d5fc48d34f7cd4aa8fb9de7369f382ef146d8d6bed7e7cc43203e1e",
+        "bytes": 86547
+      },
+      "manifest.json": {
+        "sha256": "b21308e7736934860bf6707786a2477b8e5190d0adad0e317dfb208dd6f4ab2f",
+        "bytes": 10096
+      },
+      "README.md": {
+        "sha256": "d21b1479e1621099516894a1cd050b032a6164ff82cdfa7e099079fe6021b35b",
+        "bytes": 6481
+      }
+    },
+    "preservation_receipt": "outputs/pusht-learned-motion-e2e-v1/huggingface-preservation.json"
+  },
+  "implementation_audit_source_sha256": {
+    "experiments/scripts/audit_pusht_learned_motion.py": "fe618acfa77b653a1875cc46104543abaefd257f427d8586dfd810bcfb62400f"
+  },
+  "user_approvals": {
+    "native_pusher_position_velocity": true,
+    "private_release_upload": true,
+    "approved_repo": "Sachioster/SafetyDial-PushT",
+    "approved_path": "campaigns/pusht-learned-safety-20261029-v1",
+    "approved_payload": "Learned safety model, frozen LeWM checkpoint, motion-training data, source snapshots and three replay videos; no secrets",
+    "date": "2026-10-29"
+  }
+}

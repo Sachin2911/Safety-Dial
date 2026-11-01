@@ -1,0 +1,71 @@
+{
+  "name": "lewm-learned-motion-preset-extension-20261030-v1",
+  "pod_id": "r8w4b6lwkbjyrz",
+  "authorization": "Conditional extension authorized by user; PushT frozen pilot gate passed. Combined rental cap $5.",
+  "compute_location": "RunPod only, no new host. Both arms use the same renderer and checkpoints.",
+  "environments": [
+    "tworoom",
+    "reacher",
+    "cube"
+  ],
+  "safety_interface": "Observed native proprioception and normalized proposed actions predict native protected-body XY trajectories. Geometry is generic circle/capsule/boxes. No simulator previews, analytic physics, true task distance, object positions, or goal coordinates enter candidate safety prediction. Native physics supplies training labels and real-execution monitors only.",
+  "protected_body": {
+    "tworoom": "7 px agent disk",
+    "reacher": "10 mm disk about fingertip",
+    "cube": "5 mm disk about pinch site, world XY extrusion; not full arm or object protection"
+  },
+  "body_radius": {
+    "tworoom": 7.0,
+    "reacher": 0.01,
+    "cube": 0.005
+  },
+  "margin": {
+    "tworoom": 3.0,
+    "reacher": 0.015,
+    "cube": 0.01
+  },
+  "units": {
+    "tworoom": "px",
+    "reacher": "m",
+    "cube": "m"
+  },
+  "engineering_budget_per_environment": {
+    "resets": 10,
+    "actions": 30
+  },
+  "motion_training": {
+    "train_groups": 80,
+    "calibration_groups": 12,
+    "test_groups": 12,
+    "trajectories_per_group": 4,
+    "actions_per_trajectory": 25,
+    "max_environment_actions": 10400,
+    "max_resets": 416,
+    "seed": 301030,
+    "model": "Residual transition MLP, two 256-unit SiLU hidden layers plus trainable linear skip; normalized observed state/action and state-delta/dense-body-delta targets. Autoregressive 25-action forecasts.",
+    "fit": "AdamW lr 0.0003 batch512 seed301030, 6000 training-only updates. No calibration or evaluation-based model selection.",
+    "calibration": "Max full-trajectory position error per source group, finite-sample 90% group conformal upper quantile. Report independent group coverage; release requires >=11/12 independent test groups covered and allowance <= configured maximum. Empirical coverage is not a safety guarantee.",
+    "max_allowance": {
+      "tworoom": 20.0,
+      "reacher": 0.08,
+      "cube": 0.08
+    },
+    "sampling": "Training actions are correlated Gaussian normalized proposals (spread .5/1/2, correlation .5) inverted with frozen public normalizers and clipped exactly as native controls; seeds and source groups disjoint. Cube uses first80/next12/next12 public training episodes; two-room positions and reacher joint states use independent seeds."
+  },
+  "cases": "Twelve source-disjoint cases, first six development and next six reserved. Island, bar, gate at two strengths in each. Choose geometry from native/dataset reference paths and actual endpoints, never planner outcomes. Admit only endpoints with clearance >= margin + learned allowance + admission buffer. Cube uses distinct public validation episodes, earliest eligible 25-step pairs with object displacement>0.05m and pinch XY displacement>0.12m. TwoRoom uses fixed within-room diagonal/vertical paths; Reacher uses fixed joint-pose pairs. Fail rather than silently replace after outcomes.",
+  "case_admission_max_resets": 240,
+  "search_seed": 301030,
+  "random_configurations": 6,
+  "comparison": "Same authors preset and matched-work bounded search as the PushT pilot: 300 candidates,30 iterations,H5,R5 author preset; working anchor H3,R1; six fixed random settings. Max150 actions,270k search predictor steps/episode. Forecast, learned-safety, encoder queries/time separate. One setting selected per environment on all development hazard/control cases. Native task success rules and no-hazard controls retained.",
+  "selection": "Zero violations and no no-hazard completion regression; maximize hazard safe completions, then no-hazard safe completions, then minimize J charging unfinished150. Authors first on exact ties. No eligible configuration means stop before reserved evaluation and report failure.",
+  "max_comparison_trials_per_environment": 120,
+  "max_comparison_actions_per_environment": 18000,
+  "stopping": "Freeze source hashes before stages, preserve failures and all interaction counts. No additional search after reserved outcomes. Engineering and release failures are reported; no universal success claim. Deadline 2026-10-30T06:27:16.558798Z. Destroy only after verified preservation.",
+  "max_episode_actions": 150,
+  "completion_checkpoints": [
+    50,
+    100,
+    150
+  ],
+  "action_budget_amendment": "Before all new environment comparisons, user approved150 actions with completion checkpoints50/100/150. Existing PushT remains50. Shared model training design unchanged."
+}

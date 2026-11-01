@@ -1,0 +1,166 @@
+{
+  "schema": "lewm-navigation-final-comparison-freeze-v1",
+  "frozen_utc": "2026-10-31T06:24:32.631348+00:00",
+  "builder_sha256": "816892338ab628e00487c849b16fa4830d90a064183f44202e1942e26250a527",
+  "opening_lock": {
+    "path": "configs/lewm_campaign_20261031/navigation-budget50-comparison-v1/final-opening-v1.json",
+    "sha256": "d445169610247f390ffc1bb333f5cb63ab8c9210e981b9508d557668e1f18669"
+  },
+  "selection_locks": [
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-budget50-comparison-v1/selection-lock-r0.json",
+      "sha256": "fbf45011ade5c47a097765e27bbbb431e4f631aa82cb3295257f35660fc203b9",
+      "repeat_id": 0,
+      "host": {
+        "repeat_id": 0,
+        "host": "navigation",
+        "pod_id": "vukovc3t4o1dui"
+      }
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-budget50-comparison-v1/selection-lock-r1.json",
+      "sha256": "0e3f484f2ce7cc8438d4ad81309627172fd2e04943e9e33eddd470e8c8fc9c41",
+      "repeat_id": 1,
+      "host": {
+        "repeat_id": 1,
+        "host": "pusht",
+        "pod_id": "wq4ar2qx2ff6r4"
+      }
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-budget50-comparison-v1/selection-lock-r2.json",
+      "sha256": "7b8a1e83227542dac0a63ff9367a789c7a0f65254b52f4b76cd2de4e2c6ed2b7",
+      "repeat_id": 2,
+      "host": {
+        "repeat_id": 2,
+        "host": "navigation",
+        "pod_id": "vukovc3t4o1dui"
+      }
+    }
+  ],
+  "case_preparation": {
+    "panel_path": "results/navigation-final-cases-v1/panel.json",
+    "panel_sha256": "b43ac22b578c3064e0e301300c1265eda1c4fc53240afd759ab5dd19a53e55eb",
+    "review_path": "results/navigation-final-cases-v1/visual-review.json",
+    "review_sha256": "ff3f097683db3a95c9259ef37bffc108946842424c7919be32770fe7603d6459",
+    "require_approved": true,
+    "require_images_clean": true
+  },
+  "preparation_protocol": {
+    "path": "configs/lewm_campaign_20261031/navigation-final-cases-v1.json",
+    "sha256": "5f88303de8d7cc249d03bb9a96c0e1b3eb6f3e1cac5a892f578c50c5c072d80d"
+  },
+  "source_case_clusters": 16,
+  "all_three_repeats_retained": true,
+  "best_repeat_selection_forbidden": true,
+  "primary_episode_starts": 288,
+  "primary_maximum_environment_actions": 14400,
+  "auxiliary_decoded_native_enabled_before_primary_outcomes": true,
+  "auxiliary_source_protocol": {
+    "path": "configs/lewm_campaign_20261031/navigation-decoded-target-pilot-v3.json",
+    "sha256": "8b5e4eb3bf26d70e99f665bcfed024f73a5c4dab84551c12008274ac3da9d137"
+  },
+  "auxiliary_episode_starts": 32,
+  "auxiliary_maximum_environment_actions": 1600,
+  "fp32_duplicate_groups_across_repeats": [
+    [
+      "r0/strong_anchor",
+      "r1/strong_anchor",
+      "r1/tuned_fixed",
+      "r1/random",
+      "r1/reinforce",
+      "r2/strong_anchor",
+      "r2/tuned_fixed",
+      "r2/random",
+      "r2/reinforce"
+    ]
+  ],
+  "duplicate_execution_rule": "Every listed job executes and is charged; duplicate weights/cases/seeds are recorded, not treated as additional independent cases",
+  "analysis": "Cluster paired analyses by the16source episodes; retain learner-repeat and physical-host blocks. Report safe completion/violation/unfinished/engagement with denominators, actual actions/model/readout work and elapsed time; architecture controls do not establish evolutionary advantage.",
+  "outcomes_present_at_freeze": false,
+  "outcome_files_read": 0,
+  "final_arrays_or_images_decoded_by_builder": 0,
+  "workers_started": 0,
+  "schedule": [
+    {
+      "kind": "primary",
+      "repeat_id": 0,
+      "host": {
+        "repeat_id": 0,
+        "host": "navigation",
+        "pod_id": "vukovc3t4o1dui"
+      },
+      "protocol": "primary-r0.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2-templates/primary/r0"
+    },
+    {
+      "kind": "primary",
+      "repeat_id": 1,
+      "host": {
+        "repeat_id": 1,
+        "host": "pusht",
+        "pod_id": "wq4ar2qx2ff6r4"
+      },
+      "protocol": "primary-r1.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2-templates/primary/r1"
+    },
+    {
+      "kind": "primary",
+      "repeat_id": 2,
+      "host": {
+        "repeat_id": 2,
+        "host": "navigation",
+        "pod_id": "vukovc3t4o1dui"
+      },
+      "protocol": "primary-r2.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2-templates/primary/r2"
+    },
+    {
+      "kind": "auxiliary",
+      "host": {
+        "repeat_id": 0,
+        "host": "navigation",
+        "pod_id": "vukovc3t4o1dui"
+      },
+      "protocol": "aux-decoded-native-navigation.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v3.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2-templates/aux-decoded-native/navigation"
+    },
+    {
+      "kind": "auxiliary",
+      "host": {
+        "repeat_id": 1,
+        "host": "pusht",
+        "pod_id": "wq4ar2qx2ff6r4"
+      },
+      "protocol": "aux-decoded-native-pusht.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v3.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2-templates/aux-decoded-native/pusht"
+    }
+  ],
+  "files": [
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/primary-design-templates/primary-r0.json",
+      "sha256": "ec106f1dd60ffbfc0492d7e97463fc03c7d7342fd9095b3baf8723d28841b9a3"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/primary-design-templates/primary-r1.json",
+      "sha256": "5e6fa639f006096dd2ada354812ed952d181da218953fa2d1bc7807676a46f5c"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/primary-design-templates/primary-r2.json",
+      "sha256": "b32f4addabc0ab7cc6105613a990c17245466bad812972cafcd90f3e735676d6"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/primary-design-templates/aux-decoded-native-navigation.json",
+      "sha256": "fe91b0df71ee25280cd6f87a6506cffff6cf7a39e7abcc2b00c0cd9aba787b06"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/primary-design-templates/aux-decoded-native-pusht.json",
+      "sha256": "b4ddea3235294bc3fe4b5a6b7bf7c01625a1b5d861a787fe7070c22d0295773d"
+    }
+  ]
+}

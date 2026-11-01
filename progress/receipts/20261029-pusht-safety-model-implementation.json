@@ -1,0 +1,263 @@
+{
+  "date": "2026-10-29",
+  "track": "LeWM / PushT",
+  "status": "Implemented and exercised in shadow mode; learned-controlled execution not validated",
+  "authorization": "Implement the safety model first, prioritize a fast working PushT prototype; optimization, ablations and other environments follow later",
+  "implementation": {
+    "model": "128-128 SiLU MLP, scalar normalized minimum clearance per chunk/constraint",
+    "features": "Current and preceding observed latent, imagined chunk endpoints, normalized candidate action prefix, previous action, history-valid flag and geometric hazard encoding",
+    "protected_body": "Full 15px pusher disk; T-block excluded",
+    "world_model_frozen": true,
+    "source_sha256": {
+      "experiments/helpers/safety_model.py": "8600d917c44d39e747204bd7215881aed63983c83db6d0d5adcf8d92e30aef72",
+      "experiments/helpers/safety_data.py": "6325cba3b837b419756f4bd4d72e9c127403b4538083aee5a3d409a6a7b6926c",
+      "experiments/helpers/safety_checker.py": "efba06f006c603c38368e740c4838ff401dadc81c569a889ae8e47fc37e7cb26",
+      "experiments/helpers/lewm16_planner.py": "7bd4b4f2c9cd0158d5effe9988410cf5954a8281006d0db0c8b24ec03852908f",
+      "experiments/scripts/prepare_safety_data.py": "64045c77d41d4117bc57eca1b81c66df2a54488ee6ccc7a862af976fd59e5b41",
+      "experiments/scripts/train_safety_model.py": "266390491c9d1b15e3988dc7b5a91af954d653ac8d8dc4fd4fb199b51501b382",
+      "experiments/scripts/run_safety_pusht.py": "501ec1ba3faa96f4bcb9681a3a2234cdd20f94e2518145ba492fa0085d13048c",
+      "experiments/scripts/run_pusht_smoke.py": "6724227ac5cd63a5fda9d8f5dd4272a656621a19863511b833f30ca8d6ff0a51",
+      "experiments/tests/test_safety_model.py": "a736a89983ee36c64ce54b675cc4a6835db78814bafae920a096c93e7dd1992d",
+      "configs/safety_model/pusht-prototype.json": "80cdf606f552e5c1bd0922ba4bb87179ae0e7da84a099158c8eb0858bac7ee31",
+      "docs/research/safety-model.md": "ebbaaf9d5e2071763267f57481dd410bd2a53d093ab51f51d997cfe0553cfdb5"
+    }
+  },
+  "export": {
+    "traces": 4,
+    "labeled_examples": 300,
+    "source_groups": 1,
+    "all_training": true,
+    "source": "Existing smoke trajectories share public episode 91 and initial/goal pair",
+    "resources": {
+      "encoder_frames": 127,
+      "model_batch_calls": 24,
+      "model_candidate_rollouts": 24,
+      "predictor_steps": 60
+    },
+    "elapsed_seconds": 4.5742995320033515,
+    "simulator_interactions": 0
+  },
+  "fit": {
+    "metrics": {
+      "train": {
+        "examples": 300,
+        "source_groups": 1,
+        "mae": 13.42284870147705,
+        "max_overprediction": 32.94623947143555,
+        "unsafe_examples": 21,
+        "accepted_examples": 0,
+        "false_safe": 0,
+        "false_rejected": 279,
+        "margin": 6.0,
+        "unit": "px"
+      }
+    },
+    "calibration": {
+      "ready": false,
+      "source_groups": 0,
+      "allowance": null,
+      "scope": "Training-only engineering prototype; learned execution unavailable"
+    },
+    "elapsed_seconds": 0.9445183700008783,
+    "simulator_interactions": 0,
+    "optimizer_updates": 120,
+    "status": "Engineering implementation; closed-loop efficacy untested"
+  },
+  "shadow_check": {
+    "role": "safety-model",
+    "case": {
+      "kind": "island",
+      "origin": [
+        217.0875726135852,
+        239.73767783187617
+      ],
+      "basis": [
+        [
+          0.39141708929502733,
+          0.920213378629005
+        ],
+        [
+          -0.920213378629005,
+          0.39141708929502733
+        ]
+      ],
+      "radius_px": 12
+    },
+    "seed": 29102026,
+    "success": false,
+    "safe_completion": false,
+    "unfinished": true,
+    "hazard_violation": false,
+    "margin_breach": false,
+    "arena_margin_breach": false,
+    "min_hazard_clearance_px": 75.1616182776551,
+    "min_arena_clearance_px": 118.46021133422852,
+    "actions": 5,
+    "simulated_seconds": 0.5,
+    "episode_seconds": 2.393747784997686,
+    "planning_seconds": 2.384269318994484,
+    "pd_max_error_px": 1.1368683772161603e-13,
+    "resources": {
+      "environment_resets": 1,
+      "reset_physics_steps": 2,
+      "render_frames": 7,
+      "encoder_frames": 3,
+      "model_batch_calls": 17,
+      "model_candidate_rollouts": 3752,
+      "predictor_steps": 11256,
+      "learned_candidate_checks": 3751,
+      "safety_head_rows": 22506,
+      "checker_candidate_rollouts": 3751,
+      "analytic_path_steps": 562650,
+      "shadow_reference_candidates": 3751,
+      "shadow_raw_false_safe": 429,
+      "shadow_conservative_false_safe": 0,
+      "shadow_conservative_false_rejected": 3189,
+      "environment_actions": 5,
+      "executed_physics_steps": 50
+    },
+    "controller_failure": null,
+    "error": null,
+    "initial_state": [
+      378.5397886657715,
+      181.55394327163697,
+      192.76044626075682,
+      335.3701455876347,
+      2.944023701972812,
+      -116.89515686035156,
+      15.622293472290039
+    ],
+    "goal_state": [
+      87.58565521240234,
+      305.3126525878906,
+      163.5110321044922,
+      358.951416015625,
+      1.8576234579086304,
+      -18.75950813293457,
+      35.579708099365234
+    ],
+    "final_state": [
+      316.897610250764,
+      217.9442697465339,
+      192.76044626075682,
+      335.3701455876347,
+      2.944023701972812,
+      13.43541484136997,
+      152.8481577373052
+    ],
+    "joint_position_error_px": 248.25150873119014,
+    "object_displacement_px": 0.0,
+    "pusher_path_length_px": 77.49489381106757,
+    "safety_model": {
+      "mode": "shadow",
+      "calibration": {
+        "ready": false,
+        "source_groups": 0,
+        "allowance": null,
+        "scope": "Training-only engineering prototype; learned execution unavailable"
+      },
+      "reference_controls_execution": true
+    }
+  },
+  "accounting": {
+    "new_environment_resets": 1,
+    "new_executed_actions": 5,
+    "new_reset_physics_steps": 2,
+    "new_executed_physics_steps": 50,
+    "model_batch_calls": 41,
+    "model_candidate_rollouts": 3776,
+    "predictor_steps": 11316,
+    "encoder_frames": 130,
+    "training_optimizer_updates": 120,
+    "external_compute_rented": false
+  },
+  "validation": {
+    "pytest": "27 passed in 3.78s",
+    "command": ".venv/bin/python -m pytest -q experiments/tests/test_safety_model.py experiments/tests/test_pusht_smoke.py experiments/tests/test_lewm16.py",
+    "ruff": "Passed, including explicit E501 checks for new code and PushT runner",
+    "contracts": [
+      "Primitive geometry matches existing shapes, including reflected hazard frames",
+      "Source-group relabelings cannot cross splits",
+      "Only training examples determine feature normalization",
+      "Calibration counts source groups, not correlated rows",
+      "Uncalibrated learned-controlled execution rejected",
+      "Checkpoint identity and hashes checked",
+      "Mean candidates receive fresh imagination and safety rechecks",
+      "Native planner path regression checks pass"
+    ]
+  },
+  "limitations": [
+    "One shared training scene and no independent calibration/test scenes",
+    "Raw learned predictions falsely accepted 429 of 3751 correlated candidate checks; this is not an episode-rate estimate",
+    "No observed breaches in the five executed actions establish only reference-controlled engineering behavior",
+    "Initial velocity is not observable from the repeated reset frame; history or permitted proprioception needs evaluation",
+    "The conservative model rejects all candidates because no finite calibration allowance exists",
+    "No learned-controlled rollout, optimizer comparison, ablation or other-environment experiment ran"
+  ],
+  "failed_attempts": [
+    {
+      "path": "outputs/safety-model-pusht-20261029/data/failure.json",
+      "cause": "Upstream loader attempted a read-only default home cache; fixed by passing existing checkpoint parent",
+      "model_queries": 0,
+      "simulator_interactions": 0
+    }
+  ],
+  "artifacts": {
+    "outputs/safety-model-pusht-20261029/manifest.json": {
+      "sha256": "5a35aab0e60191a2edd35ca77ab408f3be958ed725e8b3aee4fbea0230d73df9",
+      "bytes": 9227
+    },
+    "outputs/safety-model-pusht-20261029/data/freeze.json": {
+      "sha256": "97d9004e101628bba14f9a0ad0d86eaa888ee3235f3f40048fb6fb1a909cba9e",
+      "bytes": 10810
+    },
+    "outputs/safety-model-pusht-20261029/data/failure.json": {
+      "sha256": "99d2b6755cc926e03b1a74d7edc89d4bf631ef8e017b1af8e7c7f5cd31580953",
+      "bytes": 221
+    },
+    "outputs/safety-model-pusht-20261029/data-r1/freeze.json": {
+      "sha256": "8251134e4c343c37d7171bdadae60c78adbc46a81609fef626b6057dab137b50",
+      "bytes": 10810
+    },
+    "outputs/safety-model-pusht-20261029/data-r1/examples.npz": {
+      "sha256": "6f2b87634f80e14f571be248911c491ec0e68c65dbcbbe464ccb68b327d5e372",
+      "bytes": 87196
+    },
+    "outputs/safety-model-pusht-20261029/data-r1/examples.json": {
+      "sha256": "1c8d46943aca3e6c963e15198cd2af84640c4628490692b4c7acbc912215fba6",
+      "bytes": 12505
+    },
+    "outputs/safety-model-pusht-20261029/fit/freeze.json": {
+      "sha256": "572671525daeb2c012c45a0cc160b17f28e39ca88cf6b2334079536c0172e969",
+      "bytes": 14494
+    },
+    "outputs/safety-model-pusht-20261029/fit/model.pt": {
+      "sha256": "24d98982771ad3e7cc47e55f808525222889d7a63c224991a9ffef8524d3de2c",
+      "bytes": 502507
+    },
+    "outputs/safety-model-pusht-20261029/fit/report.json": {
+      "sha256": "2807af65eb99f17a786751751abbc35ddab78e02160f3b79f4728da28ab8fc72",
+      "bytes": 3338
+    },
+    "outputs/safety-model-pusht-20261029/shadow-protocol.json": {
+      "sha256": "9a7e3cf4a6d1f7c37efe97e0648eda6a1313815d3de807f14f300ad383e2731b",
+      "bytes": 1709
+    },
+    "outputs/safety-model-pusht-20261029/shadow/freeze.json": {
+      "sha256": "45cbbaf588d8039d95eecbf43c883bd8f4e8083b3ac69f1dc0cbefca8ac22976",
+      "bytes": 2865
+    },
+    "outputs/safety-model-pusht-20261029/shadow/result.json": {
+      "sha256": "e8d8d825566899dbc0623f790e089ba3a8301792e0d0460e7cc5b0eb4989538e",
+      "bytes": 2375
+    },
+    "outputs/safety-model-pusht-20261029/shadow/episode/trace.npz": {
+      "sha256": "4b3d5c2ae7a4937bdf4fb5b9ba1ea37d56ed27548dc1c7a51caf0d652ff5f178",
+      "bytes": 27875
+    },
+    "outputs/safety-model-pusht-20261029/shadow/episode/replans.json": {
+      "sha256": "2d9349e751f00eddc7832d539b363268c6a8a66026c36ccc919da34c5a7711fe",
+      "bytes": 1126
+    }
+  }
+}

@@ -1,0 +1,320 @@
+{
+  "name": "lewm-navigation-command-diagnostic-20261031-v1",
+  "execution_pod_id": "vukovc3t4o1dui",
+  "deadline_utc": "2026-10-31T07:23:14+00:00",
+  "frozen_utc": "2026-10-31T00:31:57.636966+00:00",
+  "purpose": "Isolate unbounded model candidate scoring versus native-clipped actions before any evolutionary claim",
+  "world_model": "assets/world-model/tworoom/lewm_object.ckpt",
+  "motion_model": "assets/tworoom-safety.pt",
+  "scalers": "assets/tworoom-scalers.json",
+  "asset_sha256": {
+    "assets/world-model/tworoom/lewm_object.ckpt": "87aab38843a8e96dc3d6fb325969f6cabe4e11dcd3b1130df8f5e5806620b973",
+    "assets/tworoom-safety.pt": "48ce87bfdfe0507ffeea0e68080a556ac07caf1efb55706651c669f79e9ac99a",
+    "assets/tworoom-scalers.json": "5ff95166374d29bd1da311a560f0763187091cf51a064716ec654a9ff1dc0101",
+    "assets/inputs/tworoom/case-00-island-mild.npz": "8bd8409397a410fcd07bc084c36a1bf3de8b501fbc7c8ff8664b4ba48e05d0f2",
+    "assets/inputs/tworoom/case-01-island-strong.npz": "fce805aae2c209116297824ba2c890f9bf5d1f8b1244aa75e407ed8fa566ca36",
+    "assets/inputs/tworoom/case-02-bar-mild.npz": "e264e2d62564cf86a648b54664afdd6a82482a159eed871ac77991cf9d4c8915"
+  },
+  "source_files": [
+    "experiments/scripts/run_lewm_navigation_diagnostic.py",
+    "experiments/helpers/lewm_navigation_evolution.py",
+    "experiments/helpers/lewm18_planner.py",
+    "experiments/helpers/lewm16_planner.py",
+    "experiments/helpers/portable_env.py",
+    "experiments/helpers/portable_motion.py",
+    "experiments/helpers/lewm_proposal_pilot.py",
+    "experiments/helpers/lewm_screen.py",
+    "experiments/helpers/lewm_proposal_adapter.py",
+    "experiments/helpers/lewm_residual.py",
+    "experiments/helpers/pusht_smoke.py",
+    "experiments/helpers/safecem10_planner.py",
+    "experiments/helpers/safety_model.py",
+    "experiments/helpers/cem_refinements.py",
+    "experiments/helpers/tworoom12_env.py",
+    "experiments/helpers/tworoom12_planner.py",
+    "experiments/helpers/reacher13_geometry.py"
+  ],
+  "sources": [
+    {
+      "index": 0,
+      "path": "assets/inputs/tworoom/case-00-island-mild.npz",
+      "historical_case_id": "case-00-island-mild",
+      "historical_source_episode": 0,
+      "source_pair_sha256": "8bd8409397a410fcd07bc084c36a1bf3de8b501fbc7c8ff8664b4ba48e05d0f2",
+      "usage": "Previously used development pose; never a globally untouched case"
+    },
+    {
+      "index": 1,
+      "path": "assets/inputs/tworoom/case-01-island-strong.npz",
+      "historical_case_id": "case-01-island-strong",
+      "historical_source_episode": 1,
+      "source_pair_sha256": "fce805aae2c209116297824ba2c890f9bf5d1f8b1244aa75e407ed8fa566ca36",
+      "usage": "Previously used development pose; never a globally untouched case"
+    },
+    {
+      "index": 2,
+      "path": "assets/inputs/tworoom/case-02-bar-mild.npz",
+      "historical_case_id": "case-02-bar-mild",
+      "historical_source_episode": 2,
+      "source_pair_sha256": "e264e2d62564cf86a648b54664afdd6a82482a159eed871ac77991cf9d4c8915",
+      "usage": "Previously used development pose; never a globally untouched case"
+    }
+  ],
+  "configurations": {
+    "legacy_authors": {
+      "project_candidates": false,
+      "params": {
+        "horizon": 5,
+        "replan_blocks": 5,
+        "iterations": 30,
+        "budget_scale": 1.0,
+        "variance": 1.0,
+        "elite": 0.1,
+        "retain": 0.0,
+        "correlate": 0.0,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true,
+        "cem_refinements": true,
+        "cem_momentum": 0.1,
+        "min_std": 0.05,
+        "proposal_mode": "residual_mixture",
+        "proposal_mixture_fraction": 0.5
+      }
+    },
+    "projected_authors": {
+      "project_candidates": true,
+      "params": {
+        "horizon": 5,
+        "replan_blocks": 5,
+        "iterations": 30,
+        "budget_scale": 1.0,
+        "variance": 1.0,
+        "elite": 0.1,
+        "retain": 0.0,
+        "correlate": 0.0,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true,
+        "cem_refinements": true,
+        "cem_momentum": 0.1,
+        "min_std": 0.05,
+        "proposal_mode": "residual_mixture",
+        "proposal_mixture_fraction": 0.5
+      }
+    },
+    "projected_selected": {
+      "project_candidates": true,
+      "params": {
+        "horizon": 2,
+        "replan_blocks": 1,
+        "iterations": 30,
+        "budget_scale": 0.2,
+        "variance": 2.0,
+        "elite": 0.2,
+        "retain": 0.25,
+        "correlate": 0.0,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true,
+        "cem_refinements": true,
+        "cem_momentum": 0.1,
+        "min_std": 0.05,
+        "proposal_mode": "residual_mixture",
+        "proposal_mixture_fraction": 0.5
+      }
+    }
+  },
+  "jobs": [
+    {
+      "id": "engineering_projected_native",
+      "category": "engineering",
+      "configuration": "projected_authors",
+      "pair": 0,
+      "seed": 310309,
+      "cap": 6,
+      "zero_adapter": false
+    },
+    {
+      "id": "engineering_projected_zero",
+      "category": "engineering",
+      "configuration": "projected_authors",
+      "pair": 0,
+      "seed": 310309,
+      "cap": 6,
+      "zero_adapter": true
+    },
+    {
+      "id": "legacy_authors_p000_s310310",
+      "category": "scored",
+      "configuration": "legacy_authors",
+      "pair": 0,
+      "seed": 310310,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "legacy_authors_p000_s310311",
+      "category": "scored",
+      "configuration": "legacy_authors",
+      "pair": 0,
+      "seed": 310311,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "legacy_authors_p001_s310320",
+      "category": "scored",
+      "configuration": "legacy_authors",
+      "pair": 1,
+      "seed": 310320,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "legacy_authors_p001_s310321",
+      "category": "scored",
+      "configuration": "legacy_authors",
+      "pair": 1,
+      "seed": 310321,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "legacy_authors_p002_s310330",
+      "category": "scored",
+      "configuration": "legacy_authors",
+      "pair": 2,
+      "seed": 310330,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "legacy_authors_p002_s310331",
+      "category": "scored",
+      "configuration": "legacy_authors",
+      "pair": 2,
+      "seed": 310331,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "projected_authors_p000_s310310",
+      "category": "scored",
+      "configuration": "projected_authors",
+      "pair": 0,
+      "seed": 310310,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "projected_authors_p000_s310311",
+      "category": "scored",
+      "configuration": "projected_authors",
+      "pair": 0,
+      "seed": 310311,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "projected_authors_p001_s310320",
+      "category": "scored",
+      "configuration": "projected_authors",
+      "pair": 1,
+      "seed": 310320,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "projected_authors_p001_s310321",
+      "category": "scored",
+      "configuration": "projected_authors",
+      "pair": 1,
+      "seed": 310321,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "projected_authors_p002_s310330",
+      "category": "scored",
+      "configuration": "projected_authors",
+      "pair": 2,
+      "seed": 310330,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "projected_authors_p002_s310331",
+      "category": "scored",
+      "configuration": "projected_authors",
+      "pair": 2,
+      "seed": 310331,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "projected_selected_p000_s310310",
+      "category": "scored",
+      "configuration": "projected_selected",
+      "pair": 0,
+      "seed": 310310,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "projected_selected_p000_s310311",
+      "category": "scored",
+      "configuration": "projected_selected",
+      "pair": 0,
+      "seed": 310311,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "projected_selected_p001_s310320",
+      "category": "scored",
+      "configuration": "projected_selected",
+      "pair": 1,
+      "seed": 310320,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "projected_selected_p001_s310321",
+      "category": "scored",
+      "configuration": "projected_selected",
+      "pair": 1,
+      "seed": 310321,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "projected_selected_p002_s310330",
+      "category": "scored",
+      "configuration": "projected_selected",
+      "pair": 2,
+      "seed": 310330,
+      "cap": 150,
+      "zero_adapter": false
+    },
+    {
+      "id": "projected_selected_p002_s310331",
+      "category": "scored",
+      "configuration": "projected_selected",
+      "pair": 2,
+      "seed": 310331,
+      "cap": 150,
+      "zero_adapter": false
+    }
+  ],
+  "body_radius": 7.0,
+  "margin": 3.0,
+  "maximum_all_episode_starts": 20,
+  "maximum_scored_episodes": 18,
+  "maximum_engineering_episodes": 2,
+  "maximum_environment_actions": 2712,
+  "maximum_predictor_steps_per_episode": 270250,
+  "monitor": "Original native goal distance<16px. No added hazard. Report completion, violations, unfinished and engagement together. Every reset/action charged. No scene substitution, episode retries or candidate budget changes.",
+  "interpretation": "Projection gain is an engineering repair, never an evolutionary result. legacy_authors means current planner with author-profile settings and unprojected candidates; it is not a replay of a historical process. All native commands explicitly clipped identically to the native TwoRoom step. Legacy action history retains the raw proposed command as in the prior runtime; unified projected arms feed the actual clipped executed command back to the policy. This diagnosis evaluates the full native-action contract repair, not a factorial isolation of its two components.",
+  "stopping": "Technical failures retained for root-cause diagnosis under seven-hour user authorization; use new source/protocol/output versions for repairs. Keep final cases untouched.15-minute reserve before globaldeadline."
+}

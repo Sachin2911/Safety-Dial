@@ -1,0 +1,154 @@
+{
+  "maniguard_checkout": "/workspace/Safety-Dial/third_party/ManiGuard",
+  "environment": {
+    "LC_ALL": "C.UTF-8",
+    "LANG": "C.UTF-8",
+    "XDG_CACHE_HOME": "/workspace/.cache",
+    "HF_HOME": "/workspace/.cache/huggingface",
+    "OMNI_KIT_ACCEPT_EULA": "YES",
+    "PRIVACY_CONSENT": "Y",
+    "XDG_RUNTIME_DIR": "/workspace/runtime",
+    "VK_ICD_FILENAMES": "/etc/vulkan/icd.d/nvidia_icd.json",
+    "OMP_NUM_THREADS": "4",
+    "OPENBLAS_NUM_THREADS": "4",
+    "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+    "XLA_PYTHON_CLIENT_MEM_FRACTION": "0.45"
+  },
+  "information": {
+    "privileged_simulator_inputs": true,
+    "inputs": [
+      "Robot joint positions and velocities",
+      "Native transformed action",
+      "Jar and end-effector poses",
+      "Original safety propositions",
+      "Grasp state",
+      "Robot-jar contact",
+      "Causal controller memory"
+    ],
+    "monitor": "Original passive ManiGuard monitor; no action veto",
+    "held_out_tasks_used": []
+  },
+  "adapter": {
+    "hidden_size": 4,
+    "correction_limit_rad": 0.08,
+    "smoothing": 0.5,
+    "gripper_threshold": 0.6,
+    "position_scale_m": 0.25,
+    "joint_error_scale_rad": 0.2,
+    "joint_velocity_scale": 2.0,
+    "stall_scale_controls": 400
+  },
+  "evaluator": {
+    "name": "maniguard_evolution_development_v3",
+    "benchmark_root": "/workspace/Safety-Dial/third_party/ManiGuard/outputs/lerobot_datasets/maniguard-bench/jar_transport",
+    "host": "127.0.0.1",
+    "port": 8000,
+    "use_openpi_client": true,
+    "random_policy": false,
+    "state_mode": "joint",
+    "external_cam": "left",
+    "action_dim": 8,
+    "execute_horizon": 8,
+    "gripper_binarize": true,
+    "controller_preset": "joint_position_raw",
+    "ik_eef_to_joint": false,
+    "grasping_mode": "assisted",
+    "action_frequency": 20,
+    "rendering_frequency": 20,
+    "physics_frequency": 120,
+    "headless": true,
+    "longfinger": true,
+    "max_steps": 2000,
+    "success_hold_steps": 10,
+    "source_profile": "legacy",
+    "camera_resolution": 256,
+    "save_video": true,
+    "save_wrist_video": true,
+    "metrics": [
+      "success",
+      "safety"
+    ]
+  },
+  "schema": "maniguard-evolution-development-v3",
+  "purpose": "Test whether conservative recurrent corrections can improve strict safe completion of frozen Jar pi0.5 on development tasks.",
+  "authorization": "Explicit current user goal authorizes implementation and execution",
+  "protocol_binding": {
+    "path": "configs/maniguard_evolution/development-v3-protocol.json",
+    "sha256": "7fb435de56d367929d2e90f6b369f62450609785fe0bfe169b243b8262b7134b"
+  },
+  "rental": {
+    "instance_id": 58363639,
+    "label": "maniguard-v3-prepared-20261030T064632Z",
+    "machine_id": 141415,
+    "guard_directory": "/workspace/setup-maniguard-v3-20261030"
+  },
+  "search": {
+    "method": "cmaes",
+    "population": 6,
+    "generations": 6,
+    "sigma": 0.3,
+    "seed": 303021,
+    "initialization_seed": 303022,
+    "tasks": [
+      0,
+      3
+    ],
+    "policy_seeds": [
+      303100,
+      303101,
+      303102,
+      303103,
+      303104,
+      303105
+    ],
+    "objective": "completion_progress_contact_v3",
+    "mutation_profile": "conservative_arm_v3",
+    "native_anchor": true,
+    "initial_controller": null,
+    "selection": "Protocol native/elite/mean development selection; strict improvement or native"
+  },
+  "selection": {
+    "tasks": [
+      6,
+      9
+    ],
+    "policy_seeds": [
+      303200,
+      303201
+    ]
+  },
+  "validation": {
+    "tasks": [
+      15,
+      17
+    ],
+    "policy_seeds": [
+      303300,
+      303301,
+      303302
+    ]
+  },
+  "limits": {
+    "deadline_utc": "2026-10-30T16:46:32.937332+00:00",
+    "shutdown_reserve_seconds": 2700,
+    "minimum_remaining_seconds_before_first_episode": 25200,
+    "minimum_start_window_seconds": 960,
+    "episode_timeout_seconds": 900,
+    "max_starts": 112,
+    "max_failed_starts": 4,
+    "max_environment_step_attempts": 225120,
+    "max_model_query_attempts": 28116,
+    "max_server_preparation_model_query_attempts": 4
+  },
+  "server_preparation_accounting": null,
+  "preservation": {
+    "repo": "Sachioster/maniguard-jar-replication-20261022",
+    "base_prefix": "22_conservative_adapter_development/20261030T075407Z"
+  },
+  "engineering_predecessor": {
+    "run": "/workspace/maniguard-evolution-v3-20261030/run-v3",
+    "reason": "First scene failed before load because the upstream asset key was missing",
+    "repair_record": "/workspace/maniguard-evolution-v3-20261030/supervision/asset-key-repair-r1.json",
+    "same_scientific_protocol": true
+  }
+}

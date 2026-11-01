@@ -1,0 +1,730 @@
+{
+  "schema": "pusht-planner-tuning-20261029-v1",
+  "date": "2026-10-29",
+  "status": "Completed small search; no reserved completion improvement; initial-state panel defect disclosed",
+  "method": "Frozen LeWM task cost and frozen native-proprioception learned motion safety; one bounded random-configuration screen; no evolution, new learning, ablations or other environments",
+  "design": "configs/pusht_tuning_20261029/design-remote-v1.json",
+  "design_sha256": "0ec375eb70c300bd6d07ab5d917bad21344888f43060113d1655cec4a0952a4b",
+  "host": {
+    "platform": "RunPod",
+    "pod_id": "r8w4b6lwkbjyrz",
+    "gpu": "NVIDIA RTX A4500",
+    "device": "cuda",
+    "code_revision": "317899496d71abc07473f3af6830a60a1ae90653"
+  },
+  "frozen_model_release": {
+    "intended_private_repo": "Sachioster/SafetyDial-PushT",
+    "intended_path": "campaigns/pusht-learned-safety-20261029-v1",
+    "revision": "34256873f32a27e90c16ee081d30660aecc6acb4",
+    "url": "https://huggingface.co/datasets/Sachioster/SafetyDial-PushT/tree/34256873f32a27e90c16ee081d30660aecc6acb4/campaigns/pusht-learned-safety-20261029-v1"
+  },
+  "checkpoint_sha256": {
+    "safety_checkpoint_sha256": "3d9d471d69dc135c12c36436328886c04485cd19f0dd0a815659e4ecb822bed5",
+    "world_model_sha256": "d27504690172f6efa31277107a4d54e68f18760520664bc8a33d3b9d1b558952"
+  },
+  "case_source_episodes": [
+    6536,
+    15164,
+    2710,
+    9341,
+    3065,
+    8841
+  ],
+  "historical_final_cases_used": false,
+  "configurations": [
+    {
+      "id": "current",
+      "params": {
+        "horizon": 3,
+        "iterations": 15,
+        "budget_scale": 0.5,
+        "variance": 1.0,
+        "retain": 0.5,
+        "correlate": 0.5,
+        "elite": 0.1,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true
+      }
+    },
+    {
+      "id": "random-01",
+      "params": {
+        "horizon": 3,
+        "iterations": 15,
+        "budget_scale": 0.5,
+        "variance": 1.0,
+        "retain": 0.25,
+        "correlate": 0.5,
+        "elite": 0.1,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true
+      }
+    },
+    {
+      "id": "random-02",
+      "params": {
+        "horizon": 1,
+        "iterations": 15,
+        "budget_scale": 0.5,
+        "variance": 0.5,
+        "retain": 0.0,
+        "correlate": 0.5,
+        "elite": 0.1,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true
+      }
+    },
+    {
+      "id": "random-03",
+      "params": {
+        "horizon": 1,
+        "iterations": 15,
+        "budget_scale": 0.5,
+        "variance": 0.5,
+        "retain": 0.5,
+        "correlate": 0.0,
+        "elite": 0.1,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true
+      }
+    },
+    {
+      "id": "random-04",
+      "params": {
+        "horizon": 3,
+        "iterations": 15,
+        "budget_scale": 0.5,
+        "variance": 0.5,
+        "retain": 0.5,
+        "correlate": 0.5,
+        "elite": 0.2,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true
+      }
+    },
+    {
+      "id": "random-05",
+      "params": {
+        "horizon": 2,
+        "iterations": 15,
+        "budget_scale": 0.5,
+        "variance": 2.0,
+        "retain": 0.5,
+        "correlate": 0.0,
+        "elite": 0.1,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true
+      }
+    },
+    {
+      "id": "random-06",
+      "params": {
+        "horizon": 2,
+        "iterations": 15,
+        "budget_scale": 0.5,
+        "variance": 0.5,
+        "retain": 0.5,
+        "correlate": 0.0,
+        "elite": 0.2,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true
+      }
+    }
+  ],
+  "selection": {
+    "id": "random-02",
+    "params": {
+      "horizon": 1,
+      "iterations": 15,
+      "budget_scale": 0.5,
+      "variance": 0.5,
+      "retain": 0.0,
+      "correlate": 0.5,
+      "elite": 0.1,
+      "adaptive": false,
+      "objective": "learned",
+      "checked": true
+    }
+  },
+  "selection_information": "Remote development only; zero violations/errors, most safe completions, then J with 50 for every unfinished episode; current-first ties",
+  "development": {
+    "current": {
+      "episodes": 3,
+      "safe_completions": 2,
+      "violating_episodes": 0,
+      "hazard_violation_episodes": 0,
+      "unfinished": 1,
+      "engineering_errors": 0,
+      "engaged": 3,
+      "object_moved_5px": 3,
+      "J_sum": 100,
+      "actions": 100,
+      "planning_seconds": 6.818499975837767,
+      "episode_seconds": 16.645535795018077,
+      "resources": {
+        "encoder_frames": 40,
+        "environment_actions": 100,
+        "environment_resets": 3,
+        "executed_physics_steps": 1000,
+        "learned_candidate_checks": 75021,
+        "learned_motion_physics_points": 11253150,
+        "model_batch_calls": 320,
+        "model_candidate_rollouts": 75020,
+        "predictor_steps": 225060,
+        "render_frames": 106,
+        "reset_physics_steps": 6
+      }
+    },
+    "random-01": {
+      "episodes": 3,
+      "safe_completions": 2,
+      "violating_episodes": 0,
+      "hazard_violation_episodes": 0,
+      "unfinished": 1,
+      "engineering_errors": 0,
+      "engaged": 3,
+      "object_moved_5px": 2,
+      "J_sum": 103,
+      "actions": 103,
+      "planning_seconds": 6.376210995018482,
+      "episode_seconds": 15.088546787388623,
+      "resources": {
+        "encoder_frames": 42,
+        "environment_actions": 103,
+        "environment_resets": 3,
+        "executed_physics_steps": 1030,
+        "learned_candidate_checks": 78771,
+        "learned_motion_physics_points": 11815650,
+        "model_batch_calls": 336,
+        "model_candidate_rollouts": 78771,
+        "predictor_steps": 236313,
+        "render_frames": 109,
+        "reset_physics_steps": 6
+      }
+    },
+    "random-02": {
+      "episodes": 3,
+      "safe_completions": 2,
+      "violating_episodes": 0,
+      "hazard_violation_episodes": 0,
+      "unfinished": 1,
+      "engineering_errors": 0,
+      "engaged": 3,
+      "object_moved_5px": 3,
+      "J_sum": 81,
+      "actions": 81,
+      "planning_seconds": 3.93469347525388,
+      "episode_seconds": 11.57583473622799,
+      "resources": {
+        "encoder_frames": 34,
+        "environment_actions": 81,
+        "environment_resets": 3,
+        "executed_physics_steps": 810,
+        "learned_candidate_checks": 191267,
+        "learned_motion_physics_points": 9563350,
+        "model_batch_calls": 272,
+        "model_candidate_rollouts": 191267,
+        "predictor_steps": 191267,
+        "render_frames": 87,
+        "reset_physics_steps": 6
+      }
+    },
+    "random-03": {
+      "episodes": 3,
+      "safe_completions": 1,
+      "violating_episodes": 0,
+      "hazard_violation_episodes": 0,
+      "unfinished": 2,
+      "engineering_errors": 0,
+      "engaged": 3,
+      "object_moved_5px": 3,
+      "J_sum": 114,
+      "actions": 69,
+      "planning_seconds": 3.4866033969447017,
+      "episode_seconds": 11.489444149658084,
+      "resources": {
+        "encoder_frames": 30,
+        "environment_actions": 69,
+        "environment_resets": 3,
+        "executed_physics_steps": 690,
+        "learned_candidate_checks": 168765,
+        "learned_motion_physics_points": 8438250,
+        "model_batch_calls": 239,
+        "model_candidate_rollouts": 168764,
+        "predictor_steps": 168764,
+        "render_frames": 76,
+        "reset_physics_steps": 6
+      }
+    },
+    "random-04": {
+      "episodes": 3,
+      "safe_completions": 2,
+      "violating_episodes": 0,
+      "hazard_violation_episodes": 0,
+      "unfinished": 1,
+      "engineering_errors": 0,
+      "engaged": 3,
+      "object_moved_5px": 3,
+      "J_sum": 99,
+      "actions": 99,
+      "planning_seconds": 6.162106409668922,
+      "episode_seconds": 15.235868596471846,
+      "resources": {
+        "encoder_frames": 40,
+        "environment_actions": 99,
+        "environment_resets": 3,
+        "executed_physics_steps": 990,
+        "learned_candidate_checks": 75020,
+        "learned_motion_physics_points": 11253000,
+        "model_batch_calls": 320,
+        "model_candidate_rollouts": 75020,
+        "predictor_steps": 225060,
+        "render_frames": 105,
+        "reset_physics_steps": 6
+      }
+    },
+    "random-05": {
+      "episodes": 3,
+      "safe_completions": 0,
+      "violating_episodes": 0,
+      "hazard_violation_episodes": 0,
+      "unfinished": 3,
+      "engineering_errors": 0,
+      "engaged": 3,
+      "object_moved_5px": 3,
+      "J_sum": 150,
+      "actions": 150,
+      "planning_seconds": 8.341336170211434,
+      "episode_seconds": 23.566458077169955,
+      "resources": {
+        "encoder_frames": 60,
+        "environment_actions": 150,
+        "environment_resets": 3,
+        "executed_physics_steps": 1500,
+        "learned_candidate_checks": 168781,
+        "learned_motion_physics_points": 16878100,
+        "model_batch_calls": 480,
+        "model_candidate_rollouts": 168780,
+        "predictor_steps": 337560,
+        "render_frames": 156,
+        "reset_physics_steps": 6
+      }
+    },
+    "random-06": {
+      "episodes": 3,
+      "safe_completions": 2,
+      "violating_episodes": 0,
+      "hazard_violation_episodes": 0,
+      "unfinished": 1,
+      "engineering_errors": 0,
+      "engaged": 3,
+      "object_moved_5px": 3,
+      "J_sum": 88,
+      "actions": 88,
+      "planning_seconds": 4.881559792906046,
+      "episode_seconds": 13.895863842219114,
+      "resources": {
+        "encoder_frames": 36,
+        "environment_actions": 88,
+        "environment_resets": 3,
+        "executed_physics_steps": 880,
+        "learned_candidate_checks": 101268,
+        "learned_motion_physics_points": 10126800,
+        "model_batch_calls": 288,
+        "model_candidate_rollouts": 101268,
+        "predictor_steps": 202536,
+        "render_frames": 94,
+        "reset_physics_steps": 6
+      }
+    }
+  },
+  "evaluation": {
+    "current": {
+      "episodes": 3,
+      "safe_completions": 0,
+      "violating_episodes": 1,
+      "hazard_violation_episodes": 0,
+      "unfinished": 3,
+      "engineering_errors": 0,
+      "engaged": 2,
+      "object_moved_5px": 2,
+      "J_sum": 150,
+      "actions": 100,
+      "planning_seconds": 6.997458991594613,
+      "episode_seconds": 18.07169080618769,
+      "resources": {
+        "encoder_frames": 42,
+        "environment_actions": 100,
+        "environment_resets": 3,
+        "executed_physics_steps": 1000,
+        "learned_candidate_checks": 78771,
+        "learned_motion_physics_points": 11815650,
+        "model_batch_calls": 335,
+        "model_candidate_rollouts": 78770,
+        "predictor_steps": 236310,
+        "render_frames": 107,
+        "reset_physics_steps": 6
+      }
+    },
+    "selected": {
+      "episodes": 3,
+      "safe_completions": 0,
+      "violating_episodes": 1,
+      "hazard_violation_episodes": 0,
+      "unfinished": 3,
+      "engineering_errors": 0,
+      "engaged": 2,
+      "object_moved_5px": 2,
+      "J_sum": 150,
+      "actions": 100,
+      "planning_seconds": 4.8770426688715816,
+      "episode_seconds": 13.948287775740027,
+      "resources": {
+        "encoder_frames": 42,
+        "environment_actions": 100,
+        "environment_resets": 3,
+        "executed_physics_steps": 1000,
+        "learned_candidate_checks": 236271,
+        "learned_motion_physics_points": 11813550,
+        "model_batch_calls": 335,
+        "model_candidate_rollouts": 236270,
+        "predictor_steps": 236270,
+        "render_frames": 107,
+        "reset_physics_steps": 6
+      }
+    },
+    "shared_observations": false,
+    "paired": [
+      {
+        "case": "case-03-island",
+        "current_safe": false,
+        "selected_safe": false,
+        "current_actions": 0,
+        "selected_actions": 0
+      },
+      {
+        "case": "case-04-bar",
+        "current_safe": false,
+        "selected_safe": false,
+        "current_actions": 50,
+        "selected_actions": 50
+      },
+      {
+        "case": "case-05-gate",
+        "current_safe": false,
+        "selected_safe": false,
+        "current_actions": 50,
+        "selected_actions": 50
+      }
+    ]
+  },
+  "panel_admission": {
+    "all_observed_starts_clear": false,
+    "initially_margin_violating_case_ids": [
+      "case-03-island"
+    ],
+    "all_frozen_cases_retained_in_primary_denominators": true,
+    "no_replacement_or_extra_trials": true
+  },
+  "admission_explanation": "case-03-island begins at 5.589818707990489 px hazard clearance after native reset settling; required margin 6 px. Both arms execute zero actions. This pre-existing margin breach remains in the primary denominator. Bar and gate remain clear but unfinished at 50 actions.",
+  "all_unique_remote_trials": {
+    "episodes": 27,
+    "safe_completions": 11,
+    "violating_episodes": 2,
+    "hazard_violation_episodes": 0,
+    "unfinished": 16,
+    "engineering_errors": 0,
+    "engaged": 25,
+    "object_moved_5px": 24,
+    "J_sum": 1035,
+    "actions": 890,
+    "planning_seconds": 51.87551187630743,
+    "episode_seconds": 139.5175305660814,
+    "resources": {
+      "encoder_frames": 366,
+      "environment_actions": 890,
+      "environment_resets": 27,
+      "executed_physics_steps": 8900,
+      "learned_candidate_checks": 1173935,
+      "learned_motion_physics_points": 102957500,
+      "model_batch_calls": 2925,
+      "model_candidate_rollouts": 1173930,
+      "predictor_steps": 2059140,
+      "render_frames": 947,
+      "reset_physics_steps": 54
+    }
+  },
+  "remote_resources_including_preparation": {
+    "encoder_frames": 366,
+    "environment_actions": 890,
+    "environment_resets": 33,
+    "executed_physics_steps": 8900,
+    "learned_candidate_checks": 1173935,
+    "learned_motion_physics_points": 102957500,
+    "model_batch_calls": 2925,
+    "model_candidate_rollouts": 1173930,
+    "predictor_steps": 2059140,
+    "render_frames": 965,
+    "reset_physics_steps": 66
+  },
+  "remote_native_test_resources": {
+    "environment_resets": 1,
+    "reset_physics_steps": 2,
+    "environment_actions": 0,
+    "reason": "One native renderer regression in the remotely executed relevant test suite; all other tests use saved or synthetic arrays."
+  },
+  "remote_physics_including_tests": 8968,
+  "prior_local_completed_trials": 27,
+  "prior_invalidated_trials": 21,
+  "prior_local_resources_including_invalid_and_tests": {
+    "environment_resets": 62,
+    "reset_physics_steps": 124,
+    "render_frames": 1972,
+    "encoder_frames": 750,
+    "model_batch_calls": 5994,
+    "model_candidate_rollouts": 2242869,
+    "predictor_steps": 4219582,
+    "learned_candidate_checks": 2242879,
+    "learned_motion_physics_points": 210980100,
+    "environment_actions": 1834,
+    "executed_physics_steps": 18340
+  },
+  "all_passes_episode_trials": 75,
+  "all_passes_resources": {
+    "encoder_frames": 1116,
+    "environment_actions": 2724,
+    "environment_resets": 96,
+    "executed_physics_steps": 27240,
+    "learned_candidate_checks": 3416814,
+    "learned_motion_physics_points": 313937600,
+    "model_batch_calls": 8919,
+    "model_candidate_rollouts": 3416799,
+    "predictor_steps": 6278722,
+    "render_frames": 2937,
+    "reset_physics_steps": 192
+  },
+  "all_passes_physics_steps": 27432,
+  "prior_record_locations": [
+    "outputs/pusht-tuning-20261029-v1/invalidated.json",
+    "outputs/pusht-tuning-20261029-v2/remote-migration.json",
+    "progress/receipts/20261029-pusht-tuning-render-repair.json"
+  ],
+  "runtime": {
+    "remote_stages": [
+      {
+        "stage": "tests",
+        "started_utc": "2026-10-29T20:50:48.515066+00:00",
+        "exit_code": 0,
+        "seconds": 25.998614731244743,
+        "ended_utc": "2026-10-29T20:51:14.546240+00:00"
+      },
+      {
+        "stage": "prepare",
+        "started_utc": "2026-10-29T20:51:14.815343+00:00",
+        "exit_code": 0,
+        "seconds": 12.29956242069602,
+        "ended_utc": "2026-10-29T20:51:27.151431+00:00"
+      },
+      {
+        "stage": "development",
+        "started_utc": "2026-10-29T20:51:27.211633+00:00",
+        "exit_code": 0,
+        "seconds": 137.83832563553005,
+        "ended_utc": "2026-10-29T20:53:45.082982+00:00"
+      },
+      {
+        "stage": "evaluate",
+        "started_utc": "2026-10-29T20:53:45.148429+00:00",
+        "exit_code": 0,
+        "seconds": 47.38773394096643,
+        "ended_utc": "2026-10-29T20:54:32.563086+00:00"
+      },
+      {
+        "stage": "report",
+        "started_utc": "2026-10-29T20:54:32.637930+00:00",
+        "exit_code": 0,
+        "seconds": 8.580541916191578,
+        "ended_utc": "2026-10-29T20:54:41.258998+00:00"
+      }
+    ],
+    "remote_episode_seconds": 139.5175305660814,
+    "remote_planning_seconds": 51.87551187630743,
+    "setup": "Separate recorded installation; network-volume bottleneck repaired by using the pod SSD",
+    "posthoc_audit_and_replays_new_interactions": 0,
+    "posthoc_audit_and_replays_new_model_queries": 0,
+    "earlier_local_passes": {
+      "v1": {
+        "episodes": 21,
+        "sum_episode_seconds": 405.98182515997905,
+        "sum_planning_seconds": 403.89535600213276,
+        "meaning": "Measured episode/planning sums, excluding preparation and model loading; not complete stage wall time",
+        "all_saved_traces_present": true
+      },
+      "v2": {
+        "episodes": 27,
+        "sum_episode_seconds": 369.0871265539972,
+        "sum_planning_seconds": 367.4456824830122,
+        "meaning": "Measured episode/planning sums, excluding preparation and model loading; not complete stage wall time",
+        "all_saved_traces_present": true
+      }
+    },
+    "all_passes_sum_episode_seconds": 914.5864822800577,
+    "all_passes_sum_planning_seconds": 823.2165503614524
+  },
+  "budget": {
+    "remote": {
+      "max_rollouts": 27,
+      "max_environment_actions": 1350,
+      "max_preparation_resets": 6,
+      "max_total_resets": 33,
+      "max_total_physics_steps": 13566,
+      "external_compute_usd": 1.5
+    },
+    "all_passes": {
+      "max_environment_actions": 3184,
+      "max_resets": 96,
+      "max_physics_steps": 32032,
+      "external_compute_usd": 1.5
+    },
+    "rental_receipt": "progress/receipts/20261029-runpod-pusht-tuning.json",
+    "overall_session_cap_usd": 5,
+    "new_rental_allocation_usd": 1.5,
+    "gpu_rate_usd_per_hour": 0.25,
+    "lease_hours": 5,
+    "deadline_utc": "2026-10-30T01:27:16.558798+00:00",
+    "maximum_five_hour_gpu_charge_usd": 1.25,
+    "actual_billing_invoice_not_claimed": true
+  },
+  "checks": {
+    "source_partitions_disjoint": true,
+    "selection_precedes_reserved_evaluation": true,
+    "original_joint_goal_verified": true,
+    "dense_physics_safety_verified": true,
+    "initial_states_match_across_configurations": true,
+    "reference_predictions_forbidden": true,
+    "search_predictor_steps_per_replan": 11250
+  },
+  "test_result": {
+    "passed": 28,
+    "warnings": 2,
+    "location": "RunPod",
+    "native_resets": 1,
+    "native_reset_physics_steps": 2
+  },
+  "completion_audit": {
+    "completed_utc": "2026-10-29T21:06:57.418390+00:00",
+    "pod_id": "r8w4b6lwkbjyrz",
+    "trials": 27,
+    "source_and_checkpoint_hashes_verified": true,
+    "all_stage_exits_zero": true,
+    "panel_admission": {
+      "all_observed_starts_clear": false,
+      "initially_margin_violating_case_ids": [
+        "case-03-island"
+      ],
+      "all_frozen_cases_retained_in_primary_denominators": true,
+      "no_replacement_or_extra_trials": true
+    },
+    "decoded_videos": [
+      {
+        "file": "media/case-03-island-comparison.mp4",
+        "frames": 12,
+        "size": [
+          1024,
+          640
+        ]
+      },
+      {
+        "file": "media/case-04-bar-comparison.mp4",
+        "frames": 61,
+        "size": [
+          1024,
+          640
+        ]
+      },
+      {
+        "file": "media/case-05-gate-comparison.mp4",
+        "frames": 61,
+        "size": [
+          1024,
+          640
+        ]
+      },
+      {
+        "file": "media-development/case-00-island-comparison.mp4",
+        "frames": 36,
+        "size": [
+          1024,
+          640
+        ]
+      },
+      {
+        "file": "media-development/case-01-bar-comparison.mp4",
+        "frames": 36,
+        "size": [
+          1024,
+          640
+        ]
+      },
+      {
+        "file": "media-development/case-02-gate-comparison.mp4",
+        "frames": 61,
+        "size": [
+          1024,
+          640
+        ]
+      }
+    ],
+    "new_interactions_from_audit_preservation_and_media": 0,
+    "new_model_queries_from_audit_preservation_and_media": 0,
+    "no_additional_trials_after_reserved_outcomes": true
+  },
+  "preservation": {
+    "archive": "outputs/runpod-pusht-tuning-20261029/pusht-tuning-remote-evidence.tar.gz",
+    "bytes": 3150887,
+    "sha256": "9c9c2e084ccb6583d12aa9353c18fc80cb89f54f32357d83313e03f6ad36275a",
+    "manifest_files": 178,
+    "source_revision": "317899496d71abc07473f3af6830a60a1ae90653",
+    "contains_account_credentials": false,
+    "local_archive_hash_verified": true,
+    "local_manifest_files_verified": 178,
+    "new_huggingface_upload": false,
+    "existing_frozen_checkpoints_already_privately_pinned": true
+  },
+  "limitations": [
+    "Cases are newly reserved within this study but come from a historical development pool. No global unseen-task claim. Different episode lengths imply different total interactions despite matched per-replan search budgets. Same cases were previously run locally before remote-only steering. Remote configuration selection uses only remote development. This is a separate-host replication, not globally untouched evaluation.",
+    "Three development and three evaluation cases",
+    "One planner seed per case and one random-search optimizer run",
+    "No evolutionary, ablation or cross-environment claim",
+    "Native reset settling moved at least one supplied start inside its 6 px margin. The layout admitted raw input coordinates rather than verifying the settled start. All frozen cases remain scored; this limits panel validity."
+  ],
+  "next_step_requires_new_freeze": "Validate layouts against native settled reset poses, then diagnose task progress on the clear bar/gate cases. No extra episodes were run after reserved outcomes.",
+  "recorded_utc": "2026-10-29T21:09:27.581191+00:00",
+  "scope_amendments": [
+    "User replaced the initial no-new-rental plan with remote-only execution and an explicitly requested replacement pod.",
+    "User set a five-hour deadline and approved copying the RunPod credential for the independent remote termination guard."
+  ],
+  "goal_completion_audit": {
+    "frozen_checkpoints_and_sources_verified": true,
+    "varied_cases_and_configuration_panel_frozen_before_remote_outcomes": true,
+    "six_random_settings_plus_current_completed": true,
+    "fixed_6px_margin_and_11250_search_predictor_steps_verified": true,
+    "development_only_selection_verified": true,
+    "both_arms_scored_on_all_three_reserved_cases": true,
+    "all_trial_traces_preserved_including_invalid_local_work": true,
+    "safe_completions_violations_unfinished_engagement_and_all_work_reported": true,
+    "runtime_reported_by_host_and_stage_with_earlier_measured_sums": true,
+    "initial_state_admission_defect_disclosed_without_replacement": true,
+    "six_replays_decoded_and_all_artifact_hashes_verified": true,
+    "remote_only_execution_and_live_five_hour_guards_verified": true,
+    "no_remaining_required_study_work": true,
+    "audited_utc": "2026-10-29T21:11:48.412931+00:00"
+  }
+}

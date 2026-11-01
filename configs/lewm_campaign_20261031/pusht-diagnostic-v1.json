@@ -1,0 +1,255 @@
+{
+  "name": "lewm-pusht-clipping-horizon-commitment-diagnostic-v1",
+  "protocol_path": "configs/lewm_campaign_20261031/pusht-diagnostic-v1.json",
+  "frozen_utc": "2026-10-31T00:35:14.100283+00:00",
+  "execution_pod_id": "wq4ar2qx2ff6r4",
+  "deadline_utc": "2026-10-31T07:23:14+00:00",
+  "source_track": "New seven-hour campaign; no old protocol or budget resumed",
+  "purpose": "Separate action projection, planning horizon and executed-plan commitment before persistent evolutionary controller training",
+  "world_model": "assets/world-model/pusht/lewm_object.ckpt",
+  "motion_model": "assets/pusht-safety.pt",
+  "scalers": "assets/pusht-scalers.json",
+  "asset_sha256": {
+    "assets/world-model/pusht/lewm_object.ckpt": "d27504690172f6efa31277107a4d54e68f18760520664bc8a33d3b9d1b558952",
+    "assets/pusht-safety.pt": "22cdca3cffde8b9bbd16c0aad972b4fe33165d015cc0f6561c9e70248d9658a3",
+    "assets/pusht-scalers.json": "0505742b401dc3e1e7a9f74a45d614eb2c3c378370663b2f41be55f35d005511",
+    "assets/inputs/pusht/pair-000.npz": "81c5e71ec8faa770210e21ef4837dcd4e1101b3e50ce3a5b7eedf0e66a9fe9d3",
+    "assets/inputs/pusht/pair-001.npz": "85f9f432882f5cd4c136b6a7eefe14ddc68829c607643d534d63a81d8ddd4474",
+    "assets/inputs/pusht/pair-002.npz": "4fa75ef8f06c3dfdbdb6b96782e3c4faa000cc64df6f4814f7da9a1a4b0924df"
+  },
+  "recipes": [
+    {
+      "name": "original_h3_r1",
+      "planner": {
+        "horizon": 3,
+        "iterations": 15,
+        "budget_scale": 0.5,
+        "variance": 1.0,
+        "retain": 0.5,
+        "correlate": 0.5,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true,
+        "elite": 0.1,
+        "replan_blocks": 1,
+        "cem_refinements": true,
+        "cem_momentum": 0.1,
+        "min_std": 0.05,
+        "proposal_mode": "residual_mixture",
+        "proposal_mixture_fraction": 0.5
+      },
+      "project_candidates": false,
+      "clip_execution": false,
+      "executed_actions_per_plan": 5
+    },
+    {
+      "name": "repaired_h3_r1",
+      "planner": {
+        "horizon": 3,
+        "iterations": 15,
+        "budget_scale": 0.5,
+        "variance": 1.0,
+        "retain": 0.5,
+        "correlate": 0.5,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true,
+        "elite": 0.1,
+        "replan_blocks": 1,
+        "cem_refinements": true,
+        "cem_momentum": 0.1,
+        "min_std": 0.05,
+        "proposal_mode": "residual_mixture",
+        "proposal_mixture_fraction": 0.5
+      },
+      "project_candidates": true,
+      "clip_execution": true,
+      "executed_actions_per_plan": 5
+    },
+    {
+      "name": "repaired_h5_r1",
+      "planner": {
+        "horizon": 5,
+        "iterations": 15,
+        "budget_scale": 0.5,
+        "variance": 1.0,
+        "retain": 0.5,
+        "correlate": 0.5,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true,
+        "elite": 0.1,
+        "replan_blocks": 1,
+        "cem_refinements": true,
+        "cem_momentum": 0.1,
+        "min_std": 0.05,
+        "proposal_mode": "residual_mixture",
+        "proposal_mixture_fraction": 0.5
+      },
+      "project_candidates": true,
+      "clip_execution": true,
+      "executed_actions_per_plan": 5
+    },
+    {
+      "name": "repaired_h5_r5",
+      "planner": {
+        "horizon": 5,
+        "iterations": 15,
+        "budget_scale": 0.5,
+        "variance": 1.0,
+        "retain": 0.5,
+        "correlate": 0.5,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true,
+        "elite": 0.1,
+        "replan_blocks": 5,
+        "cem_refinements": true,
+        "cem_momentum": 0.1,
+        "min_std": 0.05,
+        "proposal_mode": "residual_mixture",
+        "proposal_mixture_fraction": 0.5
+      },
+      "project_candidates": true,
+      "clip_execution": true,
+      "executed_actions_per_plan": 25
+    }
+  ],
+  "cases": [
+    {
+      "id": "p000-bar",
+      "pair_index": 0,
+      "pair_path": "assets/inputs/pusht/pair-000.npz",
+      "source_episode": 0,
+      "source_row": 50,
+      "shape": {
+        "kind": "bar",
+        "origin": [
+          251.4234619140625,
+          321.95957946777344
+        ],
+        "basis": [
+          [
+            0.9704314124314251,
+            -0.24137703653485595
+          ],
+          [
+            0.24137703653485595,
+            0.9704314124314251
+          ]
+        ],
+        "radius_px": 7,
+        "segment_half_length_px": 30
+      },
+      "seeds": [
+        317100,
+        317101
+      ]
+    },
+    {
+      "id": "p001-island",
+      "pair_index": 1,
+      "pair_path": "assets/inputs/pusht/pair-001.npz",
+      "source_episode": 3,
+      "source_row": 495,
+      "shape": {
+        "kind": "island",
+        "origin": [
+          352.6397399902344,
+          330.6053009033203
+        ],
+        "basis": [
+          [
+            -0.9766207609740826,
+            -0.2149695076851687
+          ],
+          [
+            0.2149695076851687,
+            -0.9766207609740826
+          ]
+        ],
+        "radius_px": 16
+      },
+      "seeds": [
+        317110,
+        317111
+      ]
+    },
+    {
+      "id": "p002-gate",
+      "pair_index": 2,
+      "pair_path": "assets/inputs/pusht/pair-002.npz",
+      "source_episode": 5,
+      "source_row": 763,
+      "shape": {
+        "kind": "gate",
+        "origin": [
+          321.1240234375,
+          217.94830322265625
+        ],
+        "basis": [
+          [
+            -0.8852238547102693,
+            0.46516526853570206
+          ],
+          [
+            -0.46516526853570206,
+            -0.8852238547102693
+          ]
+        ],
+        "gap_width_px": 80,
+        "gap_offset_px": 65,
+        "extent_px": 180,
+        "band_half_width_px": 7
+      },
+      "seeds": [
+        317120,
+        317121
+      ]
+    },
+    {
+      "id": "p000-none",
+      "pair_index": 0,
+      "pair_path": "assets/inputs/pusht/pair-000.npz",
+      "source_episode": 0,
+      "source_row": 50,
+      "shape": {
+        "kind": "none",
+        "origin": [
+          251.4234619140625,
+          321.95957946777344
+        ],
+        "basis": [
+          [
+            0.9704314124314251,
+            -0.24137703653485595
+          ],
+          [
+            0.24137703653485595,
+            0.9704314124314251
+          ]
+        ]
+      },
+      "seeds": [
+        317130,
+        317131
+      ]
+    }
+  ],
+  "maximum_scored_episodes": 32,
+  "maximum_failed_technical_starts": 2,
+  "maximum_episode_starts": 34,
+  "maximum_episode_actions": 150,
+  "maximum_predictor_steps_per_episode": 338000,
+  "maximum_stage_minutes": 30,
+  "margin_px": 6.0,
+  "body_radius_px": 15.0,
+  "native_action_contract": "relative=True, native commands in[-1,1], PDtarget=currentposition+100*command. Original diagnostic retains its unprojected score/execution; repaired recipes project normalized candidates in place before LeWM/checker/fit/archive and clip native execution. Raw commands and executed actions both retained.",
+  "timing": "Each planner block contains5nativeactions; R1 executes5actions, h5R5 executes25actions. Changing timing changes actual modelwork; report it rather than claiming equal query work.",
+  "source_selection": "Four fixed development cases chosen before new outcomes from previously used publicposes. No final-evaluation case or memory is read. Geometries reuse the recorded deterministic source-pair rule; all new trajectories use fresh seeds and outputpaths.",
+  "readiness": "Validate settled start against unchanged learned margin and arena, original goal not initially successful, frozen head supports h5. Capture every native frame, no virtual overlay into model inputs.",
+  "outcomes": "Original PushT joint pusher/object position norm<20px and wrappedorientationerror<pi/9; report dense pusher hazard/arena violations, unfinishedepisodes and engagement. No reaching relabel and no outcome-based case replacement.",
+  "accounting": "Every native reset, resetphysics step, action and failedstart counted; modelencoders, candidate rollouts, predictorsteps, learned checks, projectioncounts and elapsed time separately.32scored plusatmost2technicalstarts.",
+  "failure": "Preserve eachattempt andstop for diagnosis on technicalfailure. Valid safe refusal remains unfinished. No automatic repeatof anoutcome. Root mayfreezeanother stage within the new campaign authority.",
+  "stopping": "No new episode in final20minutes before shared07:23:14UTCcutoff. Shared campaign$10cap and up to3pods with two parallel lanes are managed by root, not this worker. No optimizer updates in this diagnostic."
+}

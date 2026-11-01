@@ -1,0 +1,318 @@
+{
+  "schema": "lewm-push-evaluation-v1",
+  "name": "push-structured-native-zero-authority-v1",
+  "frozen_utc": "2026-10-31T01:01:45.205601+00:00",
+  "evaluation": {
+    "execution_pod_id": "wq4ar2qx2ff6r4",
+    "deadline_utc": "2026-10-31T07:23:14+00:00",
+    "world_model": "assets/world-model/pusht/lewm_object.ckpt",
+    "motion_model": "assets/pusht-safety.pt",
+    "scalers": "assets/pusht-scalers.json",
+    "asset_sha256": {
+      "assets/world-model/pusht/lewm_object.ckpt": "d27504690172f6efa31277107a4d54e68f18760520664bc8a33d3b9d1b558952",
+      "assets/pusht-safety.pt": "22cdca3cffde8b9bbd16c0aad972b4fe33165d015cc0f6561c9e70248d9658a3",
+      "assets/pusht-scalers.json": "0505742b401dc3e1e7a9f74a45d614eb2c3c378370663b2f41be55f35d005511",
+      "assets/inputs/pusht/pair-000.npz": "81c5e71ec8faa770210e21ef4837dcd4e1101b3e50ce3a5b7eedf0e66a9fe9d3",
+      "assets/inputs/pusht/pair-001.npz": "85f9f432882f5cd4c136b6a7eefe14ddc68829c607643d534d63a81d8ddd4474",
+      "assets/inputs/pusht/pair-002.npz": "4fa75ef8f06c3dfdbdb6b96782e3c4faa000cc64df6f4814f7da9a1a4b0924df"
+    },
+    "source_sha256": {
+      "experiments/scripts/run_lewm_push_campaign.py": "99bdddae6255ff763c497ff15c9dce95935ef93e67d898f60dd042fe8ae02abe",
+      "experiments/scripts/run_lewm_push_diagnostic.py": "99dff293c8dd087b866c1dba54a1363f256f7f9857b7f77dde2ac50e88d345d7",
+      "experiments/scripts/run_pusht_smoke.py": "ace49f4469241fdbe174cd9ad97f750102885084e8fb1c79e1aa0cbe715127d6",
+      "experiments/helpers/lewm_campaign_training.py": "348bd6a821a2b76ea22545d21aa751f5881ea0b576cae3f6928cea4faaf136fb",
+      "experiments/helpers/lewm_push_evolution.py": "4ca696e3c5d8fd825517c0b4e78af177848c7a822a24c3e76f7c1857d007f152",
+      "experiments/helpers/lewm_navigation_evolution.py": "653c7bda28b6fafe978c9a55643ba2dfe48b18ad2473bfc9a33b759241f3ead1",
+      "experiments/helpers/lewm18_planner.py": "856e2d4f42af05176ab5416e1628e9009bf5a90fbc5a4fc815abbe50269f4443",
+      "experiments/helpers/lewm16_planner.py": "7bd4b4f2c9cd0158d5effe9988410cf5954a8281006d0db0c8b24ec03852908f",
+      "experiments/helpers/cem_refinements.py": "4a4f4c31db0e846c6b028eeb7db7c9bb1c9d83f474fb0aaaf6b924af3eb77ea5",
+      "experiments/helpers/lewm_proposal_adapter.py": "cf6d3bccab418dfdcacf495f1b3308c099483aea9b22f69bb645620f72df70b3",
+      "experiments/helpers/lewm_residual.py": "ae82f4ec8cf9ae9f0c9101de257954d864d3fb5cce12f2da23aff71c6fa23b0e",
+      "experiments/helpers/learned_motion.py": "e8e4576903a4badea3cf815df96a9ad53725d9f834ec3fabe0ed85a4edcd6956",
+      "experiments/helpers/pusht_smoke.py": "9906b1ae88a83fdfb5e74fe7d5c1c7c8d005358775b3b00dfcd4fcdb5ec620b3",
+      "experiments/helpers/safety_model.py": "aea6c3ef1140328136518b42adfb935d310d042a6e2852e66bc917b8ae7d069b",
+      "experiments/helpers/safecem10_planner.py": "9f4dddaa54012c1f45fce6da054b74611d826e4f2fa91445c274a43cca5a43ed"
+    },
+    "planner": {
+      "horizon": 5,
+      "iterations": 15,
+      "budget_scale": 0.5,
+      "variance": 1.0,
+      "retain": 0.5,
+      "correlate": 0.5,
+      "adaptive": false,
+      "objective": "learned",
+      "checked": true,
+      "elite": 0.1,
+      "replan_blocks": 5,
+      "cem_refinements": true,
+      "cem_momentum": 0.1,
+      "min_std": 0.05,
+      "proposal_mode": "residual_mixture",
+      "proposal_mixture_fraction": 0.5
+    },
+    "body_radius_px": 15.0,
+    "margin_px": 6.0,
+    "maximum_episode_actions": 150,
+    "maximum_predictor_steps_per_episode": 68000,
+    "controller_spec": {
+      "max_horizon": 5,
+      "action_block": 5,
+      "action_dim": 2,
+      "native_residual_bound": 0.25,
+      "proximity_length_px": 60.0,
+      "body_radius_px": 15.0,
+      "margin_px": 6.0
+    },
+    "candidate_projection": true,
+    "original_task": "Joint pusher/object position error<20px ANDwrappedorientationerror<pi/9, dense pusher safety at6pxmargin.",
+    "information": "Nativepusher4Dproprioception,declaredhazardgeometry,scalarfrozenvisualgoaltaskcost/progress,andshiftednativeplanorpreviousactuallyexecutedactiondirection. NoexactgoalXY/objectstateenterspolicy; alloptimizersgetidenticaloriginaltaskmonitor terminalprogress/fitness.",
+    "progress_rule": "0.5*(clip(1-final_joint4D_position_error/max(initial_error,1e-6),0,1)+clip(1-final_wrapped_orientation_error/max(initial_orientation_error,1e-6),0,1)). Originalcompletiondominatesprogressinfitness.",
+    "image_policy": "No virtualoverlay inmodelinputs; allrawframes saved; shape/dtypechecked, potentialroughnessflags retainedandstopforreview ratherthanclassifiedascorruption.",
+    "architecture": "24persistentlinearneural coefficients over4causalfeatures\u00d73directionbases\u00d72fixedtemporalmodes. Shiftednativeplan-directionbasisfallstoactuallyexecutedpreviousactionwhenthefullR5bufferisempty. CEMinitializationunchanged; bothcausalcontextsrecorded. Boundednative.25residualshifts halfnewCEMcandidates; fixed learnedcheckingandzeroanchor.",
+    "selection_of_recipe": "Allfourdiagnosticrecipes scored2/8safeentirelyfromnohazcontrols; repairedh5R5chosenprospectivelyfor~80percentlessmodelwork, notbecauseofcompletiongain."
+  },
+  "max_environment_actions": 612,
+  "max_episode_actions": 150,
+  "max_episode_starts": 6,
+  "controllers": {
+    "native": {
+      "kind": "native"
+    },
+    "zero": {
+      "kind": "structured",
+      "parameters": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "evaluation_jobs": [
+    {
+      "controller": "native",
+      "case": {
+        "case_id": "p000-bar",
+        "seed": 318900,
+        "input_path": "assets/inputs/pusht/pair-000.npz",
+        "input_sha256": "81c5e71ec8faa770210e21ef4837dcd4e1101b3e50ce3a5b7eedf0e66a9fe9d3",
+        "pair_index": 0,
+        "source_episode": 0,
+        "source_row": 50,
+        "shape": {
+          "kind": "bar",
+          "origin": [
+            251.4234619140625,
+            321.95957946777344
+          ],
+          "basis": [
+            [
+              0.9704314124314251,
+              -0.24137703653485595
+            ],
+            [
+              0.24137703653485595,
+              0.9704314124314251
+            ]
+          ],
+          "radius_px": 7,
+          "segment_half_length_px": 30
+        }
+      },
+      "seed": 318900,
+      "max_actions": 6
+    },
+    {
+      "controller": "zero",
+      "case": {
+        "case_id": "p000-bar",
+        "seed": 318900,
+        "input_path": "assets/inputs/pusht/pair-000.npz",
+        "input_sha256": "81c5e71ec8faa770210e21ef4837dcd4e1101b3e50ce3a5b7eedf0e66a9fe9d3",
+        "pair_index": 0,
+        "source_episode": 0,
+        "source_row": 50,
+        "shape": {
+          "kind": "bar",
+          "origin": [
+            251.4234619140625,
+            321.95957946777344
+          ],
+          "basis": [
+            [
+              0.9704314124314251,
+              -0.24137703653485595
+            ],
+            [
+              0.24137703653485595,
+              0.9704314124314251
+            ]
+          ],
+          "radius_px": 7,
+          "segment_half_length_px": 30
+        }
+      },
+      "seed": 318900,
+      "max_actions": 6
+    },
+    {
+      "controller": "native",
+      "case": {
+        "case_id": "p000-island",
+        "seed": 318100,
+        "input_path": "assets/inputs/pusht/pair-000.npz",
+        "input_sha256": "81c5e71ec8faa770210e21ef4837dcd4e1101b3e50ce3a5b7eedf0e66a9fe9d3",
+        "pair_index": 0,
+        "source_episode": 0,
+        "source_row": 50,
+        "shape": {
+          "kind": "island",
+          "origin": [
+            251.4234619140625,
+            321.95957946777344
+          ],
+          "basis": [
+            [
+              0.9704314124314251,
+              -0.24137703653485595
+            ],
+            [
+              0.24137703653485595,
+              0.9704314124314251
+            ]
+          ],
+          "radius_px": 12
+        }
+      },
+      "seed": 318100,
+      "max_actions": 150
+    },
+    {
+      "controller": "native",
+      "case": {
+        "case_id": "p001-bar",
+        "seed": 318110,
+        "input_path": "assets/inputs/pusht/pair-001.npz",
+        "input_sha256": "85f9f432882f5cd4c136b6a7eefe14ddc68829c607643d534d63a81d8ddd4474",
+        "pair_index": 1,
+        "source_episode": 3,
+        "source_row": 495,
+        "shape": {
+          "kind": "bar",
+          "origin": [
+            352.6397399902344,
+            330.6053009033203
+          ],
+          "basis": [
+            [
+              -0.9766207609740826,
+              -0.2149695076851687
+            ],
+            [
+              0.2149695076851687,
+              -0.9766207609740826
+            ]
+          ],
+          "radius_px": 7,
+          "segment_half_length_px": 40
+        }
+      },
+      "seed": 318110,
+      "max_actions": 150
+    },
+    {
+      "controller": "native",
+      "case": {
+        "case_id": "p002-gate",
+        "seed": 318120,
+        "input_path": "assets/inputs/pusht/pair-002.npz",
+        "input_sha256": "4fa75ef8f06c3dfdbdb6b96782e3c4faa000cc64df6f4814f7da9a1a4b0924df",
+        "pair_index": 2,
+        "source_episode": 5,
+        "source_row": 763,
+        "shape": {
+          "kind": "gate",
+          "origin": [
+            321.1240234375,
+            217.94830322265625
+          ],
+          "basis": [
+            [
+              -0.8852238547102693,
+              0.46516526853570206
+            ],
+            [
+              -0.46516526853570206,
+              -0.8852238547102693
+            ]
+          ],
+          "gap_width_px": 80,
+          "gap_offset_px": 65,
+          "extent_px": 180,
+          "band_half_width_px": 7
+        }
+      },
+      "seed": 318120,
+      "max_actions": 150
+    },
+    {
+      "controller": "native",
+      "case": {
+        "case_id": "p000-none",
+        "seed": 318130,
+        "input_path": "assets/inputs/pusht/pair-000.npz",
+        "input_sha256": "81c5e71ec8faa770210e21ef4837dcd4e1101b3e50ce3a5b7eedf0e66a9fe9d3",
+        "pair_index": 0,
+        "source_episode": 0,
+        "source_row": 50,
+        "shape": {
+          "kind": "none",
+          "origin": [
+            251.4234619140625,
+            321.95957946777344
+          ],
+          "basis": [
+            [
+              0.9704314124314251,
+              -0.24137703653485595
+            ],
+            [
+              0.24137703653485595,
+              0.9704314124314251
+            ]
+          ]
+        }
+      },
+      "seed": 318130,
+      "max_actions": 150
+    }
+  ],
+  "equivalence_pairs": [
+    [
+      0,
+      1
+    ]
+  ],
+  "no_arbitrary_untrained_efficacy_gate": true
+}

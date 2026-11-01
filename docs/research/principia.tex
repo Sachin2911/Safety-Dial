@@ -36,15 +36,15 @@ Supervisor: Geraud Nangue Tasse
 \vspace{8mm}
 \finding{Useful control mechanisms emerged. An evolutionary safe-completion advantage remains unestablished.}
 This volume consolidates the experimental record from September through
-27 October 2026. It contains 37 experiment accounts, each on one page:
-18 historical studies and 19 numbered tasks from the current programme.
+29 October 2026. It contains 38 experiment accounts, each on one page:
+18 historical studies and 20 numbered tasks from the current programme.
 Closely related engineering screens are grouped under their campaign; planning-only
 proposals and document-production tasks are not counted as experiments.
 \block{The strongest positive evidence}{Tuned fixed planning recovered safe completion at unchanged margins in four tasks. Grasp sensing supported useful release control in UNISafe. A Jar tip shield reduced observed violations while leaving completion unchanged.}
 \block{The original objective remains open}{The target is a compact evolved controller that improves safe task completion of frozen ManiGuard policies under matched interaction budgets. Planning results, better predictions and fewer violations do not individually establish that objective.}
 \block{How to read the record}{Counts and definitions remain local to each study. Benchmark success, requested completion, raw violations and counted violations can differ. Failed engineering gates and missing confirmation are labelled explicitly. Zero observed violations is not a safety guarantee.}
 \vfill
-{\small\color{muted}Compiled 29 October 2026. No new experimental episodes were run for this summary. Original prose removed during cleanup is preserved in the document-recovery bundle; code, frozen configurations and machine-readable evidence retain their paths.}
+{\small\color{muted}Updated 29 October 2026 after the separately authorized grasp-initiation screen. Original prose removed during cleanup is preserved in the document-recovery bundle; code, frozen configurations and machine-readable evidence retain their paths.}
 \clearpage
 {\color{ink}\LARGE\bfseries Experiment index}\par
 \vspace{3mm}
@@ -91,6 +91,7 @@ proposals and document-production tasks are not counted as experiments.
 \noindent\hyperref[exp:T17]{\textbf{T17} LeWM: compare evolution with simpler optimizers}\par\vspace{5pt}
 \noindent\hyperref[exp:T18]{\textbf{T18} PushT and Cube: original object-moving goals}\par\vspace{5pt}
 \noindent\hyperref[exp:T19]{\textbf{T19} Jar: a tip shield around frozen pi0.5}\par\vspace{5pt}
+\noindent\hyperref[exp:T20]{\textbf{T20} Jar: initiate a grasp from a matched pose}\par\vspace{5pt}
 \end{multicols}\clearpage
 \phantomsection\label{exp:H01}
 {\color{accent}\small\bfseries H01 / 20 September 2026}\par
@@ -535,5 +536,18 @@ proposals and document-production tasks are not counted as experiments.
 \block{What this establishes}{The primary completion endpoint did not improve. Five native confirmation violations were inspected during design, no multiplicity correction was fixed in advance, and the cleanest post-freeze subset gave p=0.075. Only twenty pairs shared a physical host. Privileged jar pose/contact, one policy, four reused scenes and missing fixed/random/learning shield controls prevent claims of general safety or evolutionary discovery.}
 \vfill{\footnotesize\color{muted}\textbf{Evidence sources (original paths).}\par
 \raggedright \path{progress/receipts/19-evo-adapter-results.md}\par \path{docs/research/honours-gecco/maniguard19.tex}}
+\clearpage
+\phantomsection\label{exp:T20}
+{\color{accent}\small\bfseries T20 / 29 October 2026}\par
+\vspace{2mm}{\color{ink}\LARGE\bfseries Jar: initiate a grasp from a matched pose}\par
+{\color{muted}\small Task 20 | One-case development mechanism screen}\par\vspace{2mm}
+\finding{The six-episode screen did not establish a safe-completion gain.}
+\block{Question}{Can a pose-triggered gripper-close override rescue a supported, closed-jar stall around the frozen policy?}
+\block{What ran}{A frozen interleaved comparison used development task zero and three fresh policy seeds per arm. The probe used privileged jar/end-effector poses, original safety propositions and grasp state. It allowed one grasp-initiation attempt per episode, preserving all seven native arm targets. The original passive monitor, 20 Hz control, eight executed actions per sixteen-step chunk, 256-pixel observations and 2,000-control horizon were retained.}
+\block{Results}{Native achieved 3/3 strict safe completions; the probe achieved 1/3. Raw and counted violation episodes were 0/3 versus 1/3; unfinished episodes 0/3 versus 2/3; engagement 3/3 in each arm. Benchmark-safe and requested-sequence completion agreed with the strict endpoint here. The probe activated in 1/3 episodes, changing eight open commands into close commands. Activation at control 832 was followed by grasp at 836, departure from support at 841 and safe completion at 873. Both unsuccessful probe episodes had zero overrides.}
+\block{What this establishes}{The predeclared development admission rule failed. The single activation demonstrates command influence followed by useful behavior, not that the override was necessary. Native supplied no failures to improve in this cohort. Matched seeds produced different trajectories even without overrides, so the observed arm difference does not isolate intervention-caused harm or benefit. One development task and three episodes per arm support no population-safety or generalization claim. No learning, evolution, threshold retuning or held-out evaluation ran.}
+\block{Engineering and work}{Eight starts included one zero-control startup failure: rendering was mistakenly set to 60 Hz, then corrected to the pinned 20 Hz using only the remaining predeclared engineering slot. All six scored episodes and the 32-control engineering episode passed recording/action replay. Charged work was 7,425 policy controls, seventy warm-up controls and 938 model queries including eight synthetic seed-reset queries. The admitted window lasted 1,157 seconds, about \$0.09 compute and disk before bandwidth. Initial bootstrap physics remains unknown.}
+\vfill{\footnotesize\color{muted}\textbf{Evidence sources.}\par
+\raggedright \path{progress/receipts/20261029-grasp-probe-results.json}\par \path{progress/receipts/20261029-grasp-probe-preservation.json}\par \path{configs/jar_grasp_probe_20261029/plan.json}}
 \clearpage
 \end{document}

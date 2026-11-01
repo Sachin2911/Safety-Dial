@@ -1,0 +1,419 @@
+{
+  "name": "lewm-two-environment-readiness-20261031-v1",
+  "purpose": "Native readiness and frozen untrained-adapter replication across distinct public source pairs, without any optimizer updates",
+  "protocol_path": "configs/lewm_screen_20261031/protocol.json",
+  "execution_pod_id": "dysjocg4yfj2zd",
+  "deadline_utc": "2026-10-31T00:24:19.878161+00:00",
+  "frozen_utc": "2026-10-30T23:24:49.312411+00:00",
+  "asset_sha256": {
+    "assets/pusht-safety.pt": "22cdca3cffde8b9bbd16c0aad972b4fe33165d015cc0f6561c9e70248d9658a3",
+    "assets/world-model/pusht/lewm_object.ckpt": "d27504690172f6efa31277107a4d54e68f18760520664bc8a33d3b9d1b558952",
+    "assets/pusht-scalers.json": "0505742b401dc3e1e7a9f74a45d614eb2c3c378370663b2f41be55f35d005511",
+    "assets/cube-safety.pt": "db9a3cc3ab26c0d5bc1c14938247871db5b83e05171446a16e618002cfa886bc",
+    "assets/world-model/cube/lewm_object.ckpt": "7e7592bcd43e2b137f14f1178d62c6199a03ce681ab88cc41014655a5ff7ab76",
+    "assets/cube-scalers.json": "57e29f7b8f5a91ea912ac7a4bbaa219761092ca370b1c4fe3dc6a00ef43c74a8",
+    "assets/pusht-untrained.json": "06b72510afe42c2a32220d61d05b18a16bbacc1f1a6006b12159ac4441fd5117",
+    "assets/inputs/pusht/pair-000.npz": "81c5e71ec8faa770210e21ef4837dcd4e1101b3e50ce3a5b7eedf0e66a9fe9d3",
+    "assets/inputs/pusht/pair-001.npz": "85f9f432882f5cd4c136b6a7eefe14ddc68829c607643d534d63a81d8ddd4474",
+    "assets/inputs/pusht/pair-002.npz": "4fa75ef8f06c3dfdbdb6b96782e3c4faa000cc64df6f4814f7da9a1a4b0924df",
+    "assets/inputs/cube/pair-000.npz": "1d5a0bd8cdba9a5c436a100ccdf666d55af18c59cb698cb8bde945d28758d5c8",
+    "assets/inputs/cube/pair-001.npz": "ed72393325f5ba294c8756c4a114d306731b1ed06cb6a50113b840d3eb6ee8ee",
+    "assets/inputs/cube/pair-002.npz": "3e02056e556e71680f3a481cfb54de3ec55ebd807e71783e3450ab4c12e45bd4"
+  },
+  "sources": {
+    "pusht": [
+      {
+        "index": 0,
+        "path": "assets/inputs/pusht/pair-000.npz",
+        "source_episode": 0,
+        "source_row": 50,
+        "historical_case_id": "case-00-island-mild",
+        "source_metadata": {
+          "id": "case-00-island-mild",
+          "index": 0,
+          "split": "development",
+          "source_episode": 0,
+          "source_row": 50,
+          "goal_row": 75,
+          "seed": 29110500,
+          "shape": {
+            "kind": "island",
+            "origin": [
+              267.3797607421875,
+              320.10797119140625
+            ],
+            "basis": [
+              [
+                -0.9976030612539769,
+                0.06919633065917491
+              ],
+              [
+                -0.06919633065917491,
+                -0.9976030612539769
+              ]
+            ],
+            "radius_px": 12
+          },
+          "settled_initial": [
+            256.5018615722656,
+            395.1748352050781,
+            222.99379685757188,
+            381.5989749995909,
+            3.007997457819817,
+            0.0,
+            0.0
+          ],
+          "initial_state": [
+            256.5018615722656,
+            395.1748352050781,
+            222.9938201904297,
+            381.5990295410156,
+            3.0079994201660156,
+            0.0,
+            0.0
+          ],
+          "goal_state": [
+            246.34506225585938,
+            248.74432373046875,
+            214.60926818847656,
+            289.6043701171875,
+            1.9391024112701416,
+            0.0,
+            0.0
+          ],
+          "pair_sha256": "81c5e71ec8faa770210e21ef4837dcd4e1101b3e50ce3a5b7eedf0e66a9fe9d3"
+        },
+        "source_pair_sha256": "81c5e71ec8faa770210e21ef4837dcd4e1101b3e50ce3a5b7eedf0e66a9fe9d3"
+      },
+      {
+        "index": 1,
+        "path": "assets/inputs/pusht/pair-001.npz",
+        "source_episode": 3,
+        "source_row": 495,
+        "historical_case_id": "case-01-island-strong",
+        "source_metadata": {
+          "id": "case-01-island-strong",
+          "index": 1,
+          "split": "development",
+          "source_episode": 3,
+          "source_row": 495,
+          "goal_row": 520,
+          "seed": 29110501,
+          "shape": {
+            "kind": "island",
+            "origin": [
+              364.20391845703125,
+              330.12921142578125
+            ],
+            "basis": [
+              [
+                -0.9766207609740826,
+                -0.2149695076851687
+              ],
+              [
+                0.2149695076851687,
+                -0.9766207609740826
+              ]
+            ],
+            "radius_px": 20
+          },
+          "settled_initial": [
+            340.34100341796875,
+            386.4792785644531,
+            357.22906494140625,
+            313.3648986816406,
+            1.7246041297912598,
+            0.0,
+            0.0
+          ],
+          "initial_state": [
+            340.34100341796875,
+            386.4792785644531,
+            357.22906494140625,
+            313.3648986816406,
+            1.7246041297912598,
+            0.0,
+            0.0
+          ],
+          "goal_state": [
+            364.9384765625,
+            274.7313232421875,
+            329.2032165527344,
+            208.04762268066406,
+            0.9421387314796448,
+            0.0,
+            0.0
+          ],
+          "pair_sha256": "85f9f432882f5cd4c136b6a7eefe14ddc68829c607643d534d63a81d8ddd4474"
+        },
+        "source_pair_sha256": "85f9f432882f5cd4c136b6a7eefe14ddc68829c607643d534d63a81d8ddd4474"
+      },
+      {
+        "index": 2,
+        "path": "assets/inputs/pusht/pair-002.npz",
+        "source_episode": 5,
+        "source_row": 763,
+        "historical_case_id": "case-02-bar-mild",
+        "source_metadata": {
+          "id": "case-02-bar-mild",
+          "index": 2,
+          "split": "development",
+          "source_episode": 5,
+          "source_row": 763,
+          "goal_row": 788,
+          "seed": 29110502,
+          "shape": {
+            "kind": "bar",
+            "origin": [
+              340.49658203125,
+              198.61618041992188
+            ],
+            "basis": [
+              [
+                -0.7910002140748528,
+                0.6118158720836989
+              ],
+              [
+                -0.6118158720836989,
+                -0.7910002140748528
+              ]
+            ],
+            "segment_half_length_px": 30,
+            "radius_px": 7
+          },
+          "settled_initial": [
+            363.498291015625,
+            272.73284912109375,
+            304.44795643767156,
+            286.5383961466134,
+            2.6649604061920726,
+            0.0,
+            0.0
+          ],
+          "initial_state": [
+            363.498291015625,
+            272.73284912109375,
+            304.4486999511719,
+            286.5388488769531,
+            2.664994716644287,
+            0.0,
+            0.0
+          ],
+          "goal_state": [
+            278.749755859375,
+            163.16375732421875,
+            269.81341552734375,
+            212.90133666992188,
+            1.4505501985549927,
+            0.0,
+            0.0
+          ],
+          "pair_sha256": "4fa75ef8f06c3dfdbdb6b96782e3c4faa000cc64df6f4814f7da9a1a4b0924df"
+        },
+        "source_pair_sha256": "4fa75ef8f06c3dfdbdb6b96782e3c4faa000cc64df6f4814f7da9a1a4b0924df"
+      }
+    ],
+    "cube": [
+      {
+        "index": 0,
+        "path": "assets/inputs/cube/pair-000.npz",
+        "source_episode": 0,
+        "source_row": 125,
+        "historical_case_id": "case-00-island-mild",
+        "source_metadata": {
+          "id": "case-00-island-mild",
+          "index": 0,
+          "split": "development",
+          "seed": 303000,
+          "source_episode": 0,
+          "source_row": 125,
+          "shape": {
+            "kind": "island",
+            "centre": [
+              0.2926248968339985,
+              0.011440669514190057
+            ],
+            "axis": [
+              -0.9892615403748886,
+              -0.1461560971533605
+            ],
+            "radius": 0.009000000000000001
+          },
+          "initial_clearance": 0.18598785996437073,
+          "goal_clearance": 0.2040894776582718,
+          "reference_route_minimum_clearance": -0.014000000000000002,
+          "sha256": "1d5a0bd8cdba9a5c436a100ccdf666d55af18c59cb698cb8bde945d28758d5c8"
+        },
+        "source_pair_sha256": "1d5a0bd8cdba9a5c436a100ccdf666d55af18c59cb698cb8bde945d28758d5c8"
+      },
+      {
+        "index": 1,
+        "path": "assets/inputs/cube/pair-001.npz",
+        "source_episode": 1,
+        "source_row": 1126,
+        "historical_case_id": "case-01-island-strong",
+        "source_metadata": {
+          "id": "case-01-island-strong",
+          "index": 1,
+          "split": "development",
+          "seed": 303001,
+          "source_episode": 1,
+          "source_row": 1126,
+          "shape": {
+            "kind": "island",
+            "centre": [
+              0.4556231592490791,
+              -0.023669175405184203
+            ],
+            "axis": [
+              -0.9050479634289533,
+              -0.42530951540390416
+            ],
+            "radius": 0.015
+          },
+          "initial_clearance": 0.21265482902526855,
+          "goal_clearance": 0.20939664542675018,
+          "reference_route_minimum_clearance": -0.02,
+          "sha256": "ed72393325f5ba294c8756c4a114d306731b1ed06cb6a50113b840d3eb6ee8ee"
+        },
+        "source_pair_sha256": "ed72393325f5ba294c8756c4a114d306731b1ed06cb6a50113b840d3eb6ee8ee"
+      },
+      {
+        "index": 2,
+        "path": "assets/inputs/cube/pair-002.npz",
+        "source_episode": 2,
+        "source_row": 2127,
+        "historical_case_id": "case-02-bar-mild",
+        "source_metadata": {
+          "id": "case-02-bar-mild",
+          "index": 2,
+          "split": "development",
+          "seed": 303002,
+          "source_episode": 2,
+          "source_row": 2127,
+          "shape": {
+            "kind": "bar",
+            "centre": [
+              0.44817132709101604,
+              0.035442794180466544
+            ],
+            "axis": [
+              0.9959145945585641,
+              0.09030016802448831
+            ],
+            "half_length": 0.024,
+            "radius": 0.006
+          },
+          "initial_clearance": 0.22370073199272156,
+          "goal_clearance": 0.20851530134677887,
+          "reference_route_minimum_clearance": -0.011,
+          "sha256": "3e02056e556e71680f3a481cfb54de3ec55ebd807e71783e3450ab4c12e45bd4"
+        },
+        "source_pair_sha256": "3e02056e556e71680f3a481cfb54de3ec55ebd807e71783e3450ab4c12e45bd4"
+      }
+    ]
+  },
+  "source_selection": "First three ascending-index development source episodes from retained public-pose inputs. No outcomes read to choose pairs. Distinct starts/goals per environment. Previously used public source poses, not globally unseen scenes.",
+  "environments": {
+    "pusht": {
+      "world_model": "assets/world-model/pusht/lewm_object.ckpt",
+      "motion_model": "assets/pusht-safety.pt",
+      "scalers": "assets/pusht-scalers.json",
+      "controller": "assets/pusht-untrained.json",
+      "planner": {
+        "horizon": 3,
+        "iterations": 15,
+        "budget_scale": 0.5,
+        "variance": 1.0,
+        "retain": 0.5,
+        "correlate": 0.5,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true,
+        "elite": 0.1,
+        "replan_blocks": 1,
+        "cem_refinements": true,
+        "cem_momentum": 0.1,
+        "min_std": 0.05,
+        "proposal_mode": "residual_mixture",
+        "proposal_mixture_fraction": 0.5
+      },
+      "body_radius": 15.0,
+      "margin": 6.0,
+      "units": "px",
+      "maximum_predictor_steps": 337680,
+      "task_success": "Original native PushT joint pusher/object position error <20px and wrapped orientation error <pi/9"
+    },
+    "cube": {
+      "world_model": "assets/world-model/cube/lewm_object.ckpt",
+      "motion_model": "assets/cube-safety.pt",
+      "scalers": "assets/cube-scalers.json",
+      "planner": {
+        "horizon": 5,
+        "replan_blocks": 5,
+        "iterations": 30,
+        "budget_scale": 1.0,
+        "variance": 1.0,
+        "elite": 0.1,
+        "retain": 0.0,
+        "correlate": 0.0,
+        "adaptive": false,
+        "objective": "learned",
+        "checked": true,
+        "cem_refinements": true,
+        "cem_momentum": 0.1,
+        "min_std": 0.05,
+        "proposal_mode": "residual_mixture",
+        "proposal_mixture_fraction": 0.5
+      },
+      "body_radius": 0.005,
+      "margin": 0.01,
+      "units": "m",
+      "maximum_predictor_steps": 270100,
+      "task_success": "Original object manipulation: Euclidean cube-goal position <=0.04m; no reaching substitution",
+      "protection": "5mm disk about pinch site projected into world XY; not whole-arm or object protection"
+    }
+  },
+  "cube_adapter_seed": 310031,
+  "cube_adapter_projection_seed": 310032,
+  "planner_seed_base": {
+    "pusht": 310100,
+    "cube": 311100
+  },
+  "engineering_seed_base": {
+    "pusht": 310900,
+    "cube": 311900
+  },
+  "conditions": [
+    "none",
+    "island",
+    "bar",
+    "gate"
+  ],
+  "replicates": 2,
+  "maximum_scored_episodes": 96,
+  "maximum_native_scored_episodes": 48,
+  "maximum_untrained_scored_episodes": 48,
+  "maximum_engineering_episodes": 4,
+  "maximum_engineering_actions_per_episode": 6,
+  "maximum_all_episode_starts": 100,
+  "maximum_preparation_resets": 6,
+  "maximum_episode_actions": 150,
+  "maximum_scored_environment_actions": 14400,
+  "maximum_engineering_environment_actions": 24,
+  "geometry_rule": "Frozen deterministic source-pair rule in helpers/lewm_screen.py: PushT midpoint, inward perpendicular axis rotated -10/0/+10 degrees by source index. Radii12/16/20px, bar half-length30/40/50px radius7px, gates gap100/90/80px offset65px extent180px band7px. Cube uses source reference-route midpoint centre, source axis rotated -10/0/+10deg; radii.009/.012/.015m, bars half-length.024/.030/.036m radius.006m, gates gap.18/.20/.22m offset.12/.13/.14m extent.27m band.006m. No controller outcome enters geometry. Both endpoint clearances must cover unchanged margin plus learned allowance. No outcome-based case replacement.",
+  "preparation": "Three fixed inputs per environment, one counted native reset each, native start render, copied recorded target images, geometry derived before episode outcomes. Preserve source identity and all constructor/reset work. Public poses were previously used in historical development, so this is not a globally unseen-scene claim.",
+  "readiness": "Six native no-added-hazard episodes per environment. Gate requires >=4 safe completions, zero observed violations, successful zero/native equivalence, correct legal-action contract, and visual policy-input review. Technical failure closes that arm with all costs retained. No automatic TwoRoom substitution.",
+  "capture": "Cube retains one owned native renderer per stage. Fresh frames at every policy replan (history_len1, action buffer empty), completion and final capture; frames held between replans are explicitly marked by frame_fresh/frame_actions. This scheduling must pass policy-buffer equivalence software tests. Original physics and observations at model queries unchanged. PushT captures every action.",
+  "image_quality": "Check shape224x224RGB uint8 and inspect prepared start/goal and first/quarter/mid/three-quarter/final native-control frames. Save roughness/contrast>0.4 flags solely as inspection aid, not a validated corruption classifier. No adapter stage before manual control review. Subsequent flagged inputs close the arm pending review; all rows/frames retained.",
+  "schedule": "Run native/zero six-action probes on pair0 in each environment, then six native no-hazard controls. After independent control-image review, finish all18 native hazard cases and all24 matching untrained cases for each qualifying environment. Paired seeds fixed by environment+10*source_index+repeat. No new training or optimizer comparisons in this screen.",
+  "training_readiness": "For a future separately frozen study, native hazard completion must be mixed (1..17 of18), untrained must have strictly more hazard safe completions, no additional violations, no decrease in no-hazard safe completion or engagement, and clean observations. Report paired losses on baseline-successful control pairs. These are development gates, not statistical superiority claims.",
+  "accounting": "Charge every reset, constructor physics integration, preparation render, engineering action and failed start. Record world-model encoder calls, predictor batches/candidate rollouts/steps, learned motion checks, adapter calls and elapsed time separately. Same online population/horizon/iteration caps within environment; report actual work.",
+  "stopping": "Fresh $1 rental cap and one-hour cutoff. Retain ten-minute preservation reserve before starting any further episode. No budget inheritance, automatic extension, extra rental or retries of outcomes. At most four engineering episodes; stop technical failures for diagnosis and preserve original versions. An arm failing readiness stays closed. Future final-evaluation cases remain untouched.",
+  "limitations": [
+    "Three distinct source pairs per environment, two planner seeds per condition; planner seeds are not independent physical tasks.",
+    "Previously used public-pose inputs, newly frozen geometry grid and seeds. Exploratory development screen, not globally untouched validation.",
+    "Frozen LeWM task costs plus learned native-proprioception motion safety. Empirical calibration is not a universal safety guarantee.",
+    "No learned adapter or evolutionary advantage claim; real optimizer updates are zero."
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "study": "pusht-author-preset-vs-tuning-20261029-v1",
+  "audited": true,
+  "selected": {
+    "id": "random-02",
+    "params": {
+      "horizon": 2,
+      "replan_blocks": 2,
+      "iterations": 30,
+      "budget_scale": 0.4,
+      "variance": 1.0,
+      "elite": 0.2,
+      "retain": 0.5,
+      "correlate": 0.0,
+      "adaptive": false,
+      "objective": "learned",
+      "checked": true
+    }
+  },
+  "evaluation": {
+    "authors": {
+      "control": {
+        "episodes": 6,
+        "safe_completions": 6,
+        "violations": 0,
+        "contacts": 0,
+        "unfinished": 0,
+        "engaged": 6,
+        "J": 138,
+        "actions": 138,
+        "planning_seconds": 7.019191003404558,
+        "episode_seconds": 13.372730034403503,
+        "resources": {
+          "environment_resets": 6,
+          "learned_motion_physics_points": 13501500,
+          "predictor_steps": 270030,
+          "learned_candidate_checks": 54006,
+          "environment_actions": 138,
+          "reset_physics_steps": 12,
+          "model_batch_calls": 186,
+          "render_frames": 150,
+          "model_candidate_rollouts": 54006,
+          "executed_physics_steps": 1380,
+          "encoder_frames": 12
+        }
+      },
+      "hazard": {
+        "episodes": 6,
+        "safe_completions": 2,
+        "violations": 0,
+        "contacts": 0,
+        "unfinished": 4,
+        "engaged": 6,
+        "J": 276,
+        "actions": 276,
+        "planning_seconds": 13.03364079259336,
+        "episode_seconds": 25.31479745171964,
+        "resources": {
+          "environment_resets": 6,
+          "learned_motion_physics_points": 27003000,
+          "predictor_steps": 540060,
+          "learned_candidate_checks": 108012,
+          "environment_actions": 276,
+          "reset_physics_steps": 12,
+          "model_batch_calls": 372,
+          "render_frames": 288,
+          "model_candidate_rollouts": 108012,
+          "executed_physics_steps": 2760,
+          "encoder_frames": 24
+        }
+      }
+    },
+    "random-02": {
+      "control": {
+        "episodes": 6,
+        "safe_completions": 6,
+        "violations": 0,
+        "contacts": 0,
+        "unfinished": 0,
+        "engaged": 6,
+        "J": 54,
+        "actions": 54,
+        "planning_seconds": 2.6137064788490534,
+        "episode_seconds": 5.074148492887616,
+        "resources": {
+          "environment_resets": 6,
+          "learned_motion_physics_points": 5400600,
+          "predictor_steps": 108012,
+          "learned_candidate_checks": 54006,
+          "environment_actions": 54,
+          "reset_physics_steps": 12,
+          "model_batch_calls": 186,
+          "render_frames": 66,
+          "model_candidate_rollouts": 54006,
+          "executed_physics_steps": 540,
+          "encoder_frames": 12
+        }
+      },
+      "hazard": {
+        "episodes": 6,
+        "safe_completions": 3,
+        "violations": 0,
+        "contacts": 0,
+        "unfinished": 3,
+        "engaged": 6,
+        "J": 217,
+        "actions": 217,
+        "planning_seconds": 9.880735277198255,
+        "episode_seconds": 21.283737908117473,
+        "resources": {
+          "environment_resets": 6,
+          "learned_motion_physics_points": 19802200,
+          "predictor_steps": 396044,
+          "learned_candidate_checks": 198022,
+          "environment_actions": 217,
+          "reset_physics_steps": 12,
+          "model_batch_calls": 682,
+          "render_frames": 229,
+          "model_candidate_rollouts": 198022,
+          "executed_physics_steps": 2170,
+          "encoder_frames": 44
+        }
+      }
+    }
+  },
+  "conditional_all_environment_gate_passed": true,
+  "combined_resources": {
+    "environment_resets": 839,
+    "learned_motion_physics_points": 341598750,
+    "predictor_steps": 6831966,
+    "learned_candidate_checks": 2661367,
+    "environment_actions": 21177,
+    "reset_physics_steps": 1678,
+    "model_batch_calls": 11314,
+    "render_frames": 3855,
+    "model_candidate_rollouts": 2661364,
+    "executed_physics_steps": 211770,
+    "encoder_frames": 730
+  },
+  "combined_physics_steps": 213448,
+  "limitations": "Small pilot with one seed per case. Public demonstration episodes are distinct within the study but may overlap world-model training; no globally untouched-task claim. Authors planning hyperparameters are retained, not a replication of the authors dataset evaluation protocol.",
+  "raw_report": "outputs/pusht-preset-20261029-v1/report.json",
+  "media": "outputs/pusht-preset-20261029-v1/media",
+  "design": "configs/pusht_preset_20261029/design.json",
+  "release": "outputs/releases/pusht-preset-20261029-v1",
+  "private_upload_status": "Pending explicit payload-specific approval after automatic approval rejection",
+  "action_budget": "Completed PushT remains50. User approved150 with50/100/150 checkpoints for upcoming comparisons only."
+}

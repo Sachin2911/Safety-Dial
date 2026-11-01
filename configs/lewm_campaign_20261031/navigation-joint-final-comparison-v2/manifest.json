@@ -1,0 +1,213 @@
+{
+  "schema": "lewm-navigation-joint-final-comparison-v2",
+  "frozen_utc": "2026-10-31T06:24:34.323909+00:00",
+  "joint_opening": {
+    "path": "configs/lewm_campaign_20261031/navigation-joint-final-opening-v2.json",
+    "sha256": "5cf9cc97c329988332651a5d5c8bd180ccbb10bc08884dee1a48ef0386b9de73"
+  },
+  "joint_preparation_protocol": {
+    "path": "configs/lewm_campaign_20261031/navigation-joint-final-cases-v2.json",
+    "sha256": "42c57f7211abe801da4c55626927bd73f586cf6ec37e66b6a1a89dd420addd38"
+  },
+  "all_six_repeat_selections_fixed_before_final_pixels": true,
+  "shared_source_case_clusters": 16,
+  "primary_action_cap_each_repeat": 4800,
+  "secondary_action_cap_each_repeat": 2880,
+  "primary_and_secondary_episode_starts": 576,
+  "auxiliary_endpoints_frozen_before_outcomes": [
+    30,
+    50
+  ],
+  "auxiliary_episode_starts": 80,
+  "auxiliary_action_cap": 3040,
+  "secondary_relocation": {
+    "path": "configs/lewm_campaign_20261031/navigation-secondary-r2-relocation-v1.json",
+    "sha256": "bdc7808f6ce172864a2d3e2fafdd00d1af6c5597714f20fca4741243ee924c70"
+  },
+  "primary_physical_host_blocks": 2,
+  "secondary_physical_host_blocks": 3,
+  "outcome_files_read": 0,
+  "workers_started": 0,
+  "files": [
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/primary50-r0.json",
+      "sha256": "45c0ae9c28cd5abfdb152b986922c5d1e9e75d3f68367a6a4936110c6c93cb48"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/primary50-r1.json",
+      "sha256": "b46a156c7595d3e018625fe2dc2f2d1d5e8a4defa060062502cf6c52516f371d"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/primary50-r2.json",
+      "sha256": "319f3b9ef3c286c66cd6cb19e6933713031d65e9c9c3f1544edb650d81e54c86"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/secondary30-r0.json",
+      "sha256": "817c244cb824fbecc7147a9098af2a937d47572670910275c76fcd7c79ef71b3"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/secondary30-r1.json",
+      "sha256": "688187425064b0f8f0bdee58db15da1209b7035052dce085bb3403a23d4b8e29"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/secondary30-r2.json",
+      "sha256": "cbf26f5eecbcce65f991b70a8baef65dca711c3805736cc9b7b887d002906e9f"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/aux-decoded-native30-navigation.json",
+      "sha256": "a6bb4d8e9db4764b4394c710f4032eeb1482b8007dcf2b4680a1e53b9f9ee20e"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/aux-decoded-native30-pusht.json",
+      "sha256": "5b53d7719969892ee424c6aaaa4f194e2f0f61dcc0af65765876e7373b9cb326"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/aux-decoded-native30-recovery.json",
+      "sha256": "6b342175116cc0f3d2af9cbf6f323df5bd3e0cf2d3317bc94d5c911df4a7038d"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/aux-decoded-native50-navigation.json",
+      "sha256": "c4e1222a49a780292292ece93a50d2192e73053b30d752ad3eb7027989a9f188"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/aux-decoded-native50-pusht.json",
+      "sha256": "a532e6becb919fe25c7efb510b72a8538c65aa28574edc65d52f21f0e71c51c3"
+    }
+  ],
+  "schedule": [
+    {
+      "family": "primary50",
+      "repeat_id": 0,
+      "host": {
+        "repeat_id": 0,
+        "host": "navigation",
+        "pod_id": "vukovc3t4o1dui"
+      },
+      "protocol": "/workspace/Safety-Dial/configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/primary50-r0.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2/primary50/r0"
+    },
+    {
+      "family": "primary50",
+      "repeat_id": 1,
+      "host": {
+        "repeat_id": 1,
+        "host": "pusht",
+        "pod_id": "wq4ar2qx2ff6r4"
+      },
+      "protocol": "/workspace/Safety-Dial/configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/primary50-r1.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2/primary50/r1"
+    },
+    {
+      "family": "primary50",
+      "repeat_id": 2,
+      "host": {
+        "repeat_id": 2,
+        "host": "navigation",
+        "pod_id": "vukovc3t4o1dui"
+      },
+      "protocol": "/workspace/Safety-Dial/configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/primary50-r2.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2/primary50/r2"
+    },
+    {
+      "family": "secondary30",
+      "repeat_id": 0,
+      "host": {
+        "repeat_id": 0,
+        "host": "navigation",
+        "pod_id": "vukovc3t4o1dui"
+      },
+      "protocol": "/workspace/Safety-Dial/configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/secondary30-r0.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2/secondary30/r0"
+    },
+    {
+      "family": "secondary30",
+      "repeat_id": 1,
+      "host": {
+        "repeat_id": 1,
+        "host": "pusht",
+        "pod_id": "wq4ar2qx2ff6r4"
+      },
+      "protocol": "/workspace/Safety-Dial/configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/secondary30-r1.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2/secondary30/r1"
+    },
+    {
+      "family": "secondary30",
+      "repeat_id": 2,
+      "host": {
+        "repeat_id": 2,
+        "host": "recovery",
+        "pod_id": "nj2fqkp2prgk8x"
+      },
+      "protocol": "/workspace/Safety-Dial/configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/secondary30-r2.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2/secondary30/r2"
+    },
+    {
+      "family": "aux-decoded-native30",
+      "host": {
+        "repeat_id": 0,
+        "host": "navigation",
+        "pod_id": "vukovc3t4o1dui"
+      },
+      "protocol": "/workspace/Safety-Dial/configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/aux-decoded-native30-navigation.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v3.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2/aux-decoded-native30/navigation"
+    },
+    {
+      "family": "aux-decoded-native30",
+      "host": {
+        "repeat_id": 1,
+        "host": "pusht",
+        "pod_id": "wq4ar2qx2ff6r4"
+      },
+      "protocol": "/workspace/Safety-Dial/configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/aux-decoded-native30-pusht.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v3.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2/aux-decoded-native30/pusht"
+    },
+    {
+      "family": "aux-decoded-native30",
+      "host": {
+        "repeat_id": 2,
+        "host": "recovery",
+        "pod_id": "nj2fqkp2prgk8x"
+      },
+      "protocol": "/workspace/Safety-Dial/configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/aux-decoded-native30-recovery.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v3.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2/aux-decoded-native30/recovery"
+    },
+    {
+      "family": "aux-decoded-native50",
+      "host": {
+        "repeat_id": 0,
+        "host": "navigation",
+        "pod_id": "vukovc3t4o1dui"
+      },
+      "protocol": "/workspace/Safety-Dial/configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/aux-decoded-native50-navigation.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v3.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2/aux-decoded-native50/navigation"
+    },
+    {
+      "family": "aux-decoded-native50",
+      "host": {
+        "repeat_id": 1,
+        "host": "pusht",
+        "pod_id": "wq4ar2qx2ff6r4"
+      },
+      "protocol": "/workspace/Safety-Dial/configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/aux-decoded-native50-pusht.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v3.py",
+      "output_namespace": "results/navigation-joint-final-comparison-v2/aux-decoded-native50/pusht"
+    }
+  ],
+  "builder_sha256": "3b8f1047dc0840f4acc2695c6d2bb63f7908895573000801605627ec99c2fe1c",
+  "primary_design_templates": {
+    "path": "configs/lewm_campaign_20261031/navigation-joint-final-comparison-v2/primary-design-templates/manifest.json",
+    "sha256": "39c9516c7d29c2a0d3b7981cb5b03848ad21bc4ccf0fdde4e65dc8db0fc27420"
+  },
+  "primary_design_templates_are_not_an_execution_schedule": true,
+  "rule": "All final profiles are jointly frozen before any primary/secondary/auxiliary outcome; retain every selected repeat and its actual lock-derived host. No post-final family/baseline selection."
+}

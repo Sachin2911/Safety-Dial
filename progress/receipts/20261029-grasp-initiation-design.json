@@ -1,0 +1,56 @@
+{
+  "schema": "jar-grasp-initiation-design-v1",
+  "created_utc": "2026-10-29T17:34:16.609197+00:00",
+  "scope": "Read-only analysis of two existing development recordings. No new simulator or model calls.",
+  "reference": {
+    "source": "outputs/tracking04/remote/episodes/job06_task00_seed301_attempt1/recordings/task_0000_base.npz",
+    "state_step": 727,
+    "first_recorded_grasp_step": 730,
+    "eef_position_in_jar_frame_m": [
+      -0.10482998937810553,
+      0.13342926552903853,
+      -0.004970039135100698
+    ],
+    "eef_quaternion_in_jar_frame_xyzw": [
+      0.6132982538569339,
+      -0.3103727775582285,
+      0.647952631570411,
+      0.3281636451647341
+    ]
+  },
+  "records": [
+    {
+      "source": "outputs/tracking04/remote/episodes/job00_task00_seed300_attempt1/recordings/task_0000_base.npz",
+      "sha256": "00372c62097860df546e7b5920b608da312442a1d0d221152bfd2d7af8f66f6f",
+      "historical_policy_seed": 300,
+      "new_simulator_steps": 0,
+      "historical_goal": false,
+      "historical_violation": false,
+      "historical_ever_grasped": false,
+      "qualifying_open_hand_states": 23,
+      "first_qualifying_state_step": 1198,
+      "first_position_gap_m": 0.029420553630816818,
+      "first_orientation_gap_deg": 16.884084749112372
+    },
+    {
+      "source": "outputs/tracking04/remote/episodes/job06_task00_seed301_attempt1/recordings/task_0000_base.npz",
+      "sha256": "463ff574dc2bcc9b350713165c519f491b73a269e86c84a629c5b4d5e8a3af87",
+      "historical_policy_seed": 301,
+      "new_simulator_steps": 0,
+      "historical_goal": true,
+      "historical_violation": false,
+      "historical_ever_grasped": true,
+      "qualifying_open_hand_states": 142,
+      "first_qualifying_state_step": 585,
+      "first_position_gap_m": 0.02566271095278008,
+      "first_orientation_gap_deg": 2.2877391934774116
+    }
+  ],
+  "limitations": [
+    "Geometric proximity does not establish that closing can form a grasp.",
+    "The proposed trigger activates in the historical success as well as the failure.",
+    "These same-task development records informed the rule; they are not validation.",
+    "No archived prototype action bounds or launch budgets have been adopted."
+  ],
+  "proposed_difference_from_previous_tests": "Initiate a new grasp when the native hand is open near a development-derived grasp pose. Earlier release delays preserved previous closing behaviour; tracking corrections and the tip shield preserved native gripper commands."
+}

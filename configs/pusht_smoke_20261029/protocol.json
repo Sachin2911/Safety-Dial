@@ -1,0 +1,40 @@
+{
+  "name": "pusht-hazards-smoke-20261029",
+  "purpose": "Engineering demonstration only, no efficacy or optimizer comparison.",
+  "authorized_scope": "One seed and three simple virtual hazard layouts, pusher only.",
+  "seed": 29102026,
+  "max_episode_actions": 50,
+  "max_rollouts": 6,
+  "max_total_environment_actions": 300,
+  "max_runtime_minutes": 60,
+  "lease": "Use existing RunPod workspace and original $5 aggregate cap/deadline; no extension.",
+  "model": "Frozen pinned LeWM PushT from configs/lewm18/pusht.json; no training.",
+  "goal": "Retain joint pusher/block planar error <20px and block angle error <pi/9.",
+  "predicate": "Full 15px-radius pusher disk; T-block is excluded from hazard safety.",
+  "margin_px": 6,
+  "arena": "Pusher disk remains inside the 512px arena, with the same extra margin.",
+  "monitor": "Record pusher clearance after every physics step, including initial state. No continuous-time claim.",
+  "case_rule": "First source row divisible by25, with goal at+25 in same public demonstration, pusher displacement>=100px, block displacement>=30px, and pusher endpoints in [70,442]^2. Select from metadata before any rollout outcomes.",
+  "layout_rule": "Use reference-path halfway point by arc length, restricted to centres at least50px from both pusher endpoints and inside [70,442]^2. Try points in increasing arc-length distance from halfway, then the endpoint midpoint. Require both full-pusher endpoints clear of every shape at the requested margin. Frame forward axis follows start-goal; perpendicular axis points toward the roomier arena side. Geometry uses only this reference and fixed rules, never checked-method outcomes.",
+  "layouts": {
+    "island": {"radius_px": 12},
+    "bar": {"segment_half_length_px": 30, "radius_px": 7},
+    "gate": {"band_half_width_px": 7, "gap_width_px": 100, "gap_offset_px": 65, "extent_px": 180}
+  },
+  "planner": {
+    "horizon": 3,
+    "iterations": 15,
+    "budget_scale": 0.5,
+    "variance": 1.0,
+    "retain": 0.5,
+    "correlate": 0.5,
+    "adaptive": false,
+    "objective": "learned",
+    "checked": true
+  },
+  "execution": "Five environment actions per replan; same frozen model and planner parameters for reference and checked runs, except safety enabled.",
+  "order": ["reference", "island", "bar", "gate"],
+  "repairs": "At most two additional rollouts for documented engineering repairs, retaining all failed attempts. No seed sweep, case replacement, or hidden tuning search.",
+  "accounting": "Count resets, reset physics steps, executed actions/physics, model queries/predictor work, and elapsed time. Analytical checks have no simulator interactions.",
+  "preservation": "New outputs/pusht-hazards-20261029 only; save every result, trace and overlay video locally before finishing. Never overwrite historical evidence."
+}

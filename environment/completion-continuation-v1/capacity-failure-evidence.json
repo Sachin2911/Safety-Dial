@@ -1,0 +1,50 @@
+{
+  "schema": "lewm-capacity-failure-evidence-v1",
+  "recorded_utc": "2026-10-31T08:04:40.236652+00:00",
+  "failures": [
+    {
+      "lane": "navigation",
+      "pod_id": "vukovc3t4o1dui",
+      "original_request": {
+        "path": "outputs/runpod-lewm-completion-20261031/navigation/start-request.json",
+        "sha256": "34b453c5ca43b8af834c0f99f33eaf69f453799da213fc03a30733ee89e598b6"
+      },
+      "requested_utc": "2026-10-31T07:49:53.772798+00:00",
+      "observed_returncode": 1,
+      "provider_http_status": 400,
+      "provider_error_code": "bad_request",
+      "provider_message": "failed to start pod: There are not enough free GPUs on the host machine to start this pod.",
+      "evidence_kind": "Root attestation of actual exec_command response, not an independently signed API log"
+    },
+    {
+      "lane": "pusht",
+      "pod_id": "wq4ar2qx2ff6r4",
+      "original_request": {
+        "path": "outputs/runpod-lewm-completion-20261031/pusht/start-request.json",
+        "sha256": "78f0f6011c25de8b7a3945b57f53ab366fa8f3c5d1caed93310e92bf7dde81ed"
+      },
+      "requested_utc": "2026-10-31T07:49:52.558181+00:00",
+      "observed_returncode": 1,
+      "provider_http_status": 400,
+      "provider_error_code": "bad_request",
+      "provider_message": "failed to start pod: There are not enough free GPUs on the host machine to start this pod.",
+      "evidence_kind": "Root attestation of actual exec_command response, not an independently signed API log"
+    },
+    {
+      "lane": "recovery",
+      "pod_id": "nj2fqkp2prgk8x",
+      "original_request": {
+        "path": "outputs/runpod-lewm-completion-20261031/recovery/start-request.json",
+        "sha256": "dfe8337622be08950b642ee37f44f42677cfe5a72394979edcdc767474aa9b78"
+      },
+      "requested_utc": "2026-10-31T07:49:55.312736+00:00",
+      "observed_returncode": 1,
+      "provider_http_status": 400,
+      "provider_error_code": "bad_request",
+      "provider_message": "failed to start pod: There are not enough free GPUs on the host machine to start this pod.",
+      "evidence_kind": "Root attestation of actual exec_command response, not an independently signed API log"
+    }
+  ],
+  "no_new_model_simulator_calls": true,
+  "fallback": "Documented podResumeZeroGpu recovery succeeded on exact existing pod identities; private preservation precedes replacement/deletion"
+}

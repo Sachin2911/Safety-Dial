@@ -1,0 +1,52 @@
+{
+  "purpose": "Working learned-controlled PushT validation, three existing layouts on one known scene; no optimizer or broad generalization claim",
+  "seed": 29102026,
+  "max_episode_actions": 50,
+  "max_runtime_minutes": 5,
+  "safety_mode": "learned",
+  "safety_backend": "observed_motion",
+  "verify_analytic_dynamics": false,
+  "world_model_checkpoint": "data/safecem10/stablewm/checkpoints/pusht/lewm_object.ckpt",
+  "safety_checkpoint": "outputs/pusht-learned-motion-v1/model.pt",
+  "safety_checkpoint_sha256": "3d9d471d69dc135c12c36436328886c04485cd19f0dd0a815659e4ecb822bed5",
+  "inputs": "outputs/pusht-hazards-20261029/inputs",
+  "pair_sha256": "38ca38ae5f24a32fadeef3ed97bcf0bfc8fff7ba6f2c2fb9edd2075e98d69d70",
+  "margin_px": 6.0,
+  "planner": {
+    "horizon": 3,
+    "iterations": 15,
+    "budget_scale": 0.5,
+    "variance": 1.0,
+    "retain": 0.5,
+    "correlate": 0.5,
+    "adaptive": false,
+    "objective": "learned",
+    "checked": true
+  },
+  "selection": "All three existing layouts, fixed order island/bar/gate, same known source scene; no case or seed replacement",
+  "accounting": "All executed actions, resets, physics, frozen world-model queries, learned predictions and wall time",
+  "release_criteria": "Each episode must complete the original joint pusher/block goal with no full-pusher hazard/arena margin breach; reference prediction forbidden",
+  "limitations": "One known task scene; independent motion predictions were tested on twelve other source scenes, not a broad task-success benchmark",
+  "name": "pusht-learned-motion-e2e-v1-gate",
+  "case": {
+    "kind": "gate",
+    "origin": [
+      217.0875726135852,
+      239.73767783187617
+    ],
+    "basis": [
+      [
+        0.39141708929502733,
+        0.920213378629005
+      ],
+      [
+        -0.920213378629005,
+        0.39141708929502733
+      ]
+    ],
+    "band_half_width_px": 7,
+    "gap_width_px": 100,
+    "gap_offset_px": 65,
+    "extent_px": 180
+  }
+}

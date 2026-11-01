@@ -1,0 +1,253 @@
+{
+  "schema": "lewm-navigation-analysis-plan-20261031-v1",
+  "frozen_utc": "2026-10-31T04:18:13.393799+00:00",
+  "analysis_script": "experiments/scripts/analyze_lewm_navigation_campaign_20261031_v3.py",
+  "analysis_script_sha256": "920dc9f9d6749fc5a26c8f7ee1145bfd0665c89d73986453358d818c03cd3bd5",
+  "source_sha256": {
+    "experiments/helpers/lewm_navigation_joint_final_v2.py": "b5f63e4a98173b5978ca7b78052672955cf98d26fb457921d72e7a96f3f33bb5",
+    "experiments/tests/test_lewm_navigation_analysis_20261031_v3.py": "c0a7778dd7381dec49df5e6e277ba464cc64c938a1e63e7de4eaf061a03ba1f0"
+  },
+  "execution": {
+    "numerical_analysis": "Declared rented RunPod hosts only; imports NumPy/matplotlib only after pod and plan/source guards.",
+    "allowed_pod_ids": [
+      "vukovc3t4o1dui",
+      "wq4ar2qx2ff6r4",
+      "nj2fqkp2prgk8x"
+    ],
+    "no_environment_model_checkpoint_image_array_loads": true,
+    "publication_exports": [
+      "PNG240dpi",
+      "SVG",
+      "JSON",
+      "LaTeXbooktabs tables",
+      "plain-text figure captions"
+    ]
+  },
+  "profiles": {
+    "primary50": {
+      "training_manifest": {
+        "path": "configs/lewm_campaign_20261031/navigation-budget50-comparison-v1/manifest.json",
+        "sha256": "e9cdf4493ec3c10ef437c102ffa3724496e1b1822c514268228b75a4b4a81a70"
+      },
+      "action_horizon": 50,
+      "training_cases": 4,
+      "hard_training_action_allowance_each_method_repeat": 9800,
+      "learner_repeats": [
+        0,
+        1,
+        2
+      ],
+      "host_assignment": {
+        "0": "vukovc3t4o1dui",
+        "1": "wq4ar2qx2ff6r4",
+        "2": "vukovc3t4o1dui"
+      },
+      "role": "Primary budget-constrained safe-completion endpoint; earlier150-action ceiling is unchanged."
+    },
+    "secondary30": {
+      "training_manifest": {
+        "path": "configs/lewm_campaign_20261031/navigation-budget30-relocated-v1/manifest.json",
+        "sha256": "6cbf1c890c1451bd79e9702db3f7bbed69d783cb3df6496b3ad44c48d62fbf40"
+      },
+      "action_horizon": 30,
+      "training_cases": 8,
+      "hard_training_action_allowance_each_method_repeat": 11760,
+      "learner_repeats": [
+        0,
+        1,
+        2
+      ],
+      "host_assignment": {
+        "0": "vukovc3t4o1dui",
+        "1": "wq4ar2qx2ff6r4",
+        "2": "nj2fqkp2prgk8x"
+      },
+      "role": "Separately activated broader-training/shorter-endpoint study; never pooled with primary50 or chosen after final outcomes.",
+      "whole_R2_output_namespace": "results/navigation-budget30-relocated-v1/r2",
+      "preserved_original_manifest": {
+        "path": "configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/manifest.json",
+        "sha256": "b6900ee408bd25bf8e73f2928750639ec81d75a81c50d813662c69d1e2a37225"
+      }
+    }
+  },
+  "secondary_activation": {
+    "path": "configs/lewm_campaign_20261031/navigation-budget30-secondary-activation-v1.json",
+    "sha256": "c15c8335d67bcb698256ec3a1d66861d9c19aaa5b25274a25f2b59668226867f"
+  },
+  "final_readiness": "The new joint-opening-v2 and all SIX distinct selected-repeat locks, primary3@50 on two original hosts and secondary3@30 on three hosts, plus exact prospective relocation/unstarted proof must validate BEFORE ANY final state/outcome read. All final/aux protocols remain jointly bound before any final output namespace exists.",
+  "final_panel": {
+    "source_case_clusters": 16,
+    "conditions": [
+      "none",
+      "circle3",
+      "circle5",
+      "circle7"
+    ],
+    "source_cases_each_condition": 4,
+    "same_clusters_across_all_methods_repeats_hosts_profiles": true,
+    "no_source_case_or_outcome_exclusion": "Require complete technically valid frozen final protocol/state panels. Incomplete/technical cases block efficacy analysis; preserve and account for every failed/partial attempt separately. No post-final replacement."
+  },
+  "arms": [
+    "native",
+    "strong_anchor",
+    "tuned_fixed",
+    "cma",
+    "random",
+    "reinforce"
+  ],
+  "metrics": {
+    "safe_completion": "Original task completed within frozen horizon with no requested margin violation.",
+    "violation": "Requested protected-body margin violation, from the frozen monitor; do not relabel as physical contact.",
+    "unfinished": "Original task not completed; distinct from unsafe completion.",
+    "engaged": "Frozen protected-body path-length engagement rule.",
+    "denominators": "Per arm/repeat16 episodes and16 source-case clusters. Raw aggregate48 repeated observations across3 fixed controllers, not48 independent cases; per-host raw observations and repeat membership reported explicitly."
+  },
+  "estimand": "For each profile, equally average the three prespecified repeat/host-specific controller scores, then average over the16 source cases. Paired contrasts compare arms WITHIN the same source case,repeat and physical host before averaging repeats. Per-repeat and per-host summaries remain visible.",
+  "paired_contrasts": {
+    "direction": "CMA-selected minus baseline",
+    "baselines": [
+      "strong_anchor",
+      "tuned_fixed",
+      "random",
+      "reinforce"
+    ],
+    "primary_metric": "safe_completion",
+    "other_predefined_metrics": [
+      "violation",
+      "unfinished",
+      "engaged"
+    ],
+    "report": "Mean difference in percentage points, conditional source-case percentile95 interval, all3 repeat differences, and physical-host blocks. No selection of favorable contrast/family/repeat after final outcomes."
+  },
+  "bootstrap": {
+    "draws": 10000,
+    "seed": 803101,
+    "rng": "NumPy Generator(PCG64(803101))",
+    "unit": "Source-case cluster; include ALL method/repeat/host observations for each resampled source case.",
+    "stratification": "Within each fixed none/circle3/circle5/circle7 stratum, sample4 of its4 source cases WITH replacement independently; concatenate16 cluster indices.",
+    "pairing": "Use the SAME10000 index draws for all arms,repeats,hosts,metrics and profiles; report profiles separately.",
+    "interval": "2.5th and97.5th empirical percentiles, NumPy quantile(method=linear).",
+    "no_bootstrap_of_learners_or_hosts": true
+  },
+  "inference_scope": "Conditional on the selected finite learned controllers, their prospectively assigned physical hosts (two primary hosts,three secondary hosts), fixed training/selection pipeline and within-room final case definition. Case bootstrap estimates source-case uncertainty only. It is NOT uncertainty over a population of future learners,optimizer seeds,training datasets or hosts. Three repeats remain visible and are not independent source cases.",
+  "multiplicity": "All intervals are NOMINAL DESCRIPTIVE95percent case-cluster percentile intervals, not multiplicity-adjusted family-wise inference. Four SC contrasts and two separately reported profiles do not license an uncorrected family-wise optimizer-superiority claim. No p-values, final-driven family/method/baseline/repeat choice or future-learner/host inference.",
+  "zero_violations": "Zero observed violations is not zero risk. Case bootstrap can degenerate at zero. For each fixed controller,0/16 independent source cases gives an approximate3/16 upper bound under that assumption. Do not replace16 by48 correlated repeat observations.",
+  "selection_and_evolution_provenance": "Report every selected_source_arm, declared/effective selected_is_trained, FP32 anchor-equivalence, native policies whose genes are ignored, producer run/candidate/generation/update and actual updates completed BEFORE that genotype was proposed/evaluated. Preserve all3 repeats; selecting an anchor/native-equivalent policy is not an evolutionary improvement. A generation0 winner is not credited with later CMA updates.",
+  "training_curves": {
+    "x_axis": "ACTUAL cumulative environment-action attempts in completed_job_ids order, including anchor, discarded/random candidates and both PG sampling and deterministic evaluation. Fixed-grid order follows its frozen job schedule.",
+    "y_axis": "Safe-completion rate of the lexicographically best COMPLETE deterministic training panel available by that action count. Tie retains the earlier/anchor incumbent. Full tuple/provenance also saved.",
+    "panels": "C/RS48 candidates plus anchor; PG24 paired sample/evaluation updates plus anchor; tuned-fixed48 distinct nonzero candidates plus anchor.",
+    "landmarks": "Frozen protocol quarters0,A/4,A/2,3A/4,A, using only already completed panels.",
+    "unspent": "Curves STOP at actual consumed actions; no line, carry-forward or estimate into unspent allowance. A landmark beyond used budget or before complete anchor has no estimate.",
+    "scope": "TRAIN learning curves are not final/generalization performance curves and never choose methods from final results."
+  },
+  "resource_reporting": "Report actual actions,hard allowance,unspent allowance,episode/planning time,encoder/cost/safety/readout attempted queries,predictor work and real optimizer updates separately by profile/repeat/arm/run. Keep counter units/aliases distinct. Common memory/readout/case preparation is separately costed by the campaign accounting collector, never charged once per reuse or counted from copied artifacts. Elapsed/query/action values remain blocked by actual host; do not pool RTX4000Ada and A40 elapsed times into an optimizer-speed claim. Final campaign accounting merges exactly one authoritative own-host report from each of the three pods before foreign analysis imports.",
+  "auxiliary_decoded_native": {
+    "eligible_profiles": "Only decoded-native endpoints30/50 already enabled in the jointly frozen final manifest BEFORE outcomes.",
+    "pairing": "For each physical host and endpoint, compare its16 decoded-native cases to the native arm of that family's LOWEST repeat ID assigned to the host; fixed before outcomes.",
+    "outputs": "Separate per-host counts/denominators, paired SC case-cluster differences and standalone figures/tables.",
+    "no_evolutionary_credit_or_pooling": true,
+    "eligible_pod_ids_by_endpoint": {
+      "50": [
+        "vukovc3t4o1dui",
+        "wq4ar2qx2ff6r4"
+      ],
+      "30": [
+        "vukovc3t4o1dui",
+        "wq4ar2qx2ff6r4",
+        "nj2fqkp2prgk8x"
+      ]
+    },
+    "profile_count_if_both_endpoints_enabled": 5,
+    "main_plus_aux_profile_count_if_both_enabled": 11,
+    "restriction": "Recovery participates only in secondary30; no auxiliary50 block there without an original-cost native50 reference. Both original hosts retain auxiliary profiles for any enabled endpoint."
+  },
+  "plot_design": "Each profile gets SC/V/unfinished/engagement means with all3 fixed-repeat points, paired SC contrast intervals, and actual-action training incumbent plots. Auxiliary controls get separate host-block plots. Figure captions state the conditional case-cluster scope and zero-violation caveat.",
+  "analysis_input_contract": "bind-inputs pins final manifest/protocol hashes, joint opening and both training manifests before final outputs exist. analyze requires every final state complete and source-bound, exact job/case/seed/weights, inner-episode artifact hashes, all16 shared source clusters and both complete3-repeat profiles. For the relocated secondary master, fixed-tuning peer files are resolved from exact authoritative manifest.files SHA refs, not guessed beside the new directory; originalR0/R1 refs stay byte-identical.",
+  "final_outcomes_read_during_plan_creation": 0,
+  "numerical_analysis_runs_during_plan_creation": 0,
+  "new_model_simulator_calls": 0,
+  "amendment_rule": "No modification of frozen source/plan after final outcomes. Any pre-outcome correction uses a new version preserving the previous bytes and reason.",
+  "version": 3,
+  "previous_preserved_plan": {
+    "path": "configs/lewm_campaign_20261031/navigation-final-analysis-plan-v2.json",
+    "sha256": "a813375a834c140981d6bdb2785be6ca8969cbaf5d758f06af1ddaf3be17d9b6",
+    "analysis_script_sha256": "8cf1514da76c0840fde8885f475afe2992d1f86da17be54083576800f671055e"
+  },
+  "amendment_reason": "Prospective whole-unstarted-secondaryR2 host relocation to authorized recovery pod before anyR2 output; primary unchanged. Exact relocated manifest/record/unstarted proof and new three-host joint guard bound; aux hosts two@50 and three@30. Statistics,bootstrap,seed,estimand,case panel,scientific settings and per-method budgets unchanged.",
+  "exploratory_training_diagnostic": {
+    "role": "EXPLORATORY TRAINING-ONLY, prompted before final outcomes by observed R0 training totals CMA148/196 vsRS125/196 despite tied best4/4; not a prespecified final-policy efficacy endpoint.",
+    "CMA_vs_RS": "Report mean safe-completion rate over all8 candidate panels in each CMA generation versus each frozen8-candidate RS batch, excluding anchor; x is actual cumulative actions when that complete batch finished. Retain all3 repeats and both study families separately.",
+    "PG": "Keep each stochastic sampling panel and deterministic postupdate evaluation panel separate, with actual cumulative action counts at their completion.",
+    "claim_limit": "Population-training behavior is not validated selected-policy gain, cannot replace the primary final-completion endpoint and cannot choose/tune a policy or family from final data."
+  },
+  "synthetic_validation": {
+    "execution_pod_id": "vukovc3t4o1dui",
+    "source_sha256": "920dc9f9d6749fc5a26c8f7ee1145bfd0665c89d73986453358d818c03cd3bd5",
+    "test_source": "experiments/tests/test_lewm_navigation_analysis_20261031_v3.py",
+    "test_source_sha256": "c0a7778dd7381dec49df5e6e277ba464cc64c938a1e63e7de4eaf061a03ba1f0",
+    "passed_report": {
+      "path": "environment/navigation-analysis-tests-v3-proof.xml",
+      "sha256": "04cbc1d543ab00464d6fa1067f48b79c664fba8bf011584a1aa239c02a631571",
+      "tests": 7,
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "pytest_reported_seconds": 2.33
+    },
+    "additional_checks": [
+      "Changing hostlabels to three distinct groups leaves the fixed-repeat case-cluster estimand and interval unchanged",
+      "Recovery auxiliary is accepted only at30 where its same-host native reference exists",
+      "Relocation scientific-setting changes are rejected; exact old-host unstarted proof is mandatory"
+    ],
+    "preserved_v2_checks": "EqualpairedzeroCI,16clusters not48independent rows, PGsample+evaluationactualactions/no extrapolation, syntheticPNG/SVG export",
+    "new_model_simulator_calls": 0,
+    "final_data_read": 0
+  },
+  "secondary_relocation": {
+    "path": "configs/lewm_campaign_20261031/navigation-secondary-r2-relocation-v1.json",
+    "sha256": "bdc7808f6ce172864a2d3e2fafdd00d1af6c5597714f20fca4741243ee924c70"
+  },
+  "secondary_unstarted_proof": {
+    "path": "results/evidence-audits/navigation-secondary-r2-unstarted-v2.json",
+    "sha256": "0431d94920683616fb0ca988b132210e801e70ec0c339f28332f2a504a5f6d62"
+  },
+  "joint_final_manifest_schema": "lewm-navigation-joint-final-comparison-v2",
+  "physical_host_metadata": {
+    "vukovc3t4o1dui": {
+      "host": "navigation",
+      "gpu_family": "A40"
+    },
+    "wq4ar2qx2ff6r4": {
+      "host": "pusht",
+      "gpu_family": "A40"
+    },
+    "nj2fqkp2prgk8x": {
+      "host": "recovery",
+      "gpu_family": "RTX4000Ada20GB",
+      "provider_hourly_usd": 0.28
+    }
+  },
+  "source_only_statistical_invariance_vs_v2": {
+    "bootstrap_summary": {
+      "unchanged": true,
+      "ast_sha256": "d6a297b9def8e191cccd5e5fbbc2f23e0c902dc75184f7732520cfc2c242311f"
+    },
+    "family_summary": {
+      "unchanged": true,
+      "ast_sha256": "0fb907199caad095f1fdd932eb11151b9d5f3f856420b04d4984cfc5e9189c17"
+    },
+    "training_curve": {
+      "unchanged": true,
+      "ast_sha256": "64689ff93fc4bb58dc61fe23ccf2d78fddb25d53a7e3ac3535ebf72916773045"
+    },
+    "plots": {
+      "unchanged": true,
+      "ast_sha256": "2d61c9e2f806541c9991ba23e74ac230fd59e078b06c9de054d563dce51834fd"
+    },
+    "latex": {
+      "unchanged": true,
+      "ast_sha256": "8305a054b17c23e07a53f9a6664945bb79d43c66fddc28374590d7c45c869587"
+    }
+  }
+}

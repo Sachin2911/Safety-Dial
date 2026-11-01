@@ -1,0 +1,542 @@
+{
+  "schema": "lewm-navigation-selection-reservation-v1",
+  "study_family": "secondary-budget30-broader-training-v1",
+  "required_total_selection_locks_before_any_final_access": 6,
+  "primary_study_must_remain_locked_and_unchanged": true,
+  "repeat_id": 0,
+  "host": {
+    "repeat_id": 0,
+    "host": "navigation",
+    "pod_id": "vukovc3t4o1dui"
+  },
+  "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py",
+  "evaluation": {
+    "execution_pod_id": "vukovc3t4o1dui",
+    "deadline_utc": "2026-10-31T07:23:14+00:00",
+    "world_model": "assets/world-model/tworoom/lewm_object.ckpt",
+    "motion_model": "assets/tworoom-safety.pt",
+    "scalers": "assets/tworoom-scalers.json",
+    "memory_path": "results/navigation-memory-cache-v3/memory.npz",
+    "memory_sha256": "684e6089518a7c1a2b8aec7a8e1db887b4140847cf9dfed27cd52ca4749c9edd",
+    "memory_metadata_path": "results/navigation-memory-cache-v3/memory-metadata.json",
+    "asset_sha256": {
+      "assets/world-model/tworoom/lewm_object.ckpt": "87aab38843a8e96dc3d6fb325969f6cabe4e11dcd3b1130df8f5e5806620b973",
+      "assets/tworoom-safety.pt": "48ce87bfdfe0507ffeea0e68080a556ac07caf1efb55706651c669f79e9ac99a",
+      "assets/tworoom-scalers.json": "5ff95166374d29bd1da311a560f0763187091cf51a064716ec654a9ff1dc0101",
+      "results/navigation-cases-v3/inputs/tworoom-01000-none.npz": "a024e178f834fe7fd5c13ac3eba4e212cd60642d565fd95ed635b515cee7ffe1",
+      "results/navigation-cases-v3/inputs/tworoom-01004-none.npz": "256ef8152d1b9dd82b031eef7b5c63f18e81c1f771bef49a42301c7614dac3d6",
+      "results/navigation-cases-v3/inputs/tworoom-01017-circle3.npz": "570b1c81adcfddf8b00985ea6b6209e4291fb7649c33d9c4463e8dcdbcc60159",
+      "results/navigation-cases-v3/inputs/tworoom-01018-circle5.npz": "abd458f55814a6d56dc4e3f1b5d05cdbd0696e4cf343d2c9389061f54785d314",
+      "results/navigation-cases-v3/inputs/tworoom-01026-circle5.npz": "3b0980be3433df60df859d215e2c89d1d6dd7cbe25cc0a1bc9669b8e151ca241",
+      "results/navigation-cases-v3/inputs/tworoom-01027-circle7.npz": "4378669c21f9ac757227c840d937dadb8a9ac3ce75d32badbb0cfae275892015",
+      "results/navigation-cases-v3/inputs/tworoom-01029-circle3.npz": "39b5d5a968d2cf2ad9d118b52981adfd5e2d674f7e9401448459b1d58b1f069c",
+      "results/navigation-cases-v3/inputs/tworoom-01039-circle7.npz": "deca05a9fd4774d4660d65005496d3bdcec56c8e0017c23115cc4984eb63b3f6",
+      "results/navigation-cases-v3/panel.json": "f4e4fd0bce55dbfffedd1ec363deb5f092748d7dc1c9457b70191c5b1879a3f3",
+      "results/navigation-cases-v3/visual-review.json": "0be0b9594faed2c19d84dfc27b35ea1d7eab253f6814268ca136ce35227836ff",
+      "results/navigation-memory-cache-v3/memory.npz": "684e6089518a7c1a2b8aec7a8e1db887b4140847cf9dfed27cd52ca4749c9edd",
+      "results/navigation-memory-cache-v3/memory-metadata.json": "73577f9afe344607917b5e1533cbe1fd7e051b47ef20ec1f9f5b4241ae3527f1",
+      "results/navigation-readout-v1/readout.npz": "a9a779c8f20e457cf52758c66423e2bace9a3fe980c61f44e86d25ead8e018c0",
+      "results/navigation-journal-parity-v1/qualification.json": "a96724f0ce7a525909719f732d796a02f15b3e603a49e77bed503073ed70ef07",
+      "results/navigation-cases-v3/inputs/tworoom-02001-circle3.npz": "112f5f265be7c88d011467a459a1a57b56e4b6462a4395ff6ba8afb30117da1b",
+      "results/navigation-cases-v3/inputs/tworoom-02006-circle5.npz": "7f7043da890d391853a26114627e919971c08b672da3e592eef3f193153c6f2f",
+      "results/navigation-cases-v3/inputs/tworoom-02009-circle3.npz": "0dc639a09edade0bbd67fede5e0873abe8a27235afe44b00786eb325ad2af1ff",
+      "results/navigation-cases-v3/inputs/tworoom-02011-circle7.npz": "8f945a563bac784d6dac68b1375a73b33d013ff28d760c9323de64958bf24267",
+      "results/navigation-cases-v3/inputs/tworoom-02012-none.npz": "1a7666fc9d8b4395849516780102cc77e801bf3ee140babb517aeac826f13217",
+      "results/navigation-cases-v3/inputs/tworoom-02015-circle7.npz": "71a6069ec1d4819e2f57217db0a3cb9ca3285efc987a688c7be219a0a646f4e7",
+      "results/navigation-cases-v3/inputs/tworoom-02028-none.npz": "2ca381f35f1834f585d26069c81c5dc53e1047d091efa54cc207dbb33b59b7eb",
+      "results/navigation-cases-v3/inputs/tworoom-02030-circle5.npz": "b4ab902f2bfd084e62dd213ac5a832fa94928322df317fd5638951a5cc5ac2ab"
+    },
+    "planner": {
+      "horizon": 2,
+      "replan_blocks": 1,
+      "iterations": 8,
+      "budget_scale": 0.08,
+      "variance": 1.0,
+      "elite": 0.1,
+      "retain": 0.25,
+      "correlate": 0.0,
+      "adaptive": false,
+      "objective": "learned",
+      "checked": true,
+      "cem_refinements": true,
+      "cem_momentum": 0.1,
+      "min_std": 0.05,
+      "proposal_mode": "residual_mixture",
+      "proposal_mixture_fraction": 0.5
+    },
+    "body_radius": 7.0,
+    "margin": 3.0,
+    "motion_allowance": 12.405431747436523,
+    "maximum_episode_actions": 30,
+    "maximum_predictor_steps_per_episode": 30000,
+    "max_episode_seconds": 300,
+    "allowed_source_episodes": [
+      2001,
+      2006,
+      2009,
+      2011,
+      2012,
+      2015,
+      2028,
+      2030
+    ],
+    "precision": {
+      "world_model_dtype": "torch.float32",
+      "cuda_matmul_allow_tf32": false,
+      "cudnn_allow_tf32": false,
+      "autocast": false,
+      "preprocessing_sha256": "da84b63338edc8434afde4be7e23a61642c1dc682dd6b0e5b17a6510432b424a"
+    },
+    "controller_backend": "observed-target-v2",
+    "progress_backend": "navigation-append-fsync-v1",
+    "controller_config": {
+      "min_target_distance": 6.0,
+      "max_target_distance": 30.0,
+      "recent_window": 6,
+      "recent_scale": 6.0,
+      "stall_distance": 3.0,
+      "readout_progress": true,
+      "direct_goal_locality": true
+    },
+    "goal_readout": {
+      "path": "results/navigation-readout-v1/readout.npz",
+      "sha256": "a9a779c8f20e457cf52758c66423e2bace9a3fe980c61f44e86d25ead8e018c0"
+    }
+  },
+  "case_preparation": {
+    "panel_path": "results/navigation-cases-v3/panel.json",
+    "panel_sha256": "f4e4fd0bce55dbfffedd1ec363deb5f092748d7dc1c9457b70191c5b1879a3f3",
+    "review_path": "results/navigation-cases-v3/visual-review.json",
+    "review_sha256": "0be0b9594faed2c19d84dfc27b35ea1d7eab253f6814268ca136ce35227836ff",
+    "require_approved": true,
+    "require_images_clean": true,
+    "rule": "Runner hardchecks the frozen panel SHA and approved/images_clean review with UTC and inspected gallery hashes BEFORE any controller episode or frozen-model load. Original panel remains immutable; review is a separate record."
+  },
+  "selection_panel": [
+    {
+      "case_id": "tworoom-02001-circle3",
+      "split": "development_selection",
+      "source_episode": 2001,
+      "source_step": 35,
+      "goal_step": 85,
+      "source_global_row": 183936,
+      "goal_global_row": 183986,
+      "input_path": "results/navigation-cases-v3/inputs/tworoom-02001-circle3.npz",
+      "input_sha256": "112f5f265be7c88d011467a459a1a57b56e4b6462a4395ff6ba8afb30117da1b",
+      "shape": {
+        "kind": "island",
+        "centre": [
+          91.37694549560547,
+          143.2187042236328
+        ],
+        "axis": [
+          0.8474190264388834,
+          0.5309246590895689
+        ],
+        "radius": 3.0
+      },
+      "condition": "circle3",
+      "seed": 424001,
+      "initial_xy": [
+        84.28520202636719,
+        88.0790786743164
+      ],
+      "goal_xy": [
+        37.60682678222656,
+        162.5833282470703
+      ],
+      "endpoint_clearance": [
+        45.59380479111238,
+        47.15080340660097
+      ],
+      "image_start_mae": 0.0,
+      "image_start_rmse": 0.0,
+      "image_style_flag": false,
+      "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+    },
+    {
+      "case_id": "tworoom-02006-circle5",
+      "split": "development_selection",
+      "source_episode": 2006,
+      "source_step": 0,
+      "goal_step": 50,
+      "source_global_row": 184364,
+      "goal_global_row": 184414,
+      "input_path": "results/navigation-cases-v3/inputs/tworoom-02006-circle5.npz",
+      "input_sha256": "7f7043da890d391853a26114627e919971c08b672da3e592eef3f193153c6f2f",
+      "shape": {
+        "kind": "island",
+        "centre": [
+          74.72946166992188,
+          149.72726440429688
+        ],
+        "axis": [
+          -0.9023760517400004,
+          -0.43094948804486144
+        ],
+        "radius": 5.0
+      },
+      "condition": "circle5",
+      "seed": 424006,
+      "initial_xy": [
+        36.87126922607422,
+        203.0408935546875
+      ],
+      "goal_xy": [
+        84.18065643310547,
+        103.97856903076172
+      ],
+      "endpoint_clearance": [
+        53.38796363476068,
+        34.71475367410328
+      ],
+      "image_start_mae": 0.0,
+      "image_start_rmse": 0.0,
+      "image_style_flag": false,
+      "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+    },
+    {
+      "case_id": "tworoom-02009-circle3",
+      "split": "development_selection",
+      "source_episode": 2009,
+      "source_step": 40,
+      "goal_step": 90,
+      "source_global_row": 184678,
+      "goal_global_row": 184728,
+      "input_path": "results/navigation-cases-v3/inputs/tworoom-02009-circle3.npz",
+      "input_sha256": "0dc639a09edade0bbd67fede5e0873abe8a27235afe44b00786eb325ad2af1ff",
+      "shape": {
+        "kind": "island",
+        "centre": [
+          63.98785400390625,
+          122.73872375488281
+        ],
+        "axis": [
+          0.8767185544465732,
+          0.48100371754188237
+        ],
+        "radius": 3.0
+      },
+      "condition": "circle3",
+      "seed": 424009,
+      "initial_xy": [
+        94.5,
+        70.90745544433594
+      ],
+      "goal_xy": [
+        43.517879486083984,
+        163.8318328857422
+      ],
+      "endpoint_clearance": [
+        50.145419010651516,
+        35.90929616974117
+      ],
+      "image_start_mae": 0.0,
+      "image_start_rmse": 0.0,
+      "image_style_flag": false,
+      "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+    },
+    {
+      "case_id": "tworoom-02011-circle7",
+      "split": "development_selection",
+      "source_episode": 2011,
+      "source_step": 0,
+      "goal_step": 50,
+      "source_global_row": 184840,
+      "goal_global_row": 184890,
+      "input_path": "results/navigation-cases-v3/inputs/tworoom-02011-circle7.npz",
+      "input_sha256": "8f945a563bac784d6dac68b1375a73b33d013ff28d760c9323de64958bf24267",
+      "shape": {
+        "kind": "island",
+        "centre": [
+          60.436363220214844,
+          140.92117309570312
+        ],
+        "axis": [
+          -0.9355477734861414,
+          -0.3532001748656469
+        ],
+        "radius": 7.0
+      },
+      "condition": "circle7",
+      "seed": 424011,
+      "initial_xy": [
+        36.38877868652344,
+        182.5204620361328
+      ],
+      "goal_xy": [
+        70.45294189453125,
+        92.29216003417969
+      ],
+      "endpoint_clearance": [
+        34.04984039780351,
+        35.64990191003994
+      ],
+      "image_start_mae": 0.0,
+      "image_start_rmse": 0.0,
+      "image_style_flag": false,
+      "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+    },
+    {
+      "case_id": "tworoom-02012-none",
+      "split": "development_selection",
+      "source_episode": 2012,
+      "source_step": 0,
+      "goal_step": 75,
+      "source_global_row": 184941,
+      "goal_global_row": 185016,
+      "input_path": "results/navigation-cases-v3/inputs/tworoom-02012-none.npz",
+      "input_sha256": "1a7666fc9d8b4395849516780102cc77e801bf3ee140babb517aeac826f13217",
+      "shape": {
+        "kind": "none"
+      },
+      "condition": "none",
+      "seed": 424012,
+      "initial_xy": [
+        170.8881378173828,
+        194.33836364746094
+      ],
+      "goal_xy": [
+        125.90882873535156,
+        83.43312072753906
+      ],
+      "endpoint_clearance": [
+        1000000.0,
+        1000000.0
+      ],
+      "image_start_mae": 0.0,
+      "image_start_rmse": 0.0,
+      "image_style_flag": false,
+      "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+    },
+    {
+      "case_id": "tworoom-02015-circle7",
+      "split": "development_selection",
+      "source_episode": 2015,
+      "source_step": 0,
+      "goal_step": 75,
+      "source_global_row": 185218,
+      "goal_global_row": 185293,
+      "input_path": "results/navigation-cases-v3/inputs/tworoom-02015-circle7.npz",
+      "input_sha256": "71a6069ec1d4819e2f57217db0a3cb9ca3285efc987a688c7be219a0a646f4e7",
+      "shape": {
+        "kind": "island",
+        "centre": [
+          143.71229553222656,
+          150.4590606689453
+        ],
+        "axis": [
+          -0.9659944027646065,
+          0.2585629784548657
+        ],
+        "radius": 7.0
+      },
+      "condition": "circle7",
+      "seed": 424015,
+      "initial_xy": [
+        169.30288696289062,
+        204.61264038085938
+      ],
+      "goal_xy": [
+        138.87738037109375,
+        90.94258117675781
+      ],
+      "endpoint_clearance": [
+        45.89564729916363,
+        45.712542533033435
+      ],
+      "image_start_mae": 0.0,
+      "image_start_rmse": 0.0,
+      "image_style_flag": false,
+      "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+    },
+    {
+      "case_id": "tworoom-02028-none",
+      "split": "development_selection",
+      "source_episode": 2028,
+      "source_step": 0,
+      "goal_step": 75,
+      "source_global_row": 186434,
+      "goal_global_row": 186509,
+      "input_path": "results/navigation-cases-v3/inputs/tworoom-02028-none.npz",
+      "input_sha256": "2ca381f35f1834f585d26069c81c5dc53e1047d091efa54cc207dbb33b59b7eb",
+      "shape": {
+        "kind": "none"
+      },
+      "condition": "none",
+      "seed": 424028,
+      "initial_xy": [
+        176.34547424316406,
+        190.1093292236328
+      ],
+      "goal_xy": [
+        143.65711975097656,
+        77.83185577392578
+      ],
+      "endpoint_clearance": [
+        1000000.0,
+        1000000.0
+      ],
+      "image_start_mae": 0.0,
+      "image_start_rmse": 0.0,
+      "image_style_flag": false,
+      "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+    },
+    {
+      "case_id": "tworoom-02030-circle5",
+      "split": "development_selection",
+      "source_episode": 2030,
+      "source_step": 0,
+      "goal_step": 50,
+      "source_global_row": 186636,
+      "goal_global_row": 186686,
+      "input_path": "results/navigation-cases-v3/inputs/tworoom-02030-circle5.npz",
+      "input_sha256": "b4ab902f2bfd084e62dd213ac5a832fa94928322df317fd5638951a5cc5ac2ab",
+      "shape": {
+        "kind": "island",
+        "centre": [
+          157.67124938964844,
+          30.70681381225586
+        ],
+        "axis": [
+          0.17483331738568447,
+          0.9845980454641968
+        ],
+        "radius": 5.0
+      },
+      "condition": "circle5",
+      "seed": 424030,
+      "initial_xy": [
+        199.7513885498047,
+        37.66618347167969
+      ],
+      "goal_xy": [
+        129.15078735351562,
+        50.202606201171875
+      ],
+      "endpoint_clearance": [
+        30.651740149665926,
+        22.547108064586368
+      ],
+      "image_start_mae": 0.0,
+      "image_start_rmse": 0.0,
+      "image_style_flag": false,
+      "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+    }
+  ],
+  "source_files": [
+    "experiments/helpers/cem_refinements.py",
+    "experiments/helpers/cube14_env.py",
+    "experiments/helpers/cube14_geometry.py",
+    "experiments/helpers/cube14_planner.py",
+    "experiments/helpers/cube14_runtime.py",
+    "experiments/helpers/dsrl06_infra.py",
+    "experiments/helpers/lewm16_planner.py",
+    "experiments/helpers/lewm16_protocol.py",
+    "experiments/helpers/lewm18_planner.py",
+    "experiments/helpers/lewm18_runtime.py",
+    "experiments/helpers/lewm_campaign_training.py",
+    "experiments/helpers/lewm_navigation_evolution.py",
+    "experiments/helpers/lewm_navigation_retrieval.py",
+    "experiments/helpers/lewm_navigation_retrieval_v2.py",
+    "experiments/helpers/lewm_progress_journal.py",
+    "experiments/helpers/lewm_proposal_adapter.py",
+    "experiments/helpers/lewm_proposal_evolution.py",
+    "experiments/helpers/lewm_proposal_pilot.py",
+    "experiments/helpers/lewm_residual.py",
+    "experiments/helpers/lewm_screen.py",
+    "experiments/helpers/portable_env.py",
+    "experiments/helpers/portable_motion.py",
+    "experiments/helpers/pusht_smoke.py",
+    "experiments/helpers/reacher13_env.py",
+    "experiments/helpers/reacher13_geometry.py",
+    "experiments/helpers/safecem10_planner.py",
+    "experiments/helpers/safety_model.py",
+    "experiments/helpers/tworoom12_env.py",
+    "experiments/helpers/tworoom12_planner.py",
+    "experiments/scripts/freeze_lewm_navigation_optimizer_comparison_v2.py",
+    "experiments/scripts/freeze_lewm_navigation_progress_pilot.py",
+    "experiments/scripts/qualify_lewm_goal_readout.py",
+    "experiments/scripts/run_lewm_navigation_campaign.py",
+    "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+  ],
+  "source_sha256": {
+    "experiments/helpers/cem_refinements.py": "4a4f4c31db0e846c6b028eeb7db7c9bb1c9d83f474fb0aaaf6b924af3eb77ea5",
+    "experiments/helpers/cube14_env.py": "bafe6cf43a0d83dbbe6ae6ae717200d12ab019eeea40b42a67c2e352db5ae495",
+    "experiments/helpers/cube14_geometry.py": "5ad739435603f4b73cb478ce380a3d1e024ef897b494d23b2657c0db1806f453",
+    "experiments/helpers/cube14_planner.py": "417c388fdc690827c9210d828042b15a5b82ed73bcf23b6db2af042959468052",
+    "experiments/helpers/cube14_runtime.py": "cc2bdb01da308ead2662b05f2d5aa70e5447e260c0e353002729bb2450b6189a",
+    "experiments/helpers/dsrl06_infra.py": "1e2a2aff8f3243843a89694bc1b6e019c046e22514be6bc886e0a6057558b1e1",
+    "experiments/helpers/lewm16_planner.py": "7bd4b4f2c9cd0158d5effe9988410cf5954a8281006d0db0c8b24ec03852908f",
+    "experiments/helpers/lewm16_protocol.py": "85aa6ce84c82736e736bd498f049fd00989ea7c5f819536e4f34dcadb2f83819",
+    "experiments/helpers/lewm18_planner.py": "856e2d4f42af05176ab5416e1628e9009bf5a90fbc5a4fc815abbe50269f4443",
+    "experiments/helpers/lewm18_runtime.py": "5bedfc77daecc4b657828825d6eaabb72b6189c043fbcb253938de13212f75b8",
+    "experiments/helpers/lewm_campaign_training.py": "348bd6a821a2b76ea22545d21aa751f5881ea0b576cae3f6928cea4faaf136fb",
+    "experiments/helpers/lewm_navigation_evolution.py": "653c7bda28b6fafe978c9a55643ba2dfe48b18ad2473bfc9a33b759241f3ead1",
+    "experiments/helpers/lewm_navigation_retrieval.py": "f306d887a359adea2a35e527d5ea9e628810cf13cbd22e35172c6d8ab5bd5fc4",
+    "experiments/helpers/lewm_navigation_retrieval_v2.py": "b732346fa489eafcc9effd26ac3b1b3eeaeaf0e8cc8b6916914ca941a1c452f5",
+    "experiments/helpers/lewm_progress_journal.py": "dc7f315b597407ff116e67b510d7aa3a0bb10ddbc495f9230d41aba21969a5ab",
+    "experiments/helpers/lewm_proposal_adapter.py": "cf6d3bccab418dfdcacf495f1b3308c099483aea9b22f69bb645620f72df70b3",
+    "experiments/helpers/lewm_proposal_evolution.py": "1a653210959b4340ab7369c6c9b46e1fd393991f4c5743ba65ffc8730cb37ea3",
+    "experiments/helpers/lewm_proposal_pilot.py": "48c329ac1c2da8ccaf0999b8b911a9e0fae7120fc5a800e907eb2ecf6004efad",
+    "experiments/helpers/lewm_residual.py": "ae82f4ec8cf9ae9f0c9101de257954d864d3fb5cce12f2da23aff71c6fa23b0e",
+    "experiments/helpers/lewm_screen.py": "b149f81f560af1462eb3d1b42b7504bb94c74bf304b95111a15e0249e5582b9e",
+    "experiments/helpers/portable_env.py": "5b9d3797e7910defecda71f8b24e9e39daac4172f124006c3ec4fcbac16b417a",
+    "experiments/helpers/portable_motion.py": "dbf833cc6f94ae4d7585354eaf842f30beae1df8f72526b824f089a658e49188",
+    "experiments/helpers/pusht_smoke.py": "9906b1ae88a83fdfb5e74fe7d5c1c7c8d005358775b3b00dfcd4fcdb5ec620b3",
+    "experiments/helpers/reacher13_env.py": "7b4febd32b225ca3ed25393d8e5ce2afba569e88e4f061159eb834405e318689",
+    "experiments/helpers/reacher13_geometry.py": "7a402be771ce9b0b9511b0db15615ed0cec536ce3e7fdf2dbe4b3361c053264c",
+    "experiments/helpers/safecem10_planner.py": "9f4dddaa54012c1f45fce6da054b74611d826e4f2fa91445c274a43cca5a43ed",
+    "experiments/helpers/safety_model.py": "aea6c3ef1140328136518b42adfb935d310d042a6e2852e66bc917b8ae7d069b",
+    "experiments/helpers/tworoom12_env.py": "67352edc208a01b67928f8ac898a2e521730956416e552abd6678a1c7df9ef0e",
+    "experiments/helpers/tworoom12_planner.py": "aba7ebdaa96fdde706e3aa5aa88c30bf822272785aba0a6d624c17c595a4778c",
+    "experiments/scripts/freeze_lewm_navigation_optimizer_comparison_v2.py": "fd3442beb05b03928f9f3300862d279d3680bbac6be00f15efc3e7e339600f73",
+    "experiments/scripts/freeze_lewm_navigation_progress_pilot.py": "3d58c3a655ce93336ebd92ceadc9e79c8fd8a2aae6c519d05f0c6ac2f3555b5f",
+    "experiments/scripts/qualify_lewm_goal_readout.py": "801a1147d0d9d0820a5bef278ecaabe36933e9769c731015457e596c67d760ae",
+    "experiments/scripts/run_lewm_navigation_campaign.py": "7485bb75e257cdd8f471e956a22d99a7d43d2bc162741dbb8c0bbbb1a574b907",
+    "experiments/scripts/run_lewm_navigation_campaign_v2.py": "08596c23ce476978251a5aaf6e1c14919216c30843df74fca6c00bb884a088b4"
+  },
+  "candidate_sources": {
+    "native": "Original visual-goal native policy",
+    "strong_anchor": [
+      0.25,
+      0.25,
+      0.1,
+      0.25,
+      0.1,
+      2.0,
+      0.25,
+      2.0,
+      4.0,
+      1.3862943611198906
+    ],
+    "tuned_fixed": {
+      "output": "results/navigation-budget30-comparison-v1/r0/fixed-tuning",
+      "rule": "Choose highest complete 8-case training tuple; exact ties prefer anchor, then ascending grid index. No partial or technical panel can nominate."
+    },
+    "cma": {
+      "protocol": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-cma-r0.json",
+      "output_namespace": "results/navigation-budget30-comparison-v1/r0/cma",
+      "nominees": "results/navigation-budget30-comparison-v1/r0/cma/nominees.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+    },
+    "random": {
+      "protocol": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-random-r0.json",
+      "output_namespace": "results/navigation-budget30-comparison-v1/r0/random",
+      "nominees": "results/navigation-budget30-comparison-v1/r0/random/nominees.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+    },
+    "reinforce": {
+      "protocol": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-reinforce-r0.json",
+      "output_namespace": "results/navigation-budget30-comparison-v1/r0/reinforce",
+      "nominees": "results/navigation-budget30-comparison-v1/r0/reinforce/nominees.json",
+      "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+    }
+  },
+  "maximum_episode_starts": 48,
+  "maximum_environment_actions": 1440,
+  "materialization_before_any_selection_episode": "Require all relevant training runs complete or explicitly budget-stopped, pin their protocol/nominees/state hashes and selected weight vectors. Include each optimizer best-trained nominee if present, else labeled anchor fallback. Freeze six-arm8-case runtime protocol before reading any selection outcome.",
+  "selection": "Native, strong anchor, tuned-fixed training winner, CMA best-trained, random best-trained and REINFORCE best-trained. Within each search arm compare its candidate to the common strong-anchor selection tuple; retain candidate only if strictly better, otherwise labeled untrained anchor. Exact ties retain anchor. All six arms use the same case/environment seeds and deterministic argmax policies, including duplicate-parameter nominees, and every execution is charged.",
+  "repeat_policy": "Keep all three learner-repeat selections. Never select the best repeat. Aggregate uncertainty by repeat and source case, with physical host retained as a block.",
+  "final_lock": "After selection, persist each selected parameter vector, is_trained flag, producer run/update/candidate provenance and selection score/input/output hashes. ALL THREE PRIMARY plus ALL THREE SECONDARY locks must exist before ANY final-case pixel or primary/secondary final controller outcome. Do not reuse the three-lock primary opening gate; a separately frozen six-lock opening is required."
+}

@@ -1,0 +1,295 @@
+{
+  "case_preparation": {
+    "panel_path": "results/navigation-cases-v3/panel.json",
+    "panel_sha256": "f4e4fd0bce55dbfffedd1ec363deb5f092748d7dc1c9457b70191c5b1879a3f3",
+    "require_approved": true,
+    "require_images_clean": true,
+    "review_path": "results/navigation-cases-v3/visual-review.json",
+    "review_sha256": "0be0b9594faed2c19d84dfc27b35ea1d7eab253f6814268ca136ce35227836ff",
+    "rule": "Runner hardchecks the frozen panel SHA and approved/images_clean review with UTC and inspected gallery hashes BEFORE any controller episode or frozen-model load. Original panel remains immutable; review is a separate record."
+  },
+  "controller_static_parameters": {
+    "common_strong_anchor": [
+      0.25,
+      0.25,
+      0.1,
+      0.25,
+      0.1,
+      2.0,
+      0.25,
+      2.0,
+      4.0,
+      1.3862943611198906
+    ],
+    "provenance": "All job parameter vectors are explicit; common anchor remains separate from trained candidate provenance"
+  },
+  "engineering_overlap_qualification": {
+    "no_final_access": true
+  },
+  "evaluation": {
+    "allowed_source_episodes": [
+      1000,
+      1004,
+      1017,
+      1018,
+      1026,
+      1027,
+      1029,
+      1039
+    ],
+    "asset_sha256": {
+      "assets/tworoom-safety.pt": "48ce87bfdfe0507ffeea0e68080a556ac07caf1efb55706651c669f79e9ac99a",
+      "assets/tworoom-scalers.json": "5ff95166374d29bd1da311a560f0763187091cf51a064716ec654a9ff1dc0101",
+      "assets/world-model/tworoom/lewm_object.ckpt": "87aab38843a8e96dc3d6fb325969f6cabe4e11dcd3b1130df8f5e5806620b973",
+      "results/navigation-cases-v3/inputs/tworoom-01000-none.npz": "a024e178f834fe7fd5c13ac3eba4e212cd60642d565fd95ed635b515cee7ffe1",
+      "results/navigation-cases-v3/inputs/tworoom-01004-none.npz": "256ef8152d1b9dd82b031eef7b5c63f18e81c1f771bef49a42301c7614dac3d6",
+      "results/navigation-cases-v3/inputs/tworoom-01017-circle3.npz": "570b1c81adcfddf8b00985ea6b6209e4291fb7649c33d9c4463e8dcdbcc60159",
+      "results/navigation-cases-v3/inputs/tworoom-01018-circle5.npz": "abd458f55814a6d56dc4e3f1b5d05cdbd0696e4cf343d2c9389061f54785d314",
+      "results/navigation-cases-v3/inputs/tworoom-01026-circle5.npz": "3b0980be3433df60df859d215e2c89d1d6dd7cbe25cc0a1bc9669b8e151ca241",
+      "results/navigation-cases-v3/inputs/tworoom-01027-circle7.npz": "4378669c21f9ac757227c840d937dadb8a9ac3ce75d32badbb0cfae275892015",
+      "results/navigation-cases-v3/inputs/tworoom-01029-circle3.npz": "39b5d5a968d2cf2ad9d118b52981adfd5e2d674f7e9401448459b1d58b1f069c",
+      "results/navigation-cases-v3/inputs/tworoom-01039-circle7.npz": "deca05a9fd4774d4660d65005496d3bdcec56c8e0017c23115cc4984eb63b3f6",
+      "results/navigation-cases-v3/panel.json": "f4e4fd0bce55dbfffedd1ec363deb5f092748d7dc1c9457b70191c5b1879a3f3",
+      "results/navigation-cases-v3/visual-review.json": "0be0b9594faed2c19d84dfc27b35ea1d7eab253f6814268ca136ce35227836ff",
+      "results/navigation-journal-parity-v1/qualification.json": "a96724f0ce7a525909719f732d796a02f15b3e603a49e77bed503073ed70ef07",
+      "results/navigation-memory-cache-v3/memory-metadata.json": "73577f9afe344607917b5e1533cbe1fd7e051b47ef20ec1f9f5b4241ae3527f1",
+      "results/navigation-memory-cache-v3/memory.npz": "684e6089518a7c1a2b8aec7a8e1db887b4140847cf9dfed27cd52ca4749c9edd",
+      "results/navigation-readout-v1/readout.npz": "a9a779c8f20e457cf52758c66423e2bace9a3fe980c61f44e86d25ead8e018c0"
+    },
+    "body_radius": 7.0,
+    "controller_backend": "observed-target-v2",
+    "controller_config": {
+      "direct_goal_locality": true,
+      "max_target_distance": 30.0,
+      "min_target_distance": 6.0,
+      "readout_progress": true,
+      "recent_scale": 6.0,
+      "recent_window": 6,
+      "stall_distance": 3.0
+    },
+    "deadline_utc": "2026-10-31T07:23:14+00:00",
+    "execution_pod_id": "nj2fqkp2prgk8x",
+    "goal_readout": {
+      "path": "results/navigation-readout-v1/readout.npz",
+      "sha256": "a9a779c8f20e457cf52758c66423e2bace9a3fe980c61f44e86d25ead8e018c0"
+    },
+    "margin": 3.0,
+    "max_episode_seconds": 300,
+    "maximum_episode_actions": 30,
+    "maximum_predictor_steps_per_episode": 30000,
+    "memory_metadata_path": "results/navigation-memory-cache-v3/memory-metadata.json",
+    "memory_path": "results/navigation-memory-cache-v3/memory.npz",
+    "memory_sha256": "684e6089518a7c1a2b8aec7a8e1db887b4140847cf9dfed27cd52ca4749c9edd",
+    "motion_allowance": 12.405431747436523,
+    "motion_model": "assets/tworoom-safety.pt",
+    "planner": {
+      "adaptive": false,
+      "budget_scale": 0.08,
+      "cem_momentum": 0.1,
+      "cem_refinements": true,
+      "checked": true,
+      "correlate": 0.0,
+      "elite": 0.1,
+      "horizon": 2,
+      "iterations": 8,
+      "min_std": 0.05,
+      "objective": "learned",
+      "proposal_mixture_fraction": 0.5,
+      "proposal_mode": "residual_mixture",
+      "replan_blocks": 1,
+      "retain": 0.25,
+      "variance": 1.0
+    },
+    "precision": {
+      "autocast": false,
+      "cuda_matmul_allow_tf32": false,
+      "cudnn_allow_tf32": false,
+      "preprocessing_sha256": "da84b63338edc8434afde4be7e23a61642c1dc682dd6b0e5b17a6510432b424a",
+      "world_model_dtype": "torch.float32"
+    },
+    "progress_backend": "navigation-append-fsync-v1",
+    "scalers": "assets/tworoom-scalers.json",
+    "world_model": "assets/world-model/tworoom/lewm_object.ckpt"
+  },
+  "frozen_utc": "2026-10-31T02:53:50.815100+00:00",
+  "information": "Frozen LeWM embeddings, real memory successor targets, causal current body XY/history, hazard geometry and a frozen memory-only Ridge goal-position estimate are available to both arms. The native reference continues to target the original observation. No true query-goal coordinates enter the target selector; original physical distance<16px remains the only success rule.",
+  "jobs": [
+    {
+      "case": {
+        "case_id": "tworoom-01000-none",
+        "condition": "none",
+        "endpoint_clearance": [
+          1000000.0,
+          1000000.0
+        ],
+        "goal_global_row": 91277,
+        "goal_step": 25,
+        "goal_xy": [
+          133.0106964111328,
+          112.71337890625
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "True goal XY is only for reset/admission/original task monitoring and common fitness. All arms have access to the same frozen memory-trained visual readout; the target selector receives final visual embedding, not true query-goal XY.",
+        "initial_xy": [
+          167.0938720703125,
+          166.56019592285156
+        ],
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-01000-none.npz",
+        "input_sha256": "a024e178f834fe7fd5c13ac3eba4e212cd60642d565fd95ed635b515cee7ffe1",
+        "seed": 355000,
+        "shape": {
+          "kind": "none"
+        },
+        "source_episode": 1000,
+        "source_global_row": 91252,
+        "source_step": 0,
+        "split": "development_training"
+      },
+      "environment_seed": 355000,
+      "job_id": "strong_tworoom-01000-none_s355000",
+      "max_actions": 30,
+      "method": "fixed_geometry_progress",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "policy_seed": 355000,
+      "repeat_id": 2
+    }
+  ],
+  "maximum_environment_actions": 30,
+  "maximum_episode_starts": 1,
+  "maximum_native_resets": 1,
+  "name": "navigation-recovery-overlap-qualification-v1",
+  "optimizer_updates": 0,
+  "output_namespace": "results/navigation-recovery-overlap-qualification-v1",
+  "overlap_qualification": {
+    "approval_rule": "No optimizer overlap before exact parity, actual memory headroom, timing review and a NEW prospective overlap authorization",
+    "engineering_source_sha256": {
+      "experiments/scripts/freeze_lewm_recovery_overlap_qualification.py": "9a373bd84d060ce909b821ac8f79a8e4b8930d65084d34928278662d400511a9",
+      "experiments/scripts/launch_lewm_campaign_frozen_overlap.py": "3a6e89fb80523d32b3a84441536aa32512d2d58f1ede7edbaab6d276aa600ce2",
+      "experiments/scripts/qualify_lewm_recovery_overlap.py": "bb9ae3ce824a72d297e973358523764cc27042cfd12809d07b15f4c342af1814"
+    },
+    "expected_peer_identity": {
+      "pid": 1607,
+      "start_ticks": "444626392"
+    },
+    "frozen_utc": "2026-10-31T04:34:25.318044+00:00",
+    "new_work_budget": {
+      "environment_actions_maximum": 30,
+      "episode_starts": 1
+    },
+    "new_work_is_additional": true,
+    "peer_observations_path": "environment/navigation-recovery-overlap-qualification-v1-peer-observations.json",
+    "reference_artifacts": {
+      "results/navigation-budget30-relocated-v1/r2/training-controls/jobs/strong_tworoom-01000-none_s355000/episode/result.json": "48f66e837a40ec756e55182caec514da09454fb4818d1383dae39726795ce374",
+      "results/navigation-budget30-relocated-v1/r2/training-controls/jobs/strong_tworoom-01000-none_s355000/episode/selector-history.json": "d01326c53f5eeb0699d8f41e4f138cf370ade4d507035a6b0777de54684551f8",
+      "results/navigation-budget30-relocated-v1/r2/training-controls/jobs/strong_tworoom-01000-none_s355000/episode/trace.npz": "c7a2922c72e2c6576f67c99a98e9560205e35120ae146759e0e140c9c492f880",
+      "results/navigation-budget30-relocated-v1/r2/training-controls/jobs/strong_tworoom-01000-none_s355000/result.json": "2e77cbcbebf7c80921b6d31643511fc234281be04792d188d0a0323619194ee7",
+      "results/navigation-budget30-relocated-v1/r2/training-controls/jobs/strong_tworoom-01000-none_s355000/started.json": "9f55831d84d7235c418fccb8d99477c62486bba24482256b726c88078fa30fd7",
+      "results/navigation-budget30-relocated-v1/r2/training-controls/source-freeze.json": "e9aa177c47fc09a3ed03d679a112af647b9838340fee63de8973ede27b64ecb1",
+      "results/navigation-budget30-relocated-v1/r2/training-controls/state.json": "1ef8045971eb4c36ea183c3ea474e61fad6985d61d16253cd3a45047f38c4252"
+    },
+    "reference_job_id": "strong_tworoom-01000-none_s355000",
+    "reference_protocol": {
+      "path": "configs/lewm_campaign_20261031/navigation-budget30-relocated-v1/training-controls-r2.json",
+      "sha256": "ee96d8fd6071987a2acd486bd47d694a6259d60c2408348cb6562dd33a744009"
+    },
+    "reference_stage": "results/navigation-budget30-relocated-v1/r2/training-controls",
+    "selection_rule": "Exactly the FIRST fixed_geometry_progress job in original protocol order; no outcome selection",
+    "strict_parity": "All saved trace arrays, selected target identities and original deterministic counters identical; elapsed timings and retrieval_microseconds reported separately"
+  },
+  "relocation_provenance": {
+    "parent_protocol": {
+      "path": "configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-controls-r2.json",
+      "sha256": "2fa932ce15d360ef4401473fc117f049181acb3756ea24901d5ce2bb2cb30c4e"
+    },
+    "record": {
+      "path": "configs/lewm_campaign_20261031/navigation-secondary-r2-relocation-v1.json",
+      "sha256": "bdc7808f6ce172864a2d3e2fafdd00d1af6c5597714f20fca4741243ee924c70"
+    }
+  },
+  "schema": "lewm-navigation-comparison-v1",
+  "source_files": [
+    "experiments/helpers/cem_refinements.py",
+    "experiments/helpers/cube14_env.py",
+    "experiments/helpers/cube14_geometry.py",
+    "experiments/helpers/cube14_planner.py",
+    "experiments/helpers/cube14_runtime.py",
+    "experiments/helpers/dsrl06_infra.py",
+    "experiments/helpers/lewm16_planner.py",
+    "experiments/helpers/lewm16_protocol.py",
+    "experiments/helpers/lewm18_planner.py",
+    "experiments/helpers/lewm18_runtime.py",
+    "experiments/helpers/lewm_campaign_training.py",
+    "experiments/helpers/lewm_navigation_evolution.py",
+    "experiments/helpers/lewm_navigation_retrieval.py",
+    "experiments/helpers/lewm_navigation_retrieval_v2.py",
+    "experiments/helpers/lewm_progress_journal.py",
+    "experiments/helpers/lewm_proposal_adapter.py",
+    "experiments/helpers/lewm_proposal_evolution.py",
+    "experiments/helpers/lewm_proposal_pilot.py",
+    "experiments/helpers/lewm_residual.py",
+    "experiments/helpers/lewm_screen.py",
+    "experiments/helpers/portable_env.py",
+    "experiments/helpers/portable_motion.py",
+    "experiments/helpers/pusht_smoke.py",
+    "experiments/helpers/reacher13_env.py",
+    "experiments/helpers/reacher13_geometry.py",
+    "experiments/helpers/safecem10_planner.py",
+    "experiments/helpers/safety_model.py",
+    "experiments/helpers/tworoom12_env.py",
+    "experiments/helpers/tworoom12_planner.py",
+    "experiments/scripts/freeze_lewm_navigation_optimizer_comparison_v2.py",
+    "experiments/scripts/freeze_lewm_navigation_progress_pilot.py",
+    "experiments/scripts/qualify_lewm_goal_readout.py",
+    "experiments/scripts/run_lewm_navigation_campaign.py",
+    "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+  ],
+  "source_sha256": {
+    "experiments/helpers/cem_refinements.py": "4a4f4c31db0e846c6b028eeb7db7c9bb1c9d83f474fb0aaaf6b924af3eb77ea5",
+    "experiments/helpers/cube14_env.py": "bafe6cf43a0d83dbbe6ae6ae717200d12ab019eeea40b42a67c2e352db5ae495",
+    "experiments/helpers/cube14_geometry.py": "5ad739435603f4b73cb478ce380a3d1e024ef897b494d23b2657c0db1806f453",
+    "experiments/helpers/cube14_planner.py": "417c388fdc690827c9210d828042b15a5b82ed73bcf23b6db2af042959468052",
+    "experiments/helpers/cube14_runtime.py": "cc2bdb01da308ead2662b05f2d5aa70e5447e260c0e353002729bb2450b6189a",
+    "experiments/helpers/dsrl06_infra.py": "1e2a2aff8f3243843a89694bc1b6e019c046e22514be6bc886e0a6057558b1e1",
+    "experiments/helpers/lewm16_planner.py": "7bd4b4f2c9cd0158d5effe9988410cf5954a8281006d0db0c8b24ec03852908f",
+    "experiments/helpers/lewm16_protocol.py": "85aa6ce84c82736e736bd498f049fd00989ea7c5f819536e4f34dcadb2f83819",
+    "experiments/helpers/lewm18_planner.py": "856e2d4f42af05176ab5416e1628e9009bf5a90fbc5a4fc815abbe50269f4443",
+    "experiments/helpers/lewm18_runtime.py": "5bedfc77daecc4b657828825d6eaabb72b6189c043fbcb253938de13212f75b8",
+    "experiments/helpers/lewm_campaign_training.py": "348bd6a821a2b76ea22545d21aa751f5881ea0b576cae3f6928cea4faaf136fb",
+    "experiments/helpers/lewm_navigation_evolution.py": "653c7bda28b6fafe978c9a55643ba2dfe48b18ad2473bfc9a33b759241f3ead1",
+    "experiments/helpers/lewm_navigation_retrieval.py": "f306d887a359adea2a35e527d5ea9e628810cf13cbd22e35172c6d8ab5bd5fc4",
+    "experiments/helpers/lewm_navigation_retrieval_v2.py": "b732346fa489eafcc9effd26ac3b1b3eeaeaf0e8cc8b6916914ca941a1c452f5",
+    "experiments/helpers/lewm_progress_journal.py": "dc7f315b597407ff116e67b510d7aa3a0bb10ddbc495f9230d41aba21969a5ab",
+    "experiments/helpers/lewm_proposal_adapter.py": "cf6d3bccab418dfdcacf495f1b3308c099483aea9b22f69bb645620f72df70b3",
+    "experiments/helpers/lewm_proposal_evolution.py": "1a653210959b4340ab7369c6c9b46e1fd393991f4c5743ba65ffc8730cb37ea3",
+    "experiments/helpers/lewm_proposal_pilot.py": "48c329ac1c2da8ccaf0999b8b911a9e0fae7120fc5a800e907eb2ecf6004efad",
+    "experiments/helpers/lewm_residual.py": "ae82f4ec8cf9ae9f0c9101de257954d864d3fb5cce12f2da23aff71c6fa23b0e",
+    "experiments/helpers/lewm_screen.py": "b149f81f560af1462eb3d1b42b7504bb94c74bf304b95111a15e0249e5582b9e",
+    "experiments/helpers/portable_env.py": "5b9d3797e7910defecda71f8b24e9e39daac4172f124006c3ec4fcbac16b417a",
+    "experiments/helpers/portable_motion.py": "dbf833cc6f94ae4d7585354eaf842f30beae1df8f72526b824f089a658e49188",
+    "experiments/helpers/pusht_smoke.py": "9906b1ae88a83fdfb5e74fe7d5c1c7c8d005358775b3b00dfcd4fcdb5ec620b3",
+    "experiments/helpers/reacher13_env.py": "7b4febd32b225ca3ed25393d8e5ce2afba569e88e4f061159eb834405e318689",
+    "experiments/helpers/reacher13_geometry.py": "7a402be771ce9b0b9511b0db15615ed0cec536ce3e7fdf2dbe4b3361c053264c",
+    "experiments/helpers/safecem10_planner.py": "9f4dddaa54012c1f45fce6da054b74611d826e4f2fa91445c274a43cca5a43ed",
+    "experiments/helpers/safety_model.py": "aea6c3ef1140328136518b42adfb935d310d042a6e2852e66bc917b8ae7d069b",
+    "experiments/helpers/tworoom12_env.py": "67352edc208a01b67928f8ac898a2e521730956416e552abd6678a1c7df9ef0e",
+    "experiments/helpers/tworoom12_planner.py": "aba7ebdaa96fdde706e3aa5aa88c30bf822272785aba0a6d624c17c595a4778c",
+    "experiments/scripts/freeze_lewm_navigation_optimizer_comparison_v2.py": "fd3442beb05b03928f9f3300862d279d3680bbac6be00f15efc3e7e339600f73",
+    "experiments/scripts/freeze_lewm_navigation_progress_pilot.py": "3d58c3a655ce93336ebd92ceadc9e79c8fd8a2aae6c519d05f0c6ac2f3555b5f",
+    "experiments/scripts/qualify_lewm_goal_readout.py": "801a1147d0d9d0820a5bef278ecaabe36933e9769c731015457e596c67d760ae",
+    "experiments/scripts/run_lewm_navigation_campaign.py": "7485bb75e257cdd8f471e956a22d99a7d43d2bc162741dbb8c0bbbb1a574b907",
+    "experiments/scripts/run_lewm_navigation_campaign_v2.py": "08596c23ce476978251a5aaf6e1c14919216c30843df74fca6c00bb884a088b4"
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "schema": "lewm-navigation-scientific-media-plan-v2",
+  "frozen_utc": "2026-10-31T04:34:33.686875+00:00",
+  "allowed_pod_ids": [
+    "vukovc3t4o1dui",
+    "wq4ar2qx2ff6r4",
+    "nj2fqkp2prgk8x"
+  ],
+  "analysis_plan": {
+    "path": "configs/lewm_campaign_20261031/navigation-final-analysis-plan-v3.json",
+    "sha256": "e06ca071e57cf30cddfbf7a367966aa621c021093f25ecb8a1ed681ff82fa6db"
+  },
+  "source_sha256": {
+    "experiments/scripts/render_lewm_navigation_scientific_media_v2.py": "6919d3fc4b409bc3ad1800f1d39f1335c60e340ea1b541af06e3873d24056071",
+    "experiments/scripts/analyze_lewm_navigation_campaign_20261031_v3.py": "920dc9f9d6749fc5a26c8f7ee1145bfd0665c89d73986453358d818c03cd3bd5",
+    "experiments/helpers/lewm_navigation_joint_final_v2.py": "b5f63e4a98173b5978ca7b78052672955cf98d26fb457921d72e7a96f3f33bb5"
+  },
+  "access_gate": "Run only AFTER every primary, secondary and enabled auxiliary final profile is complete and source-bound. Validate all six joint locks, prospectively bound input/manifest/protocol hashes and all complete states before ANY trace/frame array loading. Never load H5, environment, neural model/checkpoint or fit a model.",
+  "showcase": {
+    "repeat_id": 0,
+    "families": [
+      "primary50",
+      "secondary30"
+    ],
+    "condition_order": [
+      "none",
+      "circle3",
+      "circle5",
+      "circle7"
+    ],
+    "case_selection": "The FIRST admitted final case per condition: minimum(source_episode,source_step,case_id) from frozen case metadata. Both endpoints use the same four source IDs. No success/violation/actions/progress field enters selection; no case substitution or outcome ranking.",
+    "arms": [
+      "native",
+      "strong_anchor",
+      "tuned_fixed",
+      "cma",
+      "random",
+      "reinforce"
+    ]
+  },
+  "plotting": {
+    "body_radius": 7.0,
+    "margin": 3.0,
+    "empirical_planning_allowance": 12.405431747436523,
+    "original_goal_radius": 16.0,
+    "proposed_command_glyph_scale": 8.0
+  },
+  "overlay_semantics": {
+    "executed": "Black line joins actual saved native body states; triangle is initial state. No imagined rollout or fitted path.",
+    "goal": "Green original physical goal marker/disc16px; original task definition unchanged.",
+    "body": "Blue endpoint disc shows protected body radius7px at the last saved executed state.",
+    "hazard": "Filled red circle uses the actual frozen virtual-hazard centre/radius. No hazard in the none condition.",
+    "margin": "Dashed r+7+3 envelope marks the requested body-centre clearance around the actual virtual hazard.",
+    "planning_allowance": "Separately dotted r+7+3+12.405431747436523 buffer illustrates the learned checker allowance for PREDICTED body centres. It is empirical, separate from observed executed clearance, and not a certified safety bound.",
+    "selected_targets": "Observed-memory target XY markers are separate from the executed path. When an original visual goal was selected, the plotted diamond is the logged frozen-readout XY estimate, explicitly labelled as an estimate.",
+    "proposed": "Grey native-command glyphs use8displaypixels per native action unit at at most4deterministically spaced actions. These are command glyphs, not predicted next states or executed displacements.",
+    "policy_images": "All overlays are analysis-only. Stored policy-input frames and goal images are never modified, redrawn, synthesized or fed back to the controller."
+  },
+  "metrics": "For every one of48fixed showcase arm/case/endpoint rows, export frozen SC/V/unfinished/engagement, actual executed actions, episode/planning time and explicit encoder/cost/safety/readout/predictor work fields. Never add query aliases together; the figure WM label means cost-call attempts.",
+  "outputs": [
+    "primary50-showcase-trajectories.png",
+    "primary50-showcase-trajectories.svg",
+    "secondary30-showcase-trajectories.png",
+    "secondary30-showcase-trajectories.svg",
+    "showcase-metrics.csv",
+    "showcase-evidence.json",
+    "artifact-manifest.json"
+  ],
+  "raw_video": {
+    "enabled_by_default": false,
+    "fixed_pair": [
+      "strong_anchor",
+      "cma"
+    ],
+    "playback_fps": 10,
+    "pair_selection": "The fixed pair applies to all four preselected cases and both endpoints, regardless of outcomes.",
+    "dependencies": "Use only already-installed ffmpeg/Pillow and lossless RGB libx264rgb. Skip with recorded reason if unavailable; do not install dependencies.",
+    "frame_integrity": "Copy each saved224x224uint8 frame unchanged into a side-by-side canvas. Put labels in an added header outside the original frames. Hold the last recorded frame after termination; annotate playback as10fps, not simulation time. No image overlays/edits/generation.",
+    "optional_mp4_exercised_in_synthetic_gate": false
+  },
+  "evidence": "Record media/analysis/input/manifest/source hashes, all complete final profile state/source-freeze/protocol and episode metadata hashes, every selected trace/selector-history hash and original prepared-input hash. Verify selected-target history against its episode provenance. Export every output hash.",
+  "claims": "Illustrative fixed-source scientific media only. No selection of a favorable repeat/case/baseline from final outcomes and no optimizer-superiority inference from showcase trajectories. The separately frozen analysis remains the quantitative result.",
+  "synthetic_renderer_qualification": {
+    "remote_path": "environment/scientific-media-synthetic-gate-v3/gate.json",
+    "sha256": "32aacf8021bcc6b375d01765c61db23bc6c57fa1a7d301f9252c8e0b08d01a1d",
+    "tests_passed": 1,
+    "failures": 0,
+    "skips": 0,
+    "test_source": {
+      "path": "experiments/tests/test_lewm_navigation_scientific_media_v2.py",
+      "sha256": "f40b62b891e869aad045c901d0adea6935ec914b755dc0f7c6127fb960cdf0ac"
+    },
+    "elapsed_seconds": 5.69,
+    "renderer_change": "No rendering or showcase-selection change. Only frozen analysis-v3 dependency, relocated host readiness and relocation/proof input-hash provenance changed. Both dummy4x6 PNG/SVG exports preserve read-only inputs. Prior renderer visual QA remains applicable.",
+    "exclude_from_experiment_accounting": true
+  },
+  "future_command": "python experiments/scripts/render_lewm_navigation_scientific_media_v2.py --plan configs/lewm_campaign_20261031/navigation-scientific-media-plan-v2.json --inputs results/navigation-final-analysis-v3/inputs.json --out results/navigation-scientific-media-v2 [--raw-video]",
+  "actual_final_data_read_during_plan_creation": 0,
+  "new_model_simulator_queries_during_plan_creation": 0,
+  "amendment_rule": "Preserve this source/plan after final outcomes. Any necessary pre-outcome correction uses a new version and records its reason.",
+  "previous_plan": {
+    "path": "configs/lewm_campaign_20261031/navigation-scientific-media-plan-v1.json",
+    "sha256": "0349d74e5034de156061791eb2adcf234d9f25cdc03c2797e565eb9ef3f48e4e"
+  },
+  "amendment_reason": "Prospective whole-unstarted-secondary-R2 relocation to the third rented host; use the frozen analysis-v3 six-lock/relocation guard and retain relocation plus original-host unstarted proof in media input hashes. Scientific plotting/showcase semantics unchanged."
+}

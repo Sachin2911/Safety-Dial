@@ -1,0 +1,198 @@
+{
+  "episode": {
+    "max_episode_actions": 150,
+    "max_runtime_minutes": 5,
+    "safety_mode": "learned",
+    "safety_backend": "observed_motion",
+    "verify_analytic_dynamics": false,
+    "world_model_checkpoint": "/workspace/Safety-Dial/assets/world-model/pusht/lewm_object.ckpt",
+    "safety_checkpoint": "/workspace/Safety-Dial/assets/current-safety.pt",
+    "safety_checkpoint_sha256": "22cdca3cffde8b9bbd16c0aad972b4fe33165d015cc0f6561c9e70248d9658a3",
+    "inputs": "/workspace/Safety-Dial/assets/inputs",
+    "pair_sha256": "38ca38ae5f24a32fadeef3ed97bcf0bfc8fff7ba6f2c2fb9edd2075e98d69d70",
+    "margin_px": 6.0,
+    "planner": {
+      "horizon": 3,
+      "iterations": 15,
+      "budget_scale": 0.5,
+      "variance": 1.0,
+      "retain": 0.5,
+      "correlate": 0.5,
+      "adaptive": false,
+      "objective": "learned",
+      "checked": true,
+      "elite": 0.1,
+      "replan_blocks": 1,
+      "cem_refinements": true,
+      "cem_momentum": 0.1,
+      "min_std": 0.05,
+      "proposal_mode": "residual_mixture",
+      "proposal_mixture_fraction": 0.5
+    },
+    "replan_blocks": 1,
+    "maximum_predictor_steps": 337680
+  },
+  "cases": {
+    "island": {
+      "kind": "island",
+      "origin": [
+        217.0875726135852,
+        239.73767783187617
+      ],
+      "basis": [
+        [
+          0.39141708929502733,
+          0.920213378629005
+        ],
+        [
+          -0.920213378629005,
+          0.39141708929502733
+        ]
+      ],
+      "radius_px": 12
+    },
+    "bar": {
+      "kind": "bar",
+      "origin": [
+        217.0875726135852,
+        239.73767783187617
+      ],
+      "basis": [
+        [
+          0.39141708929502733,
+          0.920213378629005
+        ],
+        [
+          -0.920213378629005,
+          0.39141708929502733
+        ]
+      ],
+      "segment_half_length_px": 30,
+      "radius_px": 7
+    },
+    "gate": {
+      "kind": "gate",
+      "origin": [
+        217.0875726135852,
+        239.73767783187617
+      ],
+      "basis": [
+        [
+          0.39141708929502733,
+          0.920213378629005
+        ],
+        [
+          -0.920213378629005,
+          0.39141708929502733
+        ]
+      ],
+      "band_half_width_px": 7,
+      "gap_width_px": 100,
+      "gap_offset_px": 65,
+      "extent_px": 180
+    }
+  },
+  "asset_sha256": {
+    "assets/current-safety.pt": "22cdca3cffde8b9bbd16c0aad972b4fe33165d015cc0f6561c9e70248d9658a3",
+    "assets/world-model/pusht/lewm_object.ckpt": "d27504690172f6efa31277107a4d54e68f18760520664bc8a33d3b9d1b558952",
+    "assets/inputs/pair.npz": "38ca38ae5f24a32fadeef3ed97bcf0bfc8fff7ba6f2c2fb9edd2075e98d69d70",
+    "assets/inputs/scalers.json": "0505742b401dc3e1e7a9f74a45d614eb2c3c378370663b2f41be55f35d005511"
+  },
+  "adapter": {
+    "seed": 304031,
+    "spec": {
+      "hidden_size": 8,
+      "max_horizon": 3,
+      "block_action_dim": 10,
+      "normalized_action_bound": 1.0,
+      "projection_seed": 303032
+    }
+  },
+  "name": "lewm-residual-common-panel-20261030-v1",
+  "purpose": "Implement diagnostics, residual mixture, common-panel selection and a bounded completion screen",
+  "frozen_utc": "2026-10-30T21:29:33.934364+00:00",
+  "execution_pod_id": "qwm6ejjm54ar0e",
+  "deadline_utc": "2026-10-30T22:28:25.028462+00:00",
+  "fresh_task_cap_usd": 1.0,
+  "maximum_valid_episodes": 233,
+  "maximum_episode_starts": 235,
+  "maximum_failed_engineering_starts": 2,
+  "maximum_total_environment_actions": 35250,
+  "maximum_total_predictor_steps": 79354800,
+  "search": {
+    "generations": 4,
+    "population": 6,
+    "sigma": 0.15,
+    "seed": 304601,
+    "order_seed": 304605,
+    "optimizer": "diagonal CMA-ES, cma 4.4.4"
+  },
+  "random_search_seed": 304606,
+  "diagnostic": [
+    [
+      "island",
+      304100
+    ],
+    [
+      "bar",
+      304100
+    ],
+    [
+      "gate",
+      304100
+    ]
+  ],
+  "development": [
+    [
+      "island",
+      304110
+    ],
+    [
+      "bar",
+      304110
+    ],
+    [
+      "island",
+      304111
+    ],
+    [
+      "bar",
+      304111
+    ]
+  ],
+  "selection": [
+    [
+      "island",
+      304120
+    ],
+    [
+      "bar",
+      304120
+    ],
+    [
+      "island",
+      304121
+    ],
+    [
+      "bar",
+      304121
+    ]
+  ],
+  "mixture": "One bounded network correction biases the last half (floor) of newly sampled candidates around the current CEM centre in each iteration, beginning at the native warm-start plan. Mean slot and retained archive unchanged; zero correction must reproduce native. Network evaluated once per replan. Same candidate population, iterations and feasibility checks.",
+  "information": "Same 29 causal features as the first pilot. Privileged native task state supplies scalar training feedback only, never adapter inputs. No analytic predictor or simulator-preview checks. Full 15px pusher and 6px margin unchanged.",
+  "fitness": "If any panel violation: -1000000 - number of violation episodes. Otherwise (n+1)*safe_completion_count + sum(safe_progress) - 0.001*capped_action_sum/(n*150). Successful episodes use actual actions, unfinished use 150. Completion dominates bounded progress; violations cannot be traded for task reward.",
+  "progress_feedback": "Safe completion=1; unsafe or technical invalid=0; safe unfinished=clip(1-final_error/initial_error,0,1). Error=norm(goal[:4]-state[:4])/20 + shortest angular error/(pi/9). This uses privileged simulator task state for scalar training feedback, never as an adapter input. Future optimizer controls require the same information.",
+  "zero_initialization": "Seeded hidden features, exactly zero output weights and bias. The untrained control uses seeded random output weights from the original network initializer.",
+  "panels": "All generations and both optimizers use the identical four-case development panel. No raw-score comparison across different panels. CMA candidate order preseeded; random search draws the same number of independent candidates from initial+N(0,sigma), with the same panel, feedback, action and model-query caps.",
+  "nomination": "CMA best common-panel score, ties earliest generation and candidate index. Random-search best score, ties earliest candidate. Never automatically deploy final CMA mean.",
+  "selection_rule": "Compare native, zero, untrained, CMA elite and random-search elite on four fresh planner-seed cases. Highest common-panel fitness wins; exact ties follow listed arm order. Freeze receipt before any expansion.",
+  "influence_gate": "Native and zero must have exactly equal actions, states and dense traces, plus equal model-query work on all diagnostic cases. Nonzero untrained residual must alter at least one action trace and enter at least one fitted elite set. Otherwise stop after nine diagnostic episodes.",
+  "completion_gate": "CMA must have zero selection violations, strictly more safe completions than native, zero and untrained, and at least native engagement. This is a development signal, not a statistical or evolutionary advantage claim. Without it stop after 233 valid episodes and keep fresh-scene validation closed.",
+  "conditional_expansion": "Only after a completion signal, prepare and freeze the next stage before its first episode: fresh start/goal scenes, repeated optimizer seeds and tuned-fixed/random/ordinary-learning controls with the same information and matched budgets. No expansion based on progress alone; no further rental or lease extension from this protocol.",
+  "stopping": "Fixed frozen development schedule; retain ten minutes before rental cutoff for preservation. Stop on technical errors for diagnosis and preserve partial accounting. No outcome retry, outcome-based extra tuning, or altered safety settings. At most two failed technical starts count against total limits.",
+  "limitations": [
+    "Development-only, one reused source scene and three known hazard layouts. Fresh planner seeds do not establish unseen-scene generalisation.",
+    "One CMA seed and one random-search seed. Matched candidate/panel caps do not imply equal actual environment or model work.",
+    "Ordinary learning and a new fixed-setting search are deferred until the completion gate. No evolutionary advantage claim is authorized by this development comparison."
+  ]
+}

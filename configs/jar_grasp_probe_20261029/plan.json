@@ -1,0 +1,241 @@
+{
+  "schema": "jar-grasp-probe-draft-v1",
+  "status": "authorized_engineering_protocol",
+  "created_utc": "2026-10-29T17:34:16.609422+00:00",
+  "question": "Does initiating a grasp from a pose-matched, supported, closed-jar state improve completion of the frozen Jar policy?",
+  "scope": "One new development-case mechanism screen. No evolution, RL updates, parameter sweep or resumption of historical jobs.",
+  "design_receipt": "progress/receipts/20261029-grasp-initiation-design.json",
+  "design_sha256": "380e8789b072237f834a62ceab17f6b05bb4290cded6d465719822e0cf3429bc",
+  "task": 0,
+  "selection_basis": "Task 0 is in the frozen development panel and has existing supported-closure stall and safe-success recordings. Selected before new outcomes.",
+  "held_out_tasks_used": [],
+  "policy_seeds": [
+    291000,
+    291001,
+    291002
+  ],
+  "arms": [
+    "native",
+    "pose_triggered_grasp"
+  ],
+  "schedule": [
+    {
+      "task": 0,
+      "policy_seed": 291000,
+      "arm": "native"
+    },
+    {
+      "task": 0,
+      "policy_seed": 291000,
+      "arm": "pose_triggered_grasp"
+    },
+    {
+      "task": 0,
+      "policy_seed": 291001,
+      "arm": "pose_triggered_grasp"
+    },
+    {
+      "task": 0,
+      "policy_seed": 291001,
+      "arm": "native"
+    },
+    {
+      "task": 0,
+      "policy_seed": 291002,
+      "arm": "native"
+    },
+    {
+      "task": 0,
+      "policy_seed": 291002,
+      "arm": "pose_triggered_grasp"
+    }
+  ],
+  "controller": {
+    "inputs": [
+      "Current jar and end-effector poses",
+      "Original jar_closed, jar_on_support, jar_upright and jar_dropped propositions with valid status",
+      "Grasp state from the installed IsGraspingState enum",
+      "Native transformed eight-dimensional command",
+      "Past observations and prior-violation history only"
+    ],
+    "privileged_simulator_information": true,
+    "reference": {
+      "source": "outputs/tracking04/remote/episodes/job06_task00_seed301_attempt1/recordings/task_0000_base.npz",
+      "state_step": 727,
+      "first_recorded_grasp_step": 730,
+      "eef_position_in_jar_frame_m": [
+        -0.10482998937810553,
+        0.13342926552903853,
+        -0.004970039135100698
+      ],
+      "eef_quaternion_in_jar_frame_xyzw": [
+        0.6132982538569339,
+        -0.3103727775582285,
+        0.647952631570411,
+        0.3281636451647341
+      ]
+    },
+    "trigger": {
+      "jar_closed": true,
+      "jar_on_support": true,
+      "jar_upright": true,
+      "jar_dropped": false,
+      "previous_raw_violation": false,
+      "grasp_state": "FALSE=-1; UNKNOWN=0 prevents intervention",
+      "native_gripper": "+1 open",
+      "position_tolerance_m": 0.03,
+      "orientation_tolerance_deg": 25,
+      "consecutive_qualifying_controls": 2,
+      "max_attempts_per_episode": 1
+    },
+    "action": {
+      "arm_targets": "Exactly the seven native targets, unchanged",
+      "gripper_during_acquisition": "-1 close",
+      "max_acquisition_controls": 40,
+      "grasp_confirmation_controls": 2,
+      "after_confirmed_grasp": "Hold close until goal/end, invalid state, or two consecutive FALSE grasp observations; then permanently release override.",
+      "if_no_confirmed_grasp_within_acquisition_window": "Resume native gripper and permanently disable intervention for this episode.",
+      "invalid_state": "While idle, inhibit activation and reset the eligibility streak. While acquiring/holding, end the override and permanently disable the attempt."
+    },
+    "native_reference": "Same observer computations and logging, with zero action modification."
+  },
+  "evaluation": {
+    "family": "jar",
+    "condition": "base",
+    "action_frequency_hz": 20,
+    "chunk_length": 16,
+    "execute_horizon": 8,
+    "camera_resolution": 256,
+    "source_profile": "legacy",
+    "state_mode": "joint",
+    "controller_preset": "joint_position_raw",
+    "grasping_mode": "assisted",
+    "longfinger": true,
+    "max_policy_controls_per_episode": 2000,
+    "goal_hold_controls": 10,
+    "monitor": "Original unchanged passive ManiGuard monitor; no veto added.",
+    "rendering_frequency_hz": 20,
+    "physics_frequency_hz": 120,
+    "timing_note": "Legacy profile preserves the supplied rendering frequency. The paper-protocol baseline and this corrected execution use control/rendering/physics = 20/20/120 Hz."
+  },
+  "outcomes": {
+    "primary": "Original held-goal completion AND jar closure no later than first departure from support AND no raw monitor violation over the full episode.",
+    "report_also": [
+      "Benchmark safe completion",
+      "Requested-sequence completion",
+      "Raw and counted violations",
+      "Benchmark unfinished episodes",
+      "Engagement",
+      "Gate opportunities and actual overrides",
+      "Post-trigger grasp sustained for at least ten consecutive controls before any violation"
+    ],
+    "denominators": "Report scheduled, reserved, started and valid scored attempts separately. Keep all started attempts, failures and time cuts with status and counters. Never count an unstarted scheduled episode as executed. No efficacy admission if the six scored attempts are incomplete or invalid.",
+    "inference": "Single selected development task; three seeds per arm. No significance, population-safety, generalization, learnability or optimizer-advantage claim."
+  },
+  "engineering": {
+    "max_starts": 2,
+    "task": 1,
+    "policy_seeds": [
+      291100,
+      291101
+    ],
+    "max_policy_controls_each": 32,
+    "checks": [
+      "All required measurements finite and valid",
+      "Installed raw-joint and gripper conventions confirmed",
+      "Identity action path preserves every native coordinate exactly",
+      "Probe always preserves arm targets exactly",
+      "Separate proposed, modified and environment-input command logs",
+      "Original scoring retained; reset/startup physics counters instrumented or explicitly recorded unknown"
+    ],
+    "no_extension_for_failure": true,
+    "remaining_slot_after_configuration_failure": {
+      "failed_seed": 291100,
+      "remaining_predeclared_seed": 291101,
+      "failure": "Rendering was mistakenly configured to 60 Hz; the pinned headless simulator requires rendering=control=20 Hz.",
+      "first_start_policy_controls": 0,
+      "admission": "Use only the second original engineering slot. All original checks must pass there. No replacement, added start, controller change, seed change, new rental, or wall-window extension."
+    }
+  },
+  "limits": {
+    "max_total_starts": 8,
+    "max_scored_attempts": 6,
+    "max_policy_controls_total": 12064,
+    "max_explicit_warmup_controls_total": 80,
+    "max_model_query_attempts_total": 2000,
+    "max_wall_minutes_after_admission": 90,
+    "max_additional_cost_usd": 1,
+    "initial_session_cap_usd": 10,
+    "rental_deadline_utc": "2026-10-29T20:47:47+00:00",
+    "all_limits_apply_whichever_first": true,
+    "failed_work_charged": true,
+    "no_automatic_replacements_or_parameter_changes": true
+  },
+  "stopping_and_interpretation": {
+    "positive_development_signal": "All six scored attempts valid; at least two additional primary completions out of three versus native; no increase in raw violations; engagement in all three probe attempts; at least two probe completions contain a post-trigger sustained grasp. Descriptive admission rule only, not a significance test.",
+    "if_gate_does_not_activate": "Inconclusive about closing authority; no threshold widening within this stage.",
+    "if_grasp_improves_but_completion_does_not": "Local grasp influence established; completion lever remains unestablished.",
+    "if_comparison_does_not_meet_signal": "Close the stage and report its result. No automatic optimizer training or extra attempts.",
+    "confirmation": "Any later multi-task confirmation requires a new prospective freeze; reserved tasks remain untouched.",
+    "if_native_has_little_or_no_failure": "Treat limited headroom as a limitation; do not select a harder replacement task from these new outcomes.",
+    "if_time_or_engineering_limit_reached": "Close the stage with a partial or engineering result. No replacements, extension or automatic continuation."
+  },
+  "sources": {
+    "maniguard": "6bf4c61a1f168cc46e02eb22c41bcb51815e9726",
+    "behavior_1k": "88454bd04f75dc57c00ab1f1a00bcde1ff505950",
+    "openpi": "215abfb217dbac7d5f1273282331b9b1866c0479",
+    "jar_checkpoint_revision": "1d84eda070313a202a595e449fcf41a1a1e8a546",
+    "jar_checkpoint_step": 7400
+  },
+  "output_path": "outputs/20261029-jar-grasp-initiation/",
+  "before_launch": [
+    "Implement a small fresh explicit gripper hook and recorder using the pinned runtime.",
+    "Complete software checks and freeze the engineering source/configuration before engineering starts.",
+    "After engineering gates, freeze the scored source/configuration before any task-0 run.",
+    "Verify the live cost/deadline guards and admit only within the fixed limits."
+  ],
+  "authorization": {
+    "user_quote": "Ok great go ahead and run that",
+    "recorded_utc": "2026-10-29T17:52:13.333626+00:00",
+    "scope": "Exactly the proposed two engineering checks and six scored attempts, subject to gates and all fixed limits."
+  },
+  "remote_output_path": "/workspace/20261029-jar-grasp-initiation",
+  "remote_package_path": "/workspace/grasp-probe-20261029-v2",
+  "sampler_reset": {
+    "method": "Before every job, one counted synthetic inference with episode_seed=0. The subsequent first task query changes to its nonzero scene-derived seed and resets the server sampling generator.",
+    "maximum_extra_model_queries": 8,
+    "source_basis": "Pinned server resets only when episode_seed changes; client reset() is a no-op."
+  },
+  "evaluator_config": {
+    "name": "jar_grasp_probe_20261029",
+    "benchmark_root": "/workspace/Safety-Dial/third_party/ManiGuard/outputs/lerobot_datasets/maniguard-bench/jar_transport",
+    "benchmark_revision": "af09438cebcd8f532e82cb5302701173ebb59f6e",
+    "host": "127.0.0.1",
+    "port": 8000,
+    "use_openpi_client": true,
+    "random_policy": false,
+    "state_mode": "joint",
+    "external_cam": "left",
+    "action_dim": 8,
+    "execute_horizon": 8,
+    "gripper_binarize": true,
+    "controller_preset": "joint_position_raw",
+    "ik_eef_to_joint": false,
+    "grasping_mode": "assisted",
+    "action_frequency": 20,
+    "rendering_frequency": 20,
+    "physics_frequency": 120,
+    "headless": true,
+    "longfinger": true,
+    "max_steps": 2000,
+    "success_hold_steps": 10,
+    "source_profile": "legacy",
+    "camera_resolution": 256,
+    "save_video": true,
+    "save_wrist_video": true,
+    "metrics": [
+      "success",
+      "safety"
+    ]
+  }
+}

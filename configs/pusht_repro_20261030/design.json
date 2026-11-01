@@ -1,0 +1,276 @@
+{
+  "name": "pusht-manual-preset-reproduction-20261030-v1",
+  "authorization": "User requested current stack with hand-tuned settings, chosePushT first and explicitly requested a pod.",
+  "frozen_utc": "2026-10-30T06:44:07.111275+00:00",
+  "pod_id": "8i3ts21n4ut0st",
+  "question": "Does the current frozen stack retain the earlier three successful PushT demonstrations under the exact hand-set planning recipe?",
+  "case_order": [
+    "island",
+    "bar",
+    "gate"
+  ],
+  "arm_order": [
+    "historical-cpu",
+    "current-cpu",
+    "current-cuda"
+  ],
+  "arms": [
+    {
+      "id": "historical-cpu",
+      "source_root": "historical",
+      "device": "cpu",
+      "safety_head": "historical-safety.pt"
+    },
+    {
+      "id": "current-cpu",
+      "source_root": "current",
+      "device": "cpu",
+      "safety_head": "current-safety.pt"
+    },
+    {
+      "id": "current-cuda",
+      "source_root": "current",
+      "device": "cuda",
+      "safety_head": "current-safety.pt"
+    }
+  ],
+  "rationale": "Historical CPU matches earlier inference device. Current CPU isolates stack/head bundle on the same host; current CUDA checks the current production inference path. CUDA and CPU need not have identical candidate RNG sequences. All arms retain the same manual planning budget.",
+  "hand_set": {
+    "horizon_blocks": 3,
+    "replan_blocks": 1,
+    "actions_per_block": 5,
+    "candidate_population": 250,
+    "cem_iterations": 15,
+    "search_predictor_steps_per_replan": 11250,
+    "proposal_variance": 1,
+    "elite_fraction": 0.1,
+    "retain": 0.5,
+    "correlate": 0.5
+  },
+  "primary_action_limit": 50,
+  "budget_reason": "Exact reproduction of the original50-action demonstration. It does not overwrite the approved150-action broader comparison or its findings.",
+  "safety": "Pusher only, full15px body radius,6px hazard and arena margin; same supplied circle, capsule and gate layouts, exact input pair and seed.",
+  "maximum_trials": 9,
+  "maximum_explicit_environment_actions": 450,
+  "maximum_resets": 9,
+  "maximum_executed_physics_steps": 4500,
+  "maximum_reset_physics_steps": 18,
+  "limits": "Known single scene and seed, three layouts; a reproduction check rather than generalization evidence. No tuning, training, new cases or outcome-based replacements. Preserve all failures.",
+  "stopping": "Run exactly these9 trials. Report safe task completion, violations, unfinished, engagement and actions. Compare stored trajectories descriptively. Do not expand or tune after outcomes. Copy and hash-verify all evidence locally, then delete only this pod before its one-hour cutoff.",
+  "historical_results": {
+    "island": {
+      "actions": 26,
+      "safe_completion": true,
+      "initial_case_protocol": {
+        "purpose": "Working learned-controlled PushT validation, three existing layouts on one known scene; no optimizer or broad generalization claim",
+        "seed": 29102026,
+        "max_episode_actions": 50,
+        "max_runtime_minutes": 5,
+        "safety_mode": "learned",
+        "safety_backend": "observed_motion",
+        "verify_analytic_dynamics": false,
+        "world_model_checkpoint": "data/safecem10/stablewm/checkpoints/pusht/lewm_object.ckpt",
+        "safety_checkpoint": "outputs/pusht-learned-motion-v1/model.pt",
+        "safety_checkpoint_sha256": "3d9d471d69dc135c12c36436328886c04485cd19f0dd0a815659e4ecb822bed5",
+        "inputs": "outputs/pusht-hazards-20261029/inputs",
+        "pair_sha256": "38ca38ae5f24a32fadeef3ed97bcf0bfc8fff7ba6f2c2fb9edd2075e98d69d70",
+        "margin_px": 6.0,
+        "planner": {
+          "horizon": 3,
+          "iterations": 15,
+          "budget_scale": 0.5,
+          "variance": 1.0,
+          "retain": 0.5,
+          "correlate": 0.5,
+          "adaptive": false,
+          "objective": "learned",
+          "checked": true
+        },
+        "selection": "All three existing layouts, fixed order island/bar/gate, same known source scene; no case or seed replacement",
+        "accounting": "All executed actions, resets, physics, frozen world-model queries, learned predictions and wall time",
+        "release_criteria": "Each episode must complete the original joint pusher/block goal with no full-pusher hazard/arena margin breach; reference prediction forbidden",
+        "limitations": "One known task scene; independent motion predictions were tested on twelve other source scenes, not a broad task-success benchmark",
+        "name": "pusht-learned-motion-e2e-v1-island",
+        "case": {
+          "kind": "island",
+          "origin": [
+            217.0875726135852,
+            239.73767783187617
+          ],
+          "basis": [
+            [
+              0.39141708929502733,
+              0.920213378629005
+            ],
+            [
+              -0.920213378629005,
+              0.39141708929502733
+            ]
+          ],
+          "radius_px": 12
+        }
+      },
+      "original_result_sha256": "5bd5651f8c8b0c529b30edc7618897c559f76bacc12e94b7a3deae959a71bc02"
+    },
+    "bar": {
+      "actions": 43,
+      "safe_completion": true,
+      "initial_case_protocol": {
+        "purpose": "Working learned-controlled PushT validation, three existing layouts on one known scene; no optimizer or broad generalization claim",
+        "seed": 29102026,
+        "max_episode_actions": 50,
+        "max_runtime_minutes": 5,
+        "safety_mode": "learned",
+        "safety_backend": "observed_motion",
+        "verify_analytic_dynamics": false,
+        "world_model_checkpoint": "data/safecem10/stablewm/checkpoints/pusht/lewm_object.ckpt",
+        "safety_checkpoint": "outputs/pusht-learned-motion-v1/model.pt",
+        "safety_checkpoint_sha256": "3d9d471d69dc135c12c36436328886c04485cd19f0dd0a815659e4ecb822bed5",
+        "inputs": "outputs/pusht-hazards-20261029/inputs",
+        "pair_sha256": "38ca38ae5f24a32fadeef3ed97bcf0bfc8fff7ba6f2c2fb9edd2075e98d69d70",
+        "margin_px": 6.0,
+        "planner": {
+          "horizon": 3,
+          "iterations": 15,
+          "budget_scale": 0.5,
+          "variance": 1.0,
+          "retain": 0.5,
+          "correlate": 0.5,
+          "adaptive": false,
+          "objective": "learned",
+          "checked": true
+        },
+        "selection": "All three existing layouts, fixed order island/bar/gate, same known source scene; no case or seed replacement",
+        "accounting": "All executed actions, resets, physics, frozen world-model queries, learned predictions and wall time",
+        "release_criteria": "Each episode must complete the original joint pusher/block goal with no full-pusher hazard/arena margin breach; reference prediction forbidden",
+        "limitations": "One known task scene; independent motion predictions were tested on twelve other source scenes, not a broad task-success benchmark",
+        "name": "pusht-learned-motion-e2e-v1-bar",
+        "case": {
+          "kind": "bar",
+          "origin": [
+            217.0875726135852,
+            239.73767783187617
+          ],
+          "basis": [
+            [
+              0.39141708929502733,
+              0.920213378629005
+            ],
+            [
+              -0.920213378629005,
+              0.39141708929502733
+            ]
+          ],
+          "segment_half_length_px": 30,
+          "radius_px": 7
+        }
+      },
+      "original_result_sha256": "ab134236ddad2db13baafdca8a789bb4e568ce7575063f9bd0b6164320af9c06"
+    },
+    "gate": {
+      "actions": 25,
+      "safe_completion": true,
+      "initial_case_protocol": {
+        "purpose": "Working learned-controlled PushT validation, three existing layouts on one known scene; no optimizer or broad generalization claim",
+        "seed": 29102026,
+        "max_episode_actions": 50,
+        "max_runtime_minutes": 5,
+        "safety_mode": "learned",
+        "safety_backend": "observed_motion",
+        "verify_analytic_dynamics": false,
+        "world_model_checkpoint": "data/safecem10/stablewm/checkpoints/pusht/lewm_object.ckpt",
+        "safety_checkpoint": "outputs/pusht-learned-motion-v1/model.pt",
+        "safety_checkpoint_sha256": "3d9d471d69dc135c12c36436328886c04485cd19f0dd0a815659e4ecb822bed5",
+        "inputs": "outputs/pusht-hazards-20261029/inputs",
+        "pair_sha256": "38ca38ae5f24a32fadeef3ed97bcf0bfc8fff7ba6f2c2fb9edd2075e98d69d70",
+        "margin_px": 6.0,
+        "planner": {
+          "horizon": 3,
+          "iterations": 15,
+          "budget_scale": 0.5,
+          "variance": 1.0,
+          "retain": 0.5,
+          "correlate": 0.5,
+          "adaptive": false,
+          "objective": "learned",
+          "checked": true
+        },
+        "selection": "All three existing layouts, fixed order island/bar/gate, same known source scene; no case or seed replacement",
+        "accounting": "All executed actions, resets, physics, frozen world-model queries, learned predictions and wall time",
+        "release_criteria": "Each episode must complete the original joint pusher/block goal with no full-pusher hazard/arena margin breach; reference prediction forbidden",
+        "limitations": "One known task scene; independent motion predictions were tested on twelve other source scenes, not a broad task-success benchmark",
+        "name": "pusht-learned-motion-e2e-v1-gate",
+        "case": {
+          "kind": "gate",
+          "origin": [
+            217.0875726135852,
+            239.73767783187617
+          ],
+          "basis": [
+            [
+              0.39141708929502733,
+              0.920213378629005
+            ],
+            [
+              -0.920213378629005,
+              0.39141708929502733
+            ]
+          ],
+          "band_half_width_px": 7,
+          "gap_width_px": 100,
+          "gap_offset_px": 65,
+          "extent_px": 180
+        }
+      },
+      "original_result_sha256": "68b32ccc7a912e956640c04df596781563d0552ca28d2345ffacda7d5f2a9d5d"
+    }
+  },
+  "asset_sha256": {
+    "assets/current-safety.pt": "22cdca3cffde8b9bbd16c0aad972b4fe33165d015cc0f6561c9e70248d9658a3",
+    "assets/historical-environment.json": "8ce1306a013a3c966515f71b16bdf5896b4bccb43cf5fb8741056c52bc590d3f",
+    "assets/historical-safety.pt": "3d9d471d69dc135c12c36436328886c04485cd19f0dd0a815659e4ecb822bed5",
+    "assets/inputs/pair.npz": "38ca38ae5f24a32fadeef3ed97bcf0bfc8fff7ba6f2c2fb9edd2075e98d69d70",
+    "assets/inputs/pair.json": "b69fc5b0c547089a850cdce9d5a4d2ce1ddee4aa124d2f7e315f9b243114df43",
+    "assets/inputs/scalers.json": "0505742b401dc3e1e7a9f74a45d614eb2c3c378370663b2f41be55f35d005511",
+    "assets/world-model/pusht/lewm_object.ckpt": "d27504690172f6efa31277107a4d54e68f18760520664bc8a33d3b9d1b558952"
+  },
+  "source_sha256": {
+    "historical/experiments/tests/conftest.py": "8eeb58ff3f12dafc7086a87efd23009ae1456f4eee4728cbf47fadb2c0d82f36",
+    "historical/experiments/tests/test_safety_model.py": "a736a89983ee36c64ce54b675cc4a6835db78814bafae920a096c93e7dd1992d",
+    "historical/experiments/tests/test_learned_motion.py": "40989daf5c97c6f00693a6d6a3e6c88b5768519c868540a279c5f3fa0bc66fe6",
+    "historical/experiments/tests/test_lewm16.py": "21c6e17e413e65bcdc78e74afc25d67709124800790d4bb0c72eba7fb07603fa",
+    "historical/experiments/tests/test_pusht_smoke.py": "0e33b65f5dcb0df7f29c26782197265c83be9eaca331ae7442ca2ceebdbc9dbb",
+    "historical/experiments/helpers/safety_checker.py": "efba06f006c603c38368e740c4838ff401dadc81c569a889ae8e47fc37e7cb26",
+    "historical/experiments/helpers/learned_motion.py": "e8e4576903a4badea3cf815df96a9ad53725d9f834ec3fabe0ed85a4edcd6956",
+    "historical/experiments/helpers/lewm16_planner.py": "7bd4b4f2c9cd0158d5effe9988410cf5954a8281006d0db0c8b24ec03852908f",
+    "historical/experiments/helpers/safety_model.py": "8600d917c44d39e747204bd7215881aed63983c83db6d0d5adcf8d92e30aef72",
+    "historical/experiments/helpers/safecem10_planner.py": "9f4dddaa54012c1f45fce6da054b74611d826e4f2fa91445c274a43cca5a43ed",
+    "historical/experiments/helpers/lewm18_planner.py": "52690a96c4ba4ce91fc5f652d0b9d02e807e7768bffc756cbc27b58f44b78cad",
+    "historical/experiments/helpers/pusht_smoke.py": "54a72d60c35e86a2406948265b293a4fa1f5a453a3f6d6f3e728bb08038060ff",
+    "historical/experiments/helpers/safety_data.py": "6325cba3b837b419756f4bd4d72e9c127403b4538083aee5a3d409a6a7b6926c",
+    "historical/experiments/helpers/tworoom12_planner.py": "aba7ebdaa96fdde706e3aa5aa88c30bf822272785aba0a6d624c17c595a4778c",
+    "historical/experiments/helpers/reacher13_geometry.py": "7a402be771ce9b0b9511b0db15615ed0cec536ce3e7fdf2dbe4b3361c053264c",
+    "historical/experiments/scripts/run_safety_pusht.py": "01f2625e376d56c8c9f98b03bb1dd13ef0d33b0764bb156fb79cb92926a5f95a",
+    "historical/experiments/scripts/train_pusht_motion.py": "ce43660b1fc949b7ad342b942fe651f1ba3efd1d2897ce8f6cd8101041d6232b",
+    "historical/experiments/scripts/media_pusht_smoke.py": "feb08d9d9eb2cb066a3f29a522a909a8ea3b69a09fb722cf8bf8d11cae18a05b",
+    "historical/experiments/scripts/run_pusht_smoke.py": "7052628f80f5c5eec0e3a20de0d49c5888a6f4a1d640ed9b7b93b2aa74f31bdf",
+    "historical/experiments/scripts/audit_pusht_learned_motion.py": "fe618acfa77b653a1875cc46104543abaefd257f427d8586dfd810bcfb62400f",
+    "historical/experiments/scripts/media_learned_pusht.py": "489fd75ad14c9ec2d08c3e6b76cbb0e11edf5c4a9d70059ffda1ecb435f01f69",
+    "current/experiments/helpers/safety_checker.py": "efba06f006c603c38368e740c4838ff401dadc81c569a889ae8e47fc37e7cb26",
+    "current/experiments/helpers/learned_motion.py": "e8e4576903a4badea3cf815df96a9ad53725d9f834ec3fabe0ed85a4edcd6956",
+    "current/experiments/helpers/lewm16_planner.py": "7bd4b4f2c9cd0158d5effe9988410cf5954a8281006d0db0c8b24ec03852908f",
+    "current/experiments/helpers/safety_model.py": "aea6c3ef1140328136518b42adfb935d310d042a6e2852e66bc917b8ae7d069b",
+    "current/experiments/helpers/safecem10_planner.py": "9f4dddaa54012c1f45fce6da054b74611d826e4f2fa91445c274a43cca5a43ed",
+    "current/experiments/helpers/lewm18_planner.py": "6ffa4fc790d35d3cb84a27e404a28377018f8dc9ed0b204690a2abc9a26a4bc2",
+    "current/experiments/helpers/pusht_smoke.py": "9906b1ae88a83fdfb5e74fe7d5c1c7c8d005358775b3b00dfcd4fcdb5ec620b3",
+    "current/experiments/helpers/safety_data.py": "6325cba3b837b419756f4bd4d72e9c127403b4538083aee5a3d409a6a7b6926c",
+    "current/experiments/helpers/lewm16_protocol.py": "85aa6ce84c82736e736bd498f049fd00989ea7c5f819536e4f34dcadb2f83819",
+    "current/experiments/helpers/tworoom12_planner.py": "aba7ebdaa96fdde706e3aa5aa88c30bf822272785aba0a6d624c17c595a4778c",
+    "current/experiments/helpers/reacher13_geometry.py": "7a402be771ce9b0b9511b0db15615ed0cec536ce3e7fdf2dbe4b3361c053264c",
+    "current/experiments/scripts/run_safety_pusht.py": "01f2625e376d56c8c9f98b03bb1dd13ef0d33b0764bb156fb79cb92926a5f95a",
+    "current/experiments/scripts/media_pusht_smoke.py": "feb08d9d9eb2cb066a3f29a522a909a8ea3b69a09fb722cf8bf8d11cae18a05b",
+    "current/experiments/scripts/run_pusht_smoke.py": "d21ee8f69d34b421b2dd30ea70cf5f71465b810bf240004a0b54b6db2a228490",
+    "current/experiments/scripts/audit_pusht_learned_motion.py": "fe618acfa77b653a1875cc46104543abaefd257f427d8586dfd810bcfb62400f",
+    "current/experiments/scripts/media_learned_pusht.py": "489fd75ad14c9ec2d08c3e6b76cbb0e11edf5c4a9d70059ffda1ecb435f01f69"
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "study": "pusht-learned-safety-random-tuning-20261029-v2",
+  "purpose": "Small automatic configuration screen, not an optimizer superiority claim",
+  "safety_backend": "observed_motion",
+  "safety_checkpoint": "outputs/pusht-learned-motion-v1/model.pt",
+  "safety_checkpoint_sha256": "3d9d471d69dc135c12c36436328886c04485cd19f0dd0a815659e4ecb822bed5",
+  "world_model_checkpoint": "data/safecem10/stablewm/checkpoints/pusht/lewm_object.ckpt",
+  "world_model_sha256": "d27504690172f6efa31277107a4d54e68f18760520664bc8a33d3b9d1b558952",
+  "scalers": "outputs/pusht-hazards-20261029/inputs/scalers.json",
+  "historical_input_root": "outputs/lewm18-pusht-r1/remote",
+  "source_episodes": [
+    6536,
+    15164,
+    2710,
+    9341,
+    3065,
+    8841
+  ],
+  "source_rule": "Use all six original development input pairs in their frozen ID order, reading only dataset_initial_state and goal. Historical final cases remain untouched. No historical outcomes select cases.",
+  "development_indices": [
+    0,
+    1,
+    2
+  ],
+  "evaluation_indices": [
+    3,
+    4,
+    5
+  ],
+  "layout_order": [
+    "island",
+    "bar",
+    "gate"
+  ],
+  "layout_rule": "Origin at pusher start/goal midpoint. Local y follows start-to-goal; local x points toward the roomier arena side. Try transverse offsets 0,4,...,32 px, taking the first with both full-pusher endpoints clear at 6.001 px. Fail preparation if none qualifies. No rollout-derived layout or case replacement.",
+  "shapes": {
+    "island": {
+      "radius_px": 12
+    },
+    "bar": {
+      "segment_half_length_px": 30,
+      "radius_px": 7
+    },
+    "gate": {
+      "band_half_width_px": 7,
+      "gap_width_px": 100,
+      "gap_offset_px": 65,
+      "extent_px": 180
+    }
+  },
+  "goal_images": "Render the supplied goal pose at zero pusher velocity using the native renderer. Goal positions and angle remain the supplied dataset values. Record all preparation resets and physics steps.",
+  "random_seed": 29102937,
+  "random_configurations": 6,
+  "search_space": {
+    "horizon": [
+      1,
+      2,
+      3
+    ],
+    "variance": [
+      0.5,
+      1.0,
+      1.5,
+      2.0
+    ],
+    "correlate": [
+      0.0,
+      0.5,
+      0.8
+    ],
+    "retain": [
+      0.0,
+      0.25,
+      0.5
+    ],
+    "elite": [
+      0.05,
+      0.1,
+      0.2
+    ]
+  },
+  "current": {
+    "horizon": 3,
+    "iterations": 15,
+    "budget_scale": 0.5,
+    "variance": 1.0,
+    "retain": 0.5,
+    "correlate": 0.5,
+    "elite": 0.1,
+    "adaptive": false,
+    "objective": "learned",
+    "checked": true
+  },
+  "planner_seed_rule": "29103100 + source case index, identical across configurations and evaluation arms",
+  "selection": "Eligible only with zero observed development hazard/arena margin violations and no engineering errors. Maximize safe completions, then minimize sum J where J=executed actions on safe completion and 50 otherwise. Resolve ties by preferring current, then earlier frozen random configuration. If no eligible configuration exists, stop before reserved evaluation.",
+  "evaluation": "Freeze selection before any reserved rollout. Evaluate current and selected on each reserved case with matched case seed. If selected equals current, run each case once and report identical arms with shared observations, not independent duplicates.",
+  "margin_px": 6.0,
+  "body_radius_px": 15.0,
+  "max_episode_actions": 50,
+  "max_episode_runtime_minutes": 5,
+  "predictor_work": "Exactly 11250 CEM rollout predictor steps per replan: 15 iterations times floor(750/horizon) candidates times horizon. The chosen-plan forecast adds horizon steps and is reported separately; count all actual work.",
+  "budget": {
+    "max_rollouts": 27,
+    "max_environment_actions": 1350,
+    "max_preparation_resets": 6,
+    "max_total_resets": 33,
+    "max_total_physics_steps": 13566,
+    "external_compute_usd": 0
+  },
+  "report": "Safe completion, hazard violations, margin/arena breaches, unfinished episodes, engagement, object displacement, actions, resets, physics steps, model and learned-checker queries, encoder frames, elapsed time and paired descriptive comparison. This is one random-search run and one seed per case, with no superiority or reliable generalization claim.",
+  "stopping": "No budget extension, seed/case replacement or outcome-adaptive changes. Preserve engineering failures; freeze any required repair separately. Do not run evolution, ablations, other environments, historical jobs or a rental.",
+  "limitations": "Cases are newly reserved within this study but come from a historical development pool. No global unseen-task claim. Different episode lengths imply different total interactions despite matched per-replan search budgets.",
+  "output": "outputs/pusht-tuning-20261029-v2",
+  "repair_of": "outputs/pusht-tuning-20261029-v1/invalidated.json",
+  "goal_image_quality": "Reindex pusher and T-block shape caches; rendered blue pusher within 10px of target; start/goal pixel MAE >=0.5. No new physics beyond counted resets.",
+  "prior_invalidated_resources": {
+    "environment_actions": 1050,
+    "environment_resets": 27,
+    "executed_physics_steps": 10500,
+    "encoder_frames": 420,
+    "reset_physics_steps": 54,
+    "predictor_steps": 2362950,
+    "model_candidate_rollouts": 1350210,
+    "learned_candidate_checks": 1350210,
+    "learned_motion_physics_points": 118147500,
+    "model_batch_calls": 3360,
+    "render_frames": 1110
+  },
+  "regression_test_budget": {
+    "new_environment_resets": 2,
+    "new_reset_physics_steps": 4,
+    "new_environment_actions": 0
+  },
+  "combined_budget_including_failed_stage": {
+    "max_environment_actions": 2400,
+    "max_resets": 62,
+    "max_physics_steps": 24124,
+    "external_compute_usd": 0
+  }
+}

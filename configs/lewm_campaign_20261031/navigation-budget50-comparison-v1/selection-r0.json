@@ -1,0 +1,3353 @@
+{
+  "schema": "lewm-navigation-comparison-v1",
+  "name": "navigation-selection-r0",
+  "frozen_utc": "2026-10-31T03:13:15.738681+00:00",
+  "output_namespace": "results/navigation-budget50-comparison-v1/r0/selection",
+  "evaluation": {
+    "execution_pod_id": "vukovc3t4o1dui",
+    "deadline_utc": "2026-10-31T07:23:14+00:00",
+    "world_model": "assets/world-model/tworoom/lewm_object.ckpt",
+    "motion_model": "assets/tworoom-safety.pt",
+    "scalers": "assets/tworoom-scalers.json",
+    "memory_path": "results/navigation-memory-cache-v3/memory.npz",
+    "memory_sha256": "684e6089518a7c1a2b8aec7a8e1db887b4140847cf9dfed27cd52ca4749c9edd",
+    "memory_metadata_path": "results/navigation-memory-cache-v3/memory-metadata.json",
+    "asset_sha256": {
+      "assets/world-model/tworoom/lewm_object.ckpt": "87aab38843a8e96dc3d6fb325969f6cabe4e11dcd3b1130df8f5e5806620b973",
+      "assets/tworoom-safety.pt": "48ce87bfdfe0507ffeea0e68080a556ac07caf1efb55706651c669f79e9ac99a",
+      "assets/tworoom-scalers.json": "5ff95166374d29bd1da311a560f0763187091cf51a064716ec654a9ff1dc0101",
+      "results/navigation-cases-v3/inputs/tworoom-01000-none.npz": "a024e178f834fe7fd5c13ac3eba4e212cd60642d565fd95ed635b515cee7ffe1",
+      "results/navigation-cases-v3/inputs/tworoom-01004-none.npz": "256ef8152d1b9dd82b031eef7b5c63f18e81c1f771bef49a42301c7614dac3d6",
+      "results/navigation-cases-v3/inputs/tworoom-01017-circle3.npz": "570b1c81adcfddf8b00985ea6b6209e4291fb7649c33d9c4463e8dcdbcc60159",
+      "results/navigation-cases-v3/inputs/tworoom-01018-circle5.npz": "abd458f55814a6d56dc4e3f1b5d05cdbd0696e4cf343d2c9389061f54785d314",
+      "results/navigation-cases-v3/inputs/tworoom-01026-circle5.npz": "3b0980be3433df60df859d215e2c89d1d6dd7cbe25cc0a1bc9669b8e151ca241",
+      "results/navigation-cases-v3/inputs/tworoom-01027-circle7.npz": "4378669c21f9ac757227c840d937dadb8a9ac3ce75d32badbb0cfae275892015",
+      "results/navigation-cases-v3/inputs/tworoom-01029-circle3.npz": "39b5d5a968d2cf2ad9d118b52981adfd5e2d674f7e9401448459b1d58b1f069c",
+      "results/navigation-cases-v3/inputs/tworoom-01039-circle7.npz": "deca05a9fd4774d4660d65005496d3bdcec56c8e0017c23115cc4984eb63b3f6",
+      "results/navigation-cases-v3/panel.json": "f4e4fd0bce55dbfffedd1ec363deb5f092748d7dc1c9457b70191c5b1879a3f3",
+      "results/navigation-cases-v3/visual-review.json": "0be0b9594faed2c19d84dfc27b35ea1d7eab253f6814268ca136ce35227836ff",
+      "results/navigation-memory-cache-v3/memory.npz": "684e6089518a7c1a2b8aec7a8e1db887b4140847cf9dfed27cd52ca4749c9edd",
+      "results/navigation-memory-cache-v3/memory-metadata.json": "73577f9afe344607917b5e1533cbe1fd7e051b47ef20ec1f9f5b4241ae3527f1",
+      "results/navigation-readout-v1/readout.npz": "a9a779c8f20e457cf52758c66423e2bace9a3fe980c61f44e86d25ead8e018c0",
+      "results/navigation-journal-parity-v1/qualification.json": "a96724f0ce7a525909719f732d796a02f15b3e603a49e77bed503073ed70ef07",
+      "results/navigation-cases-v3/inputs/tworoom-02001-circle3.npz": "112f5f265be7c88d011467a459a1a57b56e4b6462a4395ff6ba8afb30117da1b",
+      "results/navigation-cases-v3/inputs/tworoom-02006-circle5.npz": "7f7043da890d391853a26114627e919971c08b672da3e592eef3f193153c6f2f",
+      "results/navigation-cases-v3/inputs/tworoom-02009-circle3.npz": "0dc639a09edade0bbd67fede5e0873abe8a27235afe44b00786eb325ad2af1ff",
+      "results/navigation-cases-v3/inputs/tworoom-02011-circle7.npz": "8f945a563bac784d6dac68b1375a73b33d013ff28d760c9323de64958bf24267",
+      "results/navigation-cases-v3/inputs/tworoom-02012-none.npz": "1a7666fc9d8b4395849516780102cc77e801bf3ee140babb517aeac826f13217",
+      "results/navigation-cases-v3/inputs/tworoom-02015-circle7.npz": "71a6069ec1d4819e2f57217db0a3cb9ca3285efc987a688c7be219a0a646f4e7",
+      "results/navigation-cases-v3/inputs/tworoom-02028-none.npz": "2ca381f35f1834f585d26069c81c5dc53e1047d091efa54cc207dbb33b59b7eb",
+      "results/navigation-cases-v3/inputs/tworoom-02030-circle5.npz": "b4ab902f2bfd084e62dd213ac5a832fa94928322df317fd5638951a5cc5ac2ab"
+    },
+    "planner": {
+      "horizon": 2,
+      "replan_blocks": 1,
+      "iterations": 8,
+      "budget_scale": 0.08,
+      "variance": 1.0,
+      "elite": 0.1,
+      "retain": 0.25,
+      "correlate": 0.0,
+      "adaptive": false,
+      "objective": "learned",
+      "checked": true,
+      "cem_refinements": true,
+      "cem_momentum": 0.1,
+      "min_std": 0.05,
+      "proposal_mode": "residual_mixture",
+      "proposal_mixture_fraction": 0.5
+    },
+    "body_radius": 7.0,
+    "margin": 3.0,
+    "motion_allowance": 12.405431747436523,
+    "maximum_episode_actions": 50,
+    "maximum_predictor_steps_per_episode": 30000,
+    "max_episode_seconds": 300,
+    "allowed_source_episodes": [
+      2001,
+      2006,
+      2009,
+      2011,
+      2012,
+      2015,
+      2028,
+      2030
+    ],
+    "precision": {
+      "world_model_dtype": "torch.float32",
+      "cuda_matmul_allow_tf32": false,
+      "cudnn_allow_tf32": false,
+      "autocast": false,
+      "preprocessing_sha256": "da84b63338edc8434afde4be7e23a61642c1dc682dd6b0e5b17a6510432b424a"
+    },
+    "controller_backend": "observed-target-v2",
+    "progress_backend": "navigation-append-fsync-v1",
+    "controller_config": {
+      "min_target_distance": 6.0,
+      "max_target_distance": 30.0,
+      "recent_window": 6,
+      "recent_scale": 6.0,
+      "stall_distance": 3.0,
+      "readout_progress": true,
+      "direct_goal_locality": true
+    },
+    "goal_readout": {
+      "path": "results/navigation-readout-v1/readout.npz",
+      "sha256": "a9a779c8f20e457cf52758c66423e2bace9a3fe980c61f44e86d25ead8e018c0"
+    }
+  },
+  "case_preparation": {
+    "panel_path": "results/navigation-cases-v3/panel.json",
+    "panel_sha256": "f4e4fd0bce55dbfffedd1ec363deb5f092748d7dc1c9457b70191c5b1879a3f3",
+    "review_path": "results/navigation-cases-v3/visual-review.json",
+    "review_sha256": "0be0b9594faed2c19d84dfc27b35ea1d7eab253f6814268ca136ce35227836ff",
+    "require_approved": true,
+    "require_images_clean": true,
+    "rule": "Runner hardchecks the frozen panel SHA and approved/images_clean review with UTC and inspected gallery hashes BEFORE any controller episode or frozen-model load. Original panel remains immutable; review is a separate record."
+  },
+  "source_files": [
+    "experiments/helpers/cem_refinements.py",
+    "experiments/helpers/cube14_env.py",
+    "experiments/helpers/cube14_geometry.py",
+    "experiments/helpers/cube14_planner.py",
+    "experiments/helpers/cube14_runtime.py",
+    "experiments/helpers/dsrl06_infra.py",
+    "experiments/helpers/lewm16_planner.py",
+    "experiments/helpers/lewm16_protocol.py",
+    "experiments/helpers/lewm18_planner.py",
+    "experiments/helpers/lewm18_runtime.py",
+    "experiments/helpers/lewm_campaign_training.py",
+    "experiments/helpers/lewm_navigation_evolution.py",
+    "experiments/helpers/lewm_navigation_retrieval.py",
+    "experiments/helpers/lewm_navigation_retrieval_v2.py",
+    "experiments/helpers/lewm_progress_journal.py",
+    "experiments/helpers/lewm_proposal_adapter.py",
+    "experiments/helpers/lewm_proposal_evolution.py",
+    "experiments/helpers/lewm_proposal_pilot.py",
+    "experiments/helpers/lewm_residual.py",
+    "experiments/helpers/lewm_screen.py",
+    "experiments/helpers/portable_env.py",
+    "experiments/helpers/portable_motion.py",
+    "experiments/helpers/pusht_smoke.py",
+    "experiments/helpers/reacher13_env.py",
+    "experiments/helpers/reacher13_geometry.py",
+    "experiments/helpers/safecem10_planner.py",
+    "experiments/helpers/safety_model.py",
+    "experiments/helpers/tworoom12_env.py",
+    "experiments/helpers/tworoom12_planner.py",
+    "experiments/scripts/freeze_lewm_navigation_optimizer_comparison.py",
+    "experiments/scripts/freeze_lewm_navigation_progress_pilot.py",
+    "experiments/scripts/freeze_lewm_navigation_selection.py",
+    "experiments/scripts/qualify_lewm_goal_readout.py",
+    "experiments/scripts/run_lewm_navigation_campaign.py",
+    "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+  ],
+  "source_sha256": {
+    "experiments/helpers/cem_refinements.py": "4a4f4c31db0e846c6b028eeb7db7c9bb1c9d83f474fb0aaaf6b924af3eb77ea5",
+    "experiments/helpers/cube14_env.py": "bafe6cf43a0d83dbbe6ae6ae717200d12ab019eeea40b42a67c2e352db5ae495",
+    "experiments/helpers/cube14_geometry.py": "5ad739435603f4b73cb478ce380a3d1e024ef897b494d23b2657c0db1806f453",
+    "experiments/helpers/cube14_planner.py": "417c388fdc690827c9210d828042b15a5b82ed73bcf23b6db2af042959468052",
+    "experiments/helpers/cube14_runtime.py": "cc2bdb01da308ead2662b05f2d5aa70e5447e260c0e353002729bb2450b6189a",
+    "experiments/helpers/dsrl06_infra.py": "1e2a2aff8f3243843a89694bc1b6e019c046e22514be6bc886e0a6057558b1e1",
+    "experiments/helpers/lewm16_planner.py": "7bd4b4f2c9cd0158d5effe9988410cf5954a8281006d0db0c8b24ec03852908f",
+    "experiments/helpers/lewm16_protocol.py": "85aa6ce84c82736e736bd498f049fd00989ea7c5f819536e4f34dcadb2f83819",
+    "experiments/helpers/lewm18_planner.py": "856e2d4f42af05176ab5416e1628e9009bf5a90fbc5a4fc815abbe50269f4443",
+    "experiments/helpers/lewm18_runtime.py": "5bedfc77daecc4b657828825d6eaabb72b6189c043fbcb253938de13212f75b8",
+    "experiments/helpers/lewm_campaign_training.py": "348bd6a821a2b76ea22545d21aa751f5881ea0b576cae3f6928cea4faaf136fb",
+    "experiments/helpers/lewm_navigation_evolution.py": "653c7bda28b6fafe978c9a55643ba2dfe48b18ad2473bfc9a33b759241f3ead1",
+    "experiments/helpers/lewm_navigation_retrieval.py": "f306d887a359adea2a35e527d5ea9e628810cf13cbd22e35172c6d8ab5bd5fc4",
+    "experiments/helpers/lewm_navigation_retrieval_v2.py": "b732346fa489eafcc9effd26ac3b1b3eeaeaf0e8cc8b6916914ca941a1c452f5",
+    "experiments/helpers/lewm_progress_journal.py": "dc7f315b597407ff116e67b510d7aa3a0bb10ddbc495f9230d41aba21969a5ab",
+    "experiments/helpers/lewm_proposal_adapter.py": "cf6d3bccab418dfdcacf495f1b3308c099483aea9b22f69bb645620f72df70b3",
+    "experiments/helpers/lewm_proposal_evolution.py": "1a653210959b4340ab7369c6c9b46e1fd393991f4c5743ba65ffc8730cb37ea3",
+    "experiments/helpers/lewm_proposal_pilot.py": "48c329ac1c2da8ccaf0999b8b911a9e0fae7120fc5a800e907eb2ecf6004efad",
+    "experiments/helpers/lewm_residual.py": "ae82f4ec8cf9ae9f0c9101de257954d864d3fb5cce12f2da23aff71c6fa23b0e",
+    "experiments/helpers/lewm_screen.py": "b149f81f560af1462eb3d1b42b7504bb94c74bf304b95111a15e0249e5582b9e",
+    "experiments/helpers/portable_env.py": "5b9d3797e7910defecda71f8b24e9e39daac4172f124006c3ec4fcbac16b417a",
+    "experiments/helpers/portable_motion.py": "dbf833cc6f94ae4d7585354eaf842f30beae1df8f72526b824f089a658e49188",
+    "experiments/helpers/pusht_smoke.py": "9906b1ae88a83fdfb5e74fe7d5c1c7c8d005358775b3b00dfcd4fcdb5ec620b3",
+    "experiments/helpers/reacher13_env.py": "7b4febd32b225ca3ed25393d8e5ce2afba569e88e4f061159eb834405e318689",
+    "experiments/helpers/reacher13_geometry.py": "7a402be771ce9b0b9511b0db15615ed0cec536ce3e7fdf2dbe4b3361c053264c",
+    "experiments/helpers/safecem10_planner.py": "9f4dddaa54012c1f45fce6da054b74611d826e4f2fa91445c274a43cca5a43ed",
+    "experiments/helpers/safety_model.py": "aea6c3ef1140328136518b42adfb935d310d042a6e2852e66bc917b8ae7d069b",
+    "experiments/helpers/tworoom12_env.py": "67352edc208a01b67928f8ac898a2e521730956416e552abd6678a1c7df9ef0e",
+    "experiments/helpers/tworoom12_planner.py": "aba7ebdaa96fdde706e3aa5aa88c30bf822272785aba0a6d624c17c595a4778c",
+    "experiments/scripts/freeze_lewm_navigation_optimizer_comparison.py": "7270a7216c1b30a82cbe85b53f2e93dc01d6cf58b3a206d49dc12eab5f3ab4fc",
+    "experiments/scripts/freeze_lewm_navigation_progress_pilot.py": "3d58c3a655ce93336ebd92ceadc9e79c8fd8a2aae6c519d05f0c6ac2f3555b5f",
+    "experiments/scripts/qualify_lewm_goal_readout.py": "801a1147d0d9d0820a5bef278ecaabe36933e9769c731015457e596c67d760ae",
+    "experiments/scripts/run_lewm_navigation_campaign.py": "7485bb75e257cdd8f471e956a22d99a7d43d2bc162741dbb8c0bbbb1a574b907",
+    "experiments/scripts/run_lewm_navigation_campaign_v2.py": "08596c23ce476978251a5aaf6e1c14919216c30843df74fca6c00bb884a088b4",
+    "experiments/scripts/freeze_lewm_navigation_selection.py": "8c1a9a2ff94412007cf108813cac4e3c9ecff41555ed5801920ef1fa3563c95f"
+  },
+  "jobs": [
+    {
+      "job_id": "native_tworoom-02001-circle3_s424001",
+      "arm": "native",
+      "method": "native",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02001-circle3",
+        "split": "development_selection",
+        "source_episode": 2001,
+        "source_step": 35,
+        "goal_step": 85,
+        "source_global_row": 183936,
+        "goal_global_row": 183986,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02001-circle3.npz",
+        "input_sha256": "112f5f265be7c88d011467a459a1a57b56e4b6462a4395ff6ba8afb30117da1b",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            91.37694549560547,
+            143.2187042236328
+          ],
+          "axis": [
+            0.8474190264388834,
+            0.5309246590895689
+          ],
+          "radius": 3.0
+        },
+        "condition": "circle3",
+        "seed": 424001,
+        "initial_xy": [
+          84.28520202636719,
+          88.0790786743164
+        ],
+        "goal_xy": [
+          37.60682678222656,
+          162.5833282470703
+        ],
+        "endpoint_clearance": [
+          45.59380479111238,
+          47.15080340660097
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424001,
+      "policy_seed": 424001,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "strong_anchor_tworoom-02001-circle3_s424001",
+      "arm": "strong_anchor",
+      "method": "strong_anchor",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02001-circle3",
+        "split": "development_selection",
+        "source_episode": 2001,
+        "source_step": 35,
+        "goal_step": 85,
+        "source_global_row": 183936,
+        "goal_global_row": 183986,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02001-circle3.npz",
+        "input_sha256": "112f5f265be7c88d011467a459a1a57b56e4b6462a4395ff6ba8afb30117da1b",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            91.37694549560547,
+            143.2187042236328
+          ],
+          "axis": [
+            0.8474190264388834,
+            0.5309246590895689
+          ],
+          "radius": 3.0
+        },
+        "condition": "circle3",
+        "seed": 424001,
+        "initial_xy": [
+          84.28520202636719,
+          88.0790786743164
+        ],
+        "goal_xy": [
+          37.60682678222656,
+          162.5833282470703
+        ],
+        "endpoint_clearance": [
+          45.59380479111238,
+          47.15080340660097
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424001,
+      "policy_seed": 424001,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "tuned_fixed_tworoom-02001-circle3_s424001",
+      "arm": "tuned_fixed",
+      "method": "tuned_fixed",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        0.5,
+        0.25,
+        4.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02001-circle3",
+        "split": "development_selection",
+        "source_episode": 2001,
+        "source_step": 35,
+        "goal_step": 85,
+        "source_global_row": 183936,
+        "goal_global_row": 183986,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02001-circle3.npz",
+        "input_sha256": "112f5f265be7c88d011467a459a1a57b56e4b6462a4395ff6ba8afb30117da1b",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            91.37694549560547,
+            143.2187042236328
+          ],
+          "axis": [
+            0.8474190264388834,
+            0.5309246590895689
+          ],
+          "radius": 3.0
+        },
+        "condition": "circle3",
+        "seed": 424001,
+        "initial_xy": [
+          84.28520202636719,
+          88.0790786743164
+        ],
+        "goal_xy": [
+          37.60682678222656,
+          162.5833282470703
+        ],
+        "endpoint_clearance": [
+          45.59380479111238,
+          47.15080340660097
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424001,
+      "policy_seed": 424001,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "cma_tworoom-02001-circle3_s424001",
+      "arm": "cma",
+      "method": "cma",
+      "parameters": [
+        1.15672172341363,
+        -0.3631522519262018,
+        -0.9746822366035601,
+        0.5544882470390631,
+        -0.4467091712743702,
+        2.7631246407404557,
+        0.1259173392760946,
+        1.7816608998606647,
+        4.08681436409356,
+        0.15619676014191586
+      ],
+      "case": {
+        "case_id": "tworoom-02001-circle3",
+        "split": "development_selection",
+        "source_episode": 2001,
+        "source_step": 35,
+        "goal_step": 85,
+        "source_global_row": 183936,
+        "goal_global_row": 183986,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02001-circle3.npz",
+        "input_sha256": "112f5f265be7c88d011467a459a1a57b56e4b6462a4395ff6ba8afb30117da1b",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            91.37694549560547,
+            143.2187042236328
+          ],
+          "axis": [
+            0.8474190264388834,
+            0.5309246590895689
+          ],
+          "radius": 3.0
+        },
+        "condition": "circle3",
+        "seed": 424001,
+        "initial_xy": [
+          84.28520202636719,
+          88.0790786743164
+        ],
+        "goal_xy": [
+          37.60682678222656,
+          162.5833282470703
+        ],
+        "endpoint_clearance": [
+          45.59380479111238,
+          47.15080340660097
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424001,
+      "policy_seed": 424001,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "random_tworoom-02001-circle3_s424001",
+      "arm": "random",
+      "method": "random",
+      "parameters": [
+        0.2260224972586259,
+        -0.1710424221096687,
+        -0.052204184843349266,
+        -0.3352900281845099,
+        -0.3199886831612575,
+        2.0517476553090925,
+        0.8160988499840891,
+        2.397112346624211,
+        4.244427199362175,
+        0.9536989313038065
+      ],
+      "case": {
+        "case_id": "tworoom-02001-circle3",
+        "split": "development_selection",
+        "source_episode": 2001,
+        "source_step": 35,
+        "goal_step": 85,
+        "source_global_row": 183936,
+        "goal_global_row": 183986,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02001-circle3.npz",
+        "input_sha256": "112f5f265be7c88d011467a459a1a57b56e4b6462a4395ff6ba8afb30117da1b",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            91.37694549560547,
+            143.2187042236328
+          ],
+          "axis": [
+            0.8474190264388834,
+            0.5309246590895689
+          ],
+          "radius": 3.0
+        },
+        "condition": "circle3",
+        "seed": 424001,
+        "initial_xy": [
+          84.28520202636719,
+          88.0790786743164
+        ],
+        "goal_xy": [
+          37.60682678222656,
+          162.5833282470703
+        ],
+        "endpoint_clearance": [
+          45.59380479111238,
+          47.15080340660097
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424001,
+      "policy_seed": 424001,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "reinforce_tworoom-02001-circle3_s424001",
+      "arm": "reinforce",
+      "method": "reinforce",
+      "parameters": [
+        0.3274420499801636,
+        0.13900916278362274,
+        -0.009445169009268284,
+        0.3495514392852783,
+        0.18870535492897034,
+        2.101384401321411,
+        0.13140524923801422,
+        2.074272871017456,
+        4.117527484893799,
+        1.4839342832565308
+      ],
+      "case": {
+        "case_id": "tworoom-02001-circle3",
+        "split": "development_selection",
+        "source_episode": 2001,
+        "source_step": 35,
+        "goal_step": 85,
+        "source_global_row": 183936,
+        "goal_global_row": 183986,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02001-circle3.npz",
+        "input_sha256": "112f5f265be7c88d011467a459a1a57b56e4b6462a4395ff6ba8afb30117da1b",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            91.37694549560547,
+            143.2187042236328
+          ],
+          "axis": [
+            0.8474190264388834,
+            0.5309246590895689
+          ],
+          "radius": 3.0
+        },
+        "condition": "circle3",
+        "seed": 424001,
+        "initial_xy": [
+          84.28520202636719,
+          88.0790786743164
+        ],
+        "goal_xy": [
+          37.60682678222656,
+          162.5833282470703
+        ],
+        "endpoint_clearance": [
+          45.59380479111238,
+          47.15080340660097
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424001,
+      "policy_seed": 424001,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "native_tworoom-02006-circle5_s424006",
+      "arm": "native",
+      "method": "native",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02006-circle5",
+        "split": "development_selection",
+        "source_episode": 2006,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 184364,
+        "goal_global_row": 184414,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02006-circle5.npz",
+        "input_sha256": "7f7043da890d391853a26114627e919971c08b672da3e592eef3f193153c6f2f",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            74.72946166992188,
+            149.72726440429688
+          ],
+          "axis": [
+            -0.9023760517400004,
+            -0.43094948804486144
+          ],
+          "radius": 5.0
+        },
+        "condition": "circle5",
+        "seed": 424006,
+        "initial_xy": [
+          36.87126922607422,
+          203.0408935546875
+        ],
+        "goal_xy": [
+          84.18065643310547,
+          103.97856903076172
+        ],
+        "endpoint_clearance": [
+          53.38796363476068,
+          34.71475367410328
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424006,
+      "policy_seed": 424006,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "strong_anchor_tworoom-02006-circle5_s424006",
+      "arm": "strong_anchor",
+      "method": "strong_anchor",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02006-circle5",
+        "split": "development_selection",
+        "source_episode": 2006,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 184364,
+        "goal_global_row": 184414,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02006-circle5.npz",
+        "input_sha256": "7f7043da890d391853a26114627e919971c08b672da3e592eef3f193153c6f2f",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            74.72946166992188,
+            149.72726440429688
+          ],
+          "axis": [
+            -0.9023760517400004,
+            -0.43094948804486144
+          ],
+          "radius": 5.0
+        },
+        "condition": "circle5",
+        "seed": 424006,
+        "initial_xy": [
+          36.87126922607422,
+          203.0408935546875
+        ],
+        "goal_xy": [
+          84.18065643310547,
+          103.97856903076172
+        ],
+        "endpoint_clearance": [
+          53.38796363476068,
+          34.71475367410328
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424006,
+      "policy_seed": 424006,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "tuned_fixed_tworoom-02006-circle5_s424006",
+      "arm": "tuned_fixed",
+      "method": "tuned_fixed",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        0.5,
+        0.25,
+        4.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02006-circle5",
+        "split": "development_selection",
+        "source_episode": 2006,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 184364,
+        "goal_global_row": 184414,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02006-circle5.npz",
+        "input_sha256": "7f7043da890d391853a26114627e919971c08b672da3e592eef3f193153c6f2f",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            74.72946166992188,
+            149.72726440429688
+          ],
+          "axis": [
+            -0.9023760517400004,
+            -0.43094948804486144
+          ],
+          "radius": 5.0
+        },
+        "condition": "circle5",
+        "seed": 424006,
+        "initial_xy": [
+          36.87126922607422,
+          203.0408935546875
+        ],
+        "goal_xy": [
+          84.18065643310547,
+          103.97856903076172
+        ],
+        "endpoint_clearance": [
+          53.38796363476068,
+          34.71475367410328
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424006,
+      "policy_seed": 424006,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "cma_tworoom-02006-circle5_s424006",
+      "arm": "cma",
+      "method": "cma",
+      "parameters": [
+        1.15672172341363,
+        -0.3631522519262018,
+        -0.9746822366035601,
+        0.5544882470390631,
+        -0.4467091712743702,
+        2.7631246407404557,
+        0.1259173392760946,
+        1.7816608998606647,
+        4.08681436409356,
+        0.15619676014191586
+      ],
+      "case": {
+        "case_id": "tworoom-02006-circle5",
+        "split": "development_selection",
+        "source_episode": 2006,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 184364,
+        "goal_global_row": 184414,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02006-circle5.npz",
+        "input_sha256": "7f7043da890d391853a26114627e919971c08b672da3e592eef3f193153c6f2f",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            74.72946166992188,
+            149.72726440429688
+          ],
+          "axis": [
+            -0.9023760517400004,
+            -0.43094948804486144
+          ],
+          "radius": 5.0
+        },
+        "condition": "circle5",
+        "seed": 424006,
+        "initial_xy": [
+          36.87126922607422,
+          203.0408935546875
+        ],
+        "goal_xy": [
+          84.18065643310547,
+          103.97856903076172
+        ],
+        "endpoint_clearance": [
+          53.38796363476068,
+          34.71475367410328
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424006,
+      "policy_seed": 424006,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "random_tworoom-02006-circle5_s424006",
+      "arm": "random",
+      "method": "random",
+      "parameters": [
+        0.2260224972586259,
+        -0.1710424221096687,
+        -0.052204184843349266,
+        -0.3352900281845099,
+        -0.3199886831612575,
+        2.0517476553090925,
+        0.8160988499840891,
+        2.397112346624211,
+        4.244427199362175,
+        0.9536989313038065
+      ],
+      "case": {
+        "case_id": "tworoom-02006-circle5",
+        "split": "development_selection",
+        "source_episode": 2006,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 184364,
+        "goal_global_row": 184414,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02006-circle5.npz",
+        "input_sha256": "7f7043da890d391853a26114627e919971c08b672da3e592eef3f193153c6f2f",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            74.72946166992188,
+            149.72726440429688
+          ],
+          "axis": [
+            -0.9023760517400004,
+            -0.43094948804486144
+          ],
+          "radius": 5.0
+        },
+        "condition": "circle5",
+        "seed": 424006,
+        "initial_xy": [
+          36.87126922607422,
+          203.0408935546875
+        ],
+        "goal_xy": [
+          84.18065643310547,
+          103.97856903076172
+        ],
+        "endpoint_clearance": [
+          53.38796363476068,
+          34.71475367410328
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424006,
+      "policy_seed": 424006,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "reinforce_tworoom-02006-circle5_s424006",
+      "arm": "reinforce",
+      "method": "reinforce",
+      "parameters": [
+        0.3274420499801636,
+        0.13900916278362274,
+        -0.009445169009268284,
+        0.3495514392852783,
+        0.18870535492897034,
+        2.101384401321411,
+        0.13140524923801422,
+        2.074272871017456,
+        4.117527484893799,
+        1.4839342832565308
+      ],
+      "case": {
+        "case_id": "tworoom-02006-circle5",
+        "split": "development_selection",
+        "source_episode": 2006,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 184364,
+        "goal_global_row": 184414,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02006-circle5.npz",
+        "input_sha256": "7f7043da890d391853a26114627e919971c08b672da3e592eef3f193153c6f2f",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            74.72946166992188,
+            149.72726440429688
+          ],
+          "axis": [
+            -0.9023760517400004,
+            -0.43094948804486144
+          ],
+          "radius": 5.0
+        },
+        "condition": "circle5",
+        "seed": 424006,
+        "initial_xy": [
+          36.87126922607422,
+          203.0408935546875
+        ],
+        "goal_xy": [
+          84.18065643310547,
+          103.97856903076172
+        ],
+        "endpoint_clearance": [
+          53.38796363476068,
+          34.71475367410328
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424006,
+      "policy_seed": 424006,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "native_tworoom-02009-circle3_s424009",
+      "arm": "native",
+      "method": "native",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02009-circle3",
+        "split": "development_selection",
+        "source_episode": 2009,
+        "source_step": 40,
+        "goal_step": 90,
+        "source_global_row": 184678,
+        "goal_global_row": 184728,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02009-circle3.npz",
+        "input_sha256": "0dc639a09edade0bbd67fede5e0873abe8a27235afe44b00786eb325ad2af1ff",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            63.98785400390625,
+            122.73872375488281
+          ],
+          "axis": [
+            0.8767185544465732,
+            0.48100371754188237
+          ],
+          "radius": 3.0
+        },
+        "condition": "circle3",
+        "seed": 424009,
+        "initial_xy": [
+          94.5,
+          70.90745544433594
+        ],
+        "goal_xy": [
+          43.517879486083984,
+          163.8318328857422
+        ],
+        "endpoint_clearance": [
+          50.145419010651516,
+          35.90929616974117
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424009,
+      "policy_seed": 424009,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "strong_anchor_tworoom-02009-circle3_s424009",
+      "arm": "strong_anchor",
+      "method": "strong_anchor",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02009-circle3",
+        "split": "development_selection",
+        "source_episode": 2009,
+        "source_step": 40,
+        "goal_step": 90,
+        "source_global_row": 184678,
+        "goal_global_row": 184728,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02009-circle3.npz",
+        "input_sha256": "0dc639a09edade0bbd67fede5e0873abe8a27235afe44b00786eb325ad2af1ff",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            63.98785400390625,
+            122.73872375488281
+          ],
+          "axis": [
+            0.8767185544465732,
+            0.48100371754188237
+          ],
+          "radius": 3.0
+        },
+        "condition": "circle3",
+        "seed": 424009,
+        "initial_xy": [
+          94.5,
+          70.90745544433594
+        ],
+        "goal_xy": [
+          43.517879486083984,
+          163.8318328857422
+        ],
+        "endpoint_clearance": [
+          50.145419010651516,
+          35.90929616974117
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424009,
+      "policy_seed": 424009,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "tuned_fixed_tworoom-02009-circle3_s424009",
+      "arm": "tuned_fixed",
+      "method": "tuned_fixed",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        0.5,
+        0.25,
+        4.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02009-circle3",
+        "split": "development_selection",
+        "source_episode": 2009,
+        "source_step": 40,
+        "goal_step": 90,
+        "source_global_row": 184678,
+        "goal_global_row": 184728,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02009-circle3.npz",
+        "input_sha256": "0dc639a09edade0bbd67fede5e0873abe8a27235afe44b00786eb325ad2af1ff",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            63.98785400390625,
+            122.73872375488281
+          ],
+          "axis": [
+            0.8767185544465732,
+            0.48100371754188237
+          ],
+          "radius": 3.0
+        },
+        "condition": "circle3",
+        "seed": 424009,
+        "initial_xy": [
+          94.5,
+          70.90745544433594
+        ],
+        "goal_xy": [
+          43.517879486083984,
+          163.8318328857422
+        ],
+        "endpoint_clearance": [
+          50.145419010651516,
+          35.90929616974117
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424009,
+      "policy_seed": 424009,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "cma_tworoom-02009-circle3_s424009",
+      "arm": "cma",
+      "method": "cma",
+      "parameters": [
+        1.15672172341363,
+        -0.3631522519262018,
+        -0.9746822366035601,
+        0.5544882470390631,
+        -0.4467091712743702,
+        2.7631246407404557,
+        0.1259173392760946,
+        1.7816608998606647,
+        4.08681436409356,
+        0.15619676014191586
+      ],
+      "case": {
+        "case_id": "tworoom-02009-circle3",
+        "split": "development_selection",
+        "source_episode": 2009,
+        "source_step": 40,
+        "goal_step": 90,
+        "source_global_row": 184678,
+        "goal_global_row": 184728,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02009-circle3.npz",
+        "input_sha256": "0dc639a09edade0bbd67fede5e0873abe8a27235afe44b00786eb325ad2af1ff",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            63.98785400390625,
+            122.73872375488281
+          ],
+          "axis": [
+            0.8767185544465732,
+            0.48100371754188237
+          ],
+          "radius": 3.0
+        },
+        "condition": "circle3",
+        "seed": 424009,
+        "initial_xy": [
+          94.5,
+          70.90745544433594
+        ],
+        "goal_xy": [
+          43.517879486083984,
+          163.8318328857422
+        ],
+        "endpoint_clearance": [
+          50.145419010651516,
+          35.90929616974117
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424009,
+      "policy_seed": 424009,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "random_tworoom-02009-circle3_s424009",
+      "arm": "random",
+      "method": "random",
+      "parameters": [
+        0.2260224972586259,
+        -0.1710424221096687,
+        -0.052204184843349266,
+        -0.3352900281845099,
+        -0.3199886831612575,
+        2.0517476553090925,
+        0.8160988499840891,
+        2.397112346624211,
+        4.244427199362175,
+        0.9536989313038065
+      ],
+      "case": {
+        "case_id": "tworoom-02009-circle3",
+        "split": "development_selection",
+        "source_episode": 2009,
+        "source_step": 40,
+        "goal_step": 90,
+        "source_global_row": 184678,
+        "goal_global_row": 184728,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02009-circle3.npz",
+        "input_sha256": "0dc639a09edade0bbd67fede5e0873abe8a27235afe44b00786eb325ad2af1ff",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            63.98785400390625,
+            122.73872375488281
+          ],
+          "axis": [
+            0.8767185544465732,
+            0.48100371754188237
+          ],
+          "radius": 3.0
+        },
+        "condition": "circle3",
+        "seed": 424009,
+        "initial_xy": [
+          94.5,
+          70.90745544433594
+        ],
+        "goal_xy": [
+          43.517879486083984,
+          163.8318328857422
+        ],
+        "endpoint_clearance": [
+          50.145419010651516,
+          35.90929616974117
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424009,
+      "policy_seed": 424009,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "reinforce_tworoom-02009-circle3_s424009",
+      "arm": "reinforce",
+      "method": "reinforce",
+      "parameters": [
+        0.3274420499801636,
+        0.13900916278362274,
+        -0.009445169009268284,
+        0.3495514392852783,
+        0.18870535492897034,
+        2.101384401321411,
+        0.13140524923801422,
+        2.074272871017456,
+        4.117527484893799,
+        1.4839342832565308
+      ],
+      "case": {
+        "case_id": "tworoom-02009-circle3",
+        "split": "development_selection",
+        "source_episode": 2009,
+        "source_step": 40,
+        "goal_step": 90,
+        "source_global_row": 184678,
+        "goal_global_row": 184728,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02009-circle3.npz",
+        "input_sha256": "0dc639a09edade0bbd67fede5e0873abe8a27235afe44b00786eb325ad2af1ff",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            63.98785400390625,
+            122.73872375488281
+          ],
+          "axis": [
+            0.8767185544465732,
+            0.48100371754188237
+          ],
+          "radius": 3.0
+        },
+        "condition": "circle3",
+        "seed": 424009,
+        "initial_xy": [
+          94.5,
+          70.90745544433594
+        ],
+        "goal_xy": [
+          43.517879486083984,
+          163.8318328857422
+        ],
+        "endpoint_clearance": [
+          50.145419010651516,
+          35.90929616974117
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424009,
+      "policy_seed": 424009,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "native_tworoom-02011-circle7_s424011",
+      "arm": "native",
+      "method": "native",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02011-circle7",
+        "split": "development_selection",
+        "source_episode": 2011,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 184840,
+        "goal_global_row": 184890,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02011-circle7.npz",
+        "input_sha256": "8f945a563bac784d6dac68b1375a73b33d013ff28d760c9323de64958bf24267",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            60.436363220214844,
+            140.92117309570312
+          ],
+          "axis": [
+            -0.9355477734861414,
+            -0.3532001748656469
+          ],
+          "radius": 7.0
+        },
+        "condition": "circle7",
+        "seed": 424011,
+        "initial_xy": [
+          36.38877868652344,
+          182.5204620361328
+        ],
+        "goal_xy": [
+          70.45294189453125,
+          92.29216003417969
+        ],
+        "endpoint_clearance": [
+          34.04984039780351,
+          35.64990191003994
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424011,
+      "policy_seed": 424011,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "strong_anchor_tworoom-02011-circle7_s424011",
+      "arm": "strong_anchor",
+      "method": "strong_anchor",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02011-circle7",
+        "split": "development_selection",
+        "source_episode": 2011,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 184840,
+        "goal_global_row": 184890,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02011-circle7.npz",
+        "input_sha256": "8f945a563bac784d6dac68b1375a73b33d013ff28d760c9323de64958bf24267",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            60.436363220214844,
+            140.92117309570312
+          ],
+          "axis": [
+            -0.9355477734861414,
+            -0.3532001748656469
+          ],
+          "radius": 7.0
+        },
+        "condition": "circle7",
+        "seed": 424011,
+        "initial_xy": [
+          36.38877868652344,
+          182.5204620361328
+        ],
+        "goal_xy": [
+          70.45294189453125,
+          92.29216003417969
+        ],
+        "endpoint_clearance": [
+          34.04984039780351,
+          35.64990191003994
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424011,
+      "policy_seed": 424011,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "tuned_fixed_tworoom-02011-circle7_s424011",
+      "arm": "tuned_fixed",
+      "method": "tuned_fixed",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        0.5,
+        0.25,
+        4.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02011-circle7",
+        "split": "development_selection",
+        "source_episode": 2011,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 184840,
+        "goal_global_row": 184890,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02011-circle7.npz",
+        "input_sha256": "8f945a563bac784d6dac68b1375a73b33d013ff28d760c9323de64958bf24267",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            60.436363220214844,
+            140.92117309570312
+          ],
+          "axis": [
+            -0.9355477734861414,
+            -0.3532001748656469
+          ],
+          "radius": 7.0
+        },
+        "condition": "circle7",
+        "seed": 424011,
+        "initial_xy": [
+          36.38877868652344,
+          182.5204620361328
+        ],
+        "goal_xy": [
+          70.45294189453125,
+          92.29216003417969
+        ],
+        "endpoint_clearance": [
+          34.04984039780351,
+          35.64990191003994
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424011,
+      "policy_seed": 424011,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "cma_tworoom-02011-circle7_s424011",
+      "arm": "cma",
+      "method": "cma",
+      "parameters": [
+        1.15672172341363,
+        -0.3631522519262018,
+        -0.9746822366035601,
+        0.5544882470390631,
+        -0.4467091712743702,
+        2.7631246407404557,
+        0.1259173392760946,
+        1.7816608998606647,
+        4.08681436409356,
+        0.15619676014191586
+      ],
+      "case": {
+        "case_id": "tworoom-02011-circle7",
+        "split": "development_selection",
+        "source_episode": 2011,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 184840,
+        "goal_global_row": 184890,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02011-circle7.npz",
+        "input_sha256": "8f945a563bac784d6dac68b1375a73b33d013ff28d760c9323de64958bf24267",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            60.436363220214844,
+            140.92117309570312
+          ],
+          "axis": [
+            -0.9355477734861414,
+            -0.3532001748656469
+          ],
+          "radius": 7.0
+        },
+        "condition": "circle7",
+        "seed": 424011,
+        "initial_xy": [
+          36.38877868652344,
+          182.5204620361328
+        ],
+        "goal_xy": [
+          70.45294189453125,
+          92.29216003417969
+        ],
+        "endpoint_clearance": [
+          34.04984039780351,
+          35.64990191003994
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424011,
+      "policy_seed": 424011,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "random_tworoom-02011-circle7_s424011",
+      "arm": "random",
+      "method": "random",
+      "parameters": [
+        0.2260224972586259,
+        -0.1710424221096687,
+        -0.052204184843349266,
+        -0.3352900281845099,
+        -0.3199886831612575,
+        2.0517476553090925,
+        0.8160988499840891,
+        2.397112346624211,
+        4.244427199362175,
+        0.9536989313038065
+      ],
+      "case": {
+        "case_id": "tworoom-02011-circle7",
+        "split": "development_selection",
+        "source_episode": 2011,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 184840,
+        "goal_global_row": 184890,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02011-circle7.npz",
+        "input_sha256": "8f945a563bac784d6dac68b1375a73b33d013ff28d760c9323de64958bf24267",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            60.436363220214844,
+            140.92117309570312
+          ],
+          "axis": [
+            -0.9355477734861414,
+            -0.3532001748656469
+          ],
+          "radius": 7.0
+        },
+        "condition": "circle7",
+        "seed": 424011,
+        "initial_xy": [
+          36.38877868652344,
+          182.5204620361328
+        ],
+        "goal_xy": [
+          70.45294189453125,
+          92.29216003417969
+        ],
+        "endpoint_clearance": [
+          34.04984039780351,
+          35.64990191003994
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424011,
+      "policy_seed": 424011,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "reinforce_tworoom-02011-circle7_s424011",
+      "arm": "reinforce",
+      "method": "reinforce",
+      "parameters": [
+        0.3274420499801636,
+        0.13900916278362274,
+        -0.009445169009268284,
+        0.3495514392852783,
+        0.18870535492897034,
+        2.101384401321411,
+        0.13140524923801422,
+        2.074272871017456,
+        4.117527484893799,
+        1.4839342832565308
+      ],
+      "case": {
+        "case_id": "tworoom-02011-circle7",
+        "split": "development_selection",
+        "source_episode": 2011,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 184840,
+        "goal_global_row": 184890,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02011-circle7.npz",
+        "input_sha256": "8f945a563bac784d6dac68b1375a73b33d013ff28d760c9323de64958bf24267",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            60.436363220214844,
+            140.92117309570312
+          ],
+          "axis": [
+            -0.9355477734861414,
+            -0.3532001748656469
+          ],
+          "radius": 7.0
+        },
+        "condition": "circle7",
+        "seed": 424011,
+        "initial_xy": [
+          36.38877868652344,
+          182.5204620361328
+        ],
+        "goal_xy": [
+          70.45294189453125,
+          92.29216003417969
+        ],
+        "endpoint_clearance": [
+          34.04984039780351,
+          35.64990191003994
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424011,
+      "policy_seed": 424011,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "native_tworoom-02012-none_s424012",
+      "arm": "native",
+      "method": "native",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02012-none",
+        "split": "development_selection",
+        "source_episode": 2012,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 184941,
+        "goal_global_row": 185016,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02012-none.npz",
+        "input_sha256": "1a7666fc9d8b4395849516780102cc77e801bf3ee140babb517aeac826f13217",
+        "shape": {
+          "kind": "none"
+        },
+        "condition": "none",
+        "seed": 424012,
+        "initial_xy": [
+          170.8881378173828,
+          194.33836364746094
+        ],
+        "goal_xy": [
+          125.90882873535156,
+          83.43312072753906
+        ],
+        "endpoint_clearance": [
+          1000000.0,
+          1000000.0
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424012,
+      "policy_seed": 424012,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "strong_anchor_tworoom-02012-none_s424012",
+      "arm": "strong_anchor",
+      "method": "strong_anchor",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02012-none",
+        "split": "development_selection",
+        "source_episode": 2012,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 184941,
+        "goal_global_row": 185016,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02012-none.npz",
+        "input_sha256": "1a7666fc9d8b4395849516780102cc77e801bf3ee140babb517aeac826f13217",
+        "shape": {
+          "kind": "none"
+        },
+        "condition": "none",
+        "seed": 424012,
+        "initial_xy": [
+          170.8881378173828,
+          194.33836364746094
+        ],
+        "goal_xy": [
+          125.90882873535156,
+          83.43312072753906
+        ],
+        "endpoint_clearance": [
+          1000000.0,
+          1000000.0
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424012,
+      "policy_seed": 424012,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "tuned_fixed_tworoom-02012-none_s424012",
+      "arm": "tuned_fixed",
+      "method": "tuned_fixed",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        0.5,
+        0.25,
+        4.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02012-none",
+        "split": "development_selection",
+        "source_episode": 2012,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 184941,
+        "goal_global_row": 185016,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02012-none.npz",
+        "input_sha256": "1a7666fc9d8b4395849516780102cc77e801bf3ee140babb517aeac826f13217",
+        "shape": {
+          "kind": "none"
+        },
+        "condition": "none",
+        "seed": 424012,
+        "initial_xy": [
+          170.8881378173828,
+          194.33836364746094
+        ],
+        "goal_xy": [
+          125.90882873535156,
+          83.43312072753906
+        ],
+        "endpoint_clearance": [
+          1000000.0,
+          1000000.0
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424012,
+      "policy_seed": 424012,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "cma_tworoom-02012-none_s424012",
+      "arm": "cma",
+      "method": "cma",
+      "parameters": [
+        1.15672172341363,
+        -0.3631522519262018,
+        -0.9746822366035601,
+        0.5544882470390631,
+        -0.4467091712743702,
+        2.7631246407404557,
+        0.1259173392760946,
+        1.7816608998606647,
+        4.08681436409356,
+        0.15619676014191586
+      ],
+      "case": {
+        "case_id": "tworoom-02012-none",
+        "split": "development_selection",
+        "source_episode": 2012,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 184941,
+        "goal_global_row": 185016,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02012-none.npz",
+        "input_sha256": "1a7666fc9d8b4395849516780102cc77e801bf3ee140babb517aeac826f13217",
+        "shape": {
+          "kind": "none"
+        },
+        "condition": "none",
+        "seed": 424012,
+        "initial_xy": [
+          170.8881378173828,
+          194.33836364746094
+        ],
+        "goal_xy": [
+          125.90882873535156,
+          83.43312072753906
+        ],
+        "endpoint_clearance": [
+          1000000.0,
+          1000000.0
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424012,
+      "policy_seed": 424012,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "random_tworoom-02012-none_s424012",
+      "arm": "random",
+      "method": "random",
+      "parameters": [
+        0.2260224972586259,
+        -0.1710424221096687,
+        -0.052204184843349266,
+        -0.3352900281845099,
+        -0.3199886831612575,
+        2.0517476553090925,
+        0.8160988499840891,
+        2.397112346624211,
+        4.244427199362175,
+        0.9536989313038065
+      ],
+      "case": {
+        "case_id": "tworoom-02012-none",
+        "split": "development_selection",
+        "source_episode": 2012,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 184941,
+        "goal_global_row": 185016,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02012-none.npz",
+        "input_sha256": "1a7666fc9d8b4395849516780102cc77e801bf3ee140babb517aeac826f13217",
+        "shape": {
+          "kind": "none"
+        },
+        "condition": "none",
+        "seed": 424012,
+        "initial_xy": [
+          170.8881378173828,
+          194.33836364746094
+        ],
+        "goal_xy": [
+          125.90882873535156,
+          83.43312072753906
+        ],
+        "endpoint_clearance": [
+          1000000.0,
+          1000000.0
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424012,
+      "policy_seed": 424012,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "reinforce_tworoom-02012-none_s424012",
+      "arm": "reinforce",
+      "method": "reinforce",
+      "parameters": [
+        0.3274420499801636,
+        0.13900916278362274,
+        -0.009445169009268284,
+        0.3495514392852783,
+        0.18870535492897034,
+        2.101384401321411,
+        0.13140524923801422,
+        2.074272871017456,
+        4.117527484893799,
+        1.4839342832565308
+      ],
+      "case": {
+        "case_id": "tworoom-02012-none",
+        "split": "development_selection",
+        "source_episode": 2012,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 184941,
+        "goal_global_row": 185016,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02012-none.npz",
+        "input_sha256": "1a7666fc9d8b4395849516780102cc77e801bf3ee140babb517aeac826f13217",
+        "shape": {
+          "kind": "none"
+        },
+        "condition": "none",
+        "seed": 424012,
+        "initial_xy": [
+          170.8881378173828,
+          194.33836364746094
+        ],
+        "goal_xy": [
+          125.90882873535156,
+          83.43312072753906
+        ],
+        "endpoint_clearance": [
+          1000000.0,
+          1000000.0
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424012,
+      "policy_seed": 424012,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "native_tworoom-02015-circle7_s424015",
+      "arm": "native",
+      "method": "native",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02015-circle7",
+        "split": "development_selection",
+        "source_episode": 2015,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 185218,
+        "goal_global_row": 185293,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02015-circle7.npz",
+        "input_sha256": "71a6069ec1d4819e2f57217db0a3cb9ca3285efc987a688c7be219a0a646f4e7",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            143.71229553222656,
+            150.4590606689453
+          ],
+          "axis": [
+            -0.9659944027646065,
+            0.2585629784548657
+          ],
+          "radius": 7.0
+        },
+        "condition": "circle7",
+        "seed": 424015,
+        "initial_xy": [
+          169.30288696289062,
+          204.61264038085938
+        ],
+        "goal_xy": [
+          138.87738037109375,
+          90.94258117675781
+        ],
+        "endpoint_clearance": [
+          45.89564729916363,
+          45.712542533033435
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424015,
+      "policy_seed": 424015,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "strong_anchor_tworoom-02015-circle7_s424015",
+      "arm": "strong_anchor",
+      "method": "strong_anchor",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02015-circle7",
+        "split": "development_selection",
+        "source_episode": 2015,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 185218,
+        "goal_global_row": 185293,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02015-circle7.npz",
+        "input_sha256": "71a6069ec1d4819e2f57217db0a3cb9ca3285efc987a688c7be219a0a646f4e7",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            143.71229553222656,
+            150.4590606689453
+          ],
+          "axis": [
+            -0.9659944027646065,
+            0.2585629784548657
+          ],
+          "radius": 7.0
+        },
+        "condition": "circle7",
+        "seed": 424015,
+        "initial_xy": [
+          169.30288696289062,
+          204.61264038085938
+        ],
+        "goal_xy": [
+          138.87738037109375,
+          90.94258117675781
+        ],
+        "endpoint_clearance": [
+          45.89564729916363,
+          45.712542533033435
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424015,
+      "policy_seed": 424015,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "tuned_fixed_tworoom-02015-circle7_s424015",
+      "arm": "tuned_fixed",
+      "method": "tuned_fixed",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        0.5,
+        0.25,
+        4.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02015-circle7",
+        "split": "development_selection",
+        "source_episode": 2015,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 185218,
+        "goal_global_row": 185293,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02015-circle7.npz",
+        "input_sha256": "71a6069ec1d4819e2f57217db0a3cb9ca3285efc987a688c7be219a0a646f4e7",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            143.71229553222656,
+            150.4590606689453
+          ],
+          "axis": [
+            -0.9659944027646065,
+            0.2585629784548657
+          ],
+          "radius": 7.0
+        },
+        "condition": "circle7",
+        "seed": 424015,
+        "initial_xy": [
+          169.30288696289062,
+          204.61264038085938
+        ],
+        "goal_xy": [
+          138.87738037109375,
+          90.94258117675781
+        ],
+        "endpoint_clearance": [
+          45.89564729916363,
+          45.712542533033435
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424015,
+      "policy_seed": 424015,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "cma_tworoom-02015-circle7_s424015",
+      "arm": "cma",
+      "method": "cma",
+      "parameters": [
+        1.15672172341363,
+        -0.3631522519262018,
+        -0.9746822366035601,
+        0.5544882470390631,
+        -0.4467091712743702,
+        2.7631246407404557,
+        0.1259173392760946,
+        1.7816608998606647,
+        4.08681436409356,
+        0.15619676014191586
+      ],
+      "case": {
+        "case_id": "tworoom-02015-circle7",
+        "split": "development_selection",
+        "source_episode": 2015,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 185218,
+        "goal_global_row": 185293,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02015-circle7.npz",
+        "input_sha256": "71a6069ec1d4819e2f57217db0a3cb9ca3285efc987a688c7be219a0a646f4e7",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            143.71229553222656,
+            150.4590606689453
+          ],
+          "axis": [
+            -0.9659944027646065,
+            0.2585629784548657
+          ],
+          "radius": 7.0
+        },
+        "condition": "circle7",
+        "seed": 424015,
+        "initial_xy": [
+          169.30288696289062,
+          204.61264038085938
+        ],
+        "goal_xy": [
+          138.87738037109375,
+          90.94258117675781
+        ],
+        "endpoint_clearance": [
+          45.89564729916363,
+          45.712542533033435
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424015,
+      "policy_seed": 424015,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "random_tworoom-02015-circle7_s424015",
+      "arm": "random",
+      "method": "random",
+      "parameters": [
+        0.2260224972586259,
+        -0.1710424221096687,
+        -0.052204184843349266,
+        -0.3352900281845099,
+        -0.3199886831612575,
+        2.0517476553090925,
+        0.8160988499840891,
+        2.397112346624211,
+        4.244427199362175,
+        0.9536989313038065
+      ],
+      "case": {
+        "case_id": "tworoom-02015-circle7",
+        "split": "development_selection",
+        "source_episode": 2015,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 185218,
+        "goal_global_row": 185293,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02015-circle7.npz",
+        "input_sha256": "71a6069ec1d4819e2f57217db0a3cb9ca3285efc987a688c7be219a0a646f4e7",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            143.71229553222656,
+            150.4590606689453
+          ],
+          "axis": [
+            -0.9659944027646065,
+            0.2585629784548657
+          ],
+          "radius": 7.0
+        },
+        "condition": "circle7",
+        "seed": 424015,
+        "initial_xy": [
+          169.30288696289062,
+          204.61264038085938
+        ],
+        "goal_xy": [
+          138.87738037109375,
+          90.94258117675781
+        ],
+        "endpoint_clearance": [
+          45.89564729916363,
+          45.712542533033435
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424015,
+      "policy_seed": 424015,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "reinforce_tworoom-02015-circle7_s424015",
+      "arm": "reinforce",
+      "method": "reinforce",
+      "parameters": [
+        0.3274420499801636,
+        0.13900916278362274,
+        -0.009445169009268284,
+        0.3495514392852783,
+        0.18870535492897034,
+        2.101384401321411,
+        0.13140524923801422,
+        2.074272871017456,
+        4.117527484893799,
+        1.4839342832565308
+      ],
+      "case": {
+        "case_id": "tworoom-02015-circle7",
+        "split": "development_selection",
+        "source_episode": 2015,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 185218,
+        "goal_global_row": 185293,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02015-circle7.npz",
+        "input_sha256": "71a6069ec1d4819e2f57217db0a3cb9ca3285efc987a688c7be219a0a646f4e7",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            143.71229553222656,
+            150.4590606689453
+          ],
+          "axis": [
+            -0.9659944027646065,
+            0.2585629784548657
+          ],
+          "radius": 7.0
+        },
+        "condition": "circle7",
+        "seed": 424015,
+        "initial_xy": [
+          169.30288696289062,
+          204.61264038085938
+        ],
+        "goal_xy": [
+          138.87738037109375,
+          90.94258117675781
+        ],
+        "endpoint_clearance": [
+          45.89564729916363,
+          45.712542533033435
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424015,
+      "policy_seed": 424015,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "native_tworoom-02028-none_s424028",
+      "arm": "native",
+      "method": "native",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02028-none",
+        "split": "development_selection",
+        "source_episode": 2028,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 186434,
+        "goal_global_row": 186509,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02028-none.npz",
+        "input_sha256": "2ca381f35f1834f585d26069c81c5dc53e1047d091efa54cc207dbb33b59b7eb",
+        "shape": {
+          "kind": "none"
+        },
+        "condition": "none",
+        "seed": 424028,
+        "initial_xy": [
+          176.34547424316406,
+          190.1093292236328
+        ],
+        "goal_xy": [
+          143.65711975097656,
+          77.83185577392578
+        ],
+        "endpoint_clearance": [
+          1000000.0,
+          1000000.0
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424028,
+      "policy_seed": 424028,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "strong_anchor_tworoom-02028-none_s424028",
+      "arm": "strong_anchor",
+      "method": "strong_anchor",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02028-none",
+        "split": "development_selection",
+        "source_episode": 2028,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 186434,
+        "goal_global_row": 186509,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02028-none.npz",
+        "input_sha256": "2ca381f35f1834f585d26069c81c5dc53e1047d091efa54cc207dbb33b59b7eb",
+        "shape": {
+          "kind": "none"
+        },
+        "condition": "none",
+        "seed": 424028,
+        "initial_xy": [
+          176.34547424316406,
+          190.1093292236328
+        ],
+        "goal_xy": [
+          143.65711975097656,
+          77.83185577392578
+        ],
+        "endpoint_clearance": [
+          1000000.0,
+          1000000.0
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424028,
+      "policy_seed": 424028,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "tuned_fixed_tworoom-02028-none_s424028",
+      "arm": "tuned_fixed",
+      "method": "tuned_fixed",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        0.5,
+        0.25,
+        4.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02028-none",
+        "split": "development_selection",
+        "source_episode": 2028,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 186434,
+        "goal_global_row": 186509,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02028-none.npz",
+        "input_sha256": "2ca381f35f1834f585d26069c81c5dc53e1047d091efa54cc207dbb33b59b7eb",
+        "shape": {
+          "kind": "none"
+        },
+        "condition": "none",
+        "seed": 424028,
+        "initial_xy": [
+          176.34547424316406,
+          190.1093292236328
+        ],
+        "goal_xy": [
+          143.65711975097656,
+          77.83185577392578
+        ],
+        "endpoint_clearance": [
+          1000000.0,
+          1000000.0
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424028,
+      "policy_seed": 424028,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "cma_tworoom-02028-none_s424028",
+      "arm": "cma",
+      "method": "cma",
+      "parameters": [
+        1.15672172341363,
+        -0.3631522519262018,
+        -0.9746822366035601,
+        0.5544882470390631,
+        -0.4467091712743702,
+        2.7631246407404557,
+        0.1259173392760946,
+        1.7816608998606647,
+        4.08681436409356,
+        0.15619676014191586
+      ],
+      "case": {
+        "case_id": "tworoom-02028-none",
+        "split": "development_selection",
+        "source_episode": 2028,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 186434,
+        "goal_global_row": 186509,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02028-none.npz",
+        "input_sha256": "2ca381f35f1834f585d26069c81c5dc53e1047d091efa54cc207dbb33b59b7eb",
+        "shape": {
+          "kind": "none"
+        },
+        "condition": "none",
+        "seed": 424028,
+        "initial_xy": [
+          176.34547424316406,
+          190.1093292236328
+        ],
+        "goal_xy": [
+          143.65711975097656,
+          77.83185577392578
+        ],
+        "endpoint_clearance": [
+          1000000.0,
+          1000000.0
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424028,
+      "policy_seed": 424028,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "random_tworoom-02028-none_s424028",
+      "arm": "random",
+      "method": "random",
+      "parameters": [
+        0.2260224972586259,
+        -0.1710424221096687,
+        -0.052204184843349266,
+        -0.3352900281845099,
+        -0.3199886831612575,
+        2.0517476553090925,
+        0.8160988499840891,
+        2.397112346624211,
+        4.244427199362175,
+        0.9536989313038065
+      ],
+      "case": {
+        "case_id": "tworoom-02028-none",
+        "split": "development_selection",
+        "source_episode": 2028,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 186434,
+        "goal_global_row": 186509,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02028-none.npz",
+        "input_sha256": "2ca381f35f1834f585d26069c81c5dc53e1047d091efa54cc207dbb33b59b7eb",
+        "shape": {
+          "kind": "none"
+        },
+        "condition": "none",
+        "seed": 424028,
+        "initial_xy": [
+          176.34547424316406,
+          190.1093292236328
+        ],
+        "goal_xy": [
+          143.65711975097656,
+          77.83185577392578
+        ],
+        "endpoint_clearance": [
+          1000000.0,
+          1000000.0
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424028,
+      "policy_seed": 424028,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "reinforce_tworoom-02028-none_s424028",
+      "arm": "reinforce",
+      "method": "reinforce",
+      "parameters": [
+        0.3274420499801636,
+        0.13900916278362274,
+        -0.009445169009268284,
+        0.3495514392852783,
+        0.18870535492897034,
+        2.101384401321411,
+        0.13140524923801422,
+        2.074272871017456,
+        4.117527484893799,
+        1.4839342832565308
+      ],
+      "case": {
+        "case_id": "tworoom-02028-none",
+        "split": "development_selection",
+        "source_episode": 2028,
+        "source_step": 0,
+        "goal_step": 75,
+        "source_global_row": 186434,
+        "goal_global_row": 186509,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02028-none.npz",
+        "input_sha256": "2ca381f35f1834f585d26069c81c5dc53e1047d091efa54cc207dbb33b59b7eb",
+        "shape": {
+          "kind": "none"
+        },
+        "condition": "none",
+        "seed": 424028,
+        "initial_xy": [
+          176.34547424316406,
+          190.1093292236328
+        ],
+        "goal_xy": [
+          143.65711975097656,
+          77.83185577392578
+        ],
+        "endpoint_clearance": [
+          1000000.0,
+          1000000.0
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424028,
+      "policy_seed": 424028,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "native_tworoom-02030-circle5_s424030",
+      "arm": "native",
+      "method": "native",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02030-circle5",
+        "split": "development_selection",
+        "source_episode": 2030,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 186636,
+        "goal_global_row": 186686,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02030-circle5.npz",
+        "input_sha256": "b4ab902f2bfd084e62dd213ac5a832fa94928322df317fd5638951a5cc5ac2ab",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            157.67124938964844,
+            30.70681381225586
+          ],
+          "axis": [
+            0.17483331738568447,
+            0.9845980454641968
+          ],
+          "radius": 5.0
+        },
+        "condition": "circle5",
+        "seed": 424030,
+        "initial_xy": [
+          199.7513885498047,
+          37.66618347167969
+        ],
+        "goal_xy": [
+          129.15078735351562,
+          50.202606201171875
+        ],
+        "endpoint_clearance": [
+          30.651740149665926,
+          22.547108064586368
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424030,
+      "policy_seed": 424030,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "strong_anchor_tworoom-02030-circle5_s424030",
+      "arm": "strong_anchor",
+      "method": "strong_anchor",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        2.0,
+        0.25,
+        2.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02030-circle5",
+        "split": "development_selection",
+        "source_episode": 2030,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 186636,
+        "goal_global_row": 186686,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02030-circle5.npz",
+        "input_sha256": "b4ab902f2bfd084e62dd213ac5a832fa94928322df317fd5638951a5cc5ac2ab",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            157.67124938964844,
+            30.70681381225586
+          ],
+          "axis": [
+            0.17483331738568447,
+            0.9845980454641968
+          ],
+          "radius": 5.0
+        },
+        "condition": "circle5",
+        "seed": 424030,
+        "initial_xy": [
+          199.7513885498047,
+          37.66618347167969
+        ],
+        "goal_xy": [
+          129.15078735351562,
+          50.202606201171875
+        ],
+        "endpoint_clearance": [
+          30.651740149665926,
+          22.547108064586368
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424030,
+      "policy_seed": 424030,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "tuned_fixed_tworoom-02030-circle5_s424030",
+      "arm": "tuned_fixed",
+      "method": "tuned_fixed",
+      "parameters": [
+        0.25,
+        0.25,
+        0.1,
+        0.25,
+        0.1,
+        0.5,
+        0.25,
+        4.0,
+        4.0,
+        1.3862943611198906
+      ],
+      "case": {
+        "case_id": "tworoom-02030-circle5",
+        "split": "development_selection",
+        "source_episode": 2030,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 186636,
+        "goal_global_row": 186686,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02030-circle5.npz",
+        "input_sha256": "b4ab902f2bfd084e62dd213ac5a832fa94928322df317fd5638951a5cc5ac2ab",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            157.67124938964844,
+            30.70681381225586
+          ],
+          "axis": [
+            0.17483331738568447,
+            0.9845980454641968
+          ],
+          "radius": 5.0
+        },
+        "condition": "circle5",
+        "seed": 424030,
+        "initial_xy": [
+          199.7513885498047,
+          37.66618347167969
+        ],
+        "goal_xy": [
+          129.15078735351562,
+          50.202606201171875
+        ],
+        "endpoint_clearance": [
+          30.651740149665926,
+          22.547108064586368
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424030,
+      "policy_seed": 424030,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "cma_tworoom-02030-circle5_s424030",
+      "arm": "cma",
+      "method": "cma",
+      "parameters": [
+        1.15672172341363,
+        -0.3631522519262018,
+        -0.9746822366035601,
+        0.5544882470390631,
+        -0.4467091712743702,
+        2.7631246407404557,
+        0.1259173392760946,
+        1.7816608998606647,
+        4.08681436409356,
+        0.15619676014191586
+      ],
+      "case": {
+        "case_id": "tworoom-02030-circle5",
+        "split": "development_selection",
+        "source_episode": 2030,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 186636,
+        "goal_global_row": 186686,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02030-circle5.npz",
+        "input_sha256": "b4ab902f2bfd084e62dd213ac5a832fa94928322df317fd5638951a5cc5ac2ab",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            157.67124938964844,
+            30.70681381225586
+          ],
+          "axis": [
+            0.17483331738568447,
+            0.9845980454641968
+          ],
+          "radius": 5.0
+        },
+        "condition": "circle5",
+        "seed": 424030,
+        "initial_xy": [
+          199.7513885498047,
+          37.66618347167969
+        ],
+        "goal_xy": [
+          129.15078735351562,
+          50.202606201171875
+        ],
+        "endpoint_clearance": [
+          30.651740149665926,
+          22.547108064586368
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424030,
+      "policy_seed": 424030,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "random_tworoom-02030-circle5_s424030",
+      "arm": "random",
+      "method": "random",
+      "parameters": [
+        0.2260224972586259,
+        -0.1710424221096687,
+        -0.052204184843349266,
+        -0.3352900281845099,
+        -0.3199886831612575,
+        2.0517476553090925,
+        0.8160988499840891,
+        2.397112346624211,
+        4.244427199362175,
+        0.9536989313038065
+      ],
+      "case": {
+        "case_id": "tworoom-02030-circle5",
+        "split": "development_selection",
+        "source_episode": 2030,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 186636,
+        "goal_global_row": 186686,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02030-circle5.npz",
+        "input_sha256": "b4ab902f2bfd084e62dd213ac5a832fa94928322df317fd5638951a5cc5ac2ab",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            157.67124938964844,
+            30.70681381225586
+          ],
+          "axis": [
+            0.17483331738568447,
+            0.9845980454641968
+          ],
+          "radius": 5.0
+        },
+        "condition": "circle5",
+        "seed": 424030,
+        "initial_xy": [
+          199.7513885498047,
+          37.66618347167969
+        ],
+        "goal_xy": [
+          129.15078735351562,
+          50.202606201171875
+        ],
+        "endpoint_clearance": [
+          30.651740149665926,
+          22.547108064586368
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424030,
+      "policy_seed": 424030,
+      "max_actions": 50,
+      "repeat_id": 0
+    },
+    {
+      "job_id": "reinforce_tworoom-02030-circle5_s424030",
+      "arm": "reinforce",
+      "method": "reinforce",
+      "parameters": [
+        0.3274420499801636,
+        0.13900916278362274,
+        -0.009445169009268284,
+        0.3495514392852783,
+        0.18870535492897034,
+        2.101384401321411,
+        0.13140524923801422,
+        2.074272871017456,
+        4.117527484893799,
+        1.4839342832565308
+      ],
+      "case": {
+        "case_id": "tworoom-02030-circle5",
+        "split": "development_selection",
+        "source_episode": 2030,
+        "source_step": 0,
+        "goal_step": 50,
+        "source_global_row": 186636,
+        "goal_global_row": 186686,
+        "input_path": "results/navigation-cases-v3/inputs/tworoom-02030-circle5.npz",
+        "input_sha256": "b4ab902f2bfd084e62dd213ac5a832fa94928322df317fd5638951a5cc5ac2ab",
+        "shape": {
+          "kind": "island",
+          "centre": [
+            157.67124938964844,
+            30.70681381225586
+          ],
+          "axis": [
+            0.17483331738568447,
+            0.9845980454641968
+          ],
+          "radius": 5.0
+        },
+        "condition": "circle5",
+        "seed": 424030,
+        "initial_xy": [
+          199.7513885498047,
+          37.66618347167969
+        ],
+        "goal_xy": [
+          129.15078735351562,
+          50.202606201171875
+        ],
+        "endpoint_clearance": [
+          30.651740149665926,
+          22.547108064586368
+        ],
+        "image_start_mae": 0.0,
+        "image_start_rmse": 0.0,
+        "image_style_flag": false,
+        "information": "Goal XY is supplied only to reset, admission, original-task monitor and common optimizer fitness. The retrieval actor receives originalgoal RGB/embedding, not its XY."
+      },
+      "environment_seed": 424030,
+      "policy_seed": 424030,
+      "max_actions": 50,
+      "repeat_id": 0
+    }
+  ],
+  "maximum_episode_starts": 48,
+  "maximum_native_resets": 48,
+  "maximum_environment_actions": 2400,
+  "optimizer_updates": 0,
+  "repeat_id": 0,
+  "host": {
+    "repeat_id": 0,
+    "host": "navigation",
+    "pod_id": "vukovc3t4o1dui"
+  },
+  "reservation": {
+    "sha256": "efed670a57341730a4d8e682a54d9aa47adfa88c73dcca1fb24cc3cef761e348",
+    "path": "configs/lewm_campaign_20261031/navigation-budget50-comparison-v1/selection-reservation-r0.json"
+  },
+  "nominee_provenance": {
+    "native": {
+      "kind": "native",
+      "is_trained": false
+    },
+    "strong_anchor": {
+      "kind": "initial_anchor",
+      "is_trained": false
+    },
+    "cma": {
+      "protocol_sha256": "936704928b7be2a09767397f7978fdee94c778f19efc30c90b3be2abd56eddb8",
+      "state_sha256": "aa9cec6b754823a0e3e0e8fda0db1d052d6c9eef24689a84e76cb99e11deefd2",
+      "source_freeze_sha256": "ba3b3a378daf43c621cec70fcfb7d1fa7b43017b1da43573f12f20bfc713af56",
+      "nominees_sha256": "7ab7326405223e0486aafc7edce8abac0d09927f8d9a8356701b3a2e4c83028c",
+      "identity": "e7a6480d01fd0f66498fe72850381ce87749301f1754e931c6482cd68a3402bf",
+      "actual_environment_actions": 6538,
+      "residual_unspent_allowance": 3262,
+      "optimizer_updates": 6,
+      "kind": "trained_candidate",
+      "is_trained": true,
+      "float32_equivalent_to_anchor": false,
+      "parameter_difference_only_float32_conversion": false,
+      "producer": {
+        "kind": "trained_candidate",
+        "method": "cma",
+        "repeat_id": 0,
+        "generation": 2,
+        "candidate_index": 2,
+        "completed_updates_before_proposal": 2
+      },
+      "completed_updates_before_nominee": 2,
+      "do_not_attribute_later_updates_to_this_genotype": true,
+      "panel_results": [
+        {
+          "job_id": "cma_g002_c002_p000",
+          "result_sha256": "2d49d1eaf22cebca1dd2c01cd7af330d46e0b914533721a01cdfb90020d87ae1",
+          "started_sha256": "c6a01a1afc9ea29130e75e7f5c9e29009c13f57f20550733b83f66e18b15e6f8"
+        },
+        {
+          "job_id": "cma_g002_c002_p001",
+          "result_sha256": "603f3aa5c4f96f01becfadf0ec461e70731f7f2ee4810deb609649e11752ab51",
+          "started_sha256": "fbc9f0285ed0bd484ac3356f40653c2d509091e0e4b5428c8830adef4ecf8f27"
+        },
+        {
+          "job_id": "cma_g002_c002_p002",
+          "result_sha256": "205478bb72b9be7b94976c3318d5a280a93314b1a2ca0d108db0520f34bd64d6",
+          "started_sha256": "863224483a549b8f15d67e8cc20fe43af45d114c4134aa54a744601e8e3d5a4d"
+        },
+        {
+          "job_id": "cma_g002_c002_p003",
+          "result_sha256": "65598ffe659a6702bb942db9e39e724e6f2070db3e3db6664bb24c5322d5f88b",
+          "started_sha256": "5a2199ce87d15baa69c4a45ef41e4f4650975a197ea98f44f067d99594b0e871"
+        }
+      ],
+      "training_fitness": [
+        4,
+        0,
+        3.3029032185477845
+      ]
+    },
+    "random": {
+      "protocol_sha256": "f75ed16f26aad6365bedbde8e058fc06ed004df44c4a7a7cb3e9a4c360bdfaa9",
+      "state_sha256": "e233adaf3c94c1a53a64d44431e8f14a35ecf745022494a125b85dd1e1c7730a",
+      "source_freeze_sha256": "c00c872c223dc464188b8ade08934d88a25257476f249ced48d90e8d9d7bc448",
+      "nominees_sha256": "0aa971233901561ac46610c61be876f4ff7e41327db92102b53469b416f40d33",
+      "identity": "6676cd4ea76def3ff0a174b019c33b0c995809bf72dbda4729160222360a3278",
+      "actual_environment_actions": 6969,
+      "residual_unspent_allowance": 2831,
+      "optimizer_updates": 0,
+      "kind": "trained_candidate",
+      "is_trained": true,
+      "float32_equivalent_to_anchor": false,
+      "parameter_difference_only_float32_conversion": false,
+      "producer": {
+        "kind": "trained_candidate",
+        "method": "random",
+        "repeat_id": 0,
+        "generation": 3,
+        "candidate_index": 7,
+        "completed_updates_before_proposal": 0
+      },
+      "completed_updates_before_nominee": 0,
+      "do_not_attribute_later_updates_to_this_genotype": true,
+      "panel_results": [
+        {
+          "job_id": "random_g003_c007_p000",
+          "result_sha256": "a23a2e2b072ca8c9d1c0a64177a60a2b42f2f5b0db6ee47e7dc41848fe0c85a5",
+          "started_sha256": "5242a2afd76c16a22e084ff9131f8df0eae048490c8a3b12cfd73c6ed753eff3"
+        },
+        {
+          "job_id": "random_g003_c007_p001",
+          "result_sha256": "8504c0de5a060c8b5f3efe8dd8c12fef3f7a0354d22ef5b3390bb7fb466593e3",
+          "started_sha256": "41da396574945e56a8183e8d54916354d09c4e33330a7d980b6c07f3154b2771"
+        },
+        {
+          "job_id": "random_g003_c007_p002",
+          "result_sha256": "5a63c4564388a1482ca35ad6337523c9b22cc30e17868e8c2c4d50880369cbd5",
+          "started_sha256": "1bf2bf86574459cfbda04749bfe195b45e09422db5d4a444b964a2532723cf26"
+        },
+        {
+          "job_id": "random_g003_c007_p003",
+          "result_sha256": "ec13adba58a48e1332b42d0b7b31b4422f52e0e9f98cf8db5999e51607cbf41c",
+          "started_sha256": "7c7ed7b792b5984d7dd5d7262552d5ea040d9310b5e6ca975cd2325901ff589c"
+        }
+      ],
+      "training_fitness": [
+        4,
+        0,
+        3.2527500653723305
+      ]
+    },
+    "reinforce": {
+      "protocol_sha256": "0977fad9857d70563ca579f733164495e14287a3e0dabef091426f5e944a99a4",
+      "state_sha256": "e3d09010631dad3c5e826a73025a5c21c4a96f8c0134813bd8099912d47a244d",
+      "source_freeze_sha256": "e8b9146fd441adfc6c1227b625859d6cf7d36a6210c24dcdd8390f558ccdb5a9",
+      "nominees_sha256": "fae5b7d152f220a5aa9bafb0fd2d3e9f2f3694eb235a0d4e76a1149173b80f72",
+      "identity": "4f2c34fc3f1b5e7624c15204b7b09b19cdd58e58d99fdb4f1a710b1d5a1e742f",
+      "actual_environment_actions": 6817,
+      "residual_unspent_allowance": 2983,
+      "optimizer_updates": 24,
+      "kind": "trained_candidate",
+      "is_trained": true,
+      "float32_equivalent_to_anchor": false,
+      "parameter_difference_only_float32_conversion": false,
+      "producer": {
+        "kind": "trained_candidate",
+        "method": "reinforce",
+        "repeat_id": 0,
+        "update": 3,
+        "completed_updates_before_evaluation": 4
+      },
+      "completed_updates_before_nominee": 4,
+      "do_not_attribute_later_updates_to_this_genotype": true,
+      "panel_results": [
+        {
+          "job_id": "reinforce_u003_evaluate_p000",
+          "result_sha256": "1058c72e918d761ae74a7c82c0ba8ca4770daf43c0c093900f18e1fb0bc381fd",
+          "started_sha256": "b3cb890692259c0b37a0ca6e38a7ab55c3d97603fc23f1933dfa0c94a6c1395e"
+        },
+        {
+          "job_id": "reinforce_u003_evaluate_p001",
+          "result_sha256": "5a8d9d01d584108f754b6ad654ae04b9ec7dede38b72fb1c6ae70aa6448e6ad7",
+          "started_sha256": "46a4ba3952ed57fe361270a8e963f00ce761435ce3c872062f6f6477825029d8"
+        },
+        {
+          "job_id": "reinforce_u003_evaluate_p002",
+          "result_sha256": "cba43f0c9a366fada83f31094c36f2051bed42cc663904b678df921b97ed20a6",
+          "started_sha256": "86ceef15ed7c3c20a40e14e89870c4653858a573e4d4c4cf7c49b3de6fec4a40"
+        },
+        {
+          "job_id": "reinforce_u003_evaluate_p003",
+          "result_sha256": "aedf9742428f43c8a51dee6eb3574903d765f741eed1ee0907bb897f6d988e24",
+          "started_sha256": "01037c19261068d496ab1e7a9a62f122e1f99f58f168849be07f799500574541"
+        }
+      ],
+      "training_fitness": [
+        4,
+        0,
+        3.25006942711499
+      ],
+      "selected_update_statistics": {
+        "loss": 18.27320671081543,
+        "gradient_norm_before_clip": 8.344054222106934,
+        "parameter_change_l2": 0.06949130445718765,
+        "episode_rewards": [
+          5.150011469604825,
+          5.152481358459057,
+          0.0,
+          0.005407839490597177
+        ],
+        "previous_case_baselines": [
+          1.3971512224693345,
+          0.4668642085017305,
+          0.5156423956342554,
+          0.9478969835328639
+        ],
+        "episode_advantages": [
+          3.752860247135491,
+          4.685617149957326,
+          -0.5156423956342554,
+          -0.9424891440422667
+        ],
+        "categorical_decisions": 30,
+        "reward_rule": "(panel_size+1)*safe_completion-violation+progress/(panel_size+1)",
+        "gradient_rule": "Mean over episodes of -advantage times sum of categorical target log probabilities; previous-update case EMA baseline. No parameter-space score gradient."
+      },
+      "selected_update_sha256": "961f5288f16131bde425188b8f94e2bf2d5fb12240d667169b23d9c2caf78015"
+    },
+    "tuned_fixed": {
+      "kind": "prospective_fixed_grid",
+      "selected_candidate_job_ids": [
+        "grid011_tworoom-01000-none_s333000",
+        "grid011_tworoom-01017-circle3_s333017",
+        "grid011_tworoom-01018-circle5_s333018",
+        "grid011_tworoom-01027-circle7_s333027"
+      ],
+      "training_fitness": [
+        4,
+        0,
+        3.263517409284451
+      ],
+      "protocol_sha256": "1b9b2d4f678081d4031ef333339afb6c2d963bcec409c4955dbb1b459c87ff7a",
+      "source_freeze_sha256": "7c5afc28ecbbf81f1f5f7252d63458734d3590af778a2cb273e23e52686fc575",
+      "state_sha256": "f9ba46ed611dcc008251b8ef9751b023a6e5310024d98becebd3fe0681de5fc8",
+      "is_trained": false,
+      "note": "Fixed configuration selected by a prospective grid; no evolutionary credit"
+    }
+  },
+  "controller_static_parameters": {
+    "strong_anchor": [
+      0.25,
+      0.25,
+      0.1,
+      0.25,
+      0.1,
+      2.0,
+      0.25,
+      2.0,
+      4.0,
+      1.3862943611198906
+    ],
+    "native": [
+      0.25,
+      0.25,
+      0.1,
+      0.25,
+      0.1,
+      2.0,
+      0.25,
+      2.0,
+      4.0,
+      1.3862943611198906
+    ],
+    "cma": [
+      1.15672172341363,
+      -0.3631522519262018,
+      -0.9746822366035601,
+      0.5544882470390631,
+      -0.4467091712743702,
+      2.7631246407404557,
+      0.1259173392760946,
+      1.7816608998606647,
+      4.08681436409356,
+      0.15619676014191586
+    ],
+    "random": [
+      0.2260224972586259,
+      -0.1710424221096687,
+      -0.052204184843349266,
+      -0.3352900281845099,
+      -0.3199886831612575,
+      2.0517476553090925,
+      0.8160988499840891,
+      2.397112346624211,
+      4.244427199362175,
+      0.9536989313038065
+    ],
+    "reinforce": [
+      0.3274420499801636,
+      0.13900916278362274,
+      -0.009445169009268284,
+      0.3495514392852783,
+      0.18870535492897034,
+      2.101384401321411,
+      0.13140524923801422,
+      2.074272871017456,
+      4.117527484893799,
+      1.4839342832565308
+    ],
+    "tuned_fixed": [
+      0.25,
+      0.25,
+      0.1,
+      0.25,
+      0.1,
+      0.5,
+      0.25,
+      4.0,
+      4.0,
+      1.3862943611198906
+    ]
+  },
+  "selection_rule": "Native, strong anchor, tuned-fixed training winner, CMA best-trained, random best-trained and REINFORCE best-trained. Within each search arm compare its candidate to the common strong-anchor selection tuple; retain candidate only if strictly better, otherwise labeled untrained anchor. Exact ties retain anchor. All six arms use the same case/environment seeds and deterministic argmax policies, including duplicate-parameter nominees, and every execution is charged.",
+  "final_lock_rule": "After selection, persist each selected parameter vector, is_trained flag, producer run/update/candidate provenance and selection score/input/output hashes. No further tuning once final reservation opens.",
+  "duplicate_parameters_are_still_charged": true,
+  "final_pixels_read": 0,
+  "new_model_simulator_calls_by_materializer": 0
+}

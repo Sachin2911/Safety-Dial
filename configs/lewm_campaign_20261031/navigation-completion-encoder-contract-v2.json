@@ -1,0 +1,49 @@
+{
+  "schema": "lewm-completion-encoder-contract-v1",
+  "frozen_utc": "2026-10-31T08:49:47.726218+00:00",
+  "execution_pod_id": "uddcaj5qijcl3j",
+  "deadline_utc": "2026-10-31T09:49:30.231013+00:00",
+  "first_frame": 0,
+  "frame_count": 64,
+  "atol": 1e-05,
+  "rtol": 1e-05,
+  "tolerance_reselection_forbidden": true,
+  "world_model": "assets/world-model/tworoom/lewm_object.ckpt",
+  "observations": "results/navigation-memory-cache-v3/observations.npz",
+  "cached_embeddings": "results/navigation-memory-cache-v3/observation-embeddings.npy",
+  "memory_metadata": "results/navigation-memory-cache-v3/memory-metadata.json",
+  "frame_index": "results/navigation-memory-cache-v3/frame-index.json",
+  "memory": "results/navigation-memory-cache-v3/memory.npz",
+  "preprocessing_sha256": "da84b63338edc8434afde4be7e23a61642c1dc682dd6b0e5b17a6510432b424a",
+  "source_sha256": {
+    "experiments/scripts/qualify_lewm_completion_encoder.py": "b7a84a444ecd9c3f3414ffdaa81313ee56cc7820d73f777874c45d96fb369d17",
+    "experiments/scripts/prepare_lewm_campaign_memory.py": "19f5542ed7252736c87d4dcfabddf645368c0b41bb7f582f0bc99ea994c0a422",
+    "experiments/helpers/safecem10_planner.py": "9f4dddaa54012c1f45fce6da054b74611d826e4f2fa91445c274a43cca5a43ed"
+  },
+  "asset_sha256": {
+    "results/navigation-memory-cache-v3/observations.npz": "f946b4948bbfd402b02bb01e8358fbdcb96ccf0687b16db74ed9540ad4ec41c2",
+    "results/navigation-memory-cache-v3/observation-embeddings.npy": "d0bf2aee695352e70e188d2e921613a614338640812f9ab7f762a41744587e27",
+    "results/navigation-memory-cache-v3/memory-metadata.json": "73577f9afe344607917b5e1533cbe1fd7e051b47ef20ec1f9f5b4241ae3527f1",
+    "results/navigation-memory-cache-v3/frame-index.json": "1f2489308f435e208c5e8f23d2df28185d25c4959cd9c5e0787f0548e91c7367",
+    "results/navigation-memory-cache-v3/memory.npz": "684e6089518a7c1a2b8aec7a8e1db887b4140847cf9dfed27cd52ca4749c9edd",
+    "assets/world-model/tworoom/lewm_object.ckpt": "87aab38843a8e96dc3d6fb325969f6cabe4e11dcd3b1130df8f5e5806620b973"
+  },
+  "selection": "Exact first64 cached training observations in original1528-row order, matching originalencoder_batch_size64. No final/query images.",
+  "original_encoding_protocol": {
+    "path": "configs/lewm_campaign_20261031/navigation-memory-encoding-v3.json",
+    "sha256": "3c7a512b36c56066c050b6535f1e266fa5f2a59d8947a3fa939f336c52a6c31d"
+  },
+  "original_encoding_logic": "AutoCostModel(prefix,cache_dir).cuda().eval().requires_grad_(False); exact image_transform(B,C,H,W).unsqueeze(1).cuda(); inference_mode encode()[emb][:,-1].flatten(1).float().cpu().numpy().",
+  "comparison": "torch.allclose(atol=1e-5,rtol=1e-5) exactly; also maxabs/RMSE/bitwise. Failure blocksfinals without retry or tolerance retuning.",
+  "resources": "Oneactualencoderattemptbatch64frames durablyrecordedBEFOREcall; constructors and successes separate,0sim/actions, ownledger separate fromoptimizer allowances.",
+  "output_namespace": "results/navigation-completion-encoder-contract-v1",
+  "collector_explicit_preparation_ledger": "results/navigation-completion-encoder-contract-v1/resources.json",
+  "maximum_encoder_batches": 1,
+  "maximum_encoder_frames": 64,
+  "maximum_environment_actions": 0,
+  "version": 2,
+  "continuation_authority": {
+    "path": "configs/lewm_campaign_20261031/navigation-final-relocation-authority-v3.json",
+    "sha256": "2c47f43e0fb6e2a97be7a9870e3fca08728fad51750d95ded7a1e9494834588a"
+  }
+}

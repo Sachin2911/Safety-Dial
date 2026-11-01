@@ -1,0 +1,208 @@
+{
+  "environment": "cube",
+  "valid_namespace": "outputs/lewm-preset-expansion-20261030/cube-v4",
+  "selected": {
+    "id": "working-anchor",
+    "params": {
+      "horizon": 3,
+      "replan_blocks": 1,
+      "iterations": 30,
+      "budget_scale": 0.2,
+      "variance": 1.0,
+      "elite": 0.1,
+      "retain": 0.5,
+      "correlate": 0.5,
+      "adaptive": false,
+      "objective": "learned",
+      "checked": true
+    }
+  },
+  "evaluation": {
+    "authors": {
+      "control": {
+        "episodes": 6,
+        "safe_completions": 3,
+        "violations": 0,
+        "contacts": 0,
+        "unfinished": 3,
+        "engaged": 6,
+        "J": 573,
+        "actions": 573,
+        "completion_at": {
+          "50": 2,
+          "100": 3,
+          "150": 3
+        },
+        "planning_seconds": 31.604675837792456,
+        "resources": {
+          "environment_resets": 6,
+          "executed_physics_steps": 14325,
+          "reset_physics_steps": 300,
+          "reset_control_actions": 12,
+          "task_monitor_queries": 579,
+          "render_frames": 579,
+          "encoder_frames": 48,
+          "model_batch_calls": 744,
+          "model_candidate_rollouts": 216024,
+          "predictor_steps": 1080120,
+          "learned_candidate_checks": 216024,
+          "learned_transition_rows": 5400600,
+          "environment_actions": 573
+        }
+      },
+      "hazard": {
+        "episodes": 6,
+        "safe_completions": 0,
+        "violations": 0,
+        "contacts": 0,
+        "unfinished": 6,
+        "engaged": 6,
+        "J": 900,
+        "actions": 900,
+        "completion_at": {
+          "50": 0,
+          "100": 0,
+          "150": 0
+        },
+        "planning_seconds": 47.65265618264675,
+        "resources": {
+          "environment_resets": 6,
+          "executed_physics_steps": 22500,
+          "reset_physics_steps": 300,
+          "reset_control_actions": 12,
+          "task_monitor_queries": 906,
+          "render_frames": 906,
+          "encoder_frames": 72,
+          "model_batch_calls": 1116,
+          "model_candidate_rollouts": 324036,
+          "predictor_steps": 1620180,
+          "learned_candidate_checks": 324036,
+          "learned_transition_rows": 8100900,
+          "environment_actions": 900
+        }
+      }
+    },
+    "working-anchor": {
+      "control": {
+        "episodes": 6,
+        "safe_completions": 1,
+        "violations": 0,
+        "contacts": 0,
+        "unfinished": 5,
+        "engaged": 6,
+        "J": 780,
+        "actions": 780,
+        "completion_at": {
+          "50": 1,
+          "100": 1,
+          "150": 1
+        },
+        "planning_seconds": 95.40149718523026,
+        "resources": {
+          "environment_resets": 6,
+          "executed_physics_steps": 19500,
+          "reset_physics_steps": 300,
+          "reset_control_actions": 12,
+          "task_monitor_queries": 786,
+          "render_frames": 786,
+          "encoder_frames": 312,
+          "model_batch_calls": 4836,
+          "model_candidate_rollouts": 468156,
+          "predictor_steps": 1404468,
+          "learned_candidate_checks": 468156,
+          "learned_transition_rows": 7022340,
+          "environment_actions": 780
+        }
+      },
+      "hazard": {
+        "episodes": 6,
+        "safe_completions": 0,
+        "violations": 0,
+        "contacts": 0,
+        "unfinished": 6,
+        "engaged": 6,
+        "J": 900,
+        "actions": 900,
+        "completion_at": {
+          "50": 0,
+          "100": 0,
+          "150": 0
+        },
+        "planning_seconds": 114.33103474415839,
+        "resources": {
+          "environment_resets": 6,
+          "executed_physics_steps": 22500,
+          "reset_physics_steps": 300,
+          "reset_control_actions": 12,
+          "task_monitor_queries": 906,
+          "render_frames": 906,
+          "encoder_frames": 360,
+          "model_batch_calls": 5580,
+          "model_candidate_rollouts": 540180,
+          "predictor_steps": 1620540,
+          "learned_candidate_checks": 540180,
+          "learned_transition_rows": 8102700,
+          "environment_actions": 900
+        }
+      }
+    }
+  },
+  "scored_trials": 120,
+  "errors": 0,
+  "verified": true,
+  "motion_calibration": {
+    "source": "cube-v2/motion",
+    "allowance": 0.06085043702452691,
+    "test_groups_covered": 46,
+    "test_groups": 48,
+    "source_file_sha256": {
+      "cube-v2/motion/calibration.npz": "d7da4ffa4f1ee9fc45349ee64ea480d16d6273f7892fd40677f08d5142d6c6eb",
+      "cube-v2/motion/test.npz": "346a177634f5103edae405cc67db53304981223030ed4563dc1037daf417172d"
+    }
+  },
+  "timing_qualification": {
+    "episodes_with_failed_final_planning_call": 12,
+    "interpretation": "Reported planning seconds omit the final exception-raising call. Full episode and stage wall times include it. Query/interaction counters include it."
+  },
+  "valid_comparison_resources": {
+    "environment_resets": 120,
+    "executed_physics_steps": 391700,
+    "reset_physics_steps": 6000,
+    "reset_control_actions": 240,
+    "task_monitor_queries": 15788,
+    "render_frames": 15800,
+    "encoder_frames": 5274,
+    "model_batch_calls": 81735,
+    "model_candidate_rollouts": 14117625,
+    "predictor_steps": 28419572,
+    "learned_candidate_checks": 14117637,
+    "learned_transition_rows": 142097955,
+    "environment_actions": 15668
+  },
+  "engineering_accounting": "Combined campaign ledger counts initial training and fresh calibration once, plus invalid and interrupted passes. cube-v4 reuses the model without a new fit.",
+  "limits": "Original object-position success, fingertip/pinch-site XY protection only. Both arms failed all six reserved hazard cases. Selected control completion regressed from authors3/6 to1/6. Closely related one-seed public pose panel; no universal transfer claim.",
+  "raw": "outputs/lewm-preset-expansion-20261030/cube-v4",
+  "replays": "outputs/lewm-preset-expansion-20261030/cube-v4/media",
+  "paired_adaptation": "outputs/lewm-preset-expansion-20261030/cube-v4/safety-adaptation.png",
+  "private_storage": "New release pending payload-specific approval; local preservation in progress.",
+  "observation_quality_qualification": {
+    "diagnostic": {
+      "episodes_checked": 120,
+      "frames_checked": 15800,
+      "flagged_episodes": 1,
+      "flagged_with_scheduled_replan_inputs": 1,
+      "evaluation_flagged": 1,
+      "locations": [
+        "evaluation/working-anchor/case-06-island-mild/hazard"
+      ]
+    },
+    "finding": "One selected reserved Cube hazard episode has a visually noisy non-scene image from frames67 through150, including scheduled replan inputs70 through145. Cause unconfirmed. The same raw pixels appear in its gallery. This is not terminal-media-only and qualifies the Cube performance comparison; no images, cases, actions or scores were replaced.",
+    "screen": "Posthoc roughness/contrast>0.4 screen of120 episodes and15800 saved frames, not a validated corruption classifier."
+  },
+  "subsequent_private_preservation": {
+    "revision": "b374ee4c602c538e992ba0e6072e58e18abcb168",
+    "url": "https://huggingface.co/datasets/Sachioster/SafetyDial-PushT/tree/b374ee4c602c538e992ba0e6072e58e18abcb168/campaigns/lewm-preset-20261030-v1",
+    "receipt": "progress/receipts/20261030-lewm-private-preservation.json",
+    "all79_files_download_verified": true
+  }
+}

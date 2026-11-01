@@ -1,0 +1,89 @@
+{
+  "status": "ready; remote study complete and preserved; pod remains available until authorized deadline",
+  "date": "2026-10-29",
+  "purpose": "Move the frozen PushT learned-safety planner tuning study to RunPod; all subsequent experiment computation is remote only.",
+  "user_authorization": [
+    "Please rent a pod and shift there",
+    "No make it a 5 hour deadline",
+    "Go ahead I give you permission to copy"
+  ],
+  "pod": {
+    "id": "r8w4b6lwkbjyrz",
+    "name": "safetydial-pusht-tuning-20261029",
+    "costPerHr": 0.25,
+    "imageName": "runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04",
+    "gpuCount": 1,
+    "containerDiskInGb": 30,
+    "volumeInGb": 20
+  },
+  "gpu": "NVIDIA RTX A4500",
+  "lease_hours": 5,
+  "deadline_utc": "2026-10-30T01:27:16.558798+00:00",
+  "deadline_sast": "2026-10-30T03:27:16.558798+02:00",
+  "overall_session_cap_usd": 5,
+  "new_rental_cap_usd": 1.5,
+  "maximum_five_hour_gpu_charge_usd": 1.25,
+  "running_storage_estimate_usd": 0.034722222222222224,
+  "guards": "Local deadline monitor plus pod-side termination guard; both target only this pod. Credential transfer explicitly approved after automatic approval review initially rejected it. Credential remains outside the project in a 0600 file.",
+  "experiment_design": "configs/pusht_tuning_20261029/design-remote-v1.json",
+  "prior_local_records": "outputs/pusht-tuning-20261029-v2/remote-migration.json",
+  "allocation_failures": "Three CLI offers returned unavailable with no pod created; the final A4500 allocation succeeded without a CUDA inventory filter. A direct API fallback failed before creation. Exact-name/state checks prevented duplicate rental.",
+  "recorded_utc": "2026-10-29T20:40:58.986263+00:00",
+  "remote_guard_verified": {
+    "pid": 327,
+    "event_utc": "2026-10-29T20:35:18.034482+00:00",
+    "deadline_utc": "2026-10-30T01:27:16.558798+00:00",
+    "private_config_mode": "0600"
+  },
+  "remote_pipeline_queued_with_setup_gates": true,
+  "updated_utc": "2026-10-29T20:43:30.752859+00:00",
+  "transfer_verification": {
+    "verified_utc": "2026-10-29T20:42:58.636870+00:00",
+    "files_checked": 3882,
+    "mismatches": []
+  },
+  "environment_path": "/opt/lewm",
+  "installation_storage_repair": {
+    "reason": "Network-volume small-file overhead",
+    "probe_files": 20,
+    "network_seconds": 1.6608561836183071,
+    "ssd_seconds": 0.0037740711122751236,
+    "software_versions_unchanged": true,
+    "simulator_interactions": 0,
+    "model_queries": 0
+  },
+  "setup_source_sha256": "f9f09b1cfce48a44a9858aba27c246386ac583d3945a5ce3c06c98e9d3c1611c",
+  "environment": {
+    "python": "3.12.16",
+    "cuda_runtime": "12.6",
+    "torch": "2.13.0+cu126",
+    "torchvision": "0.28.0+cu126",
+    "stable-worldmodel": "0.1.1",
+    "stable-pretraining": "0.1.8",
+    "transformers": "5.14.1",
+    "numpy": "2.4.6",
+    "pymunk": "7.3.0",
+    "gymnasium": "1.3.0",
+    "checkpoint_hashes_verified": true
+  },
+  "test_stage_exit_code": 0,
+  "remote_development_started_utc": "2026-10-29T20:51:27.211633+00:00",
+  "remote_tests": {
+    "passed": 28,
+    "warnings": 2,
+    "wall_seconds": 25.998614731244743,
+    "native_environment_resets": 1,
+    "native_reset_physics_steps": 2,
+    "environment_actions": 0
+  },
+  "study_receipt": "progress/receipts/20261029-pusht-planner-tuning.json",
+  "preservation": {
+    "archive": "outputs/runpod-pusht-tuning-20261029/pusht-tuning-remote-evidence.tar.gz",
+    "bytes": 3150887,
+    "sha256": "9c9c2e084ccb6583d12aa9353c18fc80cb89f54f32357d83313e03f6ad36275a",
+    "manifest_files": 178,
+    "source_revision": "317899496d71abc07473f3af6830a60a1ae90653",
+    "contains_account_credentials": false
+  },
+  "git_metadata_restored_at_revision": "317899496d71abc07473f3af6830a60a1ae90653"
+}

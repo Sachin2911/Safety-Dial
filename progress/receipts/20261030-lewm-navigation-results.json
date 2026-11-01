@@ -1,0 +1,350 @@
+{
+  "completed_environments": {
+    "tworoom": {
+      "selection": {
+        "id": "random-05",
+        "params": {
+          "horizon": 2,
+          "replan_blocks": 1,
+          "iterations": 30,
+          "budget_scale": 0.2,
+          "variance": 2.0,
+          "elite": 0.2,
+          "retain": 0.25,
+          "correlate": 0.0,
+          "adaptive": false,
+          "objective": "learned",
+          "checked": true
+        }
+      },
+      "evaluation": {
+        "authors": {
+          "control": {
+            "episodes": 6,
+            "safe_completions": 1,
+            "violations": 0,
+            "contacts": 0,
+            "unfinished": 5,
+            "engaged": 6,
+            "J": 900,
+            "actions": 900,
+            "completion_at": {
+              "50": 0,
+              "100": 0,
+              "150": 1
+            },
+            "planning_seconds": 56.12571926508099,
+            "resources": {
+              "environment_resets": 6,
+              "render_frames": 906,
+              "encoder_frames": 72,
+              "model_batch_calls": 1116,
+              "model_candidate_rollouts": 324036,
+              "predictor_steps": 1620180,
+              "learned_candidate_checks": 324036,
+              "learned_transition_rows": 8100900,
+              "environment_actions": 900,
+              "executed_discrete_steps": 900
+            }
+          },
+          "hazard": {
+            "episodes": 6,
+            "safe_completions": 0,
+            "violations": 0,
+            "contacts": 0,
+            "unfinished": 6,
+            "engaged": 6,
+            "J": 900,
+            "actions": 900,
+            "completion_at": {
+              "50": 0,
+              "100": 0,
+              "150": 0
+            },
+            "planning_seconds": 57.80137797538191,
+            "resources": {
+              "environment_resets": 6,
+              "render_frames": 906,
+              "encoder_frames": 72,
+              "model_batch_calls": 1116,
+              "model_candidate_rollouts": 324036,
+              "predictor_steps": 1620180,
+              "learned_candidate_checks": 324036,
+              "learned_transition_rows": 8100900,
+              "environment_actions": 900,
+              "executed_discrete_steps": 900
+            }
+          }
+        },
+        "random-05": {
+          "control": {
+            "episodes": 6,
+            "safe_completions": 6,
+            "violations": 0,
+            "contacts": 0,
+            "unfinished": 0,
+            "engaged": 6,
+            "J": 226,
+            "actions": 226,
+            "completion_at": {
+              "50": 6,
+              "100": 6,
+              "150": 6
+            },
+            "planning_seconds": 28.08628056757152,
+            "resources": {
+              "environment_resets": 6,
+              "render_frames": 232,
+              "encoder_frames": 94,
+              "model_batch_calls": 1457,
+              "model_candidate_rollouts": 211547,
+              "predictor_steps": 423094,
+              "learned_candidate_checks": 211547,
+              "learned_transition_rows": 2115470,
+              "environment_actions": 226,
+              "executed_discrete_steps": 226
+            }
+          },
+          "hazard": {
+            "episodes": 6,
+            "safe_completions": 3,
+            "violations": 0,
+            "contacts": 0,
+            "unfinished": 3,
+            "engaged": 6,
+            "J": 650,
+            "actions": 555,
+            "completion_at": {
+              "50": 2,
+              "100": 2,
+              "150": 3
+            },
+            "planning_seconds": 69.94109896570444,
+            "resources": {
+              "environment_resets": 6,
+              "render_frames": 563,
+              "encoder_frames": 226,
+              "model_batch_calls": 3501,
+              "model_candidate_rollouts": 508611,
+              "predictor_steps": 1017222,
+              "learned_candidate_checks": 508615,
+              "learned_transition_rows": 5086150,
+              "environment_actions": 555,
+              "executed_discrete_steps": 555
+            }
+          }
+        }
+      },
+      "resources": {
+        "environment_resets": 548,
+        "render_frames": 15577,
+        "encoder_frames": 5052,
+        "model_batch_calls": 78302,
+        "model_candidate_rollouts": 15464522,
+        "predictor_steps": 27923695,
+        "learned_candidate_checks": 15464528,
+        "learned_transition_rows": 139618530,
+        "environment_actions": 25841,
+        "executed_discrete_steps": 25841
+      },
+      "scored_trials": 120,
+      "verified": true,
+      "calibration": {
+        "source": "tworoom/motion",
+        "allowance": 12.405431747436523,
+        "test_groups_covered": 12,
+        "test_groups": 12,
+        "source_file_sha256": {
+          "tworoom/motion/calibration.npz": "4a2b195aab8e5522c46c84e0bb3c3881b3c9a3b68f46a293d95ac670407c6608",
+          "tworoom/motion/calibration-predictions.npz": "cb12f55de3582f9c6950dfc532bcd20825f395183c263070aa370ad53e349cec",
+          "tworoom/motion/test.npz": "a177ba95e226c07ef330f89db69f01ed4674f919f099611af8d409725ad8b62e",
+          "tworoom/motion/test-predictions.npz": "52644c46b1cb05652e72f742098dd730cb3fd74746fd1ea3b00331dea42704a9"
+        }
+      },
+      "timing_qualification": {
+        "episodes_with_failed_final_planning_call": 4,
+        "interpretation": "Reported planning seconds omit the final exception-raising call. Full episode and stage wall times include it. Query/interaction counters include it."
+      },
+      "raw": "outputs/lewm-preset-expansion-20261030/tworoom",
+      "replays": "outputs/lewm-preset-expansion-20261030/tworoom/media",
+      "paired_adaptation": "outputs/lewm-preset-expansion-20261030/tworoom/safety-adaptation.png",
+      "motion_model_sha256": "48ce87bfdfe0507ffeea0e68080a556ac07caf1efb55706651c669f79e9ac99a"
+    },
+    "reacher": {
+      "selection": {
+        "id": "random-05",
+        "params": {
+          "horizon": 2,
+          "replan_blocks": 1,
+          "iterations": 30,
+          "budget_scale": 0.2,
+          "variance": 2.0,
+          "elite": 0.2,
+          "retain": 0.25,
+          "correlate": 0.0,
+          "adaptive": false,
+          "objective": "learned",
+          "checked": true
+        }
+      },
+      "evaluation": {
+        "authors": {
+          "control": {
+            "episodes": 6,
+            "safe_completions": 5,
+            "violations": 0,
+            "contacts": 0,
+            "unfinished": 1,
+            "engaged": 6,
+            "J": 433,
+            "actions": 433,
+            "completion_at": {
+              "50": 3,
+              "100": 4,
+              "150": 5
+            },
+            "planning_seconds": 32.20874029677361,
+            "resources": {
+              "environment_resets": 6,
+              "render_frames": 439,
+              "encoder_frames": 40,
+              "model_batch_calls": 620,
+              "model_candidate_rollouts": 180020,
+              "predictor_steps": 900100,
+              "learned_candidate_checks": 180020,
+              "learned_transition_rows": 4500500,
+              "environment_actions": 433,
+              "executed_physics_steps": 864
+            }
+          },
+          "hazard": {
+            "episodes": 6,
+            "safe_completions": 0,
+            "violations": 0,
+            "contacts": 0,
+            "unfinished": 6,
+            "engaged": 6,
+            "J": 900,
+            "actions": 900,
+            "completion_at": {
+              "50": 0,
+              "100": 0,
+              "150": 0
+            },
+            "planning_seconds": 56.457879561930895,
+            "resources": {
+              "environment_resets": 6,
+              "render_frames": 906,
+              "encoder_frames": 72,
+              "model_batch_calls": 1116,
+              "model_candidate_rollouts": 324036,
+              "predictor_steps": 1620180,
+              "learned_candidate_checks": 324036,
+              "learned_transition_rows": 8100900,
+              "environment_actions": 900,
+              "executed_physics_steps": 1800
+            }
+          }
+        },
+        "random-05": {
+          "control": {
+            "episodes": 6,
+            "safe_completions": 4,
+            "violations": 0,
+            "contacts": 0,
+            "unfinished": 2,
+            "engaged": 6,
+            "J": 429,
+            "actions": 429,
+            "completion_at": {
+              "50": 4,
+              "100": 4,
+              "150": 4
+            },
+            "planning_seconds": 43.185568501241505,
+            "resources": {
+              "environment_resets": 6,
+              "render_frames": 435,
+              "encoder_frames": 174,
+              "model_batch_calls": 2697,
+              "model_candidate_rollouts": 391587,
+              "predictor_steps": 783174,
+              "learned_candidate_checks": 391587,
+              "learned_transition_rows": 3915870,
+              "environment_actions": 429,
+              "executed_physics_steps": 856
+            }
+          },
+          "hazard": {
+            "episodes": 6,
+            "safe_completions": 0,
+            "violations": 0,
+            "contacts": 0,
+            "unfinished": 6,
+            "engaged": 6,
+            "J": 900,
+            "actions": 900,
+            "completion_at": {
+              "50": 0,
+              "100": 0,
+              "150": 0
+            },
+            "planning_seconds": 95.90738042537123,
+            "resources": {
+              "environment_resets": 6,
+              "render_frames": 906,
+              "encoder_frames": 360,
+              "model_batch_calls": 5580,
+              "model_candidate_rollouts": 810180,
+              "predictor_steps": 1620360,
+              "learned_candidate_checks": 810180,
+              "learned_transition_rows": 8101800,
+              "environment_actions": 900,
+              "executed_physics_steps": 1800
+            }
+          }
+        }
+      },
+      "resources": {
+        "environment_resets": 548,
+        "render_frames": 15832,
+        "encoder_frames": 5338,
+        "model_batch_calls": 82731,
+        "model_candidate_rollouts": 16303761,
+        "predictor_steps": 28490626,
+        "learned_candidate_checks": 16303769,
+        "learned_transition_rows": 142453300,
+        "environment_actions": 26092,
+        "executed_physics_steps": 52178,
+        "preparation_kinematic_queries": 312
+      },
+      "scored_trials": 120,
+      "verified": true,
+      "calibration": {
+        "source": "reacher/motion",
+        "allowance": 0.05329630896449089,
+        "test_groups_covered": 12,
+        "test_groups": 12,
+        "source_file_sha256": {
+          "reacher/motion/calibration.npz": "6a8d19f3b2bbcb1e3d94b9a9ad795af941b52f85cb97d817bb1ba29ab84705b5",
+          "reacher/motion/calibration-predictions.npz": "9fc20070d071022df49ceca66bab233a7cb461836b78ee253344f35bba6d3a89",
+          "reacher/motion/test.npz": "a538b379c71c5b3809fa19f772cc080a1dd8f9051a71a1d5f16f8661d47ff310",
+          "reacher/motion/test-predictions.npz": "719878c0712e1a257c4bc06b23c61a52a3d5ffbf46f091b2298f13efe818ee18"
+        }
+      },
+      "timing_qualification": {
+        "episodes_with_failed_final_planning_call": 8,
+        "interpretation": "Reported planning seconds omit the final exception-raising call. Full episode and stage wall times include it. Query/interaction counters include it."
+      },
+      "raw": "outputs/lewm-preset-expansion-20261030/reacher",
+      "replays": "outputs/lewm-preset-expansion-20261030/reacher/media",
+      "paired_adaptation": "outputs/lewm-preset-expansion-20261030/reacher/safety-adaptation.png",
+      "motion_model_sha256": "d45b8562fd40ec8359548995133a9005d97688778afe2ce4236ece6853dc0330"
+    }
+  },
+  "scope": "Two completed components of the separately authorized LeWM extension. Cube remains in progress; this is not an all-environment closeout.",
+  "protocol": "configs/lewm_portable_20261030/design.json",
+  "limits": "One-seed synthetic within-room and joint-pose panels, closely related starts/goals within each split. Not independent task replications or an evolutionary comparison. Equal evaluation allowances, not equal total tuning cost; all development work counted.",
+  "model_interface": "Frozen LeWM task cost plus per-environment learned native-proprioception motion predictor and shared primitive geometry. No candidate simulator previews. Native monitors label actual executions.",
+  "private_storage": "New uploads pending payload-specific approval; current exact checkpoints backed up and hash-verified locally."
+}

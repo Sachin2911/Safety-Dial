@@ -1,0 +1,77 @@
+{
+  "seed": 29102026,
+  "max_episode_actions": 150,
+  "max_runtime_minutes": 5,
+  "safety_mode": "learned",
+  "safety_backend": "observed_motion",
+  "verify_analytic_dynamics": false,
+  "world_model_checkpoint": "/workspace/Safety-Dial/assets/world-model/pusht/lewm_object.ckpt",
+  "safety_checkpoint": "/workspace/Safety-Dial/assets/current-safety.pt",
+  "safety_checkpoint_sha256": "22cdca3cffde8b9bbd16c0aad972b4fe33165d015cc0f6561c9e70248d9658a3",
+  "inputs": "/workspace/Safety-Dial/assets/inputs",
+  "pair_sha256": "38ca38ae5f24a32fadeef3ed97bcf0bfc8fff7ba6f2c2fb9edd2075e98d69d70",
+  "margin_px": 6.0,
+  "planner": {
+    "horizon": 3,
+    "iterations": 15,
+    "budget_scale": 0.5,
+    "variance": 1.0,
+    "retain": 0.5,
+    "correlate": 0.5,
+    "adaptive": false,
+    "objective": "learned",
+    "checked": true,
+    "elite": 0.1,
+    "replan_blocks": 1,
+    "cem_refinements": true,
+    "cem_momentum": 0.1,
+    "min_std": 0.05
+  },
+  "case": {
+    "kind": "island",
+    "origin": [
+      217.0875726135852,
+      239.73767783187617
+    ],
+    "basis": [
+      [
+        0.39141708929502733,
+        0.920213378629005
+      ],
+      [
+        -0.920213378629005,
+        0.39141708929502733
+      ]
+    ],
+    "radius_px": 12
+  },
+  "replan_blocks": 1,
+  "name": "lewm-proposal-integration-20261030-v1",
+  "purpose": "Single-episode proposal-adapter engineering integration",
+  "frozen_utc": "2026-10-30T19:58:01.696351+00:00",
+  "execution_pod_id": "dcyk2i5ug0e9yv",
+  "deadline_utc": "2026-10-30T21:46:41.429958+00:00",
+  "maximum_valid_episodes": 1,
+  "maximum_failed_engineering_starts": 2,
+  "maximum_predictor_steps": 337680,
+  "maximum_total_environment_actions_including_failed_starts": 450,
+  "maximum_total_predictor_steps_including_failed_starts": 1013040,
+  "adapter": {
+    "seed": 303031,
+    "checkpoint": "controllers/seeded-303031.json",
+    "spec": {
+      "hidden_size": 8,
+      "max_horizon": 3,
+      "block_action_dim": 10,
+      "normalized_action_bound": 1.0,
+      "projection_seed": 303032
+    }
+  },
+  "injection": "One adapter candidate occupies the final existing candidate slot in each CEM iteration; ordinary candidates remain. Same nominal search prediction work.",
+  "selection": "Fixed seeded untrained adapter. No optimizer updates or outcome-based settings changes.",
+  "admission": "Known engineering island and source pair, unchanged seed and goal. Check settled initial full-pusher and arena clearance before executing.",
+  "scope": "Software integration on one reused engineering scene; not training, efficacy, generalization or optimizer comparison.",
+  "stopping": "Stop after one valid episode, including legitimate refusal or unfinished outcome. Retain failed technical attempts in fresh output directories; no outcome retries.",
+  "accounting": "Record all resets, actions, physics steps, frozen-model queries, adapter calls, failures and elapsed time. Fake software-test model counters are not actual frozen-model queries.",
+  "lifecycle": "Fresh task $1 cap and two-hour cutoff, independent local provider-stop guard, credential-free pod process timeout. Preserve and verify all local evidence before deleting this pod."
+}

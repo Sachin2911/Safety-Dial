@@ -1,0 +1,295 @@
+{
+  "schema": "lewm-navigation-optimizer-comparison-freeze-v2",
+  "study_family": "secondary-budget30-broader-training-v1",
+  "activation_record": {
+    "path": "configs/lewm_campaign_20261031/navigation-budget30-secondary-activation-v1.json",
+    "sha256": "c15c8335d67bcb698256ec3a1d66861d9c19aaa5b25274a25f2b59668226867f"
+  },
+  "required_total_selection_locks_before_any_final_access": 6,
+  "training_quota_per_condition": 2,
+  "training_panel_size": 8,
+  "created_utc": "2026-10-31T04:11:20.806389+00:00",
+  "base_pilot": {
+    "path": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-progress-budget30-pilot-v1.json",
+    "sha256": "34e57c7c2638310401ef5c85fa79711dd82285ae7f063ee225553d9867d39f76"
+  },
+  "builder_sha256": "fd3442beb05b03928f9f3300862d279d3680bbac6be00f15efc3e7e339600f73",
+  "lever_gate": {
+    "state_sha256": "9f70e9bd47ba005c2eb24b9911104af1ddca23010a60fce74842d7bbe8a6ebae",
+    "source_freeze_sha256": "29cb09a55f758ceaf7e32168ed65b33801d534c96c209257073bf7d7bc151a15",
+    "training_case_ids": [
+      "tworoom-01000-none",
+      "tworoom-01004-none",
+      "tworoom-01017-circle3",
+      "tworoom-01018-circle5",
+      "tworoom-01026-circle5",
+      "tworoom-01027-circle7",
+      "tworoom-01029-circle3",
+      "tworoom-01039-circle7"
+    ],
+    "safe_completions": {
+      "native": 0,
+      "fixed_geometry_progress": 3
+    },
+    "denominator_each": 8,
+    "role": "Launch gate only, no outcome-based panel substitution"
+  },
+  "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py",
+  "training_case_ids": [
+    "tworoom-01000-none",
+    "tworoom-01004-none",
+    "tworoom-01017-circle3",
+    "tworoom-01018-circle5",
+    "tworoom-01026-circle5",
+    "tworoom-01027-circle7",
+    "tworoom-01029-circle3",
+    "tworoom-01039-circle7"
+  ],
+  "selection_case_ids": [
+    "tworoom-02001-circle3",
+    "tworoom-02006-circle5",
+    "tworoom-02009-circle3",
+    "tworoom-02011-circle7",
+    "tworoom-02012-none",
+    "tworoom-02015-circle7",
+    "tworoom-02028-none",
+    "tworoom-02030-circle5"
+  ],
+  "source_sha256": {
+    "experiments/helpers/cem_refinements.py": "4a4f4c31db0e846c6b028eeb7db7c9bb1c9d83f474fb0aaaf6b924af3eb77ea5",
+    "experiments/helpers/cube14_env.py": "bafe6cf43a0d83dbbe6ae6ae717200d12ab019eeea40b42a67c2e352db5ae495",
+    "experiments/helpers/cube14_geometry.py": "5ad739435603f4b73cb478ce380a3d1e024ef897b494d23b2657c0db1806f453",
+    "experiments/helpers/cube14_planner.py": "417c388fdc690827c9210d828042b15a5b82ed73bcf23b6db2af042959468052",
+    "experiments/helpers/cube14_runtime.py": "cc2bdb01da308ead2662b05f2d5aa70e5447e260c0e353002729bb2450b6189a",
+    "experiments/helpers/dsrl06_infra.py": "1e2a2aff8f3243843a89694bc1b6e019c046e22514be6bc886e0a6057558b1e1",
+    "experiments/helpers/lewm16_planner.py": "7bd4b4f2c9cd0158d5effe9988410cf5954a8281006d0db0c8b24ec03852908f",
+    "experiments/helpers/lewm16_protocol.py": "85aa6ce84c82736e736bd498f049fd00989ea7c5f819536e4f34dcadb2f83819",
+    "experiments/helpers/lewm18_planner.py": "856e2d4f42af05176ab5416e1628e9009bf5a90fbc5a4fc815abbe50269f4443",
+    "experiments/helpers/lewm18_runtime.py": "5bedfc77daecc4b657828825d6eaabb72b6189c043fbcb253938de13212f75b8",
+    "experiments/helpers/lewm_campaign_training.py": "348bd6a821a2b76ea22545d21aa751f5881ea0b576cae3f6928cea4faaf136fb",
+    "experiments/helpers/lewm_navigation_evolution.py": "653c7bda28b6fafe978c9a55643ba2dfe48b18ad2473bfc9a33b759241f3ead1",
+    "experiments/helpers/lewm_navigation_retrieval.py": "f306d887a359adea2a35e527d5ea9e628810cf13cbd22e35172c6d8ab5bd5fc4",
+    "experiments/helpers/lewm_navigation_retrieval_v2.py": "b732346fa489eafcc9effd26ac3b1b3eeaeaf0e8cc8b6916914ca941a1c452f5",
+    "experiments/helpers/lewm_progress_journal.py": "dc7f315b597407ff116e67b510d7aa3a0bb10ddbc495f9230d41aba21969a5ab",
+    "experiments/helpers/lewm_proposal_adapter.py": "cf6d3bccab418dfdcacf495f1b3308c099483aea9b22f69bb645620f72df70b3",
+    "experiments/helpers/lewm_proposal_evolution.py": "1a653210959b4340ab7369c6c9b46e1fd393991f4c5743ba65ffc8730cb37ea3",
+    "experiments/helpers/lewm_proposal_pilot.py": "48c329ac1c2da8ccaf0999b8b911a9e0fae7120fc5a800e907eb2ecf6004efad",
+    "experiments/helpers/lewm_residual.py": "ae82f4ec8cf9ae9f0c9101de257954d864d3fb5cce12f2da23aff71c6fa23b0e",
+    "experiments/helpers/lewm_screen.py": "b149f81f560af1462eb3d1b42b7504bb94c74bf304b95111a15e0249e5582b9e",
+    "experiments/helpers/portable_env.py": "5b9d3797e7910defecda71f8b24e9e39daac4172f124006c3ec4fcbac16b417a",
+    "experiments/helpers/portable_motion.py": "dbf833cc6f94ae4d7585354eaf842f30beae1df8f72526b824f089a658e49188",
+    "experiments/helpers/pusht_smoke.py": "9906b1ae88a83fdfb5e74fe7d5c1c7c8d005358775b3b00dfcd4fcdb5ec620b3",
+    "experiments/helpers/reacher13_env.py": "7b4febd32b225ca3ed25393d8e5ce2afba569e88e4f061159eb834405e318689",
+    "experiments/helpers/reacher13_geometry.py": "7a402be771ce9b0b9511b0db15615ed0cec536ce3e7fdf2dbe4b3361c053264c",
+    "experiments/helpers/safecem10_planner.py": "9f4dddaa54012c1f45fce6da054b74611d826e4f2fa91445c274a43cca5a43ed",
+    "experiments/helpers/safety_model.py": "aea6c3ef1140328136518b42adfb935d310d042a6e2852e66bc917b8ae7d069b",
+    "experiments/helpers/tworoom12_env.py": "67352edc208a01b67928f8ac898a2e521730956416e552abd6678a1c7df9ef0e",
+    "experiments/helpers/tworoom12_planner.py": "aba7ebdaa96fdde706e3aa5aa88c30bf822272785aba0a6d624c17c595a4778c",
+    "experiments/scripts/freeze_lewm_navigation_optimizer_comparison_v2.py": "fd3442beb05b03928f9f3300862d279d3680bbac6be00f15efc3e7e339600f73",
+    "experiments/scripts/freeze_lewm_navigation_progress_pilot.py": "3d58c3a655ce93336ebd92ceadc9e79c8fd8a2aae6c519d05f0c6ac2f3555b5f",
+    "experiments/scripts/qualify_lewm_goal_readout.py": "801a1147d0d9d0820a5bef278ecaabe36933e9769c731015457e596c67d760ae",
+    "experiments/scripts/run_lewm_navigation_campaign.py": "7485bb75e257cdd8f471e956a22d99a7d43d2bc162741dbb8c0bbbb1a574b907",
+    "experiments/scripts/run_lewm_navigation_campaign_v2.py": "08596c23ce476978251a5aaf6e1c14919216c30843df74fca6c00bb884a088b4"
+  },
+  "schedule": [
+    {
+      "repeat_id": 0,
+      "host": "navigation",
+      "pod_id": "vukovc3t4o1dui",
+      "methods_sequential": [
+        "cma",
+        "random",
+        "reinforce"
+      ],
+      "runs": {
+        "cma": {
+          "protocol": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-cma-r0.json",
+          "output_namespace": "results/navigation-budget30-comparison-v1/r0/cma",
+          "nominees": "results/navigation-budget30-comparison-v1/r0/cma/nominees.json",
+          "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+        },
+        "random": {
+          "protocol": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-random-r0.json",
+          "output_namespace": "results/navigation-budget30-comparison-v1/r0/random",
+          "nominees": "results/navigation-budget30-comparison-v1/r0/random/nominees.json",
+          "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+        },
+        "reinforce": {
+          "protocol": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-reinforce-r0.json",
+          "output_namespace": "results/navigation-budget30-comparison-v1/r0/reinforce",
+          "nominees": "results/navigation-budget30-comparison-v1/r0/reinforce/nominees.json",
+          "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+        }
+      },
+      "fixed_tuning": "results/navigation-budget30-comparison-v1/r0/fixed-tuning",
+      "training_controls": "results/navigation-budget30-comparison-v1/r0/training-controls",
+      "selection_protocol_to_materialize": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/selection-reservation-r0.json",
+      "rule": "One active experiment worker per physical host. Run all methods and native/fixed controls for the repeat on its assigned host; do not compare a method on another host without local controls."
+    },
+    {
+      "repeat_id": 1,
+      "host": "pusht",
+      "pod_id": "wq4ar2qx2ff6r4",
+      "methods_sequential": [
+        "random",
+        "reinforce",
+        "cma"
+      ],
+      "runs": {
+        "cma": {
+          "protocol": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-cma-r1.json",
+          "output_namespace": "results/navigation-budget30-comparison-v1/r1/cma",
+          "nominees": "results/navigation-budget30-comparison-v1/r1/cma/nominees.json",
+          "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+        },
+        "random": {
+          "protocol": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-random-r1.json",
+          "output_namespace": "results/navigation-budget30-comparison-v1/r1/random",
+          "nominees": "results/navigation-budget30-comparison-v1/r1/random/nominees.json",
+          "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+        },
+        "reinforce": {
+          "protocol": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-reinforce-r1.json",
+          "output_namespace": "results/navigation-budget30-comparison-v1/r1/reinforce",
+          "nominees": "results/navigation-budget30-comparison-v1/r1/reinforce/nominees.json",
+          "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+        }
+      },
+      "fixed_tuning": "results/navigation-budget30-comparison-v1/r1/fixed-tuning",
+      "training_controls": "results/navigation-budget30-comparison-v1/r1/training-controls",
+      "selection_protocol_to_materialize": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/selection-reservation-r1.json",
+      "rule": "One active experiment worker per physical host. Run all methods and native/fixed controls for the repeat on its assigned host; do not compare a method on another host without local controls."
+    },
+    {
+      "repeat_id": 2,
+      "host": "recovery",
+      "pod_id": "nj2fqkp2prgk8x",
+      "methods_sequential": [
+        "reinforce",
+        "cma",
+        "random"
+      ],
+      "runs": {
+        "cma": {
+          "protocol": "configs/lewm_campaign_20261031/navigation-budget30-relocated-v1/training-cma-r2.json",
+          "output_namespace": "results/navigation-budget30-relocated-v1/r2/cma",
+          "nominees": "results/navigation-budget30-relocated-v1/r2/cma/nominees.json",
+          "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+        },
+        "random": {
+          "protocol": "configs/lewm_campaign_20261031/navigation-budget30-relocated-v1/training-random-r2.json",
+          "output_namespace": "results/navigation-budget30-relocated-v1/r2/random",
+          "nominees": "results/navigation-budget30-relocated-v1/r2/random/nominees.json",
+          "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+        },
+        "reinforce": {
+          "protocol": "configs/lewm_campaign_20261031/navigation-budget30-relocated-v1/training-reinforce-r2.json",
+          "output_namespace": "results/navigation-budget30-relocated-v1/r2/reinforce",
+          "nominees": "results/navigation-budget30-relocated-v1/r2/reinforce/nominees.json",
+          "entrypoint": "experiments/scripts/run_lewm_navigation_campaign_v2.py"
+        }
+      },
+      "fixed_tuning": "results/navigation-budget30-relocated-v1/r2/fixed-tuning",
+      "training_controls": "results/navigation-budget30-relocated-v1/r2/training-controls",
+      "selection_protocol_to_materialize": "configs/lewm_campaign_20261031/navigation-budget30-relocated-v1/selection-reservation-r2.json",
+      "rule": "One active experiment worker per physical host. Run all methods and native/fixed controls for the repeat on its assigned host; do not compare a method on another host without local controls."
+    }
+  ],
+  "files": [
+    {
+      "path": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-cma-r0.json",
+      "sha256": "680ac584e1a9d3f0935d3fbd813bac063e227afee19fe3a7087ade95b85912f7"
+    },
+    {
+      "path": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-random-r0.json",
+      "sha256": "9dd19596795113e1be60ad2bdc5a042fc6a1b0b72ecd3d7df2c6a26e5989b483"
+    },
+    {
+      "path": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-reinforce-r0.json",
+      "sha256": "8c1662ae8cb7abf010cc2a9c2d45e9cbdb95d45463f772b4dba7258ea1090470"
+    },
+    {
+      "path": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/fixed-tuning-r0.json",
+      "sha256": "aff5d047f8370b32f1efa3392d8be7278f4a6e28caebfda14b116a8e7d417bca"
+    },
+    {
+      "path": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-controls-r0.json",
+      "sha256": "68b3eada05ac3fe0aef1835239ae611004897149406774237cd567bc2a9a9af4"
+    },
+    {
+      "path": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/selection-reservation-r0.json",
+      "sha256": "31456412710108bd713c36540111743c49870fc9f7347a13ae1ad189306ac242"
+    },
+    {
+      "path": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-cma-r1.json",
+      "sha256": "faa7a049acc8ba45491fb2c0e97bd675d0f3239b03979cb4fc5b808cec8aba37"
+    },
+    {
+      "path": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-random-r1.json",
+      "sha256": "b0cf698bcb9d93200ae6815c68a3b4d7db6c3c8d1d487b297906f02b8177a34f"
+    },
+    {
+      "path": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-reinforce-r1.json",
+      "sha256": "61ee5b37b7e37e289118e53cd2026290f056c45c88254052799352a851c617f5"
+    },
+    {
+      "path": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/fixed-tuning-r1.json",
+      "sha256": "100571d2931ac30736184ab8a44c5502b02234973127f65caf0af8baf7712806"
+    },
+    {
+      "path": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/training-controls-r1.json",
+      "sha256": "73f549032ca6c30060c8f7353e7d85bdf0fbe7da6b1b2828e80c53e2f1c03856"
+    },
+    {
+      "path": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/selection-reservation-r1.json",
+      "sha256": "c474c26f0e08e96fa1cf3b9366a656520f46dff813593473ec5ecb5e9b44f265"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-budget30-relocated-v1/training-cma-r2.json",
+      "sha256": "29457e15062dc8bef1c4a35fa16d43352e135bdac546f75feb9a1041f5b10250"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-budget30-relocated-v1/training-random-r2.json",
+      "sha256": "f7f7e0d7ad3c4fdbae45df78d0b3bcae285b223b53c36f985ab42bdb53d3b73b"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-budget30-relocated-v1/training-reinforce-r2.json",
+      "sha256": "ff1ce2f951f48f2e4af609cc0661b2049ae26b76ae920986972fb4f3e8161a11"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-budget30-relocated-v1/fixed-tuning-r2.json",
+      "sha256": "c87fa276346b2e6d4d9fde1468d92e94317a7a6ca740723cd98a1047fd0be6c7"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-budget30-relocated-v1/training-controls-r2.json",
+      "sha256": "ee96d8fd6071987a2acd486bd47d694a6259d60c2408348cb6562dd33a744009"
+    },
+    {
+      "path": "configs/lewm_campaign_20261031/navigation-budget30-relocated-v1/selection-reservation-r2.json",
+      "sha256": "97b2468e08893f45ba7f396433abe2fe1f29150edc561c94fdaed8e565154707"
+    },
+    {
+      "path": "/home/sachin/Desktop/Research/Safety-Dial/configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/final-reservation.json",
+      "sha256": "09a2f154658b821e93b05fae35e0bf6b1b66775c4693a01022b2272f6c3d008e"
+    }
+  ],
+  "no_workers_launched": true,
+  "per_optimizer_repeat_hard_action_cap": 11760,
+  "three_method_three_repeat_action_cap": 105840,
+  "fixed_tuning_three_repeat_action_cap": 35280,
+  "all_preparation_and_engineering_costs_remain_separately_charged": true,
+  "deadline": "2026-10-31T07:23:14+00:00",
+  "final_pixels_read": 0,
+  "metadata_relocation": {
+    "path": "configs/lewm_campaign_20261031/navigation-secondary-r2-relocation-v1.json",
+    "sha256": "bdc7808f6ce172864a2d3e2fafdd00d1af6c5597714f20fca4741243ee924c70"
+  },
+  "original_secondary_manifest": {
+    "path": "configs/lewm_campaign_20261031/navigation-budget30-comparison-v1/manifest.json",
+    "sha256": "b6900ee408bd25bf8e73f2928750639ec81d75a81c50d813662c69d1e2a37225"
+  },
+  "no_workers_launched_by_this_relocation": true,
+  "existing_original_repeats_0_1_retained_unchanged": true,
+  "relocated_repeat2_was_unstarted": true,
+  "relocation_builder_sha256": "efa9d72db261aa29116143f034d3574f71c76c94081bf15afae85d866c59be6e"
+}

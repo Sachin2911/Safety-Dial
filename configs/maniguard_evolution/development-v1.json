@@ -1,0 +1,80 @@
+{
+  "schema": "maniguard-evolution-development-v1",
+  "purpose": "Iterative implementation and development training, not a final optimizer comparison",
+  "authorization": "User requested a complete implementation and iterative pipeline without staged small-study approval gates; bounded joint corrections and gripper decisions with declared privileged simulator inputs were explicitly selected.",
+  "maniguard_checkout": "/workspace/Safety-Dial/third_party/ManiGuard",
+  "information": {
+    "privileged_simulator_inputs": true,
+    "inputs": ["Robot joint positions and velocities", "Native transformed action", "Jar and end-effector poses", "Original safety propositions", "Grasp state", "Robot-jar contact", "Causal controller memory"],
+    "monitor": "Original passive ManiGuard monitor; no action veto",
+    "held_out_tasks_used": []
+  },
+  "adapter": {
+    "hidden_size": 4,
+    "correction_limit_rad": 0.08,
+    "smoothing": 0.5,
+    "gripper_threshold": 0.6,
+    "position_scale_m": 0.25,
+    "joint_error_scale_rad": 0.2,
+    "joint_velocity_scale": 2.0,
+    "stall_scale_controls": 400
+  },
+  "search": {
+    "method": "cmaes",
+    "population": 6,
+    "generations": 4,
+    "sigma": 0.3,
+    "seed": 291021,
+    "initialization_seed": 291022,
+    "tasks": [0, 3],
+    "policy_seeds": [292100, 292101, 292102, 292103],
+    "objective": "completion_progress",
+    "initial_controller": null,
+    "selection": "Final CMA-ES distribution mean; validation does not select or update it"
+  },
+  "validation": {
+    "tasks": [6, 9],
+    "policy_seeds": [292200, 292201, 292202],
+    "interpretation": "Fresh-seed development validation against contemporary native execution on the same host. No held-out evaluation or evolutionary-advantage claim."
+  },
+  "limits": {
+    "deadline_utc": "2026-10-30T01:47:47+00:00",
+    "shutdown_reserve_seconds": 120,
+    "minimum_start_window_seconds": 300,
+    "episode_timeout_seconds": 900,
+    "max_starts": 68,
+    "max_environment_step_attempts": 136680,
+    "max_model_query_attempts": 17068,
+    "existing_session_cap_usd": 10,
+    "new_rentals_authorized": false,
+    "note": "Existing local and remote rental guards remain authoritative. Failed starts and synthetic seed-reset queries are charged. Bootstrap physics is unknown, not zero."
+  },
+  "evaluator": {
+    "name": "maniguard_evolution_development_v1",
+    "benchmark_root": "/workspace/Safety-Dial/third_party/ManiGuard/outputs/lerobot_datasets/maniguard-bench/jar_transport",
+    "host": "127.0.0.1",
+    "port": 8000,
+    "use_openpi_client": true,
+    "random_policy": false,
+    "state_mode": "joint",
+    "external_cam": "left",
+    "action_dim": 8,
+    "execute_horizon": 8,
+    "gripper_binarize": true,
+    "controller_preset": "joint_position_raw",
+    "ik_eef_to_joint": false,
+    "grasping_mode": "assisted",
+    "action_frequency": 20,
+    "rendering_frequency": 20,
+    "physics_frequency": 120,
+    "headless": true,
+    "longfinger": true,
+    "max_steps": 2000,
+    "success_hold_steps": 10,
+    "source_profile": "legacy",
+    "camera_resolution": 256,
+    "save_video": true,
+    "save_wrist_video": true,
+    "metrics": ["success", "safety"]
+  }
+}

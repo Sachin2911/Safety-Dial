@@ -1,0 +1,49 @@
+{
+  "schema": "maniguard-evolution-code-review-v1",
+  "reviewed_utc": "2026-10-29T21:36:01.593293+00:00",
+  "method": "Manual source review, saved-trajectory diagnostics and rented-host regression tests",
+  "running_v2_source_unchanged": true,
+  "next_version_launched": false,
+  "new_simulator_interactions": 0,
+  "new_model_queries": 0,
+  "findings": [
+    {
+      "type": "bug",
+      "location": "experiments/helpers/maniguard_evolution_scoring.py:ordered_progress",
+      "finding": "Auxiliary carry-stage credit can be granted when departure preceded the ten-control grasp",
+      "reproduction": {
+        "departure_observation": 1,
+        "ten_control_grasp_observation": 9,
+        "v2_stage": 3,
+        "fixed_v3_stage": 2
+      },
+      "strict_completion_endpoint_affected": false,
+      "initial_generation_fitness_affected": false,
+      "fix": "Separately versioned ordered_progress_v3 requires a later support-departure transition"
+    },
+    {
+      "type": "design_weakness",
+      "finding": "Initial candidates apply nearly continuous arm residuals and frequently lose engagement; observed joint RMS was about 0.011 to 0.025 radians.",
+      "improvement": "Conservative per-parameter initial arm/hidden exploration, retaining larger gripper exploration",
+      "interpretation": "Consistent with overly disruptive exploration, but matched seeds do not isolate causal harm in this simulator."
+    },
+    {
+      "type": "design_weakness",
+      "finding": "Safe inactivity ties with safe target contact without closure, and the native point is not retained in the original candidate population",
+      "improvement": "Native-anchor injection for both CMA-ES and random search, plus a safe-target-contact tie-break below strict completion"
+    }
+  ],
+  "validation": {
+    "location": "/workspace/maniguard-evolution-20261029/review-v3",
+    "pytest": "33 passed in 1.86s",
+    "ruff": "passed",
+    "tests_include_original_pipeline": true
+  },
+  "future_configuration_fragment": "configs/maniguard_evolution/improvements-v3-draft.json",
+  "allocation": "No new run or rental authorized by the draft; current goal remains completion, preservation and teardown of the active run",
+  "interface_checks": {
+    "eef_pose": "Installed OmniGibson manipulation_robot.py documents global/world coordinates; frame convention is correct",
+    "action_path": "Raw joint-target correction after native gripper binarization; actual modified-episode replay passed",
+    "active_endpoint": "Strict safe completion and passive monitor unchanged"
+  }
+}

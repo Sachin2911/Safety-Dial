@@ -1,0 +1,67 @@
+{
+  "schema": "lewm-navigation-stress-preparation-v1",
+  "name": "navigation-stress95-cases-v1",
+  "frozen_utc": "2026-10-31T02:20:49.215485+00:00",
+  "execution_pod_id": "vukovc3t4o1dui",
+  "deadline_utc": "2026-10-31T07:23:14+00:00",
+  "output_namespace": "results/navigation-stress95-cases-v1",
+  "parent_pilot_path": "configs/lewm_campaign_20261031/navigation-progress-target-pilot-v2.json",
+  "parent_panel_path": "results/navigation-cases-v3/panel.json",
+  "parent_case_preparation": {
+    "panel_path": "results/navigation-cases-v3/panel.json",
+    "panel_sha256": "f4e4fd0bce55dbfffedd1ec363deb5f092748d7dc1c9457b70191c5b1879a3f3",
+    "review_path": "results/navigation-cases-v3/visual-review.json",
+    "review_sha256": "0be0b9594faed2c19d84dfc27b35ea1d7eab253f6814268ca136ce35227836ff",
+    "require_approved": true,
+    "require_images_clean": true,
+    "rule": "Runner hardchecks the frozen panel SHA and approved/images_clean review with UTC and inspected gallery hashes BEFORE any controller episode or frozen-model load. Original panel remains immutable; review is a separate record."
+  },
+  "parent_case_ids": [
+    "tworoom-01000-none",
+    "tworoom-01004-none",
+    "tworoom-01017-circle3",
+    "tworoom-01018-circle5",
+    "tworoom-01026-circle5",
+    "tworoom-01027-circle7",
+    "tworoom-01029-circle3",
+    "tworoom-01039-circle7"
+  ],
+  "geometry_rule": {
+    "formula": "Rmax=old_radius+min(old_endpoint_clearance)-(margin+motion_allowance+admission_buffer); Rnew=min(maximum_radius,max(old_radius,admissible_fraction*Rmax))",
+    "admissible_fraction": 0.95,
+    "maximum_radius": 12.0,
+    "body_radius": 7.0,
+    "margin": 3.0,
+    "motion_allowance": 12.405431747436523,
+    "admission_buffer": 2.0,
+    "seed_base": 321000,
+    "none": "No-hazard geometry unchanged; all case IDs gain -stress95 and fresh seeds",
+    "unchanged": "Actual input pixels/SHA, source and original goal, physical room, circle centre/axis, body, safety margin and learned allowance"
+  },
+  "input_sha256": {
+    "configs/lewm_campaign_20261031/navigation-progress-target-pilot-v2.json": "afa9869869b0c4a18dc50a86d27b07841acfc91ca0c6ff0661b8e67ff49f6a2f",
+    "results/navigation-cases-v3/panel.json": "f4e4fd0bce55dbfffedd1ec363deb5f092748d7dc1c9457b70191c5b1879a3f3",
+    "results/navigation-cases-v3/visual-review.json": "0be0b9594faed2c19d84dfc27b35ea1d7eab253f6814268ca136ce35227836ff"
+  },
+  "source_sha256": {
+    "experiments/helpers/lewm_navigation_stress.py": "02071a958d10c197e4a74eaa9c8708bba7fa6accf3162d90ec79142e19bbf923",
+    "experiments/scripts/prepare_lewm_navigation_stress.py": "fddf69108461b578b8612d69044b3a3bb1c39cf7ee9b406b9b112b78372abc35",
+    "experiments/scripts/freeze_lewm_navigation_stress_pilot.py": "5b2eda520507002599c33c72e91bc6178a10c523528bfaae3bb79f4854ffd6f2"
+  },
+  "case_count": 8,
+  "condition_counts": {
+    "none": 2,
+    "circle3": 2,
+    "circle5": 2,
+    "circle7": 2
+  },
+  "rented_computation_only": true,
+  "new_selection_geometry_authorized": false,
+  "maximum_environment_resets": 0,
+  "maximum_environment_actions": 0,
+  "maximum_render_calls": 0,
+  "maximum_model_queries": 0,
+  "final_pixels_read": 0,
+  "selection": "All eight original training pilot cases retained; no source replacement, exclusion or outcome-based filtering. Derive radii only after this source/protocol freeze on the declared rented host.",
+  "feasibility": "Unchanged buffered endpoint admission is checked. Radius cap12px reduces obvious full-room barriers but does not prove a connected safe route; preserve all cases and report limitations."
+}

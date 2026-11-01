@@ -1,0 +1,106 @@
+{
+  "schema": "vast-deadline-extension-v1",
+  "instance_id": 58267560,
+  "label": "safetydial-maniguard-setup-20261029",
+  "authorization": "Ok so actually you can schedule another 5 hours on the vast gpu",
+  "scope": "Extend both live shutdown guards by five hours; no experiment launch.",
+  "previous_deadline_utc": "2026-10-29T20:47:47+00:00",
+  "deadline_utc": "2026-10-30T01:47:47+00:00",
+  "deadline_sast": "2026-10-30T03:47:47+02:00",
+  "added_hours": 5,
+  "initial_cap_usd_unchanged": 10,
+  "applied_utc": "2026-10-29T20:18:05.521305+00:00",
+  "local_guard_pid": 1110162,
+  "local_guard_state_path": "/tmp/safety-dial-vast-guard-5h-20261029.json",
+  "local_guard_source_path": "/tmp/safety-dial-vast-guard-5h-20261029.py",
+  "local_guard_snapshot": {
+    "pid": 1110162,
+    "label": "safetydial-maniguard-setup-20261029",
+    "deadline_utc": "2026-10-30T01:47:47+00:00",
+    "initial_cap_usd": 10,
+    "prior_runpod_cost_estimate_usd": 0.82,
+    "status": "monitoring",
+    "stopped_instance_ids": [],
+    "heartbeat_utc": "2026-10-29T20:18:04.056852+00:00",
+    "matching_instance_ids": [
+      58267560
+    ],
+    "estimated_total_with_bandwidth_reserve_usd": 3.193841280547778
+  },
+  "remote_extension": {
+    "instance_id": 58267560,
+    "old_pid": 16198,
+    "new_pid": 22271,
+    "old_deadline_utc": "2026-10-29T20:47:47+00:00",
+    "new_deadline_utc": "2026-10-30T01:47:47+00:00",
+    "added_hours": 5,
+    "scoped_credentials_present": true,
+    "authenticated_read_passed": true,
+    "new_guard_alive": true,
+    "changed_utc": "2026-10-29T20:18:03.848409+00:00",
+    "authorization": "User requested another five hours on the Vast GPU; $10 cap retained."
+  },
+  "previous_local_guard_pid": 1013729,
+  "live_guards_only_no_container_recreation": true,
+  "runpod_check": {
+    "check": "Live runpodctl pod list --all returned [] during this extension.",
+    "current_pod_list_empty": true,
+    "former_development_pod": "sx1m7orpwfx62x",
+    "backup_success_utc": "2026-10-29T18:57:39.491253+00:00",
+    "termination_verified_utc": "2026-10-29T18:57:40.714245+00:00",
+    "cause": "Existing six-hour lease expired",
+    "new_runpod_actions": "Read-only pod list; no resource changes."
+  },
+  "verification": {
+    "remote_guard_alive": true,
+    "previous_remote_guard_retired": true,
+    "guard_check": {
+      "instance_id": 58267560,
+      "guard_pid": 22271,
+      "scoped_credentials_present": true,
+      "authenticated_read_passed": true,
+      "deadline_utc": "2026-10-30T01:47:47+00:00"
+    },
+    "billing_snapshot": {
+      "id": 58267560,
+      "label": "safetydial-maniguard-setup-20261029",
+      "actual_status": "running",
+      "intended_status": "running",
+      "start_date": 1793287560.654855,
+      "dph_total": 0.28222222222222226,
+      "storage_cost": 0.19999999999999998,
+      "inet_down_cost": 0.0013020833333333333,
+      "inet_up_cost": 0.0013020833333333333
+    },
+    "checked_utc": "2026-10-29T20:18:43.916729+00:00",
+    "local_guard_alive": true,
+    "previous_local_guard_retired": true,
+    "local_guard_snapshot": {
+      "pid": 1110162,
+      "label": "safetydial-maniguard-setup-20261029",
+      "deadline_utc": "2026-10-30T01:47:47+00:00",
+      "initial_cap_usd": 10,
+      "prior_runpod_cost_estimate_usd": 0.82,
+      "status": "monitoring",
+      "stopped_instance_ids": [],
+      "heartbeat_utc": "2026-10-29T20:18:25.244702+00:00",
+      "matching_instance_ids": [
+        58267560
+      ],
+      "estimated_total_with_bandwidth_reserve_usd": 3.195514523445677
+    }
+  },
+  "estimates": {
+    "additional_five_hours_compute_and_disk_usd": 1.4111111111111114,
+    "session_compute_and_disk_through_deadline_usd": 2.924633230502076,
+    "session_total_with_prior_runpod_and_1usd_bandwidth_reserve": 4.744633230502076,
+    "not_an_invoice": true
+  },
+  "verification_complete": true,
+  "rental_closeout": {
+    "status": "destroyed",
+    "verified_utc": "2026-10-30T00:34:28.931402+00:00",
+    "receipt": "progress/receipts/20261030-maniguard-evolution-closeout.json",
+    "final_artifacts_verified_before_destruction": true
+  }
+}

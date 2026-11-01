@@ -1,0 +1,92 @@
+{
+  "schema": "lewm-navigation-joint-final-design-v1",
+  "frozen_utc": "2026-10-31T02:53:10.044279+00:00",
+  "execution_enabled": false,
+  "secondary_activation_authorized_by_this_design": false,
+  "purpose": "Optional reviewable six-lock final path if root prospectively activates the qualified broader30-action study; no opening, preparation, final pixels or episodes are started by this design.",
+  "opening_requirements": {
+    "primary_selection_locks": 3,
+    "primary_episode_actions": 50,
+    "secondary_selection_locks": 3,
+    "secondary_episode_actions": 30,
+    "total_before_any_final_access": 6,
+    "all_source_weight_provenance_hashes_required": true,
+    "best_repeat_selection_forbidden": true
+  },
+  "host_rule": "PrimaryR0/R2navigation,R1pusht remains unchanged. Secondary uses actual frozen lock host assignments, permitsR0navigation/R1/R2pusht, and retains both physical hosts within each family.",
+  "unchanged_primary_template": {
+    "path": "configs/lewm_campaign_20261031/navigation-final-cases-template-v1.json",
+    "sha256": "921383025e6a40849b0a90045ca8c293c8db9e78c4d5e840fdfdcd6e3a9db23f"
+  },
+  "unchanged_primary_comparison_builder": {
+    "path": "experiments/scripts/freeze_lewm_navigation_final_comparison.py",
+    "sha256": "816892338ab628e00487c849b16fa4830d90a064183f44202e1942e26250a527"
+  },
+  "workflow": [
+    {
+      "stage": "selection",
+      "action": "Seal each family separately with all three repeat-specific six-arm selections,50actions primary and30actions secondary. Neither family opening alone authorizes final data after secondary activation."
+    },
+    {
+      "stage": "joint_seal",
+      "entrypoint": "experiments/scripts/freeze_lewm_navigation_joint_final.py seal",
+      "inputs": [
+        "primary-opening.json",
+        "secondary-opening.json",
+        "explicit-secondary-activation.json"
+      ],
+      "action": "Require both three-lock groups, six distinct immutable lock SHAs, correct family caps/two physical hosts and no final pixels or outcomes. Refuse backdated sealing after canonical final preparation has begun."
+    },
+    {
+      "stage": "joint_preparation_freeze",
+      "entrypoint": "experiments/scripts/freeze_lewm_navigation_joint_final.py preparation",
+      "action": "Bind joint seal to unchanged activated primary50 preparation protocol. This writes JSON only."
+    },
+    {
+      "stage": "shared_images",
+      "entrypoint": "experiments/scripts/prepare_lewm_navigation_joint_final_cases.py",
+      "action": "Validate all six locks and sources before heavy imports, dataset access or output creation. Persist a joint access receipt, then delegate exact unchanged primary16case v3 geometry/admission/gallery preparation. Secondary cap30 does not change goals, images or safety margins."
+    },
+    {
+      "stage": "visual_review",
+      "action": "Root explicitly approves the shared16case final gallery with panel/gallery SHAs before model inputs or controller episodes."
+    },
+    {
+      "stage": "joint_final_freeze",
+      "entrypoint": "experiments/scripts/freeze_lewm_navigation_joint_final.py comparison",
+      "action": "Reuse immutable primary builder as JSON design templates only; write six fresh final profiles3primary50+3secondary30, lock-derived hosts and all source/asset/weight/review/joint-chain pins. Optional decoded-native endpoint30/50 host blocks are chosen jointly now, before any final outcome."
+    }
+  ],
+  "profile_limits": {
+    "primary_each_repeat": {
+      "starts": 96,
+      "maximum_actions": 4800
+    },
+    "secondary_each_repeat": {
+      "starts": 96,
+      "maximum_actions": 2880
+    },
+    "optional_decoded_native_per_host_endpoint": {
+      "starts": 16,
+      "maximum_actions_rule": "16*endpoint_actions"
+    },
+    "all_repeats_retained": true
+  },
+  "analysis": "Sixteen source-case clusters shared across both endpoints and all six learner repeats; preserve study family and physical-host blocks. Keep duplicate FP32 policy flags and every actual execution/cost; no final-outcome-based family, best-repeat or auxiliary-baseline choice.",
+  "source_sha256": {
+    "experiments/helpers/lewm_navigation_joint_final.py": "ec304d78cfee963467bc5284edd1f92ef72b8447560c33ec8f0fa9d8688bd625",
+    "experiments/scripts/prepare_lewm_navigation_joint_final_cases.py": "3f66028b2f6ef237120a6c3c59605d4c6d19cdba20645d5364b775efb8ccf5b3",
+    "experiments/scripts/freeze_lewm_navigation_joint_final.py": "4a15c4290bf674ca8d4eaae581338c75f7a0450472ac5c2a903e9edbd8b7da10",
+    "experiments/tests/test_lewm_navigation_joint_final.py": "75206505c1dc93ba37197d9683637d10525d5c0dbbc08baaeb3a749fb85051fb"
+  },
+  "synthetic_gate": {
+    "path": "environment/joint-final-admission-gate-v1/gate.json",
+    "passed": 5,
+    "failures": 0,
+    "skips": 0,
+    "new_model_simulator_renderer_queries": 0,
+    "final_metadata_or_pixels_accessed": 0
+  },
+  "workers_started": 0,
+  "final_metadata_or_pixels_accessed": 0
+}

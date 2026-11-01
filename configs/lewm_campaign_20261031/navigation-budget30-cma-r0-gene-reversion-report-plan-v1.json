@@ -1,0 +1,106 @@
+{
+  "all_expected_jobs": 96,
+  "all_negative_and_duplicate_policy_results_retained": true,
+  "allowed_pod_ids": [
+    "vukovc3t4o1dui"
+  ],
+  "arm_order": [
+    "cma_full",
+    "strong_anchor",
+    "revert_gene_00",
+    "revert_gene_01",
+    "revert_gene_02",
+    "revert_gene_03",
+    "revert_gene_04",
+    "revert_gene_05",
+    "revert_gene_06",
+    "revert_gene_07",
+    "revert_gene_08",
+    "revert_gene_09"
+  ],
+  "case_order": [
+    "tworoom-01000-none",
+    "tworoom-01004-none",
+    "tworoom-01017-circle3",
+    "tworoom-01018-circle5",
+    "tworoom-01026-circle5",
+    "tworoom-01027-circle7",
+    "tworoom-01029-circle3",
+    "tworoom-01039-circle7"
+  ],
+  "command_after_root_completion_confirmation": "source /workspace/activate-lewm-campaign.sh && cd /workspace/Safety-Dial && /opt/lewm/bin/python experiments/scripts/report_lewm_gene_reversion.py --plan configs/lewm_campaign_20261031/navigation-budget30-cma-r0-gene-reversion-report-plan-v1.json --artifact-root /workspace/Safety-Dial --out results/navigation-budget30-cma-r0-gene-reversion-report-v1 --study-complete-confirmed-by-root",
+  "denominator_each_arm": 8,
+  "execution_gate": "Do not execute until root explicitly confirms the separate96-job study complete. Require actual rentedNav pod and --study-complete-confirmed-by-root. Final analysis/preservation readiness takes priority; leave unexecuted if no safe gap.",
+  "extra_work_required_in_original_nav_final_collector": true,
+  "final_data_read": 0,
+  "fresh_report_namespace": "results/navigation-budget30-cma-r0-gene-reversion-report-v1",
+  "frozen_before_first_study_outcome": true,
+  "frozen_utc": "2026-10-31T05:46:33.143846+00:00",
+  "inference": "Exploratory development TRAIN mechanism study of one fixed R0 nominee and eight fixed cases. No confidence intervals, p-values, optimizer-superiority inference, favorable gene/case selection or modification to nominees/final panels/primary analyses.",
+  "lineage_checks": [
+    "Exact study protocol41126488 and frozen script hash",
+    "Original complete R0 CMA6updates/48candidatepanels and full nominee/anchor references",
+    "Raw source/protocol/canonical started.job/input hashes and eight producer panel references",
+    "All96 planned jobs, exact one-coordinate vectors, cyclic arm order, balanced cases, fresh common seeds",
+    "Complete study source/state/started/outer/inner JSON and resource/action ledger reconciliation"
+  ],
+  "metrics": [
+    "safe_completion",
+    "violation",
+    "unfinished",
+    "engaged",
+    "progress",
+    "actual_environment_actions"
+  ],
+  "new_NN_simulator_calls": 0,
+  "optimizer_budgets_unchanged": true,
+  "output_files": [
+    "report.json",
+    "arm-summary.csv",
+    "case-outcomes.csv",
+    "paired-gene-differences.csv",
+    "paired-case-differences.csv",
+    "safe-completion-heatmap.csv",
+    "arm-summary.tex",
+    "paired-gene-differences.tex",
+    "safe-completion-heatmap.png",
+    "safe-completion-heatmap.svg",
+    "paired-gene-safe-completion.png",
+    "paired-gene-safe-completion.svg",
+    "captions.txt",
+    "artifact-manifest.json"
+  ],
+  "paired_baseline": "cma_full",
+  "paired_definition": "For each of the ten genes and identical eight cases, compute reverted-minus-full per-case metrics, their count differences and mean differences. Preserve fixed gene order00..09; report every contrast.",
+  "paired_reversion_arms": [
+    "revert_gene_00",
+    "revert_gene_01",
+    "revert_gene_02",
+    "revert_gene_03",
+    "revert_gene_04",
+    "revert_gene_05",
+    "revert_gene_06",
+    "revert_gene_07",
+    "revert_gene_08",
+    "revert_gene_09"
+  ],
+  "plot_contract": "BinarySC12x8 heatmap and all10 SC paired differences in fixed order, no uncertainty bars, transparent exploratory TRAIN labels. PublicationPNG240dpi andSVG. Numerical/plot imports only after actualNav and complete-lineage guards.",
+  "preparation_read_scope": "Frozen protocol and source bytes only. No study output namespace, case array/model/image or final data opened.",
+  "protocol": {
+    "path": "configs/lewm_campaign_20261031/navigation-budget30-cma-r0-gene-reversion-v1.json",
+    "sha256": "4112648831854f0007bfac6fe22df79a352136230f6d4f11045ee6c51492fce9"
+  },
+  "query_fields_separate_no_alias_sums": [
+    "actual_encoder_call_attempts",
+    "actual_cost_call_attempts",
+    "actual_safety_call_attempts",
+    "goal_readout_call_attempts",
+    "actual_candidate_block_steps_attempted"
+  ],
+  "schema": "lewm-gene-reversion-report-plan-v1",
+  "script": "experiments/scripts/report_lewm_gene_reversion.py",
+  "script_sha256": "9863084230af440057f4c244156fdcdc8e35c233b3993b8aea8ce045a8c424f4",
+  "study_outcomes_read_during_report_preparation": 0,
+  "study_output_namespace": "results/navigation-budget30-cma-r0-gene-reversion-v1",
+  "validation": "Source-only independent schema/arithmetic review passed; no new tests required. Actual output visualQA may inspect publication exports only if the study and report run."
+}

@@ -2,13 +2,24 @@
 
 ## Current direction and authority
 
-Read [firstPrinciples.md](firstPrinciples.md). The goal is unchanged: a compact
-evolved controller that raises safe task completion of frozen ManiGuard policies under
-matched interaction budgets. The plan now establishes four preconditions in order,
-variance, a lever, stable evaluation, then an optimizer comparison, and each stage is
-frozen before it runs. Jar is the chosen family; Stack is the backup. The published
-base rates and the reasons are in
-[ManiGuard base rates](docs/research/research_notes/ManiGuard%20base%20rates.md).
+Read [firstPrinciples.md](firstPrinciples.md). As agreed on 1 November 2026, the
+shared question is whether evolutionary search can learn compact adapters that
+recover safe task completion around frozen world-model systems, reducing reliance
+on manually tuned behavioural rules. LeWM is the opening study across TwoRoom,
+PushT and OGBench Cube; Block Plucking is the intended main study. ManiGuard is
+deferred. Its former Jar/Stack choices and gates are historical context.
+
+[Rule42](SafeLeWM/Rule42.pdf), its [LaTeX source](SafeLeWM/Rule42.tex) and
+[FirstExperiment.md](SafeLeWM/FirstExperiment.md) hold the working study design.
+Matching an expert reference with demonstrably less tuning may be useful; optimizer
+superiority is a separate claim. The adapter interface, protocols and budgets are
+not frozen. Earlier experiments are exploratory context, not assumed fully ablated
+or correct. Preserve their results as recorded.
+
+Sachin authorised one fresh idle RunPod on 1 November, explicitly without running
+anything on it. He then removed the proposed automatic stop and said he will tell
+the agent when to turn it off. This is provisioning authority only, not authority
+for installation, tests or experiments, and inherits no historical budget.
 
 [principia.pdf](principia.pdf) is the consolidated experiment record, with one page
 per experiment. The current manuscript is under `docs/research/honours-gecco/`.
@@ -69,6 +80,11 @@ jobs. Do not inherit their protocols, gates or budgets.
    Check with `python archive/verify.py --manifest 20261029/manifest.json`.
    Edit `docs/research/principia.tex` to update the consolidated record, then rebuild
    `principia.pdf` using the instructions in `docs/README.md`.
+9. `SafeLeWM/`: all new work for the first experiment belongs here, as explicitly
+   requested on 1 November. This includes documents, implementation, configurations,
+   tests and ignored local outputs. Use `SafeLeWM/experiments/{helpers,scripts,tests}/`
+   and `SafeLeWM/configs/` for new first-experiment code and configuration. Earlier
+   shared code, evidence and archives retain their existing paths.
 
 ## Research controls
 
@@ -85,15 +101,22 @@ jobs. Do not inherit their protocols, gates or budgets.
   starts. Report model queries and elapsed time separately.
 - The ManiGuard monitor labels violations and never vetoes actions. Keep proposed,
   filtered and executed actions distinguishable.
-- Before any evolutionary claim, compare against native, a tuned fixed setting,
-  parameter random search and ordinary learning with the same information. A
-  development-only ordinary-learning pilot may precede that optimizer comparison.
+- Evaluate evolutionary learning against native, a tuned fixed reference, parameter
+  random search and ordinary learning with the same information and declared budgets.
+  Distinguish learned benefit, reduced tuning and optimizer superiority. Matching
+  performance is not proof of equivalence; preset fallback is not learned discovery.
+  A development-only ordinary-learning pilot may precede the full comparison.
 - Freeze each stage's protocol before running it. Choose panels and seeds before reading
   outcomes. Keep held-out tasks untouched until the final comparison.
 - Archived results stay as recorded. New experiments use new files and output paths.
 
 ## Environment and engineering
 
+- Run experiment computation only on rented RunPod or Vast hosts. Local work is
+  limited to editing, orchestration, transfers and inspecting saved evidence. This
+  includes simulator preparation, training, tuning, evaluation and experiment tests.
+- Public data downloads are authorized for future research work. Keep them within
+  the active task's spending and storage limits; no repeated download approval is needed.
 - Historical host: the Vast template "ManiGuard latent evolution" (hash
   `62414e8fca6befba085051de7ed36190`) on an RTX 3090 host with driver 580.x, installed
   from `progress/receipts/01-install.md` and `01-sources.json` at the pinned revisions
@@ -125,5 +148,5 @@ commit or pass them in configs, manifests or command arguments. Recognized keys:
 ## Writing
 
 Plain prose, no em or en dashes as clause breaks, plain hyphens in compound modifiers.
-Current research notes go under `docs/research/`. Do not create competing top-level plan
-folders.
+First-experiment notes go under `SafeLeWM/`; other current research notes go under
+`docs/research/`. Do not create competing plan folders.
