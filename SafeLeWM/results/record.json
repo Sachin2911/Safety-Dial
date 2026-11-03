@@ -1,0 +1,624 @@
+{
+ "date": "2026-11-02",
+ "scope": "Completed SafeLeWM development studies; recorded counts only, no new experiments",
+ "studies": [
+  {
+   "id": "01-initial-qualification",
+   "title": "Initial TwoRoom qualification",
+   "question": "Can the first planner recipe complete the task and follow a safe detour?",
+   "setup": "One constructed scene; 16 runs including scripted witnesses, a stationary control, native planning and intermediate targets. Planner cap: 100 actions. This was a diagnostic, not an author reproduction.",
+   "labels": [
+    "Direct witness",
+    "Safe detour witnesses",
+    "Stationary control",
+    "Planner, no hazard",
+    "Planner, monitored",
+    "Intermediate targets"
+   ],
+   "complete": [
+    1,
+    2,
+    0,
+    0,
+    0,
+    0
+   ],
+   "denom": [
+    1,
+    2,
+    1,
+    3,
+    3,
+    6
+   ],
+   "finding": "Scripted direct execution completed and violated (1/1). Safe witnesses completed without violation (2/2). Native planning completed 0/3 clean and 0/3 monitored runs; intermediate targets completed 0/6. All target-guided runs reached the first target but failed to finish the next leg.",
+   "safety": "No planner violations occurred. All planner runs engaged, but none completed. The three clean/monitored pairs had identical actions, states, images and rewards.",
+   "meaning": "The geometry was feasible and targets changed behaviour. Useful completion authority and a training signal were not established.",
+   "limits": "One scene and one planning recipe. Movement or zero violations cannot substitute for completion. The failure cannot establish a general limitation of LeWM.",
+   "resources": "Including preflight: 17 resets, 1,361 actions and 1,771,200 candidate model steps. Scored episode loop: 47.5 seconds. The failed first launch had no simulator interaction.",
+   "source": "outputs/qualification-20261101/remote/run-v2/summary.json",
+   "protocol": "Qualification.md"
+  },
+  {
+   "id": "02-planner-settings",
+   "title": "Planning-settings comparison",
+   "question": "Can fixed planner settings recover completion before we change the adapter?",
+   "setup": "77 no-hazard runs: three recipes on six historical cases and three repeats of one constructed scene (27 runs), plus the paper-profile reconstruction on 50 dataset cases. Dataset goals: offset 100, cap 150 actions.",
+   "labels": [
+    "Paper profile: diagnostic",
+    "random-05: diagnostic",
+    "Initial recipe: diagnostic",
+    "Paper profile: dataset"
+   ],
+   "complete": [
+    0,
+    9,
+    0,
+    5
+   ],
+   "denom": [
+    9,
+    9,
+    9,
+    50
+   ],
+   "finding": "The fixed historical random-05 recipe completed 6/6 historical cases and 3/3 constructed runs. The other two recipes each completed 0/9 diagnostic runs. On the separate dataset panel, the paper-profile reconstruction completed 5/50, leaving 45/50 unfinished.",
+   "safety": "No added hazards or safety interventions. All 77 runs engaged. Hazard violation rates are not an endpoint here.",
+   "meaning": "Planner settings recovered task completion on selected diagnostic inputs. They did not establish a generally competent backbone or isolate the responsible setting.",
+   "limits": "random-05 is a preset name, not random search in this study. Diagnostic and dataset panels differ. The earlier expectation of 87% used the wrong evaluation protocol; the later short-goal check resolves that comparison.",
+   "resources": "Including preflight: 78 resets, 10,013 actions and 7,617,160 candidate model steps. Saved traces and accounting passed audit.",
+   "source": "outputs/baseline-20261101/remote/baseline-20261101/run-v2/summary.json",
+   "protocol": "BaselineComparison.md"
+  },
+  {
+   "id": "03-fixed-baseline",
+   "title": "Fixed random-05 baseline",
+   "question": "Does the promising diagnostic preset work on the broader development panel?",
+   "setup": "Unchanged random-05 preset on the same 50 dataset cases used for the earlier paper-profile result. Goal offset 100; cap 150 actions; one planner seed. No hazards, tuning or new preflight episodes.",
+   "labels": [
+    "Earlier paper profile",
+    "Fixed random-05"
+   ],
+   "complete": [
+    5,
+    9
+   ],
+   "denom": [
+    50,
+    50
+   ],
+   "finding": "random-05 completed 9/50 (18%), leaving 41/50 unfinished. It completed 4/9 same-room and 5/41 cross-room cases. Earlier paper-profile completion was 5/50: 1/9 same-room and 4/41 cross-room.",
+   "safety": "All 50 runs engaged. No added hazards were evaluated. Only one case succeeded under both recipes; random-05 gained eight and lost four cases.",
+   "meaning": "The nine diagnostic successes did not generalize to this panel. A measured fixed baseline was established, but robust long-goal completion remained unresolved.",
+   "limits": "These are development cases, one planner seed and different complete planner recipes. This is not an isolated setting ablation or a reliable population-advantage claim.",
+   "resources": "50 resets, 6,833 actions, 41,070 model batch calls and 12,321,000 candidate model steps. Episode loop: 419.6 seconds. All 50 traces passed audit.",
+   "source": "outputs/fixed-baseline-20261101/remote/fixed-baseline-20261101/run-v1/summary.json",
+   "protocol": "FixedBaseline.md"
+  },
+  {
+   "id": "04-short-goal-replication",
+   "title": "Short-goal evaluator replication",
+   "question": "Can we recover the reported high completion under the released short-goal protocol?",
+   "setup": "Unmodified released evaluator, seed 42 and 50 source queries. Effective goal offset 24; cap 50 actions. CEM: 300 candidates, 30 iterations, 30 elites, five five-action blocks, execute 25 actions.",
+   "labels": [
+    "Authors: saved seed 42",
+    "Our run: seed 42"
+   ],
+   "complete": [
+    45,
+    44
+   ],
+   "denom": [
+    50,
+    50
+   ],
+   "finding": "Our run completed 44/50 (88%), leaving six unfinished. The authors' saved seed-42 record used exactly the same 50 source rows and completed 45/50. Episode outcomes agreed on 47/50.",
+   "safety": "No hazard diagnostic was included. Independent auditing recovered every recorded completion from native state traces.",
+   "meaning": "The large earlier discrepancy was primarily a protocol-comparison problem: short-goal and long-goal results answer different questions. This run largely resolves the short-goal baseline concern.",
+   "limits": "One seed on a disclosed runtime, not exact per-episode replication or the published three-seed 87.3% mean. stable-worldmodel 0.0.6 was isolated; existing Torch and Transformers versions were retained. An import shim exposes the installed ImageNet constants without modifying the evaluator.",
+   "resources": "Scored run: 50 resets, 2,500 actions, 3,000 model batch calls, 4,500,000 predicted blocks and 6,000 encoder frames; 651.3 seconds. Separate AP preflight: one reset, one action, two cost calls, 16 blocks and four encoder frames.",
+   "source": "outputs/anchored-20261101/remote/anchored-20261101/short-v1/run.json",
+   "protocol": "AnchoredQualification.md"
+  },
+  {
+   "id": "05-anchored-planning",
+   "title": "Matched long-goal AP comparison",
+   "question": "Does choosing a nearby observation target improve frozen-planner completion?",
+   "setup": "50 paired development cases, goal offset 100 and cap 200 actions. Both arms use identical one-block CEM: 300 candidates, 30 iterations, 30 elites, five-action execution and paired seeds. Only the target changes.",
+   "labels": [
+    "Final-goal CEM",
+    "Anchored Planning CEM"
+   ],
+   "complete": [
+    0,
+    20
+   ],
+   "denom": [
+    50,
+    50
+   ],
+   "finding": "Final-goal CEM completed 0/50; AP-CEM completed 20/50 (40%). AP completed 8/9 same-room and 12/41 cross-room cases. All 100 runs engaged; 50 final-goal and 30 AP runs remained unfinished.",
+   "safety": "No hazards. Observation-only memory used 8,000 episodes, excluding all short- and long-goal evaluation source episodes. Recorded actions were not used for retrieval or CEM initialization. Every retrieved source and successor passed the exclusion and boundary audit.",
+   "meaning": "Target selection is a useful fixed planning lever on this panel. The predeclared 20/50 completion threshold and ten-case advantage were met, permitting the bounded hazard diagnostic.",
+   "limits": "AP is an existing method and a baseline, not our evolutionary contribution. The panel is development evidence, not held-out evaluation or the paper's exact panel. Prior random-05 used different CEM settings and a 150-action cap.",
+   "resources": "100 resets, 17,662 actions, 109,709 model batch calls, 31,858,078 predicted blocks and 6,273 encoder frames. Cache construction separately encoded 920,809 frames in 431.8 seconds.",
+   "source": "outputs/anchored-20261101/remote/anchored-20261101/long-v1/summary.json",
+   "protocol": "AnchoredQualification.md"
+  },
+  {
+   "id": "06-hazard-qualification",
+   "title": "AP hazard qualification",
+   "question": "Does the fixed hazard family provide feasible safe routes and enough unsafe AP behaviour?",
+   "setup": "Three predefined same-room scenes, two seeds each and four arms: 24 runs. Cap 200 actions; retrieval H=100. Circle radius 8, body radius 7 and margin 3 give an 18-unit exclusion radius. Swept contact counts as a violation.",
+   "labels": [
+    "AP, passive monitor",
+    "Direct witness",
+    "Safe detour witness"
+   ],
+   "complete": [
+    4,
+    6,
+    6
+   ],
+   "violations": [
+    1,
+    6,
+    0
+   ],
+   "denom": [
+    6,
+    6,
+    6
+   ],
+   "finding": "Monitored AP completed 4/6, violated in 1/6 and completed safely in 3/6, with 2/6 unfinished. Direct witnesses completed and violated in 6/6. Safe detour witnesses completed safely in 6/6. Clean AP also completed 4/6.",
+   "safety": "All 24 runs engaged. Clean and monitored AP actions, states and frames were identical in all six pairs. The monitor never vetoed actions or appeared in model-input images. Witnesses use privileged position for feasibility only.",
+   "meaning": "The hazard-family admission criterion failed: one AP violation episode was below the frozen minimum of two. Completion and witness criteria passed. This family is not qualified for training.",
+   "limits": "Three scenes repeated with two seeds are not six independent scenes. No geometry or criterion was altered after outcomes. Zero witness violations does not certify zero risk. No optimizer ran.",
+   "resources": "24 resets, 1,802 actions, 9,796 model batch calls, 2,844,632 predicted blocks and 894 encoder frames. All trace, monitor, input and accounting audits passed.",
+   "source": "outputs/anchored-20261101/remote/anchored-20261101/hazard-v1/summary.json",
+   "protocol": "AnchoredQualification.md"
+  },
+  {
+   "id": "07-hazard-screen",
+   "title": "Broader TwoRoom hazard screen",
+   "question": "Which geometric hazard families combine feasible safe routes, AP task completion and recurring violations?",
+   "setup": "Twelve fixed constructed layouts: open same room, wall-constrained same room and doorway approach. Each family has two geometries and their left/right mirrors. Two AP seeds per layout, paired clean and monitored runs, plus one safe and one risky witness per layout: 72 episodes, each capped at 200 actions.",
+   "labels": [
+    "Open same room",
+    "Wall-constrained",
+    "Doorway approach"
+   ],
+   "complete": [
+    6,
+    6,
+    0
+   ],
+   "violations": [
+    4,
+    6,
+    6
+   ],
+   "safe_complete": [
+    2,
+    0,
+    0
+   ],
+   "denom": [
+    8,
+    8,
+    8
+   ],
+   "finding": "Open-room AP completed 6/8, violated in 4/8 and completed safely in 2/8; two runs were unfinished. Wall-constrained AP completed 6/8, violated in 6/8 and completed safely in 0/8; two were unfinished. Doorway AP completed 0/8, violated in 6/8 and left all eight unfinished.",
+   "safety": "All 12 safe witnesses completed without violation; all 12 risky witnesses completed and violated. All 72 runs engaged. The 24 clean/monitored AP pairs matched exactly in states, actions, images, rewards and termination, with identical planning records.",
+   "meaning": "Both same-room families passed the frozen qualification criteria. The doorway family failed its completion criterion. This establishes useful development hazard families, not adapter authority or a learned safety improvement. Stop after step 1; no adapter search or training followed.",
+   "limits": "Constructed development layouts, not held-out evidence. Seed repeats and mirror pairs are correlated: both seeds gave the same binary completion/violation outcome per layout. Open-room violations occurred in the two mirrors of geometry B; wall-constrained violations covered three layouts. Witnesses use privileged position. No geometry or thresholds were changed after outcomes.",
+   "resources": "72 resets, 7,468 actions, 42,718 model batch calls, 12,404,756 predicted blocks and 3,768 encoder frames. Execution including model/bank setup took 395.1 seconds. Reused the existing cache; witnesses used zero model queries. Geometry checks used zero simulator steps.",
+   "source": "outputs/hazard-screen-20261101/summary.json",
+   "protocol": "HazardScreen.md"
+  },
+  {
+   "id": "08-recurrent-adapter-pilot",
+   "title": "Recurrent adapter mechanism pilot",
+   "question": "Can an evolved recurrent action adapter improve safe completion around frozen AP?",
+   "setup": "Eight training layouts, four new evaluation layouts and three planner seeds. Diagonal CMA-ES and random search each evaluated 32 candidates on all eight training layouts. Frozen AP; 19,172 learned adapter parameters; 200-action episode cap.",
+   "labels": [
+    "Native AP",
+    "Untrained adapter",
+    "Evolved adapter",
+    "Random-search adapter"
+   ],
+   "complete": [
+    10,
+    7,
+    8,
+    6
+   ],
+   "safe_complete": [
+    2,
+    1,
+    5,
+    0
+   ],
+   "violations": [
+    10,
+    6,
+    3,
+    6
+   ],
+   "denom": [
+    12,
+    12,
+    12,
+    12
+   ],
+   "finding": "On new layouts, evolved safe completion was 5/12 versus native 2/12, untrained 1/12 and selected random search 0/12. Evolved total completion fell to 8/12 from native 10/12.",
+   "safety": "All 48 evaluation episodes engaged. Evolved violations were 3/12 versus native 10/12, with four versus two unfinished. Safe gains came from two of four layouts; one remained unsafe and one stalled.",
+   "meaning": "Positive exploratory evidence for an evolved safe-completion lever on this TwoRoom panel. The result is not a replicated evolutionary advantage or cross-environment transfer.",
+   "limits": "One optimizer repeat, four constructed layouts repeated with three planner seeds. Equal episode caps, but CMA used 36,366 training actions versus random search 32,182. No PPO, exact interaction matching, risk dial or PushT/Cube evaluation.",
+   "resources": "Corrected run: 591 resets, 77,238 actions, 481,926 model batch calls, 139,945,092 predicted blocks, 42,990 encoder frames; 486.2 seconds. Both attempts: 1,050 resets and 135,417 actions. The original TPA sample-order bug and all 459 attempted episodes remain preserved.",
+   "source": "outputs/adapter-pilot-20261101/run-v2/summary.json",
+   "protocol": "AdapterPilotCorrection.md"
+  },
+  {
+   "id": "09-adapter-replication",
+   "title": "Matched-budget adapter replication",
+   "question": "Does the safe-completion gain persist across training repeats and new layouts at equal actual interactions?",
+   "setup": "Three paired training repeats; 40,000 actual actions per optimizer per repeat. Twelve new layouts with three planner seeds; 360 final episodes. Native is shared.",
+   "labels": [
+    "r0-native",
+    "r0-untrained",
+    "r0-cma",
+    "r0-random",
+    "r1-untrained",
+    "r1-cma",
+    "r1-random",
+    "r2-untrained",
+    "r2-cma",
+    "r2-random"
+   ],
+   "complete": [
+    21,
+    12,
+    20,
+    25,
+    20,
+    15,
+    23,
+    11,
+    22,
+    12
+   ],
+   "safe_complete": [
+    3,
+    2,
+    8,
+    4,
+    10,
+    6,
+    4,
+    2,
+    11,
+    1
+   ],
+   "violations": [
+    21,
+    18,
+    20,
+    21,
+    14,
+    15,
+    25,
+    11,
+    17,
+    13
+   ],
+   "denom": [
+    36,
+    36,
+    36,
+    36,
+    36,
+    36,
+    36,
+    36,
+    36,
+    36
+   ],
+   "finding": "CMA safe completion was 8/36, 6/36 and 11/36 versus native 3/36 and random search 4/36, 4/36 and 1/36.",
+   "safety": "CMA completion was 20/36, 15/36 and 22/36; violations 20/36, 15/36 and 17/36; unfinished 16/36, 21/36 and 14/36. All 360 evaluation episodes engaged.",
+   "meaning": "Safe-completion gains appeared in all three repeats on this panel. Broader optimizer superiority remains unestablished.",
+   "limits": "Both crossed-cluster 95% intervals include zero. The second untrained reference beat its CMA pair, 10/36 versus 6/36. Twelve shared layouts are not 108 independent tasks; no RL comparison or transfer test.",
+   "resources": "2,254 resets; 294,707 actions including exactly 240,000 training actions; 1,839,013 model batch calls; 534,025,646 predicted blocks; 2,492.9 execution seconds. All episodes audited.",
+   "source": "outputs/replication-20261101/run-v1/summary.json",
+   "protocol": "AdapterReplication.md",
+   "figure_source": "experiments/scripts/analyze_replication.py",
+   "analysis": "results/09-analysis.json"
+  },
+  {
+   "id": "10-pusht-screen",
+   "title": "PushT manipulation hazard screen",
+   "question": "Does frozen Anchored Planning complete PushT long-goal cases, and do constructed islands on or beside recorded pusher paths give feasible safe routes and recurring AP contacts?",
+   "setup": "Fifty official-rule dataset cases with paired final-goal CEM and AP arms (280-action budget), then two four-layout island families built from recorded episodes: on-path (recording contacts, scripted detour avoids) and near-path (recording clear by 3 to 8 px, scripted excursion contacts). Two AP seeds per layout, paired clean and monitored runs, one replay and one scripted witness per layout: 148 episodes.",
+   "labels": [
+    "Final-goal CEM, no hazard",
+    "AP, no hazard",
+    "AP, on-path island",
+    "AP, near-path island"
+   ],
+   "complete": [
+    1,
+    15,
+    8,
+    8
+   ],
+   "safe_complete": [
+    null,
+    null,
+    0,
+    7
+   ],
+   "violations": [
+    null,
+    null,
+    8,
+    1
+   ],
+   "denom": [
+    50,
+    50,
+    8,
+    8
+   ],
+   "finding": "Without hazards AP completed 15/50 against 1/50 for final-goal CEM, below the frozen 20/50 readiness rule, which Sachin waived with disclosure. With islands AP completed 16/16: on-path AP contacted the island in 8/8 runs with 0/8 safe completions; near-path AP contacted it in 1/8 with 7/8 safe completions.",
+   "safety": "On-path: all four scripted detours completed safely and all four replays contacted. Near-path: all four replays completed safely; all four scripted excursions contacted but only one completed. All 148 runs engaged. All 16 clean/monitored pairs were bitwise identical and the audit passed.",
+   "meaning": "The on-path family met every frozen family criterion, the near-path family failed two. AP reproduces a memorised pusher path through an island it cannot see, so this family is a candidate development scene for adapter-authority testing, under the waived gate and the single-cluster limit below. No adapter work followed.",
+   "limits": "All eight layouts come from one run of 101 dataset episodes that share a start state; the PushT dataset has 185 such runs. Three on-path islands lie within 7 px of each other and near-path layouts 1 to 3 within 1 px, so the four layouts are one scene, not four. AP retrieved sibling episodes of that run and followed the recorded path within 32 px to the island row. AP's 30% no-hazard completion is well below the authors' 69.5%; final-goal 2% matches their 2.3%.",
+   "resources": "Stage A: 100 resets, 25,702 actions, 159,557 model batch calls, 46,333,294 predicted five-action blocks, 9,095 encoder frames; 1,440.1 seconds. Stage B: 48 resets, 6,769 actions, 27,776 batch calls, 8,065,792 blocks, 2,720 encoder frames; 309.7 seconds. Witness development: 4 resets, 576 actions. Cache: 982,507 encoder frames.",
+   "source": "outputs/manip-20261101/pusht/{long-v1,hazard-v1}/summary.json",
+   "protocol": "ManipulationScreen.md"
+  },
+  {
+   "id": "11-cube-screen",
+   "title": "Cube manipulation hazard screen",
+   "question": "Does frozen Anchored Planning complete OGBench Cube long-goal cases, and do constructed posts on or beside recorded carry paths give feasible safe routes and recurring AP contacts?",
+   "setup": "Fifty official-rule dataset cases with paired final-goal CEM and AP arms (150-action budget), then two four-layout post families built from recorded pick-and-place episodes: on-path (recorded carry contacts, scripted arc avoids) and near-path (recording clear by about 6 mm, scripted excursion contacts). Protected points: gripper pinch site and cube centre, 60 mm exclusion. Two AP seeds per layout, paired clean and monitored runs, one replay and one scripted witness per layout: 148 episodes.",
+   "labels": [
+    "Final-goal CEM, no hazard",
+    "AP, no hazard",
+    "AP, on-path post",
+    "AP, near-path post"
+   ],
+   "complete": [
+    6,
+    26,
+    0,
+    0
+   ],
+   "safe_complete": [
+    null,
+    null,
+    0,
+    0
+   ],
+   "violations": [
+    null,
+    null,
+    2,
+    5
+   ],
+   "denom": [
+    50,
+    50,
+    8,
+    8
+   ],
+   "finding": "Without hazards AP completed 26/50 against 6/50 for final-goal CEM, meeting the frozen readiness rule. With posts AP completed 0/16: it never lifted the cube within 150 actions from the rest start. Contacts occurred in 2/8 on-path and 5/8 near-path runs while the empty gripper wandered.",
+   "safety": "All four scripted arcs and all four near-path replays completed safely; all four on-path replays contacted. Three of four near-path scripted excursions were flagged invalid (a waypoint was not reached) and only one completed. All 148 runs engaged. No clean/monitored pair was bitwise identical: a two-run diagnostic showed the EGL renderer itself differs by one grey level from the first frame.",
+   "meaning": "Both Cube families failed the completion criterion, so neither qualifies. AP's no-hazard completion comes from starts already holding the cube (13/13 from rows 41 to 51 of the episode, 2/22 from rows 0 to 20); hazard layouts start from rest. The pair criterion failed for a renderer reason, not a monitor effect. No adapter work followed.",
+   "limits": "Constructed layouts from eight recorded episodes with distinct starts. The scripted near-path excursion recipe failed in three layouts, so the risky-witness criterion is unmet by witness design. Rendering on this GPU is not bit-exact; any future Cube run needs a bit-exact renderer fixed in advance. A first Stage A attempt failed on its first episode with a CUDA out-of-memory error and is retained.",
+   "resources": "Stage A: 100 resets, 10,947 actions, 68,262 model batch calls, 19,822,404 predicted five-action blocks, 3,973 encoder frames; 708.2 seconds; failed first attempt 2 resets, 255 actions. Stage B: 48 resets, 6,047 actions, 29,760 batch calls, 8,641,920 blocks, 2,504 encoder frames; 378.3 seconds. Diagnostic: 2 resets, 300 actions. Witness development: 4 resets, 277 actions. Cache: 1,608,000 encoder frames.",
+   "source": "outputs/manip-20261101/cube/{long-v2,hazard-v1}/summary.json",
+   "protocol": "ManipulationScreen.md"
+  },
+  {
+   "id": "12-adapter-mechanism",
+   "title": "Representation and mechanism study",
+   "question": "Which search representation supports safe adaptation, and which mechanisms matter on new layouts?",
+   "setup": "Nine representation searches, then fifteen fresh mechanism searches, each with exactly 40,000 training actions. Twenty-four final layouts, three planner seeds, shared native.",
+   "labels": [
+    "Native AP",
+    "Untrained",
+    "Safety-aware CMA",
+    "Random search",
+    "Task-only CMA",
+    "Hazard-blind CMA",
+    "Memory-reset CMA"
+   ],
+   "complete": [
+    39,
+    130,
+    115,
+    134,
+    123,
+    125,
+    136
+   ],
+   "safe_complete": [
+    7,
+    32,
+    45,
+    47,
+    29,
+    36,
+    37
+   ],
+   "violations": [
+    39,
+    114,
+    94,
+    95,
+    120,
+    107,
+    111
+   ],
+   "denom": [
+    72,
+    216,
+    216,
+    216,
+    216,
+    216,
+    216
+   ],
+   "finding": "CMA safe completion 16/72,18/72,11/72 versus random16/72,16/72,15/72 and shared native7/72. No aggregate CMA advantage over random search.",
+   "limits": "Three repeats on shared constructed layouts. Representation selected on reused development cases. Audit ordering correction documented. No risk dial, safety guarantee or cross-environment transfer.",
+   "source": "outputs/mechanism-20261101/run-v1/summary.json",
+   "protocol": "AdapterMechanism.md",
+   "figure_source": "experiments/scripts/analyze_mechanism.py",
+   "analysis": "results/12-analysis.json"
+  },
+  {
+   "id": "13-pusht-authority",
+   "title": "PushT distinct-scene qualification",
+   "question": "Does the fixed planner and adapter family support safe completion beyond one memorised starting scene?",
+   "setup": "Eight distinct development scene groups, excluded from 8,000-episode retrieval memory; frozen on-path island recipe, two planner seeds, passive monitor.",
+   "labels": [
+    "safe",
+    "risky",
+    "native",
+    "neutral"
+   ],
+   "complete": [
+    6,
+    8,
+    4,
+    4
+   ],
+   "denom": [
+    8,
+    8,
+    16,
+    16
+   ],
+   "finding": "Prerequisite gate failed; no parameter probes were executed.",
+   "figure_source": "rented-host post-run supplement.py",
+   "report": "13-pusht-authority.md"
+  },
+  {
+   "id": "14-matched-ppo",
+   "title": "Matched-objective PPO comparison",
+   "labels": [
+    "Native",
+    "Untrained",
+    "CMA-ES",
+    "Random",
+    "PPO"
+   ],
+   "complete": [
+    77,
+    127,
+    116,
+    99,
+    110
+   ],
+   "safe_complete": [
+    14,
+    34,
+    44,
+    37,
+    20
+   ],
+   "violations": [
+    75,
+    111,
+    109,
+    84,
+    116
+   ],
+   "denom": [
+    144,
+    216,
+    216,
+    216,
+    216
+   ],
+   "finding": "CMA ranked highest here and exceeded PPO in all three repeats; both primary intervals include zero.",
+   "figure_source": "experiments/scripts/render_ppo_ap_closeout.py",
+   "analysis": "results/14-analysis.json",
+   "protocol": "MatchedPPO.md"
+  },
+  {
+   "id": "15-pusht-ap-reproduction",
+   "title": "PushT AP-CEM reproduction",
+   "labels": [
+    "Published external reference",
+    "Authors evaluator",
+    "Existing wrapper"
+   ],
+   "complete": [
+    89,
+    88,
+    89
+   ],
+   "denom": [
+    128,
+    128,
+    128
+   ],
+   "finding": "Our wrapper matches the published aggregate rate on matched inputs/runtime. No hazards or adapter learning.",
+   "figure_source": "experiments/scripts/render_ppo_ap_closeout.py",
+   "analysis": "results/15-analysis.json",
+   "protocol": "PushTAPReproduction.md"
+  },
+  {
+   "id": "16-pusht-validated",
+   "title": "PushT: validated baseline and failed adapter authority",
+   "labels": [
+    "Native",
+    "Neutral",
+    "Safe witness",
+    "Risky witness"
+   ],
+   "complete": [
+    12,
+    12,
+    8,
+    8
+   ],
+   "safe": [
+    0,
+    0,
+    7,
+    0
+   ],
+   "violations": [
+    16,
+    16,
+    1,
+    8
+   ],
+   "denom": [
+    16,
+    16,
+    8,
+    8
+   ],
+   "finding": "Baseline/hazard gate passed on five scenes. Sixteen parameter probes achieved only 0-1/10 admitted safe completions on one scene; useful authority failed.",
+   "figure_source": "experiments/scripts/render_pusht_validated_closeout.py",
+   "analysis": "results/16-analysis.json",
+   "protocol": "PushTValidatedQualification.md"
+  },
+  {
+   "id": "17-safety-dial-library",
+   "title": "Safety-dial library: prospective development check",
+   "finding": "17/45 target assignments unavailable; 5/28 available settings exceeded the empirical risk limit. Four of six changing-policy curves had nondecreasing risk; no calibrated dial established.",
+   "figure_source": "experiments/scripts/render_development_closeout.py",
+   "analysis": "results/17-analysis.json",
+   "protocol": "SafetyDialLibrary.md",
+   "evaluation_episodes": 756,
+   "engineering_episodes": 16,
+   "unique_policies": 21,
+   "episodes_per_policy": 36
+  }
+ ]
+}

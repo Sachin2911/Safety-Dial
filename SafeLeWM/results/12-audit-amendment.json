@@ -1,0 +1,14 @@
+{
+  "original_auditor_sha256": "1e413ea3eae8bb1f9b09ace21398658e01b3fe7615879decf6056f1922c8abfd",
+  "revised_auditor_sha256": "649307b340189a0e908c15324b887a7ddd804e6ed72c4d8b87be1542635dfe73",
+  "frozen_runner_sha256": "e7673cb7d80922c3b6d905c45daea9b773b75c186e62b62c798098f9537e10b0",
+  "ordering_tests_sha256": "9ed082006d5981ce521195aa7e93f248067dcb25cca07e015b9bf0e4347cb0b7",
+  "original_failed_audit_log_sha256": "0259a05f92ecfaa5917cb089dd55b67af9b3a647472cded14a56a5d9c3e42de6",
+  "timestamp_probe_sha256": "3a5fd18f5a765f64db072fad8e12779440bcaddfd0dc6b9b53251eac4038902d",
+  "recorded_at": 1793569467.276237,
+  "reason": "Original audit compared high-resolution wall time against coarser filesystem timestamps. First final specs share the lock file timestamp, 2.77996 ms earlier than its recorded wall time. Probe found 1.33-4.97 ms file timestamp lag. Frozen synchronous code writes the lock before dispatch; earliest result follows the lock by 2.565 s.",
+  "change": "Compare lock and episode-spec filesystem mtimes on the same clock, retain high-resolution lock-before-first-result check, and document ties using frozen control flow. All other audit checks unchanged.",
+  "limitation": "Equal filesystem ticks alone do not resolve sub-tick order; frozen synchronous control flow supplies that ordering evidence.",
+  "experiment_rerun": false,
+  "extra_environment_actions": 0
+}

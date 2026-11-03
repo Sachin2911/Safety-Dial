@@ -25,7 +25,7 @@ import numpy as np
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
-sys.path.insert(0, str(ROOT / "experiments/scripts"))
+sys.path.insert(0, str(HERE / "figure_tools"))
 from revalidate_evo19 import counted_episode, finished_runs  # noqa: E402
 
 plt.rcParams.update({"pdf.fonttype": 42, "ps.fonttype": 42, "font.size": 8})

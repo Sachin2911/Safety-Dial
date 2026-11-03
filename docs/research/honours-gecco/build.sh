@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd -- "$(dirname -- "$0")"
-build_dir=../../../outputs/honours-gecco/build
+build_dir=build
 mkdir -p "$build_dir"
 pdflatex -interaction=nonstopmode -halt-on-error -output-directory="$build_dir" honoursThesis.tex
 source_dir="$PWD"

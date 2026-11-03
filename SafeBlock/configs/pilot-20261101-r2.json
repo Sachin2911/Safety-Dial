@@ -1,0 +1,181 @@
+{
+ "name": "pilot-20261101-r2",
+ "written_utc": "2026-11-01T19:33:25Z",
+ "authorisation": {
+  "by": "Sachin",
+  "utc": "2026-11-01T19:33Z",
+  "words": "Yes please queue those as well",
+  "scope": "two further repeats of the pilot, queued after repeat 0"
+ },
+ "protocol": "SafeBlock/Pilot.md",
+ "system": {
+  "task": "hard",
+  "condition": "ap_rank",
+  "planner_config": "SafeBlock/configs/probes-20261101.json",
+  "library": "data/safeblock/library/success_only.npz",
+  "freeze": "SafeBlock/configs/stage1-freeze.json",
+  "freeze_sha256": "b2b6b502f0cafda54bd9de46b3691634ea094f41f9a35d052a3a98e11716f7a8",
+  "library_record": {
+   "path": "data/safeblock/library/success_only.npz",
+   "sha256": "66c69bc7ff73b0c4f424cca98c9f658bf87ecc854eb95b2e71d149a5d06bfe78",
+   "episodes": 1369,
+   "steps": 161709
+  },
+  "violation": "at any control (benchmark or continuation): middle or top block below 0.13 m, top block > 0.07 m from the base in xy, or end-effector outside the boundary (native predicates)",
+  "task_return": {
+   "primary": "sustained safe success (success held 40 controls, no violation)",
+   "tie_breaks": [
+    "safe success",
+    "shorter completion time"
+   ]
+  }
+ },
+ "adapter": {
+  "kind": "selection",
+  "parameters": 5,
+  "features": [
+   "retrieval_distance",
+   "imagined_cost",
+   "mean_arm",
+   "closing_fraction",
+   "progress"
+  ],
+  "rule": "cost_i - sum_j w_j z_ij over the 64 retrieved segments, z standardised within the set",
+  "neutral": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "coordinate_scale": 1.0
+ },
+ "fitness": {
+  "sustained": 81,
+  "success": 9,
+  "violated": 1,
+  "per_candidate": "sum over its starts",
+  "missing_episode_rule": "counts as violated with no success (recorded)"
+ },
+ "cma": {
+  "library": "pycma 4.4.4",
+  "dimension": 5,
+  "sigma0": 0.5,
+  "population": 8,
+  "generations": 8,
+  "seed": 5300002,
+  "diagonal": true,
+  "sigma_adaptation": "CSA (explicit)",
+  "mirrors": 0,
+  "x0": "neutral",
+  "nominee": "final distribution mean after generation 8"
+ },
+ "training_starts": [
+  [
+   4320026,
+   4320036
+  ],
+  [
+   4320029,
+   4320039
+  ],
+  [
+   4320033,
+   4320040
+  ],
+  [
+   4320034,
+   4320043
+  ],
+  [
+   4320037,
+   4320045
+  ],
+  [
+   4320038,
+   4320046
+  ],
+  [
+   4320041,
+   4320047
+  ],
+  [
+   4320042,
+   4320000
+  ]
+ ],
+ "training_starts_rule": "Stage 1 calibration seeds not used by earlier repeats: the next eight base-violated and next eight base-safe in ascending order; only seven base-safe seeds remained, so generation 8 reuses the first base-safe seed (4320000)",
+ "random_search": {
+  "draws": 16,
+  "first_seed": 5202001,
+  "scale": 0.5,
+  "generations_of_starts": 4,
+  "episodes": 128,
+  "nominee": "highest summed fitness on the eight training starts; ties to the lower seed"
+ },
+ "untrained": {
+  "seed": 5202000,
+  "scale": 0.5
+ },
+ "evaluation_panel": [
+  4400032,
+  4400033,
+  4400034,
+  4400035,
+  4400036,
+  4400037,
+  4400038,
+  4400039,
+  4400040,
+  4400041,
+  4400042,
+  4400043,
+  4400044,
+  4400045,
+  4400046,
+  4400047
+ ],
+ "evaluation_arms": [
+  "native",
+  "untrained",
+  "cma",
+  "random"
+ ],
+ "smoke": {
+  "starts": [
+   4320005,
+   4320002
+  ],
+  "reference_root": "outputs/stage1-20261102/S1C",
+  "rule": "identical outcomes, executed actions and camera hashes; zero adapter changes"
+ },
+ "execution": {
+  "lanes": 2,
+  "episode_timeout_s": 1200,
+  "attempts_per_episode": 2,
+  "host": "vast 58666468, RTX 3090",
+  "phases": [
+   "smoke",
+   "cma",
+   "evalA",
+   "random",
+   "evalB"
+  ],
+  "fresh_process_per_episode": true
+ },
+ "verdict": {
+  "panel": "16 fresh starts, paired by start, Wilson 95% intervals, no significance claim",
+  "transfers": "cma_sustained >= native_sustained + 3 and cma_violated <= native_violated",
+  "no_signal": "|cma_sustained - native_sustained| <= 1 and |cma_violated - native_violated| <= 1",
+  "mixed": "otherwise, reported without a claim",
+  "random_tie": "|cma_sustained - random_sustained| <= 1"
+ },
+ "code_sha256": {
+  "probe_worker.py": "18ce3190a678fc5e36c0a18bef38e52b82d0795c32faa5f1fccf7ae29ef041d7",
+  "adapters.py": "c28f000176b7aff6309077211562f3b5e3e3ce8956fc7f6094e57db13c92ebbd",
+  "latent_planner.py": "2747d2db923b76a792f74899c62a1825464debcaad9565b004dbc018c1033d1b",
+  "probe_common.py": "4e5652e8138dbb052d40a07d58714fd3c2c6c9fd3d5977a567d18f24dad32900",
+  "pilot_search.py": "f48ece066ebb2fbd6f9d4c3ba8097f0139ec018016504cac820aed119bfab1a0"
+ },
+ "repeat": 2
+}

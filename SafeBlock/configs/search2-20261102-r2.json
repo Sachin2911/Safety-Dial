@@ -1,0 +1,254 @@
+{
+ "name": "search2-20261102-r2",
+ "repeat": 2,
+ "written_utc": "2026-11-01T22:37:49Z",
+ "authorisation": {
+  "by": "Sachin",
+  "utc": "2026-11-01T22:40Z",
+  "words": "Yes this is awesome, let's go with 1-4 now and then 5 and 6 after",
+  "scope": "design, implementation and parity smoke; the full run awaits the budget confirmation",
+  "run": {
+   "by": "Sachin",
+   "utc": "2026-11-01T23:10Z",
+   "words": "I'll go with your recommendation / Go for it!",
+   "scope": "full run of the three repeats on three single-GPU RTX 3090 hosts, one repeat each, 4 to 5 lanes"
+  }
+ },
+ "protocol": "SafeBlock/Search2.md",
+ "system": {
+  "task": "hard",
+  "condition": "ap_rank",
+  "planner_config": "SafeBlock/configs/probes-20261101.json",
+  "library": "data/safeblock/library/success_only.npz",
+  "freeze": "SafeBlock/configs/stage1-freeze.json",
+  "freeze_sha256": "b2b6b502f0cafda54bd9de46b3691634ea094f41f9a35d052a3a98e11716f7a8",
+  "library_record": {
+   "path": "data/safeblock/library/success_only.npz",
+   "sha256": "66c69bc7ff73b0c4f424cca98c9f658bf87ecc854eb95b2e71d149a5d06bfe78",
+   "episodes": 1369,
+   "steps": 161709
+  },
+  "violation": "at any control (benchmark or continuation): middle or top block below 0.13 m, top block > 0.07 m from the base in xy, or end-effector outside the boundary (native predicates)",
+  "task_return": {
+   "primary": "sustained safe success (success held 40 controls, no violation)",
+   "tie_breaks": [
+    "safe success",
+    "shorter completion time"
+   ]
+  }
+ },
+ "adapter": {
+  "kind": "selection2",
+  "parameters": 8,
+  "features": [
+   "retrieval_distance",
+   "imagined_cost",
+   "mean_arm",
+   "closing_fraction",
+   "progress",
+   "imagined_min_q",
+   "imagined_failure_probability",
+   "imagined_disagreement"
+  ],
+  "rule": "cost_i - sum_j w_j z_ij over the 64 retrieved segments; z standardised within the set; features 6-8 are frozen-system scores of each candidate's imagined block (min critic value at the imagined terminal state under the safety actor's mean action, world-model failure probability there, mean ensemble disagreement along the block)",
+  "neutral": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "coordinate_scale": 1.0
+ },
+ "fitness": {
+  "key": [
+   "sum sustained",
+   "sum success",
+   "-sum violated",
+   "-mean max_top_base_xy_distance_m",
+   "+mean progress",
+   "-mean completion_time_s over successes (300 if none)"
+  ],
+  "progress": "min(max_middle_displacement_m / 0.07, 1)",
+  "missing_episode_rule": "violated, no success, top excursion 1.0, progress 0",
+  "cma_values": "rank within the generation, 0 = best (ties broken by candidate order)"
+ },
+ "starts_per_candidate": 8,
+ "cma": {
+  "library": "pycma 4.4.4",
+  "dimension": 8,
+  "sigma0": 0.5,
+  "population": 8,
+  "generations": 8,
+  "seed": 5400002,
+  "diagonal": true,
+  "sigma_adaptation": "CSA (explicit)",
+  "mirrors": 0,
+  "x0": "neutral",
+  "elite": "best of each generation by the key; injected (force) into the next generation and re-evaluated on its starts",
+  "nominee_candidates": [
+   "final distribution mean",
+   "last elite"
+  ],
+  "nominee_rule": "higher key on the selection panel"
+ },
+ "training_starts": [
+  4502000,
+  4502001,
+  4502002,
+  4502003,
+  4502004,
+  4502005,
+  4502006,
+  4502007,
+  4502008,
+  4502009,
+  4502010,
+  4502011,
+  4502012,
+  4502013,
+  4502014,
+  4502015,
+  4502016,
+  4502017,
+  4502018,
+  4502019,
+  4502020,
+  4502021,
+  4502022,
+  4502023,
+  4502024,
+  4502025,
+  4502026,
+  4502027,
+  4502028,
+  4502029,
+  4502030,
+  4502031,
+  4502032,
+  4502033,
+  4502034,
+  4502035,
+  4502036,
+  4502037,
+  4502038,
+  4502039,
+  4502040,
+  4502041,
+  4502042,
+  4502043,
+  4502044,
+  4502045,
+  4502046,
+  4502047,
+  4502048,
+  4502049,
+  4502050,
+  4502051,
+  4502052,
+  4502053,
+  4502054,
+  4502055,
+  4502056,
+  4502057,
+  4502058,
+  4502059,
+  4502060,
+  4502061,
+  4502062,
+  4502063
+ ],
+ "training_starts_rule": "fresh unlabelled seeds; generation g uses the g-th block of eight; the same eight for every candidate of the generation",
+ "selection_panel": [
+  4512000,
+  4512001,
+  4512002,
+  4512003,
+  4512004,
+  4512005,
+  4512006,
+  4512007,
+  4512008,
+  4512009,
+  4512010,
+  4512011,
+  4512012,
+  4512013,
+  4512014,
+  4512015
+ ],
+ "final_panel": [
+  4522000,
+  4522001,
+  4522002,
+  4522003,
+  4522004,
+  4522005,
+  4522006,
+  4522007,
+  4522008,
+  4522009,
+  4522010,
+  4522011,
+  4522012,
+  4522013,
+  4522014,
+  4522015
+ ],
+ "random_search": {
+  "draws": 64,
+  "first_seed": 5412001,
+  "scale": 0.5,
+  "blocks": "draw block b (eight draws) uses the starts of generation b",
+  "nominee_candidates": "top two by the key",
+  "nominee_rule": "selection panel",
+  "episodes": 512
+ },
+ "untrained": {
+  "seed": 5420002,
+  "scale": 0.5
+ },
+ "smoke": {
+  "starts": [
+   4320005,
+   4320002
+  ],
+  "reference_root": "outputs/stage1-20261102/S1C",
+  "rule": "host-local: a bare ap_rank episode and a zero-weight selection2 episode on the same host must match bitwise (actions, cameras, shadow signals, outcome); agreement with the pilot host's Stage 1 episodes is recorded as cross-host information"
+ },
+ "execution": {
+  "lanes": 2,
+  "episode_timeout_s": 1200,
+  "attempts_per_episode": 2,
+  "host": "one fresh single RTX 3090 Vast host per repeat (28-48 cores); lanes set per host with --lanes and recorded in driver-start",
+  "phases": [
+   "smoke",
+   "cma",
+   "selectA",
+   "finalA",
+   "random",
+   "selectB",
+   "finalB"
+  ],
+  "fresh_process_per_episode": true,
+  "lanes_note": "3 lanes per host: each simulator process needs about 6 GB of GPU memory; a 5-lane launch overflowed 24 GB and was discarded before any training episode counted"
+ },
+ "verdict": {
+  "panel": "16 fresh final starts per repeat, paired by start; pooled 48 over three repeats",
+  "transfers": "cma_sustained >= native_sustained + 3 (pooled + 9) and cma_violated <= native_violated",
+  "no_signal": "both differences within +-1 (pooled +-3)",
+  "mixed": "otherwise",
+  "random_tie": "|cma_sustained - random_sustained| <= 1 (pooled 3)"
+ },
+ "code_sha256": {
+  "probe_worker.py": "3f962d3dc700f1424e6e1a08cd4c5a6c62b998b4f71e8e80a966f4683888a543",
+  "adapters.py": "aa3e79674a3836743fe92862675ed6d7e8434607c62cc3a6818951fca8d5e7d1",
+  "latent_planner.py": "dc6f83675d0974b9398d1c109fccb75b427fedee261ec7c2e2bd875a4e002f0c",
+  "probe_common.py": "4e5652e8138dbb052d40a07d58714fd3c2c6c9fd3d5977a567d18f24dad32900",
+  "pilot_search.py": "c51ca5dd2e54c445f4033069348e4ee5941a50d55e6573bba7886a4a02575b91",
+  "search2.py": "3b9f3a15d72d7660f698c8f5e56add5cc479d78ffbfac4fd481b157a837a7dd0"
+ }
+}

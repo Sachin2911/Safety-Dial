@@ -1,0 +1,76 @@
+{
+  "training_actions_per_search": 40000,
+  "sigma": 0.5,
+  "rollout_actions": 3200,
+  "learning_rate": 0.0003,
+  "epochs": 4,
+  "run_seconds": 72000,
+  "bootstrap_seed": 12501,
+  "bootstrap_replicates": 2000,
+  "hosts": {
+    "075cb160c9b3": {
+      "pod_id": "pwjry7gqqs278s",
+      "gpu": "RTX 4090",
+      "repeats": [
+        "R0",
+        "R1"
+      ],
+      "action_cap": 379800
+    },
+    "8cf3a706cdd1": {
+      "pod_id": "yvrg8ow7i9n9u6",
+      "gpu": "L4",
+      "repeats": [
+        "R2"
+      ],
+      "action_cap": 202200
+    }
+  },
+  "repeats": [
+    {
+      "id": "R0",
+      "initialization_seed": 12101,
+      "untrained_seed": 12102,
+      "cma_seed": 12103,
+      "random_seed": 12104,
+      "projection_seed": 12105,
+      "ppo_seed": 12106,
+      "shuffle_seed": 12107,
+      "order": [
+        "ppo",
+        "main",
+        "random"
+      ]
+    },
+    {
+      "id": "R1",
+      "initialization_seed": 12201,
+      "untrained_seed": 12202,
+      "cma_seed": 12203,
+      "random_seed": 12204,
+      "projection_seed": 12205,
+      "ppo_seed": 12206,
+      "shuffle_seed": 12207,
+      "order": [
+        "main",
+        "random",
+        "ppo"
+      ]
+    },
+    {
+      "id": "R2",
+      "initialization_seed": 12301,
+      "untrained_seed": 12302,
+      "cma_seed": 12303,
+      "random_seed": 12304,
+      "projection_seed": 12305,
+      "ppo_seed": 12306,
+      "shuffle_seed": 12307,
+      "order": [
+        "random",
+        "ppo",
+        "main"
+      ]
+    }
+  ]
+}

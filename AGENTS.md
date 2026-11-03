@@ -16,19 +16,40 @@ superiority is a separate claim. The adapter interface, protocols and budgets ar
 not frozen. Earlier experiments are exploratory context, not assumed fully ablated
 or correct. Preserve their results as recorded.
 
-Sachin authorised one fresh idle RunPod on 1 November, explicitly without running
-anything on it. He then removed the proposed automatic stop and said he will tell
-the agent when to turn it off. This is provisioning authority only, not authority
-for installation, tests or experiments, and inherits no historical budget.
+## Current execution status
 
-[principia.pdf](principia.pdf) is the consolidated experiment record, with one page
+Use the "Active goal" section of [firstPrinciples.md](firstPrinciples.md) for the
+latest authority. Keep the status there rather than duplicating the full chronology
+in this file. The prior navigation snapshot was removed with the root archive in
+the [3 November deletion](docs/records/progress/receipts/local-deletion-20261103.md).
+
+As recorded on 2 November:
+
+- The L4 population-size study remains active only under
+  `SafeLeWM/EvolutionBudgetStudy.md`: population four versus eight and matched random
+  search, two development repeats, 240,000 training and 308,400 total actions.
+- The adapter pilot, replication, representation/mechanism study, matched PPO and
+  PushT AP reproduction are complete. Their protocols authorize no additional runs.
+- All PushT screens are complete. The validated screen failed useful adapter
+  authority; no optimizer training followed and twelve reserved cases are untouched.
+  Do not resume a completed screen or substitute a new interface study for a failed gate.
+- The safety-dial library is complete and preserved. It does not establish calibrated
+  risk and authorizes no new run. See Rule43 accounts 14-17 and the results index.
+- Block Plucking has its own work area and protocols. Preserve concurrent work there.
+- All rental shutdowns remain manual. This cleanup changes no rental or execution
+  authority. No historical allocation or completed protocol resumes automatically.
+- The current manuscript is `docs/research/honours-gecco/world-model-adapters.tex`;
+  retain the October thesis and earlier recorded results unchanged.
+
+[principia.pdf](docs/research/principia.pdf) is the consolidated experiment record, with one page
 per experiment. The current manuscript is under `docs/research/honours-gecco/`.
 As of 29 October 2026, the planning studies establish a useful fixed-configuration
 lever; an evolutionary advantage and a replicated ManiGuard completion lever remain
 unestablished. Task 19 reduced observed violations without improving completion.
 
-Everything completed before 22 October 2026 lives under `archive/` and is historical
-evidence, not a launch instruction. Do not resume archived pilots, screens or managed
+The former `archive/` held work completed before 22 October 2026; Sachin authorized
+its deletion on 3 November. Historical evidence is not a launch instruction.
+Do not resume archived pilots, screens or managed
 jobs. Do not inherit their protocols, gates or budgets.
 
 - **Student:** Sachin Mohan (2699183), BSc Honours CS, University of the Witwatersrand.
@@ -37,56 +58,66 @@ jobs. Do not inherit their protocols, gates or budgets.
 
 ## Repository map
 
-1. `firstPrinciples.md`: the current plan.
-2. `docs/research/research_notes/`: current notes. `docs/papers/`: reference papers,
-   compressed with Ghostscript `/ebook` before committing.
-3. `docs/allocatedTopic.md`, `docs/gecco2027.md`, `docs/researchConceptNote/`,
-   `docs/templates/`: topic, venue, concept note and document templates.
-4. `progress/`: start at `README.md`. It holds machine-readable evidence, not duplicate
-   task write-ups. On 29 October, Sachin requested consolidation into `principia.pdf`
-   followed by removal of old documents while retaining code and evidence. The old
-   task plans, prompts, reports, Odyssey and framing guide are preserved with original
-   bytes in `archive/20261029/documents.tar.gz`; its manifest hashes every member.
-   Restore required document paths from that bundle before running historical
-   packaging, source-freeze scripts or tests that read them. Completed protocols do
-   not authorize more work. Task 7's experiment is complete with closeout records
-   pending; task 15's final recovery confirmation remains unverified. Neither status
-   asserts a live rental. `receipts/README.md` indexes retained evidence; task 5 executed
-   `05-adapter-plan-v4.json`, not its earlier versions. Todo 1 has one instance per
-   prefix (`01` B, `01b` C, `01c` D), followed by `02-*`, `03-*`, `04-tracking-*` and
-   `05-adapter-*` receipts. The finished
-   todo 1 checklists and prompts are in git history up to `c248194`, todo 2's up to
-   `b98b3cf`, todo 3's up to `af888ab`. Instance
-   B's seed 0 is excluded from results and kept under `progress/receipts/excluded-instance-B/`.
-   `scripts/todo1*/`, `scripts/todo2/`, `scripts/todo3/`: the pinned download, serving, lane,
-   comparison, upload, rename, self-stop, recorder and supervisor-proxy scripts those
-   checklists used; the paper-protocol eval config is
-   `progress/receipts/01-jar-eval.yaml`. `configs/dsrl06/` pins the isolated learner
-   dependencies; new Hydra configs go in `configs/<group>/`. The previous Vast templates, rental records and
-   setup scripts were under `archive/20261022/configs/vast/` and `archive/20261022/scripts/`.
-   Sachin requested deletion of all rental files on 29 October; the removal inventory
-   is `archive/20261029/removals.json`. The older archive manifest records this explicit
-   exception. Historical scripts may require separately recovered rental records.
-5. `experiments/` contains the tracking diagnostic and execution adapter. Reusable
-   code goes in `experiments/helpers/`,
-   entry points in `experiments/scripts/`, tests in `experiments/tests/`. No `src/`.
-6. `archive/20261022/`: the ManiGuard and UNISafe studies, previous direction, plan
-   history, reports, code, configs and tests, moved unchanged on 22 October 2026 with
-   `archive/20261022/manifest.json`. Check with
-   `python archive/verify.py --manifest 20261022/manifest.json`.
-7. `archive/legacy/`: Push-T, Hopper, Walker and LeWM studies from 8 October 2026,
-   checked by `python archive/verify.py`.
-8. `archive/20261029/`: the compressed superseded-document bundle and its inventory.
-   Check with `python archive/verify.py --manifest 20261029/manifest.json`.
-   Edit `docs/research/principia.tex` to update the consolidated record, then rebuild
-   `principia.pdf` using the instructions in `docs/README.md`.
-9. `SafeLeWM/`: all new work for the first experiment belongs here, as explicitly
-   requested on 1 November. This includes documents, implementation, configurations,
-   tests and ignored local outputs. Use `SafeLeWM/experiments/{helpers,scripts,tests}/`
-   and `SafeLeWM/configs/` for new first-experiment code and configuration. Earlier
-   shared code, evidence and archives retain their existing paths.
+1. `firstPrinciples.md`: current direction and execution authority.
+2. `SafeLeWM/`: LeWM design, protocols, results, code and cloud recovery records.
+   New code goes in `SafeLeWM/experiments/{helpers,scripts,tests}/` and configuration
+   in `SafeLeWM/configs/`. Its relative runtime paths stay within SafeLeWM.
+3. `SafeBlock/`: Block Plucking design, protocols and code. Required UNISafe helpers
+   live in `SafeBlock/experiments/helpers/`, with settings in
+   `SafeBlock/configs/unisafe09/`. Ignored weights/runtime data and the pinned upstream
+   checkout live in `SafeBlock/data/` and `SafeBlock/third_party/`. Use
+   `SafeBlock/experiments/project_paths.py` for historical asset/output prefixes;
+   frozen configuration bytes remain unchanged.
+4. `docs/`: manuscripts, academic material, papers and retained records. Oracle is
+   under `docs/research/Oracle/`; the consolidated experiment record is
+   `docs/research/principia.pdf`. Edit its adjacent `.tex` source and use the build
+   instructions in `docs/README.md`.
+5. `docs/records/`: original progress receipts, frozen historical configs, figures
+   and environment records moved from the root. The consolidation receipt maps
+   original paths and hashes to their new locations. Historical record contents
+   retain old paths; resolve them through `docs/records/README.md`.
+
+The old root `experiments/`, `scripts/`, `configs/`, `data/`, `third_party/`,
+`progress/`, `results/` and `environment/` are removed after relocation of needed
+code/assets and retained records. Do not recreate root-level campaign folders.
+Current source preparation, tests and simulations remain restricted to rented hosts
+where applicable; cleanup authorizes no experiments or rental changes.
+
+## Repository cleanup, 3 November 2026
+
+The initial cleanup bundled older notes and navigation snapshots in the root archive.
+Sixteen SafeLeWM evidence archives were then moved to private Hugging Face storage
+with independent full-download verification and a successful restoration drill.
+
+Sachin subsequently explicitly confirmed deletion of all three remaining groups,
+after clarification that they included active work and evidence not yet verified
+in cloud storage. The exact local scope is `archive/`, `outputs/`,
+`SafeLeWM/outputs/` and `SafeBlock/outputs/`. This supersedes earlier preservation
+requirements for those paths only. The [deletion record](docs/records/progress/receipts/local-deletion-20261103.md)
+and adjacent JSON receipt document completion and a metadata-only file inventory.
+The older root document bundles and navigation snapshots were included. Do not
+claim that all deleted files have verified backups. Historical preservation records
+describe their original verification dates, not current local availability.
+
+Current code outside the root archive, protocols, result reports and the verified
+SafeLeWM cloud archive remain. Local deletion changes no rental or execution
+authority and authorizes no new experiment or remote deletion.
+
+Sachin then approved consolidating the repository into SafeLeWM, SafeBlock and
+`docs/`: required UNISafe runtime dependencies moved into SafeBlock, manuscripts and
+records moved into docs, and unused legacy campaign code/assets were deleted.
+See `docs/records/consolidation-20261103.json` for the path map and hashes. This
+supersedes earlier instructions to retain the old root code/configuration paths.
 
 ## Research controls
+
+On 3 November Sachin authorized moving archived evidence to private Hugging Face
+storage and keeping recovery notes. The initial sixteen-archive SafeLeWM batch is
+documented in `SafeLeWM/archive/README.md`, `cloud-index-20261103.json` and
+`cloud-receipt-20261103.json`. Consult the receipt for actual transfer/removal status.
+Fetch any absent archives using `SafeLeWM/experiments/scripts/fetch_cloud_archive.py`
+before running the original archive verifier. Preserve pinned cloud revisions and
+original manifests. This migration changes no experiment or rental authority.
 
 - Reproduce the published baseline before building on it. The ManiGuard paper's
   protocol is 20 Hz control, 8 executed actions per 16-step chunk, 256 by 256
@@ -119,7 +150,7 @@ jobs. Do not inherit their protocols, gates or budgets.
   the active task's spending and storage limits; no repeated download approval is needed.
 - Historical host: the Vast template "ManiGuard latent evolution" (hash
   `62414e8fca6befba085051de7ed36190`) on an RTX 3090 host with driver 580.x, installed
-  from `progress/receipts/01-install.md` and `01-sources.json` at the pinned revisions
+  from `docs/records/progress/receipts/01-install.md` and `01-sources.json` at the pinned revisions
   (ManiGuard `6bf4c61` with the legacy 256 render profile). Baseline replication results
   of record come from machine 54514; later studies have their own host records and
   contemporary controls. Comparisons remain blocked by host. The selected task 6

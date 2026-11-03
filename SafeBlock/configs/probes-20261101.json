@@ -1,0 +1,555 @@
+{
+  "written_utc": "2026-11-01T15:05:00Z",
+  "protocol": "SafeBlock/Probes.md",
+  "library": "data/safeblock/library/success_only.npz",
+  "planner": {
+    "common": {
+      "block": 5,
+      "lookahead": 5,
+      "neighbours": 64
+    },
+    "cem_goal": {
+      "horizon_blocks": 2,
+      "samples": 256,
+      "elites": 32,
+      "iterations": 6,
+      "init_std": 0.5,
+      "std_floor": 0.05
+    },
+    "ap_cem": {
+      "horizon_blocks": 1,
+      "samples": 256,
+      "elites": 32,
+      "iterations": 6,
+      "init_std": 0.5,
+      "std_floor": 0.05
+    },
+    "ap_rank": {}
+  },
+  "keepout_families": {
+    "K1_overhead": "eef within 0.06 m of the bottom stack block centre in xy and z > 0.175 m",
+    "K2_ceiling": "eef z > 0.30 m",
+    "K3_lateral": "|eef y - bottom block y| > 0.08 m"
+  },
+  "probes": {
+    "A": {
+      "task": "regular",
+      "seeds": [
+        4100000,
+        4100001,
+        4100002,
+        4100003,
+        4100004,
+        4100005,
+        4100006,
+        4100007
+      ],
+      "conditions": [
+        "native_unfiltered",
+        "native_filtered",
+        "cem_goal",
+        "ap_cem",
+        "ap_rank"
+      ],
+      "jobs": [
+        {
+          "id": "A-4100000-native_unfiltered",
+          "task": "regular",
+          "condition": "native_unfiltered",
+          "seed": 4100000
+        },
+        {
+          "id": "A-4100000-native_filtered",
+          "task": "regular",
+          "condition": "native_filtered",
+          "seed": 4100000
+        },
+        {
+          "id": "A-4100000-cem_goal",
+          "task": "regular",
+          "condition": "cem_goal",
+          "seed": 4100000
+        },
+        {
+          "id": "A-4100000-ap_cem",
+          "task": "regular",
+          "condition": "ap_cem",
+          "seed": 4100000
+        },
+        {
+          "id": "A-4100000-ap_rank",
+          "task": "regular",
+          "condition": "ap_rank",
+          "seed": 4100000
+        },
+        {
+          "id": "A-4100001-native_unfiltered",
+          "task": "regular",
+          "condition": "native_unfiltered",
+          "seed": 4100001
+        },
+        {
+          "id": "A-4100001-native_filtered",
+          "task": "regular",
+          "condition": "native_filtered",
+          "seed": 4100001
+        },
+        {
+          "id": "A-4100001-cem_goal",
+          "task": "regular",
+          "condition": "cem_goal",
+          "seed": 4100001
+        },
+        {
+          "id": "A-4100001-ap_cem",
+          "task": "regular",
+          "condition": "ap_cem",
+          "seed": 4100001
+        },
+        {
+          "id": "A-4100001-ap_rank",
+          "task": "regular",
+          "condition": "ap_rank",
+          "seed": 4100001
+        },
+        {
+          "id": "A-4100002-native_unfiltered",
+          "task": "regular",
+          "condition": "native_unfiltered",
+          "seed": 4100002
+        },
+        {
+          "id": "A-4100002-native_filtered",
+          "task": "regular",
+          "condition": "native_filtered",
+          "seed": 4100002
+        },
+        {
+          "id": "A-4100002-cem_goal",
+          "task": "regular",
+          "condition": "cem_goal",
+          "seed": 4100002
+        },
+        {
+          "id": "A-4100002-ap_cem",
+          "task": "regular",
+          "condition": "ap_cem",
+          "seed": 4100002
+        },
+        {
+          "id": "A-4100002-ap_rank",
+          "task": "regular",
+          "condition": "ap_rank",
+          "seed": 4100002
+        },
+        {
+          "id": "A-4100003-native_unfiltered",
+          "task": "regular",
+          "condition": "native_unfiltered",
+          "seed": 4100003
+        },
+        {
+          "id": "A-4100003-native_filtered",
+          "task": "regular",
+          "condition": "native_filtered",
+          "seed": 4100003
+        },
+        {
+          "id": "A-4100003-cem_goal",
+          "task": "regular",
+          "condition": "cem_goal",
+          "seed": 4100003
+        },
+        {
+          "id": "A-4100003-ap_cem",
+          "task": "regular",
+          "condition": "ap_cem",
+          "seed": 4100003
+        },
+        {
+          "id": "A-4100003-ap_rank",
+          "task": "regular",
+          "condition": "ap_rank",
+          "seed": 4100003
+        },
+        {
+          "id": "A-4100004-native_unfiltered",
+          "task": "regular",
+          "condition": "native_unfiltered",
+          "seed": 4100004
+        },
+        {
+          "id": "A-4100004-native_filtered",
+          "task": "regular",
+          "condition": "native_filtered",
+          "seed": 4100004
+        },
+        {
+          "id": "A-4100004-cem_goal",
+          "task": "regular",
+          "condition": "cem_goal",
+          "seed": 4100004
+        },
+        {
+          "id": "A-4100004-ap_cem",
+          "task": "regular",
+          "condition": "ap_cem",
+          "seed": 4100004
+        },
+        {
+          "id": "A-4100004-ap_rank",
+          "task": "regular",
+          "condition": "ap_rank",
+          "seed": 4100004
+        },
+        {
+          "id": "A-4100005-native_unfiltered",
+          "task": "regular",
+          "condition": "native_unfiltered",
+          "seed": 4100005
+        },
+        {
+          "id": "A-4100005-native_filtered",
+          "task": "regular",
+          "condition": "native_filtered",
+          "seed": 4100005
+        },
+        {
+          "id": "A-4100005-cem_goal",
+          "task": "regular",
+          "condition": "cem_goal",
+          "seed": 4100005
+        },
+        {
+          "id": "A-4100005-ap_cem",
+          "task": "regular",
+          "condition": "ap_cem",
+          "seed": 4100005
+        },
+        {
+          "id": "A-4100005-ap_rank",
+          "task": "regular",
+          "condition": "ap_rank",
+          "seed": 4100005
+        },
+        {
+          "id": "A-4100006-native_unfiltered",
+          "task": "regular",
+          "condition": "native_unfiltered",
+          "seed": 4100006
+        },
+        {
+          "id": "A-4100006-native_filtered",
+          "task": "regular",
+          "condition": "native_filtered",
+          "seed": 4100006
+        },
+        {
+          "id": "A-4100006-cem_goal",
+          "task": "regular",
+          "condition": "cem_goal",
+          "seed": 4100006
+        },
+        {
+          "id": "A-4100006-ap_cem",
+          "task": "regular",
+          "condition": "ap_cem",
+          "seed": 4100006
+        },
+        {
+          "id": "A-4100006-ap_rank",
+          "task": "regular",
+          "condition": "ap_rank",
+          "seed": 4100006
+        },
+        {
+          "id": "A-4100007-native_unfiltered",
+          "task": "regular",
+          "condition": "native_unfiltered",
+          "seed": 4100007
+        },
+        {
+          "id": "A-4100007-native_filtered",
+          "task": "regular",
+          "condition": "native_filtered",
+          "seed": 4100007
+        },
+        {
+          "id": "A-4100007-cem_goal",
+          "task": "regular",
+          "condition": "cem_goal",
+          "seed": 4100007
+        },
+        {
+          "id": "A-4100007-ap_cem",
+          "task": "regular",
+          "condition": "ap_cem",
+          "seed": 4100007
+        },
+        {
+          "id": "A-4100007-ap_rank",
+          "task": "regular",
+          "condition": "ap_rank",
+          "seed": 4100007
+        }
+      ]
+    },
+    "B": {
+      "task": "hard",
+      "seeds": [
+        4200000,
+        4200001,
+        4200002,
+        4200003,
+        4200004,
+        4200005,
+        4200006,
+        4200007,
+        4200008,
+        4200009,
+        4200010,
+        4200011
+      ],
+      "conditions": [
+        "native_unfiltered",
+        "native_filtered",
+        "ap_rank"
+      ],
+      "planner_condition": "ap_rank",
+      "jobs": [
+        {
+          "id": "B-4200000-native_unfiltered",
+          "task": "hard",
+          "condition": "native_unfiltered",
+          "seed": 4200000
+        },
+        {
+          "id": "B-4200000-native_filtered",
+          "task": "hard",
+          "condition": "native_filtered",
+          "seed": 4200000
+        },
+        {
+          "id": "B-4200001-native_unfiltered",
+          "task": "hard",
+          "condition": "native_unfiltered",
+          "seed": 4200001
+        },
+        {
+          "id": "B-4200001-native_filtered",
+          "task": "hard",
+          "condition": "native_filtered",
+          "seed": 4200001
+        },
+        {
+          "id": "B-4200002-native_unfiltered",
+          "task": "hard",
+          "condition": "native_unfiltered",
+          "seed": 4200002
+        },
+        {
+          "id": "B-4200002-native_filtered",
+          "task": "hard",
+          "condition": "native_filtered",
+          "seed": 4200002
+        },
+        {
+          "id": "B-4200003-native_unfiltered",
+          "task": "hard",
+          "condition": "native_unfiltered",
+          "seed": 4200003
+        },
+        {
+          "id": "B-4200003-native_filtered",
+          "task": "hard",
+          "condition": "native_filtered",
+          "seed": 4200003
+        },
+        {
+          "id": "B-4200004-native_unfiltered",
+          "task": "hard",
+          "condition": "native_unfiltered",
+          "seed": 4200004
+        },
+        {
+          "id": "B-4200004-native_filtered",
+          "task": "hard",
+          "condition": "native_filtered",
+          "seed": 4200004
+        },
+        {
+          "id": "B-4200005-native_unfiltered",
+          "task": "hard",
+          "condition": "native_unfiltered",
+          "seed": 4200005
+        },
+        {
+          "id": "B-4200005-native_filtered",
+          "task": "hard",
+          "condition": "native_filtered",
+          "seed": 4200005
+        },
+        {
+          "id": "B-4200006-native_unfiltered",
+          "task": "hard",
+          "condition": "native_unfiltered",
+          "seed": 4200006
+        },
+        {
+          "id": "B-4200006-native_filtered",
+          "task": "hard",
+          "condition": "native_filtered",
+          "seed": 4200006
+        },
+        {
+          "id": "B-4200007-native_unfiltered",
+          "task": "hard",
+          "condition": "native_unfiltered",
+          "seed": 4200007
+        },
+        {
+          "id": "B-4200007-native_filtered",
+          "task": "hard",
+          "condition": "native_filtered",
+          "seed": 4200007
+        },
+        {
+          "id": "B-4200008-native_unfiltered",
+          "task": "hard",
+          "condition": "native_unfiltered",
+          "seed": 4200008
+        },
+        {
+          "id": "B-4200008-native_filtered",
+          "task": "hard",
+          "condition": "native_filtered",
+          "seed": 4200008
+        },
+        {
+          "id": "B-4200009-native_unfiltered",
+          "task": "hard",
+          "condition": "native_unfiltered",
+          "seed": 4200009
+        },
+        {
+          "id": "B-4200009-native_filtered",
+          "task": "hard",
+          "condition": "native_filtered",
+          "seed": 4200009
+        },
+        {
+          "id": "B-4200010-native_unfiltered",
+          "task": "hard",
+          "condition": "native_unfiltered",
+          "seed": 4200010
+        },
+        {
+          "id": "B-4200010-native_filtered",
+          "task": "hard",
+          "condition": "native_filtered",
+          "seed": 4200010
+        },
+        {
+          "id": "B-4200011-native_unfiltered",
+          "task": "hard",
+          "condition": "native_unfiltered",
+          "seed": 4200011
+        },
+        {
+          "id": "B-4200011-native_filtered",
+          "task": "hard",
+          "condition": "native_filtered",
+          "seed": 4200011
+        },
+        {
+          "id": "B-4200000-ap_rank",
+          "task": "hard",
+          "condition": "ap_rank",
+          "seed": 4200000
+        },
+        {
+          "id": "B-4200001-ap_rank",
+          "task": "hard",
+          "condition": "ap_rank",
+          "seed": 4200001
+        },
+        {
+          "id": "B-4200002-ap_rank",
+          "task": "hard",
+          "condition": "ap_rank",
+          "seed": 4200002
+        },
+        {
+          "id": "B-4200003-ap_rank",
+          "task": "hard",
+          "condition": "ap_rank",
+          "seed": 4200003
+        },
+        {
+          "id": "B-4200004-ap_rank",
+          "task": "hard",
+          "condition": "ap_rank",
+          "seed": 4200004
+        },
+        {
+          "id": "B-4200005-ap_rank",
+          "task": "hard",
+          "condition": "ap_rank",
+          "seed": 4200005
+        },
+        {
+          "id": "B-4200006-ap_rank",
+          "task": "hard",
+          "condition": "ap_rank",
+          "seed": 4200006
+        },
+        {
+          "id": "B-4200007-ap_rank",
+          "task": "hard",
+          "condition": "ap_rank",
+          "seed": 4200007
+        },
+        {
+          "id": "B-4200008-ap_rank",
+          "task": "hard",
+          "condition": "ap_rank",
+          "seed": 4200008
+        },
+        {
+          "id": "B-4200009-ap_rank",
+          "task": "hard",
+          "condition": "ap_rank",
+          "seed": 4200009
+        },
+        {
+          "id": "B-4200010-ap_rank",
+          "task": "hard",
+          "condition": "ap_rank",
+          "seed": 4200010
+        },
+        {
+          "id": "B-4200011-ap_rank",
+          "task": "hard",
+          "condition": "ap_rank",
+          "seed": 4200011
+        }
+      ],
+      "planner_decision": {
+        "utc": "2026-11-01T15:26:32+00:00",
+        "rule": "Probes.md Probe A reading rule: carry forward if >= 3/8 completions not all on the native actor's start; ap_rank if tied",
+        "probe_A_safe_success": {
+          "ap_rank": "7/8",
+          "ap_cem": "7/8",
+          "cem_goal": "0/8",
+          "native_unfiltered": "1/8",
+          "native_filtered": "0/8"
+        },
+        "probe_A_sustained": {
+          "ap_rank": 4,
+          "ap_cem": 3
+        },
+        "chosen": "ap_rank (tie on completions; rule says ap_rank; also more sustained successes and ~6 ms plans)"
+      }
+    }
+  }
+}

@@ -1,0 +1,139 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=22mm,top=19mm,bottom=20mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath}
+\usepackage[hidelinks,pdftitle={Move32}]{hyperref}
+\pagestyle{plain}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\emergencystretch=1em
+
+\begin{document}
+{\LARGE\bfseries Move32}\par
+{\small Working design / 1 November 2026 / companion to Rule42}
+
+\textbf{Shared contribution}\par
+\emph{Risk is a budget, not a penalty.} A person states how often failure is
+acceptable. Evolution ranks candidates by whether they meet that budget, then by
+how well they do the task. No safety weight is tuned, no cost function is designed
+beyond the violation itself.
+
+\bigskip
+{\Large\bfseries The idea, and the two studies that carry it}\par
+{\small Page 1: framing}
+
+\textbf{What the brief asks.} The allocated topic asks whether evolutionary
+algorithms can learn safe policies without hand-crafted penalties or cost
+functions, balancing reward against the probability of violation. Penalty methods
+need a weight sweep: too weak is unsafe, too strong is useless. Lagrangian
+reinforcement learning learns the weight but needs many samples. Our answer is to
+replace the weight with a number a human can actually state.
+
+\textbf{The rule.} For a candidate adapter with parameters $\theta$, evaluated on
+$n$ complete episodes, record the mean task return $\widehat J(\theta)$ and the
+fraction of episodes with any violation $\widehat p_V(\theta)$. At a requested
+limit $\epsilon$, candidates with $\widehat p_V\le\epsilon$ outrank all others;
+among them, higher $\widehat J$ wins; among the rest, smaller shortfall wins.
+This is the fitness. Everything else is a control.
+
+\textbf{The dial.} The same rule at several requested limits gives a library of
+controllers. The claim is tested by one figure: requested risk on one axis,
+measured risk and completion on the other, one curve per method. Stricter
+requests should give lower measured risk with useful completion retained. We do
+not assume monotonicity and we do not pick limits after seeing the curve.
+
+\textbf{What evolution contributes.} Not optimizer superiority. Our data say random
+search ties CMA-ES in small adapter families. The contribution is constraint
+handling under noise: the constraint is a probability estimated from a handful of
+episodes, and we ask whether feasibility-first ranking lands near the requested
+risk without a weight sweep, against penalty-weighted evolution and Lagrangian RL
+at matched simulator budgets.
+
+\textbf{The vehicle.} A frozen pretrained system plus a compact adapter with
+generic initialisation and no expert fallback. The frozen system makes episodes
+cheap and the base behaviour competent. It is the setting, not the claim.
+
+\textbf{LeWM's job.} Develop the recipe fast. Episodes cost seconds, so the
+ranking rule, the dial and the matched comparison are debugged there, on TwoRoom
+with Anchored Planning as the base planner. PushT and Cube are thesis material if
+they stay cheap.
+
+\textbf{Block Plucking's job.} Show the recipe means something physical. A frozen
+robot policy that drops blocks. A real failure predicate, not a drawn circle. Two
+hand-tuned references already published: the UNISafe safety filter and the task 9
+release rule. The concrete question: can a small evolved adapter, given only a
+risk budget, reach the completion of those hand-designed fixes at the risk level
+we asked for?
+
+\textbf{One experiment at two scales.} Nothing in Block Plucking is new method.
+Same adapter family, same ranking rule, same arms, same figure. Only the base
+system and the failure are real.
+
+\newpage
+{\Large\bfseries Experiment 2: a risk-budgeted adapter around frozen UNISafe}\par
+{\small Page 2: design}
+
+\textbf{The frozen system, as it exists.} Franka arm, three-block stack, extract
+the middle block. 300 controls at 20 Hz, seven-coordinate actions, six arm deltas
+and one gripper sign. Dreamer world model, task actor, uncertainty ensemble and
+reachability filter, all frozen, on the migrated Isaac Sim 6.2 stack validated on
+25 October. Native completes about 3/64 reserved starts and violates in about
+6/64. Hand-designed release rules complete 54 to 56 of 64 with 4 to 9 violations.
+Evolution tied with a fixed rule and random search; violations never fell.
+
+\textbf{Violation and success.} The released physical predicates define the
+violation: block drops, top-block lateral displacement, boundary exit. Nothing is
+shrunk. Task return is sustained safe success, the released predicate held for two
+further seconds without violation.
+
+\textbf{Main condition.} The filter runs in shadow mode and records what it would
+have done. The adapter acts on the actor's proposal; the executed command is what
+the adapter returns, clipped to the legal box. The predicates label outcomes and
+veto nothing. The same frozen adapters are rerun with the filter live as the
+separate shielded comparison.
+
+\textbf{Adapter.} A bounded residual on the seven coordinates,
+$a_t=\operatorname{clip}(a_t^{\mathrm{base}}+B\odot\tanh u_t)$, with bound 0.5 on
+the arm and 2.0 on the gripper so a release can become a hold. One decision per
+five controls. Inputs: end-effector pose, finger positions, the proposal, three
+steps of history and time, 44 in all; hidden 8; 423 parameters. Zero residual
+must reproduce native execution bitwise.
+
+\textbf{Arms.} CMA-ES under three ranking rules: task only, penalty with a weight
+grid, and feasibility-first at $\epsilon$. Parameter random search as the honesty
+control. PPO-Lagrangian as the RL reference with a first-violation cost. Native
+actor, untrained adapter, release rule and live filter as references. Eight
+episodes per candidate, limit 0.125, population 16, six generations, three
+repeats; then the dial at limits 0, 0.125 and 0.25.
+
+\textbf{Panels.} Fresh seed ranges at 3.1, 3.2 and 3.3 million for training,
+selection and the 64 reserved final starts, never used before. Policy seed equals
+start seed. Overlap with the checkpoint's training data is unknown and declared.
+
+\textbf{Budget.} 44 seconds per episode as measured, half of it simulator start-up.
+The full comparison is about 107 lane-hours. Qualification measures two levers,
+in-process resets and several environments per process, before anything is
+frozen. If neither qualifies, repeats drop to two and PPO moves to a second
+allocation.
+
+\textbf{Order.} Qualification: rebuild the platform, reproduce the task 9 native
+outcome, prove zero-residual parity, measure adapter authority with generic
+genotypes, measure throughput, anchor the references. Freeze. Main comparison.
+Focused ablations: trained versus untrained, feasibility versus task-only,
+without finger positions. Dial study, separately frozen.
+
+\textbf{What would establish the claim.} Feasibility-first controllers whose
+measured risk tracks the requested limit, with completion near the hand-designed
+references, while penalty evolution needs a weight sweep to get there and the RL
+reference does not get there at matched budgets. A clean negative is also a
+result and costs less.
+
+\textbf{Limits.} Migrated simulator, not the original stack or a real robot.
+Finger positions are extra information shared by every arm. Equal episode counts
+are not equal work; actual controls and queries are reported. Zero observed
+violations is not zero risk. This is a working design, not an execution
+authorisation.
+
+{\small Detail: \href{BlockPlucking.md}{\texttt{BlockPlucking.md}},
+\href{Qualification.md}{\texttt{Qualification.md}}.}
+\end{document}

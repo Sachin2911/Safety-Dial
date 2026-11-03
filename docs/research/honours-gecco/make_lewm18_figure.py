@@ -11,7 +11,7 @@ from PIL import Image
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(ROOT / "experiments/scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "figure_tools"))
 media = importlib.import_module("media_lewm18")
 
 source = ROOT / "outputs/lewm18-combined"

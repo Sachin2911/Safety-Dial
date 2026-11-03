@@ -11,6 +11,30 @@ All first-experiment work now lives under SafeLeWM, as explicitly requested on
 belong here. Existing historical implementations remain in the parent repository;
 their presence does not make them the new experiment's implementation.
 
+## Execution status, 2 November 2026
+
+The sections below retain the broader prospective design. They are not a description
+of everything already implemented. The executed protocols and Rule43 determine
+what can be claimed:
+
+| Design component | Executed or current status |
+| --- | --- |
+| Feasibility-first evolutionary selection at a risk limit | Not yet tested as proposed. Completed TwoRoom searches use a fixed safe-completion-first utility, encoded as `81 * safe + 9 * complete - violations` over eight complete cases. |
+| Full-covariance CMA-ES | Completed runs use diagonal CMA-ES, population eight, sigma 0.5 and explicit CSA; the current L4 development study tests population four against eight and random search. |
+| PPO-Lagrangian | Deferred when Sachin selected matched-objective PPO. The completed comparison uses the same fixed terminal utility as evolution, not a learned safety multiplier or a separate risk constraint. |
+| Reuse across all three LeWM environments | TwoRoom has completed learning comparisons. PushT's reproduced baseline and hazards qualified, but sixteen head-coordinate probes failed useful authority; no PushT optimizer comparison followed. Cube remains deferred after its earlier failures. |
+| Safety dial | The frozen 17-actor library evaluation is complete: 17/45 targets unavailable and 5/28 available settings exceeded requested empirical risk limits. Four of six changing-policy curves had nondecreasing risk. See account 17; no calibrated-risk result. |
+| Reduced manual tuning | Unestablished. No completed tuning-cost comparison with a specialised safe reference supports this claim. |
+| Shared Block Plucking architecture | Not implemented: its current pilot uses a five-weight candidate selector, while LeWM uses a recurrent action adapter. The shared scope is adaptation around frozen world models. |
+
+Completed evidence: [Rule43](Rule43.pdf), especially accounts 12-17, including the
+[safety-dial evaluation](results/17-safety-dial-library.md). Current bounded work:
+[EvolutionBudgetStudy.md](EvolutionBudgetStudy.md). The
+[current paper draft](../docs/research/honours-gecco/world-model-adapters.pdf)
+keeps these distinctions explicit. The conditional PushT optimizer stage is closed
+by the failed authority gate; changing its interface requires a new prospective
+study, not a rerun of that screen.
+
 ## Shared question and paper role
 
 > Can evolutionary search learn compact adapters that recover safe task completion
@@ -26,8 +50,9 @@ behavioural and safety-penalty tuning. Matching a specialised expert reference
 could be valuable; outperforming it is not a prerequisite. Comparable scores alone
 do not establish equivalence or reduced human effort.
 
-Keep the scope precise: the method avoids a manually selected safety-penalty
-multiplier in evolutionary selection. It still requires a task reward, a violation
+Keep the proposed scope precise: feasibility-first selection would avoid a manually
+selected safety-penalty multiplier in evolutionary selection. This is a prospective
+claim, distinct from the fixed utility used in the completed studies above. It still requires a task reward, a violation
 definition, a safety target and algorithm settings. The binary violation signal is
 still a cost signal. This is not elimination of all hand-designed costs or all
 human design, and constraint handling itself is not claimed as novel.
@@ -229,10 +254,13 @@ $$
 \mathbf 1[\text{episode }i\text{ has any violation}].
 $$
 
-Use the verified original task reward by default, shared with RL. The existing
-portable wrapper discards the returned native reward, so exposing and auditing it
-is implementation work. Task-only shaping, if necessary, is a prospective
-development decision shared by methods; it is not a hidden safety penalty.
+Audit the original task reward before choosing the shared learning objective. The
+TwoRoom implementation returns zero reward even at success, so native reward alone
+cannot train this adapter. The [first qualification](archive/protocols/Qualification.md) explicitly
+uses original-goal completion as a binary task return and keeps native reward
+separately. This is a task-feedback wrapper, not the native reward. Sparse completion
+must itself be qualified before the main study. Any additional task-only shaping
+is a prospective development decision shared by methods, not a hidden safety penalty.
 
 At a fixed empirical risk target epsilon:
 
@@ -391,6 +419,54 @@ all tuning trials and an inventory of remaining human choices. Do not invent a
 retrospective human-time saving from an existing controller.
 
 ## Qualification and prospective freeze
+
+The [first TwoRoom qualification](results/01-initial-qualification.md)
+completed on 1 November. Scripted safe detours exist, and intermediate targets alter
+behaviour, but this planner recipe completed 0/3 no-hazard episodes and 0/6 target-guided
+episodes. Every target-guided run reached its first nearby target, then failed on the
+longer next leg. Training remains unqualified. These diagnostic targets were manually
+rendered, not retrieved from an admissible learned-controller memory. Do not interpret
+this result as a general failure of target selection or as a published-baseline result.
+
+The subsequent [planning comparison](results/02-planner-settings.md)
+recovered 6/6 historical diagnostic completions and 3/3 runs on the constructed
+scene with the fixed historical `random-05` recipe. The paper-profile and initial
+qualification recipes completed 0/9 diagnostic runs each. On a separate 50-case
+dataset panel, the paper-profile reconstruction completed 5/50. None of these runs
+used hazards or training. This demonstrates recipe-dependent diagnostic recovery,
+not reproduced paper performance or a learned safety benefit. The
+[fixed-baseline follow-up](results/03-fixed-baseline.md) evaluates `random-05` unchanged on the
+same 50 dataset cases before choosing the next qualification step. It completed
+9/50: 4/9 same-room cases and 5/41 cross-room cases, with 41 unfinished and all
+50 engaged. All traces passed audit. This measures the fixed baseline but does not
+establish a competent general backbone; the nine diagnostic successes were not
+representative. Broad hazard and learning studies remain premature. End-to-end
+authors' evaluator reproduction remained unresolved at that stage; no further tuning
+or hazard episodes were run as part of this baseline. The later short-goal check
+below substantially resolves that baseline concern.
+
+The subsequent [Anchored Planning qualification](archive/protocols/AnchoredQualification.md) completed
+steps 1-3. The unchanged short-goal evaluator achieved 44/50, consistent with the
+reported near-87% setting; the earlier 100-offset experiment was a different task
+distribution. On the matched 100-offset, 200-action development panel, AP-CEM
+achieved 20/50 versus 0/50 for otherwise identical final-goal CEM. Its same-room
+and cross-room breakdown was 8/9 and 12/41. This is a target-selection effect, not
+learning or an evolutionary benefit.
+
+On the three-scene/two-seed hazard diagnostic, monitored AP completed 4/6, violated
+in 1/6 and completed safely in 3/6, with two unfinished. All six scripted direct
+witnesses completed and violated; all six safe witnesses completed safely. Clean
+and monitored AP traces matched exactly. The hazard family missed its predeclared
+minimum of two AP violation episodes, so training remains unqualified. Preserve
+these results and define further hazard/interface qualification prospectively;
+do not reinterpret this pilot as an established safety-learning comparison.
+
+A subsequent [12-layout hazard screen](results/07-hazard-screen.md) completed 72
+runs. The open and wall-constrained same-room families passed their prospectively
+frozen criteria; the doorway family failed at 0/8 AP completions. All safe witnesses
+succeeded. This supplies feasible safety problems with baseline task completion
+and recurring violations, but does not establish adapter authority. Step 1 is
+complete and work is paused at Sachin's request, before any adapter search.
 
 Proceed in a staged order:
 

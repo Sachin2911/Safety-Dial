@@ -1,0 +1,302 @@
+{
+  "protocol": "MatchedPPO.md",
+  "analysis_script_sha256": "60c17147cec2faa692beb4a45d82176188cdd68d55a50e3fb5ace7019b5d549b",
+  "groups": {
+    "4090-shared-native": {
+      "n": 72,
+      "safe_completion": 7,
+      "success": 39,
+      "violation": 39,
+      "unfinished": 33,
+      "engaged": 72
+    },
+    "4090-R0-untrained": {
+      "n": 72,
+      "safe_completion": 15,
+      "success": 46,
+      "violation": 37,
+      "unfinished": 26,
+      "engaged": 72
+    },
+    "4090-R0-main": {
+      "n": 72,
+      "safe_completion": 14,
+      "success": 41,
+      "violation": 38,
+      "unfinished": 31,
+      "engaged": 72
+    },
+    "4090-R0-random": {
+      "n": 72,
+      "safe_completion": 12,
+      "success": 27,
+      "violation": 22,
+      "unfinished": 45,
+      "engaged": 72
+    },
+    "4090-R0-ppo": {
+      "n": 72,
+      "safe_completion": 7,
+      "success": 38,
+      "violation": 36,
+      "unfinished": 34,
+      "engaged": 72
+    },
+    "4090-R1-untrained": {
+      "n": 72,
+      "safe_completion": 13,
+      "success": 35,
+      "violation": 23,
+      "unfinished": 37,
+      "engaged": 72
+    },
+    "4090-R1-main": {
+      "n": 72,
+      "safe_completion": 14,
+      "success": 27,
+      "violation": 26,
+      "unfinished": 45,
+      "engaged": 72
+    },
+    "4090-R1-random": {
+      "n": 72,
+      "safe_completion": 12,
+      "success": 29,
+      "violation": 20,
+      "unfinished": 43,
+      "engaged": 72
+    },
+    "4090-R1-ppo": {
+      "n": 72,
+      "safe_completion": 6,
+      "success": 34,
+      "violation": 39,
+      "unfinished": 38,
+      "engaged": 72
+    },
+    "l4-shared-native": {
+      "n": 72,
+      "safe_completion": 7,
+      "success": 38,
+      "violation": 36,
+      "unfinished": 34,
+      "engaged": 72
+    },
+    "l4-R2-untrained": {
+      "n": 72,
+      "safe_completion": 6,
+      "success": 46,
+      "violation": 51,
+      "unfinished": 26,
+      "engaged": 72
+    },
+    "l4-R2-main": {
+      "n": 72,
+      "safe_completion": 16,
+      "success": 48,
+      "violation": 45,
+      "unfinished": 24,
+      "engaged": 72
+    },
+    "l4-R2-random": {
+      "n": 72,
+      "safe_completion": 13,
+      "success": 43,
+      "violation": 42,
+      "unfinished": 29,
+      "engaged": 72
+    },
+    "l4-R2-ppo": {
+      "n": 72,
+      "safe_completion": 7,
+      "success": 38,
+      "violation": 41,
+      "unfinished": 34,
+      "engaged": 72
+    }
+  },
+  "pooled": {
+    "native": {
+      "n": 144,
+      "safe_completion": 14,
+      "success": 77,
+      "violation": 75,
+      "unfinished": 67,
+      "engaged": 144
+    },
+    "untrained": {
+      "n": 216,
+      "safe_completion": 34,
+      "success": 127,
+      "violation": 111,
+      "unfinished": 89,
+      "engaged": 216
+    },
+    "main": {
+      "n": 216,
+      "safe_completion": 44,
+      "success": 116,
+      "violation": 109,
+      "unfinished": 100,
+      "engaged": 216
+    },
+    "random": {
+      "n": 216,
+      "safe_completion": 37,
+      "success": 99,
+      "violation": 84,
+      "unfinished": 117,
+      "engaged": 216
+    },
+    "ppo": {
+      "n": 216,
+      "safe_completion": 20,
+      "success": 110,
+      "violation": 116,
+      "unfinished": 106,
+      "engaged": 216
+    }
+  },
+  "contrasts": {
+    "cma_minus_ppo": {
+      "difference_pp": 11.11111111111111,
+      "interval95_pp": [
+        -6.944444444444445,
+        28.240740740740737
+      ],
+      "per_repeat_pp": [
+        9.722222222222221,
+        11.11111111111111,
+        12.5
+      ]
+    },
+    "cma_minus_random": {
+      "difference_pp": 3.2407407407407414,
+      "interval95_pp": [
+        -11.574074074074076,
+        18.51851851851852
+      ],
+      "per_repeat_pp": [
+        2.777777777777779,
+        2.7777777777777786,
+        4.166666666666666
+      ]
+    }
+  },
+  "training": {
+    "R0-head-ppo": {
+      "host": "4090",
+      "actions": 40000,
+      "updates": 10,
+      "actions_by_stage": {
+        "ppo-collection": 32000,
+        "training": 8000
+      }
+    },
+    "R0-head-main": {
+      "host": "4090",
+      "actions": 40000,
+      "updates": 5,
+      "actions_by_stage": {
+        "training": 40000
+      }
+    },
+    "R0-head-random": {
+      "host": "4090",
+      "actions": 40000,
+      "updates": 0,
+      "actions_by_stage": {
+        "training": 40000
+      }
+    },
+    "R1-head-main": {
+      "host": "4090",
+      "actions": 40000,
+      "updates": 5,
+      "actions_by_stage": {
+        "training": 40000
+      }
+    },
+    "R1-head-random": {
+      "host": "4090",
+      "actions": 40000,
+      "updates": 0,
+      "actions_by_stage": {
+        "training": 40000
+      }
+    },
+    "R1-head-ppo": {
+      "host": "4090",
+      "actions": 40000,
+      "updates": 10,
+      "actions_by_stage": {
+        "ppo-collection": 32000,
+        "training": 8000
+      }
+    },
+    "R2-head-random": {
+      "host": "l4",
+      "actions": 40000,
+      "updates": 0,
+      "actions_by_stage": {
+        "training": 40000
+      }
+    },
+    "R2-head-ppo": {
+      "host": "l4",
+      "actions": 40000,
+      "updates": 10,
+      "actions_by_stage": {
+        "ppo-collection": 32000,
+        "training": 8000
+      }
+    },
+    "R2-head-main": {
+      "host": "l4",
+      "actions": 40000,
+      "updates": 5,
+      "actions_by_stage": {
+        "training": 40000
+      }
+    }
+  },
+  "bootstrap": {
+    "draws": 2000,
+    "seed": 12501,
+    "scheme": "crossed repeat/case; planner seeds together"
+  },
+  "host_resources": {
+    "4090": {
+      "environment_resets": 2755,
+      "encoder_frames": 191728,
+      "retrieval_queries": 68088,
+      "model_batch_calls": 2110728,
+      "candidate_model_steps": 612928176,
+      "replans": 68088,
+      "environment_actions": 336760,
+      "clipped_actions": 59375,
+      "adapter_calls": 325948
+    },
+    "l4": {
+      "environment_resets": 1414,
+      "encoder_frames": 97428,
+      "retrieval_queries": 34512,
+      "model_batch_calls": 1069872,
+      "candidate_model_steps": 310677024,
+      "replans": 34512,
+      "adapter_calls": 159701,
+      "environment_actions": 170627,
+      "clipped_actions": 24897
+    }
+  },
+  "host_seconds": {
+    "4090": 16286.692938993918,
+    "l4": 12281.00324138801
+  },
+  "limitations": [
+    "Three repeats",
+    "Two hardware blocks",
+    "One fixed PPO setting",
+    "Shared final panel with mechanism study; not independent replication"
+  ]
+}

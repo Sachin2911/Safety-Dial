@@ -32,16 +32,7 @@ package = false
 
 [tool.ruff]
 line-length = 100
-src = ["experiments", "scripts"]
-
-[tool.ruff.lint.per-file-ignores]
-# Notebook-facing helpers are consumed via `from helpers.X import *`.
-"experiments/helpers/*.py" = ["F403", "F405"]
-# Imports follow sys.path setup, and star-imported names resolve at runtime.
-"experiments/scripts/*.py" = ["E402", "F403", "F405"]
-# Research notebooks: exploratory idioms (star imports, imports after code,
-# cell-level redefinition) are deliberate. Real errors still surface.
-"experiments/*.ipynb" = ["E402", "E702", "E741", "F401", "F403", "F405", "F541", "F811"]
+src = ["SafeLeWM/experiments", "SafeBlock/experiments"]
 
 [tool.pytest.ini_options]
-testpaths = ["archive/legacy/tests", "archive/legacy/experiments/tests"]
+testpaths = ["SafeLeWM/experiments/tests"]

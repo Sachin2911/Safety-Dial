@@ -1,0 +1,109 @@
+{
+  "instance_id": 58676387,
+  "machine_id": 19781,
+  "runtime_hostname": "c45db82630e6",
+  "gpu_count": 8,
+  "training_actions_per_search": 40000,
+  "total_training_actions": 960000,
+  "max_total_actions": 1344808,
+  "run_seconds": 21600,
+  "population": 8,
+  "sigma": 0.5,
+  "subspace_dimension": 256,
+  "bootstrap_seed": 11501,
+  "bootstrap_replicates": 2000,
+  "stage_a": [
+    {
+      "id": "A0",
+      "initialization_seed": 10101,
+      "cma_seed": 10103,
+      "projection_seed": 10105,
+      "order": [
+        "full",
+        "head",
+        "subspace"
+      ]
+    },
+    {
+      "id": "A1",
+      "initialization_seed": 10201,
+      "cma_seed": 10203,
+      "projection_seed": 10205,
+      "order": [
+        "head",
+        "subspace",
+        "full"
+      ]
+    },
+    {
+      "id": "A2",
+      "initialization_seed": 10301,
+      "cma_seed": 10303,
+      "projection_seed": 10305,
+      "order": [
+        "subspace",
+        "full",
+        "head"
+      ]
+    }
+  ],
+  "stage_b": [
+    {
+      "id": "B0",
+      "initialization_seed": 11101,
+      "untrained_seed": 11102,
+      "cma_seed": 11103,
+      "random_seed": 11104,
+      "projection_seed": 11105,
+      "order": [
+        "main",
+        "random",
+        "task",
+        "blind",
+        "reset"
+      ]
+    },
+    {
+      "id": "B1",
+      "initialization_seed": 11201,
+      "untrained_seed": 11202,
+      "cma_seed": 11203,
+      "random_seed": 11204,
+      "projection_seed": 11205,
+      "order": [
+        "task",
+        "blind",
+        "reset",
+        "main",
+        "random"
+      ]
+    },
+    {
+      "id": "B2",
+      "initialization_seed": 11301,
+      "untrained_seed": 11302,
+      "cma_seed": 11303,
+      "random_seed": 11304,
+      "projection_seed": 11305,
+      "order": [
+        "reset",
+        "main",
+        "random",
+        "task",
+        "blind"
+      ]
+    }
+  ],
+  "representations": [
+    "full",
+    "head",
+    "subspace"
+  ],
+  "arms": [
+    "main",
+    "random",
+    "task",
+    "blind",
+    "reset"
+  ]
+}

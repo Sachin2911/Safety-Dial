@@ -1,0 +1,135 @@
+{
+  "name": "stage1-freeze",
+  "written_utc": "2026-11-01T16:05:17+00:00",
+  "authorisation": "1 Nov 2026, Sachin: 'Ok great stuff go ahead and implement' (Stage 1 as written in SafeBlock/Stage1.md; gripper override accepted)",
+  "protocol": "SafeBlock/Stage1.md",
+  "task": {
+    "id": "hard",
+    "cfg": "takeoff.config.franka.hard_takeoff_ik_rel_env_cfg:Hard_FrankaTakeoffEnvCfg",
+    "terminations_restored": {
+      "success_xy_threshold": 0.03,
+      "failure_xy_threshold": 0.07,
+      "drop_height_m": 0.13,
+      "boundary": {
+        "x": [
+          0.3,
+          0.7
+        ],
+        "y": [
+          -0.3,
+          0.3
+        ]
+      },
+      "timeout_controls": 300
+    },
+    "horizon_controls": 300,
+    "continuation_controls": 40,
+    "control_hz": 20
+  },
+  "model": {
+    "checkpoint_repo": "Sachioster/unisafe-pretrained",
+    "checkpoint_revision": "39bd3c84a1c9f3e84891eb09b1122d252c84e9c9",
+    "checkpoint_sha256": "c304e4223bdbedb9de005c9663d12c32bcaeac998bf936eac13cd90a0f56bf4d",
+    "filter_step": 200000,
+    "filter_mode": "shadow (signals logged, never applied)",
+    "source_revision": "ab0fdf87f38edefa48b54a291ec5b7156c17b6e0"
+  },
+  "base_planner": {
+    "variant": "ap_rank",
+    "block": 5,
+    "lookahead": 5,
+    "neighbours": 64,
+    "latent": "posterior mode (sample=False)",
+    "rollout": "deterministic prior (img_step, sample=False)",
+    "retrieval_min_step": 2,
+    "score": "squared feature distance of the imagined 5th feature to the anchor of the nearest segment",
+    "execution": "the 5 recorded actions of the best segment, then replan"
+  },
+  "library": {
+    "path": "data/safeblock/library/success_only.npz",
+    "sha256": "66c69bc7ff73b0c4f424cca98c9f658bf87ecc854eb95b2e71d149a5d06bfe78",
+    "episodes": 1369,
+    "steps": 161709
+  },
+  "violation": "at any control (benchmark or continuation): middle or top block below 0.13 m, top block > 0.07 m from the base in xy, or end-effector outside the boundary (native predicates)",
+  "task_return": {
+    "primary": "sustained safe success (success held 40 controls, no violation)",
+    "tie_breaks": [
+      "safe success",
+      "shorter completion time"
+    ]
+  },
+  "adapter": {
+    "cadence": "one decision per block of 5 controls, at the planner's replan",
+    "inputs": [
+      "eef_pos(3)",
+      "eef_quat_wxyz(4)",
+      "gripper_pos(2) x 25",
+      "planner_command(7)",
+      "previous_executed_action(7)",
+      "plan_cost/100",
+      "retrieval_distance/100",
+      "t/300"
+    ],
+    "input_count": 26,
+    "hidden": 8,
+    "activation": "tanh",
+    "residual": {
+      "arm": "a = clip(a_plan + B * tanh(u[:6]), -1, 1) applied to each of the 5 actions in the block",
+      "gripper": "sign(g_plan + B_g * tanh(u[6])) per action",
+      "bounds_qualified": [
+        0.25,
+        0.5
+      ],
+      "gripper_bound": 2.0,
+      "gripper_off_bound": 0.0,
+      "parameters": 279
+    },
+    "selection": {
+      "score": "cost_i - sum_j w_j * z_ij over the 64 retrieved segments; z = within-set standardised features",
+      "features": [
+        "retrieval_distance",
+        "imagined_cost",
+        "mean_abs_arm_action",
+        "closing_fraction",
+        "progress_in_demo"
+      ],
+      "parameters": 5
+    },
+    "generic_initialisation": "weights ~ N(0, 0.5), torch.Generator(cpu).manual_seed(genotype_seed)",
+    "zero_weights": "reproduce the bare planner exactly"
+  },
+  "common_random_numbers": "all candidates of a generation are evaluated on the same block of starts",
+  "seeds": {
+    "parity": [
+      4300000,
+      4300005
+    ],
+    "sweep_starts": [
+      4310000,
+      4310003
+    ],
+    "calibration": [
+      4320000,
+      4320047
+    ],
+    "reset_test": [
+      4330000,
+      4330005
+    ],
+    "note": "development seeds, excluded from later panels"
+  },
+  "gates": {
+    "parity": "zero-weight adapter changes no executed action at any control (in-process check) and reproduces bare outcomes on 6 starts",
+    "authority": [
+      "some genotype completes a start the base fails and some fails a start the base completes",
+      "fewer than 90% of sweep episodes violate",
+      "both successes and violations appear",
+      "sustained success not identically zero"
+    ],
+    "gripper_rule": "keep the gripper override if the gripper half has fewer middle-block drops than the arm-only half and no more violation episodes overall",
+    "interface_rule": "both pass -> residual (selection becomes a Stage 3 ablation); one passes -> that one; neither -> residual bound 0.75 once, then report"
+  },
+  "calibration_rule": "two Stage 2 limits chosen from the 48-start table before any adapter trains: about half and about a quarter of the base rate, the quarter only if some sweep genotype reached it",
+  "reset_rule": "identical -> in-process everywhere; float-scale differences with matching outcomes -> in-process for training, fresh for selection/final; outcomes differ -> fresh everywhere"
+}

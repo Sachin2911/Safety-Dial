@@ -25,8 +25,8 @@ plt.rcParams.update(
     }
 )
 
-s16 = json.loads((ROOT / "progress/receipts/16-final-statistics.json").read_text())
-s17 = json.loads((ROOT / "progress/receipts/17-final-statistics.json").read_text())
+s16 = json.loads((ROOT / "docs/records/progress/receipts/16-final-statistics.json").read_text())
+s17 = json.loads((ROOT / "docs/records/progress/receipts/17-final-statistics.json").read_text())
 rows = []
 for env, margin, expected in [("tworoom", 6, (3, 34)), ("reacher", 0.015, (0, 33))]:
     values = []
@@ -205,7 +205,9 @@ plt.close(fig)
 (OUT / "planning-outcomes-data.json").write_text(json.dumps(outcome_rows, indent=2) + "\n")
 # UNISafe confirmation: every setting's 64 attempts split into safe completion, a
 # violation (physical failure or boundary exit) and a timeout.
-s09 = json.loads((ROOT / "progress/receipts/09-unisafe-C-combined-analysis.json").read_text())
+s09 = json.loads(
+    (ROOT / "docs/records/progress/receipts/09-unisafe-C-combined-analysis.json").read_text()
+)
 settings = [("d00_g100", "Native"), ("d15_g100", "Sensed release, delay 15"),
             ("history_only", "History-only release"), ("d40_g100", "Sensed release, delay 40"),
             ("reference_random", "Earlier random-search setting"),

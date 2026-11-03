@@ -1,0 +1,401 @@
+% Current working manuscript, distinct from the historical October thesis.
+\documentclass[sigconf,nonacm]{acmart}
+\setkeys{acmart.cls}{balance=false}
+\usepackage{amsmath,booktabs,tabularx}
+\setcopyright{none}
+\settopmatter{printacmref=false}
+\acmConference{}{}{}\acmBooktitle{}\acmDOI{}\acmISBN{}
+\emergencystretch=1em
+\begin{document}
+\raggedbottom
+\title{Learning Safe Adapters Around Frozen World Models}
+\author{Sachin Mohan}
+\affiliation{\institution{University of the Witwatersrand}\city{Johannesburg}\country{South Africa}}
+\authornote{Working evidence draft, 2 November 2026. Supervisor: Geraud Nangue Tasse. Experiments are ongoing; this is not a submission-ready manuscript.}
+\begin{abstract}
+Can evolutionary search learn compact adapters that recover safe task completion
+around frozen world-model systems, reducing reliance on manually tuned behavioural
+rules? We test recurrent action adapters around LeWorldModel planning and a
+candidate selector around frozen UNISafe Block Plucking. On TwoRoom, CMA-ES, random search and PPO achieved
+44, 37 and 20 safe completions in 216 evaluation episodes each. All received the
+same adapter information and 40,000 training/selection actions per repeat. The
+exploratory contrast intervals include zero, and a separate mechanism study slightly
+favoured random search. PushT baseline reproduction recovered 88/128 completions
+with the released evaluator and 89/128 with our wrapper; subsequent hazard
+qualification passed, but adapter authority failed. The Block Plucking pilot found
+no pooled gain over native. A TwoRoom policy library offered some risk tradeoffs,
+but five of 28 available settings exceeded the requested empirical risk limit.
+Evolutionary superiority, reduced tuning, calibrated risk and reliable
+cross-environment gains remain unestablished. Further development studies are active.
+\end{abstract}
+\keywords{evolution strategies, safe task completion, world models, adapters, reinforcement learning}
+\maketitle
+
+\section{Research question and scope}
+A policy can avoid violations by failing to finish. Conversely, a controller can
+finish often while violating a safety requirement. Our primary endpoint is therefore
+\emph{safe task completion}, accompanied by completion, violations, unfinished
+episodes and engagement. We ask whether a compact learned adapter can improve this
+endpoint around a frozen world-model system with less manual behavioural design.
+Matching a carefully tuned reference with demonstrably less tuning would be useful;
+beating every specialised controller is not a necessary condition.
+
+Useful \emph{authority} requires parameter changes to alter safe completion.
+Learning must improve over native and untrained references; an evolutionary
+advantage additionally requires comparison with parameter random search and
+ordinary learning under matched information and interaction budgets. Reduced
+tuning requires a separate accounting of development effort and tuning evaluations.
+
+LeWM provides the opening experiment, starting with TwoRoom and extending to PushT
+when baseline and authority checks permit. Block Plucking is the intended main
+experiment because violations have physical task definitions. Cube is deferred
+after failed task-completion and renderer checks. ManiGuard and the October planner
+studies are historical context, not additional repeats of the present experiment.
+The connection between LeWM and Block Plucking is adaptation around a frozen world
+model. Their currently implemented adapters differ, so we do not claim shared
+weights or an identical architecture.
+
+\section{Relation to prior work}
+LeWorldModel learns a latent predictive model from pixels~\cite{lewm}; our work
+freezes the released backbone and adapts its use. Anchored Planning retrieves
+short observation targets from offline trajectories to help frozen planners reach
+long-range goals~\cite{ap}. It supplies our baseline planning mechanism, not our
+learning contribution. UNISafe combines uncertainty detection and latent
+reachability to filter unsafe actions~\cite{unisafe}. Our Block Plucking study
+uses its frozen components and physical task, with filter behaviour documented
+separately. We use established evolutionary and policy-gradient optimizers,
+CMA-ES~\cite{cma} and PPO~\cite{ppo}. The research question concerns their utility
+for compact safety adaptation under matched information and interactions, not
+novelty of either optimizer.
+
+Separating task reward from constraints is established in constrained RL, including
+Constrained Policy Optimization~\cite{cpo}. A requested risk budget is also an
+established formulation: budgeted RL allows its constraint budget to vary at
+execution time~\cite{budgeted}. Our current PPO arm is a matched-utility optimizer
+control, not a comparison against these constrained methods. Likewise, selecting
+an existing finite library by empirical violations is not the same as learning a
+budget-conditioned value function or inheriting a training-safety guarantee.
+Evolutionary constraint handling also predates this work. Deb's feasibility rules
+prefer feasible candidates, compare feasible candidates by objective, and compare
+infeasible candidates by violation, avoiding a penalty coefficient~\cite{deb}.
+Stochastic ranking instead uses a probability to balance objective-based and
+violation-based comparisons~\cite{ranking}. Removing a penalty coefficient therefore
+does not by itself establish novelty or remove every design choice. Our current
+fixed utility implements neither of these constraint-handling methods. The intended
+contribution is measured adaptation and tuning cost around frozen models.
+
+Evolution also has direct safe-RL precedents. Safe Neural Evolutionary Strategies
+use Bayesian model checking to adapt a Lagrangian tradeoff according to confidence
+in constraint satisfaction~\cite{snes}. Safety-Oriented Search augments deep RL
+with evolutionary cost optimization and mutations informed by visited unsafe
+states~\cite{sos}. Our experiments instead compare optimizers of compact adapters
+around frozen world-model systems. They do not implement these two approaches,
+compare against them, or inherit their verification procedures. Evolution for
+safety and adaptive tradeoffs alone therefore cannot constitute our novelty claim.
+
+Multi-objective methods address a broader tradeoff-learning problem. MO-ERL
+combines policy-gradient learning with evolutionary search to maintain diversity
+across a Pareto front~\cite{moerl}. Constraint-Rectified Multi-Objective Policy
+Optimization alternates multi-objective policy improvement with updates that
+reduce an unsatisfied constraint; its convergence analysis is tabular~\cite{crmopo}.
+Our library instead retains fixed-utility search candidates and selects among
+them afterward. It neither learns a Pareto front nor implements these
+methods. Probabilistic safe RL also distinguishes trajectory-level safety from
+cumulative-cost relaxations~\cite{gsrl}. Our episode indicator targets any
+violation, but finite development counts do not certify its population probability.
+
+\section{Problem and controls}
+For LeWM episode $i$, let $C_i$ indicate task completion and $V_i$ indicate any monitored
+violation, including a violation before eventual completion. Safe completion is
+$S_i=C_i(1-V_i)$. We report all denominators. Violations may overlap completed and
+unfinished episodes; these quantities are not an additive partition. Movement is
+reported as engagement and is not treated as successful progress.
+
+The main LeWM monitor labels executed trajectories and never vetoes an action.
+Hazard geometry is supplied equally to the relevant learning arms. Safe scripted
+witnesses establish feasibility and risky witnesses establish an avoidable violation;
+they are privileged diagnostics, not demonstration inputs to the adapter. A useful
+case must support a safe route and give the baseline an opportunity to take risk.
+
+All weights of the backbone, retrieval memory and planner are frozen. Changes to
+query panels, memory exclusions, precision, renderer and horizon can change baseline
+competence. We therefore qualify them before searching for a safety controller.
+Protocols, seeds, panels, budgets and gates are fixed before their outcomes.
+Every simulator action counts, including selection, discarded candidates and failed
+starts. Model queries and elapsed time are recorded separately. Comparisons are
+blocked by host when numerical behaviour differs across hardware.
+
+\section{Opening study: LeWM}
+\subsection{Adapter and learning}
+The TwoRoom adapter encodes current and goal latents, normalized geometry, the base
+action, explicit lag inputs and time. A 32-unit feature layer and 32-unit GRU produce
+an action gain and residual. For base action $a_t^0$,
+\begin{equation}
+a_t=\operatorname{clip}_{[-1,1]}\left[
+(1+\tanh g_t)\odot a_t^0+\tanh r_t\right].
+\end{equation}
+Zero output heads recover the base controller exactly. The actor has 19,172
+parameters in TwoRoom; a development comparison selected its 132 head coordinates
+for the subsequent matched studies. Frozen random features and recurrence still
+contain capacity, so a random untrained adapter is an essential reference.
+PushT uses 402 inputs instead of 396, with its task geometry normalized explicitly.
+This is reuse of an interface family, not same-weight transfer.
+
+Diagonal CMA-ES uses population eight, initial standard deviation 0.5 and explicit
+cumulative step-size adaptation. Random search samples the same initial distribution.
+On complete eight-case panels, $81\sum_i S_i+9\sum_i C_i-\sum_i V_i$ orders safe
+completion, completion and fewer violations lexicographically: $9>8$ and
+$81>9\cdot8+8$. The coefficients encode this chosen hierarchy; they were not tuned.
+Partial panels consume budget but cannot nominate a policy.
+
+The PPO comparison trains the same head-coordinate actor with a separate critic
+and stochastic raw logits; evaluation exports a deterministic actor. Its terminal
+reward is $(81S_i+9C_i-V_i)/90$, without a dense progress reward. Training and
+selection together receive exactly 40,000 actions per optimizer per repeat.
+PPO also learns four exploration-scale parameters and the critic; the comparison
+matches actor coordinates, information and interactions, not total training parameters.
+The finite-panel ordering does not imply lexicographic population probabilities:
+PPO maximizes expected fixed utility. Safety specification and preference design
+remain, and reduced tuning is untested. Only one PPO configuration was tested.
+
+\subsection{TwoRoom evidence}
+The initial replication found CMA safe completion of 8/36, 6/36 and 11/36 across
+three repeats, compared with native 3/36 and random search 4/36, 4/36 and 1/36.
+A later representation/mechanism study selected head coordinates and evaluated on
+24 new layouts with three planner seeds. It found 45/216 safe completions for CMA
+and 47/216 for random search, against shared native 7/72. One untrained reference
+outperformed its paired evolved adapter. These outcomes limit any conclusion drawn
+from the initial positive pilot.
+
+\begin{table}[t]
+\caption{Matched-objective TwoRoom study. Native is shared within each host; the
+other rows pool three learner repeats on the same 24 layouts and three planner
+seeds. Episodes are not independent task samples. All episodes engaged.}
+\label{tab:ppo}
+\centering\small
+\begin{tabular}{lrrrrr}
+\toprule
+Controller & Safe & Complete & Violated & Unfinished & $n$\\
+\midrule
+Native & 14 & 77 & 75 & 67 & 144\\
+Untrained & 34 & 127 & 111 & 89 & 216\\
+CMA-ES & 44 & 116 & 109 & 100 & 216\\
+Random & 37 & 99 & 84 & 117 & 216\\
+PPO & 20 & 110 & 116 & 106 & 216\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The separate matched PPO study used two complete optimizer comparisons on one
+RTX 4090 and one on an L4. CMA ranked highest in aggregate (Table~\ref{tab:ppo})
+and exceeded PPO in every repeat. A pre-specified crossed bootstrap resampling
+learner repeats and layouts, with planner seeds retained together, gave CMA minus
+PPO $+11.11$ percentage points, exploratory 95\% interval $[-6.94,+28.24]$;
+CMA minus random was $+3.24$ points, interval $[-11.57,+18.52]$.
+Three repeats and shared final layouts limit inference. This supports neither
+broad evolutionary superiority nor a claim that PPO cannot learn the task.
+
+The mechanism study also examined task-only ranking, removal of online hazard
+geometry and recurrent-state resets. Their safe-completion totals were 29/216,
+36/216 and 37/216, respectively, with mixed effects across repeats. Hazard relocation
+changed 72/72 main-adapter action sequences and 0/72 hazard-blind sequences. This
+establishes response to hazard information, not necessarily a safer response.
+
+\subsection{PushT baseline and qualification}
+A first distinct-scene screen excluded entire scene groups from an 8,000-episode
+retrieval memory. Native completed 4/16 episodes, safely in 2/16, with 4/16 violations
+and 12/16 unfinished. The prerequisite gate failed, so no parameter probes or
+learning followed. That result is retained.
+
+We then reproduced the released AP-CEM protocol on its 128 queries with its full
+16,688-episode memory, published package versions and fixed seeds. The released
+evaluator completed 88/128 and the existing wrapper 89/128; both engaged in all
+128 episodes, with no initially successful queries. They shared 88 successes and
+39 failures. Query episodes were excluded, but sibling demonstrations from the
+same scene could remain. The study used RTX 4090 rather than H20 hardware and a
+different Python patch release. Near-matching aggregate performance does not imply
+bitwise equivalence.
+
+The earlier screen and reproduction differ in memory, queries and runtime together.
+Their difference does not isolate a causal explanation. The reproduced baseline
+supports a new episode-excluded, familiar-scene qualification; it does not validate
+novel-scene generalization. That qualification fixes eight development scenes and
+twelve reserved candidate final scenes, with safe and risky witnesses and sixteen
+pre-drawn head-coordinate probes. The completed 329-episode qualification passed its independent audit. Native
+completed 12/16 episodes but violated in all 16; five scenes passed admission.
+Across sixteen head-coordinate probes, safe completion on the admitted subset
+ranged only from 0/10 to 1/10 and occurred on just one scene. Across all scenes,
+probe completion ranged from 0/16 to 4/16, below native 12/16, despite engagement
+in every episode. The useful-authority gate failed, so no matched optimizer
+training followed and the twelve reserved cases remain untouched. This separates
+baseline competence from useful control authority in the tested adapter space.
+
+\section{Intended main study: Block Plucking}
+Block Plucking uses frozen UNISafe components and task-native physical violations.
+Here ``native'' denotes the bare anchored planner. The safety filter computes
+shadow signals but never vetoes the planner's commands. This is a study built on
+UNISafe components, not a reproduction of its released filtered-policy evaluation.
+The primary endpoint also differs from LeWM: after initial benchmark success,
+the physical success predicate must hold for all 40 additional controls (two
+seconds), with no violation. Benchmark success, sustained safe success and any
+violation during continuation are recorded separately. ``Unfinished'' here means
+no initial benchmark success, including episodes that ended on a violation.
+The current pilot selects among retrieved trajectory candidates around a frozen
+world-model planner, rather than applying the LeWM recurrent action residual.
+Its five linear weights modify candidate ranking using standardized retrieval
+distance, imagined cost, mean arm magnitude, closing fraction and demonstration
+progress. Neutral weights recover the bare planner. This implementation difference
+is material to the scope of transfer.
+
+The completed three-repeat pilot evaluated 48 fresh starts per controller.
+Sustained safe success was 10/48 native, 12/48 untrained, 7/48 random search and
+10/48 CMA. Violations were 28/48, 25/48, 30/48 and 26/48, respectively. CMA's
+safe-completion differences from native were $+2,+2,-4$ across repeats. The pooled
+pre-registered verdict was no signal. The pilot matched training episode counts,
+whereas LeWM matches actual simulator actions; these are not identical budgets.
+CMA and random search also used different training-panel allocation rules in this
+pilot, which limits optimizer interpretation.
+
+The next Block Plucking study independently changes training-panel breadth,
+nominee selection, elite re-evaluation and frozen-system candidate scores. Its
+selector expands from five to eight weights, adding imagined terminal minimum
+critic value, predicted failure probability and ensemble disagreement along the
+imagined action block. These are signals from the pretrained frozen system.
+Its
+first completed repeat (R1) passed an independent saved-record audit. On 16 final
+starts, sustained safe completion was 2 native, 6 untrained, 6 random and 5 CMA;
+violations were 9, 9, 6 and 10, respectively. Benchmark successes were 10, 10, 9
+and 7, leaving 6, 6, 7 and 9 unfinished. CMA therefore received the frozen mixed
+verdict: three more sustained completions than native, but one more violation.
+Its final mean beat its last elite on the selection panel. Two repeats remain
+active, so no pooled conclusion follows. Since the changes are bundled, a gain
+would not identify its cause. Comparisons stay within host because equal seeds
+produce different trajectories across hosts.
+
+The R1 audit checks all 1,156 completed episode records, including four host-local
+smoke episodes (two more than the original budget table), search rankings, nominees
+and final panels. It reconstructs outcomes from saved predicates without replaying
+the simulator. This run used 93,457 controls. Setup and discarded launches are
+accounted separately; incomplete attempts provide only recorded lower bounds.
+Three withdrawn-repeat smoke episodes are documented, but their raw resource
+records have not been located. Complete study-wide resource use is not verified.
+
+\section{Safety dial and reliable gains}
+A risk limit is useful only when candidate policies offer different task/risk
+choices. A zero-rollout diagnostic used complete training panels from the matched
+PPO study, choosing maximum completion subject to empirical violation limits
+$0,0.25,0.5,0.75,1$. It found distinct selected CMA and random policies in all three
+repeats, but only one selected PPO policy per repeat. Missing targets remained
+unavailable. These are eight reused selection cases, so their risk estimates
+cannot certify deployment probabilities.
+
+The prospective test locked 17 distinct selected actors, shared native and
+three untrained references before 756 episodes on twelve previously observed
+development layouts and three planner seeds. All 772 records, including 16
+engineering episodes, passed audit. Of 45 target assignments, 17 were unavailable;
+five of 28 available assignments exceeded the requested empirical risk limit.
+Four of six curves selecting multiple policies had nondecreasing violations;
+R0 CMA and R2 random search were nonmonotonic. PPO selected one actor per repeat
+at limits 0.75 and 1, with no lower targets available. Such constant curves do not
+establish a useful dial.
+
+For example, R0 CMA violated in 18/36 episodes at limit 0.25 and 16/36 at 0.5.
+R1 CMA offered a risk change from 4/36 to 11/36, but completion was only 11/36
+and 12/36, leaving 25/36 and 24/36 unfinished. Every policy engaged in all 36
+episodes. Repeated targets reuse the same actor evaluation, so assignments are
+not independent trials. This is limited development evidence of policy choice,
+not a calibrated-risk result. The library was trained with the original fixed
+utility, not these risk limits. Its 360,000 acquisition actions remain charged
+separately from the new 105,532 actions. No reduced-tuning claim follows.
+
+A separate L4 development study tests population four against the existing eight
+and matched random search in two repeats, each at 40,000 actions per arm. The
+hypothesis is that more CMA updates can help at a small interaction budget.
+Its advancement criterion requires gains over both controls in both repeats
+without higher violations than population eight. No result is yet available.
+Passing that criterion would motivate fresh confirmation, not establish a
+reliable evolutionary advantage by itself.
+
+\section{Limitations and remaining evidence}
+The present monitors and inputs still require designed safety definitions.
+TwoRoom hazards are constructed; PushT protects only the pusher; Block Plucking
+uses different physical predicates and sustained completion. These settings support
+mechanistic comparisons, not a universal human-values alignment claim. Familiar
+scene retrieval and previously observed development layouts restrict transfer
+claims. Small numbers of learner repeats, model-based numerical variability and
+one ordinary-learning configuration restrict optimizer conclusions.
+
+Reduced tuning remains a distinct experiment: compare a frozen adaptive method
+against a specified manually tuned reference, count every development interaction
+for each, and evaluate on untouched tasks under a predeclared practical comparison
+criterion. Current fixed utility coefficients and post-diagnostic design choices
+must remain disclosed. No such benefit is claimed here.
+
+Active development and Block Plucking outcomes remain necessary for final claims.
+Failed prerequisites stay in the evidence. Current results support useful TwoRoom
+adaptation and baseline qualification; cross-environment gains, reduced tuning and
+reliable evolutionary superiority remain unestablished.
+
+\section*{Evidence map and draft status}
+Rule43 accounts 9 and 12--17 index completed LeWM evidence;
+\texttt{SafeBlock/PilotPooled.md} records the Block pilot. The active studies are
+\texttt{Search2.md} and \texttt{EvolutionBudget\allowbreak Study.md}.
+Final-result integration, broader literature coverage and author/supervisor review
+remain before submission.
+
+\begin{thebibliography}{14}
+\bibitem{lewm} Lucas Maes, Quentin Le Lidec, Damien Scieur, Yann LeCun, and
+Randall Balestriero. 2026. \href{https://arxiv.org/abs/2603.19312}{LeWorldModel:
+Stable End-to-End Joint-Embedding Predictive Architecture from Pixels}.
+\bibitem{ap} Xvyuan Liu, Jianjie Fang, Wei Wu, Chen Gao, and Yong Li. 2026.
+\href{https://arxiv.org/abs/2609.30036}{Aim Short to Reach Far: Your Frozen World
+Model Can Plan Better Than You Think}.
+\bibitem{unisafe} Junwon Seo, Kensuke Nakamura, and Andrea Bajcsy. 2025.
+\href{https://proceedings.mlr.press/v305/seo25a.html}{Uncertainty-aware Latent
+Safety Filters for Avoiding Out-of-Distribution Failures}.
+\emph{Proceedings of the 9th Conference on Robot Learning}, PMLR 305, 4442--4472.
+\bibitem{cma} Nikolaus Hansen. 2016.
+\href{https://arxiv.org/abs/1604.00772}{The CMA Evolution Strategy: A Tutorial}.
+\bibitem{ppo} John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, and
+Oleg Klimov. 2017. \href{https://arxiv.org/abs/1707.06347}{Proximal Policy
+Optimization Algorithms}.
+\bibitem{cpo} Joshua Achiam, David Held, Aviv Tamar, and Pieter Abbeel. 2017.
+\href{https://proceedings.mlr.press/v70/achiam17a.html}{Constrained Policy Optimization}.
+\emph{Proceedings of the 34th International
+Conference on Machine Learning}, PMLR 70, 22--31.
+\bibitem{budgeted} Nicolas Carrara, Edouard Leurent, Romain Laroche, Tanguy Urvoy,
+Odalric-Ambrym Maillard, and Olivier Pietquin. 2019.
+\href{https://papers.nips.cc/paper_files/paper/2019/hash/4fe5149039b52765bde64beb9f674940-Abstract.html}{Budgeted
+Reinforcement Learning in Continuous State Space}.
+\emph{Advances in Neural Information Processing Systems 32}.
+\bibitem{deb} Kalyanmoy Deb. 2000.
+\href{https://doi.org/10.1016/S0045-7825(99)00389-8}{An efficient constraint handling
+method for genetic algorithms}. \emph{Computer Methods in Applied Mechanics and
+Engineering} 186, 2--4, 311--338.
+\bibitem{ranking} Thomas P. Runarsson and Xin Yao. 2000.
+\href{https://doi.org/10.1109/4235.873238}{Stochastic ranking for constrained
+evolutionary optimization}. \emph{IEEE Transactions on Evolutionary Computation}
+4, 3, 284--294.
+\bibitem{snes} Lenz Belzner and Martin Wirsing. 2021.
+\href{https://doi.org/10.1016/j.scico.2021.102620}{Synthesizing safe policies under
+probabilistic constraints with reinforcement learning and Bayesian model checking}.
+\emph{Science of Computer Programming} 206, Article 102620.
+\bibitem{sos} Enrico Marchesini, Davide Corsi, and Alessandro Farinelli. 2022.
+\href{https://ojs.aaai.org/index.php/AAAI/article/view/20737}{Exploring Safer Behaviors
+for Deep Reinforcement Learning}. \emph{Proceedings of the AAAI Conference on
+Artificial Intelligence} 36, 7, 7701--7709.
+\bibitem{moerl} Adam Callaghan, Karl Mason, and Patrick Mannion. 2025.
+\href{https://doi.org/10.1016/j.neucom.2025.129991}{Extending Evolution-Guided
+Policy Gradient Learning into the multi-objective domain}.
+\emph{Neurocomputing} 636, Article 129991.
+\bibitem{crmopo} Shangding Gu, Bilgehan Sel, Yuhao Ding, Lu Wang, Qingwei Lin,
+Alois Knoll, and Ming Jin. 2024.
+\href{https://arxiv.org/abs/2405.16390}{Safe and Balanced: A Framework for
+Constrained Multi-Objective Reinforcement Learning}. arXiv:2405.16390.
+\bibitem{gsrl} Weiqin Chen and Santiago Paternain. 2024.
+\href{https://proceedings.mlr.press/v242/chen24b.html}{Generalized constraint for
+probabilistic safe reinforcement learning}. \emph{Proceedings of the 6th Annual
+Learning for Dynamics \& Control Conference}, PMLR 242, 1606--1618.
+\end{thebibliography}
+
+\end{document}
