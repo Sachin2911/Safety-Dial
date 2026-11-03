@@ -69,7 +69,7 @@ jobs. Do not inherit their protocols, gates or budgets.
    `SafeBlock/experiments/project_paths.py` for historical asset/output prefixes;
    frozen configuration bytes remain unchanged.
 4. `docs/`: manuscripts, academic material, papers and retained records. Oracle is
-   under `docs/research/Oracle/`; the consolidated experiment record is
+   under `Paper/`; the consolidated experiment record is
    `docs/research/principia.pdf`. Edit its adjacent `.tex` source and use the build
    instructions in `docs/README.md`.
 5. `docs/records/`: original progress receipts, frozen historical configs, figures

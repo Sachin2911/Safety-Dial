@@ -12,7 +12,7 @@ Supervisor: Geraud Nangue Tasse.
 | LeWM opening study | [SafeLeWM](SafeLeWM/README.md) |
 | Block Plucking main study | [SafeBlock](SafeBlock/README.md) |
 | Current research paper | [PDF](docs/research/honours-gecco/world-model-adapters.pdf), [source and build notes](docs/research/honours-gecco/README.md) |
-| Oracle manuscript | [PDF](docs/research/Oracle/paper.pdf), [source](docs/research/Oracle/paper.tex), [Overleaf bundle](docs/research/Oracle/evolve-dont-retrain-overleaf.zip) |
+| Oracle manuscript | [PDF](Paper/paper.pdf), [source](Paper/paper.tex), [Overleaf bundle](Paper/evolve-dont-retrain-overleaf.zip) |
 
 For a quieter file tree, open [Safety-Dial.code-workspace](Safety-Dial.code-workspace)
 in VS Code or a compatible editor using **File > Open Workspace from File**.

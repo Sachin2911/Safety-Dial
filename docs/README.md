@@ -22,8 +22,8 @@
   SafeCEM, planner tuning and a proposed safety adapter, with an
   [editable builder](research/build_SafeLeWM.py).
 - [Block Plucking](../SafeBlock/README.md): main-study design and results.
-- [Oracle manuscript](research/Oracle/paper.pdf), [source](research/Oracle/paper.tex), and
-  [Overleaf bundle](research/Oracle/evolve-dont-retrain-overleaf.zip).
+- [Oracle manuscript](../Paper/paper.pdf), [source](../Paper/paper.tex), and
+  [Overleaf bundle](../Paper/evolve-dont-retrain-overleaf.zip).
 - [Local archive and output deletion](records/progress/receipts/local-deletion-20261103.md):
   records the removal of the older document bundles and local output trees.
 
