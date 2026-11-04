@@ -1,8 +1,22 @@
 # LeWM Experiment 1
 
 This is the working area for the new LeWM experiment. The Vast compute pipeline
-is ready; the experiment's code, protocol and configuration still need to be
-specified. Existing research designs and results remain in `SafeLeWM/`.
+is ready, and the frozen-checkpoint reproduction is underway under the
+[prospective protocol](reproduction/protocol.md). Existing research designs and
+results remain in `SafeLeWM/`.
+
+The proposed frozen-checkpoint reproduction is summarized in the
+[one-page overview](../theOdessy/reproduction.pdf), with its
+[LaTeX source](../theOdessy/reproduction.tex).
+
+The implementation lives in `reproduction/`: `assets.json` pins public inputs,
+`prepare.py` downloads and verifies them on the rented host, `model.py` loads the
+original frozen JEPA, `evaluate.py` executes fixed panels with action accounting,
+and `audit.py` reconciles episode results against saved traces. Read
+[compatibility.md](reproduction/compatibility.md) for the exact-goal indexing,
+renderer and released-runtime decisions. Engineering evidence is kept separate
+from scientific results. The current authorization and status remain in the root
+[`firstPrinciples.md`](../firstPrinciples.md).
 
 ## Start here
 

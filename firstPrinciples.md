@@ -61,7 +61,12 @@ It covers original LeWM plus CEM on TwoRoom, Reacher, PushT and OGBench single C
 with fixed nearby-goal panels and separately reported paper/released-config settings.
 The initial session has a six-hour work limit and $8 estimated budget. Rental
 shutdown remains manual. This new authorization does not reopen completed studies.
-Preparation is in progress; no reproduction outcomes have yet been observed.
+Vast instance 59111700 is rented under this protocol. All four checkpoints and the
+TwoRoom/Reacher datasets are verified. TwoRoom's two engineering cases passed the
+implementation audit and independent backup verification. Its fixed scientific
+job has been submitted. Exact run state is held by the compute controller;
+evidence is uploaded to the private Experiment 1
+dataset. No scientific reproduction result is yet reported as final.
 
 ## Prior active work, 2 November
 

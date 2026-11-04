@@ -80,6 +80,8 @@ jobs. Do not inherit their protocols, gates or budgets.
    area. Its compute pipeline, tests and future experiment
    files belong here. This is a scoped exception to the SafeLeWM placement rule;
    keep the existing SafeLeWM protocols and recorded results in place.
+7. `theOdessy/`: the LeWM checkpoint-reproduction overview, with LaTeX source and
+   PDF. Sachin explicitly requested this folder at the repository root.
 
 The old root `experiments/`, `scripts/`, `configs/`, `data/`, `third_party/`,
 `progress/`, `results/` and `environment/` are removed after relocation of needed
@@ -222,4 +224,5 @@ and credential table.
 Plain prose, no em or en dashes as clause breaks, plain hyphens in compound modifiers.
 Existing SafeLeWM study notes stay under `SafeLeWM/`; notes for the explicitly
 requested new experiment go under `LeWM_Experiment1/`. Other current research
-notes go under `docs/research/`. Do not create competing plan folders.
+notes go under `docs/research/`. The reproduction overview is the explicit
+root-level `theOdessy/` exception. Do not create competing plan folders.

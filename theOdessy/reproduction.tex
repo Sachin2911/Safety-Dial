@@ -1,0 +1,87 @@
+% Build from the repository root; keep auxiliary files outside this folder:
+% mkdir -p /tmp/lewm-odessy-pdf
+% pdflatex -halt-on-error -interaction=nonstopmode -output-directory=/tmp/lewm-odessy-pdf theOdessy/reproduction.tex
+% cp /tmp/lewm-odessy-pdf/reproduction.pdf theOdessy/reproduction.pdf
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=23mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+\definecolor{accent}{HTML}{23485B}
+\usepackage[colorlinks=true,urlcolor=accent,linkcolor=accent]{hyperref}
+\hypersetup{
+  pdftitle={LeWM checkpoint reproduction},
+  pdfauthor={Sachin Mohan},
+  pdfsubject={Experiment 1: frozen checkpoint competence on nearby goals}
+}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{8pt}
+\setlength{\emergencystretch}{2em}
+\pagestyle{empty}
+
+\begin{document}
+{\small\sffamily\color{accent} theOdessy \quad / \quad Experiment 1}
+
+{\LARGE\bfseries LeWM checkpoint reproduction}
+
+{\large Checking the foundation before building on it}
+\vspace{3pt}
+
+We want to establish that the released LeWorldModel (LeWM) checkpoints can
+complete the tasks reported in the paper using its nearby-goal evaluation.
+This gives our later planning and safety research a tested starting point.
+The test covers the complete controller: frozen model, image processing,
+planner and environment.
+
+We will use the authors' available checkpoint for each environment and keep
+its weights fixed. The first comparison uses the original LeWM planner with
+the Cross-Entropy Method (CEM). Anchored Planning and our safety adaptations
+come after this baseline check; world-model retraining is outside this study.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\linewidth}{@{}lXr@{}}
+\toprule
+\textbf{Environment} & \textbf{Task} & \textbf{Paper success} \\
+\midrule
+TwoRoom & Navigate between rooms through a doorway & 87\% \\
+Reacher & Match a target arm configuration & 86\% \\
+PushT & Push a T-shaped block into position & 96\% \\
+OGBench Cube & Move a single cube to its target & 74\% \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+For each case, the start and goal come from the same recorded trajectory.
+The goal is \textbf{25 environment actions ahead}, and the controller has
+\textbf{50 actions} to reach it. CEM uses 300 candidates and 30 elites.
+It plans five blocks of five actions and executes the 25-action plan before
+replanning. These scores describe nearby-goal control, rather than arbitrary
+full-task completion.
+
+We will begin with the released evaluation recipe of 50 cases per environment
+and seed 42, saving the exact sampled cases. Additional evaluation seeds will
+be chosen beforehand and reported separately. Checkpoint and dataset versions,
+preprocessing, action normalization and success rules will be fixed. Before
+running, we will resolve the paper/code differences in CEM iteration counts
+and TwoRoom history length and record the settings we adopt.
+
+The outcome we want is a repeatable baseline with performance consistent with
+the published results. We will report successes, failures and uncertainty,
+using an acceptable deviation chosen before seeing the outcomes. Exact equality
+with a rounded paper percentage is not required. Any substantial shortfall
+will be investigated and recorded before we build on that environment.
+
+The final record will contain a results table, the exact configuration and
+case list, episode outcomes, simulator actions, model queries and elapsed time.
+This establishes task competence under the tested conditions; safety and
+longer-horizon performance require their own evaluations.
+
+\vfill
+{\footnotesize
+Planning overview, 4 November 2026. Final settings, repeats, acceptance margins
+and compute budget will be fixed before execution.
+}
+\end{document}
