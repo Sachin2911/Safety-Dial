@@ -127,6 +127,7 @@ def main():
     expected |= {(task, 42, 30) for task in REFERENCES if task != "pusht"}
     observed = [(p["task"], p["seed"], p["iterations"]) for p in scientific]
     assert len(observed) == len(set(observed)), "Duplicate scientific panels"
+    assert set(observed) <= expected, "Undeclared scientific panel"
     missing = sorted(expected - set(observed))
     pooled = {}
     for task in REFERENCES:
@@ -156,6 +157,14 @@ def main():
                                                  "predicted_latent_steps", "encoder_frames")}}
     ledger = read(Path("/workspace/LeWM_Experiment1/assets/reproduction/interaction-ledger.json"))
     report["interaction_ledger"] = ledger
+    for key, continuation in ledger.get("reservation_resumptions", {}).items():
+        prior = root / continuation["prior_run"]
+        resumed = root / continuation["continuation_run"]
+        assert continuation["prior_actions"] == continuation["prior_model_queries"] == 0
+        assert not list((prior / "metrics" / key).glob("*"))
+        assert read(prior / "artifacts" / key / "cases.json") == read(
+            resumed / "artifacts" / key / "cases.json")
+        assert any(p["run"] == resumed.name and p["panel"] == key for p in scientific)
     report["completed_engineering_queries"] = {
         key: sum(p["model_queries"][key] for p in panels
                  if p.get("phase") == "engineering" and p["status"] == "verified")
@@ -172,6 +181,10 @@ def main():
             f"Unaccounted {phase} actions: supply every evaluation attempt to the audit")
     assert ledger["engineering"]["actions_attempted"] <= 1000
     assert ledger["scientific"]["actions_attempted"] <= 37500
+    assert ledger["engineering"]["episodes"] <= 20
+    assert ledger["scientific"]["episodes"] <= 750
+    if report["complete"]:
+        assert ledger["scientific"]["episodes"] == sum(p["episodes"] for p in scientific) == 750
     text = ["# LeWM frozen-checkpoint reproduction", "",
             "Audit status: " + ("complete" if report["complete"] else "incomplete"), "",
             "Main comparison uses the paper's CEM iterations and a true 25-action goal offset.",
@@ -222,6 +235,11 @@ def main():
                  "JSON serialization rejected unused NaN telemetry. Its ten actions are",
                  "retained in the durable ledger. Its model-query counts are reconstructed",
                  "from the completed CEM solve, separately from measured counters.", ""]
+    if ledger.get("reservation_resumptions"):
+        text += ["Reacher's initial multi-panel job was stopped after its first completed panel",
+                 "because the next panel stalled during construction. That next panel had",
+                 "zero actions and retained its original reservation when continued in a",
+                 "separate process. The first result was preserved and never rerun.", ""]
     publish_artifact("artifacts/audit.json", data=json.dumps(report, indent=2) + "\n")
     publish_artifact("artifacts/results.md", data="\n".join(text))
     print(json.dumps({"complete": report["complete"], "missing": missing,

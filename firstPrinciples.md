@@ -67,13 +67,12 @@ implementation audit and independent backup verification. Its scientific panels
 are complete and backed up: 45/50, 37/50 and 45/50 for seeds 42, 43 and 44, with
 42/50 in the separately declared CEM-30 sensitivity. Reacher engineering exposed
 a logging issue, now corrected with the failed attempt preserved, and a MuJoCo
-texture-rendering change. A pre-3.12 runtime overlay is being checked before any
-Reacher scientific evaluation. That correction passed. Reacher seed 42 completed
+texture-rendering change. The pre-3.12 runtime overlay passed engineering before
+Reacher scientific evaluation. Reacher seed 42 completed
 at 32/50; the next panel stalled before taking actions. Its stopped run is backed
 up, and the remaining fixed panels are proceeding in separate processes, with
 the original zero-action reservation explicitly continued. PushT and Cube remain
-pending. Exact run state is
-held by the compute controller; evidence is uploaded to the private Experiment 1
+pending. Exact run state is held by the compute controller; evidence is uploaded to the private Experiment 1
 dataset. The full reproduction is not yet complete.
 
 ## Prior active work, 2 November
