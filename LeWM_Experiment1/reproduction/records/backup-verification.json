@@ -1,5 +1,18 @@
 {
   "instance_id": 59111700,
+  "operational_events": {
+    "pusht-final-upload-recovery": {
+      "additional_simulator_actions": 0,
+      "experiment_exit_code": 0,
+      "experiment_status": "completed",
+      "note": "A stop request was issued while investigating the delay; the authoritative exit record showed clean experiment completion before the backup retry.",
+      "observed_error": "ConnectionError",
+      "observed_phase": "backup_failed",
+      "recovered_revision": "c5cb75fb30b13ba27cfcd963f75c6fd1ea4c31f9",
+      "recovery": "Retried final sync only; no experiment rerun",
+      "run_id": "repro-20261104-eval-pusht-seed44-cem30"
+    }
+  },
   "repository": "Sachioster/lewm-experiment1",
   "runs": {
     "repro-20261104-engineering-pusht-01": {
@@ -152,6 +165,25 @@
         "verification": "fresh full HTTP downloads, SHA-256 and size",
         "verified": true,
         "verified_epoch": 1793806700.8552408
+      }
+    },
+    "repro-20261104-eval-pusht-seed44-cem30": {
+      "controller_verified_epoch": 1793807613.4789622,
+      "result": {
+        "exit_code": 0,
+        "finished_epoch": 1793807233.00583,
+        "status": "completed"
+      },
+      "upload": {
+        "bytes": 715175,
+        "error": null,
+        "files": 32,
+        "last_sync_epoch": 1793807392.555612,
+        "manifest_sha256": "693dc5af8eb41d9c15bf9d35ef8a3c6ba750b470cf58d415d1565c556afd914d",
+        "revision": "c5cb75fb30b13ba27cfcd963f75c6fd1ea4c31f9",
+        "verification": "fresh full HTTP downloads, SHA-256 and size",
+        "verified": true,
+        "verified_epoch": 1793807402.677992
       }
     },
     "repro-20261104-eval-reacher": {
@@ -402,6 +434,6 @@
       }
     }
   },
-  "updated_epoch": 1793807016.8763497,
+  "updated_epoch": 1793807613.479268,
   "verification_scope": "Uploader: fresh full HTTP artifact downloads with SHA-256 and size checks. Controller: independent private pinned-revision check and manifest HTTP download/hash check."
 }

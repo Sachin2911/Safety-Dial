@@ -157,6 +157,14 @@ def main():
                                                  "predicted_latent_steps", "encoder_frames")}}
     ledger = read(Path("/workspace/LeWM_Experiment1/assets/reproduction/interaction-ledger.json"))
     report["interaction_ledger"] = ledger
+    report["scientific_panel_elapsed_seconds"] = sum(p["elapsed_seconds"] for p in scientific)
+    report["observed_physics_frames"] = {}
+    for task in ("pusht", "cube"):
+        selected = [p for p in scientific if p["task"] == task]
+        if selected:
+            report["observed_physics_frames"][task] = {
+                phase: sum(p["interaction_counts"].get(phase + "_physics_frames_attempted", 0)
+                           for p in selected) for phase in ("reset", "evaluation")}
     for key, continuation in ledger.get("reservation_resumptions", {}).items():
         prior = root / continuation["prior_run"]
         resumed = root / continuation["continuation_run"]
@@ -227,9 +235,22 @@ def main():
              f"Audited completed engineering actions: {report['engineering_actions']:,}.",
              f"Total attempted controller actions including failures: "
              f"{sum(ledger[p]['actions_attempted'] for p in ('engineering', 'scientific')):,}.",
+             f"Scientific model work: {report['scientific_queries']['cost_calls']:,} cost calls, "
+             f"{report['scientific_queries']['candidate_rollouts']:,} candidate rollouts and "
+             f"{report['scientific_queries']['predicted_latent_steps']:,} predicted latent steps.",
+             f"Summed scientific panel time: {report['scientific_panel_elapsed_seconds']:.1f} "
+             "seconds, including panel setup, planning and control. Downloads, transfer retries "
+             "and time between panels are additional session work.",
              "Per-panel evidence and model-query counts are in audit.json. Failed and",
              "engineering runs remain separate. See compatibility.md for the API, renderer,",
              "checkpoint-history and exact-goal-index decisions.", ""]
+    if report["observed_physics_frames"]:
+        text += ["Low-level physics counters were instrumented for PushT and Cube; TwoRoom",
+                 "and Reacher have exact controller-action counts only. For scientific panels:", ""]
+        for task, frames in report["observed_physics_frames"].items():
+            text.append(f"- {task}: {frames['reset']:,} reset/restoration physics frames and "
+                        f"{frames['evaluation']:,} evaluation physics frames attempted.")
+        text.append("")
     if report["failed_queries_reconstructed"]:
         text += ["The first Reacher engineering attempt lost its ten action trace rows when",
                  "JSON serialization rejected unused NaN telemetry. Its ten actions are",

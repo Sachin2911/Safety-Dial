@@ -73,9 +73,11 @@ Reacher scientific evaluation. Reacher is complete and backed up: 32/50, 34/50 a
 stall was recovered using separate processes without repeating a completed panel.
 Sachin approved deleting only the public Reacher dataset cache after verification;
 the [receipt](LeWM_Experiment1/reproduction/records/public-cache-retirement.json)
-records that deletion and the preserved backups. PushT passed engineering and its
-scientific panels are running; Cube preparation follows them. Exact run state is
-held by the compute controller. The full reproduction is not yet complete.
+records that deletion and the preserved backups. PushT is complete and backed up:
+48/50, 44/50 and 44/50. A transient final-upload connection failure was recovered
+without rerunning its cleanly completed last panel. Cube's pinned dataset is now
+being prepared before its engineering gate and fixed scientific panels. Exact run
+state is held by the compute controller. The full reproduction is not yet complete.
 
 ## Prior active work, 2 November
 
