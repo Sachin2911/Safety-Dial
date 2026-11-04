@@ -162,6 +162,12 @@ def main():
     for task in ("pusht", "cube"):
         selected = [p for p in scientific if p["task"] == task]
         if selected:
+            for panel in selected:
+                for phase in ("reset", "evaluation"):
+                    counts = panel["interaction_counts"]
+                    assert counts[phase + "_physics_frames_attempted"] > 0
+                    assert counts[phase + "_physics_frames_returned"] == counts[
+                        phase + "_physics_frames_attempted"]
             report["observed_physics_frames"][task] = {
                 phase: sum(p["interaction_counts"].get(phase + "_physics_frames_attempted", 0)
                            for p in selected) for phase in ("reset", "evaluation")}
