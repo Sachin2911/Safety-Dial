@@ -252,9 +252,11 @@ class Controller:
             order=[["dph_total", "asc"]],
             inet_up={"gte": self.policy["minimum_upload_mbps"]},
         )
-        if getattr(args, "offer_id", None):
-            query["id"] = {"eq": args.offer_id}
         rows = self.api.call("/bundles/", method="POST", payload=query, retry=True)["offers"]
+        # Vast's bundle-query `id` is not the returned rentable ask ID. Match the
+        # requested ask locally, then apply every normal hardware and cost check.
+        if getattr(args, "offer_id", None):
+            rows = [row for row in rows if row.get("id") == args.offer_id]
         candidates = [offer_summary(row, self.template, self.policy, args) for row in rows]
         candidates = [item for item in candidates if item]
         return sorted(
@@ -512,9 +514,11 @@ class Controller:
         except ApiError as error:
             if error.status in (400, 401, 403, 404, 410, 422):
                 state["phase"] = "create_rejected"
+                state["create_http_status"] = error.status
                 self.save(state)
                 raise ComputeError(
-                    "Vast rejected the launch. Refresh search before trying up again."
+                    f"Vast rejected the launch (HTTP {error.status}). "
+                    "Refresh search before trying up again."
                 )
             raise ComputeError("Creation was not confirmed. Use recover; do not retry the rental.")
         if not response.get("success") or not response.get("new_contract"):

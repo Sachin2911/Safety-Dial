@@ -25,6 +25,8 @@ for new experiment preparation and its Vast compute pipeline. New files for that
 work belong there, as an exception to the earlier SafeLeWM placement instruction.
 Existing study protocols and results remain in SafeLeWM. Infrastructure setup
 does not reopen completed protocols or authorize new research runs.
+At Sachin's request, the reproduction overview and its LaTeX source live in
+[`theOdessy/`](theOdessy/reproduction.pdf) at the repository root.
 
 Evolution may contribute by reaching useful performance with less manual tuning;
 beating a specialised expert controller is not a prerequisite. Optimizer superiority,
@@ -50,7 +52,18 @@ statements below describe the original closeouts, not current local availability
 Consult the frozen protocol and its correction before inspecting a historical run.
 Completed work does not authorize another experiment or reuse of an unused budget.
 
-## Active goal, 2 November
+## Active goal, 4 November
+
+Sachin explicitly requested renting a GPU and performing the four-environment
+frozen LeWM checkpoint reproduction. The prospective protocol is
+[`LeWM_Experiment1/reproduction/protocol.md`](LeWM_Experiment1/reproduction/protocol.md).
+It covers original LeWM plus CEM on TwoRoom, Reacher, PushT and OGBench single Cube,
+with fixed nearby-goal panels and separately reported paper/released-config settings.
+The initial session has a six-hour work limit and $8 estimated budget. Rental
+shutdown remains manual. This new authorization does not reopen completed studies.
+Preparation is in progress; no reproduction outcomes have yet been observed.
+
+## Prior active work, 2 November
 
 The matched PPO comparison and PushT AP reproduction are complete, audited and
 independently backed up. PPO safe completion was 20/216, CMA 44/216 and random
