@@ -93,7 +93,7 @@ def main():
     parser.add_argument("--run", action="append", required=True)
     args = parser.parse_args()
     root = Path("/workspace/LeWM_Experiment1/runs")
-    panels, outcomes = [], []
+    panels, outcomes, diagnostics = [], [], []
     for name in args.run:
         run = root / name
         if run.parent != root or not run.is_dir():
@@ -102,6 +102,12 @@ def main():
         summaries = sorted((run / "metrics").glob("*/summary.json"))
         for path in summaries:
             panels.append(audit_panel(run, path))
+        diagnostic_path = run / "artifacts/render-check.json"
+        if diagnostic_path.exists():
+            diagnostic = read(diagnostic_path)
+            assert diagnostic["simulator_actions"] == diagnostic["model_queries"] == 0
+            diagnostics.append({"run": name, **diagnostic})
+            continue
         if not summaries and outcomes[-1]["result"]["status"] != "completed":
             failure = read(Path(__file__).parent / "records" / (name + "-failure.json"))
             assert failure["run_id"] == name
@@ -140,6 +146,7 @@ def main():
     report = {"complete": not missing and not any(p["phase"] == "scientific" for p in failed),
               "missing_panels": missing, "panels": panels,
               "failed_attempts": failed, "run_outcomes": outcomes, "pooled_main": pooled,
+              "zero_action_diagnostics": diagnostics,
               "scientific_actions": sum(p["actions"] for p in scientific),
               "engineering_actions": sum(p["actions"] for p in panels
                                           if p.get("phase") == "engineering"
@@ -210,6 +217,11 @@ def main():
              "Per-panel evidence and model-query counts are in audit.json. Failed and",
              "engineering runs remain separate. See compatibility.md for the API, renderer,",
              "checkpoint-history and exact-goal-index decisions.", ""]
+    if report["failed_queries_reconstructed"]:
+        text += ["The first Reacher engineering attempt lost its ten action trace rows when",
+                 "JSON serialization rejected unused NaN telemetry. Its ten actions are",
+                 "retained in the durable ledger. Its model-query counts are reconstructed",
+                 "from the completed CEM solve, separately from measured counters.", ""]
     publish_artifact("artifacts/audit.json", data=json.dumps(report, indent=2) + "\n")
     publish_artifact("artifacts/results.md", data="\n".join(text))
     print(json.dumps({"complete": report["complete"], "missing": missing,
