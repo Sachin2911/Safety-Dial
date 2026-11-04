@@ -77,9 +77,10 @@ records that deletion and the preserved backups. PushT is complete and backed up
 48/50, 44/50 and 44/50. A transient final-upload connection failure was recovered
 without rerunning its cleanly completed last panel. Cube's pinned dataset is
 verified, and its engineering gate passed after adding direct MuJoCo physics
-accounting. Its four fixed scientific panels are running in separate processes.
-Exact run state is held by the compute controller. The full reproduction is not
-yet complete.
+accounting. Cube's main panels are complete and backed up: 36/50, 42/50 and 32/50.
+Its final paired CEM-30 sensitivity panel is running. Exact run state is held by
+the compute controller. The full reproduction still awaits this panel and the
+combined audit.
 
 ## Prior active work, 2 November
 
