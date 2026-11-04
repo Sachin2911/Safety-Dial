@@ -18,6 +18,13 @@ renderer and released-runtime decisions. Engineering evidence is kept separate
 from scientific results. The current authorization and status remain in the root
 [`firstPrinciples.md`](../firstPrinciples.md).
 
+Scientific panels now run in separate processes. `evaluate.py` accepts
+`--panel-seed 42|43|44` and `--cem-iterations 10|30`, restricted to the combinations
+in the frozen protocol. Reacher and Cube use `native_runtime.py evaluate.py ...`
+to select the documented MuJoCo compatibility overlay. Completed panels cannot
+be rerun. The guarded zero-action continuation option is for the recorded Reacher
+construction stall, not a general retry mechanism.
+
 ## Start here
 
 Read the root [agent instructions](../AGENTS.md) and the
