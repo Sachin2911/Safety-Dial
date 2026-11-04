@@ -18,6 +18,9 @@ SHA256 is `553a01501ac74ec56721cfdb936d3825ac941734133a1fd761f614c01b6887e9`.
 Official source is `lucas-maes/le-wm` commit
 `8edfeb336732b5f3ce7b8b210d0ba370a09e2cac`. Public model and dataset revisions and
 compressed-file SHA256 values are recorded in `assets.json` before evaluation.
+The pre-outcome runtime decisions are recorded in `compatibility.md`, including
+the installed evaluator API and the exclusive-end slice correction required to
+select a goal exactly 25 actions after the start.
 
 ## Fixed evaluation
 
