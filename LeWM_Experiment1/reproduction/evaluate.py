@@ -188,6 +188,26 @@ class Recorder:
             return result
 
         base.step, base.reset = step, reset
+        # PushT creates a new Pymunk space at reset, then advances it while
+        # restoring states. Count those advances separately from control actions.
+        if hasattr(base, "space") and hasattr(base, "_setup"):
+            original_setup = base._setup
+
+            def setup(*args, **kwargs):
+                result = original_setup(*args, **kwargs)
+                original_physics_step = base.space.step
+
+                def physics_step(*step_args, **step_kwargs):
+                    key = self.phase + "_physics_frames"
+                    self.counts[key + "_attempted"] += 1
+                    value = original_physics_step(*step_args, **step_kwargs)
+                    self.counts[key + "_returned"] += 1
+                    return value
+
+                base.space.step = physics_step
+                return result
+
+            base._setup = setup
         # OGBench exposes these low-level physics advances, including reset settling.
         if hasattr(base, "do_simulation"):
             original_simulate = base.do_simulation

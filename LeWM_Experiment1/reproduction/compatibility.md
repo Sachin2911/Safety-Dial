@@ -90,3 +90,10 @@ the checkerboard placement and arm geometry now match the recorded image. Residu
 pixel differences remain and are disclosed. Freeze this pair for Reacher and Cube,
 the MuJoCo environments, subject to each task's engineering checks. TwoRoom's
 completed results remain unchanged; PushT uses the original image's 2D simulator.
+
+Before PushT engineering, add observational counters around its native Pymunk
+`space.step` calls, including the steps performed during reset/state restoration.
+Keep these physics steps separate from the protocol's controller-action budget.
+The wrapper forwards the original arguments and return value without changing
+state or stepping behavior. OGBench already has equivalent `do_simulation` frame
+counters. Completed TwoRoom and Reacher source snapshots are preserved.
