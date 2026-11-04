@@ -61,26 +61,34 @@ It covers original LeWM plus CEM on TwoRoom, Reacher, PushT and OGBench single C
 with fixed nearby-goal panels and separately reported paper/released-config settings.
 The initial session has a six-hour work limit and $8 estimated budget. Rental
 shutdown remains manual. This new authorization does not reopen completed studies.
-Vast instance 59111700 is rented under this protocol. All four checkpoints and the
-TwoRoom/Reacher datasets are verified. TwoRoom's two engineering cases passed the
-implementation audit and independent backup verification. Its scientific panels
-are complete and backed up: 45/50, 37/50 and 45/50 for seeds 42, 43 and 44, with
-42/50 in the separately declared CEM-30 sensitivity. Reacher engineering exposed
-a logging issue, now corrected with the failed attempt preserved, and a MuJoCo
-texture-rendering change. The pre-3.12 runtime overlay passed engineering before
-Reacher scientific evaluation. Reacher is complete and backed up: 32/50, 34/50 and
-43/50, with 39/50 in the CEM-30 sensitivity. Its recorded zero-action construction
-stall was recovered using separate processes without repeating a completed panel.
-Sachin approved deleting only the public Reacher dataset cache after verification;
-the [receipt](LeWM_Experiment1/reproduction/records/public-cache-retirement.json)
-records that deletion and the preserved backups. PushT is complete and backed up:
-48/50, 44/50 and 44/50. A transient final-upload connection failure was recovered
-without rerunning its cleanly completed last panel. Cube's pinned dataset is
-verified, and its engineering gate passed after adding direct MuJoCo physics
-accounting. Cube's main panels are complete and backed up: 36/50, 42/50 and 32/50.
-Its final paired CEM-30 sensitivity panel is running. Exact run state is held by
-the compute controller. The full reproduction still awaits this panel and the
-combined audit.
+The reproduction is complete. All four released checkpoints and datasets were
+verified, and all 15 declared scientific panels passed the combined evidence audit:
+750 episodes and 37,500 controller actions. Engineering used 19 reserved
+episodes/attempts and 710 actions, including the failed attempt. All 30 managed run
+records have verified private Hugging Face backups; the final report and audit
+were independently downloaded locally and checked against their pinned manifest.
+See the [results](LeWM_Experiment1/reproduction/results.md),
+[audit](LeWM_Experiment1/reproduction/records/final-audit.json),
+[backup index](LeWM_Experiment1/reproduction/records/backup-verification.json) and
+[closeout receipt](LeWM_Experiment1/reproduction/records/closeout.json).
+
+Main success counts for seeds 42, 43 and 44 are TwoRoom 45/50, 37/50, 45/50;
+Reacher 32/50, 34/50, 43/50; PushT 48/50, 44/50, 44/50; and Cube 36/50, 42/50,
+32/50. The paired seed-42 CEM-30 sensitivity is 42/50 for TwoRoom, 39/50 for Reacher
+and 34/50 for Cube. TwoRoom, PushT and Cube meet the primary practical tolerance;
+Reacher fails it. Audit completion is not a claim that every paper score was
+reproduced, nor evidence of safety or formal equivalence. No additional run is
+authorized by this completed protocol.
+
+Runtime corrections, the zero-action Reacher continuation and the first failed
+engineering attempt's ten lost raw trace rows remain disclosed in the
+[compatibility record](LeWM_Experiment1/reproduction/compatibility.md) and report.
+No completed scientific panel was repeated. The approved public Reacher cache
+deletion is recorded in its
+[receipt](LeWM_Experiment1/reproduction/records/public-cache-retirement.json).
+Vast instance 59111700 is idle and ready for manual destruction. It remains
+running and billing until Sachin directs shutdown; exact rental state is held by
+the compute controller.
 
 ## Prior active work, 2 November
 
