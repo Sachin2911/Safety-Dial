@@ -1,6 +1,7 @@
 """Select an isolated pre-3.12 MuJoCo overlay on the rented host."""
 
 import importlib.metadata
+import faulthandler
 import json
 import os
 from pathlib import Path
@@ -48,6 +49,10 @@ def main():
         raise ValueError("Prepare the pinned overlay first")
     sys.path.insert(0, str(overlay))
     assert {name: importlib.metadata.version(name) for name in PINS} == PINS
+    # Capture Python thread stacks if a long panel or shutdown stalls. This
+    # watchdog only writes diagnostics; it does not interrupt computation.
+    faulthandler.enable()
+    faulthandler.dump_traceback_later(300, repeat=True)
     sys.argv = sys.argv[1:]
     runpy.run_path(sys.argv[0], run_name="__main__")
 
