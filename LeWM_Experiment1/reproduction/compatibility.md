@@ -129,3 +129,8 @@ unchanged, and restore the original function after closing the world. Repeat the
 two engineering cases within the shared allowance before Cube scientific panels.
 The first engineering run's absent low-level counters are not zero physics work.
 Cases, weights, planner settings and benchmark labels remain unchanged.
+
+The isolated runtime emits passive Python stack diagnostics every 300 seconds.
+Their `Timeout` heading is the diagnostic timer, not a job timeout. These messages
+do not interrupt evaluation; the runner result and completed traces determine the
+run outcome.
