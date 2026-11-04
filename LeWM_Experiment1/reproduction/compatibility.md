@@ -97,3 +97,23 @@ Keep these physics steps separate from the protocol's controller-action budget.
 The wrapper forwards the original arguments and return value without changing
 state or stepping behavior. OGBench already has equivalent `do_simulation` frame
 counters. Completed TwoRoom and Reacher source snapshots are preserved.
+
+## Process isolation after a zero-action Reacher stall
+
+The Reacher seed-42 scientific panel completed and saved 32/50 successes. The next
+panel reserved its original 50 episodes, saved cases/model/configuration, then
+stalled during `World` construction before initial images, action steps or model
+queries. The scientific action ledger remained 12,500, exactly the completed
+TwoRoom panels plus the first Reacher panel. Read-only process inspection showed
+the process waiting on a futex with an idle GPU; container restrictions prevented
+a debugger stack trace, so the precise cause is unconfirmed. Stop and preserve
+this run. Its completed result is retained regardless of its score.
+
+Run subsequent fixed panels in separate processes to avoid reusing renderer
+resources. This changes process lifetime, not cases, seeds, CEM or success scoring.
+Before continuing, repeat the small engineering gate within the shared allowance.
+Resume the already-reserved seed-43 panel only after checking its stopped-run
+record, identical config/cases, absent action artifacts and full reconciliation
+of the scientific action ledger to other summaries. Record that continuation in
+the durable ledger without allocating or repeating episodes. Other panels retain
+their original reservations and bounds. No completed panel is rerun.

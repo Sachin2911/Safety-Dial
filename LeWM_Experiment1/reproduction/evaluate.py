@@ -265,7 +265,37 @@ def run_panel(args, config, root, dataset, task_cfg, cases, processors, ledger, 
     world_config = dict(task_cfg["world"], num_envs=count, max_episode_steps=100)
     publish(f"artifacts/{prefix}/configuration.json", {"world": world_config,
             "original_task_config": task_cfg, "iterations": iterations})
-    ledger.reserve(key, count)
+    if args.resume_unstarted_run:
+        prior = root.parents[1] / "runs" / args.resume_unstarted_run
+        assert prior.parent == root.parents[1] / "runs"
+        assert json.loads((prior / "result.json").read_text())["exit_code"] != 0
+        assert json.loads((prior / "config.json").read_text()) == config
+        previous_cases = json.loads((prior / "artifacts" / prefix / "cases.json").read_text())
+        assert previous_cases["cases"] == cases
+        assert previous_cases["cem_iterations"] == iterations
+        assert not list((prior / "metrics" / prefix).glob("*"))
+        assert not (prior / "artifacts" / prefix / "initial.png").exists()
+        assert [p for p in ledger.data["panels"] if "-scientific-" in p][-1] == key
+        # Only an unexecuted reservation can resume. All scientific actions
+        # must already be accounted for by other saved summaries.
+        recorded = 0
+        for summary in (root.parents[1] / "runs").glob("*/metrics/*/summary.json"):
+            row = json.loads(summary.read_text())
+            if row["phase"] == "scientific":
+                recorded += row.get("interaction_counts", {}).get("evaluation_step_attempts", 0)
+        assert recorded == ledger.data["scientific"]["actions_attempted"]
+        resumptions = ledger.data.setdefault("reservation_resumptions", {})
+        assert key not in resumptions
+        record = {"prior_run": args.resume_unstarted_run,
+                  "continuation_run": Path(os.environ["LEWM_RUN_DIR"]).name,
+                  "prior_actions": 0, "prior_model_queries": 0,
+                  "basis": "Stalled during World construction before initial-image publication; "
+                           "all scientific actions reconcile to other completed summaries"}
+        resumptions[key] = record
+        atomic_json(ledger.path, ledger.data)
+        publish("artifacts/reservation-continuation.json", record)
+    else:
+        ledger.reserve(key, count)
     world, recorder = None, None
     start = time.time()
     result = {"task": args.task, "phase": args.phase, "seed": seed,
@@ -334,7 +364,19 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("task", choices=["tworoom", "reacher", "pusht", "cube"])
     parser.add_argument("--phase", choices=["engineering", "scientific"], required=True)
+    parser.add_argument("--panel-seed", type=int, choices=[42, 43, 44])
+    parser.add_argument("--cem-iterations", type=int, choices=[10, 30])
+    parser.add_argument("--resume-unstarted-run")
     args = parser.parse_args()
+    if args.panel_seed is not None or args.cem_iterations is not None:
+        assert args.phase == "scientific"
+        assert args.panel_seed is not None and args.cem_iterations is not None
+        allowed = {(seed, 30 if args.task == "pusht" else 10) for seed in (42, 43, 44)}
+        if args.task != "pusht":
+            allowed.add((42, 30))
+        assert (args.panel_seed, args.cem_iterations) in allowed
+    if args.resume_unstarted_run:
+        assert args.phase == "scientific" and args.panel_seed is not None
     config = json.loads(Path(os.environ["LEWM_CONFIG"]).read_text())
     root = Path(config["asset_root"])
     if not str(root).startswith("/workspace/LeWM_Experiment1/"):
@@ -371,9 +413,13 @@ def main():
     publish("artifacts/all-panels.json", panels)
     iterations = 30 if args.task == "pusht" else 10
     for seed in seeds:
+        if args.panel_seed is not None and (seed, iterations) != (
+                args.panel_seed, args.cem_iterations):
+            continue
         run_panel(args, config, root, dataset, task_cfg, panels[seed], processors,
                   ledger, seed, iterations)
-    if args.phase == "scientific" and args.task != "pusht":
+    if args.phase == "scientific" and args.task != "pusht" and (
+            args.panel_seed is None or (args.panel_seed, args.cem_iterations) == (42, 30)):
         run_panel(args, config, root, dataset, task_cfg, panels[42], processors,
                   ledger, 42, 30)
     if dataset.h5_file:
