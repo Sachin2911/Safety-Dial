@@ -8,7 +8,7 @@ import runpy
 import subprocess
 import sys
 
-PINS = {"mujoco": "3.11.0", "dm-control": "1.0.43"}
+PINS = {"mujoco": "3.11.0", "dm-control": "1.0.44"}
 
 
 def main():
@@ -16,7 +16,7 @@ def main():
     root = Path(cfg["asset_root"])
     if not str(root).startswith("/workspace/LeWM_Experiment1/"):
         raise ValueError("Runtime preparation must run on the rented host")
-    overlay = root / "runtime-mujoco311"
+    overlay = root / f"runtime-mujoco{PINS['mujoco']}-dmcontrol{PINS['dm-control']}"
     if sys.argv[1:] == ["--setup"]:
         from run_io import publish_artifact
 

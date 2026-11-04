@@ -74,3 +74,12 @@ This selects versions from a documented rendering change, not success scores.
 The original training simulator version remains unestablished; a matching image
 does not prove identical physics. Each later engineering gate records actual
 simulator package versions and requires the scientific job to match them.
+
+The first zero-action overlay check failed during environment construction because
+dm-control 1.0.43 still expects `mjData.qM`, removed by MuJoCo 3.11. Its stated lower
+bound did not guarantee compatibility with this newer release. No action or model
+query occurred; the reserved engineering reset and failed run are retained. Use
+dm-control 1.0.44 instead, released alongside MuJoCo 3.11 and declaring >=3.11.0.
+This is the same dm-control version as the main image; only MuJoCo changes relative
+to that image. Preserve the first overlay and install the corrected pair in a new
+directory before repeating the fixed-state image check.

@@ -83,6 +83,8 @@ def audit_panel(run, summary_path):
             "elapsed_seconds": summary["elapsed_seconds"],
             "dataset_sha256": receipt["sha256"],
             "model_revision": model["model_revision"],
+            "runtime": read(run / "artifacts/runtime.json"),
+            "interaction_counts": counts,
             "restored_image_errors": summary.get("restored_image_mean_absolute_errors", [])}
 
 
@@ -147,6 +149,13 @@ def main():
                                                  "predicted_latent_steps", "encoder_frames")}}
     ledger = read(Path("/workspace/LeWM_Experiment1/assets/reproduction/interaction-ledger.json"))
     report["interaction_ledger"] = ledger
+    report["completed_engineering_queries"] = {
+        key: sum(p["model_queries"][key] for p in panels
+                 if p.get("phase") == "engineering" and p["status"] == "verified")
+        for key in ("cost_calls", "candidate_rollouts", "predicted_latent_steps", "encoder_frames")}
+    report["failed_queries_reconstructed"] = [
+        {"run": p["run"], "counts": p["reconstructed_failure_record"][
+            "model_queries_reconstructed"]} for p in failed if "reconstructed_failure_record" in p]
     for phase in ("engineering", "scientific"):
         completed_actions = sum(p["actions"] for p in panels
                                 if p.get("phase") == phase and p["status"] == "verified")
