@@ -17,17 +17,23 @@ or safety claims.
 
 The [full audit](reproduction/records/final-audit.json) includes every panel's
 counts and uncertainty intervals, interaction accounting and failed attempts.
-The [backup index](reproduction/records/backup-verification.json) pins all 30 run
-records in private Hugging Face storage. The
+The [backup index](reproduction/records/backup-verification.json) pins the 30 original
+reproduction run records in private Hugging Face storage. The
 [closeout receipt](reproduction/records/closeout.json) records independent local
 downloads and hashes of the final audit and report. Engineering used 19 reserved
 episodes/attempts and 710 controller actions. Ten raw action rows from the first
 failed Reacher engineering attempt were lost; their action count remains in the
 ledger, with this limitation disclosed in the report.
 
-The original reproduction plan is summarized in the
+The completed reproduction and its results are summarized in the
 [one-page overview](../theOdessy/reproduction.pdf), with its
 [LaTeX source](../theOdessy/reproduction.tex).
+
+The [Hugging Face results page](https://huggingface.co/datasets/Sachioster/lewm-experiment1/blob/main/reports/reproduction-20261104/README.md)
+also contains the PDF, detailed results and eight reconstructed videos with
+trajectory images: one recorded success and one failure per environment.
+Read the [media notes](reproduction/media/README.md) for selection, reconstruction
+limits and verified cloud receipts. No scientific evaluation was rerun to make them.
 
 The implementation lives in `reproduction/`: `assets.json` pins public inputs,
 `prepare.py` downloads and verifies them on the rented host, `model.py` loads the

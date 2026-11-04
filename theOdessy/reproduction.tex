@@ -26,62 +26,62 @@
 
 {\LARGE\bfseries LeWM checkpoint reproduction}
 
-{\large Checking the foundation before building on it}
+{\large Results: checking the foundation before building on it}
 \vspace{3pt}
 
-We want to establish that the released LeWorldModel (LeWM) checkpoints can
-complete the tasks reported in the paper using its nearby-goal evaluation.
-This gives our later planning and safety research a tested starting point.
-The test covers the complete controller: frozen model, image processing,
-planner and environment.
+We evaluated the released LeWorldModel (LeWM) checkpoints to check whether
+they provide a competent starting point for our planning and safety research.
+Weights stayed frozen, and control used the original Cross-Entropy Method
+(CEM) planner. There was no retraining, Anchored Planning or safety adapter.
 
-We will use the authors' available checkpoint for each environment and keep
-its weights fixed. The first comparison uses the original LeWM planner with
-the Cross-Entropy Method (CEM). Anchored Planning and our safety adaptations
-come after this baseline check; world-model retraining is outside this study.
+\textbf{What we tested.} Each start and goal came from the same recorded
+trajectory, with the goal \textbf{25 environment actions ahead}. The controller
+had \textbf{50 actions} to reach it. We tested 50 cases per environment for
+seeds 42, 43 and 44: 600 main episodes. Seed 42 was the primary paper comparison;
+the other seeds were robustness repeats using the same checkpoint.
 
 \begin{center}
 \renewcommand{\arraystretch}{1.12}
-\begin{tabularx}{\linewidth}{@{}lXr@{}}
+\begin{tabularx}{\linewidth}{@{}lrr>{\raggedleft\arraybackslash}X@{}}
 \toprule
-\textbf{Environment} & \textbf{Task} & \textbf{Paper success} \\
+\textbf{Environment} & \textbf{Paper} & \textbf{Primary (42)} & \textbf{Repeats (43 / 44)} \\
 \midrule
-TwoRoom & Navigate between rooms through a doorway & 87\% \\
-Reacher & Match a target arm configuration & 86\% \\
-PushT & Push a T-shaped block into position & 96\% \\
-OGBench Cube & Move a single cube to its target & 74\% \\
+TwoRoom & 87\% & 90\% (45/50) & 74\% / 90\% \\
+Reacher & 86\% & 64\% (32/50) & 68\% / 86\% \\
+PushT & 96\% & 96\% (48/50) & 88\% / 88\% \\
+OGBench Cube & 74\% & 72\% (36/50) & 84\% / 64\% \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
-For each case, the start and goal come from the same recorded trajectory.
-The goal is \textbf{25 environment actions ahead}, and the controller has
-\textbf{50 actions} to reach it. CEM uses 300 candidates and 30 elites.
-It plans five blocks of five actions and executes the 25-action plan before
-replanning. These scores describe nearby-goal control, rather than arbitrary
-full-task completion.
+CEM used 300 candidates, 30 elites and a 25-action plan before replanning.
+The main settings used 10 CEM iterations for TwoRoom, Reacher and Cube, and
+30 for PushT. A separate, predeclared 30-iteration check reused the seed-42
+cases for the other three tasks: TwoRoom 84\%, Reacher 78\% and Cube 68\%.
+These 150 extra episodes brought the total to \textbf{750 evaluations}.
 
-We will begin with the released evaluation recipe of 50 cases per environment
-and seed 42, saving the exact sampled cases. Additional evaluation seeds will
-be chosen beforehand and reported separately. Checkpoint and dataset versions,
-preprocessing, action normalization and success rules will be fixed. Before
-running, we will resolve the paper/code differences in CEM iteration counts
-and TwoRoom history length and record the settings we adopt.
+\textbf{What we learned.} Before running, we allowed a primary result up to
+10 percentage points below the paper as a practical competence check.
+\textbf{TwoRoom, PushT and Cube met this tolerance; Reacher did not.}
+The extra-iteration result does not replace Reacher's failed main comparison.
+Across all three main seeds, success was 84.7\%, 72.7\%, 90.7\% and 73.3\%,
+respectively. Variation across cases remains substantial; this is not proof of
+equivalence to the paper or a replication across training seeds.
 
-The outcome we want is a repeatable baseline with performance consistent with
-the published results. We will report successes, failures and uncertainty,
-using an acceptable deviation chosen before seeing the outcomes. Exact equality
-with a rounded paper percentage is not required. Any substantial shortfall
-will be investigated and recorded before we build on that environment.
+\textbf{Checks and limitations.} All 15 evaluation panels passed the evidence
+audit, covering 37,500 controller actions. Exact cases, outcomes, configuration,
+model queries and uncertainty intervals are saved, with verified backups in our
+private Hugging Face dataset. Runtime and paper/code differences are documented,
+including rendering, goal indexing and checkpoint history length. Engineering
+used another 710 actions. Ten raw trace rows from an early logging failure were
+lost; their action count is preserved and the limitation is recorded.
 
-The final record will contain a results table, the exact configuration and
-case list, episode outcomes, simulator actions, model queries and elapsed time.
-This establishes task competence under the tested conditions; safety and
-longer-horizon performance require their own evaluations.
+The result gives us a tested \textbf{nearby-goal baseline for three environments}.
+Reacher's shortfall remains unresolved. Safety, longer-horizon control and any
+benefit from our adaptations still require separate experiments.
 
 \vfill
 {\footnotesize
-Planning overview, 4 November 2026. Final settings, repeats, acceptance margins
-and compute budget will be fixed before execution.
+Completed 4 November 2026. Frozen checkpoints, native CEM, fixed evaluation panels.
 }
 \end{document}

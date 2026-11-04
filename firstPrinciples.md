@@ -64,8 +64,8 @@ shutdown remains manual. This new authorization does not reopen completed studie
 The reproduction is complete. All four released checkpoints and datasets were
 verified, and all 15 declared scientific panels passed the combined evidence audit:
 750 episodes and 37,500 controller actions. Engineering used 19 reserved
-episodes/attempts and 710 actions, including the failed attempt. All 30 managed run
-records have verified private Hugging Face backups; the final report and audit
+episodes/attempts and 710 actions, including the failed attempt. The 30 original
+reproduction run records have verified private Hugging Face backups; the final report and audit
 were independently downloaded locally and checked against their pinned manifest.
 See the [results](LeWM_Experiment1/reproduction/results.md),
 [audit](LeWM_Experiment1/reproduction/records/final-audit.json),
@@ -86,9 +86,24 @@ engineering attempt's ten lost raw trace rows remain disclosed in the
 No completed scientific panel was repeated. The approved public Reacher cache
 deletion is recorded in its
 [receipt](LeWM_Experiment1/reproduction/records/public-cache-retirement.json).
-Vast instance 59111700 is idle and ready for manual destruction. It remains
-running and billing until Sachin directs shutdown; exact rental state is held by
-the compute controller.
+Vast instance 59111700 is idle. After reviewing the completed reproduction and
+verified backups, Sachin explicitly directed keeping it running. Billing
+continues; this decision authorizes no additional experiments. Any later
+destruction still requires his direction. Exact rental state is held by the
+compute controller, and the decision is recorded in the closeout receipt.
+
+Sachin subsequently requested updating the Odyssey one-page PDF with these results,
+and publishing videos and trajectory images on Hugging Face. He selected one
+success and one failure per environment. The completed
+[media protocol and records](LeWM_Experiment1/reproduction/media/README.md)
+preserve eight labelled reconstructed clips and eight trajectory images, selected
+by fixed case order from the primary panels. The original scientific ledger is
+unchanged: zero additional evaluation actions or model queries. All media attempts
+together used 524 setup physics steps and 20 reset-internal controller calls,
+within 24 reserved environment setups. The private
+[results page](https://huggingface.co/datasets/Sachioster/lewm-experiment1/blob/main/reports/reproduction-20261104/README.md)
+collects the PDF, results, audits and media. The instance remains running at his
+direction; neither completed protocol authorizes additional experiments.
 
 ## Prior active work, 2 November
 
