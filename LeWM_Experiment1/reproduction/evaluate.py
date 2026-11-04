@@ -5,6 +5,7 @@ from collections import Counter
 import hashlib
 import importlib.metadata
 import json
+import math
 import os
 from pathlib import Path
 import time
@@ -30,11 +31,15 @@ def serial(value):
     if isinstance(value, (tuple, list)):
         return [serial(v) for v in value]
     if isinstance(value, np.ndarray):
-        return value.tolist()
+        return serial(value.tolist())
     if isinstance(value, np.generic):
-        return value.item()
+        return serial(value.item())
     if torch.is_tensor(value):
-        return value.detach().cpu().tolist()
+        return serial(value.detach().cpu().tolist())
+    if isinstance(value, float) and not math.isfinite(value):
+        # DMControl's unused info['success'] is NaN; termination remains the label.
+        return {"nonfinite": "NaN" if math.isnan(value) else
+                "Infinity" if value > 0 else "-Infinity"}
     return value
 
 
@@ -284,13 +289,19 @@ def run_panel(args, config, root, dataset, task_cfg, cases, processors, ledger, 
         result.update(elapsed_seconds=time.time() - start, model_queries=model.counts,
                       ledger=ledger.data)
         if recorder:
-            recorder.flush()
             result["interaction_counts"] = dict(recorder.counts)
             result["case_steps"] = recorder.case_steps
             result["restored_image_mean_absolute_errors"] = recorder.restore_image_errors
-        publish(f"metrics/{prefix}/summary.json", result)
-        if world:
-            world.close()
+            try:
+                recorder.flush()
+            except Exception as error:
+                result["trace_flush_error"] = repr(error)
+                result["status"] = "failed"
+        try:
+            publish(f"metrics/{prefix}/summary.json", result)
+        finally:
+            if world:
+                world.close()
         del model, original
         torch.cuda.empty_cache()
 

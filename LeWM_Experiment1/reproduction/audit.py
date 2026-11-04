@@ -3,6 +3,7 @@
 import argparse
 from collections import defaultdict
 import json
+import hashlib
 import math
 from pathlib import Path
 
@@ -96,8 +97,20 @@ def main():
         if run.parent != root or not run.is_dir():
             raise ValueError("Expected an existing run ID")
         outcomes.append({"run": name, "result": read(run / "result.json")})
-        for path in sorted((run / "metrics").glob("*/summary.json")):
+        summaries = sorted((run / "metrics").glob("*/summary.json"))
+        for path in summaries:
             panels.append(audit_panel(run, path))
+        if not summaries and outcomes[-1]["result"]["status"] != "completed":
+            failure = read(Path(__file__).parent / "records" / (name + "-failure.json"))
+            assert failure["run_id"] == name
+            assert hashlib.sha256((run / "manifest.json").read_bytes()).hexdigest() == (
+                failure["manifest_sha256"])
+            panels.append({"run": name, "status": "incomplete", "phase": failure["phase"],
+                           "task": failure["task"], "seed": failure["seed"],
+                           "iterations": failure["iterations"],
+                           "summary": {"interaction_counts": {
+                               "evaluation_step_attempts": failure["actions_attempted"]}},
+                           "reconstructed_failure_record": failure})
     scientific = [p for p in panels if p.get("phase") == "scientific"
                   and p["status"] == "verified"]
     failed = [p for p in panels if p["status"] != "verified"]

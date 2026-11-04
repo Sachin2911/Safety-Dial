@@ -37,3 +37,19 @@ Engineering verification must still establish strict checkpoint loading, finite
 costs/actions, callable availability, exact goal indexing and agreement between
 recorded termination flags and the native evaluator's success vector. Failures
 remain recorded; this document does not claim those checks have already passed.
+
+## Engineering correction, before Reacher scientific evaluation
+
+Reacher engineering attempt 01 stopped after ten controller actions because the
+native DMControl wrapper returns `info['success'] = NaN` as a placeholder. The
+benchmark's termination flag is its actual success signal. Our strict JSON encoder
+rejected that unused field during the first trace flush; a repeated flush also
+prevented the summary from being saved. The original failed run and logs are
+preserved, and its ten actions remain in the durable interaction ledger. Its raw
+ten-step trace was lost before publication and is not claimed to be recoverable.
+
+The logger now represents nonfinite telemetry explicitly as JSON objects such as
+`{"nonfinite": "NaN"}` and saves accounting even if a trace flush fails. This does
+not change actions, CEM, model weights, goals or benchmark labels. Nonfinite actions
+and model costs still fail their numerical checks. Reacher's engineering check is
+repeated within the original shared engineering allowance before any scientific run.
