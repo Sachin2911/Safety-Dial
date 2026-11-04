@@ -129,9 +129,27 @@ class Recorder:
         self.count = count
         self.world_steps = 0
         self.restore_image_errors = []
+        self.original_mujoco_step = None
         for i, wrapped in enumerate(world.envs.unwrapped.envs):
             base = wrapped.unwrapped
             self.instrument(base, i)
+        if any(hasattr(w.unwrapped, "_n_steps") and hasattr(w.unwrapped, "_model")
+               for w in world.envs.unwrapped.envs):
+            # OGBench calls mujoco.mj_step directly, including during reset.
+            import mujoco
+
+            original = mujoco.mj_step
+            self.original_mujoco_step = original
+
+            def physics_step(*args, **kwargs):
+                frames = int(kwargs.get("nstep", args[2] if len(args) > 2 else 1))
+                key = self.phase + "_physics_frames"
+                self.counts[key + "_attempted"] += frames
+                result = original(*args, **kwargs)
+                self.counts[key + "_returned"] += frames
+                return result
+
+            mujoco.mj_step = physics_step
         original_step = world.step
 
         def world_step():
@@ -208,15 +226,12 @@ class Recorder:
                 return result
 
             base._setup = setup
-        # OGBench exposes these low-level physics advances, including reset settling.
-        if hasattr(base, "do_simulation"):
-            original_simulate = base.do_simulation
 
-            def simulate(ctrl, n_frames, *args, **kwargs):
-                self.counts[self.phase + "_physics_frames_attempted"] += int(n_frames)
-                return original_simulate(ctrl, n_frames, *args, **kwargs)
+    def restore_hooks(self):
+        if self.original_mujoco_step is not None:
+            import mujoco
 
-            base.do_simulation = simulate
+            mujoco.mj_step = self.original_mujoco_step
 
     def flush(self):
         if self.rows:
@@ -354,8 +369,12 @@ def run_panel(args, config, root, dataset, task_cfg, cases, processors, ledger, 
         try:
             publish(f"metrics/{prefix}/summary.json", result)
         finally:
-            if world:
-                world.close()
+            try:
+                if world:
+                    world.close()
+            finally:
+                if recorder:
+                    recorder.restore_hooks()
         del model, original
         torch.cuda.empty_cache()
 

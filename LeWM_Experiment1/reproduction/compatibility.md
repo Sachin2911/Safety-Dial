@@ -117,3 +117,15 @@ record, identical config/cases, absent action artifacts and full reconciliation
 of the scientific action ledger to other summaries. Record that continuation in
 the durable ledger without allocating or repeating episodes. Other panels retain
 their original reservations and bounds. No completed panel is rerun.
+
+## Cube physics accounting before scientific evaluation
+
+Cube's first two engineering cases completed with matching restored images and
+valid control-action accounting, including four internal reset action calls.
+The generic `do_simulation` counter was not invoked: the installed OGBench base
+class calls `mujoco.mj_step(..., nstep=self._n_steps)` directly. Add a passive
+counter around that native function, forwarding arguments and return values
+unchanged, and restore the original function after closing the world. Repeat the
+two engineering cases within the shared allowance before Cube scientific panels.
+The first engineering run's absent low-level counters are not zero physics work.
+Cases, weights, planner settings and benchmark labels remain unchanged.
