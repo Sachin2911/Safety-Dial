@@ -19,20 +19,37 @@
   "elapsed_rental_minutes": 185.9,
   "estimated_compute_usd": 2.031,
   "transfer_fees": "Not included in this compute-only estimate",
-  "rental_state": "Running and idle; user explicitly directed keeping this instance running after reproduction closeout",
+  "rental_state": "Destroyed at explicit user direction; provider removal confirmed",
   "rental_decision": {
-    "choice": "keep_running",
-    "source": "Explicit user response to shutdown question for instance 59111700",
-    "recorded_utc": "2026-11-04T16:50:40.226393+00:00",
+    "choice": "destroy",
+    "source": "User explicitly requested: Ok great stuff you can now delete the instance",
+    "recorded_utc": "2026-11-04T17:34:06.132969+00:00",
     "new_experiments_authorized": false
   },
   "media_publication_receipt": "../media/publication.json",
   "final_status_check": {
-    "epoch": 1793813111.61883,
-    "provider_status": "running",
-    "idle_and_backed_up_runs": 36,
-    "elapsed_rental_minutes": 222.8,
-    "estimated_compute_usd_excluding_transfers": 2.4344,
-    "retained_at_user_direction": true
-  }
+    "epoch": 1793813646.132986,
+    "local_phase": "destroyed",
+    "provider_instance_absent": true,
+    "backups_verified_before_destruction": 36
+  },
+  "rental_decision_history": [
+    {
+      "choice": "keep_running",
+      "source": "Explicit user response to shutdown question for instance 59111700",
+      "recorded_utc": "2026-11-04T16:50:40.226393+00:00",
+      "new_experiments_authorized": false
+    }
+  ],
+  "shutdown_receipt": "rental-shutdown.json",
+  "status_history": [
+    {
+      "epoch": 1793813111.61883,
+      "provider_status": "running",
+      "idle_and_backed_up_runs": 36,
+      "elapsed_rental_minutes": 222.8,
+      "estimated_compute_usd_excluding_transfers": 2.4344,
+      "retained_at_user_direction": true
+    }
+  ]
 }

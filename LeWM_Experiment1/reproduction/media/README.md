@@ -34,4 +34,6 @@ All attempts together reserved 24 environment setups, used 524 setup physics ste
 and made 20 reset-internal controller calls. These are separate from the original
 scientific interaction ledger, which is unchanged. There were zero new evaluation
 actions and zero model queries. This completed media protocol authorizes no further
-rendering attempts. Instance retention follows Sachin's explicit direction.
+rendering attempts. Instance 59111700 was subsequently destroyed at Sachin's
+explicit direction after backup verification; see the
+[shutdown receipt](../records/rental-shutdown.json).

@@ -86,11 +86,11 @@ engineering attempt's ten lost raw trace rows remain disclosed in the
 No completed scientific panel was repeated. The approved public Reacher cache
 deletion is recorded in its
 [receipt](LeWM_Experiment1/reproduction/records/public-cache-retirement.json).
-Vast instance 59111700 is idle. After reviewing the completed reproduction and
-verified backups, Sachin explicitly directed keeping it running. Billing
-continues; this decision authorizes no additional experiments. Any later
-destruction still requires his direction. Exact rental state is held by the
-compute controller, and the decision is recorded in the closeout receipt.
+Vast instance 59111700 was retained temporarily at Sachin's request. He then
+explicitly directed its destruction on 4 November. The controller reverified all
+36 run backups, and Vast confirmed removal at 17:34 UTC. The
+[shutdown receipt](LeWM_Experiment1/reproduction/records/rental-shutdown.json)
+records provider removal; the closeout receipt preserves both rental decisions.
 
 Sachin subsequently requested updating the Odyssey one-page PDF with these results,
 and publishing videos and trajectory images on Hugging Face. He selected one
@@ -102,8 +102,8 @@ unchanged: zero additional evaluation actions or model queries. All media attemp
 together used 524 setup physics steps and 20 reset-internal controller calls,
 within 24 reserved environment setups. The private
 [results page](https://huggingface.co/datasets/Sachioster/lewm-experiment1/blob/main/reports/reproduction-20261104/README.md)
-collects the PDF, results, audits and media. The instance remains running at his
-direction; neither completed protocol authorizes additional experiments.
+collects the PDF, results, audits and media. Neither completed protocol authorizes
+additional experiments.
 
 ## Prior active work, 2 November
 
