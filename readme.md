@@ -10,6 +10,7 @@ Supervisor: Geraud Nangue Tasse.
 | --- | --- |
 | Direction and authorized next steps | [First principles](firstPrinciples.md) |
 | LeWM opening study | [SafeLeWM](SafeLeWM/README.md) |
+| New LeWM Experiment 1 and Vast compute | [Experiment overview](LeWM_Experiment1/readme.md), [compute commands](LeWM_Experiment1/computeConfigs/README.md) |
 | Block Plucking main study | [SafeBlock](SafeBlock/README.md) |
 | Current research paper | [PDF](docs/research/honours-gecco/world-model-adapters.pdf), [source and build notes](docs/research/honours-gecco/README.md) |
 | Oracle manuscript | [PDF](Paper/paper.pdf), [source](Paper/paper.tex), [Overleaf bundle](Paper/evolve-dont-retrain-overleaf.zip) |
@@ -32,8 +33,9 @@ or edit `files.exclude` in the workspace to reveal individual folders.
 
 ## Working conventions
 
-Read [AGENTS.md](AGENTS.md) before research work. Put new LeWM work in `SafeLeWM/`
-and Block Plucking work in `SafeBlock/`; keep paper sources under their existing paths.
+Read [AGENTS.md](AGENTS.md) before research work. Existing LeWM studies live in
+`SafeLeWM/`; the new, explicitly requested experiment uses `LeWM_Experiment1/`.
+Put Block Plucking work in `SafeBlock/`; keep paper sources under their existing paths.
 SafeBlock owns its required UNISafe helpers, configuration and ignored local assets.
 Manuscripts and historical receipts live under `docs/`. The unused root campaign
 code, launch scripts, upstream checkouts and asset caches were removed after
@@ -45,3 +47,12 @@ retains its separate recovery instructions. Future local outputs and study data 
 contain research records that Git does not back up. The root Python
 environment is legacy. Experiment computation and tests run only on rented hosts;
 completed protocols do not authorize new experiments. Rental shutdown stays manual.
+
+## LeWM Experiment 1 compute
+
+Use `python3 LeWM_Experiment1/computeConfigs/compute.py` for Vast search, launch,
+SSH, jobs, backup and destruction. The [experiment README](LeWM_Experiment1/readme.md)
+gives the starting commands; the [compute guide](LeWM_Experiment1/computeConfigs/README.md)
+documents limits, recovery, artifact storage and credentials. The template already
+sets runtime environment variables, and the controller supplies the required
+credentials separately. The root `.env` is not copied to the instance.

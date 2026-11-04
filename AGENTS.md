@@ -76,12 +76,51 @@ jobs. Do not inherit their protocols, gates or budgets.
    and environment records moved from the root. The consolidation receipt maps
    original paths and hashes to their new locations. Historical record contents
    retain old paths; resolve them through `docs/records/README.md`.
+6. `LeWM_Experiment1/`: Sachin's explicitly requested new experiment preparation
+   area. Its compute pipeline, tests and future experiment
+   files belong here. This is a scoped exception to the SafeLeWM placement rule;
+   keep the existing SafeLeWM protocols and recorded results in place.
 
 The old root `experiments/`, `scripts/`, `configs/`, `data/`, `third_party/`,
 `progress/`, `results/` and `environment/` are removed after relocation of needed
 code/assets and retained records. Do not recreate root-level campaign folders.
 Current source preparation, tests and simulations remain restricted to rented hosts
 where applicable; cleanup authorizes no experiments or rental changes.
+
+## LeWM Experiment 1 compute
+
+Start with [the experiment README](LeWM_Experiment1/readme.md) and
+[the compute guide](LeWM_Experiment1/computeConfigs/README.md). Use
+`python3 LeWM_Experiment1/computeConfigs/compute.py` from the repository root for
+routine Vast operations. Use the wrapper before consulting provider docs or
+writing ad hoc CLI/API commands; it owns selection, session identity, SSH, uploads
+and destruction checks. Local setup needs Python 3.11+, Git and OpenSSH, plus `gh`
+when using the existing GitHub login for private image access.
+
+- `search` is read-only. `up` rents one instance with explicit hours, maximum
+  hourly price, input/output transfer allowances and estimated budget. Use the
+  session's current authorization and limits; examples and historical receipts
+  grant no new rental or research authority. Billing continues until destruction.
+- Use `status`, `ssh`, `run`, `logs`, `stop` and `sync` for the active session.
+  Keep ignored `computeConfigs/.state/`; it records the current instance identity.
+  If allocation is uncertain or boot fails, use `recover` before another `up`.
+- Runtime environment settings are already in `config/vast-template.json`.
+  Credentials are loaded automatically from the ignored root `.env`, process
+  environment or existing CLI logins. `GHCR_READ_TOKEN` is optional when `gh`
+  already has package pull access. Never print `gh auth token` or upload `.env`.
+  The HF token travels over SSH stdin to the uploader, not the experiment child.
+  W&B credentials and arbitrary environment forwarding are not implemented.
+- `run` needs an actual source directory, JSON config, prospective protocol,
+  seeds and finite runtime. No scientific entrypoint is supplied by the pipeline.
+  Outputs go under `LEWM_RUN_DIR` and then to private dataset
+  `Sachioster/lewm-experiment1`, prefix `runs/<run-id>/`. Use `run_io` for periodic
+  publication; the compute guide defines the artifact and verification contract.
+- Destroy only when the user directs shutdown. `compute.py destroy` checks idle
+  jobs, verified backups, and the exact instance identity. `stop` ends the job
+  only. Do not bypass a failed backup check or assume a deadline stops billing.
+- Runtime/build checks execute on rented hosts. The fake-provider orchestration
+  tests in `LeWM_Experiment1/tests/compute/` run locally with `.venv/bin/python`;
+  they import no simulator. Preserve `image/requirements.lock` and runtime checks.
 
 ## Repository cleanup, 3 November 2026
 
@@ -174,10 +213,13 @@ original manifests. This migration changes no experiment or rental authority.
 Secrets stay in the ignored root `.env` or the remote account environment. Never print,
 commit or pass them in configs, manifests or command arguments. Recognized keys:
 `WANDB_API_KEY`, `GITHUB_TOKEN`, `HF_TOKEN`, `HF_NAMESPACE`, `GIT_AUTHOR_NAME`,
-`GIT_AUTHOR_EMAIL`.
+`GIT_AUTHOR_EMAIL`, `VAST_API_KEY`, `GHCR_READ_TOKEN`. A recognized key is not
+automatically forwarded to a rented instance; see the compute guide's environment
+and credential table.
 
 ## Writing
 
 Plain prose, no em or en dashes as clause breaks, plain hyphens in compound modifiers.
-First-experiment notes go under `SafeLeWM/`; other current research notes go under
-`docs/research/`. Do not create competing plan folders.
+Existing SafeLeWM study notes stay under `SafeLeWM/`; notes for the explicitly
+requested new experiment go under `LeWM_Experiment1/`. Other current research
+notes go under `docs/research/`. Do not create competing plan folders.

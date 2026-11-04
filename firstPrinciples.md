@@ -20,6 +20,12 @@ configurations, tests and local outputs belong under `SafeLeWM/`. On 3 November,
 Sachin authorized deletion of the older root archive and all three local output
 trees; see the [deletion record](docs/records/progress/receipts/local-deletion-20261103.md).
 
+As of 4 November, Sachin has explicitly requested [LeWM_Experiment1](LeWM_Experiment1/readme.md)
+for new experiment preparation and its Vast compute pipeline. New files for that
+work belong there, as an exception to the earlier SafeLeWM placement instruction.
+Existing study protocols and results remain in SafeLeWM. Infrastructure setup
+does not reopen completed protocols or authorize new research runs.
+
 Evolution may contribute by reaching useful performance with less manual tuning;
 beating a specialised expert controller is not a prerequisite. Optimizer superiority,
 comparability, reduced tuning and same-weight transfer are distinct claims.
