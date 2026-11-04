@@ -8,6 +8,7 @@ import json
 import math
 import os
 from pathlib import Path
+import sys
 import time
 import traceback
 
@@ -213,6 +214,9 @@ def runtime_record():
         if str(item).startswith("stable_worldmodel/") and str(item).endswith(".py"):
             hashes[str(item)] = hashlib.sha256(distribution.locate_file(item).read_bytes()).hexdigest()
     return {"stable_worldmodel_version": distribution.version, "source_sha256": hashes,
+            "interpreter": sys.executable,
+            "simulator_packages": {name: importlib.metadata.version(name)
+                                   for name in ("mujoco", "dm-control", "ogbench")},
             "torch": torch.__version__, "gpu": torch.cuda.get_device_name(0),
             "cuda": torch.version.cuda, "mujoco_gl": os.environ.get("MUJOCO_GL"),
             "float32_matmul_precision": torch.get_float32_matmul_precision(),
@@ -317,12 +321,14 @@ def main():
         raise ValueError("Use the rented workspace")
     torch.set_num_threads(2)
     source_hash = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    runtime = runtime_record()
     gate_path = root / f"engineering-{args.task}.json"
     if args.phase == "scientific":
         gate = json.loads(gate_path.read_text())
         assert gate["status"] == "passed" and gate["evaluation_source_sha256"] == source_hash
         assert gate["model_source_sha256"] == hashlib.sha256(
             Path(__file__).with_name("model.py").read_bytes()).hexdigest()
+        assert gate["simulator_packages"] == runtime["simulator_packages"]
     task_cfg = yaml.safe_load((root / "official-source/config/eval" / (args.task + ".yaml")).read_text())
     spec = config["tasks"][args.task]
     dataset = swm.data.HDF5Dataset(spec["dataset_name"], cache_dir=root / "datasets",
@@ -334,7 +340,7 @@ def main():
         publish("artifacts/dataset-layout.json", {k: {"shape": v.shape, "dtype": str(v.dtype)}
                                                    for k, v in handle.items()})
     publish("artifacts/dataset-provenance.json", receipt)
-    publish("artifacts/runtime.json", runtime_record())
+    publish("artifacts/runtime.json", runtime)
     processors, scalers = fit_scalers(dataset, task_cfg["dataset"]["keys_to_cache"])
     publish("artifacts/scalers.json", scalers)
     ledger = Ledger(root, args.phase)
@@ -354,6 +360,7 @@ def main():
         dataset.h5_file.close()
     if args.phase == "engineering":
         gate = {"status": "passed", "task": args.task, "run_id": Path(os.environ["LEWM_RUN_DIR"]).name,
+                "simulator_packages": runtime["simulator_packages"],
                 "evaluation_source_sha256": source_hash,
                 "model_source_sha256": hashlib.sha256(
                     Path(__file__).with_name("model.py").read_bytes()).hexdigest()}

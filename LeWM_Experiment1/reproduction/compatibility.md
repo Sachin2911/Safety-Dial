@@ -53,3 +53,24 @@ The logger now represents nonfinite telemetry explicitly as JSON objects such as
 not change actions, CEM, model weights, goals or benchmark labels. Nonfinite actions
 and model costs still fail their numerical checks. Reacher's engineering check is
 repeated within the original shared engineering allowance before any scientific run.
+
+## Rendering correction, before Reacher scientific evaluation
+
+The second Reacher engineering run completed, but its restored initial images had
+normalized mean absolute pixel errors of 0.07772 and 0.07948. A zero-action check
+on its first fixed seed-0 state confirmed exact qpos restoration and the expected
+floor colors, while the checkerboard texture differed visibly from the dataset.
+MuJoCo's [3.12 changelog](https://mujoco.readthedocs.io/en/stable/changelog.html#version-3-12-0-august-20-2026)
+documents a breaking change to primitive texture coordinates and finite-plane
+checkerboard placement.
+
+Before any Reacher scientific outcome, select the last pre-change MuJoCo release,
+3.11.0, with dm-control 1.0.43, whose published requirement is MuJoCo >=3.10.0.
+Install only these two packages in a separate import overlay. Keep the main image,
+Torch, checkpoint, native planner, OSMesa backend and fixed cases unchanged. Save
+wheel hashes, actual versions and source paths. First compare the same state with
+zero action steps, then repeat engineering within the original shared allowance.
+This selects versions from a documented rendering change, not success scores.
+The original training simulator version remains unestablished; a matching image
+does not prove identical physics. Each later engineering gate records actual
+simulator package versions and requires the scientific job to match them.

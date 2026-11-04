@@ -1,6 +1,7 @@
 """Compare rendering backends on a fixed engineering state, with zero action steps."""
 
 import argparse
+import importlib.metadata
 import json
 import os
 from pathlib import Path
@@ -39,6 +40,8 @@ def main():
                   if k.startswith("variation.")}
     options = {"variation": list(variations), "variation_values": variations} if variations else {}
     report = {"backend": args.backend, "case": case, "simulator_actions": 0,
+              "simulator_packages": {name: importlib.metadata.version(name)
+                                     for name in ("mujoco", "dm-control")},
               "model_queries": 0, "status": "incomplete", "variation_values": variations}
     world = None
     try:
