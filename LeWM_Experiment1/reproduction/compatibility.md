@@ -83,3 +83,10 @@ dm-control 1.0.44 instead, released alongside MuJoCo 3.11 and declaring >=3.11.0
 This is the same dm-control version as the main image; only MuJoCo changes relative
 to that image. Preserve the first overlay and install the corrected pair in a new
 directory before repeating the fixed-state image check.
+
+The corrected pair completed the same zero-action check: qpos error remained zero,
+and normalized mean absolute pixel error fell to 0.0100945. Inspection confirmed
+the checkerboard placement and arm geometry now match the recorded image. Residual
+pixel differences remain and are disclosed. Freeze this pair for Reacher and Cube,
+the MuJoCo environments, subject to each task's engineering checks. TwoRoom's
+completed results remain unchanged; PushT uses the original image's 2D simulator.
