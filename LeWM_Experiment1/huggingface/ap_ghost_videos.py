@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Compose matched AP/CEM videos from verified saved evidence, without replay.
 
-The main view is an honest 50/50 blend of original observation crops. Physical
-paths are plotted separately in native coordinates; no image-plane projection,
-segmentation, simulator, checkpoint or model package is used. Every displayed
-state/action comes from the saved primitive-step trace. Images are held between
-recorded observations and after stopping, with explicit action-index labels.
+The main view blends the two observation crops after separately smoothing each
+saved video with motion-compensated interpolation. Synthetic in-between images
+are presentation only, never scored evidence. Paths use the saved primitive-step
+trace. No simulator, checkpoint or model package is used. Both arms share a
+constant action-time clock and hold their last available image after recording.
 """
 
 from __future__ import annotations
@@ -30,8 +30,10 @@ REPO = ap_media.REPO
 ARMS = ("gaussian_observed", "gaussian_final")
 NAMES = {"gaussian_observed": "AP-CEM", "gaussian_final": "Final-goal CEM"}
 COLORS = {"gaussian_observed": "#197a91", "gaussian_final": "#d36a32"}
+GHOST_TINTS = {"gaussian_observed": (36, 184, 208), "gaussian_final": (245, 129, 50)}
 TEXT, MUTED, BACKGROUND = "#172c3b", "#586c78", "#f4f7fa"
-SIZE, FPS, CROP_SIZE = (1280, 960), 2, (448, 448)
+SIZE, FPS, CROP_SIZE = (1600, 900), 30, (448, 448)
+ACTIONS_PER_SECOND, FINAL_HOLD_SECONDS = 20, 1.5
 PROJECT = Path(__file__).resolve().parents[2]
 RUN_ROOT = PROJECT / "LeWM_Experiment1/runs/AP"
 
@@ -170,7 +172,32 @@ def fonts():
     base = Path("/usr/share/fonts/truetype/dejavu")
     require((base / "DejaVuSans.ttf").is_file(), "DejaVu Sans is required for readable labels")
     return {size: ImageFont.truetype(str(base / "DejaVuSans.ttf"), size)
-            for size in (14, 15, 16, 17, 18, 20, 22, 28, 32)}
+            for size in (14, 15, 16, 17, 18, 20, 22, 24, 28, 32, 36)}
+
+
+def smoothed_frames(ffmpeg, arm, destination):
+    """Interpolate each original crop before blending; retain an exact time map."""
+    import numpy as np
+
+    last = arm["source"]["last_frame_action"]
+    count = math.ceil(last * FPS / ACTIONS_PER_SECOND) + 1
+    if count == 1:
+        destination.write_bytes(arm["frames"][0].tobytes())
+        return np.memmap(destination, dtype="uint8", mode="r", shape=(1, 448, 448, 3))
+    # Two cloned source frames let the bidirectional filter reach the final
+    # observation. Trim them away; later holds are handled by the shared clock.
+    filters = ("crop=448:448:0:50,tpad=stop_mode=clone:stop_duration=0.5,"
+               f"minterpolate=fps={FPS}:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:"
+               "me=epzs:mb_size=8:search_param=32:vsbmc=1,"
+               f"trim=end_frame={count},setpts=PTS-STARTPTS")
+    subprocess.run([ffmpeg, "-v", "error", "-nostdin", "-n", "-threads", "2",
+                    "-r", str(ACTIONS_PER_SECOND / 5), "-i", str(arm["paths"]["video"]),
+                    "-vf", filters, "-an", "-fps_mode", "passthrough",
+                    "-f", "rawvideo", "-pix_fmt", "rgb24",
+                    str(destination)], capture_output=True, check=True, timeout=600)
+    require(destination.stat().st_size == count * math.prod(CROP_SIZE) * 3,
+            "Motion interpolation produced an unexpected number of frames")
+    return np.memmap(destination, dtype="uint8", mode="r", shape=(count, 448, 448, 3))
 
 
 class PathPlot:
@@ -179,7 +206,7 @@ class PathPlot:
         from matplotlib.figure import Figure
 
         self.loaded, self.lines, self.points = loaded, {}, {}
-        self.figure = Figure(figsize=(6.64, 3.10), dpi=100, facecolor="white")
+        self.figure = Figure(figsize=(7.84, 3.55), dpi=100, facecolor="white")
         self.canvas = FigureCanvasAgg(self.figure)
         cube = pair["task"] == "cube"
         pusht = pair["task"] == "pusht"
@@ -255,7 +282,13 @@ class PathPlot:
         for name in ARMS:
             stop = self.loaded[name]["source"]["stop_action"]
             for label, series in self.loaded[name]["plot"]["series"].items():
-                points = series[:min(action, stop) + 1]
+                position = min(action, stop)
+                whole = int(position)
+                points = list(series[:whole + 1])
+                if whole < stop and position > whole:
+                    fraction = position - whole
+                    points.append([a + fraction * (b - a)
+                                   for a, b in zip(series[whole], series[whole + 1])])
                 x, y = [point[0] for point in points], [point[1] for point in points]
                 for view in range(len(self.axes)):
                     line, marker = self.lines[view, name, label], self.points[view, name, label]
@@ -270,107 +303,117 @@ class PathPlot:
                                 self.canvas.buffer_rgba(), "raw", "RGBA", 0, 1).convert("RGB")
 
 
-def action_scales(loaded):
-    actions = [step["action"] for arm in loaded.values() for step in arm["trajectory"]["steps"]]
-    if not actions:
-        return []
-    dimensions = len(actions[0])
-    require(all(len(action) == dimensions for action in actions), "Action dimensions differ")
-    require(all(math.isfinite(float(value)) for action in actions for value in action),
-            "Nonfinite executed action")
-    scales = [max(max(abs(float(action[i])) for action in actions), 1e-6)
-              for i in range(dimensions)]
-    require(all(math.isfinite(value) for value in scales), "Nonfinite executed action")
-    return scales
+def tinted_ghost(image, task, name):
+    """Recolor visible agents/objects by their existing pixel colors, without warping.
 
+    The task-specific soft masks retain static walls, goals and dark backgrounds.
+    This is a visualization mask, not a recovered object/physics annotation.
+    """
+    import numpy as np
+    from PIL import Image
 
-def action_panel(draw, font, box, name, arm, action, scales):
-    x, y, width, height = box
-    stop = arm["source"]["stop_action"]
-    completed = min(action, stop)
-    stopped = action >= stop
-    color = MUTED if stopped else COLORS[name]
-    draw.rounded_rectangle((x, y, x + width, y + height), radius=12, fill="white")
-    draw.text((x + 16, y + 10), NAMES[name], font=font[20], fill=COLORS[name])
-    if completed == 0:
-        caption = "No action executed" + ("; stopped at reset" if stopped else "")
-    elif stopped:
-        caption = f"STOPPED at {stop}; last action held"
+    pixels = np.asarray(image, dtype=np.float32)
+    red, green, blue = pixels.transpose(2, 0, 1)
+    luminance = 0.299 * red + 0.587 * green + 0.114 * blue
+    tint = np.array(GHOST_TINTS[name], dtype=np.float32)
+    if task == "tworoom":
+        # Replace only the red excess, including faint glow over black walls.
+        # Dividing by the local red value would amplify dark codec noise.
+        excess = np.maximum(red - np.maximum(green, blue), 0)
+        neutral = pixels.copy()
+        neutral[..., 0] -= excess
+        result = neutral + tint * (excess / 255)[..., None]
     else:
-        caption = f"Last executed action: {completed}"
-    draw.text((x + 16, y + 38), caption, font=font[15], fill=color)
-    values = arm["trajectory"]["steps"][completed - 1]["action"] if completed else [0] * len(scales)
-    row_height = min(29, (height - 72) / max(1, len(scales)))
-    center, half = x + 300, 185
-    for index, (value, scale) in enumerate(zip(values, scales)):
-        row_y = y + 69 + index * row_height
-        draw.text((x + 16, row_y - 8), f"a{index}", font=font[15], fill=TEXT)
-        draw.line((center - half, row_y, center + half, row_y), fill="#dce4e9", width=3)
-        draw.line((center, row_y - 6, center, row_y + 6), fill="#9aa9b3", width=1)
-        end = center + half * float(value) / scale
-        if completed and abs(end - center) > 0.5:
-            draw.rectangle((min(center, end), row_y - 4, max(center, end), row_y + 4), fill=color)
-        draw.text((x + width - 95, row_y - 9), f"{value:+.3f}" if completed else "--",
-                  font=font[15], fill=color)
+        if task == "pusht":
+            mask = np.clip(np.minimum((blue - red - 3) / 12, (blue - green - 2) / 7), 0, 1)
+        elif task == "reacher":
+            yellow = np.minimum((red - blue - 10) / 40, (red - 75) / 75)
+            cyan = np.minimum((green - red - 30) / 70, (green - 120) / 80)
+            mask = np.clip(np.maximum(yellow, cyan), 0, 1)
+        else:
+            require(task == "cube", "Unknown tint palette")
+            metal = (luminance - 75) / 35
+            purple = np.minimum((red - green - 10) / 25, (blue - green - 20) / 30)
+            cube = np.minimum((red - green - 30) / 40, (red - blue - 20) / 40)
+            mask = np.clip(np.maximum.reduce([metal, purple, cube]), 0, 1)
+        shade = 0.55 + 0.45 * luminance / 255
+        colored = shade[..., None] * tint
+        result = pixels * (1 - mask[..., None]) + colored * mask[..., None]
+    return Image.fromarray(np.rint(np.clip(result, 0, 255)).astype(np.uint8))
 
 
-def compose_frame(pair, loaded, action, plot, font, scales):
+def compose_frame(pair, loaded, action, plot, font):
     from PIL import Image, ImageDraw
 
     canvas = Image.new("RGB", SIZE, BACKGROUND)
     draw = ImageDraw.Draw(canvas)
     task = ap_media.TASKS[pair["task"]]
-    draw.text((24, 17), f"{task}  |  Matched planner comparison", font=font[32], fill=TEXT)
-    draw.text((24, 60), f"Query {pair['query_ordinal']:03d}  |  Same start, goal and seeds  |  "
-              f"Action timeline: {action}", font=font[20], fill=MUTED)
+    draw.text((32, 21), f"{task}  /  AP vs CEM", font=font[36], fill=TEXT)
+    draw.text((32, 70), f"Query {pair['query_ordinal']:03d}  ·  Same start, goal and seeds",
+              font=font[20], fill=MUTED)
+    maximum = max(arm["source"]["stop_action"] for arm in loaded.values())
+    draw.text((1192, 29), f"Step {int(action):03d} / {maximum:03d}", font=font[28], fill=TEXT)
+    draw.text((1192, 70), "20 actions / playback second", font=font[18], fill=MUTED)
     observations, metadata = {}, {}
     for name in ARMS:
         arm = loaded[name]
-        index = bisect_right(arm["source"]["frame_steps"], action) - 1
-        observed = arm["source"]["frame_steps"][index]
-        observations[name] = arm["frames"][index]
+        source_steps = arm["source"]["frame_steps"]
+        index = max(0, bisect_right(source_steps, action) - 1)
+        observed = source_steps[index]
+        next_observed = source_steps[min(index + 1, len(source_steps) - 1)]
+        smooth_index = min(round(action * FPS / ACTIONS_PER_SECOND), len(arm["smooth"]) - 1)
+        observations[name] = Image.fromarray(arm["smooth"][smooth_index])
+        # Use the original decoded pixels at exact observed timestamps and after
+        # the last capture. This also makes the shared initial image exact.
+        if math.isclose(action, observed, abs_tol=1e-8) or action >= source_steps[-1]:
+            observations[name] = arm["frames"][index]
         stop = arm["source"]["stop_action"]
-        completed = min(action, stop)
-        metadata[name] = {"observed": observed, "stopped": action >= stop, "stop": stop,
-                          "executed_actions": completed,
-                          "last_executed_action_index": completed - 1 if completed else None}
-    overlay = Image.blend(observations[ARMS[0]], observations[ARMS[1]], 0.5)
-    draw.text((24, 98), "Merged original observations · 50/50", font=font[22], fill=TEXT)
-    canvas.paste(overlay.resize((520, 520)), (24, 130))
-    draw.rounded_rectangle((23, 129, 545, 651), radius=2, outline="#cfdae2", width=2)
-    for index, name in enumerate(ARMS):
-        info = metadata[name]
-        label = f"{NAMES[name]}: observation after {info['observed']} actions"
-        if info["stopped"]:
-            label += f"; STOPPED at {info['stop']}"
-        elif info["observed"] < action:
-            label += " (held)"
-        draw.text((24, 665 + index * 25), label, font=font[16], fill=COLORS[name])
+        metadata[name] = {"observation_bracket": [observed, next_observed],
+                          "interpolated": observed < action < next_observed,
+                          "image_held": action > source_steps[-1],
+                          "stopped": action >= stop, "stop": stop,
+                          "executed_actions": min(int(action), stop)}
+    overlay = Image.blend(tinted_ghost(observations[ARMS[0]], pair["task"], ARMS[0]),
+                          tinted_ghost(observations[ARMS[1]], pair["task"], ARMS[1]), 0.5)
+    draw.text((32, 115), "GHOST COMPARISON", font=font[18], fill=MUTED)
+    draw.ellipse((548, 119, 560, 131), fill=COLORS[ARMS[0]])
+    draw.text((570, 114), "AP", font=font[18], fill=COLORS[ARMS[0]])
+    draw.ellipse((630, 119, 642, 131), fill=COLORS[ARMS[1]])
+    draw.text((652, 114), "CEM", font=font[18], fill=COLORS[ARMS[1]])
+    canvas.paste(overlay.resize((712, 712), Image.Resampling.LANCZOS), (32, 146))
+    draw.rectangle((31, 145, 745, 859), outline="#d9e2e8", width=2)
     for index, (name, label) in enumerate(((ARMS[0], NAMES[ARMS[0]]),
-                                         (ARMS[1], NAMES[ARMS[1]]), (None, "Fixed goal"))):
-        x = 580 + index * 232
+                                         (ARMS[1], NAMES[ARMS[1]]), (None, "Goal"))):
+        x = 784 + index * 272
         color = COLORS[name] if name else "#8e700e"
-        draw.text((x, 99), label, font=font[20], fill=color)
+        draw.text((x, 112), label, font=font[22], fill=color)
         image = observations[name] if name else loaded[ARMS[0]]["goal_image"]
-        canvas.paste(image.resize((200, 200)), (x, 130))
-        draw.rectangle((x - 1, 129, x + 200, 330), outline=color, width=3)
+        canvas.paste(image.resize((240, 240), Image.Resampling.LANCZOS), (x, 146))
+        draw.rectangle((x - 1, 145, x + 240, 386), outline=color, width=3)
         if name:
             info = metadata[name]
-            status = ("Stopped: " + ("success" if loaded[name]["source"]["success"] else "failure")) \
-                if info["stopped"] else "Planning"
-            draw.text((x, 337), status, font=font[16], fill=color)
-            draw.text((x, 359), f"Observed at action {info['observed']}", font=font[14], fill=MUTED)
+            if info["stopped"]:
+                outcome = "Reached goal" if loaded[name]["source"]["success"] else "Not reached"
+                status = f"{outcome} · {info['stop']} steps"
+            else:
+                status = "Moving" if not info["image_held"] else "Last recorded view"
+            draw.text((x, 397), status, font=font[16], fill=color)
+            if info["image_held"]:
+                draw.text((x, 423), f"View held from step {arm_last(loaded, name)}",
+                          font=font[15], fill=MUTED)
         else:
-            draw.text((x, 337), "Same dataset goal", font=font[16], fill=MUTED)
-    label = "Recorded joint-space paths" if pair["task"] == "reacher" else \
-        "Recorded cube XYZ paths" if pair["task"] == "cube" else "Recorded native XY paths"
-    draw.text((580, 391), label, font=font[20], fill=TEXT)
-    canvas.paste(plot.frame(action), (580, 420))
-    action_panel(draw, font, (24, 743, 596, 177), ARMS[0], loaded[ARMS[0]], action, scales)
-    action_panel(draw, font, (660, 743, 596, 177), ARMS[1], loaded[ARMS[1]], action, scales)
-    draw.text((24, 935), "Saved frames only · No rerun · Paths use recorded states · "
-              "Signed action bars use shared per-channel scales", font=font[15], fill=MUTED)
+            draw.text((x, 397), "Shared target", font=font[16], fill=MUTED)
+    label = "Joint-space trajectories" if pair["task"] == "reacher" else \
+        "Cube trajectories · XYZ" if pair["task"] == "cube" else "Recorded trajectories"
+    draw.text((784, 469), label, font=font[24], fill=TEXT)
+    canvas.paste(plot.frame(action), (784, 508))
+    draw.text((32, 875), "Motion-smoothed playback · Original captured frames are linked below",
+              font=font[15], fill=MUTED)
     return canvas, metadata
+
+
+def arm_last(loaded, name):
+    return loaded[name]["source"]["last_frame_action"]
 
 
 def render_pair(outcome, pair, loaded, sources, output, relative, ffmpeg, generator_hash, qa_root):
@@ -380,26 +423,32 @@ def render_pair(outcome, pair, loaded, sources, output, relative, ffmpeg, genera
         arm = loaded[name]
         arm["frames"], arm["goal_image"] = decoded_frames(
             ffmpeg, arm["paths"]["video"], len(arm["source"]["frame_steps"]))
-    timeline = sorted({point for arm in loaded.values() for point in arm["source"]["frame_steps"]}
-                      | {arm["source"]["stop_action"] for arm in loaded.values()})
-    timeline.extend([timeline[-1]] * 3)  # Two seconds to read the labelled final held state.
+    maximum = max(arm["source"]["stop_action"] for arm in loaded.values())
+    timeline = [min(index * ACTIONS_PER_SECOND / FPS, maximum)
+                for index in range(math.ceil(maximum * FPS / ACTIONS_PER_SECOND) + 1)]
+    timeline.extend([maximum] * round(FPS * FINAL_HOLD_SECONDS))
     output.parent.mkdir(parents=True, exist_ok=True)
     qa_root.mkdir(parents=True, exist_ok=True)
     require(not output.exists(), f"Derived destination already exists: {output}")
     poster = output.with_name(output.stem + "-poster.png")
     require(not poster.exists(), "Derived poster already exists")
-    font, plot, scales = fonts(), PathPlot(pair, loaded), action_scales(loaded)
+    font, plot = fonts(), PathPlot(pair, loaded)
+    temporary = tempfile.TemporaryDirectory(prefix="ap-smoothed-frames-")
+    for name in ARMS:
+        loaded[name]["smooth"] = smoothed_frames(
+            ffmpeg, loaded[name], Path(temporary.name) / (name + ".rgb"))
     process = subprocess.Popen([ffmpeg, "-hide_banner", "-loglevel", "error", "-nostdin", "-n",
-                                "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", "1280x960",
+                                "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{SIZE[0]}x{SIZE[1]}",
                                 "-r", str(FPS), "-i", "pipe:0", "-an", "-c:v", "libx264",
-                                "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p",
+                                "-preset", "medium", "-crf", "18", "-threads", "4", "-pix_fmt", "yuv420p",
                                 "-movflags", "+faststart", str(output)], stdin=subprocess.PIPE)
     frames = []
     try:
         for index, action in enumerate(timeline):
-            frame, metadata = compose_frame(pair, loaded, action, plot, font, scales)
+            frame, metadata = compose_frame(pair, loaded, action, plot, font)
             process.stdin.write(frame.tobytes())
-            frames.append({"frame": index, "action_index": action, "arms": metadata})
+            frames.append({"frame": index, "playback_seconds": index / FPS,
+                           "action_index": action, "arms": metadata})
             if index in {0, len(timeline) // 2, len(timeline) - 1}:
                 frame.save(qa_root / (output.stem + f"-frame-{index:03d}.png"))
             if index == len(timeline) // 2:
@@ -410,6 +459,9 @@ def render_pair(outcome, pair, loaded, sources, output, relative, ffmpeg, genera
         if process.poll() is None:
             process.kill()
             process.wait()
+        for name in ARMS:
+            del loaded[name]["smooth"]
+        temporary.cleanup()
     require(ap_media.digest(Path(__file__)) == generator_hash, "Generator changed during rendering")
     # Decode the result to a null sink. This checks the complete encoded bitstream.
     subprocess.run([ffmpeg, "-v", "error", "-nostdin", "-i", str(output), "-f", "null", "-"],
@@ -434,7 +486,9 @@ def render_pair(outcome, pair, loaded, sources, output, relative, ffmpeg, genera
             "comparison_checks": {"same_seed": True, "same_initial_state": True, "same_goal": True},
             "simulator_actions": 0, "model_queries": 0, "stopping": stops,
             "frames": frames, "fps": FPS, "resolution": list(SIZE),
-            "action_scales": scales, "trajectory_coordinates": loaded[ARMS[0]]["plot"][
+            "playback_actions_per_second": ACTIONS_PER_SECOND,
+            "motion_interpolation": "FFmpeg minterpolate; per arm before ghost blending",
+            "trajectory_coordinates": loaded[ARMS[0]]["plot"][
                 "coordinate_note"], "trajectory_views": plot.bounds,
             "pair_raw_render_sha256": pair["initial_render_sha256"],
             "pair_goal_rgb_sha256": pair["goal_rgb_sha256"]}
@@ -505,7 +559,7 @@ def main():
               flush=True)
     require(ap_media.digest(Path(ap_media.__file__)) == helper_hash,
             "Coordinate helper changed during verification/rendering")
-    result = {"schema": "lewm-ap-paired-ghost-videos-v1", "repo_id": REPO,
+    result = {"schema": "lewm-ap-paired-ghost-videos-v2", "repo_id": REPO,
               "derived_comparisons_verified": True, "created_utc": datetime.now(timezone.utc).isoformat(),
               "generator": {"source_sha256": generator_hash, "source_path": str(Path(__file__)),
                             "coordinate_helper_sha256": helper_hash,
@@ -516,11 +570,22 @@ def main():
               "settings": {"size": list(SIZE), "fps": FPS, "overlay_alpha": 0.5,
                            "observation_crop": [0, 50, 448, 498], "goal_crop": [448, 50, 896, 498],
                            "selection": "First AP success/failure by original ordinal in a complete cohort",
-                           "timeline": "Union of native observation action indices and both true stopping actions",
-                           "frame_holds": "Use the last original observation at or before each action index",
-                           "final_state_hold_seconds": 2,
-                           "action_bars": "Human action number; zero-based index retained in metadata; inactive after stop; shared channel scales",
-                           "ghost_method": "50/50 original decoded pixels; no segmentation or image-plane projection"},
+                           "timeline": "Constant shared action clock; shorter arm stays at its stop",
+                           "playback_actions_per_second": ACTIONS_PER_SECOND,
+                           "frame_holds": "Hold original last observation after each arm's final capture",
+                           "final_state_hold_seconds": FINAL_HOLD_SECONDS,
+                           "action_bars": False,
+                           "motion_interpolation": {
+                               "method": "FFmpeg minterpolate",
+                               "settings": "mci/aobmc/bidir/epzs, block8, search32, vsbmc1",
+                               "scope": "Each original observation crop separately, before ghost blending",
+                               "evidence_status": "Synthetic in-between images for presentation only",
+                               "native_capture_spacing_actions": 5},
+                           "trajectory_interpolation": "Linear marker motion between recorded primitive states",
+                           "ghost_method": "50/50 blend of separately smoothed and tinted crops",
+                           "ghost_tints": {name: list(color) for name, color in GHOST_TINTS.items()},
+                           "tint_mask": "Task-specific soft pixel-color masks; visualization only",
+                           "individual_previews": "Original colors, with motion interpolation"},
               "selected_environments": environments, "selected_outcomes": outcomes,
               "complete_eight_comparison_set": len(comparisons) == 8,
               "comparisons": comparisons, "simulator_actions": 0, "model_queries": 0}

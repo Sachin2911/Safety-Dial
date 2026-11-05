@@ -117,6 +117,17 @@ pins the final revision; the [closeout](LeWM_Experiment1/computeConfigs/records/
 indexes the verified evidence and both shutdowns. The reproduction and presentation
 work are complete.
 
+Sachin then requested smoother renderings, removal of the action-channel panels
+and distinct ghost tints. The eight comparisons now use a larger 16:9 layout at
+30 fps, with teal AP ghosts and orange CEM ghosts. Motion interpolation supplies
+estimated in-between images; soft pixel-color masks add the tints. Both arms keep
+the same action clock, with labeled holds after the last saved observation. The
+[video refresh receipt](LeWM_Experiment1/huggingface/records/ap_reproduction/media-refresh-20261105/publication-receipt.json)
+records publication and fresh verification of all 61 presentation files. All
+scientific results, original run files, original clips and the PDF are unchanged.
+This local presentation update used zero simulator actions, model queries or
+rental operations and authorizes no new experiment.
+
 ## Completed baseline reproduction, 4 November
 
 Sachin explicitly requested renting a GPU and performing the four-environment

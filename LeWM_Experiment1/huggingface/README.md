@@ -10,9 +10,14 @@ The [AP report and environment galleries](https://huggingface.co/datasets/Sachio
 bring together original clips, trajectories, settings and eight derived ghost
 comparisons. Each environment shows the first AP success and failure by original
 query order, paired with the control from the same start, goal and optimizer seed.
-Comparisons blend saved observations 50/50, show recorded paths and actions, and
-label held frames and each arm's stopping point. The last recorded image can precede
-the final scored state. Creating this media used no new simulator or model work.
+The revised comparisons use a larger widescreen layout at 30 fps, without action
+bars. AP ghosts are teal and CEM ghosts are orange, matching the paths. Soft
+pixel-color masks tint the main view while individual previews keep original colors.
+Each original clip is motion-smoothed before the 50/50 ghost blend. These
+in-between images are visual estimates, not recorded observations. Both planners
+share the same action clock, and the plots connect saved physical states. Held
+images are labeled and can precede the final scored state. Original clips remain
+linked. Creating this media used no new simulator or model work.
 
 The [scientific audit](../ap_reproduction/evidence/final-audit.json),
 [complete accounting](../ap_reproduction/evidence/final-accounting.json),
@@ -23,7 +28,7 @@ retain the evidence behind the presentation. The local
 supplied fixed goals 100-150 recorded actions ahead; full canonical-task completion
 and safety require separate tests.
 
-The [AP publication receipt](records/ap_reproduction/publication-receipt.json)
+The [initial AP publication receipt](records/ap_reproduction/publication-receipt.json)
 pins revision `995d62a638359a0ccf266a5b50c57e705ff10edb`. All 61 presentation
 files passed fresh HTTP size and SHA-256 checks, and the original run tree remained
 unchanged. The [local presentation checks](records/ap_reproduction/local-presentation-verification.json)
@@ -31,11 +36,21 @@ cover all 294 Markdown/HTML destinations and card parsing. The eight comparison
 videos passed full decoding and source-hash checks. Signed-in Hugging Face browser
 playback was not checked.
 
+The [video refresh receipt](records/ap_reproduction/media-refresh-20261105/publication-receipt.json)
+pins the improved gallery at `d85622b7bfd8654fd5888f5ce8d7e239c23c221d`.
+All eight videos passed 30 fps, frame-count, timing and streaming-layout checks;
+[render and link verification](records/ap_reproduction/media-refresh-20261105/render-and-link-verification.json)
+also checks all 294 gallery destinations. Fresh downloads verified all 61
+presentation files after replacing 24 video, poster and gallery files. Original
+run bytes, scientific results, original clips and the PDF remain unchanged.
+Versioned media links refresh browser caches after this update.
+
 The AP pipeline is `ap_media.py` for fixed-order original clip selection and
 saved-state plots, `ap_ghost_videos.py` for paired comparisons, `ap_catalog.py`
 for navigation and results, and `publish_ap_report.py` for exact-manifest staging,
 publication and fresh download verification. Generated media stays in ignored
-`../runs/AP/publication-content/` and the private dataset, outside Git.
+`../runs/AP/publication-content-smooth-tinted/` and the private dataset, outside Git.
+The earlier presentation folders retain the prior renderings for comparison.
 
 The following record describes the baseline dataset's earlier reorganization.
 

@@ -32,11 +32,15 @@ historical experiment, so its success rates are not a matched AP comparison.
 
 Eight ghost comparisons show the first AP success and first AP failure by original
 query order in each completed environment. Each pairs AP with its control from the
-same query. The videos blend saved observations 50/50 and show recorded paths and
-executed actions. Labels distinguish the action timeline, observation time and
-stopping point; frames are held after an arm stops. The final saved image can
-precede the scored final state. No simulation or model evaluation was rerun to
-create this media.
+same query. The revised widescreen videos play at 30 fps, with a larger ghost view,
+teal AP ghosts, orange CEM ghosts, matching trajectories and no action bars.
+Soft pixel-color masks tint the main view; individual previews keep original colors.
+Motion interpolation smooths the two
+original clips separately before blending them 50/50. The in-between images are
+visual estimates, not new observations. Both arms follow the same clock at 20
+recorded actions per playback second; shorter recordings hold their final image.
+That image can precede the scored stopping state. Original clips remain linked.
+No simulation or model evaluation was rerun to create this media.
 
 The evidence is available separately from the presentation:
 

@@ -69,12 +69,15 @@ VIDEO_NOTE = (
 )
 COMPARISON_NOTE = (
     "AP-CEM and final-goal CEM start from the same recorded state, environment seed, "
-    "optimizer seed and fixed goal. Each comparison overlays their original observations "
-    "as transparent ghosts, with colored physical trajectories and executed-action indicators. "
-    "The timeline follows action number, not wall-clock speed. When an arm stops, its last "
-    "available observation is held and labeled; this can precede the stopping action. "
-    "The coordinate plot includes the recorded stop. These are derived videos made from "
-    "saved evidence, with no extra simulation or model calls."
+    "optimizer seed and fixed goal. The 30 fps widescreen videos show AP ghosts in teal "
+    "and CEM ghosts in orange, matching the trajectory lines, without action bars. "
+    "Pixel-color masks tint the main view; individual previews keep their original colors. "
+    "Motion interpolation smooths each "
+    "original clip before blending; the in-between images are visual estimates, not new "
+    "observations. Both planners follow the same clock at 20 recorded actions per playback "
+    "second. Paths connect saved states. The last available image is held and labeled; "
+    "it can precede the scored stopping state. Original unmodified clips remain linked "
+    "below. No additional simulation or model evaluation was used."
 )
 DEFAULT_IMPLICATIONS = [
     "Use the paired AP-CEM and final-goal CEM results as the long-range recorded-goal "
@@ -427,9 +430,13 @@ class Catalog:
                 continue
             case = self.examples[task, outcome]["case"]
             title = f"{TASKS[task]}: AP-CEM versus final-goal CEM, query {case['query_ordinal']}"
-            video_url = url(entry["output"]["path"], raw=True)
-            poster = (f' poster="{escape(url(entry["poster"]["path"], raw=True), quote=True)}"'
-                      if entry.get("poster") else "")
+            video_url = (url(entry["output"]["path"], raw=True)
+                         + "?v=" + entry["output"]["sha256"][:16])
+            poster = ""
+            if entry.get("poster"):
+                poster_url = (url(entry["poster"]["path"], raw=True)
+                              + "?v=" + entry["poster"]["sha256"][:16])
+                poster = f' poster="{escape(poster_url, quote=True)}"'
             player = (f'<video controls playsinline preload="none" width="100%" '
                       f'src="{escape(video_url, quote=True)}"{poster} '
                       f'title="{escape(title, quote=True)}">'
