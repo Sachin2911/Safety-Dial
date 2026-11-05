@@ -52,7 +52,20 @@ statements below describe the original closeouts, not current local availability
 Consult the frozen protocol and its correction before inspecting a historical run.
 Completed work does not authorize another experiment or reuse of an unused budget.
 
-## Active goal, 4 November
+## Active goal, 5 November
+
+Sachin explicitly authorized reproducing AP (Aim Short to Reach Far) across all
+four environments, renting a GPU, publishing a separate private dataset
+`Sachioster/LeWMExp1_AP_Reproduction`, and adding an AP page to the Odyssey PDF.
+The work lives in [`LeWM_Experiment1/ap_reproduction/`](LeWM_Experiment1/ap_reproduction/README.md).
+Its [prospective protocol](LeWM_Experiment1/ap_reproduction/protocol.md) fixes
+the original 128 long-range queries per task and the clean AP-CEM/final-goal CEM
+pair: 1,024 scientific cases, at most 238,080 policy actions. Separate bounded
+engineering and cache preparation are recorded there. The initial single-4090
+rental has a six-hour work limit and $10 estimated budget. Shutdown remains
+manual. This is a new scoped authorization; completed SafeLeWM studies stay closed.
+
+## Completed baseline reproduction, 4 November
 
 Sachin explicitly requested renting a GPU and performing the four-environment
 frozen LeWM checkpoint reproduction. The prospective protocol is

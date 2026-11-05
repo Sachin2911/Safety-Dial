@@ -15,6 +15,7 @@ from compute_common import (
     relative_path,
     safe_path,
     sha256,
+    validate_storage,
 )
 
 
@@ -63,10 +64,7 @@ class HubStore:
     def __init__(self, storage, token):
         from huggingface_hub import HfApi
 
-        if storage.get("private") is not True or storage.get("repo_type") != "dataset":
-            raise ComputeError("Expected a private dataset destination")
-        if storage["repo_id"] != "Sachioster/LeWMExp1_Baseline_Reproduction":
-            raise ComputeError("Unexpected Experiment 1 dataset destination")
+        storage = validate_storage(storage)
         self.api = HfApi(token=token)
         self.token, self.storage = token, storage
         self.repo = storage["repo_id"]

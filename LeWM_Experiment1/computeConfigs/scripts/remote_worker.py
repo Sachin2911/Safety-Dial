@@ -24,6 +24,7 @@ from compute_common import (
     relative_path,
     safe_path,
     valid_id,
+    validate_storage,
 )
 from hf_store import sync_run
 from run_io import mark_ready, publish_artifact
@@ -383,6 +384,9 @@ def dispatch(request):
         runs = all_status(root)
         return {"runs": runs, "ready_to_destroy": all(r["ready_to_destroy"] for r in runs)}
     if action == "launch":
+        storage = validate_storage(request["spec"]["storage"])
+        if session.get("storage") is not None and storage != validate_storage(session["storage"]):
+            raise ComputeError("Run storage does not match the rental's pinned destination")
         return launch(root, request)
     run_id = request.get("run_id")
     directories = (

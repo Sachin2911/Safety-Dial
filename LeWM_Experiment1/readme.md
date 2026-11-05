@@ -1,5 +1,9 @@
 # LeWM Experiment 1
 
+The [AP reproduction](ap_reproduction/README.md) is now active: the authors' full
+128-case long-range panel per environment, paired AP-CEM and final-goal CEM,
+with its own frozen protocol and private Hugging Face dataset.
+
 This is the working area for the new LeWM experiment. The Vast compute pipeline
 is ready, and the frozen-checkpoint reproduction completed on 4 November 2026.
 All 15 declared panels passed the evidence audit: 600 main-condition episodes and

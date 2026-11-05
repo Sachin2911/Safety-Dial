@@ -22,6 +22,7 @@ from compute_common import (
     ApiError,
     ComputeError,
     JsonApi,
+    STORAGE_REPOSITORIES,
     atomic_json,
     error_summary,
     fingerprint,
@@ -34,6 +35,7 @@ from compute_common import (
     reject_secrets,
     require_secret,
     valid_id,
+    validate_storage,
 )
 
 
@@ -204,15 +206,8 @@ class Controller:
         self.directory, self.state_dir = Path(directory), Path(state_dir)
         self.policy = read_json(self.directory / "config/compute-policy.json")
         self.template = read_json(self.directory / "config/vast-template.json")
-        self.storage = read_json(self.directory / "config/storage.json")
-        if (
-            self.policy["remote_root"] != "/workspace/LeWM_Experiment1"
-            or self.storage["remote_runs_root"] != self.policy["remote_root"] + "/runs"
-            or self.storage["token_env"] != "HF_TOKEN"
-            or self.storage["repo_id"] != "Sachioster/LeWMExp1_Baseline_Reproduction"
-            or self.storage["repo_type"] != "dataset"
-            or not self.storage["private"]
-        ):
+        self.storage = self.select_storage("baseline")
+        if self.policy["remote_root"] != "/workspace/LeWM_Experiment1":
             raise ComputeError(
                 "Experiment 1 workspace and private storage settings are inconsistent"
             )
@@ -222,10 +217,22 @@ class Controller:
         )
         self.state_path = self.state_dir / "instance.json"
 
+    def select_storage(self, profile):
+        if profile not in STORAGE_REPOSITORIES:
+            raise ComputeError("Unknown Experiment 1 storage profile")
+        filename = "storage.json" if profile == "baseline" else f"storage-{profile}.json"
+        storage = validate_storage(read_json(self.directory / "config" / filename))
+        if storage["repo_id"] != STORAGE_REPOSITORIES[profile]:
+            raise ComputeError("Storage profile points to a different dataset")
+        return storage
+
     def state(self):
         value = read_json(self.state_path)
         if value is None:
             raise ComputeError("No managed rental. Use search and up first.")
+        # Retired baseline sessions predate the storage field. New sessions carry
+        # their destination so editing a config cannot redirect an active run.
+        self.storage = validate_storage(value.get("storage", self.select_storage("baseline")))
         return value
 
     def save(self, state):
@@ -470,6 +477,8 @@ class Controller:
         previous = read_json(self.state_path)
         if previous and previous.get("phase") not in ("destroyed", "create_rejected"):
             raise ComputeError("A session is already recorded; use status, recover, or destroy")
+        profile = getattr(args, "storage_profile", "baseline")
+        self.storage = self.select_storage(profile)
         if args.hours * 3600 <= self.policy["final_sync_reserve_seconds"] + 60:
             raise ComputeError("Session is too short for boot and final sync reserve")
         self.credentials_preflight()
@@ -477,6 +486,12 @@ class Controller:
         if not choices:
             raise ComputeError("No offers satisfy all hardware, transfer, and spending limits")
         offer = choices[0]
+        if previous:
+            archive = self.state_dir / "sessions" / f"{valid_id(previous['session_id'])}.json"
+            if archive.exists() and read_json(archive) != previous:
+                raise ComputeError("Retired session archive differs; preserve it before renting")
+            if not archive.exists():
+                atomic_json(archive, previous)
         session_id = "lewm-exp1-" + uuid.uuid4().hex[:12]
         now = time.time()
         state = {
@@ -495,6 +510,8 @@ class Controller:
             "template_hash": self.policy["template_hash"],
             "template_sha256": fingerprint(self.template),
             "image": self.template["image"] + ":" + self.template["tag"],
+            "storage_profile": profile,
+            "storage": self.storage,
             "runs": [],
         }
         self.save(state)  # Persist before requesting a billable resource.
@@ -556,6 +573,7 @@ class Controller:
         report = {
             "instance_id": state.get("instance_id"),
             "phase": state["phase"],
+            "storage_repo": self.storage["repo_id"],
             "provider_status": None if row is None else row.get("actual_status"),
             "deadline_epoch": state["deadline_epoch"],
             "budget_usd": state["budget_usd"],
@@ -775,6 +793,11 @@ def parser():
         )
         command.add_argument("--budget-usd", required=name == "up", type=positive)
         command.add_argument("--offer-id", type=int)
+        if name == "up":
+            command.add_argument(
+                "--storage-profile", choices=tuple(STORAGE_REPOSITORIES), default="baseline",
+                help="Private output dataset, pinned to this session (default: baseline)",
+            )
     for name in ("status", "recover", "destroy"):
         commands.add_parser(name)
     ssh = commands.add_parser("ssh", help="Interactive SSH or a quoted diagnostic command")

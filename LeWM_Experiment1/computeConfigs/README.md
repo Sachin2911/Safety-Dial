@@ -35,7 +35,7 @@ changing the controller does not require rebuilding the image.
 | Command | Effect |
 | --- | --- |
 | `search` | Return three offers ranked by estimated session cost, within every hardware filter |
-| `up` | Check credentials, rent one container, wait for SSH, deploy helpers and validate the runtime |
+| `up` | Select storage, check credentials, rent one container, wait for SSH, deploy helpers and validate the runtime |
 | `status` | Read rental, job, progress, backup and estimated compute-cost information |
 | `ssh` | Open a shell; `ssh -- nvidia-smi` runs a quoted diagnostic command |
 | `run` | Transfer a source snapshot, protocol and JSON config; start a detached, time-limited job |
@@ -45,8 +45,25 @@ changing the controller does not require rebuilding the image.
 | `recover` | Find an uncertain rental by its unique label and finish setup without renting again |
 | `destroy` | Require idle jobs and verified backups, check HF manifests independently, then delete the rental |
 
-The only local runtime state is under ignored `.state/`, including `instance.json`
-and SSH host keys. No credentials are stored there. Each operation checks the saved
+Choose the output dataset when starting a new rental. The default is `baseline`;
+add `--storage-profile ap` to the authorized `up` command for AP reproduction.
+
+| Profile | Private dataset | Configuration |
+| --- | --- | --- |
+| `baseline` | `Sachioster/LeWMExp1_Baseline_Reproduction` | `config/storage.json` |
+| `ap` | `Sachioster/LeWMExp1_AP_Reproduction` | `config/storage-ap.json` |
+
+The selected dataset must already exist and be private. Its complete storage
+configuration is saved with the session and every run. Later `run`, `status`,
+`recover`, `sync` and `destroy` commands use that saved destination automatically;
+no profile flag is needed after `up`. `status` includes `storage_repo`. The worker
+rejects a launch whose storage differs from the rental's saved configuration.
+Legacy sessions without a saved destination retain the baseline dataset.
+
+Local runtime state stays under ignored `.state/`, including `instance.json`
+and SSH host keys. Before a new rental replaces a destroyed or rejected session,
+the controller preserves that session under `.state/sessions/<session-id>.json`.
+No credentials are stored there. Each operation checks the saved
 instance ID and label; the worker additionally checks the remote session identity.
 Read-only status does not rewrite session state.
 
@@ -178,6 +195,12 @@ passed full HF read-back and idempotent closeout at
 The controller's independent manifest download check also passed at that revision.
 These storage checks started no rental or scientific run.
 
+Validation on 5 November 2026: 15 offline storage-profile checks passed. They cover
+baseline/AP selection, destination pinning across configuration changes, retired
+session preservation, cross-dataset launch rejection and independent receipt
+verification against the saved destination. They use fake providers and processes;
+the pre-existing deleted `test_compute.py` was not restored.
+
 The first timed `up` check passed on 4 November 2026, instance `59105596`, machine
 `10447`, one RTX 4090, using the pinned image and 200 GB disk. Timing starts at
 controller invocation and ends after the GPU and rendering checks:
@@ -291,10 +314,13 @@ Completed baseline-reproduction billing, rental, shutdown and backup receipts ar
 kept in `records/baseline_reproduction/`. Their contents retain the identifiers
 used at execution time. Current storage uses the renamed dataset below.
 
-The selected private dataset is
-[Sachioster/LeWMExp1_Baseline_Reproduction](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction).
-`config/storage.json` records its destination and the run directory on the rented instance.
-The controller passes this configuration to the remote runner and uploader.
+The private datasets are
+[Sachioster/LeWMExp1_Baseline_Reproduction](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction)
+and [Sachioster/LeWMExp1_AP_Reproduction](https://huggingface.co/datasets/Sachioster/LeWMExp1_AP_Reproduction).
+`config/storage.json` retains the baseline settings; `config/storage-ap.json`
+defines the AP destination. `up --storage-profile ap` selects AP for a new session.
+The controller pins the selected configuration in the session and passes it to
+the remote runner and uploader. Historical run metadata and receipts stay unchanged.
 
 Each run should write under `/workspace/LeWM_Experiment1/runs/<run-id>/` and upload
 completed files to `runs/<run-id>/` in the dataset. Use unique run IDs, staged uploads

@@ -19,6 +19,27 @@ class ComputeError(RuntimeError):
     pass
 
 
+STORAGE_REPOSITORIES = {
+    "baseline": "Sachioster/LeWMExp1_Baseline_Reproduction",
+    "ap": "Sachioster/LeWMExp1_AP_Reproduction",
+}
+
+
+def validate_storage(storage):
+    """Accept only the two declared private experiment destinations and fixed layout."""
+    if not isinstance(storage, dict) or (
+        storage.get("repo_id") not in STORAGE_REPOSITORIES.values()
+        or storage.get("repo_type") != "dataset"
+        or storage.get("private") is not True
+        or storage.get("branch") != "main"
+        or storage.get("path_prefix") != "runs"
+        or storage.get("remote_runs_root") != "/workspace/LeWM_Experiment1/runs"
+        or storage.get("token_env") != "HF_TOKEN"
+    ):
+        raise ComputeError("Unexpected Experiment 1 private storage settings")
+    return dict(storage)
+
+
 class ApiError(ComputeError):
     def __init__(self, status=None):
         self.status = status
