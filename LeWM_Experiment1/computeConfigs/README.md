@@ -174,7 +174,7 @@ Controller tests use fake providers and processes, with no simulator imports:
 Validation on 4 November 2026: 51 orchestration tests passed; a live read-only Vast
 search returned eligible offers; a 1,231-byte upload of four infrastructure files
 passed full HF read-back and idempotent closeout at
-[`d4ae2166f22c505627f23ef442809a8c430ae96c`](https://huggingface.co/datasets/Sachioster/lewm-experiment1/tree/d4ae2166f22c505627f23ef442809a8c430ae96c/infrastructure-checks/transfer-check-20261104T121235Z-c795a2).
+[`d4ae2166f22c505627f23ef442809a8c430ae96c`](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/tree/d4ae2166f22c505627f23ef442809a8c430ae96c/infrastructure-checks/transfer-check-20261104T121235Z-c795a2).
 The controller's independent manifest download check also passed at that revision.
 These storage checks started no rental or scientific run.
 
@@ -287,8 +287,12 @@ When changing template versions, also update `template_hash` in `config/compute-
 
 ## Experiment 1 output storage
 
+Completed baseline-reproduction billing, rental, shutdown and backup receipts are
+kept in `records/baseline_reproduction/`. Their contents retain the identifiers
+used at execution time. Current storage uses the renamed dataset below.
+
 The selected private dataset is
-[Sachioster/lewm-experiment1](https://huggingface.co/datasets/Sachioster/lewm-experiment1).
+[Sachioster/LeWMExp1_Baseline_Reproduction](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction).
 `config/storage.json` records its destination and the run directory on the rented instance.
 The controller passes this configuration to the remote runner and uploader.
 

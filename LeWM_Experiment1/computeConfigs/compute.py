@@ -209,7 +209,7 @@ class Controller:
             self.policy["remote_root"] != "/workspace/LeWM_Experiment1"
             or self.storage["remote_runs_root"] != self.policy["remote_root"] + "/runs"
             or self.storage["token_env"] != "HF_TOKEN"
-            or self.storage["repo_id"] != "Sachioster/lewm-experiment1"
+            or self.storage["repo_id"] != "Sachioster/LeWMExp1_Baseline_Reproduction"
             or self.storage["repo_type"] != "dataset"
             or not self.storage["private"]
         ):

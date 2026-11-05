@@ -80,6 +80,10 @@ jobs. Do not inherit their protocols, gates or budgets.
    area. Its compute pipeline, tests and future experiment
    files belong here. This is a scoped exception to the SafeLeWM placement rule;
    keep the existing SafeLeWM protocols and recorded results in place.
+   The completed checkpoint study is in `LeWM_Experiment1/baseline_reproduction/`.
+   Its `README.md` holds results and `evidence/` holds detailed scientific checks.
+   Operational receipts live under `computeConfigs/records/baseline_reproduction/`
+   and publication receipts under `huggingface/records/baseline_reproduction/`.
 7. `theOdessy/`: the LeWM checkpoint-reproduction overview, with LaTeX source and
    PDF. Sachin explicitly requested this folder at the repository root.
 
@@ -115,7 +119,7 @@ when using the existing GitHub login for private image access.
 - `run` needs an actual source directory, JSON config, prospective protocol,
   seeds and finite runtime. No scientific entrypoint is supplied by the pipeline.
   Outputs go under `LEWM_RUN_DIR` and then to private dataset
-  `Sachioster/lewm-experiment1`, prefix `runs/<run-id>/`. Use `run_io` for periodic
+  `Sachioster/LeWMExp1_Baseline_Reproduction`, prefix `runs/<run-id>/`. Use `run_io` for periodic
   publication; the compute guide defines the artifact and verification contract.
 - Destroy only when the user directs shutdown. `compute.py destroy` checks idle
   jobs, verified backups, and the exact instance identity. `stop` ends the job

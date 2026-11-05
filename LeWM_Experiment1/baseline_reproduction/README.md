@@ -1,5 +1,8 @@
 # LeWM frozen-checkpoint reproduction
 
+[Protocol](protocol.md) · [Videos and trajectories](media/README.md) ·
+[Detailed audit](evidence/final-audit.json) · [Runtime notes](evidence/compatibility.md)
+
 Audit status: complete
 
 Main comparison uses the paper's CEM iterations and a true 25-action goal offset.
@@ -40,8 +43,8 @@ Audited completed engineering actions: 700.
 Total attempted controller actions including failures: 38,210.
 Scientific model work: 27,000 cost calls, 8,100,000 candidate rollouts and 40,500,000 predicted latent steps.
 Summed scientific panel time: 4693.4 seconds, including panel setup, planning and control. Downloads, transfer retries and time between panels are additional session work.
-Per-panel evidence and model-query counts are in audit.json. Failed and
-engineering runs remain separate. See compatibility.md for the API, renderer,
+Per-panel evidence and model-query counts are in [the audit](evidence/final-audit.json). Failed and
+engineering runs remain separate. See [runtime compatibility](evidence/compatibility.md) for the API, renderer,
 checkpoint-history and exact-goal-index decisions.
 
 Low-level physics counters were instrumented for PushT and Cube; TwoRoom

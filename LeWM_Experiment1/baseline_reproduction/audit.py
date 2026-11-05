@@ -109,7 +109,7 @@ def main():
             diagnostics.append({"run": name, **diagnostic})
             continue
         if not summaries and outcomes[-1]["result"]["status"] != "completed":
-            failure = read(Path(__file__).parent / "records" / (name + "-failure.json"))
+            failure = read(Path(__file__).parent / "evidence" / (name + "-failure.json"))
             assert failure["run_id"] == name
             assert hashlib.sha256((run / "manifest.json").read_bytes()).hexdigest() == (
                 failure["manifest_sha256"])

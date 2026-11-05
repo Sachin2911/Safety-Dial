@@ -1,6 +1,13 @@
 # Reproduction videos and trajectories
 
-The [private Hugging Face results page](https://huggingface.co/datasets/Sachioster/lewm-experiment1/blob/main/reports/reproduction-20261104/README.md)
+The [dataset home](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction)
+now shows all eight clips with inline playback, grouped by environment. The
+5 November organization update adds environment pages and byte-identical final
+media copies under `media/reproduction-20261104/`; original run paths and pinned
+receipts below remain unchanged. See the
+[presentation receipt](../../huggingface/publication-20261105.json).
+
+The [private Hugging Face results page](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/blob/main/reports/reproduction-20261104/README.md)
 collects the updated one-page PDF, full results, audits and eight examples.
 Each environment has one recorded success and one failure, selected as the first
 case of each outcome in the primary seed-42 panel. These examples illustrate
@@ -25,9 +32,9 @@ cached drawing geometry and stationary-trajectory plot scaling. The final packag
 reuses verified TwoRoom and Reacher artifacts from attempt 02.
 
 - [Protocol](protocol.md) and [selected cases](config.json).
-- [Cloud and independent-download receipt](receipt.json), including every attempt.
-- [Visual review](visual-review.json), including file hashes.
-- [Report publication receipt](publication.json), pinning the PDF and report revision.
+- [Cloud and independent-download receipt](../../huggingface/records/baseline_reproduction/receipt.json), including every attempt.
+- [Visual review](../../huggingface/records/baseline_reproduction/visual-review.json), including file hashes.
+- [Report publication receipt](../../huggingface/records/baseline_reproduction/publication.json), pinning the PDF and report revision.
 - [Rendering source](render.py), executed only on the rented host.
 
 All attempts together reserved 24 environment setups, used 524 setup physics steps
@@ -36,4 +43,4 @@ scientific interaction ledger, which is unchanged. There were zero new evaluatio
 actions and zero model queries. This completed media protocol authorizes no further
 rendering attempts. Instance 59111700 was subsequently destroyed at Sachin's
 explicit direction after backup verification; see the
-[shutdown receipt](../records/rental-shutdown.json).
+[shutdown receipt](../../computeConfigs/records/baseline_reproduction/rental-shutdown.json).

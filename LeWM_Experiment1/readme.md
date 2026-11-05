@@ -4,10 +4,17 @@ This is the working area for the new LeWM experiment. The Vast compute pipeline
 is ready, and the frozen-checkpoint reproduction completed on 4 November 2026.
 All 15 declared panels passed the evidence audit: 600 main-condition episodes and
 150 paired sensitivity episodes, totaling 37,500 scientific controller actions.
-The [completed protocol](reproduction/protocol.md) authorizes no additional runs.
+The [completed protocol](baseline_reproduction/protocol.md) authorizes no additional runs.
 Existing research designs and results remain in `SafeLeWM/`.
 
-Read the [results report](reproduction/results.md). Primary seed-42 success was
+The completed study is under `baseline_reproduction/`, with results in its
+`README.md` and detailed checks in `evidence/`. Rental, billing and backup
+paperwork is under `computeConfigs/records/baseline_reproduction/`; media
+publication receipts are under `huggingface/records/baseline_reproduction/`.
+The [relocation record](huggingface/local-organization-20261105.json) maps the
+former paths and records preserved file hashes.
+
+Read the [results report](baseline_reproduction/README.md). Primary seed-42 success was
 90% on TwoRoom, 64% on Reacher, 96% on PushT and 72% on Cube, against paper
 references of 87%, 86%, 96% and 74%. TwoRoom, PushT and Cube meet the predeclared
 10 percentage-point practical tolerance; Reacher does not. The repeats and CEM-30
@@ -15,11 +22,11 @@ sensitivity are reported separately. This supports nearby-goal competence in
 three environments, not exact paper-score equivalence, training-seed replication
 or safety claims.
 
-The [full audit](reproduction/records/final-audit.json) includes every panel's
+The [full audit](baseline_reproduction/evidence/final-audit.json) includes every panel's
 counts and uncertainty intervals, interaction accounting and failed attempts.
-The [backup index](reproduction/records/backup-verification.json) pins the 30 original
+The [backup index](computeConfigs/records/baseline_reproduction/backup-verification.json) pins the 30 original
 reproduction run records in private Hugging Face storage. The
-[closeout receipt](reproduction/records/closeout.json) records independent local
+[closeout receipt](computeConfigs/records/baseline_reproduction/closeout.json) records independent local
 downloads and hashes of the final audit and report. Engineering used 19 reserved
 episodes/attempts and 710 controller actions. Ten raw action rows from the first
 failed Reacher engineering attempt were lost; their action count remains in the
@@ -29,17 +36,21 @@ The completed reproduction and its results are summarized in the
 [one-page overview](../theOdessy/reproduction.pdf), with its
 [LaTeX source](../theOdessy/reproduction.tex).
 
-The [Hugging Face results page](https://huggingface.co/datasets/Sachioster/lewm-experiment1/blob/main/reports/reproduction-20261104/README.md)
-also contains the PDF, detailed results and eight reconstructed videos with
-trajectory images: one recorded success and one failure per environment.
-Read the [media notes](reproduction/media/README.md) for selection, reconstruction
+The [Hugging Face dataset home](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction)
+contains an experiment index and eight inline reconstructed videos, grouped by
+environment. Each environment page brings together its success and failure clips,
+trajectory images, settings and results. The
+[experiment report](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/blob/main/reports/reproduction-20261104/README.md)
+links the PDF, detailed results and all 15 setups. The 5 November presentation
+update is recorded under [huggingface/](huggingface/README.md).
+Read the [media notes](baseline_reproduction/media/README.md) for selection, reconstruction
 limits and verified cloud receipts. No scientific evaluation was rerun to make them.
 
-The implementation lives in `reproduction/`: `assets.json` pins public inputs,
+The implementation lives in `baseline_reproduction/`: `assets.json` pins public inputs,
 `prepare.py` downloads and verifies them on the rented host, `model.py` loads the
 original frozen JEPA, `evaluate.py` executes fixed panels with action accounting,
 and `audit.py` reconciles episode results against saved traces. Read
-[compatibility.md](reproduction/compatibility.md) for the exact-goal indexing,
+[compatibility.md](baseline_reproduction/evidence/compatibility.md) for the exact-goal indexing,
 renderer and released-runtime decisions. Engineering evidence is kept separate
 from scientific results. The current authorization and status remain in the root
 [`firstPrinciples.md`](../firstPrinciples.md).
@@ -93,7 +104,7 @@ It does not copy `.env` or forward every variable to the experiment subprocess.
 W&B integration and private checkpoint downloads inside the job are not wired up.
 
 Write outputs beneath `LEWM_RUN_DIR`. Completed artifacts upload to the private
-dataset [Sachioster/lewm-experiment1](https://huggingface.co/datasets/Sachioster/lewm-experiment1),
+dataset [Sachioster/LeWMExp1_Baseline_Reproduction](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction),
 under `runs/<run-id>/`. Use the `run_io` helpers described in the compute guide for
 periodic uploads and immutable checkpoints. A final download verifies stored bytes
 before destruction is allowed.

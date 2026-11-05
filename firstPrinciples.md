@@ -56,7 +56,7 @@ Completed work does not authorize another experiment or reuse of an unused budge
 
 Sachin explicitly requested renting a GPU and performing the four-environment
 frozen LeWM checkpoint reproduction. The prospective protocol is
-[`LeWM_Experiment1/reproduction/protocol.md`](LeWM_Experiment1/reproduction/protocol.md).
+[`LeWM_Experiment1/baseline_reproduction/protocol.md`](LeWM_Experiment1/baseline_reproduction/protocol.md).
 It covers original LeWM plus CEM on TwoRoom, Reacher, PushT and OGBench single Cube,
 with fixed nearby-goal panels and separately reported paper/released-config settings.
 The initial session has a six-hour work limit and $8 estimated budget. Rental
@@ -67,10 +67,10 @@ verified, and all 15 declared scientific panels passed the combined evidence aud
 episodes/attempts and 710 actions, including the failed attempt. The 30 original
 reproduction run records have verified private Hugging Face backups; the final report and audit
 were independently downloaded locally and checked against their pinned manifest.
-See the [results](LeWM_Experiment1/reproduction/results.md),
-[audit](LeWM_Experiment1/reproduction/records/final-audit.json),
-[backup index](LeWM_Experiment1/reproduction/records/backup-verification.json) and
-[closeout receipt](LeWM_Experiment1/reproduction/records/closeout.json).
+See the [results](LeWM_Experiment1/baseline_reproduction/README.md),
+[audit](LeWM_Experiment1/baseline_reproduction/evidence/final-audit.json),
+[backup index](LeWM_Experiment1/computeConfigs/records/baseline_reproduction/backup-verification.json) and
+[closeout receipt](LeWM_Experiment1/computeConfigs/records/baseline_reproduction/closeout.json).
 
 Main success counts for seeds 42, 43 and 44 are TwoRoom 45/50, 37/50, 45/50;
 Reacher 32/50, 34/50, 43/50; PushT 48/50, 44/50, 44/50; and Cube 36/50, 42/50,
@@ -82,28 +82,50 @@ authorized by this completed protocol.
 
 Runtime corrections, the zero-action Reacher continuation and the first failed
 engineering attempt's ten lost raw trace rows remain disclosed in the
-[compatibility record](LeWM_Experiment1/reproduction/compatibility.md) and report.
+[compatibility record](LeWM_Experiment1/baseline_reproduction/evidence/compatibility.md) and report.
 No completed scientific panel was repeated. The approved public Reacher cache
 deletion is recorded in its
-[receipt](LeWM_Experiment1/reproduction/records/public-cache-retirement.json).
+[receipt](LeWM_Experiment1/computeConfigs/records/baseline_reproduction/public-cache-retirement.json).
 Vast instance 59111700 was retained temporarily at Sachin's request. He then
 explicitly directed its destruction on 4 November. The controller reverified all
 36 run backups, and Vast confirmed removal at 17:34 UTC. The
-[shutdown receipt](LeWM_Experiment1/reproduction/records/rental-shutdown.json)
+[shutdown receipt](LeWM_Experiment1/computeConfigs/records/baseline_reproduction/rental-shutdown.json)
 records provider removal; the closeout receipt preserves both rental decisions.
 
 Sachin subsequently requested updating the Odyssey one-page PDF with these results,
 and publishing videos and trajectory images on Hugging Face. He selected one
 success and one failure per environment. The completed
-[media protocol and records](LeWM_Experiment1/reproduction/media/README.md)
+[media protocol and records](LeWM_Experiment1/baseline_reproduction/media/README.md)
 preserve eight labelled reconstructed clips and eight trajectory images, selected
 by fixed case order from the primary panels. The original scientific ledger is
 unchanged: zero additional evaluation actions or model queries. All media attempts
 together used 524 setup physics steps and 20 reset-internal controller calls,
 within 24 reserved environment setups. The private
-[results page](https://huggingface.co/datasets/Sachioster/lewm-experiment1/blob/main/reports/reproduction-20261104/README.md)
+[results page](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/blob/main/reports/reproduction-20261104/README.md)
 collects the PDF, results, audits and media. Neither completed protocol authorizes
 additional experiments.
+
+On 5 November, Sachin requested clearer Hugging Face organization and selected
+grouping the existing clips by environment. The dataset now has a landing page,
+experiment index, eight inline video players, environment pages and a setup table.
+Curated media copies match the final originals byte for byte; all original run
+files and scientific results remain intact. The
+[presentation receipt](LeWM_Experiment1/huggingface/publication-20261105.json)
+records publication and verification. This presentation update used no new
+evaluation actions, model queries or media generation.
+
+Sachin then renamed the private dataset to
+`Sachioster/LeWMExp1_Baseline_Reproduction`. Its history and original evidence
+are preserved; current navigation and storage settings use the new name.
+Historical protocols and receipts retain their original repository identifiers.
+See the [rename receipt](LeWM_Experiment1/huggingface/rename-20261105.json).
+
+At Sachin's request, the local study folder is now
+`LeWM_Experiment1/baseline_reproduction/`. Results are its entry README and
+scientific checks are under `evidence/`. Billing, rental and backup records moved
+beside the compute pipeline; media publication records moved beside the Hugging
+Face catalog. The [relocation map](LeWM_Experiment1/huggingface/local-organization-20261105.json)
+preserves the original paths and hashes. No scientific evidence was deleted.
 
 ## Prior active work, 2 November
 

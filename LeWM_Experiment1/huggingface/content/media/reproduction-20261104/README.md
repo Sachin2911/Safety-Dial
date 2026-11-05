@@ -1,0 +1,14 @@
+# Reproduction videos by environment
+
+[Dataset home and inline videos](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction) · [Experiment report](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/blob/main/reports/reproduction-20261104/README.md)
+
+Each environment has one recorded success and one failure from its primary seed-42 panel. Press play below or use **Open video**. These five-second clips reconstruct 50 saved post-action states at 10 displayed actions per second. They are illustrative examples, not original recordings or real-time playback. Sign in with access to this private dataset to load the videos and images.
+
+| Environment | Gallery | Success | Failure |
+| --- | --- | --- | --- |
+| TwoRoom | [Videos, trajectories and settings](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/blob/main/reports/reproduction-20261104/environments/tworoom.md) | [MP4](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/resolve/main/media/reproduction-20261104/tworoom/success.mp4) | [MP4](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/resolve/main/media/reproduction-20261104/tworoom/failure.mp4) |
+| Reacher | [Videos, trajectories and settings](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/blob/main/reports/reproduction-20261104/environments/reacher.md) | [MP4](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/resolve/main/media/reproduction-20261104/reacher/success.mp4) | [MP4](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/resolve/main/media/reproduction-20261104/reacher/failure.mp4) |
+| PushT | [Videos, trajectories and settings](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/blob/main/reports/reproduction-20261104/environments/pusht.md) | [MP4](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/resolve/main/media/reproduction-20261104/pusht/success.mp4) | [MP4](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/resolve/main/media/reproduction-20261104/pusht/failure.mp4) |
+| OGBench Cube | [Videos, trajectories and settings](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/blob/main/reports/reproduction-20261104/environments/cube.md) | [MP4](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/resolve/main/media/reproduction-20261104/cube/success.mp4) | [MP4](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/resolve/main/media/reproduction-20261104/cube/failure.mp4) |
+
+[Source revisions, case IDs and checksums](https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/blob/main/media/reproduction-20261104/index.json)

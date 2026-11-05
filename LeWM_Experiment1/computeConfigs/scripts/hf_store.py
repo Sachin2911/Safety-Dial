@@ -65,7 +65,7 @@ class HubStore:
 
         if storage.get("private") is not True or storage.get("repo_type") != "dataset":
             raise ComputeError("Expected a private dataset destination")
-        if storage["repo_id"] != "Sachioster/lewm-experiment1":
+        if storage["repo_id"] != "Sachioster/LeWMExp1_Baseline_Reproduction":
             raise ComputeError("Unexpected Experiment 1 dataset destination")
         self.api = HfApi(token=token)
         self.token, self.storage = token, storage

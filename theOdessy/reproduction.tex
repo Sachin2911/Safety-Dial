@@ -2,7 +2,7 @@
 % mkdir -p /tmp/lewm-odessy-pdf
 % pdflatex -halt-on-error -interaction=nonstopmode -output-directory=/tmp/lewm-odessy-pdf theOdessy/reproduction.tex
 % cp /tmp/lewm-odessy-pdf/reproduction.pdf theOdessy/reproduction.pdf
-\documentclass[11pt,a4paper]{article}
+\documentclass[12pt,a4paper]{article}
 \usepackage[margin=23mm]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
@@ -24,27 +24,16 @@
 \begin{document}
 {\small\sffamily\color{accent} theOdessy \quad / \quad Experiment 1}
 
-{\LARGE\bfseries LeWM checkpoint reproduction}
+{\LARGE\bfseries LeWM reproduction}
 
-{\large Results: checking the foundation before building on it}
-\vspace{3pt}
-
-We evaluated the released LeWorldModel (LeWM) checkpoints to check whether
-they provide a competent starting point for our planning and safety research.
-Weights stayed frozen, and control used the original Cross-Entropy Method
-(CEM) planner. There was no retraining, Anchored Planning or safety adapter.
-
-\textbf{What we tested.} Each start and goal came from the same recorded
-trajectory, with the goal \textbf{25 environment actions ahead}. The controller
-had \textbf{50 actions} to reach it. We tested 50 cases per environment for
-seeds 42, 43 and 44: 600 main episodes. Seed 42 was the primary paper comparison;
-the other seeds were robustness repeats using the same checkpoint.
+\textbf{TwoRoom, PushT and Cube met our practical baseline check.
+Reacher fell short.}
 
 \begin{center}
 \renewcommand{\arraystretch}{1.12}
 \begin{tabularx}{\linewidth}{@{}lrr>{\raggedleft\arraybackslash}X@{}}
 \toprule
-\textbf{Environment} & \textbf{Paper} & \textbf{Primary (42)} & \textbf{Repeats (43 / 44)} \\
+\textbf{Environment} & \textbf{Paper} & \textbf{Primary} & \textbf{Repeats} \\
 \midrule
 TwoRoom & 87\% & 90\% (45/50) & 74\% / 90\% \\
 Reacher & 86\% & 64\% (32/50) & 68\% / 86\% \\
@@ -54,34 +43,37 @@ OGBench Cube & 74\% & 72\% (36/50) & 84\% / 64\% \\
 \end{tabularx}
 \end{center}
 
-CEM used 300 candidates, 30 elites and a 25-action plan before replanning.
-The main settings used 10 CEM iterations for TwoRoom, Reacher and Cube, and
-30 for PushT. A separate, predeclared 30-iteration check reused the seed-42
-cases for the other three tasks: TwoRoom 84\%, Reacher 78\% and Cube 68\%.
-These 150 extra episodes brought the total to \textbf{750 evaluations}.
+Primary: seed 42. Repeats: seeds 43 and 44. Each score uses 50 cases.
+The predeclared check allowed a primary score up to 10 percentage points
+below the paper. This is a practical tolerance, not proof of equivalence.
 
-\textbf{What we learned.} Before running, we allowed a primary result up to
-10 percentage points below the paper as a practical competence check.
-\textbf{TwoRoom, PushT and Cube met this tolerance; Reacher did not.}
-The extra-iteration result does not replace Reacher's failed main comparison.
-Across all three main seeds, success was 84.7\%, 72.7\%, 90.7\% and 73.3\%,
-respectively. Variation across cases remains substantial; this is not proof of
-equivalence to the paper or a replication across training seeds.
+\textbf{What we ran.} Frozen released LeWM checkpoints with the original
+Cross-Entropy Method (CEM) planner. Goals were 25 recorded actions ahead;
+the controller had 50 actions to reach them. All \textbf{15 panels passed
+the evidence audit}: 750 episodes and 37,500 controller actions, including
+the separately planned CEM sensitivity checks.
 
-\textbf{Checks and limitations.} All 15 evaluation panels passed the evidence
-audit, covering 37,500 controller actions. Exact cases, outcomes, configuration,
-model queries and uncertainty intervals are saved, with verified backups in our
-private Hugging Face dataset. Runtime and paper/code differences are documented,
-including rendering, goal indexing and checkpoint history length. Engineering
-used another 710 actions. Ten raw trace rows from an early logging failure were
-lost; their action count is preserved and the limitation is recorded.
+These are nearby-goal results from shared checkpoints. They do not establish
+safety, long-horizon performance or replication across training seeds.
 
-The result gives us a tested \textbf{nearby-goal baseline for three environments}.
-Reacher's shortfall remains unresolved. Safety, longer-horizon control and any
-benefit from our adaptations still require separate experiments.
+\vspace{4pt}
+\textbf{What this means for our testing}
+
+\begin{itemize}
+\setlength{\itemsep}{6pt}
+\item \textbf{Start from the tested baselines.} TwoRoom, PushT and Cube
+provide starting points for adapter studies. Reacher's shortfall needs
+diagnosis before gains there can be interpreted confidently.
+\item \textbf{Measure safe completion.} Compare adapters with native LeWM
+on matched cases and budgets, across multiple seeds. Report safe completion,
+violations and unfinished episodes together; test longer horizons separately.
+\end{itemize}
 
 \vfill
 {\footnotesize
-Completed 4 November 2026. Frozen checkpoints, native CEM, fixed evaluation panels.
+Experiment completed 4 November 2026. Summary revised 5 November 2026.\\
+\href{https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction/blob/main/reports/reproduction-20261104/README.md}{Full results, uncertainty and runtime caveats}
+\quad\textbar\quad
+\href{https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction}{Videos by environment}
 }
 \end{document}
