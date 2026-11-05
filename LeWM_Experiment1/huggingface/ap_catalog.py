@@ -21,7 +21,9 @@ measured scientific totals come only from that audit. Required presentation keys
           "revision": "40-character HF commit", "status": "verified",
           "description": "..."}, ...]
 
-Optional presentation keys: testing_implications (list of strings), limitations
+Optional presentation keys: overview_pdf (report-relative PDF path),
+accounting_report (report-relative JSON path),
+testing_implications (list of strings), limitations
 (list of strings), and accounting (setting/value rows for measured non-scientific
 work). Do not put monetary or rental details in study accounting.
 
@@ -64,6 +66,15 @@ VIDEO_NOTE = (
     "and played at 2 frames per second. The final frame can precede the stopping action. "
     "The success/failure label comes from the recorded evaluation outcome. "
     "No replay or reconstruction was used. Sign in with dataset access to play the clips."
+)
+COMPARISON_NOTE = (
+    "AP-CEM and final-goal CEM start from the same recorded state, environment seed, "
+    "optimizer seed and fixed goal. Each comparison overlays their original observations "
+    "as transparent ghosts, with colored physical trajectories and executed-action indicators. "
+    "The timeline follows action number, not wall-clock speed. When an arm stops, its last "
+    "available observation is held and labeled; this can precede the stopping action. "
+    "The coordinate plot includes the recorded stop. These are derived videos made from "
+    "saved evidence, with no extra simulation or model calls."
 )
 DEFAULT_IMPLICATIONS = [
     "Use the paired AP-CEM and final-goal CEM results as the long-range recorded-goal "
@@ -136,6 +147,12 @@ def validate(data, media, allow_partial):
     presentation = data["presentation"]
     require(re.fullmatch(r"[a-z0-9][a-z0-9_-]*", presentation["report_id"]), "Invalid report_id")
     datetime.date.fromisoformat(presentation["date"])
+    if presentation.get("overview_pdf"):
+        require(path_text(presentation["overview_pdf"]).endswith(".pdf"),
+                "Overview link must identify a report-relative PDF")
+    if presentation.get("accounting_report"):
+        require(path_text(presentation["accounting_report"]).endswith(".json"),
+                "Accounting link must identify a report-relative JSON file")
     require(presentation["setup"]["common"], "Exact shared setup rows are required")
     require(presentation["evidence"] and presentation["runs"], "Evidence and run links are required")
     for rows in [presentation["setup"]["common"], *presentation["setup"]["environments"].values(),
@@ -264,37 +281,78 @@ def validate(data, media, allow_partial):
 
 
 class Catalog:
-    def __init__(self, data, media, allow_partial=False):
+    def __init__(self, data, media, allow_partial=False, comparisons=None):
         self.complete, self.examples = validate(data, media, allow_partial)
         self.data, self.media = data, media
         self.presentation = data["presentation"]
         self.report = "reports/" + self.presentation["report_id"]
         self.media_root = "media/" + self.presentation["report_id"]
+        self.comparisons = {}
+        if comparisons is not None:
+            require(comparisons.get("repo_id") == REPO
+                    and comparisons.get("derived_comparisons_verified") is True,
+                    "Comparison videos require verified saved-evidence derivation")
+            for entry in comparisons["comparisons"]:
+                key = entry["environment"], entry["outcome"]
+                require(key in self.examples and key not in self.comparisons,
+                        "Invalid or duplicate comparison selection")
+                original = self.examples[key].get("case")
+                require(original is not None
+                        and entry["query_ordinal"] == original["query_ordinal"],
+                        "Comparison differs from the original first-case selection")
+                require(entry.get("comparison_checks") == {
+                    "same_seed": True, "same_initial_state": True, "same_goal": True},
+                    "Comparison lacks matched seed/state/goal checks")
+                require(entry.get("simulator_actions") == 0 and entry.get("model_queries") == 0,
+                        "Comparison must use existing recordings only")
+                output = entry["output"]
+                require(path_text(output["path"]).endswith(".mp4")
+                        and type(output["bytes"]) is int and output["bytes"] > 0
+                        and re.fullmatch(r"[0-9a-f]{64}", output["sha256"]),
+                        "Comparison output needs its exact size and hash")
+                if entry.get("poster"):
+                    poster = entry["poster"]
+                    require(path_text(poster["path"]).endswith(".png")
+                            and type(poster["bytes"]) is int and poster["bytes"] > 0
+                            and re.fullmatch(r"[0-9a-f]{64}", poster["sha256"]),
+                            "Comparison poster needs its exact size and hash")
+                self.comparisons[key] = entry
+            require(not self.complete or set(self.comparisons) == {
+                key for key, example in self.examples.items() if example.get("case") is not None},
+                "Completed gallery needs every selected paired comparison")
 
     def link(self, label, suffix="README.md"):
         return f"[{label}]({url(self.report + '/' + suffix)})"
 
     def navigation(self):
-        return " · ".join([f"[Dataset home]({BASE})", self.link("Results"),
-                           self.link("Exact setup", "setups.md"),
-                           self.link("Evidence", "evidence.md"), f"[Original runs]({url('runs/README.md')})"])
+        links = [f"[Dataset home]({BASE})", self.link("Results")]
+        if self.presentation.get("overview_pdf"):
+            links.append(self.link("Two-page overview", self.presentation["overview_pdf"]))
+        links += [self.link("Exact setup", "setups.md"), self.link("Evidence", "evidence.md"),
+                  self.link("Original runs", "runs.md")]
+        return " · ".join(links)
 
-    def result_table(self, tasks=None):
+    def result_table(self, tasks=None, *, show_intervals=False):
         rows = []
         for task in tasks or TASKS:
             result = self.data["summary"].get(task, {})
             row = [self.link(TASKS[task], f"environments/{task}.md")]
-            for arm in ARMS:
+            for arm in ("gaussian_observed", "gaussian_final"):
                 panel = result.get(arm)
-                row.append("Not available" if panel is None else
-                           f"{panel['successes']}/{panel['episodes']} ({pct(panel['success_rate'])}); "
-                           f"95% CI {interval(panel['wilson_95'])}")
+                value = "Not available" if panel is None else (
+                    f"{panel['successes']}/{panel['episodes']} ({pct(panel['success_rate'])})")
+                if panel is not None and show_intervals:
+                    value += f"; 95% CI {interval(panel['wilson_95'])}"
+                row.append(value)
             paired = result.get("paired_difference")
             bounds = self.data.get("paired_bootstrap", {}).get("intervals_95", {}).get(task)
-            row.append("Not available" if paired is None else pp(paired)
-                       + (f"; 95% CI {interval(bounds, difference=True)}" if bounds else "; CI unavailable"))
+            value = "Not available" if paired is None else pp(paired)
+            if paired is not None and show_intervals:
+                value += (f"; 95% CI {interval(bounds, difference=True)}"
+                          if bounds else "; CI unavailable")
+            row.append(value)
             rows.append(row)
-        return table(["Environment", "Final-goal CEM", "AP-CEM", "Paired AP-CEM gain"], rows)
+        return table(["Environment", "AP-CEM", "Final-goal CEM", "Paired AP-CEM gain"], rows)
 
     def headline(self):
         if not self.complete:
@@ -324,13 +382,14 @@ class Catalog:
                 "This descriptive check is separate from passing the evidence audit; it does not "
                 "establish statistical equivalence.")
 
-    def gallery(self, task, *, include_plots=False):
+    def gallery(self, task, *, include_plots=False, heading_level=3):
+        heading = "#" * heading_level
         blocks = []
         for outcome in ("success", "failure"):
             example = self.examples[task, outcome]
             title = f"{TASKS[task]}: first AP-CEM {outcome}"
             if example.get("case") is None:
-                blocks.append(f"### {outcome.title()}\n\n{example['reason']}")
+                blocks.append(f"{heading} {outcome.title()}\n\n{example['reason']}")
                 continue
             case = example["case"]
             file = next(file for file in example["files"] if file["path"].endswith(".mp4"))
@@ -344,7 +403,7 @@ class Catalog:
                       f"record `{case['identity']['record_id']}`. "
                       f"Recorded stop after **{case['primitive_steps']} actions**; "
                       f"last displayed observation after **{frame_steps[-1]} actions**.")
-            block = (f"### {outcome.title()}\n\n{player}\n\n{detail}\n\n"
+            block = (f"{heading} {outcome.title()}\n\n{player}\n\n{detail}\n\n"
                      f"[Open video]({video_url}) · [Original case record]({trace_url})")
             plot = example.get("trajectory_plot")
             if plot:
@@ -357,6 +416,38 @@ class Catalog:
             if example.get("note"):
                 block += f"\n\n{example['note']}"
             blocks.append(block)
+        return "\n\n".join(blocks)
+
+    def comparison_gallery(self, task, *, heading_level=3):
+        heading = "#" * heading_level
+        blocks = []
+        for outcome in ("success", "failure"):
+            entry = self.comparisons.get((task, outcome))
+            if entry is None:
+                continue
+            case = self.examples[task, outcome]["case"]
+            title = f"{TASKS[task]}: AP-CEM versus final-goal CEM, query {case['query_ordinal']}"
+            video_url = url(entry["output"]["path"], raw=True)
+            poster = (f' poster="{escape(url(entry["poster"]["path"], raw=True), quote=True)}"'
+                      if entry.get("poster") else "")
+            player = (f'<video controls playsinline preload="none" width="100%" '
+                      f'src="{escape(video_url, quote=True)}"{poster} '
+                      f'title="{escape(title, quote=True)}">'
+                      f'<a href="{escape(video_url, quote=True)}">Watch {escape(title)}</a></video>')
+            original_links = []
+            for arm, label in (("gaussian_observed", "Original AP"),
+                               ("gaussian_final", "Original CEM")):
+                source = next(item for item in entry["sources"]
+                              if item["source_path"].endswith("_" + arm + ".mp4"))
+                original_links.append(
+                    f"[{label}]({url(source['source_path'], raw=True, rev=source['source_revision'])})")
+            blocks.append(
+                f"{heading} First AP-CEM {outcome}: matched comparison\n\n{player}\n\n"
+                f"Original query **{case['query_ordinal']}**. Shared environment seed "
+                f"**{case['identity']['environment_seed']}**, optimizer seed **{case['optimizer_seed']}**; "
+                "the starting state and goal match exactly.\n\n"
+                f"[Open comparison]({video_url}) · " + " · ".join(original_links) + " · "
+                f"[Pairing and derivation evidence]({url(self.media_root + '/comparisons.json')})")
         return "\n\n".join(blocks)
 
     def setup_rows(self, task=None):
@@ -389,6 +480,8 @@ class Catalog:
         text += (f"\n\n[Audit used for this page]({url(self.report + '/audit.json')}) · "
                  f"[Catalog input]({url(self.report + '/catalog-data.json')}) · "
                  f"[Media provenance and hashes]({url(self.media_root + '/index.json')})\n\n")
+        if self.presentation.get("accounting_report"):
+            text += self.link("Full work accounting", self.presentation["accounting_report"]) + "\n\n"
         totals = self.data.get("scientific_totals", {})
         text += "## Recorded scientific work\n\n" + table(
             ["Measure", "Recorded value"], [(key.replace("_", " "), value) for key, value in totals.items()])
@@ -427,25 +520,28 @@ class Catalog:
         report = (f"# AP checkpoint reproduction\n\nReport date: {self.presentation['date']}.\n\n"
                   f"{common}\n\n{nav}\n\n## What this means\n\n{self.interpretation()}\n\n"
                   f"## What this means for our testing\n\n{self.implications()}\n")
+        video_title = "Matched ghost comparisons" if self.comparisons else "Videos by environment"
+        video_note = COMPARISON_NOTE if self.comparisons else VIDEO_NOTE
         card = ("---\npretty_name: LeWMExp1 AP Reproduction\nlanguage:\n  - en\ntags:\n"
                 "  - robotics\n  - world-models\n  - planning\n  - video\n  - reproducibility\n"
                 "viewer: false\n---\n# LeWM Experiment 1: AP reproduction\n\n"
-                f"{common}\n\n{nav}\n\n## Videos by environment\n\n{VIDEO_NOTE}\n\n")
+                f"{common}\n\n{nav}\n\n## {video_title}\n\n{video_note}\n\n")
         for task, name in TASKS.items():
             card += f"### {name}\n\n{self.link('Results, setup and original clips', f'environments/{task}.md')}\n\n"
-            card += self.gallery(task) + "\n\n"
+            gallery = self.comparison_gallery if self.comparisons else self.gallery
+            card += gallery(task, heading_level=4) + "\n\n"
         card += f"## What this means for our testing\n\n{self.implications()}\n\n{self.interpretation()}\n"
         pages = {
             "README.md": card,
             self.report + "/README.md": report,
             self.report + "/evidence.md": self.evidence_page(),
-            "runs/README.md": self.run_page(),
+            self.report + "/runs.md": self.run_page(),
             "reports/README.md": "# Experiment reports\n\n" + table(
                 ["Study", "Scope", "Audit"], [[self.link("AP checkpoint reproduction"),
                  "Four environments; paired AP-CEM and final-goal CEM on original recorded goals",
                  "Passed" if self.complete else "Incomplete"]]) + "\n",
-            "media/README.md": (f"# Original evaluation videos\n\n{VIDEO_NOTE}\n\n"
-                                f"[Browse by environment]({BASE}#videos-by-environment) · "
+            "media/README.md": (f"# Evaluation videos\n\n{video_note}\n\n"
+                                f"[Browse by environment]({BASE}#{video_title.lower().replace(' ', '-')}) · "
                                 f"[Media index]({url(self.media_root + '/index.json')})\n"),
         }
         setup = f"# Exact study setup\n\n{nav}\n\n## Shared settings\n\n{self.setup_rows()}\n"
@@ -459,7 +555,8 @@ class Catalog:
                 row = panel.get(arm, {})
                 if "paper_successes" in row and "paper_episodes" in row:
                     external.append(f"{label}: {row['paper_successes']}/{row['paper_episodes']}")
-            page = (f"# {name}: AP reproduction\n\n{nav}\n\n{self.result_table([task])}\n\n"
+            page = (f"# {name}: AP reproduction\n\n{nav}\n\n"
+                    f"{self.result_table([task], show_intervals=True)}\n\n"
                     f"{unfinished}.\n\n{self.statistics_note()}\n\n")
             detail = []
             for arm, label in ARMS.items():
@@ -484,6 +581,9 @@ class Catalog:
                 page += (f"**{status} the AP-CEM practical tolerance** of no more than 10 percentage "
                          "points below its published reference. This is a descriptive score check, "
                          "not the evidence-audit result.\n\n")
+            if self.comparisons:
+                page += (f"## Matched ghost comparisons\n\n{COMPARISON_NOTE}\n\n"
+                         f"{self.comparison_gallery(task)}\n\n")
             page += (f"## Original AP-CEM clips\n\n{VIDEO_NOTE}\n\n{self.media['selection']}\n\n"
                      f"{self.gallery(task, include_plots=True)}\n\n## Environment setup\n\n{self.setup_rows(task)}\n\n"
                      f"{self.link('Shared planner and evaluation settings', 'setups.md')} · "
@@ -493,15 +593,19 @@ class Catalog:
         return pages
 
 
-def build(data_path, media_path, output, *, allow_partial=False):
+def build(data_path, media_path, output, *, allow_partial=False, comparisons_path=None):
     data_bytes, media_bytes = data_path.read_bytes(), media_path.read_bytes()
     data, media = json.loads(data_bytes), json.loads(media_bytes)
-    catalog = Catalog(data, media, allow_partial)
+    comparison_bytes = comparisons_path.read_bytes() if comparisons_path else None
+    comparisons = json.loads(comparison_bytes) if comparison_bytes is not None else None
+    catalog = Catalog(data, media, allow_partial, comparisons)
     payloads = {path: text.encode() for path, text in catalog.pages().items()}
     audit = {key: value for key, value in data.items() if key != "presentation"}
     payloads[catalog.report + "/audit.json"] = (json.dumps(audit, indent=2, allow_nan=False) + "\n").encode()
     payloads[catalog.report + "/catalog-data.json"] = data_bytes
     payloads[catalog.media_root + "/index.json"] = media_bytes
+    if comparison_bytes is not None:
+        payloads[catalog.media_root + "/comparisons.json"] = comparison_bytes
     manifest = {
         "repo_id": REPO, "report_id": catalog.presentation["report_id"],
         "audit_passed": catalog.complete, "published": False,
@@ -510,6 +614,8 @@ def build(data_path, media_path, output, *, allow_partial=False):
         "files": {path: {"bytes": len(content), "sha256": hashlib.sha256(content).hexdigest()}
                   for path, content in sorted(payloads.items())},
     }
+    if comparison_bytes is not None:
+        manifest["inputs"]["comparisons_index_sha256"] = hashlib.sha256(comparison_bytes).hexdigest()
     payloads["catalog-manifest.json"] = (json.dumps(manifest, indent=2) + "\n").encode()
     output = output.resolve()
     for name, content in payloads.items():
@@ -524,11 +630,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--media-index", type=Path, required=True)
+    parser.add_argument("--comparisons-index", type=Path)
     parser.add_argument("--output", type=Path, default=Path(__file__).parent / "content-ap")
     parser.add_argument("--allow-partial", action="store_true")
     args = parser.parse_args()
     try:
-        manifest = build(args.data, args.media_index, args.output, allow_partial=args.allow_partial)
+        manifest = build(args.data, args.media_index, args.output, allow_partial=args.allow_partial,
+                         comparisons_path=args.comparisons_index)
     except (KeyError, TypeError, ValueError) as error:
         parser.exit(2, f"Invalid catalog input: {error}\n")
     print(json.dumps({"output": str(args.output), "files": len(manifest["files"]) + 1,

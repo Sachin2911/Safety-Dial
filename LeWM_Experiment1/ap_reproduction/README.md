@@ -1,21 +1,61 @@
 # AP reproduction
 
-In progress. This study reproduces Anchored Planning on the authors' original
-long-range cases in TwoRoom, PushT, Reacher and Cube: 128 cases per environment,
-each evaluated with AP-CEM and matched final-goal CEM.
+Completed on 5 November 2026. AP-CEM succeeded in **306/512 cases (59.8%)**,
+compared with **47/512 (9.2%)** for matched final-goal CEM, a paired gain of
+50.6 percentage points. All 1,024 scientific cases passed the independent evidence
+audit, with no missing or repeated cases.
 
-The [frozen protocol](protocol.md) defines the cases, engineering gates, budgets
-and analysis. [assets.json](assets.json) pins the released inputs and runtime
-configuration. Results and videos will be published in the private dataset
-[LeWMExp1_AP_Reproduction](https://huggingface.co/datasets/Sachioster/LeWMExp1_AP_Reproduction).
+Each row contains **128 original queries per arm**. Counts are successful cases:
 
-All simulation and model computation runs on the rented host through the
-[compute pipeline](../computeConfigs/README.md). Run the stages in order for
-each task: `prepare.py`, `encode_cache.py`, `engineering.py`, then `evaluate.py`.
-Each entrypoint takes the task name; configuration and output locations come
-from the pipeline environment. `audit.py` inspects saved evidence independently.
+| Environment | AP-CEM | Final-goal CEM | Paper AP-CEM |
+| --- | ---: | ---: | ---: |
+| TwoRoom | 58/128 | 2/128 | 60/128 |
+| PushT | 88/128 | 4/128 | 89/128 |
+| Reacher | 100/128 | 32/128 | 97/128 |
+| OGBench Cube | 60/128 | 9/128 | 60/128 |
 
-These cases use recorded goals 100-150 actions ahead. The
-[completed baseline](../baseline_reproduction/README.md) used nearby goals and
-is a separate experiment. No results are claimed here until execution and the
-evidence audit are complete.
+All four AP rates meet the declared practical tolerance of no more than
+10 percentage points below publication. Agreement on this fixed panel does not
+establish statistical equivalence or independent training-seed replication.
+
+Read the [private dataset](https://huggingface.co/datasets/Sachioster/LeWMExp1_AP_Reproduction),
+its [environment galleries](https://huggingface.co/datasets/Sachioster/LeWMExp1_AP_Reproduction/blob/main/reports/ap-reproduction-20261105/README.md),
+or the local [Odyssey PDF](../../theOdessy/reproduction.pdf).
+
+Both arms use the same starting state, supplied goal, optimizer seed, frozen
+weights, CEM settings and action budget. AP selects intermediate targets from the
+authors' memory; the control plans toward the final goal. The supplied goals are
+**100-150 recorded actions ahead**. Interpretation is limited to these original
+fixed queries. Full canonical-task completion and safety require separate tests.
+The [nearby-goal baseline](../baseline_reproduction/README.md) remains a separate
+historical experiment, so its success rates are not a matched AP comparison.
+
+Eight ghost comparisons show the first AP success and first AP failure by original
+query order in each completed environment. Each pairs AP with its control from the
+same query. The videos blend saved observations 50/50 and show recorded paths and
+executed actions. Labels distinguish the action timeline, observation time and
+stopping point; frames are held after an arm stops. The final saved image can
+precede the scored final state. No simulation or model evaluation was rerun to
+create this media.
+
+The evidence is available separately from the presentation:
+
+- [Scientific audit](evidence/final-audit.json): outcomes, uncertainty, paired
+  comparisons, initial successes and engagement for all 1,024 cases.
+- [Complete accounting](evidence/final-accounting.json): 183,765 scientific actions,
+  engineering and cache work, and preserved failed-run history.
+- [Source and gate verification](evidence/source-gate-verification.json), including
+  [official source hashes](evidence/official-source-verification.json): pinned
+  code, assets, engineering gates and verified backups for all 35 runs.
+- [Paired-media provenance](evidence/paired-media-provenance.json): identical
+  starting conditions and seeds, source hashes and frame indices for all 512 pairs.
+
+The [frozen protocol](protocol.md) and [asset pins](assets.json) document the method.
+The [recording correction](evidence/recording-correction-validation.json) preserved
+14 completed PushT cases and continued only untouched query indices; its interrupted
+batch remains in the accounting. This completed protocol authorizes no further runs.
+
+AP supplies a matched long-range reference for future adapters. Testing safe
+completion still needs explicit hazards, engagement measures and comparisons with
+equal budgets on held-out cases. These results make no claim about evolutionary
+optimizer superiority.

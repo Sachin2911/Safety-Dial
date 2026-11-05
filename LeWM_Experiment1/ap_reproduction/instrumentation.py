@@ -15,6 +15,40 @@ from common import check_deadline, publish, serial
 from run_io import publish_artifact
 
 
+def compress_closed_journal(source, destination):
+    """Preserve exact closed journal bytes in gzip and verify a fresh decompression."""
+    source, destination = Path(source), Path(destination)
+    before = source.stat()
+    original_hash, original_bytes = hashlib.sha256(), 0
+    with source.open("rb") as incoming, destination.open("xb") as output:
+        with gzip.GzipFile(filename="", mode="wb", fileobj=output,
+                           compresslevel=3, mtime=0) as compressed:
+            for block in iter(lambda: incoming.read(1024 * 1024), b""):
+                original_hash.update(block)
+                original_bytes += len(block)
+                compressed.write(block)
+    after = source.stat()
+    if (before.st_size, before.st_mtime_ns, before.st_ino) != (
+            after.st_size, after.st_mtime_ns, after.st_ino) or original_bytes != before.st_size:
+        raise RuntimeError("Closed journal changed while compressing")
+    restored_hash, restored_bytes = hashlib.sha256(), 0
+    with gzip.open(destination, "rb") as restored:
+        for block in iter(lambda: restored.read(1024 * 1024), b""):
+            restored_hash.update(block)
+            restored_bytes += len(block)
+            if restored_bytes > original_bytes:
+                raise RuntimeError("Decompressed journal exceeds its original size")
+    if restored_bytes != original_bytes or restored_hash.digest() != original_hash.digest():
+        raise RuntimeError("Journal compression round-trip differs from original bytes")
+    with destination.open("rb") as compressed:
+        compressed_hash = hashlib.file_digest(compressed, "sha256").hexdigest()
+    return {"encoding": "gzip", "compression_level": 3, "original_filename": source.name,
+            "original_bytes": original_bytes, "original_sha256": original_hash.hexdigest(),
+            "compressed_bytes": destination.stat().st_size, "compressed_sha256": compressed_hash,
+            "verification": "Fresh decompression matched original byte count and SHA-256",
+            "raw_retention": "Original closed file remains in the run's excluded .control scratch area"}
+
+
 class Observer:
     def __init__(self, config, task):
         self.config, self.task = config, task
@@ -271,12 +305,14 @@ class Recorder:
         try:
             self.event({"event": "close", "counts": self.counts})
             self.journal.close()
+            journal = self.path.with_suffix(".jsonl.gz")
+            trace["journal"] = {"path": f"metrics/journals/{self.case}.jsonl.gz",
+                                **compress_closed_journal(self.path.with_suffix(".jsonl"), journal)}
             compressed = self.path.with_suffix(".json.gz")
             with gzip.open(compressed, "wt") as stream:
                 json.dump(trace, stream, allow_nan=False)
             publish_artifact(f"metrics/trajectories/{self.case}.json.gz", source=compressed)
-            publish_artifact(f"metrics/journals/{self.case}.jsonl",
-                             source=self.path.with_suffix(".jsonl"))
+            publish_artifact(trace["journal"]["path"], source=journal)
             if self.video and failure is None:
                 publish_artifact(f"artifacts/videos/{self.case}.mp4",
                                  source=self.path.with_suffix(".mp4"))

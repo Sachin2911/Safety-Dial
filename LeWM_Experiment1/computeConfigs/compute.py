@@ -33,7 +33,9 @@ from compute_common import (
     read_json,
     redact,
     reject_secrets,
+    relative_path,
     require_secret,
+    safe_path,
     valid_id,
     validate_storage,
 )
@@ -46,6 +48,19 @@ WORKER_FILES = ("compute_common.py", "run_io.py", "hf_store.py", "remote_worker.
 STATE_DIR = HERE / ".state"
 SOURCE_SUFFIXES = {".py", ".sh", ".json", ".yaml", ".yml", ".toml", ".md", ".txt", ".csv"}
 EXCLUDED_PARTS = {".git", ".state", "data", "cache", "checkpoints", "outputs", "runs", "wandb"}
+
+
+def session_state_dir(name=None):
+    """Keep the original default state and each explicitly named rental separate."""
+    if name is None:
+        return STATE_DIR
+    name = valid_id(name)
+    parent = STATE_DIR / "named"
+    target = parent / name
+    if parent.is_symlink() or target.is_symlink() or not target.resolve().is_relative_to(
+            STATE_DIR.resolve() / "named"):
+        raise ComputeError("Named session state must not alias another directory")
+    return target
 
 
 def emit(value):
@@ -132,21 +147,49 @@ def endpoints(instance):
     return result
 
 
-def bundle_source(source, secrets, limit):
+def bundle_source(source, secrets, limit, *, manifest=None):
     source = Path(source).resolve()
     if not source.is_dir() or not source.is_relative_to(PROJECT):
         raise ComputeError("--source must be a directory inside this repository")
     relative = source.relative_to(PROJECT).as_posix()
-    result = subprocess.run(
-        ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", relative],
-        cwd=PROJECT,
-        stdout=subprocess.PIPE,
-        check=True,
-    )
+    if manifest is None:
+        result = subprocess.run(
+            ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", relative],
+            cwd=PROJECT,
+            stdout=subprocess.PIPE,
+            check=True,
+        )
+        paths = [PROJECT / item for item in sorted(set(result.stdout.decode().split("\0")) - {""})]
+    else:
+        if not isinstance(manifest, dict) or manifest.get("path") != relative:
+            raise ComputeError("Source manifest path differs from --source")
+        expected = manifest.get("files")
+        if not isinstance(expected, dict) or not expected:
+            raise ComputeError("Source manifest must list nonempty file hashes")
+        for name, digest in expected.items():
+            local = relative_path(name)
+            if set(local.parts) & EXCLUDED_PARTS or local.suffix not in SOURCE_SUFFIXES:
+                raise ComputeError("Source manifest contains an excluded file")
+            if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest):
+                raise ComputeError("Source manifest contains an invalid file hash")
+            path = safe_path(source, name)
+            if not path.is_file():
+                raise ComputeError("Source manifest file is missing or not regular: " + name)
+        actual = set()
+        for path in source.rglob("*"):
+            local = path.relative_to(source)
+            if (set(local.parts) & EXCLUDED_PARTS or any(p.startswith(".") for p in local.parts)
+                    or path.suffix not in SOURCE_SUFFIXES):
+                continue
+            safe_path(source, local.as_posix())
+            if path.is_file():
+                actual.add(local.as_posix())
+        if actual != set(expected):
+            raise ComputeError("Eligible source files differ from the explicit manifest")
+        paths = [safe_path(source, name) for name in sorted(expected)]
     output, total, included = io.BytesIO(), 0, []
     with tarfile.open(fileobj=output, mode="w:gz") as archive:
-        for item in sorted(set(result.stdout.decode().split("\0")) - {""}):
-            path = PROJECT / item
+        for path in paths:
             local = path.relative_to(source)
             if (
                 set(local.parts) & EXCLUDED_PARTS
@@ -159,6 +202,8 @@ def bundle_source(source, secrets, limit):
             if not path.is_file():
                 continue
             data = path.read_bytes()
+            if manifest is not None and hashlib.sha256(data).hexdigest() != expected[local.as_posix()]:
+                raise ComputeError("Source file differs from its manifest hash: " + local.as_posix())
             reject_secrets(data, secrets.values())
             total += len(data)
             if total > limit:
@@ -169,6 +214,8 @@ def bundle_source(source, secrets, limit):
             info.size, info.mtime, info.mode = len(data), 0, path.stat().st_mode & 0o755
             archive.addfile(info, io.BytesIO(data))
             included.append(local.as_posix())
+    if manifest is not None and set(included) != set(expected):
+        raise ComputeError("Source files changed while packaging the explicit manifest")
     if not included:
         raise ComputeError("No deployable source files found")
     return output.getvalue(), included
@@ -198,6 +245,72 @@ fd,tmp=tempfile.mkstemp(dir=control)
 with os.fdopen(fd,'w') as stream: json.dump(request['state'],stream)
 os.replace(tmp,session)
 print(json.dumps({'deployed':True}))
+"""
+
+
+REFRESH_WORKERS = r"""
+import base64, json, os, pathlib, shutil, sys, tempfile
+request=json.load(sys.stdin)
+root=pathlib.Path('/workspace/LeWM_Experiment1')
+control=root/'.control'
+old_tools=pathlib.Path(request['refresh']['previous_remote_tools'])
+if old_tools.parent != control/'tools' or not old_tools.is_dir():
+    raise RuntimeError('Unknown previous worker bundle')
+sys.path.insert(0,str(old_tools))
+from compute_common import atomic_json, fingerprint, locked, read_json
+from remote_worker import all_status
+with locked(control/'launch.lock'):
+    previous=read_json(control/'session.json')
+    state=request['state']
+    for key in ('session_id','instance_id','storage'):
+        if previous.get(key)!=state.get(key):
+            raise RuntimeError('Worker refresh would change session identity or storage')
+    refresh=request['refresh']
+    if previous.get('remote_tools') not in (str(old_tools),state['remote_tools']):
+        raise RuntimeError('Remote worker version changed unexpectedly')
+    rows=all_status(root)
+    if {row['run_id'] for row in rows} != set(state['runs']):
+        raise RuntimeError('Worker refresh cannot account for every submitted run')
+    if any(row['supervisor_alive'] or row['job_alive'] or not row['ready_to_destroy']
+           or not row.get('upload',{}).get('verified') for row in rows):
+        raise RuntimeError('Worker refresh requires idle jobs and verified backups')
+    files=request['files']
+    if set(files)!={'compute_common.py','run_io.py','hf_store.py','remote_worker.py'}:
+        raise RuntimeError('Unexpected worker bundle contents')
+    bundle_hash=fingerprint(files)
+    target=control/'tools'/bundle_hash
+    if str(target)!=state['remote_tools'] or str(target)!=refresh['remote_tools']:
+        raise RuntimeError('Worker bundle hash differs from the requested version')
+    decoded={name:base64.b64decode(value,validate=True) for name,value in files.items()}
+    for name,data in decoded.items():
+        compile(data,name,'exec')
+    receipt_path=control/'worker-refreshes'/refresh['id']
+    receipt_path=receipt_path.with_suffix('.json')
+    receipt=read_json(receipt_path)
+    if receipt:
+        if receipt['applied_state']!=state or receipt['refresh']!=refresh:
+            raise RuntimeError('Existing worker refresh receipt differs')
+    else:
+        receipt={'refresh':refresh,'previous_session':previous,'applied_state':state,
+                 'verified_runs':[{key:row['upload'].get(key) for key in
+                                  ('revision','manifest_sha256')} | {'run_id':row['run_id']}
+                                  for row in rows]}
+        atomic_json(receipt_path,receipt)
+    if target.exists():
+        for name,data in decoded.items():
+            path=target/name
+            if not path.is_file() or path.read_bytes()!=data:
+                raise RuntimeError('Existing versioned worker bytes differ')
+    else:
+        stage=pathlib.Path(tempfile.mkdtemp(prefix='.refresh-',dir=target.parent))
+        try:
+            for name,data in decoded.items(): (stage/name).write_bytes(data)
+            os.rename(stage,target)
+        finally:
+            shutil.rmtree(stage,ignore_errors=True)
+    atomic_json(control/'session.json',state)
+    print(json.dumps({'refreshed':True,'refresh':refresh,
+                      'remote_receipt':str(receipt_path),'runs_verified':len(rows)}))
 """
 
 
@@ -577,10 +690,13 @@ class Controller:
             "provider_status": None if row is None else row.get("actual_status"),
             "deadline_epoch": state["deadline_epoch"],
             "budget_usd": state["budget_usd"],
-            "planned_session_usd": state["offer"]["estimated_session_usd"],
+            "planned_session_usd": state.get("estimated_session_usd", state["offer"]["estimated_session_usd"]),
+            "upload_gb": state["upload_gb"],
             "runs": [],
             "ready_to_destroy": False,
         }
+        if state.get("pending_worker_refresh"):
+            report["pending_worker_refresh"] = state["pending_worker_refresh"]
         if row:
             elapsed = max(0, time.time() - (row.get("start_date") or state["created_epoch"]))
             report.update(
@@ -601,10 +717,118 @@ class Controller:
             )
         return report
 
+    def extend_transfer(self, upload_gb):
+        return self._set_transfer_limit(upload_gb, allow_decrease=False)
+
+    def set_transfer_limit(self, upload_gb):
+        return self._set_transfer_limit(upload_gb, allow_decrease=True)
+
+    def _set_transfer_limit(self, upload_gb, *, allow_decrease):
+        state = self.state()
+        requested = positive(upload_gb)
+        previous = positive(state["upload_gb"])
+        if state["phase"] != "ready" or state.get("pending_worker_refresh"):
+            raise ComputeError("Transfer extension requires a ready session with no pending refresh")
+        if requested < previous and not allow_decrease:
+            raise ComputeError("extend-transfer cannot reduce the existing upload allowance")
+        if requested == previous:
+            return {"changed": False, "upload_gb": previous, "reason": "Already current"}
+        if time.time() >= state["deadline_epoch"]:
+            raise ComputeError("Session deadline has passed; transfer extension does not extend time")
+        history = state.get("transfer_extensions", [])
+        original = history[0]["previous_upload_gb"] if history else previous
+        outgoing = nonnegative(state["offer"]["upload_usd_per_gb"])
+        incoming = nonnegative(state["offer"]["download_usd_per_gb"])
+        estimate = nonnegative(state["offer"]["estimated_session_usd"]) + (requested - original) * (outgoing + incoming)
+        if estimate > state["budget_usd"]:
+            raise ComputeError("Revised transfer estimate exceeds the unchanged session budget")
+        provider = self.instance(state)
+        if provider is None or provider.get("actual_status") != "running":
+            raise ComputeError("The exact saved rental must still be running")
+        rows = self.worker(state, "status", provider_instance=provider)["runs"]
+        if {row["run_id"] for row in rows} != set(state["runs"]):
+            raise ComputeError("Transfer extension cannot account for every submitted run")
+        if any(row["supervisor_alive"] or row["job_alive"] or not row["ready_to_destroy"]
+               or not row.get("upload", {}).get("verified") for row in rows):
+            raise ComputeError("Transfer extension requires idle jobs and verified backups")
+        for row in rows:
+            if not re.fullmatch(r"[0-9a-f]{40}", row["upload"].get("revision", "")) or not re.fullmatch(
+                    r"[0-9a-f]{64}", row["upload"].get("manifest_sha256", "")):
+                raise ComputeError("Every prior backup needs its pinned revision and manifest hash")
+        used = sum(nonnegative(row["upload"].get("bytes", 0)) for row in rows)
+        if used >= requested * 1e9:
+            raise ComputeError("Requested transfer allowance must exceed recorded artifacts")
+        extension = {
+            "id": uuid.uuid4().hex, "recorded_epoch": time.time(),
+            "operation": "set-transfer-limit" if allow_decrease else "extend-transfer",
+            "session_id": state["session_id"], "instance_id": state["instance_id"],
+            "previous_upload_gb": previous, "upload_gb": requested,
+            "additional_outgoing_usd": (requested - previous) * outgoing,
+            "additional_readback_usd": (requested - previous) * incoming,
+            "estimated_session_usd": round(estimate, 6), "budget_usd": state["budget_usd"],
+            "deadline_epoch": state["deadline_epoch"], "recorded_artifact_bytes": int(used),
+            "quote_basis": "Original saved offer rates; one outgoing upload and one incoming full read-back",
+            "scope": "Controller allowance for future run artifacts only; existing run caps remain unchanged",
+        }
+        candidate = dict(state, upload_gb=requested, estimated_session_usd=round(estimate, 6),
+                         transfer_extensions=[*history, extension])
+        receipt_path = self.state_dir / "transfer-extensions" / (extension["id"] + ".json")
+        receipt = {"phase": "prepared", "previous_state": state, "extension": extension,
+                   "verified_runs": [{"run_id": row["run_id"], "upload": row["upload"]} for row in rows]}
+        atomic_json(receipt_path, receipt)
+        self.save(candidate)
+        atomic_json(receipt_path, dict(receipt, phase="applied"))
+        return {"changed": True, **extension, "receipt": str(receipt_path), "remote_mutation": False}
+
+    def refresh_workers(self):
+        state = self.state()
+        if state["phase"] != "ready":
+            raise ComputeError("Only a ready session can refresh its workers")
+        files = {name: base64.b64encode((SCRIPTS / name).read_bytes()).decode()
+                 for name in WORKER_FILES}
+        target = self.policy["remote_root"] + "/.control/tools/" + fingerprint(files)
+        pending = state.get("pending_worker_refresh")
+        if pending and pending["remote_tools"] != target:
+            raise ComputeError("Pending refresh has different worker bytes; restore them before retrying")
+        if not pending and state["remote_tools"] == target:
+            return {"refreshed": False, "remote_tools": target, "reason": "Already current"}
+        rows = self.worker(state, "status")["runs"]
+        if {row["run_id"] for row in rows} != set(state["runs"]):
+            raise ComputeError("Worker refresh cannot account for every submitted run")
+        if any(row["supervisor_alive"] or row["job_alive"] or not row["ready_to_destroy"]
+               or not row.get("upload", {}).get("verified") for row in rows):
+            raise ComputeError("Worker refresh requires idle jobs and verified backups")
+        if not pending:
+            pending = {"id": uuid.uuid4().hex, "previous_remote_tools": state["remote_tools"],
+                       "remote_tools": target, "requested_epoch": time.time()}
+            atomic_json(self.state_dir / "worker-refreshes" / (pending["id"] + ".json"),
+                        {"previous_state": state, "refresh": pending})
+            state = dict(state, pending_worker_refresh=pending)
+            self.save(state)  # A lost SSH reply must block launches until this refresh is resolved.
+        candidate = {key: value for key, value in state.items() if key != "pending_worker_refresh"}
+        candidate["remote_tools"] = target
+        candidate["worker_refresh_history"] = [*state.get("worker_refresh_history", []), pending]
+        endpoint = self.connected(state)
+        reply = self.ssh_call(state, endpoint, [self.policy["python"], "-c", REFRESH_WORKERS],
+                              {"state": candidate, "files": files, "refresh": pending}, timeout=90)
+        result = json.loads(reply)
+        if result.get("refreshed") is not True or result.get("refresh") != pending:
+            raise ComputeError("Worker refresh confirmation differs; retry refresh-workers")
+        current = self.worker(candidate, "status")["runs"]
+        if current != rows:
+            raise ComputeError("Run status changed during refresh; inspect status before retrying")
+        receipt_path = self.state_dir / "worker-refreshes" / (pending["id"] + ".json")
+        receipt = read_json(receipt_path)
+        atomic_json(receipt_path, dict(receipt, confirmation=result))
+        self.save(candidate)
+        return result
+
     def run(self, args):
         state = self.state()
         if state["phase"] != "ready":
             raise ComputeError("Instance must pass readiness checks before a run")
+        if state.get("pending_worker_refresh"):
+            raise ComputeError("Resolve the pending worker refresh with refresh-workers before a run")
         remaining = (
             state["deadline_epoch"] - time.time() - self.policy["final_sync_reserve_seconds"]
         )
@@ -624,9 +848,18 @@ class Controller:
         if not isinstance(config, dict) or not protocol.strip():
             raise ComputeError("Use a JSON object config and a nonempty prospective protocol")
         reject_secrets(json.dumps([command, protocol, config]).encode(), self.secrets.values())
-        source, included = bundle_source(
-            args.source, self.secrets, self.policy["source_limit_bytes"]
-        )
+        manifest, manifest_sha256 = None, None
+        if getattr(args, "source_manifest", None):
+            manifest_bytes = Path(args.source_manifest).read_bytes()
+            reject_secrets(manifest_bytes, self.secrets.values())
+            manifest = json.loads(manifest_bytes)
+            if not isinstance(manifest, dict) or any(manifest.get(key) != state.get(key)
+                                                     for key in ("instance_id", "session_id")):
+                raise ComputeError("Source manifest belongs to a different instance or session")
+            manifest_sha256 = hashlib.sha256(manifest_bytes).hexdigest()
+        options = {} if manifest is None else {"manifest": manifest}
+        source, included = bundle_source(args.source, self.secrets,
+                                         self.policy["source_limit_bytes"], **options)
         prior = self.worker(state, "status")["runs"]
         if any(run["supervisor_alive"] or run["job_alive"] for run in prior):
             raise ComputeError("A job is already active on this instance")
@@ -680,7 +913,10 @@ class Controller:
                 )
             },
             "readiness": state.get("readiness"),
+            "worker_tools": state["remote_tools"],
         }
+        if manifest is not None:
+            spec.update(source_manifest=manifest, source_manifest_sha256=manifest_sha256)
         if run_id in state["runs"]:
             raise ComputeError(
                 "Run ID has already been submitted; use status, sync, or a new run ID"
@@ -774,6 +1010,8 @@ class Controller:
 
 def parser():
     result = argparse.ArgumentParser(description=__doc__)
+    result.add_argument("--session", metavar="NAME",
+                        help="Use isolated .state/named/NAME; omit for the original default rental")
     commands = result.add_subparsers(dest="action", required=True)
     for name in ("search", "up"):
         command = commands.add_parser(name)
@@ -798,8 +1036,14 @@ def parser():
                 "--storage-profile", choices=tuple(STORAGE_REPOSITORIES), default="baseline",
                 help="Private output dataset, pinned to this session (default: baseline)",
             )
-    for name in ("status", "recover", "destroy"):
+    for name in ("status", "recover", "destroy", "refresh-workers"):
         commands.add_parser(name)
+    for name, help_text in (
+        ("extend-transfer", "Increase future output allowance at an idle verified boundary"),
+        ("set-transfer-limit", "Reallocate future output allowance above verified usage at an idle boundary"),
+    ):
+        extension = commands.add_parser(name, help=help_text)
+        extension.add_argument("--upload-gb", required=True, type=positive)
     ssh = commands.add_parser("ssh", help="Interactive SSH or a quoted diagnostic command")
     ssh.add_argument("command", nargs=argparse.REMAINDER)
     for name in ("logs", "sync", "stop"):
@@ -809,6 +1053,7 @@ def parser():
             command.add_argument("--lines", type=int, default=100)
     run = commands.add_parser("run")
     run.add_argument("--source", required=True)
+    run.add_argument("--source-manifest", help="Explicit hash-frozen snapshot manifest bound to this rental")
     run.add_argument("--config", required=True)
     run.add_argument("--protocol", required=True)
     run.add_argument("--seed", required=True, type=int, action="append")
@@ -821,7 +1066,7 @@ def parser():
 def main():
     args = parser().parse_args()
     try:
-        controller = Controller()
+        controller = Controller(state_dir=session_state_dir(args.session))
         if args.action == "search":
             emit(
                 {
@@ -851,6 +1096,12 @@ def main():
                     emit(controller.up(args))
                 elif args.action == "recover":
                     emit(controller.recover())
+                elif args.action == "refresh-workers":
+                    emit(controller.refresh_workers())
+                elif args.action == "extend-transfer":
+                    emit(controller.extend_transfer(args.upload_gb))
+                elif args.action == "set-transfer-limit":
+                    emit(controller.set_transfer_limit(args.upload_gb))
                 elif args.action == "run":
                     emit(controller.run(args))
                 elif args.action == "sync":

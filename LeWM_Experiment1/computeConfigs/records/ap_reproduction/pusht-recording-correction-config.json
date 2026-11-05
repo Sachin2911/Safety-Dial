@@ -1,0 +1,83 @@
+{
+  "study": "lewm-exp1-ap-reproduction-20261105",
+  "ap_revision": "984327424ca7a2e52c75a8279197750d9d0b7c8e",
+  "ap_root": "/opt/ap-reference/code/ap",
+  "asset_root": "/workspace/LeWM_Experiment1/assets/ap_reproduction",
+  "reacher_overlay": "/workspace/LeWM_Experiment1/runtime/ap-reacher-mujoco310",
+  "conditions": [
+    "clean"
+  ],
+  "arms": [
+    "gaussian_final",
+    "gaussian_observed"
+  ],
+  "cache_batch_size": 128,
+  "cache_attempt": 0,
+  "engineering_attempt": 1,
+  "max_seconds": 21600,
+  "budgets": {
+    "scientific_resets": 1024,
+    "scientific_policy_actions": 238080,
+    "scientific_predictor_calls": 1500000,
+    "scientific_predictor_candidate_blocks": 450000000,
+    "engineering_resets": 32,
+    "engineering_policy_actions": 800,
+    "engineering_predictor_calls": 496,
+    "engineering_predictor_candidate_blocks": 144032,
+    "cache_encoder_images": 16000000
+  },
+  "task_specs": {
+    "tworoom": {
+      "model_repo": "quentinll/lewm-tworooms",
+      "model_revision": "77adaae0bc31deab21c93740d1f8bb947cd0bdec",
+      "weights_bytes": 72290849,
+      "weights_sha256": "566f223624ea4bfb39dbfe6ae731198dd6ea73b7b8919fed6b1ecafca810f7dd",
+      "dataset_repo": "quentinll/lewm-tworooms",
+      "dataset_revision": "6903a2de048b13819d812da0b4dd661290bc01e4",
+      "archive": "tworoom.tar.zst",
+      "archive_bytes": 3425937909,
+      "archive_sha256": "494b1a02f0765cd9a0d9daf1786c419ced1009977fc45d01e3158932f8d080ca",
+      "dataset_name": "tworoom",
+      "member": "tworoom.h5"
+    },
+    "reacher": {
+      "model_repo": "quentinll/lewm-reacher",
+      "model_revision": "62adae4b71dc474ddf8f794c476ebfe737a743ca",
+      "weights_bytes": 72290849,
+      "weights_sha256": "eb70b1fd5409f8f81875d62f5ee5a20dd220a3128a477de66b5760f475f0f469",
+      "dataset_repo": "quentinll/lewm-reacher",
+      "dataset_revision": "e70a080d0d04c6072123c9ebd343acf7fff28dbf",
+      "archive": "reacher.tar.zst",
+      "archive_bytes": 23750614946,
+      "archive_sha256": "4ff2385e49712caa89f21b8e0a246e2614b621d3f22cf2d1224d845e879a1cc2",
+      "dataset_name": "dmc/reacher_random",
+      "member": null
+    },
+    "pusht": {
+      "model_repo": "quentinll/lewm-pusht",
+      "model_revision": "22b330c28c27ead4bfd1888615af1340e3fe9052",
+      "weights_bytes": 72290721,
+      "weights_sha256": "48938400ae3464c9680731287f583a9cb516f55a8ec64ea13a91be47fb15b607",
+      "dataset_repo": "quentinll/lewm-pusht",
+      "dataset_revision": "655cd446b9929369d7d406001da85c15d1457850",
+      "archive": "pusht_expert_train.h5.zst",
+      "archive_bytes": 13136247974,
+      "archive_sha256": "7cfbd6d90fa2f27876379a5ff169715a36ed82edbda64f9e5b5bfa34d212f318",
+      "dataset_name": "pusht_expert_train",
+      "member": null
+    },
+    "cube": {
+      "model_repo": "quentinll/lewm-cube",
+      "model_revision": "b0747c5002e86d2ce8f3cd8178004b97524c587d",
+      "weights_bytes": 72291425,
+      "weights_sha256": "2839a907362f403f9136383016e91774373a295d958ae75121791f22a9fddf89",
+      "dataset_repo": "quentinll/lewm-cube",
+      "dataset_revision": "02a19a67a0dc8c9d6215f89c19e0a597691e152a",
+      "archive": "cube_single_expert.tar.zst",
+      "archive_bytes": 46184624478,
+      "archive_sha256": "3725d6a01abd492164441ef0a27e588f52b94a118fab56b96987b1a34a6c2600",
+      "dataset_name": "ogbench/cube_single_expert",
+      "member": "cube_single_expert.h5"
+    }
+  }
+}

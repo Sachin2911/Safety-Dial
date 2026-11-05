@@ -64,6 +64,58 @@ pair: 1,024 scientific cases, at most 238,080 policy actions. Separate bounded
 engineering and cache preparation are recorded there. The initial single-4090
 rental has a six-hour work limit and $10 estimated budget. Shutdown remains
 manual. This is a new scoped authorization; completed SafeLeWM studies stay closed.
+Sachin subsequently explicitly approved deleting each downloaded public input
+HDF5 after its environment finishes and its results, videos and retrieval cache
+have verified backups. This releases temporary rented-host storage; retain the
+unique evidence, checkpoints and receipts. The authorization is recorded under
+`LeWM_Experiment1/computeConfigs/records/ap_reproduction/`.
+Sachin then approved increasing the output allowance from 5 GB to 8 GB to retain
+the original oversized PushT journals and finish verified backups. The $10 spending
+cap, six-hour work limit and all scientific budgets remain unchanged.
+Sachin subsequently authorized a second RTX 4090 to run Cube in parallel. The
+original host finishes PushT and Reacher. The second host has a two-hour work
+limit and $1.50 sub-budget within the shared $10 cap; output allowances are 6 GB
+and 2 GB, preserving 8 GB overall. Every environment keeps both paired planners
+on one host. The [host split](LeWM_Experiment1/computeConfigs/records/ap_reproduction/host-split-amendment.json)
+partitions the existing scientific, engineering and cache limits without adding
+cases or resetting the original ledger. Both shutdowns remain manual.
+
+The AP reproduction is now scientifically complete: **306/512 AP-CEM successes
+versus 47/512 matched final-goal CEM successes**, with 128 cases per arm in each
+environment. AP/control counts are TwoRoom 58/2, PushT 88/4, Reacher 100/32 and
+Cube 60/9. All four AP scores meet the declared practical tolerance. The
+[final audit](LeWM_Experiment1/ap_reproduction/evidence/final-audit.json),
+[accounting](LeWM_Experiment1/ap_reproduction/evidence/final-accounting.json) and
+[source verification](LeWM_Experiment1/ap_reproduction/evidence/source-gate-verification.json)
+pass for all 1,024 cases and 35 verified run backups. Scientific execution used
+183,765 policy actions; engineering used 20 resets and 198 actions. The original
+failed engineering attempt and the safely paused PushT batch remain recorded.
+No scientific case was repeated. All four completed public inputs were retired
+under Sachin's explicit authorization after verified evidence and cache backups.
+
+Sachin also requested same-start ghost comparison videos. Eight comparisons use
+paired original observations, recorded trajectories and executed actions, with
+matching environment seeds, optimizer seeds, initial states and goals. Their
+[paired provenance](LeWM_Experiment1/ap_reproduction/evidence/paired-media-provenance.json)
+covers all 512 pairs. Media editing adds zero simulator actions or model queries.
+The goals are supplied recorded targets 100 to 150 actions ahead. These results
+establish neither unrestricted canonical completion, safety nor an evolutionary
+advantage. This completed protocol authorizes no additional runs.
+
+Cube instance 59256965 was destroyed with Sachin's explicit approval; the
+[provider receipt](LeWM_Experiment1/computeConfigs/records/ap_reproduction/cube-rental-shutdown.json)
+confirms removal. Sachin subsequently approved destroying the original instance
+59238554. The wrapper rechecked all 27 verified backups and Vast confirmed removal;
+see the [primary shutdown receipt](LeWM_Experiment1/computeConfigs/records/ap_reproduction/primary-rental-shutdown.json).
+Both rentals are destroyed. The
+[private AP dataset](https://huggingface.co/datasets/Sachioster/LeWMExp1_AP_Reproduction)
+now contains the results, eight paired ghost comparisons, original clips and the
+two-page Odyssey overview. All 61 presentation files passed fresh download/hash
+verification and the original run tree is unchanged. The
+[publication receipt](LeWM_Experiment1/huggingface/records/ap_reproduction/publication-receipt.json)
+pins the final revision; the [closeout](LeWM_Experiment1/computeConfigs/records/ap_reproduction/closeout.json)
+indexes the verified evidence and both shutdowns. The reproduction and presentation
+work are complete.
 
 ## Completed baseline reproduction, 4 November
 

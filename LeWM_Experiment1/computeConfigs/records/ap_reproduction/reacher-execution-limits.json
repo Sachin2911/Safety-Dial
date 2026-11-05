@@ -1,0 +1,32 @@
+{
+  "schema": "lewm-ap-reacher-execution-limits-v1",
+  "frozen_utc": "2026-11-05T12:03:31.854343+00:00",
+  "instance_id": 59238554,
+  "session_id": "lewm-exp1-3f5a39762ff1",
+  "deadline_epoch": 1793891328.33411,
+  "configuration": "host-split-gpu1-config.json",
+  "preparation_max_seconds": 2400,
+  "cache_max_seconds": 1800,
+  "engineering_max_seconds": 600,
+  "scientific_shards": 4,
+  "scientific_cases_per_shard": 64,
+  "max_policy_actions_per_case": 300,
+  "actions_per_decision": 5,
+  "max_cem_decisions_per_shard": 3840,
+  "timeout_rule": {
+    "engineering_input": "Slower of the two existing numerical-smoke CEM planning timings from the first passed Reacher engineering gate",
+    "estimate_formula_seconds": "300 + 3840 * max(timing.seconds)",
+    "nonplanner_allowance_seconds": 300,
+    "select_seconds": [
+      1200,
+      1800
+    ],
+    "selection": "Smallest listed limit that covers the estimate; if neither fits, stop new launches for review. This is an operational estimate, not a runtime guarantee."
+  },
+  "invariants": [
+    "Original 128 queries, both arms, original shards 0..3 and native seeds remain unchanged",
+    "No scientific case replay, no additional engineering or model calls to estimate throughput",
+    "Existing session deadline and final backup reserve checked before every launch",
+    "No rental, budget extension or shutdown authorized by this execution record"
+  ]
+}

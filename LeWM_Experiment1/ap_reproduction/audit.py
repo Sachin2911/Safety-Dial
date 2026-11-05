@@ -13,6 +13,8 @@ import math
 from pathlib import Path
 import random
 
+from accounting import validate_boundary_pause
+
 
 TASKS = ("cube", "pusht", "reacher", "tworoom")
 ARMS = ("gaussian_final", "gaussian_observed")
@@ -152,11 +154,31 @@ def audit(run_roots: list[Path], protocol_path: Path) -> dict:
     totals = Counter()
     outcomes = defaultdict(dict)
     group_counts = defaultdict(Counter)
-    sources = []
+    sources, run_completion, boundary_pauses = [], [], []
     for root in run_roots:
         case_paths = sorted((root / "metrics/cases").glob("*.json"))
         if not case_paths:
             continue
+        boundary_pause = None
+        try:
+            boundary_pause = validate_boundary_pause(root)
+            if boundary_pause is not None:
+                boundary_pauses.append(boundary_pause)
+            run_account = read_json(root / "metrics/accounting.json")
+            run_result = read_json(root / "result.json")
+            finished_batch = (run_account.get("completed") is True
+                              and run_result.get("status") == "completed"
+                              and run_result.get("exit_code") == 0)
+            require(finished_batch or boundary_pause is not None,
+                    f"{root}: incomplete batch has no validated clean boundary pause")
+            require(run_account.get("completed_outcomes") == len(case_paths),
+                    f"{root}: saved case count differs from batch accounting")
+            run_completion.append({"root": str(root), "original_result": run_result,
+                                   "batch_completed": run_account.get("completed"),
+                                   "saved_cases": len(case_paths),
+                                   "validated_boundary_pause": boundary_pause is not None})
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            require(False, str(error))
         original_path = root / "artifacts/protocol/main.json"
         require(original_path.exists() and digest(original_path) == MAIN_SHA256,
                 f"{root}: original protocol is absent or changed")
@@ -352,6 +374,7 @@ def audit(run_roots: list[Path], protocol_path: Path) -> dict:
         "passed": not errors, "errors": errors, "missing_cases": missing,
         "scope": "four tasks, original 128 queries, clean starts, two target-matched CEM arms",
         "scientific_totals": dict(totals), "summary": summary,
+        "run_completion": run_completion, "validated_boundary_pauses": boundary_pauses,
         "practical_tolerance": {
             "criterion": "AP-CEM success rate no more than 10 percentage points below publication",
             "applies_to": "gaussian_observed; final-goal CEM is reported as a paired control",

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "authorization": "User requested merged ghost videos of the different variations starting from the same seed and state.",
+  "scope": "AP-CEM versus matched final-goal CEM in each of the four current AP reproduction environments.",
+  "selection": "First AP-CEM success and first AP-CEM failure by original query ordinal within each complete 128-query environment cohort; use the same original query for the counterpart planner.",
+  "planned_comparisons": 8,
+  "pair_checks": [
+    "same original identity and environment seed",
+    "same optimizer seed",
+    "same initial physical state and raw render hash",
+    "same fixed goal and goal image hash"
+  ],
+  "presentation": {
+    "size": [
+      1280,
+      960
+    ],
+    "fps": 2,
+    "main_view": "50/50 alpha blend of the two original decoded observation crops; no guessed segmentation or image-plane projection.",
+    "trajectory_panel": "Color-coded saved native-coordinate paths including the actual stopping state; Reacher is joint space and Cube is XYZ.",
+    "action_panel": "Last recorded executed action with its index, displayed on common per-channel scales; no action is implied at reset or after stop.",
+    "reference_views": "Small separate AP, final-goal CEM and fixed-goal images.",
+    "timeline": "Synchronize by executed-action number using recorded frame_steps; include the final true stopping action in the timeline.",
+    "stopped_arms": "Hold the last available original observation and label the stopping action and last observed action explicitly.",
+    "interpolation": "Do not synthesize intermediate simulator images or pretend the final saved observation is a terminal render."
+  },
+  "provenance": "Bind each derived output hash to both original MP4s, native case records and full saved trajectories, their pinned run revisions/manifests, generator hash, and pairing checks.",
+  "additional_simulator_actions": 0,
+  "additional_model_queries": 0,
+  "new_scientific_cases": 0,
+  "rental_authority": "No new rental, time extension or scientific budget. Existing manual shutdown rules remain."
+}

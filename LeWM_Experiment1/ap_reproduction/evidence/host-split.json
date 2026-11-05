@@ -1,0 +1,32 @@
+{
+  "schema": "lewm-ap-scientific-hosting-v1",
+  "status": "Authorized; second rental bound; fresh per-host engineering gates required before new scientific execution",
+  "amendment": "../../computeConfigs/records/ap_reproduction/host-split-amendment.json",
+  "scientific_scope": "Same four-task, 128-query, two-arm fixed cohort. Cube is wholly assigned to the second host; TwoRoom/PushT/Reacher remain on the first.",
+  "comparison_limit": "Within-task AP/control pairs share a host. Tasks across hosts are not hardware-matched timing comparisons.",
+  "prior_evidence": "Original completed and interrupted runs, including the PushT serialization boundary, retain their source, config and ledger bytes.",
+  "runtime": "Same pinned image/checkpoints/native AP source; Cube uses base MuJoCo3.12.0/DM-Control1.0.44, Reacher retains its existing3.10.0/1.0.43 overlay.",
+  "new_scientific_cases": 0,
+  "gated_source_files_changed": false,
+  "hosts": [
+    {
+      "partition": "gpu1_existing",
+      "instance_id": 59238554,
+      "session_id": "lewm-exp1-3f5a39762ff1",
+      "tasks": [
+        "tworoom",
+        "pusht",
+        "reacher"
+      ]
+    },
+    {
+      "partition": "gpu2_cube",
+      "instance_id": 59256965,
+      "session_id": "lewm-exp1-d88cfc7fb578",
+      "tasks": [
+        "cube"
+      ]
+    }
+  ],
+  "recording_source": "Cube starts from the separately reviewed gzip-journal recorder in an isolated source copy. Primary PushT source stays unchanged through completion; fresh Reacher/Cube gates bind the source used on each host."
+}

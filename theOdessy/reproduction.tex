@@ -12,9 +12,9 @@
 \definecolor{accent}{HTML}{23485B}
 \usepackage[colorlinks=true,urlcolor=accent,linkcolor=accent]{hyperref}
 \hypersetup{
-  pdftitle={LeWM checkpoint reproduction},
+  pdftitle={LeWM and AP checkpoint reproductions},
   pdfauthor={Sachin Mohan},
-  pdfsubject={Experiment 1: frozen checkpoint competence on nearby goals}
+  pdfsubject={Experiment 1: nearby-goal LeWM and longer-range Anchored Planning}
 }
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{8pt}
@@ -76,4 +76,63 @@ Experiment completed 4 November 2026. Summary revised 5 November 2026.\\
 \quad\textbar\quad
 \href{https://huggingface.co/datasets/Sachioster/LeWMExp1_Baseline_Reproduction}{Videos by environment}
 }
+
+\newpage
+{\small\sffamily\color{accent} theOdessy \quad / \quad Experiment 1}
+
+{\LARGE\bfseries AP reproduction}
+
+\textbf{AP completed 306/512 cases; matched final-goal CEM completed 47/512.}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\linewidth}{@{}l*{3}{>{\raggedleft\arraybackslash}X}@{}}
+\toprule
+\textbf{Environment} & \textbf{Our AP} & \textbf{Our CEM} & \textbf{Paper AP} \\
+\midrule
+TwoRoom & 58/128 & 2/128 & 60/128 \\
+PushT & 88/128 & 4/128 & 89/128 \\
+Reacher & 100/128 & 32/128 & 97/128 \\
+OGBench Cube & 60/128 & 9/128 & 60/128 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Each score covers 128 original cases. AP met our predeclared practical
+check in \textbf{4 of 4 environments}: no more than 10 percentage
+points below the paper. This is not proof of statistical equivalence.
+
+\textbf{What changed.} Anchored Planning (AP) retrieves nearby targets
+from recorded experience to guide the frozen world model toward a distant
+goal. Its matched control uses the same checkpoint and CEM optimizer,
+scoring plans directly against the final goal. No model was trained.
+
+\textbf{A longer-range test.} Goals lie 100 to 150 recorded actions ahead,
+compared with 25 in the earlier baseline; their temporal offset is supplied.
+The full comparison contains
+1,024 episodes. These are fixed recorded-goal tasks; they do not establish
+unrestricted task completion, safety or robustness across training seeds.
+The nearby-goal baseline is a separate, unpaired comparison.
+
+\vspace{4pt}
+\textbf{What this means for our testing}
+
+\begin{itemize}
+\setlength{\itemsep}{6pt}
+\item \textbf{Use AP as the longer-range reference.} Test adapters against
+AP and matched final-goal CEM, keeping cases, available information and
+interaction budgets comparable.
+\item \textbf{Test safety explicitly.} Add hazards and measure safe
+completion, violations and unfinished episodes on held-out cases.
+Task-success gains alone establish neither safety nor an evolutionary advantage.
+\end{itemize}
+
+\vfill
+{\footnotesize
+Completed 5 November 2026. All 1,024 cases independently audited.\\
+\href{https://huggingface.co/datasets/Sachioster/LeWMExp1_AP_Reproduction/blob/main/reports/ap-reproduction-20261105/README.md}{Full results, uncertainty and runtime caveats}
+\quad\textbar\quad
+\href{https://huggingface.co/datasets/Sachioster/LeWMExp1_AP_Reproduction}{Matched ghost comparisons}
+}
+
 \end{document}

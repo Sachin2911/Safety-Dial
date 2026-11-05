@@ -1,6 +1,7 @@
 """Small I/O helpers for the separately authorized, rented-host AP reproduction."""
 
 from contextlib import contextmanager
+import base64
 import fcntl
 import hashlib
 import json
@@ -10,12 +11,14 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+import zlib
 
 from run_io import publish_artifact
 
 AP_REVISION = "984327424ca7a2e52c75a8279197750d9d0b7c8e"
 PROTOCOL_SHA256 = "3243f4ec7c55d349a3f7a73b093664ca7ae695d369f6f718824b54ea47b894b6"
 TASKS = ("tworoom", "reacher", "pusht", "cube")
+IMAGE_TAG = "__lewm_rgb_image__"
 
 
 def read(path):
@@ -27,11 +30,58 @@ def sha(path):
         return hashlib.file_digest(handle, "sha256").hexdigest()
 
 
+def encode_rgb_bytes(raw, shape):
+    """Losslessly pack an RGB uint8 image without changing any environment object."""
+    shape = list(shape)
+    if (len(shape) != 3 or any(type(size) is not int or size <= 0 for size in shape)
+            or shape[2] != 3 or not isinstance(raw, bytes) or len(raw) != math.prod(shape)):
+        raise ValueError("Expected exact C-order uint8 RGB bytes and shape")
+    return {IMAGE_TAG: 1, "encoding": "zlib-base64", "shape": shape, "dtype": "|u1",
+            "order": "C", "byte_count": len(raw), "sha256": hashlib.sha256(raw).hexdigest(),
+            "data": base64.b64encode(zlib.compress(raw, level=1)).decode("ascii")}
+
+
+def decode_rgb_bytes(value, *, max_bytes=64 * 1024 * 1024):
+    """Decode saved RGB bytes, checking shape, dtype, exact length and SHA-256.
+
+    This standard-library decoder requires no model, simulator, or NumPy import.
+    Dimensions remain in value['shape']; bytes are stored in C (HWC) order.
+    """
+    keys = {IMAGE_TAG, "encoding", "shape", "dtype", "order", "byte_count", "sha256", "data"}
+    if not isinstance(value, dict) or set(value) != keys or type(value[IMAGE_TAG]) is not int:
+        raise ValueError("Invalid saved RGB image record")
+    if (value[IMAGE_TAG] != 1 or value["encoding"] != "zlib-base64" or value["dtype"] != "|u1"
+            or value["order"] != "C"):
+        raise ValueError("Unsupported saved RGB image encoding")
+    shape = value["shape"]
+    if (not isinstance(shape, list) or len(shape) != 3
+            or any(type(size) is not int or size <= 0 for size in shape) or shape[2] != 3):
+        raise ValueError("Invalid saved RGB image shape")
+    expected = math.prod(shape)
+    if (type(value["byte_count"]) is not int or value["byte_count"] != expected
+            or not 0 < expected <= max_bytes):
+        raise ValueError("Saved RGB image byte count differs or exceeds the decoder bound")
+    encoded = value["data"]
+    if not isinstance(encoded, str) or len(encoded) > 2 * max_bytes:
+        raise ValueError("Saved RGB payload exceeds the decoder bound")
+    compressed = base64.b64decode(encoded, validate=True)
+    decoder = zlib.decompressobj()
+    raw = decoder.decompress(compressed, expected + 1)
+    if (len(raw) != expected or not decoder.eof or decoder.unused_data or decoder.unconsumed_tail):
+        raise ValueError("Saved RGB payload length or compressed stream differs")
+    if hashlib.sha256(raw).hexdigest() != value["sha256"]:
+        raise ValueError("Saved RGB image checksum differs")
+    return raw
+
+
 def serial(value):
     if isinstance(value, dict):
         return {str(k): serial(v) for k, v in value.items()}
     if isinstance(value, (list, tuple)):
         return [serial(v) for v in value]
+    if (getattr(value, "ndim", None) == 3 and str(getattr(value, "dtype", "")) == "uint8"
+            and tuple(value.shape)[-1] == 3):
+        return encode_rgb_bytes(value.tobytes(order="C"), list(value.shape))
     if hasattr(value, "tolist"):
         return serial(value.tolist())
     if isinstance(value, float) and not math.isfinite(value):

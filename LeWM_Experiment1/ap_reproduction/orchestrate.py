@@ -4,6 +4,10 @@
 The separately written JSON plan pins the rental, session, deadline, local input
 files and exact commands. This program never retries a launch, synchronizes a
 failed backup, stops an experiment, or destroys a rental.
+
+Plans may select the separately authorized controller_session="ap-cube". That
+route uses its own state/journal/lock and the pinned Cube source snapshot; plans
+without controller_session retain the original rental and canonical source.
 """
 
 import argparse
@@ -27,6 +31,12 @@ POLICY = PROJECT / "LeWM_Experiment1/computeConfigs/config/compute-policy.json"
 SOURCE = PROJECT / "LeWM_Experiment1/ap_reproduction"
 REPOSITORY = "Sachioster/LeWMExp1_AP_Reproduction"
 INSTANCE_ID = 59238554
+CUBE_SOURCE = PROJECT / "LeWM_Experiment1/runs/AP/cube-source-20261105"
+CUBE_SOURCE_MANIFEST = (
+    PROJECT / "LeWM_Experiment1/computeConfigs/records/ap_reproduction/cube-source-snapshot.json")
+CUBE_INSTANCE_ID = 59256965
+CUBE_SESSION_ID = "lewm-exp1-d88cfc7fb578"
+CUBE_DEADLINE = 1793885983.2140357
 GATE_FILES = {"common.py", "instrumentation.py", "engineering.py", "evaluate.py"}
 ENTRYPOINTS = {"prepare.py", "encode_cache.py", "engineering.py", "evaluate.py"}
 
@@ -76,22 +86,62 @@ def local_path(value, *, directory=False):
     return path
 
 
+def routing(plan):
+    name = plan.get("controller_session")
+    if name is None:
+        return {"controller_session": None, "instance_id": INSTANCE_ID,
+                "state": STATE, "log": LOG, "source": SOURCE}
+    if name != "ap-cube":
+        raise StopQueue("Only the explicitly authorized ap-cube named controller is permitted")
+    if plan.get("session_id") != CUBE_SESSION_ID:
+        raise StopQueue("Named Cube plan does not match its authorized session identity")
+    if positive(plan["deadline_epoch"]) > CUBE_DEADLINE:
+        raise StopQueue("Named Cube plan exceeds its authorized session deadline")
+    parent = STATE.parent / "named"
+    directory = parent / name
+    if parent.is_symlink() or directory.is_symlink() or not directory.resolve().is_relative_to(
+            STATE.parent.resolve() / "named"):
+        raise StopQueue("Named controller state must not alias another session directory")
+    return {"controller_session": name, "instance_id": CUBE_INSTANCE_ID,
+            "state": directory / STATE.name, "log": directory / LOG.name,
+            "source": CUBE_SOURCE}
+
+
 def validate_plan(plan):
-    if plan.get("schema_version") != 1 or plan.get("instance_id") != INSTANCE_ID:
+    route = routing(plan)
+    if plan.get("schema_version") != 1 or plan.get("instance_id") != route["instance_id"]:
         raise StopQueue("Plan does not identify the authorized AP instance")
     if plan.get("storage_repo") != REPOSITORY:
         raise StopQueue("Plan storage is not the AP reproduction dataset")
     identifier(plan["session_id"])
     positive(plan["deadline_epoch"])
     source = local_path(plan["source"], directory=True)
-    if source != SOURCE:
-        raise StopQueue("Plan source must be the AP reproduction directory")
+    if source != route["source"]:
+        raise StopQueue("Plan source differs from the exact authorized session source directory")
     local_path(plan["config"])
     local_path(plan["protocol"])
+    if route["controller_session"]:
+        config = read(local_path(plan["config"]))
+        binding = config.get("maintenance_binding", {})
+        if (config.get("execution_partition") != "gpu2_cube"
+                or config.get("hosting_tasks") != ["cube"]
+                or binding.get("instance_id") != CUBE_INSTANCE_ID
+                or binding.get("session_id") != CUBE_SESSION_ID
+                or binding.get("tasks") != ["cube"]):
+            raise StopQueue("Named Cube configuration differs from its exact task and host binding")
     pins = plan.get("gate_hashes")
     if not isinstance(pins, dict) or set(pins) != GATE_FILES:
         raise StopQueue("Plan must pin exactly the four engineering gate source files")
-    for value in [*pins.values(), plan["config_sha256"], plan["protocol_sha256"]]:
+    hashes = [*pins.values(), plan["config_sha256"], plan["protocol_sha256"]]
+    source_manifest = plan.get("source_manifest")
+    if source_manifest is not None:
+        manifest_path = local_path(source_manifest)
+        hashes.append(plan["source_manifest_sha256"])
+        if route["controller_session"] and manifest_path != CUBE_SOURCE_MANIFEST:
+            raise StopQueue("Named Cube plan uses an unexpected source-snapshot manifest")
+    elif route["controller_session"] or "source_manifest_sha256" in plan:
+        raise StopQueue("Named Cube plans require a pinned explicit source-snapshot manifest")
+    for value in hashes:
         if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value):
             raise StopQueue("Plan contains an invalid input checksum")
     prior = plan.get("prior_run_ids", [])
@@ -124,10 +174,13 @@ def validate_plan(plan):
             raise StopQueue("Unexpected stage interpreter")
         if command[1] not in ENTRYPOINTS:
             raise StopQueue("Unexpected AP stage entrypoint")
+        if route["controller_session"] and (len(command) < 3 or command[2] != "cube"):
+            raise StopQueue("The named Cube controller is authorized for Cube stages only")
         if any(re.match(r"--?(?:token|password|api[-_]key)(?:=|$)", arg) for arg in command):
             raise StopQueue("Credentials cannot appear in a stage command")
     if len(set(ids)) != len(ids) or set(ids) & set(failures):
         raise StopQueue("Stage IDs must be unique and cannot excuse a previous failed stage")
+    return route
 
 
 class Queue:
@@ -135,7 +188,10 @@ class Queue:
         self.path = Path(path).resolve()
         self.plan_hash = digest(self.path)
         self.plan = read(self.path)
-        validate_plan(self.plan)
+        route = validate_plan(self.plan)
+        self.controller_session = route["controller_session"]
+        self.instance_id = route["instance_id"]
+        self.state, self.log, self.source = route["state"], route["log"], route["source"]
         self.poll_seconds = positive(poll_seconds)
         if not 1 <= self.poll_seconds <= 60:
             raise StopQueue("Poll intervals must be between one and sixty seconds")
@@ -145,10 +201,10 @@ class Queue:
         self.allowed_failures = set(self.plan.get("allowed_prior_failed_run_ids", []))
         self.intents = set()
         self.last_status, self.last_emitted = None, 0
-        if LOG.exists():
-            if LOG.is_symlink():
+        if self.log.exists():
+            if self.log.is_symlink():
                 raise StopQueue("Orchestrator journal cannot be a symlink")
-            with LOG.open() as stream:
+            with self.log.open() as stream:
                 for line in stream:
                     row = json.loads(line)
                     if row.get("session_id") == self.plan["session_id"] and row.get(
@@ -156,10 +212,12 @@ class Queue:
                         self.intents.add(identifier(row["run_id"]))
 
     def emit(self, event, **fields):
-        record = {"epoch": time.time(), "event": event, "instance_id": INSTANCE_ID,
+        record = {"epoch": time.time(), "event": event, "instance_id": self.instance_id,
                   "session_id": self.plan["session_id"], "plan_sha256": self.plan_hash, **fields}
+        if self.controller_session:
+            record["controller_session"] = self.controller_session
         encoded = json.dumps(record, sort_keys=True, allow_nan=False) + "\n"
-        with LOG.open("a") as stream:
+        with self.log.open("a") as stream:
             stream.write(encoded)
             stream.flush()
             os.fsync(stream.fileno())
@@ -174,17 +232,21 @@ class Queue:
     def validate_inputs(self):
         self.deadline()
         for name, expected in self.plan["gate_hashes"].items():
-            path = local_path(str(SOURCE / name))
+            path = local_path(str(self.source / name))
             if digest(path) != expected:
                 raise StopQueue("Engineering gate source checksum changed: " + name)
         for name in ("config", "protocol"):
             if digest(local_path(self.plan[name])) != self.plan[name + "_sha256"]:
                 raise StopQueue("Pinned " + name + " checksum changed")
+        if self.plan.get("source_manifest") is not None:
+            if digest(local_path(self.plan["source_manifest"])) != self.plan[
+                    "source_manifest_sha256"]:
+                raise StopQueue("Pinned source-snapshot manifest checksum changed")
 
     def local_identity(self):
         self.deadline()
-        state = read(STATE)
-        if state.get("instance_id") != INSTANCE_ID or state.get("session_id") != self.plan[
+        state = read(self.state)
+        if state.get("instance_id") != self.instance_id or state.get("session_id") != self.plan[
                 "session_id"]:
             raise StopQueue("Local compute session or instance identity changed")
         if state.get("storage", {}).get("repo_id") != REPOSITORY:
@@ -208,7 +270,11 @@ class Queue:
             raise StopQueue("Only compute status and run are permitted")
         self.deadline()
         timeout = min(60.0, self.plan["deadline_epoch"] - time.time())
-        process = subprocess.Popen([sys.executable, str(COMPUTE), action, *arguments],
+        command = [sys.executable, str(COMPUTE)]
+        if self.controller_session:
+            command += ["--session", self.controller_session]
+        command += [action, *arguments]
+        process = subprocess.Popen(command,
                                    cwd=PROJECT, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                    text=True, start_new_session=True)
         try:
@@ -237,7 +303,7 @@ class Queue:
             local = self.local_identity()
             try:
                 report = self.call("status")
-                if report.get("instance_id") != INSTANCE_ID or report.get("storage_repo") != (
+                if report.get("instance_id") != self.instance_id or report.get("storage_repo") != (
                         REPOSITORY):
                     raise StopQueue("Reported rental or storage identity changed")
                 if report.get("deadline_epoch") != local["deadline_epoch"]:
@@ -316,6 +382,8 @@ class Queue:
                 "--config", str(local_path(self.plan["config"])),
                 "--protocol", str(local_path(self.plan["protocol"])),
                 "--max-seconds", str(stage["max_seconds"]), "--run-id", run_id]
+        if self.plan.get("source_manifest") is not None:
+            argv += ["--source-manifest", str(local_path(self.plan["source_manifest"]))]
         for seed in stage["seeds"]:
             argv += ["--seed", str(seed)]
         argv += ["--", *stage["command"]]
@@ -373,10 +441,11 @@ def main():
     parser.add_argument("--plan", required=True, type=Path)
     parser.add_argument("--poll-seconds", type=float, default=30)
     args = parser.parse_args()
-    LOG.parent.mkdir(parents=True, exist_ok=True)
     queue = None
     try:
-        lock_path = LOG.with_suffix(".lock")
+        queue = Queue(args.plan, args.poll_seconds)
+        queue.log.parent.mkdir(parents=True, exist_ok=True)
+        lock_path = queue.log.with_suffix(".lock")
         if lock_path.is_symlink():
             raise StopQueue("Orchestrator lock cannot be a symlink")
         with lock_path.open("a") as lock:
@@ -384,7 +453,6 @@ def main():
                 fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
             except BlockingIOError:
                 raise StopQueue("Another AP orchestrator holds the local queue lock") from None
-            queue = Queue(args.plan, args.poll_seconds)
             queue.run()
         return 0
     except KeyboardInterrupt:

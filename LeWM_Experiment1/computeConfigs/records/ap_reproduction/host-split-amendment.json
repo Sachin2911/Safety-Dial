@@ -1,0 +1,181 @@
+{
+  "schema": "lewm-ap-host-budget-partitions-v1",
+  "status": "authorized",
+  "recorded_utc": "2026-11-05T11:41:00.793825+00:00",
+  "authorization": {
+    "user_statement": "Ok go ahead and set the other one up to",
+    "scope": "One additional GPU rental for the unchanged Cube reproduction; separate host budgets sum to the original study limits.",
+    "activation_status": "Actual second rental bound. Preparation is authorized; scientific evaluation requires the fresh Cube engineering gate."
+  },
+  "global_budgets": {
+    "scientific_resets": 1024,
+    "scientific_policy_actions": 238080,
+    "scientific_predictor_calls": 1500000,
+    "scientific_predictor_candidate_blocks": 450000000,
+    "engineering_resets": 32,
+    "engineering_policy_actions": 800,
+    "engineering_predictor_calls": 496,
+    "engineering_predictor_candidate_blocks": 144032,
+    "cache_encoder_images": 16000000
+  },
+  "original_configuration": {
+    "path": "LeWM_Experiment1/ap_reproduction/assets.json",
+    "sha256": "c324a39cdc1316b6f5278b7ed1580d6ff3ee4a6b5444f31bff4bf3b13d236464"
+  },
+  "partitions": [
+    {
+      "id": "gpu1_existing",
+      "session_id": "lewm-exp1-3f5a39762ff1",
+      "instance_id": 59238554,
+      "tasks": [
+        "tworoom",
+        "pusht",
+        "reacher"
+      ],
+      "scientific_cases": 768,
+      "budgets": {
+        "scientific_resets": 768,
+        "scientific_policy_actions": 199680,
+        "scientific_predictor_calls": 1261920,
+        "scientific_predictor_candidate_blocks": 380864640,
+        "engineering_resets": 24,
+        "engineering_policy_actions": 600,
+        "engineering_predictor_calls": 372,
+        "engineering_predictor_candidate_blocks": 108024,
+        "cache_encoder_images": 11980000
+      },
+      "legacy_global_budget_runs": [
+        "ap-20261105-cache-pusht",
+        "ap-20261105-cache-tworoom",
+        "ap-20261105-engineering-pusht",
+        "ap-20261105-engineering-pusht-compact",
+        "ap-20261105-engineering-tworoom",
+        "ap-20261105-engineering-tworoom-valid",
+        "ap-20261105-eval-pusht-s0",
+        "ap-20261105-eval-pusht-s0-cont",
+        "ap-20261105-eval-pusht-s1",
+        "ap-20261105-eval-pusht-s2",
+        "ap-20261105-eval-pusht-s3",
+        "ap-20261105-eval-tworoom-s0",
+        "ap-20261105-eval-tworoom-s1",
+        "ap-20261105-eval-tworoom-s2",
+        "ap-20261105-eval-tworoom-s3",
+        "ap-20261105-prepare-pusht",
+        "ap-20261105-prepare-tworoom",
+        "ap-20261105-retire-tworoom"
+      ],
+      "config": "host-split-gpu1-config.json",
+      "activation": "Only after all original PushT scientific work completes; retain the existing cumulative ledger and original run files.",
+      "config_sha256": "9abdaa83068d8248be313c22076edcdde3b0eed29e756e1fba775f065a402905"
+    },
+    {
+      "id": "gpu2_cube",
+      "session_id": "lewm-exp1-d88cfc7fb578",
+      "instance_id": 59256965,
+      "tasks": [
+        "cube"
+      ],
+      "scientific_cases": 256,
+      "budgets": {
+        "scientific_resets": 256,
+        "scientific_policy_actions": 38400,
+        "scientific_predictor_calls": 238080,
+        "scientific_predictor_candidate_blocks": 69135360,
+        "engineering_resets": 8,
+        "engineering_policy_actions": 200,
+        "engineering_predictor_calls": 124,
+        "engineering_predictor_candidate_blocks": 36008,
+        "cache_encoder_images": 4020000
+      },
+      "legacy_global_budget_runs": [],
+      "config": "host-split-gpu2-cube-config.json",
+      "activation": "Bind the new rental session and instance before preparation; fresh Cube engineering gate before scientific evaluation.",
+      "config_sha256": "8d5425c0d31eae921cd0ef017628e45967cf85e9607de71bc28cee3e11a91651"
+    }
+  ],
+  "prior_primary_ledger": {
+    "captured_from": "LeWM_Experiment1/runs/AP/ap-20261105-eval-pusht-s0-cont/metrics/study-attempt-ledger.json",
+    "snapshot": "LeWM_Experiment1/computeConfigs/records/ap_reproduction/host-split-ledger-before.json",
+    "sha256": "1b4c58c75d7f4a126861da1d48f2896c5345644ec92a5e183caa78edf578a150",
+    "attempts": 337,
+    "reserved": {
+      "cache_encoder_images": 3257545,
+      "engineering_resets": 12,
+      "engineering_policy_actions": 120,
+      "engineering_predictor_calls": 186,
+      "engineering_predictor_candidate_blocks": 54012,
+      "scientific_resets": 320,
+      "scientific_policy_actions": 69120,
+      "scientific_predictor_calls": 428544,
+      "scientific_predictor_candidate_blocks": 124443648
+    },
+    "scope": "Latest downloaded snapshot at proposal time; the primary ledger remains cumulative. Capture and verify a fresh snapshot at activation without deleting or resetting prior attempts."
+  },
+  "rental": {
+    "second_hours": 2,
+    "second_max_hourly_usd": 0.6,
+    "second_budget_subcap_usd": 1.5,
+    "second_input_gb": 60,
+    "second_output_gb": 2,
+    "primary_output_gb_after_idle_reallocation": 6,
+    "combined_output_gb_cap": 8,
+    "global_estimated_budget_usd": 10,
+    "initial_unavailable_offer": {
+      "offer_id": 58295845,
+      "gpu": "RTX 4090",
+      "hourly_usd": 0.588889,
+      "estimated_second_usd": 1.234601,
+      "estimated_combined_usd": 4.981406,
+      "status": "Unavailable before allocation; no instance/state was created. Fresh selection uses the same limits."
+    },
+    "actual_second_offer": {
+      "disk_gb": 200,
+      "download_mbps": 2285.4,
+      "download_usd_per_gb": 0.0013020833333333333,
+      "estimated_session_usd": 1.033194,
+      "estimated_transfer_usd": 0.095417,
+      "gpu": "RTX 4090",
+      "hourly_usd": 0.4688888888888889,
+      "machine_id": 41250,
+      "offer_id": 33923285,
+      "reliability": 0.9986316,
+      "upload_mbps": 1982.5,
+      "upload_usd_per_gb": 0.0013020833333333333
+    },
+    "primary_deadline_epoch_unchanged": 1793891328.33411,
+    "shutdown": "Manual user instruction for each rental; deadlines stop work, not billing.",
+    "second_deadline_epoch": 1793885983.2140357
+  },
+  "scientific_invariants": {
+    "cases": 1024,
+    "conditions": [
+      "clean"
+    ],
+    "arms": [
+      "gaussian_final",
+      "gaussian_observed"
+    ],
+    "ap_revision": "984327424ca7a2e52c75a8279197750d9d0b7c8e",
+    "native_protocol_sha256": "3243f4ec7c55d349a3f7a73b093664ca7ae695d369f6f718824b54ea47b894b6",
+    "all_cube_cases_on_one_host": true,
+    "unchanged": [
+      "original 128 query rows and seeds per task",
+      "checkpoint and dataset revisions/hashes",
+      "memory episodes and encodings",
+      "CEM settings, normalizers and success criteria",
+      "case budgets and no replay of completed scientific cases"
+    ],
+    "source_policy": "No gated scientific source edit is part of the host split. Any separately approved recorder amendment must be frozen before fresh Reacher/Cube gates."
+  },
+  "accounting": {
+    "mode": "Independent monotonic ledgers bound to exact session/instance; merge by globally unique attempt identities.",
+    "cli": "accounting.py --config assets.json --partition-plan <this file> --run-root <each downloaded root> [--partition-ledger gpu1_existing=<fresh file>] [--partition-ledger gpu2_cube=<fresh file>]",
+    "requirements": [
+      "Each task occurs only on its assigned host",
+      "No identity may appear in both host ledgers",
+      "Historical global-budget configurations are accepted only for the enumerated original primary runs",
+      "All actual work, failed attempts, readiness sessions and reservations are summed; both host and global caps are checked",
+      "Final audit still requires all 1024 original scientific cases"
+    ]
+  }
+}

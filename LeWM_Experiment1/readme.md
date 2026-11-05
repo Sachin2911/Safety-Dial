@@ -1,8 +1,19 @@
 # LeWM Experiment 1
 
-The [AP reproduction](ap_reproduction/README.md) is now active: the authors' full
-128-case long-range panel per environment, paired AP-CEM and final-goal CEM,
-with its own frozen protocol and private Hugging Face dataset.
+The [AP reproduction](ap_reproduction/README.md) completed on 5 November 2026.
+AP-CEM succeeded in **306/512 cases (59.8%)**, versus **47/512 (9.2%)** for matched
+final-goal CEM. With 128 original queries per arm in each environment, AP/control
+success counts were TwoRoom **58/2**, PushT **88/4**, Reacher **100/32** and Cube
+**60/9**. All 1,024 cases passed the [scientific audit](ap_reproduction/evidence/final-audit.json)
+and [source and gate checks](ap_reproduction/evidence/source-gate-verification.json).
+
+The [private AP dataset](https://huggingface.co/datasets/Sachioster/LeWMExp1_AP_Reproduction)
+organizes results and videos by environment, including eight matched ghost
+comparisons from saved AP/control clips with identical starts, goals and optimizer
+seeds. The [Odyssey PDF](../theOdessy/reproduction.pdf) brings the baseline and AP
+results together. AP uses the authors' supplied fixed goals 100-150 recorded actions
+ahead; these results do not establish full canonical-task completion or safety.
+Its [completed protocol](ap_reproduction/protocol.md) authorizes no additional runs.
 
 This is the working area for the new LeWM experiment. The Vast compute pipeline
 is ready, and the frozen-checkpoint reproduction completed on 4 November 2026.

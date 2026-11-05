@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "prospective; saved-image verification and replacement engineering gate pending",
+  "task": "pusht",
+  "problem": "PushT info.goal contains an RGB image. The original recorder expanded that repeated image into nested integer lists in every action trace and uncompressed journal row, increasing recording time and output size.",
+  "changed_source": "LeWM_Experiment1/ap_reproduction/common.py",
+  "old_common_sha256": "7c24bff39cb8015f8e794407b199b23cc7454ee8438e1be86db61c4d842a9363",
+  "new_common_sha256": "48cdeada0f9d50591a788a4063e36195b87540af2bb381095e1cb10ad499ec88",
+  "representation_change": {
+    "applies_to": "NumPy uint8 arrays with three dimensions and three channels in the last dimension",
+    "old": "Nested JSON integer lists",
+    "new": "Tagged lossless zlib-base64 bytes with HWC shape, uint8 dtype, C byte order, exact byte count and SHA-256 of the original uncompressed pixel bytes",
+    "tag": "__lewm_rgb_image__",
+    "tag_version": 1,
+    "decoder": "common.decode_rgb_bytes",
+    "decoder_checks": [
+      "Supported tag, encoding, dtype and byte order",
+      "Positive RGB dimensions and exact declared byte count",
+      "Bounded complete zlib stream without trailing data",
+      "Exact decoded byte count and original pixel SHA-256"
+    ]
+  },
+  "semantic_scope": {
+    "claim": "This change is confined to serializing saved image arrays. The serializer copies image bytes and does not replace or mutate objects returned to the native evaluator.",
+    "unchanged_by_this_change": [
+      "Native observations and info returned by environment steps",
+      "Reset states and goals",
+      "Proposed and executed actions",
+      "Retrieval, model calls and CEM settings",
+      "Original query identities and random seeds",
+      "Success scoring and episode stopping rules",
+      "Existing native render calls and video frame capture",
+      "Serialization of nonimage values"
+    ],
+    "limitation": "The prospective claim is limited to the serialization boundary. Saved-byte equivalence and fresh engineering parity must pass before further scientific execution with this source. Existing scientific evidence remains in its original representation."
+  },
+  "required_saved_evidence_check": {
+    "entrypoint": "check_image_codec.py",
+    "source": "Previously recorded PushT engineering or scientific JSON evidence",
+    "checks": [
+      "Legacy saved RGB bytes equal decoded packed bytes",
+      "Pack/decode round trip preserves every pixel byte",
+      "Repeated serialization preserves the packed record",
+      "The RGB serialization branch preserves saved bytes",
+      "An altered SHA-256 is rejected"
+    ],
+    "simulator_actions": 0,
+    "model_queries": 0,
+    "status": "pending"
+  },
+  "required_engineering_revalidation": {
+    "task": "pusht",
+    "engineering_attempt": 1,
+    "cases": "The same first two eligible memory episodes outside the scientific query panel",
+    "reserved_resets": 4,
+    "maximum_policy_actions": 40,
+    "native_cem_optimizations": 2,
+    "predictor_calls": 62,
+    "predictor_candidate_blocks": 18004,
+    "model_proposals_executed": 0,
+    "checks": "Native versus recorded fixed-action transitions, render hashes and success labels must match exactly. Each native CEM optimization must use 31 predictor calls and 9002 candidate blocks.",
+    "stage_budget_caps_unchanged": {
+      "engineering_resets": 32,
+      "engineering_policy_actions": 800,
+      "engineering_predictor_calls": 496,
+      "engineering_predictor_candidate_blocks": 144032
+    },
+    "gate_requirement": "Freeze the final four source hashes, including the separately reviewed continuation evaluator, before this gate. Preserve the original gate artifact; publish the replacement gate in its new run.",
+    "status": "pending"
+  },
+  "scientific_continuation": {
+    "completed_cases": "Preserve all completed original cases and their original saved evidence; never rerun a completed scientific case.",
+    "remaining_cases": "Only original query identities not already attempted may be selected for continuation, preserving the original query ordinals, seeds and paired arms.",
+    "boundary_handling": "The root controller is arranging a documented completed-case boundary hold before stopping the affected batch. Actual boundary, ledger reconciliation and backup evidence will be recorded separately.",
+    "status": "pending separate continuation review"
+  }
+}

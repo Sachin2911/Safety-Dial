@@ -43,6 +43,9 @@ changing the controller does not require rebuilding the image.
 | `stop` | Request job termination, preserving outputs; the rental remains active |
 | `sync` | Queue an upload for a running job, or retry final verification for an idle job |
 | `recover` | Find an uncertain rental by its unique label and finish setup without renting again |
+| `refresh-workers` | At an idle, fully backed-up boundary, select updated versioned helpers for future runs without repeating runtime validation |
+| `extend-transfer --upload-gb N` | Apply an explicitly authorized larger output allowance for future runs, within the existing time and estimated-dollar limits |
+| `set-transfer-limit --upload-gb N` | Reallocate a host's future output allowance at an idle verified boundary, keeping it strictly above already recorded artifacts |
 | `destroy` | Require idle jobs and verified backups, check HF manifests independently, then delete the rental |
 
 Choose the output dataset when starting a new rental. The default is `baseline`;
@@ -66,6 +69,27 @@ the controller preserves that session under `.state/sessions/<session-id>.json`.
 No credentials are stored there. Each operation checks the saved
 instance ID and label; the worker additionally checks the remote session identity.
 Read-only status does not rewrite session state.
+
+The original rental remains the default when no session flag is supplied. An
+explicitly authorized additional rental can use a separate named state:
+
+```bash
+python3 compute.py --session ap-cube status
+```
+
+Put `--session NAME` before the command on every operation for that rental,
+including `up`, `ssh`, `run`, `sync` and `destroy`. Names allow letters, digits,
+hyphens and underscores. Named state lives under `.state/named/NAME/`, with its
+own instance identity, controller lock, SSH host keys and receipts. It never
+replaces the default `.state/instance.json`. The same storage profile can be used
+by separate hosts when all run IDs are unique.
+
+Named state does not authorize another rental or create a shared budget. Separate
+hosts need explicit task assignments, finite limits and a combined accounting of
+spending, transfer allowances and scientific interactions. Keep each environment's
+paired comparison on one host. The existing AP queue is pinned to its original
+default instance; a named host needs its own reviewed queue or explicit wrapper
+commands.
 
 The ignored root `.env` or process environment supplies `HF_TOKEN`. For the private
 image, set `GHCR_READ_TOKEN` to a classic GitHub token with `read:packages` access,
@@ -146,6 +170,14 @@ with the run. The command runs relative to the source snapshot and receives
 resolved to `/venv/main/bin/python`. Cloud tokens remain with the uploader and are
 removed from the experiment subprocess environment.
 
+An intentionally ignored, frozen source snapshot requires explicit
+`run --source-manifest PATH`. Its JSON must contain `path` relative to the repository,
+the current `instance_id` and `session_id`, and `files` mapping every eligible relative
+filename to its SHA256. The controller verifies all listed files and rejects extra
+eligible files, changed bytes, symlinks and excluded paths. Secret scanning and the
+20 MB source cap still apply. The manifest and its original-byte SHA256 are preserved
+in `run.json`. Omitting this option retains the normal Git-based source selection.
+
 The detached supervisor survives SSH disconnection. A separate `timeout` wrapper
 bounds the job even if the supervisor crashes. Child processes must remain in the
 job's process group. A failed or interrupted job is recorded and backed up, never
@@ -173,8 +205,47 @@ session's runs, and exceeding the allowance blocks finalization.
 
 On closeout, the uploader snapshots the files, refuses conflicting remote bytes,
 commits a hash manifest, and streams fresh downloads at the returned HF revision to
-verify every file. `destroy` also downloads the manifest independently from this
+verify every file. Read-back uses at most eight independent streamed requests;
+every response still requires its complete size and SHA-256 to match. Any HTTP,
+stream or hash failure leaves the backup unverified. `destroy` also downloads the manifest independently from this
 workstation. Verified immutable closeouts are reused rather than reuploaded.
+
+Helper edits do not change a running or recorded worker bundle automatically.
+After every submitted job has stopped and every backup is verified, use
+`python3 compute.py refresh-workers` to select updated helpers for subsequent runs.
+It checks that all submitted runs are accounted for, repeats the idle/backup guard
+on the host under the launch lock, and stages the new bundle atomically under its
+content hash. The previous bundle, run metadata, upload receipts, session identity,
+storage binding and original runtime readiness remain intact. New runs record
+their worker path in `run.json`. Refresh does not repeat GPU or renderer checks.
+
+Local `.state/worker-refreshes/` and remote `.control/worker-refreshes/` preserve
+the previous session and the transition. If a refresh reply is lost, the controller
+retains `pending_worker_refresh` and refuses another `run`. Inspect `status`, then
+repeat `refresh-workers` with the same helper bytes to confirm the existing
+transition. Do not replace worker files while a refresh is pending. This command
+never creates a rental, launches an experiment, or destroys the instance.
+
+An explicitly authorized output-allowance increase uses
+`python3 compute.py extend-transfer --upload-gb N`. The controller verifies the
+exact rental and remote session, requires all submitted jobs idle and backed up,
+and prices the additional outgoing bytes plus one incoming full read-back using
+the original offer rates. The revised estimate must fit the unchanged dollar
+budget. Hours, deadline, input allowance, storage and existing run caps remain
+unchanged. Only subsequent run allocations use the larger allowance. This edits
+local controller state, with a previous-state receipt under
+`.state/transfer-extensions/`; it does not mutate the provider or old remote run
+records. `status` reports the current allowance and revised estimate. A larger
+allowance needs current authorization; the command is not an automatic extension.
+
+For an explicitly approved split between hosts, `set-transfer-limit --upload-gb N`
+uses those same identity, idle, backup, deadline and dollar-budget checks, but can
+also reduce a host's allowance. The new limit must exceed all its verified artifact
+bytes. Existing run caps and receipts remain unchanged; subsequent jobs use the
+new remainder. The original offer quote and every adjustment are preserved under
+the existing transfer receipt/history paths. `extend-transfer` still rejects a
+decrease. Host limits must sum to the authorized shared allowance; for example,
+6 GB on the default host plus 2 GB on a named host preserves an 8 GB total.
 
 If boot fails, use `recover` or explicitly `destroy` the unused rental. If a create
 reply is lost, use `recover`; creation is never blindly retried. If a job or backup
@@ -200,6 +271,13 @@ baseline/AP selection, destination pinning across configuration changes, retired
 session preservation, cross-dataset launch rejection and independent receipt
 verification against the saved destination. They use fake providers and processes;
 the pre-existing deleted `test_compute.py` was not restored.
+
+The later parallel read-back and worker-refresh update passed 35 current checks
+(15 storage-profile and 20 refresh/verification checks). An isolated run of the
+retained legacy tests passed 50 of 51. Its remaining privacy-test fixture uses
+the retired dataset name and fails destination validation before its intended
+assertion; this also occurs at the preceding baseline commit. The working-tree
+test deletion remains untouched. Current-profile privacy checks pass.
 
 The first timed `up` check passed on 4 November 2026, instance `59105596`, machine
 `10447`, one RTX 4090, using the pinned image and 200 GB disk. Timing starts at

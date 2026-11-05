@@ -1,5 +1,6 @@
 """Immutable run uploads and full read-back verification on the rented host."""
 
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import hashlib
 from pathlib import Path
 import shutil
@@ -21,6 +22,7 @@ from compute_common import (
 
 ROOT_FILES = {"run.json", "config.json", "protocol.md", "source.tar.gz", "result.json"}
 OUTPUT_DIRS = {"metrics", "logs", "artifacts"}
+READBACK_WORKERS = 8
 
 
 def inventory(root, final):
@@ -157,8 +159,8 @@ class HubStore:
         import requests
         from huggingface_hub import hf_hub_url
 
-        # Stream fresh HTTP downloads instead of accepting the upload cache as evidence.
-        for name, expected in files.items():
+        def verify_one(name, expected):
+            # requests.get creates an independent session for each streamed response.
             url = hf_hub_url(self.repo, f"{prefix}/{name}", repo_type="dataset", revision=revision)
             hasher, count = hashlib.sha256(), 0
             with requests.get(
@@ -179,6 +181,21 @@ class HubStore:
                     hasher.update(block)
             if count != expected["bytes"] or hasher.hexdigest() != expected["sha256"]:
                 raise ComputeError(f"HF read-back differs from local output: {name}")
+
+        # Every file still receives a fresh full HTTP read-back at the pinned revision.
+        # A failure cancels queued work and propagates only after active streams close.
+        if not files:
+            return
+        with ThreadPoolExecutor(max_workers=min(READBACK_WORKERS, len(files)),
+                                thread_name_prefix="hf-readback") as executor:
+            pending = [executor.submit(verify_one, name, expected) for name, expected in files.items()]
+            try:
+                for future in as_completed(pending):
+                    future.result()
+            except BaseException:
+                for future in pending:
+                    future.cancel()
+                raise
 
 
 def sync_run(root, token, *, final=False, store_factory=HubStore):
