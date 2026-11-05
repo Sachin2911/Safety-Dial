@@ -1,0 +1,23 @@
+{
+  "corrections": [
+    {
+      "recorded_utc": "2026-11-05T09:28:31.813136+00:00",
+      "failed_run": "ap-20261105-engineering-tworoom",
+      "failure": "Eligibility filter required episode length greater than horizon + 10; no TwoRoom memory episode qualifies.",
+      "evidence": {
+        "horizon": 100,
+        "memory_episodes_longer_than_horizon": 4856,
+        "memory_episodes_longer_than_horizon_plus_10": 0,
+        "engineering_attempts_reserved": 0,
+        "resets": 0,
+        "policy_actions": 0,
+        "model_queries": 0
+      },
+      "correction": "Require length > max(horizon, 9): goal row start + horizon and recorded action rows start through start + 9 must exist. First two sorted eligible memory episodes are 7 and 8.",
+      "scientific_cases_started": 0,
+      "protocol_change": false,
+      "engineering_sha256_after": "24934e4257d0d7092787ad1f3d42209cc96441e57ad3a64dbbd7bb8236a1f53a",
+      "continuation": "New run ID; engineering attempt 0 remains unused because the failure preceded reservation."
+    }
+  ]
+}

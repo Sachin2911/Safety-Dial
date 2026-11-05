@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "instance_id": 59238554,
+  "session_id": "lewm-exp1-3f5a39762ff1",
+  "storage_repo": "Sachioster/LeWMExp1_AP_Reproduction",
+  "deadline_epoch": 1793891328.33411,
+  "source": "LeWM_Experiment1/ap_reproduction",
+  "config": "LeWM_Experiment1/ap_reproduction/assets.json",
+  "protocol": "LeWM_Experiment1/ap_reproduction/protocol.md",
+  "config_sha256": "c324a39cdc1316b6f5278b7ed1580d6ff3ee4a6b5444f31bff4bf3b13d236464",
+  "protocol_sha256": "d5590e748eaff58f01fe4f6b2b8f600df777f74027be3d1046a79101b35e45dd",
+  "gate_hashes": {
+    "common.py": "7c24bff39cb8015f8e794407b199b23cc7454ee8438e1be86db61c4d842a9363",
+    "instrumentation.py": "657167c73218a2b65b56b9a7d6db6961037f2b697c943abbc3f9bbf86377582a",
+    "engineering.py": "24934e4257d0d7092787ad1f3d42209cc96441e57ad3a64dbbd7bb8236a1f53a",
+    "evaluate.py": "6689db0fb6c3c48795d0d95853954c11233759856ba104ec4ecd8dabbd70842a"
+  },
+  "prior_run_ids": [
+    "ap-20261105-prepare-tworoom",
+    "ap-20261105-cache-tworoom",
+    "ap-20261105-engineering-tworoom",
+    "ap-20261105-engineering-tworoom-valid",
+    "ap-20261105-eval-tworoom-s0",
+    "ap-20261105-eval-tworoom-s1"
+  ],
+  "allowed_prior_failed_run_ids": [
+    "ap-20261105-engineering-tworoom"
+  ],
+  "stages": [
+    {
+      "run_id": "ap-20261105-eval-tworoom-s2",
+      "command": [
+        "python",
+        "evaluate.py",
+        "tworoom",
+        "--shards",
+        "4",
+        "--shard-index",
+        "2"
+      ],
+      "max_seconds": 1800,
+      "seeds": [
+        0
+      ]
+    },
+    {
+      "run_id": "ap-20261105-eval-tworoom-s3",
+      "command": [
+        "python",
+        "evaluate.py",
+        "tworoom",
+        "--shards",
+        "4",
+        "--shard-index",
+        "3"
+      ],
+      "max_seconds": 1800,
+      "seeds": [
+        0
+      ]
+    }
+  ]
+}

@@ -109,7 +109,9 @@ def main(task):
         with h5py.File(asset["dataset"], "r") as data:
             horizon = protocol["studies"][task]["horizon"]
             memory = sorted(protocol["bank_train_episodes"][task])
-            episodes = [e for e in memory if int(data["ep_len"][e]) > horizon + 10][:2]
+            # Goal row start+H and action rows start..start+9 only need this
+            # many rows; adding ten to H excludes valid 101-row TwoRoom episodes.
+            episodes = [e for e in memory if int(data["ep_len"][e]) > max(horizon, 9)][:2]
             if len(episodes) != 2:
                 raise ValueError("Insufficient separate engineering memory episodes")
             forbidden = {r["episode"] for r in protocol["studies"][task]["confirm"]}
